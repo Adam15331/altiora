@@ -1,0 +1,332 @@
+const courseRequirements = [
+  {
+    id: "comp_sci_ucl",
+    title: "Computer Science BSc",
+    university: "University College London",
+    ucasCode: "G400",
+    duration: "3 years",
+    status: "open",
+    ucasPoints: 144,
+    requirements: {
+      alevel: {
+        grades: ["A", "A", "B"],
+        required: ["maths"],
+        preferred: ["further_maths", "computer_science", "physics"],
+        notes: "Mathematics required at grade A minimum.",
+      },
+      btec: {
+        grades: ["D*", "D*", "D"],
+        required: ["it", "engineering", "science_btec"],
+        notes: "BTEC must be in a relevant technical subject.",
+      },
+      ib: {
+        totalPoints: 38,
+        required: ["ib_maths_aa_hl"],
+        hlGrades: { min: 6 },
+        notes: "HL Mathematics: Analysis & Approaches at grade 6 required.",
+      },
+      access: {
+        grades: "Distinction in 30 credits, Merit in 15 credits",
+        required: ["access_computing", "access_science"],
+        notes: "Access to HE in Computing or Science pathway.",
+      },
+    },
+    description:
+      "Explore the theory and practice of computing, from algorithms and data structures to artificial intelligence and systems design.",
+    entryYear: 2025,
+  },
+  {
+    id: "medicine_kings",
+    title: "Medicine MBBS",
+    university: "King's College London",
+    ucasCode: "A100",
+    duration: "5 years",
+    status: "open",
+    ucasPoints: null,
+    requirements: {
+      alevel: {
+        grades: ["A*", "A", "A"],
+        required: ["chemistry", "biology"],
+        preferred: ["physics", "maths"],
+        notes: "Chemistry and Biology required. UCAT required.",
+      },
+      ib: {
+        totalPoints: 39,
+        required: ["ib_chemistry_hl", "ib_biology_hl"],
+        hlGrades: { min: 6 },
+        notes: "HL Chemistry and Biology at 6 minimum. UCAT required.",
+      },
+      access: null,
+      btec: null,
+    },
+    description:
+      "A five-year programme preparing students for a career in medicine, combining clinical experience with scientific grounding.",
+    entryYear: 2025,
+  },
+  {
+    id: "law_oxford",
+    title: "Law (Jurisprudence) BA",
+    university: "University of Oxford",
+    ucasCode: "M100",
+    duration: "3 years",
+    status: "open",
+    ucasPoints: null,
+    requirements: {
+      alevel: {
+        grades: ["A*", "A", "A"],
+        required: [],
+        preferred: ["history", "english_lit", "law", "economics"],
+        notes: "LNAT required. No specific subjects required but essay-based preferred.",
+      },
+      ib: {
+        totalPoints: 39,
+        hlGrades: { min: 7, count: 1, additional: 6 },
+        notes: "38–39 points with 766 at HL. LNAT required.",
+      },
+      access: null,
+      btec: null,
+    },
+    description:
+      "Oxford's law degree combines the study of legal rules with deeper jurisprudential and philosophical questions about law and society.",
+    entryYear: 2025,
+  },
+  {
+    id: "psychology_manchester",
+    title: "Psychology BSc",
+    university: "University of Manchester",
+    ucasCode: "C800",
+    duration: "3 years",
+    status: "open",
+    ucasPoints: 136,
+    requirements: {
+      alevel: {
+        grades: ["A", "A", "B"],
+        required: [],
+        preferred: ["psychology", "biology", "maths", "sociology"],
+        notes: "A science or social science subject preferred.",
+      },
+      btec: {
+        grades: ["D*", "D*", "M"],
+        required: ["health", "science_btec"],
+        notes: "BTEC in Health or Applied Science accepted.",
+      },
+      ib: {
+        totalPoints: 35,
+        hlGrades: { min: 5 },
+        notes: "35 points with 655 at HL.",
+      },
+      access: {
+        grades: "Distinction in 30 credits",
+        required: ["access_social_science", "access_science", "access_health"],
+        notes: "Access to HE in relevant subject area.",
+      },
+      scottish: {
+        grades: ["A", "A", "A", "B", "B"],
+        required: [],
+        notes: "Five Highers at AABBB.",
+      },
+    },
+    description:
+      "Study the science of mind and behaviour, covering clinical, cognitive, developmental, and social psychology across three years.",
+    entryYear: 2025,
+  },
+  {
+    id: "economics_lse",
+    title: "Economics BSc",
+    university: "London School of Economics",
+    ucasCode: "L100",
+    duration: "3 years",
+    status: "open",
+    ucasPoints: null,
+    requirements: {
+      alevel: {
+        grades: ["A*", "A", "A"],
+        required: ["maths"],
+        preferred: ["further_maths", "economics"],
+        notes: "Mathematics at A* required. Further Maths strongly preferred.",
+      },
+      ib: {
+        totalPoints: 38,
+        required: ["ib_maths_aa_hl"],
+        hlGrades: { min: 7, subjectMin: { ib_maths_aa_hl: 7 } },
+        notes: "Maths AA HL at 7 required.",
+      },
+      access: null,
+      btec: null,
+    },
+    description:
+      "One of the world's leading economics programmes, blending rigorous mathematical methods with social science breadth.",
+    entryYear: 2025,
+  },
+  {
+    id: "nursing_edinburgh",
+    title: "Nursing BN",
+    university: "University of Edinburgh",
+    ucasCode: "B700",
+    duration: "4 years",
+    status: "open",
+    ucasPoints: 120,
+    requirements: {
+      alevel: {
+        grades: ["B", "B", "C"],
+        required: [],
+        preferred: ["biology", "chemistry", "psychology", "health"],
+        notes: "A science subject is advantageous.",
+      },
+      btec: {
+        grades: ["D", "D", "M"],
+        required: ["health", "science_btec"],
+        notes: "BTEC in Health & Social Care or Applied Science accepted.",
+      },
+      ib: {
+        totalPoints: 30,
+        hlGrades: { min: 5 },
+        notes: "30 points with 555 at HL.",
+      },
+      access: {
+        grades: "Merit in 45 credits",
+        required: ["access_health", "access_science"],
+        notes: "Access to HE in Health or Science.",
+      },
+      scottish: {
+        grades: ["A", "B", "B", "B", "C"],
+        required: [],
+        notes: "Five Highers including a science subject.",
+      },
+    },
+    description:
+      "Train as a registered nurse across four years of academic study and clinical placements across NHS Scotland settings.",
+    entryYear: 2025,
+  },
+  {
+    id: "architecture_bartlett",
+    title: "Architecture BSc",
+    university: "UCL Bartlett School of Architecture",
+    ucasCode: "K100",
+    duration: "3 years",
+    status: "open",
+    ucasPoints: 136,
+    requirements: {
+      alevel: {
+        grades: ["A", "A", "B"],
+        required: [],
+        preferred: ["art", "maths", "physics", "geography"],
+        notes: "Portfolio required. Art & Design or Maths strongly preferred.",
+      },
+      btec: {
+        grades: ["D*", "D", "M"],
+        required: ["art_design", "engineering", "construction"],
+        notes: "Portfolio required alongside BTEC.",
+      },
+      ib: {
+        totalPoints: 35,
+        hlGrades: { min: 5 },
+        notes: "35 points. Portfolio required.",
+      },
+      access: {
+        grades: "Distinction in 30 credits",
+        required: ["access_humanities", "access_science"],
+        notes: "Portfolio required. Case-by-case basis.",
+      },
+    },
+    description:
+      "The Bartlett is globally renowned for experimental, research-led architectural education combining design studio with technical and cultural study.",
+    entryYear: 2025,
+  },
+  {
+    id: "biomedical_imperial",
+    title: "Biomedical Science BSc",
+    university: "Imperial College London",
+    ucasCode: "B990",
+    duration: "3 years",
+    status: "limited",
+    ucasPoints: 152,
+    requirements: {
+      alevel: {
+        grades: ["A*", "A", "A"],
+        required: ["chemistry"],
+        preferred: ["biology", "maths", "physics"],
+        notes: "Chemistry required. Biology or Maths strongly preferred.",
+      },
+      ib: {
+        totalPoints: 39,
+        required: ["ib_chemistry_hl"],
+        hlGrades: { min: 6 },
+        notes: "HL Chemistry at 6 minimum.",
+      },
+      access: null,
+      btec: null,
+    },
+    description:
+      "An intensive programme covering cell biology, physiology, pharmacology and genetics, preparing graduates for research and healthcare careers.",
+    entryYear: 2025,
+  },
+  {
+    id: "history_cambridge",
+    title: "History BA",
+    university: "University of Cambridge",
+    ucasCode: "V100",
+    duration: "3 years",
+    status: "open",
+    ucasPoints: null,
+    requirements: {
+      alevel: {
+        grades: ["A*", "A", "A"],
+        required: ["history"],
+        preferred: ["english_lit", "geography", "economics", "law"],
+        notes: "History required. Written work submission expected.",
+      },
+      ib: {
+        totalPoints: 40,
+        required: ["ib_history_hl"],
+        hlGrades: { min: 7 },
+        notes: "40–42 points with 776 at HL. History HL required.",
+      },
+      access: null,
+      btec: null,
+    },
+    description:
+      "Cambridge's history degree spans medieval to modern periods, developing critical analysis, archival research, and essay-writing skills.",
+    entryYear: 2025,
+  },
+  {
+    id: "business_warwick",
+    title: "Business Studies BSc",
+    university: "University of Warwick",
+    ucasCode: "N100",
+    duration: "3 years",
+    status: "open",
+    ucasPoints: 136,
+    requirements: {
+      alevel: {
+        grades: ["A", "A", "B"],
+        required: [],
+        preferred: ["maths", "economics", "business"],
+        notes: "Quantitative subjects are an advantage.",
+      },
+      btec: {
+        grades: ["D*", "D*", "M"],
+        required: ["business_btec"],
+        notes: "BTEC Business accepted with strong grades.",
+      },
+      ib: {
+        totalPoints: 36,
+        hlGrades: { min: 6 },
+        notes: "36 points with 666 at HL.",
+      },
+      access: {
+        grades: "Distinction in 30 credits",
+        required: ["access_business", "access_social_science"],
+        notes: "Access to HE in Business or Social Science.",
+      },
+      scottish: {
+        grades: ["A", "A", "B", "B", "B"],
+        required: [],
+        notes: "Five Highers at AABBB.",
+      },
+    },
+    description:
+      "Warwick Business School's undergraduate programme is one of the UK's most competitive, combining strategy, finance, and organisational behaviour.",
+    entryYear: 2025,
+  },
+];

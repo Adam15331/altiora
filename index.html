@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Altiora — discover UK university courses that match your qualifications." />
+  <title>Altiora</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav class="nav" aria-label="Main navigation">
+    <div class="nav__inner">
+      <a href="#" class="nav__brand" aria-label="Altiora home">
+        <span class="nav__logo">Altiora</span>
+        <span class="nav__tagline">Your journey, guided.</span>
+      </a>
+      <div class="nav__actions">
+        <button class="btn btn--ghost btn--sm" id="resetBtn">Start over</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Main content ── -->
+  <main>
+    <div class="content">
+
+      <!-- Hero -->
+      <section class="hero" aria-labelledby="heroHeading">
+        <span class="hero__eyebrow">UK University Course Finder</span>
+        <h1 id="heroHeading">Find courses that fit your grades</h1>
+        <p>Tell us your qualification and subjects — we'll show you which university courses you're eligible for, and how close you are to the ones you're not.</p>
+      </section>
+
+      <!-- Progress bar -->
+      <div class="progress" role="progressbar" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1">
+        <div class="progress__bar">
+          <div class="progress__fill" id="progressFill"></div>
+        </div>
+        <span class="progress__label" id="progressLabel">Step 1 of 3</span>
+      </div>
+
+      <!-- ── Step 1: Qualification ── -->
+      <section class="step-form" aria-live="polite">
+
+        <div class="step active" id="step1" aria-label="Step 1: Choose your qualification">
+          <div class="step__header">
+            <div class="step__label">Step 1</div>
+            <h2>What's your qualification?</h2>
+            <p>Select the qualification you're studying or have completed.</p>
+          </div>
+
+          <div class="qual-grid" id="qualGrid" role="list" aria-label="Qualification options">
+            <!-- Populated by JS -->
+          </div>
+
+          <div class="form-actions">
+            <span></span>
+            <button class="btn btn--primary" id="nextStep1" disabled>
+              Continue →
+            </button>
+          </div>
+        </div>
+
+        <!-- ── Step 2: Subjects & Grades ── -->
+        <div class="step" id="step2" aria-label="Step 2: Enter your subjects and grades">
+          <div class="step__header">
+            <div class="step__label">Step 2</div>
+            <h2>Your subjects &amp; grades</h2>
+            <p>Add the subjects you're taking (or have taken) and your predicted or actual grades.</p>
+          </div>
+
+          <div class="subject-search">
+            <span class="subject-search__icon" aria-hidden="true">⌕</span>
+            <input
+              type="search"
+              id="subjectSearchInput"
+              placeholder="Search subjects…"
+              aria-label="Search subjects"
+            />
+          </div>
+
+          <div id="subjectRows" role="list" aria-label="Subject entries">
+            <!-- Populated by JS -->
+          </div>
+
+          <button class="add-subject-btn" id="addSubjectBtn" type="button">
+            + Add another subject
+          </button>
+
+          <p class="text-secondary mt-8" style="font-size:13px;" id="subjectCount">0 subjects entered</p>
+
+          <div class="form-actions">
+            <button class="btn btn--ghost" id="backStep2">← Back</button>
+            <button class="btn btn--primary" id="nextStep2">Continue →</button>
+          </div>
+        </div>
+
+        <!-- ── Step 3: Confirm & Search ── -->
+        <div class="step" id="step3" aria-label="Step 3: Confirm and search">
+          <div class="step__header">
+            <div class="step__label">Step 3</div>
+            <h2>Confirm your profile</h2>
+            <p>Check your details below, then search to see matched courses.</p>
+          </div>
+
+          <div id="summaryContent">
+            <!-- Populated by JS -->
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn--ghost" id="backStep3">← Back</button>
+            <button class="btn btn--primary" id="findCoursesBtn">Find matching courses →</button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ── Results ── -->
+      <section class="results" id="results" aria-label="Course results" aria-live="polite">
+        <div class="divider"></div>
+
+        <div class="results__header">
+          <h2>Matching courses</h2>
+          <div class="results__meta">
+            <span id="resultCount" class="text-secondary" style="font-size:14px;"></span>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters" role="group" aria-label="Filter courses by eligibility">
+          <button class="filter-btn active" data-filter="all">
+            All <span class="filter-count"></span>
+          </button>
+          <button class="filter-btn" data-filter="eligible">
+            Likely eligible <span class="filter-count"></span>
+          </button>
+          <button class="filter-btn" data-filter="borderline">
+            Borderline <span class="filter-count"></span>
+          </button>
+          <button class="filter-btn" data-filter="ineligible">
+            Unlikely eligible <span class="filter-count"></span>
+          </button>
+        </div>
+
+        <!-- Course list -->
+        <div class="course-list" id="courseList" role="list" aria-label="Course cards">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <p>Built by a student, for students. &mdash; Altiora &copy; 2025</p>
+  </footer>
+
+  <!-- Data scripts loaded before main -->
+  <script src="data/qualificationMappings.js"></script>
+  <script src="data/courseRequirements.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
