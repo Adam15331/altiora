@@ -1,0 +1,538 @@
+/* ═══════════════════════════════════════════════════════════════
+ * Altiora — main.js
+ *
+ * Two modes:
+ *   "check"   – pick subjects → instant GREEN / AMBER / RED classification
+ *   "reverse" – search a degree → see required subjects per qualification system
+ *
+ * Data dependencies (loaded before this script):
+ *   qualificationMappings  – data/qualificationMappings.js
+ *   courses                – data/courseRequirements.js
+ * ═══════════════════════════════════════════════════════════════ */
+
+'use strict';
+
+/* ─── State ─────────────────────────────────────────────────────
+ * Single source of truth. Read everywhere; mutate only in named
+ * handler functions so the render path stays predictable.
+ * ─────────────────────────────────────────────────────────────── */
+const state = {
+  mode:             'check',
+  checkSystem:      '',
+  reverseSystem:    '',
+  selectedSubjects: [],
+  selectedTags:     new Set(),
+  countryFilter:    'All',
+  searchQuery:      '',
+};
+
+/* ─── Constants ─────────────────────────────────────────────────── */
+const COUNTRY_FLAGS  = { UK:'🇬🇧', US:'🇺🇸', Netherlands:'🇳🇱', Singapore:'🇸🇬', Hong_Kong:'🇭🇰' };
+const COUNTRY_LABELS = { UK:'UK',  US:'US',  Netherlands:'Netherlands', Singapore:'Singapore', Hong_Kong:'Hong Kong' };
+
+const STATUS = {
+  green: { label:'Open',     badgeCls:'badge--success', icon:'✓', cardCls:'card--green' },
+  amber: { label:'Possible', badgeCls:'badge--warning', icon:'◑', cardCls:'card--amber' },
+  red:   { label:'Closed',   badgeCls:'badge--error',   icon:'✕', cardCls:'card--red'   },
+};
+const STATUS_SORT = { green:0, amber:1, red:2 };
+
+/* ─── DOM shortcuts ──────────────────────────────────────────────── */
+const $  = id  => document.getElementById(id);
+const $$ = sel => document.querySelectorAll(sel);
+
+/* ═══════════════════════════════════════════════════════════════
+ * REVERSE-MAP UTILITIES
+ * Build tag → [local subject names] per system; pick the best
+ * representative name for display.
+ * ═══════════════════════════════════════════════════════════════ */
+
+const _rMapCache = {};
+
+function getReverseMap(systemKey) {
+  if (_rMapCache[systemKey]) return _rMapCache[systemKey];
+  const src = qualificationMappings[systemKey]?.subjects ?? {};
+  const map = {};
+  for (const [name, tag] of Object.entries(src)) (map[tag] ??= []).push(name);
+  _rMapCache[systemKey] = map;
+  return map;
+}
+
+/**
+ * Score subjects for display preference (higher = show first).
+ *   2  – HL / H2 / AP  (standard advanced form)
+ *   1  – neutral / no level marker
+ *   0  – SL / H1
+ *  -1  – "Further *"  (supplementary enrichment, not standalone)
+ */
+function subjectDisplayScore(name) {
+  if (/\bFurther\b/.test(name))                                    return -1;
+  if (/ HL$/.test(name) || /^H2 /.test(name) || /^AP /.test(name)) return  2;
+  if (/ SL$/.test(name) || /^H1 /.test(name))                      return  0;
+  return 1;
+}
+
+/**
+ * Translate a universal tag to the best local subject name.
+ * Sort: score DESC → length DESC (longer = more specific) → alpha ASC.
+ */
+function tagToLocal(tag, systemKey) {
+  if (!systemKey) return humanTag(tag);
+  const options = getReverseMap(systemKey)[tag];
+  if (!options?.length) return humanTag(tag);
+  return [...options].sort((a, b) => {
+    const byScore = subjectDisplayScore(b) - subjectDisplayScore(a);
+    if (byScore !== 0) return byScore;
+    const byLen = b.length - a.length;
+    return byLen !== 0 ? byLen : a.localeCompare(b);
+  })[0];
+}
+
+function humanTag(tag) { return tag.replace(/_/g, ' '); }
+
+/* ═══════════════════════════════════════════════════════════════
+ * TAG DERIVATION
+ * ═══════════════════════════════════════════════════════════════ */
+
+function deriveTagsFromSubjects(subjects, systemKey) {
+  const forward = qualificationMappings[systemKey]?.subjects ?? {};
+  const tags = new Set();
+  for (const name of subjects) { const t = forward[name]; if (t) tags.add(t); }
+  return tags;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * ELIGIBILITY ENGINE
+ * ═══════════════════════════════════════════════════════════════ */
+
+function classify(course, userTags) {
+  const { essential = [], preferred = [] } = course.requirements;
+  const missingEssential = essential.filter(t => !userTags.has(t));
+  if (missingEssential.length) return { status:'red', missingEssential, missingPreferred:[] };
+  const missingPreferred = preferred.filter(t => !userTags.has(t));
+  return { status: missingPreferred.length ? 'amber' : 'green', missingEssential:[], missingPreferred };
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * TOAST NOTIFICATION
+ * ═══════════════════════════════════════════════════════════════ */
+
+let _toastTimer = null;
+
+function showToast(message) {
+  const toast = $('toast');
+  toast.textContent = message;
+  toast.classList.add('toast--visible');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => toast.classList.remove('toast--visible'), 2400);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * MODE TOGGLE
+ * ═══════════════════════════════════════════════════════════════ */
+
+function switchMode(mode) {
+  state.mode = mode;
+  $$('.mode-btn').forEach(btn => {
+    const active = btn.dataset.mode === mode;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-selected', String(active));
+  });
+  $('panel-check')  .classList.toggle('hidden', mode !== 'check');
+  $('panel-reverse').classList.toggle('hidden', mode !== 'reverse');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * SYSTEM DROPDOWNS
+ * ═══════════════════════════════════════════════════════════════ */
+
+function populateSystemSelects() {
+  const optHtml = Object.entries(qualificationMappings)
+    .map(([k, sys]) => `<option value="${k}">${esc(sys.systemLabel)}</option>`)
+    .join('');
+  $('checkSystemSelect').innerHTML   = `<option value="">Select your system…</option>${optHtml}`;
+  $('reverseSystemSelect').innerHTML = `<option value="">Show as universal tags</option>${optHtml}`;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * SUBJECT PICKER  (check mode)
+ * ═══════════════════════════════════════════════════════════════ */
+
+function buildSubjectPicker(systemKey) {
+  const section = $('subjectPickerSection');
+  const picker  = $('subjectPicker');
+  $('subjectFilterInput').value = '';
+
+  if (!systemKey) { section.classList.add('hidden'); picker.innerHTML = ''; return; }
+
+  const subjects = Object.keys(qualificationMappings[systemKey]?.subjects ?? {});
+  const frag = document.createDocumentFragment();
+  subjects.forEach(name => {
+    const label = document.createElement('label');
+    label.className = 'subject-chip';
+    label.innerHTML = `<input type="checkbox" value="${esc(name)}"><span>${esc(name)}</span>`;
+    label.querySelector('input').addEventListener('change', onSubjectToggle);
+    frag.appendChild(label);
+  });
+
+  picker.innerHTML = '';
+  picker.appendChild(frag);
+  section.classList.remove('hidden');
+  syncSubjectCount();
+}
+
+function onSubjectToggle() {
+  state.selectedSubjects = Array.from($$('#subjectPicker input:checked')).map(c => c.value);
+  state.selectedTags     = deriveTagsFromSubjects(state.selectedSubjects, state.checkSystem);
+  $$('#subjectPicker .subject-chip').forEach(chip =>
+    chip.classList.toggle('selected', chip.querySelector('input').checked)
+  );
+  syncSubjectCount();
+  renderCheckResults();
+}
+
+function syncSubjectCount() {
+  const n = state.selectedSubjects.length;
+  $('subjectCountBadge').textContent = n === 0 ? 'none selected' : `${n} selected`;
+}
+
+$('subjectFilterInput').addEventListener('input', e => {
+  const q = e.target.value.toLowerCase();
+  $$('#subjectPicker .subject-chip').forEach(chip => {
+    chip.classList.toggle('hidden', !!q && !chip.querySelector('span').textContent.toLowerCase().includes(q));
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════════
+ * COUNTRY FILTER BAR
+ * ═══════════════════════════════════════════════════════════════ */
+
+function buildCountryFilterBar() {
+  const bar = $('countryFilterBar');
+  [['All','All'], ...Object.entries(COUNTRY_LABELS)].forEach(([key, label]) => {
+    const btn = document.createElement('button');
+    btn.className = `filter-btn${key === 'All' ? ' active' : ''}`;
+    btn.dataset.country = key;
+    btn.textContent = (COUNTRY_FLAGS[key] ? COUNTRY_FLAGS[key] + ' ' : '') + label;
+    btn.addEventListener('click', () => {
+      state.countryFilter = key;
+      $$('#countryFilterBar .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCheckResults();
+    });
+    bar.appendChild(btn);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * SUMMARY BAR
+ * "You've selected 4 subjects → 8 open · 12 possible · 22 closed"
+ * + segmented progress bar
+ * ═══════════════════════════════════════════════════════════════ */
+
+function renderSummaryBar(subjectCount, counts, total) {
+  const bar = $('summaryBar');
+
+  const gPct = total ? (counts.green / total * 100) : 0;
+  const aPct = total ? (counts.amber / total * 100) : 0;
+  const rPct = total ? (counts.red   / total * 100) : 0;
+
+  bar.innerHTML = `
+    <div class="summary-text">
+      <span>You've selected <strong>${subjectCount}</strong> subject${subjectCount !== 1 ? 's' : ''}</span>
+      <span class="summary-arrow">→</span>
+      <span class="summary-stat summary-stat--green">${counts.green}&nbsp;open</span>
+      <span class="summary-dot">·</span>
+      <span class="summary-stat summary-stat--amber">${counts.amber}&nbsp;possible</span>
+      <span class="summary-dot">·</span>
+      <span class="summary-stat summary-stat--red">${counts.red}&nbsp;closed</span>
+    </div>
+    <div class="summary-progress" role="img" aria-label="Course eligibility breakdown: ${counts.green} open, ${counts.amber} possible, ${counts.red} closed">
+      <div class="summary-seg summary-seg--green" style="width:${gPct.toFixed(2)}%"></div>
+      <div class="summary-seg summary-seg--amber" style="width:${aPct.toFixed(2)}%"></div>
+      <div class="summary-seg summary-seg--red"   style="width:${rPct.toFixed(2)}%"></div>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * CHECK MODE — RESULTS
+ * ═══════════════════════════════════════════════════════════════ */
+
+function renderCheckResults() {
+  const section = $('checkResultsSection');
+
+  if (state.selectedSubjects.length === 0) {
+    section.classList.add('hidden');
+    return;
+  }
+  section.classList.remove('hidden');
+
+  const pool = state.countryFilter === 'All'
+    ? courses
+    : courses.filter(c => c.country === state.countryFilter);
+
+  const classified = pool
+    .map(course => ({ course, result: classify(course, state.selectedTags) }))
+    .sort((a, b) => {
+      const byStatus = STATUS_SORT[a.result.status] - STATUS_SORT[b.result.status];
+      return byStatus !== 0 ? byStatus : a.course.university.localeCompare(b.course.university);
+    });
+
+  const counts = { green:0, amber:0, red:0 };
+  classified.forEach(c => counts[c.result.status]++);
+
+  // Summary bar
+  renderSummaryBar(state.selectedSubjects.length, counts, classified.length);
+
+  // Legacy badge row (compact, above the filter)
+  $('resultSummaryBadges').innerHTML = `
+    <span class="badge badge--success">✓&thinsp;${counts.green}</span>
+    <span class="badge badge--warning">◑&thinsp;${counts.amber}</span>
+    <span class="badge badge--error">✕&thinsp;${counts.red}</span>
+    <span class="badge badge--neutral">${classified.length} shown</span>
+  `;
+
+  // Cards with staggered entrance (cap delay at card 16 to keep it snappy)
+  const grid = $('courseGrid');
+  const frag = document.createDocumentFragment();
+  classified.forEach(({ course, result }, i) => {
+    const card = buildCheckCard(course, result);
+    card.style.setProperty('--card-delay', `${Math.min(i, 16) * 0.035}s`);
+    frag.appendChild(card);
+  });
+  grid.innerHTML = '';
+  grid.appendChild(frag);
+}
+
+function buildCheckCard(course, result) {
+  const { status, missingEssential, missingPreferred } = result;
+  const cfg     = STATUS[status];
+  const sys     = state.checkSystem;
+  const flag    = COUNTRY_FLAGS[course.country] ?? '';
+  const country = COUNTRY_LABELS[course.country] ?? course.country;
+
+  // Red: underlined missing essential subject names
+  const missingTagsHtml = tags =>
+    tags.map(t => `<span class="missing-tag">${esc(tagToLocal(t, sys))}</span>`).join(', ');
+
+  let footerHtml = '';
+
+  if (status === 'red' && missingEssential.length) {
+    // Show all missing essentials with red underline
+    footerHtml = `
+      <p class="card-missing card-missing--red">
+        <span class="missing-prefix">Needs:</span>
+        ${missingTagsHtml(missingEssential)}
+      </p>`;
+  } else if (status === 'amber' && missingPreferred.length) {
+    // Actionable tip: surface the single most impactful missing preferred subject
+    const topSubject = tagToLocal(missingPreferred[0], sys);
+    const extras     = missingPreferred.length > 1
+      ? ` <span style="color:var(--text-faint);font-weight:400"> + ${missingPreferred.length - 1} more</span>`
+      : '';
+    footerHtml = `
+      <p class="card-tip">
+        <span class="card-tip__icon">💡</span>
+        Add <strong>${esc(topSubject)}</strong> to open more doors${extras}
+      </p>`;
+  }
+
+  const card = document.createElement('div');
+  card.className = `course-card ${cfg.cardCls}`;
+  card.setAttribute('role', 'listitem');
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="card-title-group">
+        <span class="card-flag" aria-hidden="true">${flag}</span>
+        <div class="card-titles">
+          <div class="card-name">${esc(course.name)}</div>
+          <div class="card-uni">${esc(course.university)}</div>
+        </div>
+      </div>
+      <span class="badge ${cfg.badgeCls}">${cfg.icon}&thinsp;${cfg.label}</span>
+    </div>
+    <div class="card-meta">
+      <span class="badge badge--neutral">${esc(course.degreeLevel)}</span>
+      <span class="badge badge--neutral">${flag}&thinsp;${esc(country)}</span>
+    </div>
+    ${footerHtml}
+  `;
+  return card;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * REVERSE MODE — RESULTS
+ * ═══════════════════════════════════════════════════════════════ */
+
+$('courseSearchInput').addEventListener('input', e => {
+  state.searchQuery = e.target.value.trim();
+  renderReverseResults();
+});
+
+$('reverseSystemSelect').addEventListener('change', e => {
+  state.reverseSystem = e.target.value;
+  if (state.searchQuery) renderReverseResults();
+});
+
+function renderReverseResults() {
+  const section = $('reverseResultsSection');
+  const q = state.searchQuery.toLowerCase();
+
+  if (!q) {
+    section.innerHTML = '<p class="search-hint">Start typing to find courses…</p>';
+    return;
+  }
+
+  const matched = courses.filter(c =>
+    c.name.toLowerCase().includes(q) ||
+    c.university.toLowerCase().includes(q) ||
+    (COUNTRY_LABELS[c.country] ?? '').toLowerCase().includes(q)
+  );
+
+  if (!matched.length) {
+    section.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state__icon">🔍</div>
+        <p>No courses matched <strong>"${esc(state.searchQuery)}"</strong>.</p>
+        <p class="mt-8">Try a broader term like <em>Medicine</em>, <em>Engineering</em>, or a university name.</p>
+      </div>`;
+    return;
+  }
+
+  const frag = document.createDocumentFragment();
+  matched.forEach((course, i) => {
+    const card = buildReverseCard(course);
+    card.style.setProperty('--card-delay', `${Math.min(i, 12) * 0.04}s`);
+    frag.appendChild(card);
+  });
+  section.innerHTML = '';
+  section.appendChild(frag);
+}
+
+function buildReverseCard(course) {
+  const sys     = state.reverseSystem;
+  const flag    = COUNTRY_FLAGS[course.country] ?? '';
+  const country = COUNTRY_LABELS[course.country] ?? course.country;
+  const { essential = [], preferred = [], useful = [] } = course.requirements;
+
+  const tagPills = tags => {
+    if (!tags.length) return '<span class="text-secondary" style="font-size:13px">None specified</span>';
+    return tags.map(t => `<span class="subject-tag">${esc(tagToLocal(t, sys))}</span>`).join('');
+  };
+
+  const rows = [
+    { label:'Required', cls:'req-essential', tags: essential },
+    ...(preferred.length ? [{ label:'Preferred', cls:'req-preferred', tags: preferred }] : []),
+    ...(useful.length    ? [{ label:'Useful',    cls:'req-useful',    tags: useful    }] : []),
+  ];
+
+  const card = document.createElement('div');
+  card.className = 'reverse-card';
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="card-title-group">
+        <span class="card-flag" aria-hidden="true">${flag}</span>
+        <div class="card-titles">
+          <div class="card-name">${esc(course.name)}</div>
+          <div class="card-uni">${esc(course.university)}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;flex-shrink:0">
+        <span class="badge badge--neutral">${esc(course.degreeLevel)}</span>
+        <span class="badge badge--neutral">${flag}&thinsp;${esc(country)}</span>
+      </div>
+    </div>
+    <div class="reverse-reqs">
+      ${rows.map(row => `
+        <div class="req-row">
+          <span class="req-label ${row.cls}">${row.label}</span>
+          <div class="req-tags">${tagPills(row.tags)}</div>
+        </div>`).join('')}
+    </div>
+    ${course.notes ? `<p class="reverse-notes">${esc(course.notes)}</p>` : ''}
+    <div class="reverse-card-footer">
+      <button class="copy-btn" type="button" aria-label="Copy requirements for ${esc(course.name)} to clipboard">
+        ⎘&ensp;Copy requirements
+      </button>
+    </div>
+  `;
+
+  // Copy-to-clipboard handler (attached after innerHTML so the button exists)
+  card.querySelector('.copy-btn').addEventListener('click', e => {
+    e.stopPropagation();
+    const btn = e.currentTarget;
+    navigator.clipboard.writeText(buildRequirementsText(course))
+      .then(() => {
+        btn.textContent = '✓  Copied!';
+        btn.classList.add('copy-btn--done');
+        showToast('Requirements copied to clipboard');
+        setTimeout(() => {
+          btn.innerHTML = '⎘&ensp;Copy requirements';
+          btn.classList.remove('copy-btn--done');
+        }, 2200);
+      })
+      .catch(() => showToast('Copy failed — try selecting the text manually'));
+  });
+
+  return card;
+}
+
+/**
+ * Build a plain-text representation of a course's requirements,
+ * with tags translated to the active reverse system.
+ */
+function buildRequirementsText(course) {
+  const sys     = state.reverseSystem;
+  const country = COUNTRY_LABELS[course.country] ?? course.country;
+  const fmt     = tags => tags.map(t => tagToLocal(t, sys)).join(', ');
+  const { essential = [], preferred = [], useful = [] } = course.requirements;
+
+  const lines = [
+    `${course.name}`,
+    `${course.university} · ${country} · ${course.degreeLevel}`,
+    '',
+    `Required:  ${essential.length  ? fmt(essential)  : 'None specified'}`,
+    ...(preferred.length ? [`Preferred: ${fmt(preferred)}`] : []),
+    ...(useful.length    ? [`Useful:    ${fmt(useful)}`]    : []),
+    ...(course.notes     ? ['', `Notes: ${course.notes}`]   : []),
+  ];
+
+  return lines.join('\n');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * UTILITY
+ * ═══════════════════════════════════════════════════════════════ */
+
+function esc(str) {
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * INIT
+ * ═══════════════════════════════════════════════════════════════ */
+
+function init() {
+  populateSystemSelects();
+  buildCountryFilterBar();
+
+  $$('.mode-btn').forEach(btn =>
+    btn.addEventListener('click', () => switchMode(btn.dataset.mode))
+  );
+
+  $('checkSystemSelect').addEventListener('change', e => {
+    state.checkSystem      = e.target.value;
+    state.selectedSubjects = [];
+    state.selectedTags     = new Set();
+    $('checkResultsSection').classList.add('hidden');
+    buildSubjectPicker(state.checkSystem);
+    // Mirror to reverse panel so both start on the same system
+    $('reverseSystemSelect').value = state.checkSystem;
+    state.reverseSystem = state.checkSystem;
+    if (state.searchQuery) renderReverseResults();
+  });
+}
+
+init();

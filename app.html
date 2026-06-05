@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Altiora — check whether your qualification subjects match university courses worldwide." />
+  <title>Altiora</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ── Navigation ─────────────────────────────────────────── -->
+  <nav class="nav" aria-label="Main navigation">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__brand" aria-label="Altiora home">
+        <span class="nav__logo">Altiora</span>
+        <span class="nav__tagline">Your journey, guided.</span>
+      </a>
+      <a href="index.html" class="nav__back">← Home</a>
+    </div>
+  </nav>
+
+  <!-- ── Main content ───────────────────────────────────────── -->
+  <main>
+    <div class="content">
+
+      <!-- Hero -->
+      <section class="hero" aria-labelledby="heroHeading">
+        <span class="hero__eyebrow">University Course Finder</span>
+        <h1 id="heroHeading">Find courses that match your subjects</h1>
+        <p>Works with UK&nbsp;A-Levels, IB, US&nbsp;APs, Dutch&nbsp;VWO, Singapore&nbsp;A-Levels, and Hong&nbsp;Kong&nbsp;DSE.</p>
+      </section>
+
+      <!-- ── Mode toggle ──────────────────────────────────────── -->
+      <div class="mode-toggle" role="tablist" aria-label="Application mode">
+        <button
+          class="mode-btn active"
+          data-mode="check"
+          role="tab"
+          aria-selected="true"
+          aria-controls="panel-check"
+        >
+          <span class="mode-btn__icon" aria-hidden="true">⊞</span>
+          Check Combination
+        </button>
+        <button
+          class="mode-btn"
+          data-mode="reverse"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-reverse"
+        >
+          <span class="mode-btn__icon" aria-hidden="true">↩</span>
+          Reverse Course Finder
+        </button>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════
+           Panel A — Check Combination
+           ═══════════════════════════════════════════════════════ -->
+      <div id="panel-check" class="panel" role="tabpanel">
+
+        <p class="panel-intro">
+          Select your qualification system, pick your subjects, and instantly see which
+          courses are open, possible, or out of reach.
+        </p>
+
+        <!-- System select -->
+        <div class="panel-controls">
+          <div class="control-group">
+            <label class="control-label" for="checkSystemSelect">
+              Qualification system
+            </label>
+            <div class="select-wrap">
+              <select id="checkSystemSelect" aria-label="Select your qualification system">
+                <!-- populated by JS -->
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subject picker — hidden until a system is chosen -->
+        <div id="subjectPickerSection" class="subject-picker-section hidden" aria-live="polite">
+          <div class="subject-picker-header">
+            <span class="control-label">Your subjects</span>
+            <span id="subjectCountBadge" class="count-badge">none selected</span>
+          </div>
+          <div class="subject-search-bar">
+            <input
+              type="search"
+              id="subjectFilterInput"
+              class="subject-filter-input"
+              placeholder="Filter subjects…"
+              autocomplete="off"
+              aria-label="Filter subject list"
+            />
+          </div>
+          <div
+            id="subjectPicker"
+            class="subject-picker"
+            role="group"
+            aria-label="Select your subjects"
+          >
+            <!-- chip labels inserted by JS -->
+          </div>
+          <p class="picker-hint">Select 3–5 subjects for best results. Results update instantly.</p>
+        </div>
+
+        <!-- Results — hidden until at least one subject is selected -->
+        <div id="checkResultsSection" class="results-section hidden" aria-live="polite">
+
+          <!-- Visual summary bar: "4 subjects → X open · Y possible · Z closed" -->
+          <div id="summaryBar" class="summary-bar" aria-live="polite" aria-atomic="true"></div>
+
+          <div class="results-toolbar">
+            <div
+              id="resultSummaryBadges"
+              class="result-summary"
+              aria-live="polite"
+              aria-atomic="true"
+            ></div>
+            <div
+              id="countryFilterBar"
+              class="filter-bar"
+              role="group"
+              aria-label="Filter results by country"
+            >
+              <!-- filter buttons inserted by JS -->
+            </div>
+          </div>
+
+          <div
+            id="courseGrid"
+            class="course-grid"
+            role="list"
+            aria-label="Course results"
+          >
+            <!-- course cards inserted by JS -->
+          </div>
+
+        </div>
+      </div><!-- /panel-check -->
+
+      <!-- ═══════════════════════════════════════════════════════
+           Panel B — Reverse Course Finder
+           ═══════════════════════════════════════════════════════ -->
+      <div id="panel-reverse" class="panel hidden" role="tabpanel">
+
+        <p class="panel-intro">
+          Search for a degree and see exactly which subjects you need, translated
+          into your own qualification system.
+        </p>
+
+        <div class="panel-controls panel-controls--row">
+
+          <div class="control-group">
+            <label class="control-label" for="reverseSystemSelect">
+              Show requirements as
+            </label>
+            <div class="select-wrap">
+              <select
+                id="reverseSystemSelect"
+                aria-label="Translate requirements to this qualification system"
+              >
+                <!-- populated by JS -->
+              </select>
+            </div>
+          </div>
+
+          <div class="control-group control-group--grow">
+            <label class="control-label" for="courseSearchInput">
+              Search degree or university
+            </label>
+            <input
+              type="search"
+              id="courseSearchInput"
+              class="search-input"
+              placeholder="e.g. Medicine, Computer Science, Law…"
+              autocomplete="off"
+              aria-label="Search by degree area or university name"
+            />
+          </div>
+
+        </div>
+
+        <div
+          id="reverseResultsSection"
+          class="results-section"
+          aria-live="polite"
+        >
+          <p class="search-hint">Start typing to find courses…</p>
+        </div>
+
+      </div><!-- /panel-reverse -->
+
+    </div><!-- /content -->
+  </main>
+
+  <!-- ── Footer ──────────────────────────────────────────────── -->
+  <footer>
+    <p>Built by a student, for students. &mdash; Altiora &copy; 2025</p>
+  </footer>
+
+  <!-- Clipboard toast notification -->
+  <div id="toast" class="toast" role="status" aria-live="assertive"></div>
+
+  <!-- Data layer must be loaded before main.js -->
+  <script src="data/qualificationMappings.js"></script>
+  <script src="data/courseRequirements.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
