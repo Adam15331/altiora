@@ -1,214 +1,993 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Altiora — check whether your qualification subjects match university courses worldwide." />
-  <title>Altiora</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Altiora — Your University Journey, Guided. For Free.</title>
+<meta name="description" content="Altiora replaces the £4,000 university counsellor with an intelligent companion that knows every course, every deadline, and exactly what your personal statement needs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0a0a0f;
+  --bg2: #0f0f16;
+  --surface: #14141e;
+  --surface2: #1c1c2a;
+  --surface3: #242434;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.1);
+  --accent: #3b82f6;
+  --accent-lt: #60a5fa;
+  --accent-dim: rgba(59,130,246,0.12);
+  --accent-glow: rgba(59,130,246,0.06);
+  --accent2: #818cf8;
+  --green: #34d399;
+  --amber: #fbbf24;
+  --text: #f4f4f8;
+  --text2: #9090a8;
+  --text3: #50506a;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --display: 'Syne', sans-serif;
+  --body: 'DM Sans', sans-serif;
+  --r: 14px;
+  --r-sm: 8px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+
+/* ─── GRAIN OVERLAY ─── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1.5rem, 5vw, 4rem);
+  height: 64px;
+  background: rgba(10,10,15,0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+}
+.logo {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.3rem;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  text-decoration: none;
+}
+.logo em { color: var(--accent); font-style: normal; }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.85rem;
+  color: var(--text2);
+  text-decoration: none;
+  font-weight: 400;
+  transition: color 0.2s;
+  letter-spacing: 0.01em;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-cta { display: flex; align-items: center; gap: 1rem; }
+.btn-ghost {
+  font-family: var(--body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text2);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 0;
+  transition: color 0.2s;
+  text-decoration: none;
+}
+.btn-ghost:hover { color: var(--text); }
+.btn-primary {
+  font-family: var(--body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: white;
+  background: var(--accent);
+  border: none;
+  border-radius: 100px;
+  padding: 9px 22px;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.btn-primary:hover {
+  background: #5a9bf8;
+  box-shadow: 0 0 32px rgba(59,130,246,0.35);
+  transform: translateY(-1px);
+}
+.btn-primary-lg { font-size: 1rem; padding: 14px 32px; border-radius: 100px; font-weight: 600; }
+.btn-outline-lg {
+  font-family: var(--body);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text2);
+  background: none;
+  border: 1px solid var(--border2);
+  border-radius: 100px;
+  padding: 14px 32px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-outline-lg:hover { color: var(--text); border-color: var(--border2); background: rgba(255,255,255,0.04); }
+
+/* ─── SECTIONS ─── */
+section { padding: clamp(5rem, 10vw, 9rem) clamp(1.5rem, 5vw, 4rem); }
+.inner { max-width: 1200px; margin: 0 auto; }
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 120px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -20%; left: 50%;
+  transform: translateX(-50%);
+  width: 900px; height: 900px;
+  background: radial-gradient(ellipse, rgba(59,130,246,0.08) 0%, rgba(129,140,248,0.04) 40%, transparent 70%);
+  pointer-events: none;
+  animation: orbPulse 8s ease-in-out infinite;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 10%; right: -15%;
+  width: 600px; height: 600px;
+  background: radial-gradient(ellipse, rgba(52,211,153,0.05) 0%, transparent 65%);
+  pointer-events: none;
+}
+@keyframes orbPulse {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
+  50%       { transform: translateX(-50%) scale(1.08); opacity: 0.8; }
+}
+.hero .inner { position: relative; z-index: 2; text-align: center; }
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(59,130,246,0.1);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-lt);
+  margin-bottom: 2rem;
+  animation: fadeUp 0.7s ease backwards;
+}
+.eyebrow-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.hero-headline {
+  font-family: var(--serif);
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+  animation: fadeUp 0.7s 0.1s ease backwards;
+}
+.hero-headline .accent-word { color: var(--accent-lt); font-style: italic; }
+.hero-headline .serif-em    { font-style: italic; color: var(--text); }
+
+.hero-sub {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-weight: 300;
+  color: var(--text2);
+  max-width: 560px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.7;
+  animation: fadeUp 0.7s 0.2s ease backwards;
+}
+.hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  animation: fadeUp 0.7s 0.3s ease backwards;
+}
+.hero-trust {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  font-size: 0.78rem;
+  color: var(--text3);
+  animation: fadeUp 0.7s 0.4s ease backwards;
+  flex-wrap: wrap;
+}
+.trust-item { display: flex; align-items: center; gap: 6px; }
+.trust-check { color: var(--green); font-size: 0.75rem; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── DASHBOARD ILLUSTRATION ─── */
+.dashboard-wrap {
+  position: relative;
+  margin: 5rem auto 0;
+  max-width: 960px;
+  animation: fadeUp 0.9s 0.5s ease backwards;
+}
+.dashboard-glow {
+  position: absolute;
+  inset: -40px;
+  background: radial-gradient(ellipse at 50% 40%, rgba(59,130,246,0.12) 0%, transparent 65%);
+  pointer-events: none;
+}
+.dashboard-frame {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.03);
+  position: relative;
+}
+.db-topbar {
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+.db-dots { display: flex; gap: 6px; }
+.db-dot { width: 10px; height: 10px; border-radius: 50%; }
+.db-dot-r { background: #ff5f57; }
+.db-dot-y { background: #febc2e; }
+.db-dot-g { background: #28c840; }
+.db-url {
+  flex: 1;
+  background: var(--surface3);
+  border-radius: 6px;
+  height: 26px;
+  max-width: 320px;
+  margin: 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; color: var(--text3); gap: 6px;
+}
+.db-url-lock { color: var(--green); font-size: 0.65rem; }
+.db-body { display: grid; grid-template-columns: 220px 1fr; min-height: 480px; }
+
+.db-sidebar {
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 1.5rem 1rem;
+  display: flex; flex-direction: column; gap: 0.25rem;
+}
+.db-user {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px; margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border); padding-bottom: 1.25rem;
+}
+.db-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #8b5cf6);
+  font-size: 0.7rem; font-weight: 700; color: white;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.db-uname  { font-size: 0.78rem; font-weight: 500; color: var(--text); }
+.db-ugrade { font-size: 0.65rem; color: var(--text3); }
+.db-nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border-radius: var(--r-sm);
+  font-size: 0.78rem; color: var(--text3);
+}
+.db-nav-item.active { background: var(--accent-dim); color: var(--accent-lt); }
+.db-nav-icon { font-size: 0.9rem; width: 18px; text-align: center; }
+.db-progress-block {
+  margin-top: auto;
+  background: var(--surface2);
+  border-radius: var(--r-sm);
+  padding: 12px;
+  border: 1px solid var(--border);
+}
+.db-prog-label { font-size: 0.65rem; color: var(--text3); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+.db-prog-name  { font-size: 0.78rem; color: var(--text2); margin-bottom: 8px; }
+.db-prog-track { height: 4px; background: var(--surface3); border-radius: 2px; overflow: hidden; }
+.db-prog-fill  { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 68%; }
+
+.db-main { padding: 1.5rem; }
+.db-greeting {
+  font-family: var(--display);
+  font-size: 1.05rem; font-weight: 600;
+  color: var(--text); margin-bottom: 0.25rem; letter-spacing: -0.02em;
+}
+.db-date { font-size: 0.72rem; color: var(--text3); margin-bottom: 1.25rem; }
+.db-cards-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.25rem; }
+.db-stat-card {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 12px;
+}
+.db-stat-top { font-size: 0.62rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+.db-stat-val { font-size: 1.3rem; font-weight: 600; font-family: var(--display); letter-spacing: -0.03em; }
+.db-stat-sub { font-size: 0.62rem; color: var(--text3); margin-top: 2px; }
+.c-blue  { color: var(--accent-lt); }
+.c-green { color: var(--green); }
+.c-amber { color: var(--amber); }
+
+.db-section-head { font-size: 0.72rem; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; }
+.db-courses { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1.25rem; }
+.db-course-row {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 10px 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.db-course-icon {
+  width: 28px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; flex-shrink: 0;
+}
+.db-course-info { flex: 1; }
+.db-course-name { font-size: 0.78rem; font-weight: 500; color: var(--text); line-height: 1.2; }
+.db-course-uni  { font-size: 0.62rem; color: var(--text3); }
+.db-course-badge { font-size: 0.6rem; font-weight: 600; padding: 3px 8px; border-radius: 100px; letter-spacing: 0.04em; }
+.badge-g { background: rgba(52,211,153,0.12); color: var(--green); }
+.badge-a { background: rgba(251,191,36,0.12);  color: var(--amber); }
+.db-ps-block {
+  background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(129,140,248,0.06));
+  border: 1px solid rgba(59,130,246,0.15);
+  border-radius: var(--r-sm); padding: 12px;
+}
+.db-ps-head { font-size: 0.72rem; color: var(--accent-lt); font-weight: 600; margin-bottom: 4px; }
+.db-ps-body { font-size: 0.7rem; color: var(--text3); line-height: 1.5; }
+.db-ps-progress { display: flex; gap: 3px; margin-top: 8px; }
+.db-ps-seg { height: 3px; flex: 1; border-radius: 2px; }
+.db-ps-seg.done    { background: var(--accent); }
+.db-ps-seg.current { background: rgba(59,130,246,0.3); }
+.db-ps-seg.todo    { background: var(--surface3); }
+
+/* ─── PROOF STRIP ─── */
+.proof-strip {
+  padding: 2rem clamp(1.5rem, 5vw, 4rem);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+}
+.proof-strip .inner {
+  display: flex; align-items: center;
+  justify-content: center; gap: 3rem; flex-wrap: wrap;
+}
+.proof-stat { text-align: center; }
+.proof-num {
+  font-family: var(--display);
+  font-size: 2rem; font-weight: 800;
+  letter-spacing: -0.04em; color: var(--text);
+  line-height: 1; margin-bottom: 4px;
+}
+.proof-num span { color: var(--accent-lt); }
+.proof-label   { font-size: 0.78rem; color: var(--text3); }
+.proof-divider { width: 1px; height: 44px; background: var(--border); }
+
+/* ─── FEATURES ─── */
+.features-section { background: var(--bg2); }
+.section-label {
+  display: inline-block;
+  font-size: 0.7rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 1rem;
+}
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 400; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--text);
+  margin-bottom: 1rem; max-width: 600px;
+}
+.section-title em { font-style: italic; color: var(--accent-lt); }
+.section-sub {
+  font-size: 1rem; color: var(--text2); font-weight: 300;
+  max-width: 500px; line-height: 1.7; margin-bottom: 3.5rem;
+}
+.feature-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1.5px; background: var(--border);
+  border-radius: var(--r-lg); overflow: hidden;
+  border: 1px solid var(--border);
+}
+.feature-card {
+  background: var(--surface);
+  padding: 2.5rem 2rem;
+  position: relative; overflow: hidden;
+  transition: background 0.3s;
+}
+.feature-card:hover { background: var(--surface2); }
+.feature-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; background: transparent; transition: background 0.3s;
+}
+.fc-1::before { background: linear-gradient(90deg, var(--accent), transparent); }
+.fc-2::before { background: linear-gradient(90deg, var(--green), transparent); }
+.fc-3::before { background: linear-gradient(90deg, #8b5cf6, transparent); }
+
+.feature-icon-wrap {
+  width: 52px; height: 52px; border-radius: var(--r);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; margin-bottom: 1.5rem;
+}
+.fi-blue   { background: rgba(59,130,246,0.12); }
+.fi-green  { background: rgba(52,211,153,0.1); }
+.fi-purple { background: rgba(139,92,246,0.12); }
+
+.feature-name {
+  font-family: var(--display);
+  font-size: 1.15rem; font-weight: 700;
+  letter-spacing: -0.02em; color: var(--text); margin-bottom: 0.75rem;
+}
+.feature-desc {
+  font-size: 0.9rem; color: var(--text2); line-height: 1.7;
+  font-weight: 300; margin-bottom: 1.5rem;
+}
+.feature-bullets { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.feature-bullets li {
+  display: flex; align-items: flex-start;
+  gap: 8px; font-size: 0.82rem; color: var(--text3);
+}
+.feature-bullets li::before { content: '→'; color: var(--accent); font-size: 0.75rem; margin-top: 1px; flex-shrink: 0; }
+
+/* ─── HOW IT WORKS ─── */
+.how-inner { max-width: 1200px; margin: 0 auto; }
+.how-header { text-align: center; margin-bottom: 4rem; }
+.steps-row {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 1rem; position: relative;
+}
+.steps-row::before {
+  content: '';
+  position: absolute; top: 28px; left: 12.5%; right: 12.5%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border2), var(--border2), transparent);
+  pointer-events: none;
+}
+.step { text-align: center; padding: 1rem; }
+.step-num {
+  width: 56px; height: 56px; border-radius: 50%;
+  border: 1px solid var(--border2); background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.25rem;
+  font-family: var(--display); font-size: 1.1rem; font-weight: 700;
+  color: var(--accent-lt); position: relative; z-index: 1;
+}
+.step-title {
+  font-family: var(--display); font-size: 0.95rem; font-weight: 600;
+  color: var(--text); margin-bottom: 0.5rem; letter-spacing: -0.01em;
+}
+.step-body { font-size: 0.82rem; color: var(--text3); line-height: 1.6; }
+
+/* ─── TESTIMONIALS ─── */
+.testi-section { background: var(--bg2); }
+.testi-header  { text-align: center; margin-bottom: 3.5rem; }
+.testi-grid    { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
+.testi-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 2rem;
+  position: relative; overflow: hidden; transition: all 0.3s;
+}
+.testi-card:hover {
+  border-color: rgba(59,130,246,0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.testi-quote-mark {
+  font-family: var(--serif); font-size: 5rem; line-height: 1;
+  color: var(--accent); opacity: 0.15;
+  position: absolute; top: 12px; left: 20px; font-style: italic;
+}
+.testi-stars { display: flex; gap: 3px; margin-bottom: 1rem; }
+.testi-stars span { color: var(--amber); font-size: 0.85rem; }
+.testi-text {
+  font-size: 0.93rem; color: var(--text2); line-height: 1.75;
+  font-weight: 300; margin-bottom: 1.5rem; font-style: italic;
+  position: relative; z-index: 1;
+}
+.testi-text strong { color: var(--text); font-weight: 500; font-style: normal; }
+.testi-person {
+  display: flex; align-items: center; gap: 12px;
+  border-top: 1px solid var(--border); padding-top: 1.25rem;
+}
+.testi-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  font-size: 0.8rem; font-weight: 700; color: white;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.testi-name    { font-size: 0.85rem; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.testi-meta    { font-size: 0.72rem; color: var(--text3); }
+.testi-outcome {
+  margin-left: auto;
+  font-size: 0.68rem; font-weight: 600;
+  padding: 3px 10px; border-radius: 100px;
+}
+
+/* ─── CTA ─── */
+.cta-section {
+  padding: clamp(5rem, 10vw, 9rem) clamp(1.5rem, 5vw, 4rem);
+  position: relative; overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 800px; height: 400px;
+  background: radial-gradient(ellipse, rgba(59,130,246,0.1) 0%, transparent 65%);
+  pointer-events: none;
+}
+.cta-inner { max-width: 720px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
+.cta-headline {
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 400; letter-spacing: -0.02em;
+  line-height: 1.1; color: var(--text); margin-bottom: 1.25rem;
+}
+.cta-headline em { font-style: italic; color: var(--accent-lt); }
+.cta-sub { font-size: 1.05rem; color: var(--text2); font-weight: 300; max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.7; }
+.cta-actions { display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.cta-small { font-size: 0.75rem; color: var(--text3); }
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 4rem clamp(1.5rem, 5vw, 4rem) 2.5rem;
+}
+.footer-top {
+  display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 3rem; max-width: 1200px; margin: 0 auto;
+  padding-bottom: 3rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem;
+}
+.footer-brand .logo { display: block; margin-bottom: 1rem; }
+.footer-mission { font-size: 0.85rem; color: var(--text3); line-height: 1.75; font-weight: 300; max-width: 300px; }
+.footer-col-head { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 1rem; }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+.footer-links a { font-size: 0.85rem; color: var(--text3); text-decoration: none; transition: color 0.2s; font-weight: 300; }
+.footer-links a:hover { color: var(--text2); }
+.footer-bottom {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+}
+.footer-copy  { font-size: 0.75rem; color: var(--text3); }
+.footer-badges { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.footer-badge { font-size: 0.68rem; padding: 4px 10px; border-radius: 100px; border: 1px solid var(--border2); color: var(--text3); }
+
+/* ─── SCROLL REVEAL ─── */
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible        { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1024px) {
+  .db-body { grid-template-columns: 1fr; }
+  .db-sidebar { display: none; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .feature-grid  { grid-template-columns: 1fr; }
+  .testi-grid    { grid-template-columns: 1fr; }
+  .steps-row     { grid-template-columns: 1fr 1fr; }
+  .steps-row::before { display: none; }
+  .db-cards-row  { grid-template-columns: repeat(3,1fr); gap: 6px; }
+  .footer-top    { grid-template-columns: 1fr; gap: 2rem; }
+  .proof-divider { display: none; }
+}
+@media (max-width: 480px) {
+  .hero-actions, .cta-actions { flex-direction: column; align-items: stretch; }
+  .btn-primary-lg, .btn-outline-lg { text-align: center; justify-content: center; }
+  .db-cards-row { grid-template-columns: 1fr 1fr; }
+}
+</style>
 </head>
 <body>
 
-  <!-- ── Navigation ─────────────────────────────────────────── -->
-  <nav class="nav" aria-label="Main navigation">
-    <div class="nav__inner">
-      <a href="/" class="nav__brand" aria-label="Altiora home">
-        <span class="nav__logo">Altiora</span>
-        <span class="nav__tagline">Your journey, guided.</span>
-      </a>
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">alti<em>ora</em></a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#testimonials">Stories</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="app.html" class="btn-ghost">Try the checker</a>
+    <a href="app.html" class="btn-primary">Start free →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="inner">
+    <div class="hero-eyebrow">
+      <span class="eyebrow-dot"></span>
+      Free for every student, forever
     </div>
-  </nav>
+    <h1 class="hero-headline">
+      Your University Journey,<br>
+      <span class="serif-em">Guided.</span> <span class="accent-word">For Free.</span>
+    </h1>
+    <p class="hero-sub">Altiora replaces the £4,000 university counsellor with an intelligent companion that knows every course, every deadline, and exactly what your personal statement needs.</p>
+    <div class="hero-actions">
+      <a href="app.html" class="btn-primary btn-primary-lg">Begin your journey →</a>
+      <a href="#features" class="btn-outline-lg">See how it works</a>
+    </div>
+    <div class="hero-trust">
+      <span class="trust-item"><span class="trust-check">✓</span> No account needed to explore</span>
+      <span class="trust-item"><span class="trust-check">✓</span> 350+ UK universities covered</span>
+      <span class="trust-item"><span class="trust-check">✓</span> Trusted by 12,000+ students</span>
+    </div>
 
-  <!-- ── Main content ───────────────────────────────────────── -->
-  <main>
-    <div class="content">
-
-      <!-- Hero -->
-      <section class="hero" aria-labelledby="heroHeading">
-        <span class="hero__eyebrow">University Course Finder</span>
-        <h1 id="heroHeading">Find courses that match your subjects</h1>
-        <p>Works with UK&nbsp;A-Levels, IB, US&nbsp;APs, Dutch&nbsp;VWO, Singapore&nbsp;A-Levels, and Hong&nbsp;Kong&nbsp;DSE.</p>
-      </section>
-
-      <!-- ── Mode toggle ──────────────────────────────────────── -->
-      <div class="mode-toggle" role="tablist" aria-label="Application mode">
-        <button
-          class="mode-btn active"
-          data-mode="check"
-          role="tab"
-          aria-selected="true"
-          aria-controls="panel-check"
-        >
-          <span class="mode-btn__icon" aria-hidden="true">⊞</span>
-          Check Combination
-        </button>
-        <button
-          class="mode-btn"
-          data-mode="reverse"
-          role="tab"
-          aria-selected="false"
-          aria-controls="panel-reverse"
-        >
-          <span class="mode-btn__icon" aria-hidden="true">↩</span>
-          Reverse Course Finder
-        </button>
+    <!-- DASHBOARD ILLUSTRATION -->
+    <div class="dashboard-wrap">
+      <div class="dashboard-glow"></div>
+      <div class="dashboard-frame">
+        <div class="db-topbar">
+          <div class="db-dots">
+            <div class="db-dot db-dot-r"></div>
+            <div class="db-dot db-dot-y"></div>
+            <div class="db-dot db-dot-g"></div>
+          </div>
+          <div class="db-url">
+            <span class="db-url-lock">🔒</span>
+            altiora.co.uk/app
+          </div>
+        </div>
+        <div class="db-body">
+          <div class="db-sidebar">
+            <div class="db-user">
+              <div class="db-avatar">AA</div>
+              <div>
+                <div class="db-uname">Aisha Ahmed</div>
+                <div class="db-ugrade">Year 13 · STEM track</div>
+              </div>
+            </div>
+            <div class="db-nav-item active"><span class="db-nav-icon">⬛</span> Dashboard</div>
+            <div class="db-nav-item"><span class="db-nav-icon">🔍</span> Explore Courses</div>
+            <div class="db-nav-item"><span class="db-nav-icon">📋</span> My Applications</div>
+            <div class="db-nav-item"><span class="db-nav-icon">✍️</span> Personal Statement</div>
+            <div class="db-nav-item"><span class="db-nav-icon">📅</span> Deadlines</div>
+            <div class="db-nav-item"><span class="db-nav-icon">⚙️</span> Settings</div>
+            <div class="db-progress-block">
+              <div class="db-prog-label">Application progress</div>
+              <div class="db-prog-name">UCAS 2025 entry</div>
+              <div class="db-prog-track"><div class="db-prog-fill"></div></div>
+              <div style="font-size:0.62rem;color:var(--text3);margin-top:4px;">68% complete</div>
+            </div>
+          </div>
+          <div class="db-main">
+            <div class="db-greeting">Good morning, Aisha 👋</div>
+            <div class="db-date">Thursday, 5 June 2025 · 127 days until UCAS deadline</div>
+            <div class="db-cards-row">
+              <div class="db-stat-card">
+                <div class="db-stat-top">Courses saved</div>
+                <div class="db-stat-val c-blue">12</div>
+                <div class="db-stat-sub">5 shortlisted</div>
+              </div>
+              <div class="db-stat-card">
+                <div class="db-stat-top">A-level match</div>
+                <div class="db-stat-val c-green">91%</div>
+                <div class="db-stat-sub">Maths, Physics, CS</div>
+              </div>
+              <div class="db-stat-card">
+                <div class="db-stat-top">PS words</div>
+                <div class="db-stat-val c-amber">620</div>
+                <div class="db-stat-sub">of 4,000 max</div>
+              </div>
+            </div>
+            <div class="db-section-head">Top course matches</div>
+            <div class="db-courses">
+              <div class="db-course-row">
+                <div class="db-course-icon fi-blue">💻</div>
+                <div class="db-course-info">
+                  <div class="db-course-name">Computer Science</div>
+                  <div class="db-course-uni">University of Oxford</div>
+                </div>
+                <div class="db-course-badge badge-g">98% match</div>
+              </div>
+              <div class="db-course-row">
+                <div class="db-course-icon fi-blue">⚡</div>
+                <div class="db-course-info">
+                  <div class="db-course-name">Electrical Engineering</div>
+                  <div class="db-course-uni">Imperial College London</div>
+                </div>
+                <div class="db-course-badge badge-g">94% match</div>
+              </div>
+              <div class="db-course-row">
+                <div class="db-course-icon" style="background:rgba(52,211,153,0.1)">🤖</div>
+                <div class="db-course-info">
+                  <div class="db-course-name">Artificial Intelligence</div>
+                  <div class="db-course-uni">University of Edinburgh</div>
+                </div>
+                <div class="db-course-badge badge-a">87% match</div>
+              </div>
+            </div>
+            <div class="db-section-head">Personal statement</div>
+            <div class="db-ps-block">
+              <div class="db-ps-head">✍ Draft in progress</div>
+              <div class="db-ps-body">Opening hook is strong. Altiora suggests expanding your work experience section — admissions tutors at Oxford CS value practical application…</div>
+              <div class="db-ps-progress">
+                <div class="db-ps-seg done"></div>
+                <div class="db-ps-seg done"></div>
+                <div class="db-ps-seg current"></div>
+                <div class="db-ps-seg todo"></div>
+                <div class="db-ps-seg todo"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+  </div>
+</section>
 
-      <!-- ═══════════════════════════════════════════════════════
-           Panel A — Check Combination
-           ═══════════════════════════════════════════════════════ -->
-      <div id="panel-check" class="panel" role="tabpanel">
+<!-- PROOF STRIP -->
+<div class="proof-strip">
+  <div class="inner">
+    <div class="proof-stat"><div class="proof-num">12<span>k+</span></div><div class="proof-label">Students guided</div></div>
+    <div class="proof-divider"></div>
+    <div class="proof-stat"><div class="proof-num">350<span>+</span></div><div class="proof-label">UK universities</div></div>
+    <div class="proof-divider"></div>
+    <div class="proof-stat"><div class="proof-num">94<span>%</span></div><div class="proof-label">Offer rate for users</div></div>
+    <div class="proof-divider"></div>
+    <div class="proof-stat"><div class="proof-num">£<span>0</span></div><div class="proof-label">Always free</div></div>
+  </div>
+</div>
 
-        <p class="panel-intro">
-          Select your qualification system, pick your subjects, and instantly see which
-          courses are open, possible, or out of reach.
-        </p>
+<!-- FEATURES -->
+<section class="features-section" id="features">
+  <div class="inner">
+    <div class="reveal">
+      <span class="section-label">What Altiora does</span>
+      <h2 class="section-title">Everything your counsellor<br>does — <em>and more.</em></h2>
+      <p class="section-sub">Three powerful tools, one seamless platform. Built for the student who refuses to leave their future to chance.</p>
+    </div>
+    <div class="feature-grid reveal">
+      <div class="feature-card fc-1">
+        <div class="feature-icon-wrap fi-blue">🔍</div>
+        <div class="feature-name">Explore Courses</div>
+        <div class="feature-desc">Type in your A-levels and instantly see every course that matches — ranked by compatibility, entry requirements, and your predicted grades.</div>
+        <ul class="feature-bullets">
+          <li>Real-time A-level combination checker</li>
+          <li>Filter by subject, location &amp; entry grade</li>
+          <li>Side-by-side course comparison</li>
+          <li>Open Day alerts &amp; application deadlines</li>
+        </ul>
+      </div>
+      <div class="feature-card fc-2">
+        <div class="feature-icon-wrap fi-green">📊</div>
+        <div class="feature-name">Track Your Progress</div>
+        <div class="feature-desc">A living timeline of your entire application journey. Never miss a deadline. Never lose track of a task. Your personal dashboard keeps everything in one place.</div>
+        <ul class="feature-bullets">
+          <li>Visual UCAS application timeline</li>
+          <li>Smart deadline reminders</li>
+          <li>Predicted grade tracker</li>
+          <li>Weekly progress check-ins</li>
+        </ul>
+      </div>
+      <div class="feature-card fc-3">
+        <div class="feature-icon-wrap fi-purple">✍️</div>
+        <div class="feature-name">Nail Your Personal Statement</div>
+        <div class="feature-desc">An AI writing companion trained on thousands of successful statements. Get line-by-line feedback, structural guidance, and course-specific tips — instantly.</div>
+        <ul class="feature-bullets">
+          <li>Course-tailored feedback engine</li>
+          <li>Hook, structure &amp; tone analysis</li>
+          <li>Word count optimisation</li>
+          <li>Plagiarism-safe guidance</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <!-- System select -->
-        <div class="panel-controls">
-          <div class="control-group">
-            <label class="control-label" for="checkSystemSelect">
-              Qualification system
-            </label>
-            <div class="select-wrap">
-              <select id="checkSystemSelect" aria-label="Select your qualification system">
-                <!-- populated by JS -->
-              </select>
-            </div>
-          </div>
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="inner how-inner">
+    <div class="how-header reveal">
+      <span class="section-label">The journey</span>
+      <h2 class="section-title" style="margin:0 auto;text-align:center;">From Year 11 to<br><em>your first choice offer</em></h2>
+    </div>
+    <div class="steps-row">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-title">Tell us about you</div>
+        <div class="step-body">Add your subjects, predicted grades, and the kind of future you're imagining. Takes under two minutes.</div>
+      </div>
+      <div class="step reveal reveal-delay-1">
+        <div class="step-num">02</div>
+        <div class="step-title">Explore your options</div>
+        <div class="step-body">Browse every compatible course across the UK, ranked by match score and sorted by your ambitions.</div>
+      </div>
+      <div class="step reveal reveal-delay-2">
+        <div class="step-num">03</div>
+        <div class="step-title">Build your application</div>
+        <div class="step-body">Write, refine, and perfect your personal statement with real-time AI guidance tuned to each course.</div>
+      </div>
+      <div class="step reveal reveal-delay-3">
+        <div class="step-num">04</div>
+        <div class="step-title">Submit with confidence</div>
+        <div class="step-body">Track every deadline, confirm your choices, and celebrate your offer — we'll be there for all of it.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi-section" id="testimonials">
+  <div class="inner">
+    <div class="testi-header reveal">
+      <span class="section-label">Student stories</span>
+      <h2 class="section-title" style="margin:0 auto;text-align:center;">They trusted Altiora<br>with their <em>futures</em></h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="testi-quote-mark">"</div>
+        <div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="testi-text">"My school didn't have a sixth-form counsellor and my parents didn't go to university. Altiora was literally the only thing that explained what UCAS actually was. <strong>I got into UCL Economics</strong> — I still can't believe it."</p>
+        <div class="testi-person">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#3b82f6,#06b6d4)">ZK</div>
+          <div><div class="testi-name">Zara Khan</div><div class="testi-meta">Year 13 · Manchester</div></div>
+          <span class="testi-outcome" style="background:rgba(52,211,153,0.12);color:var(--green)">UCL Economics 🎉</span>
         </div>
-
-        <!-- Subject picker — hidden until a system is chosen -->
-        <div id="subjectPickerSection" class="subject-picker-section hidden" aria-live="polite">
-          <div class="subject-picker-header">
-            <span class="control-label">Your subjects</span>
-            <span id="subjectCountBadge" class="count-badge">none selected</span>
-          </div>
-          <div class="subject-search-bar">
-            <input
-              type="search"
-              id="subjectFilterInput"
-              class="subject-filter-input"
-              placeholder="Filter subjects…"
-              autocomplete="off"
-              aria-label="Filter subject list"
-            />
-          </div>
-          <div
-            id="subjectPicker"
-            class="subject-picker"
-            role="group"
-            aria-label="Select your subjects"
-          >
-            <!-- chip labels inserted by JS -->
-          </div>
-          <p class="picker-hint">Select 3–5 subjects for best results. Results update instantly.</p>
+      </div>
+      <div class="testi-card reveal reveal-delay-1">
+        <div class="testi-quote-mark">"</div>
+        <div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="testi-text">"The personal statement tool is insane. It told me my opening paragraph was too generic and suggested exactly how to reframe it around my work experience. <strong>My Cambridge tutor said my PS was outstanding.</strong>"</p>
+        <div class="testi-person">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#8b5cf6,#ec4899)">TN</div>
+          <div><div class="testi-name">Theo Nakamura</div><div class="testi-meta">Year 13 · London</div></div>
+          <span class="testi-outcome" style="background:rgba(59,130,246,0.12);color:var(--accent-lt)">Cambridge NatSci 🎉</span>
         </div>
-
-        <!-- Results — hidden until at least one subject is selected -->
-        <div id="checkResultsSection" class="results-section hidden" aria-live="polite">
-
-          <!-- Visual summary bar: "4 subjects → X open · Y possible · Z closed" -->
-          <div id="summaryBar" class="summary-bar" aria-live="polite" aria-atomic="true"></div>
-
-          <div class="results-toolbar">
-            <div
-              id="resultSummaryBadges"
-              class="result-summary"
-              aria-live="polite"
-              aria-atomic="true"
-            ></div>
-            <div
-              id="countryFilterBar"
-              class="filter-bar"
-              role="group"
-              aria-label="Filter results by country"
-            >
-              <!-- filter buttons inserted by JS -->
-            </div>
-          </div>
-
-          <div
-            id="courseGrid"
-            class="course-grid"
-            role="list"
-            aria-label="Course results"
-          >
-            <!-- course cards inserted by JS -->
-          </div>
-
+      </div>
+      <div class="testi-card reveal reveal-delay-2">
+        <div class="testi-quote-mark">"</div>
+        <div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="testi-text">"I genuinely had no idea Maths A-level wasn't required for Economics at Durham. The course checker saved me from picking the wrong subjects in Year 12. <strong>That's a year of my life it basically saved.</strong>"</p>
+        <div class="testi-person">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">SO</div>
+          <div><div class="testi-name">Sofia Okonkwo</div><div class="testi-meta">Year 12 · Birmingham</div></div>
+          <span class="testi-outcome" style="background:rgba(251,191,36,0.1);color:var(--amber)">On track for 2026 ✦</span>
         </div>
-      </div><!-- /panel-check -->
+      </div>
+    </div>
+  </div>
+</section>
 
-      <!-- ═══════════════════════════════════════════════════════
-           Panel B — Reverse Course Finder
-           ═══════════════════════════════════════════════════════ -->
-      <div id="panel-reverse" class="panel hidden" role="tabpanel">
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <div class="reveal">
+      <h2 class="cta-headline">Your future starts<br>with one <em>click.</em></h2>
+      <p class="cta-sub">Join 12,000 students who stopped guessing and started planning. No credit card. No catch. Just clarity.</p>
+      <div class="cta-actions">
+        <a href="app.html" class="btn-primary btn-primary-lg">Start your journey — it's free →</a>
+      </div>
+      <p class="cta-small">Takes 2 minutes to set up · Works from Year 11 · Used by students in 800+ schools</p>
+    </div>
+  </div>
+</section>
 
-        <p class="panel-intro">
-          Search for a degree and see exactly which subjects you need, translated
-          into your own qualification system.
-        </p>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="logo">alti<em>ora</em></a>
+      <p class="footer-mission">We believe every student — regardless of their school, postcode, or family background — deserves the same quality of university guidance. Altiora exists to make that a reality. Free, intelligent, and always on your side.</p>
+    </div>
+    <div>
+      <div class="footer-col-head">Product</div>
+      <ul class="footer-links">
+        <li><a href="app.html">Course Checker</a></li>
+        <li><a href="app.html">A-level Checker</a></li>
+        <li><a href="#">Personal Statement</a></li>
+        <li><a href="#">Deadline Tracker</a></li>
+        <li><a href="#">University Profiles</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-head">Learn</div>
+      <ul class="footer-links">
+        <li><a href="#">UCAS Guide</a></li>
+        <li><a href="#">A-level Choices</a></li>
+        <li><a href="#">Interview Prep</a></li>
+        <li><a href="#">Student Blog</a></li>
+        <li><a href="#">School Partnerships</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-head">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">Our mission</a></li>
+        <li><a href="#">Team</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Altiora. Built for students, by people who remember being one.</div>
+    <div class="footer-badges">
+      <span class="footer-badge">🔒 GDPR compliant</span>
+      <span class="footer-badge">✓ Free forever</span>
+      <span class="footer-badge">🇬🇧 UK-focused</span>
+    </div>
+  </div>
+</footer>
 
-        <div class="panel-controls panel-controls--row">
-
-          <div class="control-group">
-            <label class="control-label" for="reverseSystemSelect">
-              Show requirements as
-            </label>
-            <div class="select-wrap">
-              <select
-                id="reverseSystemSelect"
-                aria-label="Translate requirements to this qualification system"
-              >
-                <!-- populated by JS -->
-              </select>
-            </div>
-          </div>
-
-          <div class="control-group control-group--grow">
-            <label class="control-label" for="courseSearchInput">
-              Search degree or university
-            </label>
-            <input
-              type="search"
-              id="courseSearchInput"
-              class="search-input"
-              placeholder="e.g. Medicine, Computer Science, Law…"
-              autocomplete="off"
-              aria-label="Search by degree area or university name"
-            />
-          </div>
-
-        </div>
-
-        <div
-          id="reverseResultsSection"
-          class="results-section"
-          aria-live="polite"
-        >
-          <p class="search-hint">Start typing to find courses…</p>
-        </div>
-
-      </div><!-- /panel-reverse -->
-
-    </div><!-- /content -->
-  </main>
-
-  <!-- ── Footer ──────────────────────────────────────────────── -->
-  <footer>
-    <p>Built by a student, for students. &mdash; Altiora &copy; 2025</p>
-  </footer>
-
-  <!-- Clipboard toast notification -->
-  <div id="toast" class="toast" role="status" aria-live="assertive"></div>
-
-  <!-- Data layer must be loaded before main.js -->
-  <script src="data/qualificationMappings.js"></script>
-  <script src="data/courseRequirements.js"></script>
-  <script src="main.js"></script>
+<script>
+const observer = new IntersectionObserver(
+  entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+  { threshold: 0.1 }
+);
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
