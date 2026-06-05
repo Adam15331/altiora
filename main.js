@@ -1,447 +1,501 @@
-/* ─── State ─────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+ * Altiora — main.js
+ *
+ * Two modes:
+ *   "check"   – user picks subjects → see which courses are open / possible / closed
+ *   "reverse" – user searches a degree → see what subjects they need
+ *
+ * Data dependencies (loaded before this script):
+ *   qualificationMappings  – from data/qualificationMappings.js
+ *   courses                – from data/courseRequirements.js
+ * ═══════════════════════════════════════════════════════════════ */
+
+'use strict';
+
+/* ─── State ─────────────────────────────────────────────────────
+ * Single source of truth for the whole app.
+ * Mutate via the helper functions below; never write directly from
+ * event handlers so the render path stays predictable.
+ * ─────────────────────────────────────────────────────────────── */
 const state = {
-  currentStep: 1,
-  totalSteps: 3,
-  qualification: null,
-  subjects: [],   // [{ subjectId, grade }]
-  results: [],
+  mode:             'check',   // 'check' | 'reverse'
+  checkSystem:      '',        // qualification system key (check panel)
+  reverseSystem:    '',        // qualification system key (reverse panel)
+  selectedSubjects: [],        // array of subject-name strings
+  selectedTags:     new Set(), // universal tags derived from selectedSubjects
+  countryFilter:    'All',     // active country filter in check mode
+  searchQuery:      '',        // live text in reverse-mode search field
 };
 
-/* ─── DOM refs ───────────────────────────────────────── */
-const progressFill  = document.getElementById('progressFill');
-const progressLabel = document.getElementById('progressLabel');
-const steps         = document.querySelectorAll('.step');
+/* ─── Constants ─────────────────────────────────────────────────── */
+const COUNTRY_FLAGS = {
+  UK: '🇬🇧', US: '🇺🇸', Netherlands: '🇳🇱',
+  Singapore: '🇸🇬', Hong_Kong: '🇭🇰',
+};
+const COUNTRY_LABELS = {
+  UK: 'UK', US: 'US', Netherlands: 'Netherlands',
+  Singapore: 'Singapore', Hong_Kong: 'Hong Kong',
+};
+// Visual config keyed on eligibility status
+const STATUS = {
+  green: { label: 'Open',     badgeCls: 'badge--success', icon: '✓', cardCls: 'card--green' },
+  amber: { label: 'Possible', badgeCls: 'badge--warning', icon: '◑', cardCls: 'card--amber' },
+  red:   { label: 'Closed',   badgeCls: 'badge--error',   icon: '✕', cardCls: 'card--red'   },
+};
+const STATUS_SORT = { green: 0, amber: 1, red: 2 };
 
-/* ─── Progress ───────────────────────────────────────── */
-function updateProgress() {
-  const pct = ((state.currentStep - 1) / (state.totalSteps - 1)) * 100;
-  progressFill.style.width = pct + '%';
-  progressLabel.textContent = `Step ${state.currentStep} of ${state.totalSteps}`;
-}
+/* ─── DOM shortcuts ─────────────────────────────────────────────── */
+const $  = id  => document.getElementById(id);
+const $$ = sel => document.querySelectorAll(sel);
 
-function goToStep(n) {
-  steps.forEach(s => s.classList.remove('active'));
-  const target = document.getElementById(`step${n}`);
-  if (target) {
-    target.classList.add('active');
-    target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+/* ═══════════════════════════════════════════════════════════════
+ * REVERSE-MAP UTILITIES
+ * Build a per-system index from universal tag → [local subject names]
+ * and provide a function to pick the best name for display.
+ * ═══════════════════════════════════════════════════════════════ */
+
+const _rMapCache = {};
+
+/** Returns { tag: [subjectName, …], … } for the given system. Cached. */
+function getReverseMap(systemKey) {
+  if (_rMapCache[systemKey]) return _rMapCache[systemKey];
+  const src = qualificationMappings[systemKey]?.subjects ?? {};
+  const map = {};
+  for (const [name, tag] of Object.entries(src)) {
+    (map[tag] ??= []).push(name);
   }
-  state.currentStep = n;
-  updateProgress();
+  _rMapCache[systemKey] = map;
+  return map;
 }
 
-/* ─── Step 1 – Qualification ─────────────────────────── */
-function buildQualGrid() {
-  const grid = document.getElementById('qualGrid');
-  grid.innerHTML = '';
-  qualificationMappings.qualifications.forEach(q => {
+/**
+ * Score a subject name so the most "representative" variant sorts first.
+ *   2 – HL / H2 / AP  (the standard advanced form)
+ *   1 – neutral / no level marker  (e.g. plain VWO subjects)
+ *   0 – SL / H1  (lower-level variants)
+ *  -1 – "Further *"  (supplementary enrichment, not a standalone choice)
+ */
+function subjectDisplayScore(name) {
+  if (/\bFurther\b/.test(name)) return -1;         // supplementary/enrichment (e.g. "Further Maths HL", "H2 Further Mathematics")
+  if (/ HL$/.test(name) || /^H2 /.test(name) || /^AP /.test(name)) return 2;
+  if (/ SL$/.test(name) || /^H1 /.test(name)) return 0;
+  return 1;
+}
+
+/**
+ * Translate a universal tag to the best local subject name for `systemKey`.
+ * Sort priority: score DESC → name length DESC (longer = more specific) → alpha ASC.
+ * Falls back to a human-readable tag string if the system has no mapping.
+ */
+function tagToLocal(tag, systemKey) {
+  if (!systemKey) return humanTag(tag);
+  const options = getReverseMap(systemKey)[tag];
+  if (!options?.length) return humanTag(tag);
+  return [...options].sort((a, b) => {
+    const byScore = subjectDisplayScore(b) - subjectDisplayScore(a);
+    if (byScore !== 0) return byScore;
+    const byLen = b.length - a.length;           // longer name = more specific
+    return byLen !== 0 ? byLen : a.localeCompare(b);
+  })[0];
+}
+
+/** "Mathematics_Advanced" → "Mathematics Advanced" */
+function humanTag(tag) { return tag.replace(/_/g, ' '); }
+
+/* ═══════════════════════════════════════════════════════════════
+ * TAG DERIVATION
+ * Map the user's selected subject names to universal tags using
+ * the active qualification system's forward map.
+ * ═══════════════════════════════════════════════════════════════ */
+
+function deriveTagsFromSubjects(subjects, systemKey) {
+  const forward = qualificationMappings[systemKey]?.subjects ?? {};
+  const tags = new Set();
+  for (const name of subjects) {
+    const tag = forward[name];
+    if (tag) tags.add(tag);
+  }
+  return tags;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * ELIGIBILITY ENGINE
+ * ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * Classify a course against the user's current tag set.
+ *
+ * Returns { status, missingEssential, missingPreferred }
+ *   status: 'green' | 'amber' | 'red'
+ */
+function classify(course, userTags) {
+  const { essential = [], preferred = [] } = course.requirements;
+  const missingEssential = essential.filter(t => !userTags.has(t));
+  if (missingEssential.length > 0) {
+    return { status: 'red', missingEssential, missingPreferred: [] };
+  }
+  const missingPreferred = preferred.filter(t => !userTags.has(t));
+  return {
+    status: missingPreferred.length ? 'amber' : 'green',
+    missingEssential: [],
+    missingPreferred,
+  };
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * MODE TOGGLE
+ * ═══════════════════════════════════════════════════════════════ */
+
+function switchMode(mode) {
+  state.mode = mode;
+  $$('.mode-btn').forEach(btn => {
+    const active = btn.dataset.mode === mode;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-selected', String(active));
+  });
+  $('panel-check')  .classList.toggle('hidden', mode !== 'check');
+  $('panel-reverse').classList.toggle('hidden', mode !== 'reverse');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * SYSTEM DROPDOWNS
+ * Both panels share the same set of options; reverse panel has an
+ * extra "Universal tags" default option.
+ * ═══════════════════════════════════════════════════════════════ */
+
+function populateSystemSelects() {
+  const optHtml = Object.entries(qualificationMappings)
+    .map(([k, sys]) => `<option value="${k}">${esc(sys.systemLabel)}</option>`)
+    .join('');
+
+  $('checkSystemSelect').innerHTML =
+    `<option value="">Select your system…</option>${optHtml}`;
+
+  $('reverseSystemSelect').innerHTML =
+    `<option value="">Show as universal tags</option>${optHtml}`;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * SUBJECT PICKER  (check mode)
+ * Renders one labelled checkbox pill per subject in the chosen system.
+ * ═══════════════════════════════════════════════════════════════ */
+
+function buildSubjectPicker(systemKey) {
+  const section = $('subjectPickerSection');
+  const picker  = $('subjectPicker');
+
+  // Reset filter text
+  $('subjectFilterInput').value = '';
+
+  if (!systemKey) {
+    section.classList.add('hidden');
+    picker.innerHTML = '';
+    return;
+  }
+
+  const subjects = Object.keys(qualificationMappings[systemKey]?.subjects ?? {});
+  const frag = document.createDocumentFragment();
+
+  subjects.forEach(name => {
+    const label = document.createElement('label');
+    label.className = 'subject-chip';
+    // Hidden checkbox keeps the selection state; the label provides the hit area
+    label.innerHTML =
+      `<input type="checkbox" value="${esc(name)}"><span>${esc(name)}</span>`;
+    label.querySelector('input').addEventListener('change', onSubjectToggle);
+    frag.appendChild(label);
+  });
+
+  picker.innerHTML = '';
+  picker.appendChild(frag);
+  section.classList.remove('hidden');
+  syncSubjectCount();
+}
+
+function onSubjectToggle() {
+  // Re-derive full selection from DOM (source of truth for checkboxes)
+  const checked = $$('#subjectPicker input:checked');
+  state.selectedSubjects = Array.from(checked).map(c => c.value);
+  state.selectedTags     = deriveTagsFromSubjects(state.selectedSubjects, state.checkSystem);
+
+  // Keep .selected class in sync for CSS styling
+  $$('#subjectPicker .subject-chip').forEach(chip => {
+    chip.classList.toggle('selected', chip.querySelector('input').checked);
+  });
+
+  syncSubjectCount();
+  renderCheckResults();
+}
+
+function syncSubjectCount() {
+  const n = state.selectedSubjects.length;
+  $('subjectCountBadge').textContent = n === 0 ? 'none selected' : `${n} selected`;
+}
+
+// Live filter chips by name as the user types
+$('subjectFilterInput').addEventListener('input', e => {
+  const q = e.target.value.toLowerCase();
+  $$('#subjectPicker .subject-chip').forEach(chip => {
+    const match = !q || chip.querySelector('span').textContent.toLowerCase().includes(q);
+    chip.classList.toggle('hidden', !match);
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════════
+ * COUNTRY FILTER BAR  (check mode)
+ * ═══════════════════════════════════════════════════════════════ */
+
+function buildCountryFilterBar() {
+  const bar = $('countryFilterBar');
+  const entries = [['All', 'All'], ...Object.entries(COUNTRY_LABELS)];
+
+  entries.forEach(([key, label]) => {
     const btn = document.createElement('button');
-    btn.className = 'qual-pill';
-    btn.textContent = q.label;
-    btn.dataset.id = q.id;
-    btn.addEventListener('click', () => selectQual(q.id));
-    grid.appendChild(btn);
-  });
-}
-
-function selectQual(id) {
-  state.qualification = id;
-  state.subjects = [];
-
-  document.querySelectorAll('.qual-pill').forEach(p => {
-    p.classList.toggle('selected', p.dataset.id === id);
-  });
-
-  document.getElementById('nextStep1').disabled = false;
-}
-
-document.getElementById('nextStep1').addEventListener('click', () => {
-  if (!state.qualification) return;
-  buildSubjectStep();
-  goToStep(2);
-});
-
-/* ─── Step 2 – Subjects & Grades ────────────────────── */
-const availableSubjects = () =>
-  qualificationMappings.subjectMappings[state.qualification] || [];
-
-const gradeOptions = () =>
-  qualificationMappings.gradeScales[state.qualification] || [];
-
-let subjectSearch = '';
-
-function buildSubjectStep() {
-  const container = document.getElementById('subjectRows');
-  container.innerHTML = '';
-  state.subjects = [];
-
-  const searchInput = document.getElementById('subjectSearchInput');
-  searchInput.value = '';
-  subjectSearch = '';
-  searchInput.oninput = (e) => {
-    subjectSearch = e.target.value.toLowerCase();
-  };
-
-  addSubjectRow();
-  renderSubjectCount();
-}
-
-function addSubjectRow() {
-  const max = state.qualification === 'alevel' || state.qualification === 'scottish' ? 5 : 3;
-  if (state.subjects.length >= max) return;
-
-  const index = state.subjects.length;
-  state.subjects.push({ subjectId: '', grade: '' });
-
-  const container = document.getElementById('subjectRows');
-  const row = document.createElement('div');
-  row.className = 'subject-row';
-  row.dataset.index = index;
-
-  const subjects = availableSubjects();
-  const grades   = gradeOptions();
-
-  row.innerHTML = `
-    <div class="select-wrap" style="flex:1">
-      <select data-field="subjectId" data-index="${index}">
-        <option value="">Select subject…</option>
-        ${subjects.map(s => `<option value="${s.id}">${s.label}</option>`).join('')}
-      </select>
-    </div>
-    <div class="select-wrap">
-      <select data-field="grade" data-index="${index}">
-        <option value="">Grade</option>
-        ${grades.map(g => `<option value="${g}">${g}</option>`).join('')}
-      </select>
-    </div>
-    <button class="remove-btn" data-index="${index}" title="Remove">✕</button>
-  `;
-
-  row.querySelectorAll('select').forEach(sel => {
-    sel.addEventListener('change', (e) => {
-      const i = +e.target.dataset.index;
-      const field = e.target.dataset.field;
-      state.subjects[i][field] = e.target.value;
-      renderSubjectCount();
+    btn.className = `filter-btn${key === 'All' ? ' active' : ''}`;
+    btn.dataset.country = key;
+    btn.textContent = (COUNTRY_FLAGS[key] ? COUNTRY_FLAGS[key] + ' ' : '') + label;
+    btn.addEventListener('click', () => {
+      state.countryFilter = key;
+      $$('#countryFilterBar .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCheckResults();
     });
+    bar.appendChild(btn);
   });
-
-  row.querySelector('.remove-btn').addEventListener('click', (e) => {
-    const i = +e.currentTarget.dataset.index;
-    removeSubjectRow(i);
-  });
-
-  container.appendChild(row);
-  renderSubjectCount();
 }
 
-function removeSubjectRow(index) {
-  state.subjects.splice(index, 1);
-  rebuildSubjectRows();
-}
+/* ═══════════════════════════════════════════════════════════════
+ * CHECK MODE — RESULTS RENDER
+ * ═══════════════════════════════════════════════════════════════ */
 
-function rebuildSubjectRows() {
-  const container = document.getElementById('subjectRows');
-  container.innerHTML = '';
+function renderCheckResults() {
+  const section = $('checkResultsSection');
 
-  const subjects = availableSubjects();
-  const grades   = gradeOptions();
-
-  state.subjects.forEach((subj, index) => {
-    const row = document.createElement('div');
-    row.className = 'subject-row';
-    row.dataset.index = index;
-
-    row.innerHTML = `
-      <div class="select-wrap" style="flex:1">
-        <select data-field="subjectId" data-index="${index}">
-          <option value="">Select subject…</option>
-          ${subjects.map(s => `<option value="${s.id}" ${s.id === subj.subjectId ? 'selected' : ''}>${s.label}</option>`).join('')}
-        </select>
-      </div>
-      <div class="select-wrap">
-        <select data-field="grade" data-index="${index}">
-          <option value="">Grade</option>
-          ${grades.map(g => `<option value="${g}" ${g === subj.grade ? 'selected' : ''}>${g}</option>`).join('')}
-        </select>
-      </div>
-      <button class="remove-btn" data-index="${index}" title="Remove">✕</button>
-    `;
-
-    row.querySelectorAll('select').forEach(sel => {
-      sel.addEventListener('change', (e) => {
-        const i = +e.target.dataset.index;
-        const field = e.target.dataset.field;
-        state.subjects[i][field] = e.target.value;
-        renderSubjectCount();
-      });
-    });
-
-    row.querySelector('.remove-btn').addEventListener('click', (e) => {
-      const i = +e.currentTarget.dataset.index;
-      removeSubjectRow(i);
-    });
-
-    container.appendChild(row);
-  });
-
-  renderSubjectCount();
-}
-
-function renderSubjectCount() {
-  const filled = state.subjects.filter(s => s.subjectId && s.grade).length;
-  const countEl = document.getElementById('subjectCount');
-  if (countEl) countEl.textContent = `${filled} subject${filled !== 1 ? 's' : ''} entered`;
-}
-
-document.getElementById('addSubjectBtn').addEventListener('click', addSubjectRow);
-
-document.getElementById('backStep2').addEventListener('click', () => goToStep(1));
-
-document.getElementById('nextStep2').addEventListener('click', () => {
-  const valid = state.subjects.filter(s => s.subjectId && s.grade);
-  if (valid.length === 0) {
-    alert('Please add at least one subject with a grade.');
+  if (state.selectedSubjects.length === 0) {
+    section.classList.add('hidden');
     return;
   }
-  state.subjects = valid;
-  buildSummaryStep();
-  goToStep(3);
-});
+  section.classList.remove('hidden');
 
-/* ─── Step 3 – Summary & Search ─────────────────────── */
-function buildSummaryStep() {
-  const qual = qualificationMappings.qualifications.find(q => q.id === state.qualification);
-  const subjectMap = {};
-  availableSubjects().forEach(s => { subjectMap[s.id] = s.label; });
+  // Apply country filter then classify every course
+  const pool = state.countryFilter === 'All'
+    ? courses
+    : courses.filter(c => c.country === state.countryFilter);
 
-  const summaryEl = document.getElementById('summaryContent');
-  summaryEl.innerHTML = `
-    <div class="req-block">
-      <div class="req-block__title">Qualification</div>
-      <div style="font-size:14px;font-weight:500;">${qual ? qual.label : state.qualification}</div>
-    </div>
-    <div class="req-block">
-      <div class="req-block__title">Your subjects</div>
-      ${state.subjects.map(s => `
-        <div class="req-row">
-          <span class="req-row__label">${subjectMap[s.subjectId] || s.subjectId}</span>
-          <strong>${s.grade}</strong>
-        </div>
-      `).join('')}
-    </div>
+  const classified = pool
+    .map(course => ({ course, result: classify(course, state.selectedTags) }))
+    .sort((a, b) => {
+      // green first, then amber, then red; alpha by university within each group
+      const byStatus = STATUS_SORT[a.result.status] - STATUS_SORT[b.result.status];
+      return byStatus !== 0 ? byStatus : a.course.university.localeCompare(b.course.university);
+    });
+
+  // Summary counts
+  const counts = { green: 0, amber: 0, red: 0 };
+  classified.forEach(c => counts[c.result.status]++);
+
+  $('resultSummaryBadges').innerHTML = `
+    <span class="badge badge--success">✓ ${counts.green} open</span>
+    <span class="badge badge--warning">◑ ${counts.amber} possible</span>
+    <span class="badge badge--error">✕ ${counts.red} closed</span>
+    <span class="badge badge--neutral">${classified.length} total</span>
   `;
+
+  // Render cards
+  const grid = $('courseGrid');
+  const frag = document.createDocumentFragment();
+  classified.forEach(({ course, result }) => frag.appendChild(buildCheckCard(course, result)));
+  grid.innerHTML = '';
+  grid.appendChild(frag);
 }
 
-document.getElementById('backStep3').addEventListener('click', () => goToStep(2));
+function buildCheckCard(course, result) {
+  const { status, missingEssential, missingPreferred } = result;
+  const cfg     = STATUS[status];
+  const sys     = state.checkSystem;
+  const flag    = COUNTRY_FLAGS[course.country] ?? '';
+  const country = COUNTRY_LABELS[course.country] ?? course.country;
 
-document.getElementById('findCoursesBtn').addEventListener('click', () => {
-  runSearch();
-});
+  // Translate a tag array to a comma-separated list of local subject names
+  const localList = tags =>
+    tags.map(t => `<em>${esc(tagToLocal(t, sys))}</em>`).join(', ');
 
-/* ─── Eligibility engine ─────────────────────────────── */
-function checkEligibility(course) {
-  const qual = state.qualification;
-  const req  = course.requirements[qual];
-
-  if (!req) return { status: 'ineligible', reason: 'Qualification not accepted for this course.' };
-
-  const gradePoints = qualificationMappings.gradePoints[qual];
-  const userPoints  = state.subjects
-    .filter(s => s.grade)
-    .reduce((sum, s) => sum + (gradePoints[s.grade] || 0), 0);
-
-  const userSubjectIds = state.subjects.map(s => s.subjectId);
-
-  // Check required subjects
-  if (req.required && req.required.length > 0) {
-    const missing = req.required.filter(r => !userSubjectIds.includes(r));
-    if (missing.length > 0) {
-      return { status: 'ineligible', reason: `Missing required subject(s).` };
-    }
+  // Build the "missing" line shown beneath the card meta
+  let missingHtml = '';
+  if (status === 'red' && missingEssential.length) {
+    missingHtml =
+      `<p class="card-missing card-missing--red">` +
+      `<span class="missing-prefix">Needs:</span> ${localList(missingEssential)}</p>`;
+  } else if (status === 'amber' && missingPreferred.length) {
+    missingHtml =
+      `<p class="card-missing card-missing--amber">` +
+      `<span class="missing-prefix">Preferred:</span> ${localList(missingPreferred)}</p>`;
   }
-
-  // IB-specific point check
-  if (qual === 'ib' && req.totalPoints) {
-    if (userPoints < req.totalPoints * 0.85) {
-      return { status: 'ineligible', reason: `IB points below minimum threshold.` };
-    }
-    if (userPoints < req.totalPoints) {
-      return { status: 'borderline', reason: `IB points close to requirement (${req.totalPoints} needed).` };
-    }
-    return { status: 'eligible', reason: 'You meet the IB requirements.' };
-  }
-
-  // UCAS points check for A-level/BTEC
-  if (course.ucasPoints) {
-    if (userPoints < course.ucasPoints * 0.85) {
-      return { status: 'ineligible', reason: `UCAS points below minimum (${course.ucasPoints} needed).` };
-    }
-    if (userPoints < course.ucasPoints) {
-      return { status: 'borderline', reason: `UCAS points close to entry requirement.` };
-    }
-  }
-
-  return { status: 'eligible', reason: 'You appear to meet the entry requirements.' };
-}
-
-/* ─── Search & render results ────────────────────────── */
-let activeFilter = 'all';
-
-function runSearch() {
-  state.results = courseRequirements.map(course => ({
-    course,
-    eligibility: checkEligibility(course),
-  }));
-
-  activeFilter = 'all';
-  renderResults();
-
-  const resultsEl = document.getElementById('results');
-  resultsEl.classList.add('visible');
-  resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function renderResults() {
-  const filtered = state.results.filter(r => {
-    if (activeFilter === 'all') return true;
-    return r.eligibility.status === activeFilter;
-  });
-
-  const counts = {
-    all:        state.results.length,
-    eligible:   state.results.filter(r => r.eligibility.status === 'eligible').length,
-    borderline: state.results.filter(r => r.eligibility.status === 'borderline').length,
-    ineligible: state.results.filter(r => r.eligibility.status === 'ineligible').length,
-  };
-
-  document.getElementById('resultCount').textContent =
-    `${filtered.length} course${filtered.length !== 1 ? 's' : ''} found`;
-
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    const f = btn.dataset.filter;
-    btn.classList.toggle('active', f === activeFilter);
-    const countSpan = btn.querySelector('.filter-count');
-    if (countSpan) countSpan.textContent = counts[f] ?? '';
-  });
-
-  const list = document.getElementById('courseList');
-  list.innerHTML = '';
-
-  if (filtered.length === 0) {
-    list.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-state__icon">🔍</div>
-        <h3>No courses match this filter</h3>
-        <p class="mt-8">Try showing all courses or adjusting your subjects.</p>
-      </div>
-    `;
-    return;
-  }
-
-  filtered.forEach(({ course, eligibility }) => {
-    const card = buildCourseCard(course, eligibility);
-    list.appendChild(card);
-  });
-}
-
-function buildCourseCard(course, eligibility) {
-  const statusLabels = { eligible: 'Likely eligible', borderline: 'Borderline', ineligible: 'Unlikely eligible' };
-  const badgeClass   = { eligible: 'badge--success', borderline: 'badge--warning', ineligible: 'badge--error' };
-  const matchClass   = eligibility.status;
-
-  const qual = state.qualification;
-  const req  = course.requirements[qual];
 
   const card = document.createElement('div');
-  card.className = 'course-card';
-
-  const subjectMap = {};
-  availableSubjects().forEach(s => { subjectMap[s.id] = s.label; });
-
-  let reqHtml = '';
-  if (req) {
-    if (qual === 'alevel' && req.grades) {
-      reqHtml = `
-        <div class="req-row"><span class="req-row__label">Grades:</span> ${req.grades.join(', ')}</div>
-        ${req.required.length ? `<div class="req-row"><span class="req-row__label">Required:</span> ${req.required.map(r => subjectMap[r] || r).join(', ')}</div>` : ''}
-        ${req.preferred && req.preferred.length ? `<div class="req-row"><span class="req-row__label">Preferred:</span> ${req.preferred.map(r => subjectMap[r] || r).join(', ')}</div>` : ''}
-        ${req.notes ? `<p class="req-note">${req.notes}</p>` : ''}
-      `;
-    } else if (qual === 'ib' && req.totalPoints) {
-      reqHtml = `
-        <div class="req-row"><span class="req-row__label">Points:</span> ${req.totalPoints}+</div>
-        ${req.required && req.required.length ? `<div class="req-row"><span class="req-row__label">Required:</span> ${req.required.map(r => subjectMap[r] || r).join(', ')}</div>` : ''}
-        ${req.notes ? `<p class="req-note">${req.notes}</p>` : ''}
-      `;
-    } else if (req.grades) {
-      reqHtml = `
-        <div class="req-row"><span class="req-row__label">Grades:</span> ${Array.isArray(req.grades) ? req.grades.join(', ') : req.grades}</div>
-        ${req.notes ? `<p class="req-note">${req.notes}</p>` : ''}
-      `;
-    } else {
-      reqHtml = req.notes ? `<p class="req-note">${req.notes}</p>` : '<p class="req-note">See university website for full details.</p>';
-    }
-  } else {
-    reqHtml = `<p class="req-note">This course does not list specific requirements for your qualification type. Contact the university directly.</p>`;
-  }
-
+  card.className = `course-card ${cfg.cardCls}`;
+  card.setAttribute('role', 'listitem');
   card.innerHTML = `
-    <div class="course-card__top">
-      <div class="course-card__info">
-        <div class="course-card__title">${course.title}</div>
-        <div class="course-card__uni">${course.university}</div>
-        <div class="course-card__tags">
-          <span class="badge badge--neutral">${course.duration}</span>
-          <span class="badge badge--neutral">UCAS ${course.ucasCode}</span>
-          ${course.ucasPoints ? `<span class="badge badge--neutral">${course.ucasPoints} pts</span>` : ''}
-          <span class="badge ${badgeClass[eligibility.status]}">${statusLabels[eligibility.status]}</span>
+    <div class="card-header">
+      <div class="card-title-group">
+        <span class="card-flag" aria-hidden="true">${flag}</span>
+        <div class="card-titles">
+          <div class="card-name">${esc(course.name)}</div>
+          <div class="card-uni">${esc(course.university)}</div>
         </div>
       </div>
-      <div class="course-card__right">
-        <div class="eligibility-indicator ${eligibility.status}" title="${statusLabels[eligibility.status]}"></div>
-      </div>
+      <span class="badge ${cfg.badgeCls}">${cfg.icon}&thinsp;${cfg.label}</span>
     </div>
-    <div class="course-detail">
-      <div class="match-summary ${matchClass}">
-        ${matchClass === 'eligible' ? '✓' : matchClass === 'borderline' ? '⚠' : '✕'}
-        ${eligibility.reason}
-      </div>
-      <p>${course.description}</p>
-      <div class="req-block">
-        <div class="req-block__title">Entry requirements for your qualification</div>
-        ${reqHtml}
-      </div>
+    <div class="card-meta">
+      <span class="badge badge--neutral">${esc(course.degreeLevel)}</span>
+      <span class="badge badge--neutral">${flag}&thinsp;${esc(country)}</span>
     </div>
+    ${missingHtml}
   `;
-
-  card.addEventListener('click', () => {
-    card.classList.toggle('expanded');
-  });
-
   return card;
 }
 
-/* ─── Filter buttons ─────────────────────────────────── */
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    activeFilter = btn.dataset.filter;
-    renderResults();
+/* ═══════════════════════════════════════════════════════════════
+ * REVERSE MODE — RESULTS RENDER
+ * ═══════════════════════════════════════════════════════════════ */
+
+$('courseSearchInput').addEventListener('input', e => {
+  state.searchQuery = e.target.value.trim();
+  renderReverseResults();
+});
+
+$('reverseSystemSelect').addEventListener('change', e => {
+  state.reverseSystem = e.target.value;
+  // Re-render immediately if there's already a query
+  if (state.searchQuery) renderReverseResults();
+});
+
+function renderReverseResults() {
+  const section = $('reverseResultsSection');
+  const q = state.searchQuery.toLowerCase();
+
+  if (!q) {
+    section.innerHTML = '<p class="search-hint">Start typing to find courses…</p>';
+    return;
+  }
+
+  // Match against course name, university name, and country label
+  const matched = courses.filter(c =>
+    c.name.toLowerCase().includes(q) ||
+    c.university.toLowerCase().includes(q) ||
+    (COUNTRY_LABELS[c.country] ?? '').toLowerCase().includes(q)
+  );
+
+  if (matched.length === 0) {
+    section.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state__icon">🔍</div>
+        <p>No courses matched <strong>"${esc(state.searchQuery)}"</strong>.</p>
+        <p class="mt-8">Try a broader term like <em>Medicine</em>, <em>Engineering</em>, or a university name.</p>
+      </div>`;
+    return;
+  }
+
+  const frag = document.createDocumentFragment();
+  matched.forEach(course => frag.appendChild(buildReverseCard(course)));
+  section.innerHTML = '';
+  section.appendChild(frag);
+}
+
+function buildReverseCard(course) {
+  const sys     = state.reverseSystem;
+  const flag    = COUNTRY_FLAGS[course.country] ?? '';
+  const country = COUNTRY_LABELS[course.country] ?? course.country;
+
+  const { essential = [], preferred = [], useful = [] } = course.requirements;
+
+  // Render an array of tags as subject-tag pills
+  const tagPills = tags => {
+    if (!tags.length) return '<span class="text-secondary" style="font-size:13px">None specified</span>';
+    return tags
+      .map(t => `<span class="subject-tag">${esc(tagToLocal(t, sys))}</span>`)
+      .join('');
+  };
+
+  // Only render rows that have tags
+  const rows = [
+    { label: 'Required', cls: 'req-essential', tags: essential },
+    ...(preferred.length ? [{ label: 'Preferred', cls: 'req-preferred', tags: preferred }] : []),
+    ...(useful.length    ? [{ label: 'Useful',    cls: 'req-useful',    tags: useful    }] : []),
+  ];
+
+  const card = document.createElement('div');
+  card.className = 'reverse-card';
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="card-title-group">
+        <span class="card-flag" aria-hidden="true">${flag}</span>
+        <div class="card-titles">
+          <div class="card-name">${esc(course.name)}</div>
+          <div class="card-uni">${esc(course.university)}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;flex-shrink:0">
+        <span class="badge badge--neutral">${esc(course.degreeLevel)}</span>
+        <span class="badge badge--neutral">${flag}&thinsp;${esc(country)}</span>
+      </div>
+    </div>
+    <div class="reverse-reqs">
+      ${rows.map(row => `
+        <div class="req-row">
+          <span class="req-label ${row.cls}">${row.label}</span>
+          <div class="req-tags">${tagPills(row.tags)}</div>
+        </div>`).join('')}
+    </div>
+    ${course.notes
+      ? `<p class="reverse-notes">${esc(course.notes)}</p>`
+      : ''}
+  `;
+  return card;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * UTILITY
+ * ═══════════════════════════════════════════════════════════════ */
+
+/** Minimal HTML escaping for user-data and data-file strings. */
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * INIT
+ * Wire up all static event listeners and run initial renders.
+ * ═══════════════════════════════════════════════════════════════ */
+
+function init() {
+  populateSystemSelects();
+  buildCountryFilterBar();
+
+  // Mode toggle buttons
+  $$('.mode-btn').forEach(btn =>
+    btn.addEventListener('click', () => switchMode(btn.dataset.mode))
+  );
+
+  // Check-mode system select
+  $('checkSystemSelect').addEventListener('change', e => {
+    state.checkSystem      = e.target.value;
+    state.selectedSubjects = [];
+    state.selectedTags     = new Set();
+
+    // Clear results before rebuilding picker so stale data isn't shown
+    $('checkResultsSection').classList.add('hidden');
+    buildSubjectPicker(state.checkSystem);
+
+    // Mirror the system choice to the reverse panel for convenience
+    $('reverseSystemSelect').value = state.checkSystem;
+    state.reverseSystem = state.checkSystem;
+    if (state.searchQuery) renderReverseResults();
   });
-});
+}
 
-/* ─── Reset ──────────────────────────────────────────── */
-document.getElementById('resetBtn').addEventListener('click', () => {
-  state.qualification = null;
-  state.subjects = [];
-  state.results  = [];
-  document.getElementById('results').classList.remove('visible');
-  document.querySelectorAll('.qual-pill').forEach(p => p.classList.remove('selected'));
-  document.getElementById('nextStep1').disabled = true;
-  goToStep(1);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-/* ─── Init ───────────────────────────────────────────── */
-buildQualGrid();
-updateProgress();
+init();

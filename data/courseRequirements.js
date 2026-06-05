@@ -446,7 +446,7 @@ const courses = [
     degreeLevel: "LLB",
     requirements: {
       essential:  ["English"],
-      preferred:  ["History", "Economics", "Literature", "Philosophy"],
+      preferred:  ["History", "Economics", "English", "Philosophy"],
       useful:     ["Mathematics_Standard", "Sociology"],
     },
     notes: "Minimum AAA/B at H2/H1. GP grade important (min. C). Written admissions test and interview required. General Paper is the 'English' signal here.",
@@ -562,7 +562,7 @@ const courses = [
     degreeLevel: "LLB",
     requirements: {
       essential:  ["English"],
-      preferred:  ["History", "Economics", "Chinese History"],
+      preferred:  ["History", "Economics", "English"],
       useful:     ["Sociology", "Philosophy"],
     },
     notes: "Level 5 in English Language required. Level 5+ in two electives. Strong reading and writing skills essential.",
