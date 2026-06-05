@@ -111,6 +111,9 @@
         <!-- Results — hidden until at least one subject is selected -->
         <div id="checkResultsSection" class="results-section hidden" aria-live="polite">
 
+          <!-- Visual summary bar: "4 subjects → X open · Y possible · Z closed" -->
+          <div id="summaryBar" class="summary-bar" aria-live="polite" aria-atomic="true"></div>
+
           <div class="results-toolbar">
             <div
               id="resultSummaryBadges"
@@ -199,6 +202,9 @@
   <footer>
     <p>Built by a student, for students. &mdash; Altiora &copy; 2025</p>
   </footer>
+
+  <!-- Clipboard toast notification -->
+  <div id="toast" class="toast" role="status" aria-live="assertive"></div>
 
   <!-- Data layer must be loaded before main.js -->
   <script src="data/qualificationMappings.js"></script>
