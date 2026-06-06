@@ -307,6 +307,17 @@ main     { flex: 1; padding: var(--pad); }
   font-size: 12px; color: var(--text-faint);
 }
 
+.subject-count-warning {
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  background: #fff8e6;
+  border: 1px solid #f0c040;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #7a5800;
+  line-height: 1.5;
+}
+
 /* ═══════════════════════════════════════════════════════════════
  * Summary bar
  * ═══════════════════════════════════════════════════════════════ */
