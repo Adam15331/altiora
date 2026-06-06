@@ -31,6 +31,17 @@ const state = {
 const COUNTRY_FLAGS  = { UK:'🇬🇧', US:'🇺🇸', CA:'🇨🇦', Netherlands:'🇳🇱', Singapore:'🇸🇬', Hong_Kong:'🇭🇰' };
 const COUNTRY_LABELS = { UK:'UK',  US:'US',  CA:'Canada', Netherlands:'Netherlands', Singapore:'Singapore', Hong_Kong:'Hong Kong' };
 
+// Minimum number of subjects required before results can show as GREEN.
+// Below this threshold results are capped at AMBER — no university admits on 1-2 subjects alone.
+const MIN_SUBJECTS = {
+  UK_A_Level:   3,
+  IB:           5,
+  US_AP:        4,
+  NL_VWO:       4,
+  SG_A_Level:   3,
+  HK_DSE:       5,
+};
+
 const CATEGORIES = [
   { id: 'medicine',      label: 'Medicine',            icon: '🏥' },
   { id: 'cs',           label: 'Computer Science',     icon: '💻' },
@@ -327,12 +338,31 @@ function renderCheckResults() {
   }
   section.classList.remove('hidden');
 
+  const minNeeded   = MIN_SUBJECTS[state.checkSystem] ?? 3;
+  const tooFew      = state.selectedSubjects.length < minNeeded;
+
+  // Remove any existing warning banner
+  const existingWarn = section.querySelector('.subject-count-warning');
+  if (existingWarn) existingWarn.remove();
+
+  if (tooFew) {
+    const warn = document.createElement('p');
+    warn.className = 'subject-count-warning';
+    warn.textContent = `Universities require a full subject combination — please select at least ${minNeeded} subjects to see accurate results. Results below are indicative only.`;
+    section.insertBefore(warn, section.firstChild);
+  }
+
   const pool = courses
     .filter(c => state.countryFilter === 'All' || c.country === state.countryFilter)
     .filter(c => state.selectedCategories.size === 0 || state.selectedCategories.has(c.category));
 
   const classified = pool
-    .map(course => ({ course, result: classify(course, state.selectedTags) }))
+    .map(course => {
+      const result = classify(course, state.selectedTags);
+      // Cap GREEN → AMBER when the student hasn't entered enough subjects yet
+      if (tooFew && result.status === 'green') result.status = 'amber';
+      return { course, result };
+    })
     .sort((a, b) => {
       const byStatus = STATUS_SORT[a.result.status] - STATUS_SORT[b.result.status];
       return byStatus !== 0 ? byStatus : a.course.university.localeCompare(b.course.university);
