@@ -56,11 +56,32 @@ const CATEGORIES = [
 ];
 
 const STATUS = {
-  green: { label:'Open',     badgeCls:'badge--success', icon:'✓', cardCls:'card--green' },
-  amber: { label:'Possible', badgeCls:'badge--warning', icon:'◑', cardCls:'card--amber' },
-  red:   { label:'Closed',   badgeCls:'badge--error',   icon:'✕', cardCls:'card--red'   },
+  green: { label:'Strong match', badgeCls:'badge--success', icon:'✓', cardCls:'course-card--green' },
+  amber: { label:'Possible',     badgeCls:'badge--warning', icon:'◑', cardCls:'course-card--amber' },
+  red:   { label:'Out of reach', badgeCls:'badge--error',   icon:'✗', cardCls:'course-card--red'   },
 };
 const STATUS_SORT = { green:0, amber:1, red:2 };
+
+const TIER_LABELS = {
+  'world-top-10':    'World Top 10',
+  'world-top-50':    'World Top 50',
+  'world-top-100':   'World Top 100',
+  'national-top-10': 'National Top 10',
+  'national-top-25': 'National Top 25',
+  'national-top-50': 'National Top 50',
+  'regional':        'Regional University',
+};
+
+const SYSTEM_GRADE_KEY = {
+  UK_A_Level: 'aLevels',
+  IB:         'ib',
+  US_AP:      'ap',
+  NL_VWO:     'vwo',
+  SG_A_Level: 'sgALevels',
+  HK_DSE:     'hkDse',
+};
+
+const CATEGORY_LABEL_MAP = Object.fromEntries(CATEGORIES.map(c => [c.id, c.label]));
 
 /* ─── DOM shortcuts ──────────────────────────────────────────────── */
 const $  = id  => document.getElementById(id);
@@ -308,16 +329,15 @@ function renderSummaryBar(subjectCount, counts, total) {
   const rPct = total ? (counts.red   / total * 100) : 0;
 
   bar.innerHTML = `
-    <div class="summary-text">
-      <span>You've selected <strong>${subjectCount}</strong> subject${subjectCount !== 1 ? 's' : ''}</span>
-      <span class="summary-arrow">→</span>
-      <span class="summary-stat summary-stat--green">${counts.green}&nbsp;open</span>
+    <div class="results-new-summary">
+      Your subjects match <strong>${total}</strong> course${total !== 1 ? 's' : ''} —
+      <a href="#results-group-green" class="summary-link summary-link--green">${counts.green} strong match${counts.green !== 1 ? 'es' : ''}</a>
       <span class="summary-dot">·</span>
-      <span class="summary-stat summary-stat--amber">${counts.amber}&nbsp;possible</span>
+      <a href="#results-group-amber" class="summary-link summary-link--amber">${counts.amber} possible</a>
       <span class="summary-dot">·</span>
-      <span class="summary-stat summary-stat--red">${counts.red}&nbsp;closed</span>
+      <a href="#results-group-red" class="summary-link summary-link--red">${counts.red} out of reach</a>
     </div>
-    <div class="summary-progress" role="img" aria-label="Course eligibility breakdown: ${counts.green} open, ${counts.amber} possible, ${counts.red} closed">
+    <div class="summary-progress" role="img" aria-label="Course eligibility: ${counts.green} strong matches, ${counts.amber} possible, ${counts.red} out of reach">
       <div class="summary-seg summary-seg--green" style="width:${gPct.toFixed(2)}%"></div>
       <div class="summary-seg summary-seg--amber" style="width:${aPct.toFixed(2)}%"></div>
       <div class="summary-seg summary-seg--red"   style="width:${rPct.toFixed(2)}%"></div>
@@ -338,8 +358,8 @@ function renderCheckResults() {
   }
   section.classList.remove('hidden');
 
-  const minNeeded   = MIN_SUBJECTS[state.checkSystem] ?? 3;
-  const tooFew      = state.selectedSubjects.length < minNeeded;
+  const minNeeded = MIN_SUBJECTS[state.checkSystem] ?? 3;
+  const tooFew    = state.selectedSubjects.length < minNeeded;
 
   // Remove any existing warning banner
   const existingWarn = section.querySelector('.subject-count-warning');
@@ -349,49 +369,93 @@ function renderCheckResults() {
     const warn = document.createElement('p');
     warn.className = 'subject-count-warning';
     warn.textContent = `Universities require a full subject combination — please select at least ${minNeeded} subjects to see accurate results. Results below are indicative only.`;
-    section.insertBefore(warn, section.firstChild);
+    $('summaryBar').before(warn);
   }
 
   const pool = courses
     .filter(c => state.countryFilter === 'All' || c.country === state.countryFilter)
     .filter(c => state.selectedCategories.size === 0 || state.selectedCategories.has(c.category));
 
-  const classified = pool
-    .map(course => {
-      const result = classify(course, state.selectedTags);
-      // Cap GREEN → AMBER when the student hasn't entered enough subjects yet
-      if (tooFew && result.status === 'green') result.status = 'amber';
-      return { course, result };
-    })
-    .sort((a, b) => {
-      const byStatus = STATUS_SORT[a.result.status] - STATUS_SORT[b.result.status];
-      return byStatus !== 0 ? byStatus : a.course.university.localeCompare(b.course.university);
-    });
+  const byStatus = { green: [], amber: [], red: [] };
+  pool.forEach(course => {
+    const result = classify(course, state.selectedTags);
+    if (tooFew && result.status === 'green') result.status = 'amber';
+    byStatus[result.status].push({ course, result });
+  });
 
-  const counts = { green:0, amber:0, red:0 };
-  classified.forEach(c => counts[c.result.status]++);
+  // Sort each group by university name
+  ['green', 'amber', 'red'].forEach(s =>
+    byStatus[s].sort((a, b) => a.course.university.localeCompare(b.course.university))
+  );
 
-  // Summary bar
-  renderSummaryBar(state.selectedSubjects.length, counts, classified.length);
+  const counts = { green: byStatus.green.length, amber: byStatus.amber.length, red: byStatus.red.length };
+  const total  = counts.green + counts.amber + counts.red;
 
-  // Legacy badge row (compact, above the filter)
+  renderSummaryBar(state.selectedSubjects.length, counts, total);
+
   $('resultSummaryBadges').innerHTML = `
     <span class="badge badge--success">✓&thinsp;${counts.green}</span>
     <span class="badge badge--warning">◑&thinsp;${counts.amber}</span>
-    <span class="badge badge--error">✕&thinsp;${counts.red}</span>
-    <span class="badge badge--neutral">${classified.length} shown</span>
+    <span class="badge badge--error">✗&thinsp;${counts.red}</span>
+    <span class="badge badge--neutral">${total} shown</span>
   `;
 
-  // Cards with staggered entrance (cap delay at card 16 to keep it snappy)
-  const grid = $('courseGrid');
-  const frag = document.createDocumentFragment();
-  classified.forEach(({ course, result }, i) => {
+  const container = $('courseGrid');
+  container.innerHTML = '';
+  let cardIndex = 0;
+
+  if (byStatus.green.length) {
+    container.appendChild(buildGroup('green', '✓ Strong matches', byStatus.green, cardIndex));
+    cardIndex += byStatus.green.length;
+  }
+  if (byStatus.amber.length) {
+    container.appendChild(buildGroup('amber', '◑ Possible with right grades', byStatus.amber, cardIndex));
+    cardIndex += byStatus.amber.length;
+  }
+  if (byStatus.red.length) {
+    container.appendChild(buildGroup('red', '✗ Out of reach', byStatus.red, cardIndex, true));
+  }
+}
+
+function buildGroup(status, headerText, items, startIndex, collapsed = false) {
+  const section = document.createElement('section');
+  section.id        = `results-group-${status}`;
+  section.className = 'results-group';
+
+  const header = document.createElement('h2');
+  header.className   = `results-group__header results-group__header--${status}`;
+  header.textContent = `${headerText} (${items.length})`;
+  section.appendChild(header);
+
+  const cardsDiv = document.createElement('div');
+  cardsDiv.className = 'results-group__grid';
+
+  items.forEach(({ course, result }, i) => {
     const card = buildCheckCard(course, result);
-    card.style.setProperty('--card-delay', `${Math.min(i, 16) * 0.035}s`);
-    frag.appendChild(card);
+    card.style.setProperty('--card-delay', `${Math.min(startIndex + i, 16) * 0.035}s`);
+    cardsDiv.appendChild(card);
   });
-  grid.innerHTML = '';
-  grid.appendChild(frag);
+
+  if (collapsed) {
+    cardsDiv.hidden = true;
+    const toggle = document.createElement('button');
+    toggle.type      = 'button';
+    toggle.className = 'results-group__toggle';
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.textContent = `Show ${items.length} out-of-reach courses`;
+    toggle.addEventListener('click', () => {
+      const nowOpen = cardsDiv.hidden;
+      cardsDiv.hidden = !nowOpen;
+      toggle.setAttribute('aria-expanded', String(nowOpen));
+      toggle.textContent = nowOpen ? 'Hide out-of-reach courses' : `Show ${items.length} out-of-reach courses`;
+    });
+    section.appendChild(toggle);
+    section.appendChild(cardsDiv);
+  } else {
+    section.appendChild(cardsDiv);
+  }
+
+  return section;
 }
 
 function buildCheckCard(course, result) {
@@ -401,21 +465,30 @@ function buildCheckCard(course, result) {
   const flag    = COUNTRY_FLAGS[course.country] ?? '';
   const country = COUNTRY_LABELS[course.country] ?? course.country;
 
-  // Red: underlined missing essential subject names
+  // Grade string for the active qualification system
+  const gradeKey = SYSTEM_GRADE_KEY[sys];
+  const gradeStr = gradeKey ? (course.grades?.[gradeKey] ?? null) : null;
+
+  // Readable category label
+  const catLabel = CATEGORY_LABEL_MAP[course.category] ?? course.category;
+
+  // Tier label (null = don't show)
+  const tierLabel = course.universityContext?.tier ? (TIER_LABELS[course.universityContext.tier] ?? null) : null;
+
+  // Admission tests
+  const tests = Array.isArray(course.admissionTests) ? course.admissionTests : [];
+
   const missingTagsHtml = tags =>
     tags.map(t => `<span class="missing-tag">${esc(tagToLocal(t, sys))}</span>`).join(', ');
 
   let footerHtml = '';
-
   if (status === 'red' && missingEssential.length) {
-    // Show all missing essentials with red underline
     footerHtml = `
       <p class="card-missing card-missing--red">
         <span class="missing-prefix">Needs:</span>
         ${missingTagsHtml(missingEssential)}
       </p>`;
   } else if (status === 'amber' && missingPreferred.length) {
-    // Actionable tip: surface the single most impactful missing preferred subject
     const topSubject = tagToLocal(missingPreferred[0], sys);
     const extras     = missingPreferred.length > 1
       ? ` <span style="color:var(--text-faint);font-weight:400"> + ${missingPreferred.length - 1} more</span>`
@@ -427,6 +500,8 @@ function buildCheckCard(course, result) {
       </p>`;
   }
 
+  const uniNotes = course.universityContext?.notes;
+
   const card = document.createElement('div');
   card.className = `course-card ${cfg.cardCls}`;
   card.setAttribute('role', 'listitem');
@@ -437,6 +512,7 @@ function buildCheckCard(course, result) {
         <div class="card-titles">
           <div class="card-name">${esc(course.name)}</div>
           <div class="card-uni">${esc(course.university)}</div>
+          ${tierLabel ? `<div class="card-tier">${esc(tierLabel)}</div>` : ''}
         </div>
       </div>
       <span class="badge ${cfg.badgeCls}">${cfg.icon}&thinsp;${cfg.label}</span>
@@ -444,8 +520,19 @@ function buildCheckCard(course, result) {
     <div class="card-meta">
       <span class="badge badge--neutral">${esc(course.degreeLevel)}</span>
       <span class="badge badge--neutral">${flag}&thinsp;${esc(country)}</span>
+      <span class="badge badge--neutral">${esc(catLabel)}</span>
     </div>
+    ${gradeStr ? `<div class="card-grades">${esc(gradeStr)}</div>` : ''}
+    ${tests.length ? `
+      <div class="card-admission-tests">
+        ${tests.map(t => `<span class="badge badge--warning">${esc(t)} required</span>`).join('')}
+      </div>` : ''}
     ${footerHtml}
+    ${uniNotes ? `
+      <details class="card-uni-info">
+        <summary>About this university</summary>
+        <p class="card-uni-info__notes">${esc(uniNotes)}</p>
+      </details>` : ''}
   `;
   return card;
 }
