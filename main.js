@@ -111,6 +111,8 @@ function deriveTagsFromSubjects(subjects, systemKey) {
   const forward = qualificationMappings[systemKey]?.subjects ?? {};
   const tags = new Set();
   for (const name of subjects) { const t = forward[name]; if (t) tags.add(t); }
+  // Advanced maths always satisfies a standard maths requirement
+  if (tags.has('Mathematics_Advanced')) tags.add('Mathematics_Standard');
   return tags;
 }
 
