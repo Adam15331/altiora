@@ -41,6 +41,7 @@ const CATEGORIES = [
   { id: 'sciences',     label: 'Natural Sciences',     icon: '🔬' },
   { id: 'psychology',   label: 'Psychology & Social',  icon: '🧠' },
   { id: 'architecture', label: 'Architecture',         icon: '🏛️' },
+  { id: 'mathematics',  label: 'Mathematics',           icon: '∑' },
 ];
 
 const STATUS = {
