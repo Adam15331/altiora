@@ -7,7 +7,7 @@
   <title>Altiora</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -128,7 +128,13 @@
         <!-- Results — hidden until at least one subject is selected -->
         <div id="checkResultsSection" class="results-section hidden" aria-live="polite">
 
-          <!-- Visual summary bar: "4 subjects → X open · Y possible · Z closed" -->
+          <!-- Persistent disclaimer -->
+          <div class="disclaimer-banner" role="note">
+            <span class="disclaimer-banner__icon" aria-hidden="true">ⓘ</span>
+            <p>Subject match only — grades, admission tests, and interviews matter equally. Always check the university's admissions page for full requirements.</p>
+          </div>
+
+          <!-- Summary bar -->
           <div id="summaryBar" class="summary-bar" aria-live="polite" aria-atomic="true"></div>
 
           <div class="results-toolbar">
@@ -148,13 +154,8 @@
             </div>
           </div>
 
-          <div
-            id="courseGrid"
-            class="course-grid"
-            role="list"
-            aria-label="Course results"
-          >
-            <!-- course cards inserted by JS -->
+          <!-- Grouped results — populated by JS -->
+          <div id="courseGrid" class="results-groups-container">
           </div>
 
         </div>

@@ -714,6 +714,179 @@ footer {
 footer p { font-size: 13px; }
 
 /* ═══════════════════════════════════════════════════════════════
+ * Disclaimer banner
+ * ═══════════════════════════════════════════════════════════════ */
+.disclaimer-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 16px;
+  background: var(--accent-light);
+  border: 1px solid rgba(47,128,237,.25);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.disclaimer-banner__icon {
+  flex-shrink: 0;
+  color: var(--accent);
+  font-size: 15px;
+  margin-top: 1px;
+}
+.disclaimer-banner p {
+  margin: 0;
+  color: var(--text);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * Results new summary row
+ * ═══════════════════════════════════════════════════════════════ */
+.results-new-summary {
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.results-new-summary strong { font-weight: 700; color: var(--text); }
+.summary-link {
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity var(--t);
+}
+.summary-link:hover { opacity: .75; text-decoration: underline; }
+.summary-link--green { color: var(--success); }
+.summary-link--amber { color: var(--warning); }
+.summary-link--red   { color: var(--error);   }
+
+/* ═══════════════════════════════════════════════════════════════
+ * Grouped results
+ * ═══════════════════════════════════════════════════════════════ */
+.results-groups-container { display: flex; flex-direction: column; gap: 8px; }
+
+.results-group { margin-bottom: 16px; }
+
+.results-group__header {
+  position: sticky;
+  top: 54px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  margin-bottom: 10px;
+  border: 1.5px solid transparent;
+}
+.results-group__header--green {
+  background: var(--success-light);
+  border-color: rgba(14,156,84,.2);
+  color: var(--success);
+}
+.results-group__header--amber {
+  background: var(--warning-light);
+  border-color: rgba(196,147,0,.2);
+  color: var(--warning-text);
+}
+.results-group__header--red {
+  background: var(--error-light);
+  border-color: rgba(217,79,71,.2);
+  color: var(--error-text);
+}
+
+.results-group__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+  gap: 12px;
+}
+
+.results-group__toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 16px;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--t), border-color var(--t), color var(--t);
+}
+.results-group__toggle:hover {
+  background: var(--error-light);
+  border-color: var(--error);
+  color: var(--error-text);
+}
+.results-group__toggle[aria-expanded="true"] {
+  border-style: solid;
+  border-color: rgba(217,79,71,.25);
+  background: var(--error-light);
+  color: var(--error-text);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * Card — grade string, admission tests, tier, expandable info
+ * ═══════════════════════════════════════════════════════════════ */
+.card-grades {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 6px;
+  letter-spacing: -.01em;
+}
+
+.card-admission-tests {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 7px;
+}
+
+.card-tier {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-faint);
+  margin-top: 2px;
+  letter-spacing: .01em;
+}
+
+.card-uni-info {
+  margin-top: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+.card-uni-info summary {
+  font-size: 12px;
+  color: var(--accent);
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.card-uni-info summary::-webkit-details-marker { display: none; }
+.card-uni-info[open] summary { margin-bottom: 6px; }
+.card-uni-info__notes {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.55;
+  padding: 7px 10px;
+  background: var(--surface);
+  border-radius: 6px;
+  margin: 0;
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════════════════════
  * Responsive
  * ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 680px) {
@@ -736,6 +909,16 @@ footer p { font-size: 13px; }
   .card-header      { flex-wrap: wrap; gap: 8px; }
 
   .nav__tagline     { display: none; }
+
+  .results-group__grid { grid-template-columns: 1fr; }
+  .results-new-summary { font-size: 13px; }
+  .results-group__header { top: 46px; }
+}
+
+@media (max-width: 480px) {
+  .disclaimer-banner { font-size: 12px; gap: 8px; }
+  .card-admission-tests .badge { font-size: 11px; padding: 2px 8px; }
+  .results-new-summary { line-height: 1.8; }
 }
 
 @media (max-width: 400px) {
