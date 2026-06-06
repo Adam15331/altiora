@@ -109,6 +109,22 @@
           <p class="picker-hint">Select 3–5 subjects for best results. Results update instantly.</p>
         </div>
 
+        <!-- Course interest filter — shown after subjects are selected -->
+        <div id="categoryPickerSection" class="category-picker-section hidden" aria-live="polite">
+          <div class="subject-picker-header">
+            <span class="control-label">What are you interested in studying?</span>
+            <span class="picker-hint-inline">Optional — leave blank to see all courses</span>
+          </div>
+          <div
+            id="categoryPicker"
+            class="category-picker"
+            role="group"
+            aria-label="Filter results by course area"
+          >
+            <!-- chips inserted by JS -->
+          </div>
+        </div>
+
         <!-- Results — hidden until at least one subject is selected -->
         <div id="checkResultsSection" class="results-section hidden" aria-live="polite">
 

@@ -17,18 +17,31 @@
  * handler functions so the render path stays predictable.
  * ─────────────────────────────────────────────────────────────── */
 const state = {
-  mode:             'check',
-  checkSystem:      '',
-  reverseSystem:    '',
-  selectedSubjects: [],
-  selectedTags:     new Set(),
-  countryFilter:    'All',
-  searchQuery:      '',
+  mode:               'check',
+  checkSystem:        '',
+  reverseSystem:      '',
+  selectedSubjects:   [],
+  selectedTags:       new Set(),
+  countryFilter:      'All',
+  selectedCategories: new Set(),
+  searchQuery:        '',
 };
 
 /* ─── Constants ─────────────────────────────────────────────────── */
 const COUNTRY_FLAGS  = { UK:'🇬🇧', US:'🇺🇸', Netherlands:'🇳🇱', Singapore:'🇸🇬', Hong_Kong:'🇭🇰' };
 const COUNTRY_LABELS = { UK:'UK',  US:'US',  Netherlands:'Netherlands', Singapore:'Singapore', Hong_Kong:'Hong Kong' };
+
+const CATEGORIES = [
+  { id: 'medicine',      label: 'Medicine',            icon: '🏥' },
+  { id: 'cs',           label: 'Computer Science',     icon: '💻' },
+  { id: 'engineering',  label: 'Engineering',          icon: '⚙️' },
+  { id: 'economics',    label: 'Economics & Finance',  icon: '📊' },
+  { id: 'law',          label: 'Law',                  icon: '⚖️' },
+  { id: 'business',     label: 'Business',             icon: '🏢' },
+  { id: 'sciences',     label: 'Natural Sciences',     icon: '🔬' },
+  { id: 'psychology',   label: 'Psychology & Social',  icon: '🧠' },
+  { id: 'architecture', label: 'Architecture',         icon: '🏛️' },
+];
 
 const STATUS = {
   green: { label:'Open',     badgeCls:'badge--success', icon:'✓', cardCls:'card--green' },
@@ -163,7 +176,12 @@ function buildSubjectPicker(systemKey) {
   const picker  = $('subjectPicker');
   $('subjectFilterInput').value = '';
 
-  if (!systemKey) { section.classList.add('hidden'); picker.innerHTML = ''; return; }
+  if (!systemKey) {
+    section.classList.add('hidden');
+    picker.innerHTML = '';
+    $('categoryPickerSection').classList.add('hidden');
+    return;
+  }
 
   const subjects = Object.keys(qualificationMappings[systemKey]?.subjects ?? {});
   const frag = document.createDocumentFragment();
@@ -178,7 +196,44 @@ function buildSubjectPicker(systemKey) {
   picker.innerHTML = '';
   picker.appendChild(frag);
   section.classList.remove('hidden');
+
+  // Reset category state when system changes
+  state.selectedCategories.clear();
+  $$('#categoryPicker .category-chip').forEach(b => b.classList.remove('active'));
+  $('categoryPickerSection').classList.add('hidden');
+
   syncSubjectCount();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * CATEGORY PICKER  (course interest filter)
+ * ═══════════════════════════════════════════════════════════════ */
+
+function buildCategoryPicker() {
+  const picker = $('categoryPicker');
+  const frag = document.createDocumentFragment();
+  CATEGORIES.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'category-chip';
+    btn.dataset.category = cat.id;
+    btn.innerHTML = `<span class="category-chip__icon" aria-hidden="true">${cat.icon}</span>${esc(cat.label)}`;
+    btn.addEventListener('click', () => {
+      if (state.selectedCategories.has(cat.id)) {
+        state.selectedCategories.delete(cat.id);
+        btn.classList.remove('active');
+        btn.setAttribute('aria-pressed', 'false');
+      } else {
+        state.selectedCategories.add(cat.id);
+        btn.classList.add('active');
+        btn.setAttribute('aria-pressed', 'true');
+      }
+      renderCheckResults();
+    });
+    btn.setAttribute('aria-pressed', 'false');
+    frag.appendChild(btn);
+  });
+  picker.appendChild(frag);
 }
 
 function onSubjectToggle() {
@@ -188,6 +243,7 @@ function onSubjectToggle() {
     chip.classList.toggle('selected', chip.querySelector('input').checked)
   );
   syncSubjectCount();
+  $('categoryPickerSection').classList.toggle('hidden', state.selectedSubjects.length === 0);
   renderCheckResults();
 }
 
@@ -268,9 +324,9 @@ function renderCheckResults() {
   }
   section.classList.remove('hidden');
 
-  const pool = state.countryFilter === 'All'
-    ? courses
-    : courses.filter(c => c.country === state.countryFilter);
+  const pool = courses
+    .filter(c => state.countryFilter === 'All' || c.country === state.countryFilter)
+    .filter(c => state.selectedCategories.size === 0 || state.selectedCategories.has(c.category));
 
   const classified = pool
     .map(course => ({ course, result: classify(course, state.selectedTags) }))
@@ -517,6 +573,7 @@ function esc(str) {
 function init() {
   populateSystemSelects();
   buildCountryFilterBar();
+  buildCategoryPicker();
 
   $$('.mode-btn').forEach(btn =>
     btn.addEventListener('click', () => switchMode(btn.dataset.mode))
