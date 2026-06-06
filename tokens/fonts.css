@@ -1,0 +1,9 @@
+/* ============================================================
+   Altiora — Webfonts
+   Instrument Sans (UI/body) · Lora (serif display accent) ·
+   IBM Plex Mono (grade strings, course codes)
+   Loaded from Google Fonts. If you self-host, replace the
+   @import below with local @font-face rules.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
