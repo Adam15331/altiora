@@ -28,8 +28,8 @@ const state = {
 };
 
 /* ─── Constants ─────────────────────────────────────────────────── */
-const COUNTRY_FLAGS  = { UK:'🇬🇧', US:'🇺🇸', Netherlands:'🇳🇱', Singapore:'🇸🇬', Hong_Kong:'🇭🇰' };
-const COUNTRY_LABELS = { UK:'UK',  US:'US',  Netherlands:'Netherlands', Singapore:'Singapore', Hong_Kong:'Hong Kong' };
+const COUNTRY_FLAGS  = { UK:'🇬🇧', US:'🇺🇸', CA:'🇨🇦', Netherlands:'🇳🇱', Singapore:'🇸🇬', Hong_Kong:'🇭🇰' };
+const COUNTRY_LABELS = { UK:'UK',  US:'US',  CA:'Canada', Netherlands:'Netherlands', Singapore:'Singapore', Hong_Kong:'Hong Kong' };
 
 const CATEGORIES = [
   { id: 'medicine',      label: 'Medicine',            icon: '🏥' },

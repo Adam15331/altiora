@@ -1546,4 +1546,560 @@ const courses = [
     notes: "Maths required.",
   },
 
+  /* ══════════════════════════════════════════════════════════════
+   * UNITED STATES (additional — reaching top 40)
+   * ══════════════════════════════════════════════════════════════ */
+
+  // ── Northwestern ──────────────────────────────────────────────
+  {
+    id: "us-cs-northwestern", name: "Computer Science BS",
+    university: "Northwestern University", country: "US", degreeLevel: "BS", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Highly selective. Integrated with liberal arts.",
+  },
+  {
+    id: "us-economics-northwestern", name: "Economics BA",
+    university: "Northwestern University", country: "US", degreeLevel: "BA", category: "economics",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    notes: "Highly selective.",
+  },
+  {
+    id: "us-engineering-northwestern", name: "Engineering BS (McCormick)",
+    university: "Northwestern University", country: "US", degreeLevel: "BS", category: "engineering",
+    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    notes: "Highly selective.",
+  },
+
+  // ── Dartmouth ─────────────────────────────────────────────────
+  {
+    id: "us-cs-dartmouth", name: "Computer Science AB",
+    university: "Dartmouth College", country: "US", degreeLevel: "AB", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Ivy League. Liberal arts focused.",
+  },
+  {
+    id: "us-economics-dartmouth", name: "Economics AB",
+    university: "Dartmouth College", country: "US", degreeLevel: "AB", category: "economics",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    notes: "Ivy League.",
+  },
+
+  // ── Brown ─────────────────────────────────────────────────────
+  {
+    id: "us-cs-brown", name: "Computer Science ScB",
+    university: "Brown University", country: "US", degreeLevel: "ScB", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Ivy League. Open Curriculum — no core requirements.",
+  },
+  {
+    id: "us-economics-brown", name: "Economics AB",
+    university: "Brown University", country: "US", degreeLevel: "AB", category: "economics",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    notes: "Ivy League. Open Curriculum.",
+  },
+
+  // ── Cornell ───────────────────────────────────────────────────
+  {
+    id: "us-cs-cornell", name: "Computer Science BS",
+    university: "Cornell University", country: "US", degreeLevel: "BS", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Ivy League. Top-ranked CS programme.",
+  },
+  {
+    id: "us-engineering-cornell", name: "Engineering BS",
+    university: "Cornell University", country: "US", degreeLevel: "BS", category: "engineering",
+    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    notes: "Ivy League. Strong engineering school.",
+  },
+  {
+    id: "us-economics-cornell", name: "Economics BA",
+    university: "Cornell University", country: "US", degreeLevel: "BA", category: "economics",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    notes: "Ivy League.",
+  },
+  {
+    id: "us-business-cornell", name: "Business Administration BS (Dyson / Hotel)",
+    university: "Cornell University", country: "US", degreeLevel: "BS", category: "business",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    notes: "Dyson (Applied Economics) and Hotel Administration are world-renowned.",
+  },
+
+  // ── Rice ──────────────────────────────────────────────────────
+  {
+    id: "us-cs-rice", name: "Computer Science BS",
+    university: "Rice University", country: "US", degreeLevel: "BS", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Highly selective. Strong research culture.",
+  },
+  {
+    id: "us-engineering-rice", name: "Engineering BS",
+    university: "Rice University", country: "US", degreeLevel: "BS", category: "engineering",
+    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    notes: "Highly selective.",
+  },
+
+  // ── Vanderbilt ────────────────────────────────────────────────
+  {
+    id: "us-economics-vanderbilt", name: "Economics BA",
+    university: "Vanderbilt University", country: "US", degreeLevel: "BA", category: "economics",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    notes: "Highly selective.",
+  },
+  {
+    id: "us-cs-vanderbilt", name: "Computer Science BS",
+    university: "Vanderbilt University", country: "US", degreeLevel: "BS", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Highly selective.",
+  },
+
+  // ── Notre Dame ────────────────────────────────────────────────
+  {
+    id: "us-business-notredame", name: "Business Administration BBA (Mendoza)",
+    university: "University of Notre Dame", country: "US", degreeLevel: "BBA", category: "business",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    notes: "Top-ranked business school.",
+  },
+  {
+    id: "us-cs-notredame", name: "Computer Science BS",
+    university: "University of Notre Dame", country: "US", degreeLevel: "BS", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Highly selective.",
+  },
+
+  // ── WashU St. Louis ───────────────────────────────────────────
+  {
+    id: "us-cs-washu", name: "Computer Science BS",
+    university: "Washington University in St. Louis", country: "US", degreeLevel: "BS", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Highly selective.",
+  },
+  {
+    id: "us-business-washu", name: "Business Administration BSBA (Olin)",
+    university: "Washington University in St. Louis", country: "US", degreeLevel: "BSBA", category: "business",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    notes: "Highly selective.",
+  },
+
+  // ── Emory ─────────────────────────────────────────────────────
+  {
+    id: "us-business-emory", name: "Business Administration BBA (Goizueta)",
+    university: "Emory University", country: "US", degreeLevel: "BBA", category: "business",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    notes: "Highly selective.",
+  },
+  {
+    id: "us-economics-emory", name: "Economics BA",
+    university: "Emory University", country: "US", degreeLevel: "BA", category: "economics",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    notes: "Highly selective.",
+  },
+
+  // ── UCLA ──────────────────────────────────────────────────────
+  {
+    id: "us-cs-ucla", name: "Computer Science BS",
+    university: "UCLA", country: "US", degreeLevel: "BS", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Highly selective public university.",
+  },
+  {
+    id: "us-engineering-ucla", name: "Mechanical Engineering BS",
+    university: "UCLA", country: "US", degreeLevel: "BS", category: "engineering",
+    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    notes: "Highly selective.",
+  },
+  {
+    id: "us-economics-ucla", name: "Economics BA",
+    university: "UCLA", country: "US", degreeLevel: "BA", category: "economics",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    notes: "Competitive.",
+  },
+
+  // ── USC ───────────────────────────────────────────────────────
+  {
+    id: "us-business-usc", name: "Business Administration BS (Marshall)",
+    university: "University of Southern California", country: "US", degreeLevel: "BS", category: "business",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    notes: "Highly selective. Strong finance and entertainment industry links.",
+  },
+  {
+    id: "us-cs-usc", name: "Computer Science BS",
+    university: "University of Southern California", country: "US", degreeLevel: "BS", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Highly selective.",
+  },
+
+  // ── Georgia Tech ──────────────────────────────────────────────
+  {
+    id: "us-cs-gatech", name: "Computer Science BS",
+    university: "Georgia Tech", country: "US", degreeLevel: "BS", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Top-ranked public STEM university.",
+  },
+  {
+    id: "us-engineering-gatech", name: "Engineering BS",
+    university: "Georgia Tech", country: "US", degreeLevel: "BS", category: "engineering",
+    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    notes: "Top-ranked public engineering school.",
+  },
+
+  // ── UVA ───────────────────────────────────────────────────────
+  {
+    id: "us-business-uva", name: "Commerce BS (McIntire)",
+    university: "University of Virginia", country: "US", degreeLevel: "BS", category: "business",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    notes: "Highly selective. McIntire School of Commerce is top-ranked.",
+  },
+  {
+    id: "us-cs-uva", name: "Computer Science BS",
+    university: "University of Virginia", country: "US", degreeLevel: "BS", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Top public university.",
+  },
+  {
+    id: "us-economics-uva", name: "Economics BA",
+    university: "University of Virginia", country: "US", degreeLevel: "BA", category: "economics",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    notes: "Top public university.",
+  },
+
+  // ── UIUC ──────────────────────────────────────────────────────
+  {
+    id: "us-cs-uiuc", name: "Computer Science BS",
+    university: "University of Illinois Urbana-Champaign", country: "US", degreeLevel: "BS", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "One of the top CS schools globally. Very competitive.",
+  },
+  {
+    id: "us-engineering-uiuc", name: "Engineering BS",
+    university: "University of Illinois Urbana-Champaign", country: "US", degreeLevel: "BS", category: "engineering",
+    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    notes: "Top public engineering school.",
+  },
+
+  // ── Purdue ────────────────────────────────────────────────────
+  {
+    id: "us-engineering-purdue", name: "Engineering BS",
+    university: "Purdue University", country: "US", degreeLevel: "BS", category: "engineering",
+    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    notes: "Top engineering school. NASA astronaut pipeline.",
+  },
+  {
+    id: "us-cs-purdue", name: "Computer Science BS",
+    university: "Purdue University", country: "US", degreeLevel: "BS", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Highly ranked CS programme.",
+  },
+
+  // ── UNC Chapel Hill ───────────────────────────────────────────
+  {
+    id: "us-business-unc", name: "Business Administration BSBA (Kenan-Flagler)",
+    university: "UNC Chapel Hill", country: "US", degreeLevel: "BSBA", category: "business",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    notes: "Top public university. Kenan-Flagler is a top-ranked business school.",
+  },
+  {
+    id: "us-economics-unc", name: "Economics BA",
+    university: "UNC Chapel Hill", country: "US", degreeLevel: "BA", category: "economics",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    notes: "Top public university.",
+  },
+
+  /* ══════════════════════════════════════════════════════════════
+   * CANADA
+   * ══════════════════════════════════════════════════════════════ */
+
+  // ── University of Toronto ─────────────────────────────────────
+  {
+    id: "ca-cs-utoronto", name: "Computer Science BSc",
+    university: "University of Toronto", country: "CA", degreeLevel: "BSc", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Top Canadian university. Calculus and advanced maths essential.",
+  },
+  {
+    id: "ca-engineering-utoronto", name: "Engineering Science BASc",
+    university: "University of Toronto", country: "CA", degreeLevel: "BASc", category: "engineering",
+    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    notes: "Very competitive. Maths and Physics essential.",
+  },
+  {
+    id: "ca-medicine-utoronto", name: "Life Sciences BSc (pre-med)",
+    university: "University of Toronto", country: "CA", degreeLevel: "BSc", category: "medicine",
+    requirements: { essential: ["Biology","Chemistry"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
+    notes: "Life Sciences is the most common pre-med pathway at UofT.",
+  },
+  {
+    id: "ca-economics-utoronto", name: "Economics BA/BSc",
+    university: "University of Toronto", country: "CA", degreeLevel: "BSc", category: "economics",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    notes: "Maths required.",
+  },
+  {
+    id: "ca-law-utoronto", name: "Law JD (pre-law BA)",
+    university: "University of Toronto", country: "CA", degreeLevel: "BA", category: "law",
+    requirements: { essential: [], preferred: ["History","English"], useful: ["Philosophy","Economics"] },
+    notes: "UofT Law is graduate-entry. Undergraduate major is flexible.",
+  },
+
+  // ── McGill ────────────────────────────────────────────────────
+  {
+    id: "ca-medicine-mcgill", name: "Medicine MDCM",
+    university: "McGill University", country: "CA", degreeLevel: "MDCM", category: "medicine",
+    requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
+    notes: "MCAT required. Chemistry and Biology essential. Highly competitive.",
+  },
+  {
+    id: "ca-cs-mcgill", name: "Computer Science BSc",
+    university: "McGill University", country: "CA", degreeLevel: "BSc", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Top Canadian CS programme.",
+  },
+  {
+    id: "ca-engineering-mcgill", name: "Engineering BEng",
+    university: "McGill University", country: "CA", degreeLevel: "BEng", category: "engineering",
+    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    notes: "Very competitive.",
+  },
+  {
+    id: "ca-economics-mcgill", name: "Economics BA",
+    university: "McGill University", country: "CA", degreeLevel: "BA", category: "economics",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    notes: "Maths required.",
+  },
+  {
+    id: "ca-law-mcgill", name: "Law BCL/LLB",
+    university: "McGill University", country: "CA", degreeLevel: "BCL/LLB", category: "law",
+    requirements: { essential: [], preferred: ["History","English"], useful: ["Philosophy","Economics"] },
+    notes: "Unique bijural programme (Common Law + Civil Law). Very competitive.",
+  },
+
+  // ── UBC ───────────────────────────────────────────────────────
+  {
+    id: "ca-cs-ubc", name: "Computer Science BSc",
+    university: "University of British Columbia", country: "CA", degreeLevel: "BSc", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Top Canadian CS programme.",
+  },
+  {
+    id: "ca-engineering-ubc", name: "Engineering BASc",
+    university: "University of British Columbia", country: "CA", degreeLevel: "BASc", category: "engineering",
+    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    notes: "Very competitive. Maths and Physics essential.",
+  },
+  {
+    id: "ca-business-ubc", name: "Business Administration BCom (Sauder)",
+    university: "University of British Columbia", country: "CA", degreeLevel: "BCom", category: "business",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    notes: "Sauder School of Business. Top Canadian business school.",
+  },
+  {
+    id: "ca-economics-ubc", name: "Economics BA/BSc",
+    university: "University of British Columbia", country: "CA", degreeLevel: "BSc", category: "economics",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    notes: "Maths required.",
+  },
+
+  // ── Waterloo ──────────────────────────────────────────────────
+  {
+    id: "ca-cs-waterloo", name: "Computer Science BSc",
+    university: "University of Waterloo", country: "CA", degreeLevel: "BSc", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Top CS school in Canada. Co-op programme world-renowned. Very competitive.",
+  },
+  {
+    id: "ca-engineering-waterloo", name: "Engineering BASc",
+    university: "University of Waterloo", country: "CA", degreeLevel: "BASc", category: "engineering",
+    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    notes: "Top engineering co-op programme in Canada.",
+  },
+  {
+    id: "ca-mathematics-waterloo", name: "Mathematics BSc",
+    university: "University of Waterloo", country: "CA", degreeLevel: "BSc", category: "mathematics",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: [], useful: ["Physics","Computer_Science","Statistics"] },
+    notes: "World-class mathematics faculty. Co-op available.",
+  },
+  {
+    id: "ca-business-waterloo", name: "Accounting & Financial Management BAFMath",
+    university: "University of Waterloo", country: "CA", degreeLevel: "BAFMath", category: "business",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Economics","Statistics"], useful: ["Business"] },
+    notes: "Unique maths-business programme. Co-op available.",
+  },
+
+  // ── McMaster ──────────────────────────────────────────────────
+  {
+    id: "ca-medicine-mcmaster", name: "Health Sciences BSc (pre-med)",
+    university: "McMaster University", country: "CA", degreeLevel: "BSc", category: "medicine",
+    requirements: { essential: ["Biology","Chemistry"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
+    notes: "McMaster is famous for its problem-based medical school.",
+  },
+  {
+    id: "ca-engineering-mcmaster", name: "Engineering BEng",
+    university: "McMaster University", country: "CA", degreeLevel: "BEng", category: "engineering",
+    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    notes: "Maths and Physics essential.",
+  },
+  {
+    id: "ca-cs-mcmaster", name: "Computer Science BSc",
+    university: "McMaster University", country: "CA", degreeLevel: "BSc", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Strong CS programme.",
+  },
+
+  // ── Western University ────────────────────────────────────────
+  {
+    id: "ca-business-western", name: "Business Administration HBA (Ivey)",
+    university: "Western University", country: "CA", degreeLevel: "HBA", category: "business",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    notes: "Ivey Business School is Canada's top business school by many rankings.",
+  },
+  {
+    id: "ca-cs-western", name: "Computer Science BSc",
+    university: "Western University", country: "CA", degreeLevel: "BSc", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Maths essential.",
+  },
+  {
+    id: "ca-medicine-western", name: "Medical Sciences BSc (pre-med)",
+    university: "Western University", country: "CA", degreeLevel: "BSc", category: "medicine",
+    requirements: { essential: ["Biology","Chemistry"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
+    notes: "Common pre-med pathway.",
+  },
+
+  // ── Queen's ───────────────────────────────────────────────────
+  {
+    id: "ca-business-queens", name: "Commerce BCom (Smith School)",
+    university: "Queen's University", country: "CA", degreeLevel: "BCom", category: "business",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    notes: "Smith School of Business. Highly selective. Strong Bay Street pipeline.",
+  },
+  {
+    id: "ca-engineering-queens", name: "Engineering BSc",
+    university: "Queen's University", country: "CA", degreeLevel: "BSc", category: "engineering",
+    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    notes: "Maths and Physics essential.",
+  },
+  {
+    id: "ca-economics-queens", name: "Economics BA",
+    university: "Queen's University", country: "CA", degreeLevel: "BA", category: "economics",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    notes: "Maths required.",
+  },
+
+  // ── University of Alberta ─────────────────────────────────────
+  {
+    id: "ca-engineering-alberta", name: "Engineering BSc",
+    university: "University of Alberta", country: "CA", degreeLevel: "BSc", category: "engineering",
+    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    notes: "Top Canadian engineering school. Maths and Physics essential.",
+  },
+  {
+    id: "ca-cs-alberta", name: "Computer Science BSc",
+    university: "University of Alberta", country: "CA", degreeLevel: "BSc", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Strong AI and CS research.",
+  },
+  {
+    id: "ca-business-alberta", name: "Business BCom (Alberta School of Business)",
+    university: "University of Alberta", country: "CA", degreeLevel: "BCom", category: "business",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    notes: "Top business school in western Canada.",
+  },
+
+  // ── Simon Fraser University ───────────────────────────────────
+  {
+    id: "ca-cs-sfu", name: "Computer Science BSc",
+    university: "Simon Fraser University", country: "CA", degreeLevel: "BSc", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Strong CS and co-op programme.",
+  },
+  {
+    id: "ca-business-sfu", name: "Business Administration BBA (Beedie)",
+    university: "Simon Fraser University", country: "CA", degreeLevel: "BBA", category: "business",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    notes: "Co-op available.",
+  },
+
+  // ── University of Calgary ─────────────────────────────────────
+  {
+    id: "ca-engineering-calgary", name: "Engineering BSc",
+    university: "University of Calgary", country: "CA", degreeLevel: "BSc", category: "engineering",
+    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    notes: "Maths and Physics essential.",
+  },
+  {
+    id: "ca-business-calgary", name: "Business BCom (Haskayne)",
+    university: "University of Calgary", country: "CA", degreeLevel: "BCom", category: "business",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    notes: "Haskayne School of Business.",
+  },
+
+  // ── University of Ottawa ──────────────────────────────────────
+  {
+    id: "ca-law-ottawa", name: "Law LLB/JD",
+    university: "University of Ottawa", country: "CA", degreeLevel: "JD", category: "law",
+    requirements: { essential: [], preferred: ["History","English"], useful: ["Philosophy","Economics"] },
+    notes: "Bilingual law school. Civil Law and Common Law programmes available.",
+  },
+  {
+    id: "ca-cs-ottawa", name: "Computer Science BSc",
+    university: "University of Ottawa", country: "CA", degreeLevel: "BSc", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Bilingual university.",
+  },
+
+  // ── Dalhousie ─────────────────────────────────────────────────
+  {
+    id: "ca-medicine-dalhousie", name: "Medicine MD",
+    university: "Dalhousie University", country: "CA", degreeLevel: "MD", category: "medicine",
+    requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
+    notes: "MCAT required. Atlantic Canada's primary medical school.",
+  },
+  {
+    id: "ca-engineering-dalhousie", name: "Engineering BEng",
+    university: "Dalhousie University", country: "CA", degreeLevel: "BEng", category: "engineering",
+    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    notes: "Maths and Physics essential.",
+  },
+
+  // ── Concordia ─────────────────────────────────────────────────
+  {
+    id: "ca-business-concordia", name: "Business Administration BComm (John Molson)",
+    university: "Concordia University", country: "CA", degreeLevel: "BComm", category: "business",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    notes: "John Molson School of Business. Strong finance programme.",
+  },
+  {
+    id: "ca-cs-concordia", name: "Computer Science BSc",
+    university: "Concordia University", country: "CA", degreeLevel: "BSc", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Strong co-op and applied programme.",
+  },
+
+  // ── York University ───────────────────────────────────────────
+  {
+    id: "ca-business-york", name: "Business Administration BBA (Schulich)",
+    university: "York University", country: "CA", degreeLevel: "BBA", category: "business",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    notes: "Schulich School of Business. Strong global business reputation.",
+  },
+  {
+    id: "ca-law-york", name: "Law JD (Osgoode Hall)",
+    university: "York University", country: "CA", degreeLevel: "JD", category: "law",
+    requirements: { essential: [], preferred: ["History","English"], useful: ["Philosophy","Economics"] },
+    notes: "Osgoode Hall Law School is one of Canada's top law schools.",
+  },
+
+  // ── University of Victoria ────────────────────────────────────
+  {
+    id: "ca-law-uvic", name: "Law JD",
+    university: "University of Victoria", country: "CA", degreeLevel: "JD", category: "law",
+    requirements: { essential: [], preferred: ["History","English"], useful: ["Philosophy","Economics"] },
+    notes: "Strong focus on Indigenous law and environmental law.",
+  },
+  {
+    id: "ca-cs-uvic", name: "Computer Science BSc",
+    university: "University of Victoria", country: "CA", degreeLevel: "BSc", category: "cs",
+    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    notes: "Co-op programme available.",
+  },
+
 ];
