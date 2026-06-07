@@ -422,9 +422,14 @@ function switchMode(mode) {
     btn.classList.toggle('active', active);
     btn.setAttribute('aria-selected', String(active));
   });
-  $('panel-check')  .classList.toggle('hidden', mode !== 'check');
-  $('panel-reverse').classList.toggle('hidden', mode !== 'reverse');
-  $('panel-plan')   .classList.toggle('hidden', mode !== 'plan');
+  $('panel-check')    .classList.toggle('hidden', mode !== 'check');
+  $('panel-reverse')  .classList.toggle('hidden', mode !== 'reverse');
+  $('panel-plan')     .classList.toggle('hidden', mode !== 'plan');
+  $('panel-strengths').classList.toggle('hidden', mode !== 'strengths');
+
+  if (mode === 'strengths' && !$('strengthsGrid').hasChildNodes()) {
+    renderStrengthsGrid();
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1340,6 +1345,185 @@ function switchToPlanCombo(tags, systemKey) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+ * STRENGTHS MODE (Mode D)
+ * ═══════════════════════════════════════════════════════════════ */
+
+const STRENGTHS_OPTIONS = [
+  {
+    id: 'maths_physics',
+    label: 'Maths & Physics',
+    icon: '📐',
+    description: 'You enjoy problem-solving, patterns, and understanding how things work.',
+    categories: ['engineering', 'cs', 'physics', 'mathematics'],
+  },
+  {
+    id: 'biology_chemistry',
+    label: 'Biology & Chemistry',
+    icon: '🧬',
+    description: "You're curious about living systems, health, and the molecular world.",
+    categories: ['medicine', 'biochemistry', 'pharmacy', 'biological-sciences'],
+  },
+  {
+    id: 'essays_writing',
+    label: 'Essay writing & argument',
+    icon: '📝',
+    description: 'You express ideas clearly, love reading, and can argue both sides.',
+    categories: ['law', 'history', 'politics', 'english'],
+  },
+  {
+    id: 'data_code',
+    label: 'Data & code',
+    icon: '📊',
+    description: 'You spot patterns in data and enjoy making computers do the work.',
+    categories: ['cs', 'data-science', 'economics', 'statistics'],
+  },
+  {
+    id: 'creative_design',
+    label: 'Creative & design',
+    icon: '🎨',
+    description: 'You think visually and enjoy creating things that are both beautiful and functional.',
+    categories: ['architecture', 'design', 'art'],
+  },
+  {
+    id: 'people_society',
+    label: 'People & society',
+    icon: '👥',
+    description: 'You care about how people think, behave, and organise themselves.',
+    categories: ['psychology', 'sociology', 'anthropology', 'politics'],
+  },
+];
+
+// Maps strength category strings to actual course category ids in the data
+const _strengthCategoryMap = {
+  engineering:          ['engineering'],
+  cs:                   ['cs'],
+  physics:              ['sciences', 'mathematics'],
+  mathematics:          ['mathematics'],
+  medicine:             ['medicine'],
+  biochemistry:         ['sciences', 'medicine'],
+  pharmacy:             ['medicine'],
+  'biological-sciences':['sciences', 'medicine'],
+  law:                  ['law'],
+  history:              ['law'],
+  politics:             ['economics', 'law'],
+  english:              ['law'],
+  'data-science':       ['cs', 'economics'],
+  economics:            ['economics', 'business'],
+  statistics:           ['mathematics', 'economics'],
+  architecture:         ['architecture'],
+  design:               ['architecture', 'engineering'],
+  art:                  ['architecture'],
+  psychology:           ['psychology'],
+  sociology:            ['psychology', 'law'],
+  anthropology:         ['psychology', 'law'],
+};
+
+const _strengthCategoryNames = {
+  medicine:     'Medicine & Health',
+  cs:           'Computer Science',
+  engineering:  'Engineering',
+  economics:    'Economics & Finance',
+  law:          'Law',
+  business:     'Business',
+  sciences:     'Natural Sciences',
+  psychology:   'Psychology',
+  architecture: 'Architecture',
+  mathematics:  'Mathematics',
+};
+
+function renderStrengthsGrid() {
+  const grid = $('strengthsGrid');
+  if (!grid) return;
+  grid.innerHTML = STRENGTHS_OPTIONS.map(opt => `
+    <button class="plan-cat-card" data-strength="${opt.id}">
+      <span class="plan-cat-card__icon" style="font-size: 28px;">${opt.icon}</span>
+      <span class="plan-cat-card__label">${esc(opt.label)}</span>
+      <span class="picker-hint-inline" style="font-size: 11px; margin-top: 6px;">${esc(opt.description)}</span>
+    </button>
+  `).join('');
+  grid.querySelectorAll('.plan-cat-card').forEach(btn => {
+    btn.addEventListener('click', () => {
+      grid.querySelectorAll('.plan-cat-card').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const strength = STRENGTHS_OPTIONS.find(s => s.id === btn.dataset.strength);
+      if (strength) renderStrengthsResults(strength);
+    });
+  });
+}
+
+function renderStrengthsResults(strength) {
+  const resultsDiv = $('strengthsSuggestions');
+  const section    = $('strengthsResults');
+
+  const targetCategories = new Set();
+  strength.categories.forEach(cat => {
+    (_strengthCategoryMap[cat] || [cat]).forEach(m => targetCategories.add(m));
+  });
+
+  const matched = [];
+  for (const cat of targetCategories) {
+    courses.filter(c => c.category === cat).slice(0, 3).forEach(c => matched.push(c));
+  }
+
+  if (!matched.length) {
+    resultsDiv.innerHTML = '<p class="search-hint">No matching courses found. Try another strength.</p>';
+    section.classList.remove('hidden');
+    return;
+  }
+
+  const grouped = {};
+  matched.forEach(c => { (grouped[c.category] ??= []).push(c); });
+
+  let html = '';
+  for (const [cat, catCourses] of Object.entries(grouped)) {
+    const catName = _strengthCategoryNames[cat] || cat;
+    html += `
+      <div class="results-group">
+        <h2 class="results-group__header">${esc(catName)}</h2>
+        <div class="results-group__grid">
+          ${catCourses.map(course => `
+            <div class="course-card course-card--green">
+              <div class="card-status card-status--green">Suggested for you</div>
+              <div class="card-header">
+                <div class="card-title-group">
+                  <span class="card-flag">${COUNTRY_FLAGS[course.country] ?? ''}</span>
+                  <div class="card-titles">
+                    <div class="card-name">${esc(course.name)}</div>
+                    <div class="card-uni">${esc(course.university)}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-meta">
+                <span>${esc(COUNTRY_LABELS[course.country] ?? course.country)}</span>
+                <span class="card-meta-sep">·</span>
+                <span>${esc(course.degreeLevel)}</span>
+              </div>
+              <button class="btn-primary" style="margin-top: var(--space-3); width: 100%;"
+                      data-explore-course="${esc(course.id)}">Explore this course →</button>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  resultsDiv.innerHTML = html;
+  section.classList.remove('hidden');
+
+  resultsDiv.querySelectorAll('[data-explore-course]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const course = courses.find(c => c.id === btn.dataset.exploreCourse);
+      if (!course) return;
+      switchMode('reverse');
+      $('courseSearchInput').value = course.name;
+      state.searchQuery = course.name;
+      renderReverseResults();
+      $('reverseResultsSection').scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
  * UTILITY
  * ═══════════════════════════════════════════════════════════════ */
 
@@ -1383,6 +1567,12 @@ function init() {
   });
 
   $('planSwitchToCheck').addEventListener('click', () => switchMode('check'));
+
+  // Auto-open strengths mode when arriving from ?mode=strengths
+  if (window.sessionStorage.getItem('openStrengthsMode') === 'true') {
+    window.sessionStorage.removeItem('openStrengthsMode');
+    switchMode('strengths');
+  }
 }
 
 init();

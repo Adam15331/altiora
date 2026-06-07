@@ -83,6 +83,16 @@
           <span class="mode-btn__label">Subject Planner</span>
           <span class="mode-btn__label--short" aria-hidden="true">Plan</span>
         </button>
+        <button class="mode-btn" data-mode="strengths" role="tab" aria-selected="false" aria-controls="panel-strengths">
+          <span class="mode-btn__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M10 3a7 7 0 0 1 7 7c0 2-1 4-2.5 5.5L10 19l-4.5-3.5A7 7 0 0 1 10 3z"/>
+              <path d="M7 8h6M10 8v5"/>
+            </svg>
+          </span>
+          <span class="mode-btn__label">Start with strengths</span>
+          <span class="mode-btn__label--short" aria-hidden="true">Strengths</span>
+        </button>
       </div>
 
       <!-- ═══════════════════════════════════════════════════════
@@ -301,6 +311,29 @@
 
       </div><!-- /panel-plan -->
 
+      <!-- ═══════════════════════════════════════════════════════
+           Panel D — Strengths First
+           ═══════════════════════════════════════════════════════ -->
+      <div id="panel-strengths" class="panel hidden" role="tabpanel">
+        <p class="panel-intro">
+          Tell us what you're good at — we'll show you degree paths that match your natural abilities.
+        </p>
+
+        <div class="plan-step">
+          <span class="control-label">What are you good at?</span>
+          <div id="strengthsGrid" class="plan-category-grid" role="group" aria-label="Select your strengths">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <div id="strengthsResults" class="hidden results-section">
+          <div class="disclaimer-banner" role="note">
+            <p>These are degree categories that typically match your strengths. Click any to explore specific courses in Check Combination mode.</p>
+          </div>
+          <div id="strengthsSuggestions" class="results-groups-container"></div>
+        </div>
+      </div><!-- /panel-strengths -->
+
     </div><!-- /content -->
   </main>
 
@@ -317,5 +350,12 @@
   <script src="data/courseRequirements.js?v=3"></script>
   <script src="data/university-profiles.js?v=1"></script>
   <script src="main.js?v=5"></script>
+  <script>
+    // Redirect ?mode=strengths to open strengths panel after init
+    const _urlParams = new URLSearchParams(window.location.search);
+    if (_urlParams.get('mode') === 'strengths') {
+      window.sessionStorage.setItem('openStrengthsMode', 'true');
+    }
+  </script>
 </body>
 </html>
