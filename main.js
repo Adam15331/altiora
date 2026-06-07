@@ -176,10 +176,24 @@ const _suppressedAutoImply = new Set();
  * TAG DERIVATION
  * ═══════════════════════════════════════════════════════════════ */
 
+// Store selected subjects with their level information
+let selectedSubjectsWithLevel = new Map(); // subjectName -> { tag, isHL }
+
 function deriveTagsFromSubjects(subjects, systemKey) {
   const forward = qualificationMappings[systemKey]?.subjects ?? {};
   const tags = new Set();
-  for (const name of subjects) { const t = forward[name]; if (t) tags.add(t); }
+  selectedSubjectsWithLevel.clear();
+
+  for (const name of subjects) {
+    const tag = forward[name];
+    if (tag) {
+      tags.add(tag);
+      // Detect HL level for IB subjects
+      const isHL = systemKey === 'IB' && (name.includes(' HL') || name.includes('Higher Level'));
+      selectedSubjectsWithLevel.set(name, { tag, isHL });
+    }
+  }
+
   // Advanced maths always satisfies a standard maths requirement
   if (tags.has('Mathematics_Advanced')) tags.add('Mathematics_Standard');
   return tags;
@@ -644,11 +658,15 @@ function renderCheckResults() {
     if (state.predictedGrade && (result.status === 'green' || result.status === 'amber')) {
       if (isGradeAboveStudent(course, state.checkSystem, state.predictedGrade)) result.status = 'grey';
     }
-    // IB HL eligibility: if required HL subjects aren't covered, downgrade GREEN→AMBER
     if (state.checkSystem === 'IB' && (result.status === 'green' || result.status === 'amber')) {
-      const ibHL = course.grades?.ibHL ?? [];
-      if (ibHL.length) {
-        const missingHL = ibHL.filter(tag => !state.selectedTags.has(tag));
+      const requiredHLTags = course.grades?.ibHL ?? [];
+      if (requiredHLTags.length) {
+        // Check if student HAS the required HL subjects at HL level
+        const studentHLSubjects = Array.from(selectedSubjectsWithLevel.values())
+          .filter(item => item.isHL)
+          .map(item => item.tag);
+
+        const missingHL = requiredHLTags.filter(tag => !studentHLSubjects.includes(tag));
         if (missingHL.length) {
           if (result.status === 'green') result.status = 'amber';
           result.ibHLWarning = missingHL;
