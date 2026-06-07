@@ -97,6 +97,22 @@ const HL_TAG_LABELS = {
   'Computer_Science':     'Computer Science',
   'Economics':            'Economics',
   'English':              'English',
+  'History':              'History',
+  // IB-specific long names
+  'Mathematics: Analysis and Approaches HL':         'Maths AA HL',
+  'Mathematics: Applications and Interpretation HL': 'Maths AI HL',
+  'Mathematics: Analysis and Approaches SL':         'Maths AA SL',
+  'Mathematics: Applications and Interpretation SL': 'Maths AI SL',
+  'Computer Science HL':   'CS HL',
+  'Economics HL':          'Econ HL',
+  'Physics HL':            'Physics HL',
+  'Chemistry HL':          'Chem HL',
+  'Biology HL':            'Bio HL',
+  'History HL':            'History HL',
+  'Psychology HL':         'Psych HL',
+  'Philosophy HL':         'Phil HL',
+  'Business Management HL':'Business HL',
+  'Visual Arts HL':        'Art HL',
 };
 function hlTagLabel(tag) {
   return HL_TAG_LABELS[tag] ?? tag.replace(/_/g, ' ');
@@ -171,15 +187,32 @@ const MATHS_IMPLY = {
 // Subjects the user has explicitly deselected despite auto-imply.
 // Cleared when the qualification system changes.
 const _suppressedAutoImply = new Set();
+// True after the user clicks "Dismiss" on the maths warning banner.
+// Cleared when system changes or user re-selects standard maths.
+let _dismissedMathsWarning = false;
 
 /* ═══════════════════════════════════════════════════════════════
  * TAG DERIVATION
  * ═══════════════════════════════════════════════════════════════ */
 
+// Store selected subjects with their level information
+let selectedSubjectsWithLevel = new Map(); // subjectName -> { tag, isHL }
+
 function deriveTagsFromSubjects(subjects, systemKey) {
   const forward = qualificationMappings[systemKey]?.subjects ?? {};
   const tags = new Set();
-  for (const name of subjects) { const t = forward[name]; if (t) tags.add(t); }
+  selectedSubjectsWithLevel.clear();
+
+  for (const name of subjects) {
+    const tag = forward[name];
+    if (tag) {
+      tags.add(tag);
+      // Detect HL level for IB subjects
+      const isHL = systemKey === 'IB' && (name.includes(' HL') || name.includes('Higher Level'));
+      selectedSubjectsWithLevel.set(name, { tag, isHL });
+    }
+  }
+
   // Advanced maths always satisfies a standard maths requirement
   if (tags.has('Mathematics_Advanced')) tags.add('Mathematics_Standard');
   return tags;
@@ -389,9 +422,14 @@ function switchMode(mode) {
     btn.classList.toggle('active', active);
     btn.setAttribute('aria-selected', String(active));
   });
-  $('panel-check')  .classList.toggle('hidden', mode !== 'check');
-  $('panel-reverse').classList.toggle('hidden', mode !== 'reverse');
-  $('panel-plan')   .classList.toggle('hidden', mode !== 'plan');
+  $('panel-check')    .classList.toggle('hidden', mode !== 'check');
+  $('panel-reverse')  .classList.toggle('hidden', mode !== 'reverse');
+  $('panel-plan')     .classList.toggle('hidden', mode !== 'plan');
+  $('panel-strengths').classList.toggle('hidden', mode !== 'strengths');
+
+  if (mode === 'strengths' && !$('strengthsGrid').hasChildNodes()) {
+    renderStrengthsGrid();
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -440,6 +478,8 @@ function buildSubjectPicker(systemKey) {
 
   // Reset auto-imply suppression and category state when system changes
   _suppressedAutoImply.clear();
+  _dismissedMathsWarning = false;
+  hideMathsWarningBanner();
   state.selectedCategories.clear();
   $$('#categoryPicker .category-chip').forEach(b => b.classList.remove('active'));
   $('categoryPickerSection').classList.add('hidden');
@@ -480,6 +520,41 @@ function buildCategoryPicker() {
   picker.appendChild(frag);
 }
 
+function showMathsWarningBanner(imply) {
+  if ($('mathsWarningBanner')) return;
+  const banner = document.createElement('div');
+  banner.id = 'mathsWarningBanner';
+  banner.className = 'maths-warning-banner';
+  banner.innerHTML = `
+    <span class="maths-warning-banner__msg">Mathematics is required alongside Further Mathematics</span>
+    <div class="maths-warning-banner__actions">
+      <button class="maths-warning-banner__add" type="button">Add Mathematics (recommended)</button>
+      <button class="maths-warning-banner__dismiss" type="button">Dismiss (not recommended for most courses)</button>
+    </div>
+  `;
+  banner.querySelector('.maths-warning-banner__add').addEventListener('click', () => {
+    _suppressedAutoImply.delete(imply.standard);
+    _dismissedMathsWarning = false;
+    const stdInput = Array.from($$('#subjectPicker input')).find(i => i.value === imply.standard);
+    if (stdInput) stdInput.checked = true;
+    hideMathsWarningBanner();
+    onSubjectToggle();
+    showToast('Mathematics added — this keeps more course options open');
+  });
+  banner.querySelector('.maths-warning-banner__dismiss').addEventListener('click', () => {
+    _dismissedMathsWarning = true;
+    hideMathsWarningBanner();
+    showToast('Mathematics suppressed — some courses may be out of reach');
+  });
+  const pickerSection = $('subjectPickerSection');
+  pickerSection.parentNode.insertBefore(banner, pickerSection);
+}
+
+function hideMathsWarningBanner() {
+  const banner = $('mathsWarningBanner');
+  if (banner) banner.remove();
+}
+
 function onSubjectToggle(e = null) {
   const changedValue = e?.target?.value ?? null;
   const wasChecked   = e?.target?.checked ?? null;
@@ -492,8 +567,11 @@ function onSubjectToggle(e = null) {
     const advInput  = allInputs.find(i => i.value === imply.advanced);
     if (advInput?.checked) _suppressedAutoImply.add(imply.standard);
   }
-  // Clear suppression when the user explicitly re-selects a subject.
-  if (changedValue && wasChecked === true) _suppressedAutoImply.delete(changedValue);
+  // Clear suppression (and any dismissed state) when the user explicitly re-selects a subject.
+  if (changedValue && wasChecked === true) {
+    _suppressedAutoImply.delete(changedValue);
+    if (imply && changedValue === imply.standard) _dismissedMathsWarning = false;
+  }
 
   // Read current checkbox state from DOM.
   state.selectedSubjects = Array.from($$('#subjectPicker input:checked')).map(c => c.value);
@@ -517,17 +595,18 @@ function onSubjectToggle(e = null) {
 
   state.selectedTags = deriveTagsFromSubjects(state.selectedSubjects, state.checkSystem);
 
-  // Show warning if user has suppressed the standard maths while advanced is active.
-  const warnSubject = (imply && _suppressedAutoImply.has(imply.standard) &&
-    state.selectedSubjects.includes(imply.advanced))
-    ? imply.standard : null;
-
   $$('#subjectPicker .subject-chip').forEach(chip => {
     const input = chip.querySelector('input');
     chip.classList.toggle('selected', input.checked);
     chip.classList.toggle('chip--auto-added', autoAdded.has(input.value));
-    chip.classList.toggle('chip--imply-warning', input.value === warnSubject);
   });
+
+  const shouldWarn = imply
+    && _suppressedAutoImply.has(imply.standard)
+    && state.selectedSubjects.includes(imply.advanced)
+    && !_dismissedMathsWarning;
+  if (shouldWarn) showMathsWarningBanner(imply);
+  else hideMathsWarningBanner();
 
   syncSubjectCount();
   $('categoryPickerSection').classList.toggle('hidden', state.selectedSubjects.length === 0);
@@ -644,11 +723,15 @@ function renderCheckResults() {
     if (state.predictedGrade && (result.status === 'green' || result.status === 'amber')) {
       if (isGradeAboveStudent(course, state.checkSystem, state.predictedGrade)) result.status = 'grey';
     }
-    // IB HL eligibility: if required HL subjects aren't covered, downgrade GREEN→AMBER
     if (state.checkSystem === 'IB' && (result.status === 'green' || result.status === 'amber')) {
-      const ibHL = course.grades?.ibHL ?? [];
-      if (ibHL.length) {
-        const missingHL = ibHL.filter(tag => !state.selectedTags.has(tag));
+      const requiredHLTags = course.grades?.ibHL ?? [];
+      if (requiredHLTags.length) {
+        // Check if student HAS the required HL subjects at HL level
+        const studentHLSubjects = Array.from(selectedSubjectsWithLevel.values())
+          .filter(item => item.isHL)
+          .map(item => item.tag);
+
+        const missingHL = requiredHLTags.filter(tag => !studentHLSubjects.includes(tag));
         if (missingHL.length) {
           if (result.status === 'green') result.status = 'amber';
           result.ibHLWarning = missingHL;
@@ -1134,6 +1217,39 @@ function renderPlanResults() {
     `;
   }
 
+  /* ── Section 1.5: Critical pairs ── */
+  const pairRules = {
+    medicine:     [['Chemistry', 'Biology']],
+    engineering:  [['Mathematics_Advanced', 'Physics']],
+    cs:           [],
+    economics:    [['Mathematics_Standard', 'Economics']],
+    sciences:     [['Chemistry', 'Biology'], ['Chemistry', 'Mathematics_Advanced']],
+    mathematics:  [],
+    law:          [],
+    psychology:   [['Psychology', 'Biology']],
+    architecture: [['Art_Design', 'Mathematics_Standard']],
+    business:     [['Mathematics_Standard', 'Economics']],
+  };
+  const tagPresence = new Set(sortedTags.map(([t]) => t));
+  const validPairs = (pairRules[state.planCategory] ?? [])
+    .filter(pair => pair.every(t => tagPresence.has(t)));
+
+  if (validPairs.length > 0) {
+    const pairsHtml = validPairs.map(pair =>
+      `<div class="plan-subject-chip" style="background: var(--color-cat-cs-bg); border-color: var(--color-cat-cs);">
+         <span class="plan-subject-chip__name">${pair.map(t => esc(tagToLocal(t, state.planSystem))).join(' + ')}</span>
+         <span class="plan-subject-chip__count">required together for most courses</span>
+       </div>`
+    ).join('');
+    $('planCriticalPairs').innerHTML = `
+      <h3 class="plan-section-head" style="margin-top: var(--space-8);">Critical pairs</h3>
+      <p class="plan-section-sub">Most ${esc(catLabel)} courses require both subjects, not just one. Plan to take them together.</p>
+      <div class="plan-essentials-grid">${pairsHtml}</div>
+    `;
+  } else {
+    $('planCriticalPairs').innerHTML = '';
+  }
+
   /* ── Section B: top subject combinations ── */
   const topTags = sortedTags.slice(0, 6).map(([t]) => t);
   const combos  = [];
@@ -1229,6 +1345,185 @@ function switchToPlanCombo(tags, systemKey) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+ * STRENGTHS MODE (Mode D)
+ * ═══════════════════════════════════════════════════════════════ */
+
+const STRENGTHS_OPTIONS = [
+  {
+    id: 'maths_physics',
+    label: 'Maths & Physics',
+    icon: '📐',
+    description: 'You enjoy problem-solving, patterns, and understanding how things work.',
+    categories: ['engineering', 'cs', 'physics', 'mathematics'],
+  },
+  {
+    id: 'biology_chemistry',
+    label: 'Biology & Chemistry',
+    icon: '🧬',
+    description: "You're curious about living systems, health, and the molecular world.",
+    categories: ['medicine', 'biochemistry', 'pharmacy', 'biological-sciences'],
+  },
+  {
+    id: 'essays_writing',
+    label: 'Essay writing & argument',
+    icon: '📝',
+    description: 'You express ideas clearly, love reading, and can argue both sides.',
+    categories: ['law', 'history', 'politics', 'english'],
+  },
+  {
+    id: 'data_code',
+    label: 'Data & code',
+    icon: '📊',
+    description: 'You spot patterns in data and enjoy making computers do the work.',
+    categories: ['cs', 'data-science', 'economics', 'statistics'],
+  },
+  {
+    id: 'creative_design',
+    label: 'Creative & design',
+    icon: '🎨',
+    description: 'You think visually and enjoy creating things that are both beautiful and functional.',
+    categories: ['architecture', 'design', 'art'],
+  },
+  {
+    id: 'people_society',
+    label: 'People & society',
+    icon: '👥',
+    description: 'You care about how people think, behave, and organise themselves.',
+    categories: ['psychology', 'sociology', 'anthropology', 'politics'],
+  },
+];
+
+// Maps strength category strings to actual course category ids in the data
+const _strengthCategoryMap = {
+  engineering:          ['engineering'],
+  cs:                   ['cs'],
+  physics:              ['sciences', 'mathematics'],
+  mathematics:          ['mathematics'],
+  medicine:             ['medicine'],
+  biochemistry:         ['sciences', 'medicine'],
+  pharmacy:             ['medicine'],
+  'biological-sciences':['sciences', 'medicine'],
+  law:                  ['law'],
+  history:              ['law'],
+  politics:             ['economics', 'law'],
+  english:              ['law'],
+  'data-science':       ['cs', 'economics'],
+  economics:            ['economics', 'business'],
+  statistics:           ['mathematics', 'economics'],
+  architecture:         ['architecture'],
+  design:               ['architecture', 'engineering'],
+  art:                  ['architecture'],
+  psychology:           ['psychology'],
+  sociology:            ['psychology', 'law'],
+  anthropology:         ['psychology', 'law'],
+};
+
+const _strengthCategoryNames = {
+  medicine:     'Medicine & Health',
+  cs:           'Computer Science',
+  engineering:  'Engineering',
+  economics:    'Economics & Finance',
+  law:          'Law',
+  business:     'Business',
+  sciences:     'Natural Sciences',
+  psychology:   'Psychology',
+  architecture: 'Architecture',
+  mathematics:  'Mathematics',
+};
+
+function renderStrengthsGrid() {
+  const grid = $('strengthsGrid');
+  if (!grid) return;
+  grid.innerHTML = STRENGTHS_OPTIONS.map(opt => `
+    <button class="plan-cat-card" data-strength="${opt.id}">
+      <span class="plan-cat-card__icon" style="font-size: 28px;">${opt.icon}</span>
+      <span class="plan-cat-card__label">${esc(opt.label)}</span>
+      <span class="picker-hint-inline" style="font-size: 11px; margin-top: 6px;">${esc(opt.description)}</span>
+    </button>
+  `).join('');
+  grid.querySelectorAll('.plan-cat-card').forEach(btn => {
+    btn.addEventListener('click', () => {
+      grid.querySelectorAll('.plan-cat-card').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const strength = STRENGTHS_OPTIONS.find(s => s.id === btn.dataset.strength);
+      if (strength) renderStrengthsResults(strength);
+    });
+  });
+}
+
+function renderStrengthsResults(strength) {
+  const resultsDiv = $('strengthsSuggestions');
+  const section    = $('strengthsResults');
+
+  const targetCategories = new Set();
+  strength.categories.forEach(cat => {
+    (_strengthCategoryMap[cat] || [cat]).forEach(m => targetCategories.add(m));
+  });
+
+  const matched = [];
+  for (const cat of targetCategories) {
+    courses.filter(c => c.category === cat).slice(0, 3).forEach(c => matched.push(c));
+  }
+
+  if (!matched.length) {
+    resultsDiv.innerHTML = '<p class="search-hint">No matching courses found. Try another strength.</p>';
+    section.classList.remove('hidden');
+    return;
+  }
+
+  const grouped = {};
+  matched.forEach(c => { (grouped[c.category] ??= []).push(c); });
+
+  let html = '';
+  for (const [cat, catCourses] of Object.entries(grouped)) {
+    const catName = _strengthCategoryNames[cat] || cat;
+    html += `
+      <div class="results-group">
+        <h2 class="results-group__header">${esc(catName)}</h2>
+        <div class="results-group__grid">
+          ${catCourses.map(course => `
+            <div class="course-card course-card--green">
+              <div class="card-status card-status--green">Suggested for you</div>
+              <div class="card-header">
+                <div class="card-title-group">
+                  <span class="card-flag">${COUNTRY_FLAGS[course.country] ?? ''}</span>
+                  <div class="card-titles">
+                    <div class="card-name">${esc(course.name)}</div>
+                    <div class="card-uni">${esc(course.university)}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-meta">
+                <span>${esc(COUNTRY_LABELS[course.country] ?? course.country)}</span>
+                <span class="card-meta-sep">·</span>
+                <span>${esc(course.degreeLevel)}</span>
+              </div>
+              <button class="btn-primary" style="margin-top: var(--space-3); width: 100%;"
+                      data-explore-course="${esc(course.id)}">Explore this course →</button>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  resultsDiv.innerHTML = html;
+  section.classList.remove('hidden');
+
+  resultsDiv.querySelectorAll('[data-explore-course]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const course = courses.find(c => c.id === btn.dataset.exploreCourse);
+      if (!course) return;
+      switchMode('reverse');
+      $('courseSearchInput').value = course.name;
+      state.searchQuery = course.name;
+      renderReverseResults();
+      $('reverseResultsSection').scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
  * UTILITY
  * ═══════════════════════════════════════════════════════════════ */
 
@@ -1272,6 +1567,12 @@ function init() {
   });
 
   $('planSwitchToCheck').addEventListener('click', () => switchMode('check'));
+
+  // Auto-open strengths mode when arriving from ?mode=strengths
+  if (window.sessionStorage.getItem('openStrengthsMode') === 'true') {
+    window.sessionStorage.removeItem('openStrengthsMode');
+    switchMode('strengths');
+  }
 }
 
 init();
