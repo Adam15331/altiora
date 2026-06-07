@@ -1,9 +1,10 @@
 /* ═══════════════════════════════════════════════════════════════
  * Altiora — main.js
  *
- * Two modes:
+ * Three modes:
  *   "check"   – pick subjects → instant GREEN / AMBER / RED classification
  *   "reverse" – search a degree → see required subjects per qualification system
+ *   "plan"    – pick a subject area → see which subjects to take
  *
  * Data dependencies (loaded before this script):
  *   qualificationMappings  – data/qualificationMappings.js
@@ -20,6 +21,8 @@ const state = {
   mode:               'check',
   checkSystem:        '',
   reverseSystem:      '',
+  planCategory:       '',
+  planSystem:         '',
   selectedSubjects:   [],
   selectedTags:       new Set(),
   countryFilter:      'All',
@@ -63,13 +66,14 @@ const STATUS = {
 const STATUS_SORT = { green:0, amber:1, red:2 };
 
 const TIER_LABELS = {
-  'world-top-10':    'World Top 10',
-  'world-top-50':    'World Top 50',
-  'world-top-100':   'World Top 100',
-  'national-top-10': 'National Top 10',
-  'national-top-25': 'National Top 25',
-  'national-top-50': 'National Top 50',
-  'regional':        'Regional University',
+  'world-top-10':     'World Top 10',
+  'world-top-50':     'World Top 50',
+  'world-top-100':    'World Top 100',
+  'national-top-10':  'National Top 10',
+  'national-top-25':  'National Top 25',
+  'national-top-50':  'National Top 50',
+  'national-leading': 'National University',
+  'regional':         'Regional University',
 };
 
 const SYSTEM_GRADE_KEY = {
@@ -188,6 +192,7 @@ function switchMode(mode) {
   });
   $('panel-check')  .classList.toggle('hidden', mode !== 'check');
   $('panel-reverse').classList.toggle('hidden', mode !== 'reverse');
+  $('panel-plan')   .classList.toggle('hidden', mode !== 'plan');
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -200,6 +205,7 @@ function populateSystemSelects() {
     .join('');
   $('checkSystemSelect').innerHTML   = `<option value="">Select your system…</option>${optHtml}`;
   $('reverseSystemSelect').innerHTML = `<option value="">Show as universal tags</option>${optHtml}`;
+  $('planSystemSelect').innerHTML    = `<option value="">Select your system…</option>${optHtml}`;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -500,11 +506,33 @@ function buildCheckCard(course, result) {
       </p>`;
   }
 
-  const uniNotes = course.universityContext?.notes;
+  const profile = (typeof universityProfiles !== 'undefined') ? (universityProfiles[course.university] ?? null) : null;
 
   const card = document.createElement('div');
   card.className = `course-card ${cfg.cardCls}`;
   card.setAttribute('role', 'listitem');
+
+  let uniInfoHtml = '';
+  if (profile) {
+    const cityLine  = profile.city ? `<span class="card-uni-city">${esc(profile.city)}</span>` : '';
+    const tagLine   = profile.tagline ? `<p class="card-uni-tagline">${esc(profile.tagline)}</p>` : '';
+    const noteLine  = profile.internationalNote ? `<p class="card-uni-note">${esc(profile.internationalNote)}</p>` : '';
+    const webLink   = profile.websiteUrl
+      ? `<a class="card-uni-link" href="${esc(profile.websiteUrl)}" target="_blank" rel="noopener noreferrer">Visit university website ↗</a>`
+      : '';
+    uniInfoHtml = `
+      <details class="card-uni-info">
+        <summary>About this university${cityLine ? ` · ${profile.city}` : ''}</summary>
+        ${tagLine}${noteLine}${webLink}
+      </details>`;
+  } else if (course.universityContext?.notes) {
+    uniInfoHtml = `
+      <details class="card-uni-info">
+        <summary>About this university</summary>
+        <p class="card-uni-info__notes">${esc(course.universityContext.notes)}</p>
+      </details>`;
+  }
+
   card.innerHTML = `
     <div class="card-header">
       <div class="card-title-group">
@@ -528,11 +556,7 @@ function buildCheckCard(course, result) {
         ${tests.map(t => `<span class="badge badge--warning">${esc(t)} required</span>`).join('')}
       </div>` : ''}
     ${footerHtml}
-    ${uniNotes ? `
-      <details class="card-uni-info">
-        <summary>About this university</summary>
-        <p class="card-uni-info__notes">${esc(uniNotes)}</p>
-      </details>` : ''}
+    ${uniInfoHtml}
   `;
   return card;
 }
@@ -678,6 +702,173 @@ function buildRequirementsText(course) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+ * SUBJECT PLANNER (Mode C)
+ * ═══════════════════════════════════════════════════════════════ */
+
+function buildPlanCategoryGrid() {
+  const grid = $('planCategoryGrid');
+  CATEGORIES.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'plan-cat-card';
+    btn.dataset.category = cat.id;
+    btn.innerHTML = `
+      <span class="plan-cat-card__icon" aria-hidden="true">${cat.icon}</span>
+      <span class="plan-cat-card__label">${esc(cat.label)}</span>
+    `;
+    btn.addEventListener('click', () => {
+      $$('#planCategoryGrid .plan-cat-card').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      state.planCategory = cat.id;
+      $('planStep2').classList.remove('hidden');
+      $('planResults').classList.add('hidden');
+      if (state.planSystem) renderPlanResults();
+    });
+    grid.appendChild(btn);
+  });
+}
+
+function getCombinations(arr, size) {
+  if (size === 1) return arr.map(x => [x]);
+  const out = [];
+  for (let i = 0; i <= arr.length - size; i++) {
+    getCombinations(arr.slice(i + 1), size - 1).forEach(rest => out.push([arr[i], ...rest]));
+  }
+  return out;
+}
+
+function renderPlanResults() {
+  if (!state.planCategory || !state.planSystem) return;
+
+  const catCourses = courses.filter(c => c.category === state.planCategory);
+  if (!catCourses.length) {
+    $('planEssentials').innerHTML   = '<p class="search-hint">No courses found for this area.</p>';
+    $('planCombinations').innerHTML = '';
+    $('planResults').classList.remove('hidden');
+    return;
+  }
+
+  const catLabel = CATEGORY_LABEL_MAP[state.planCategory] ?? state.planCategory;
+
+  /* ── Section A: essential subject tags, sorted by frequency ── */
+  const tagFreq = {};
+  catCourses.forEach(c =>
+    (c.requirements.essential ?? []).forEach(t => { tagFreq[t] = (tagFreq[t] ?? 0) + 1; })
+  );
+  const sortedTags = Object.entries(tagFreq).sort((a, b) => b[1] - a[1]);
+
+  if (sortedTags.length === 0) {
+    $('planEssentials').innerHTML = `
+      <h3 class="plan-section-head">Essential subjects</h3>
+      <p class="plan-section-sub">No specific subject requirements — ${esc(catLabel)} courses are broadly open.</p>`;
+  } else {
+    const chipsHtml = sortedTags.map(([tag, count]) => `
+      <div class="plan-subject-chip">
+        <span class="plan-subject-chip__name">${esc(tagToLocal(tag, state.planSystem))}</span>
+        <span class="plan-subject-chip__count">unlocks ${count} course${count !== 1 ? 's' : ''}</span>
+      </div>`).join('');
+    $('planEssentials').innerHTML = `
+      <h3 class="plan-section-head">Essential subjects</h3>
+      <p class="plan-section-sub">Subjects that appear as required across ${esc(catLabel)} courses in our database.</p>
+      <div class="plan-essentials-grid">${chipsHtml}</div>
+    `;
+  }
+
+  /* ── Section B: top subject combinations ── */
+  const topTags = sortedTags.slice(0, 6).map(([t]) => t);
+  const combos  = [];
+  for (let size = 2; size <= 4 && combos.length < 20; size++) {
+    for (const c of getCombinations(topTags, size)) {
+      if (combos.length >= 20) break;
+      combos.push(c);
+    }
+  }
+
+  const scored = combos.map(combo => {
+    const tagSet = new Set(combo);
+    if (tagSet.has('Mathematics_Advanced')) tagSet.add('Mathematics_Standard');
+    let green = 0, amber = 0;
+    catCourses.forEach(course => {
+      const r = classify(course, tagSet);
+      if (r.status === 'green') green++;
+      else if (r.status === 'amber') amber++;
+    });
+    return { combo, green, amber };
+  }).sort((a, b) => b.green - a.green || b.amber - a.amber);
+
+  const top5 = scored.slice(0, 5).filter(s => s.green + s.amber > 0);
+
+  if (top5.length === 0) {
+    $('planCombinations').innerHTML = '';
+  } else {
+    const rowsHtml = top5.map(({ combo, green, amber }) => {
+      const tags = combo.map(t => `<span class="plan-combo-tag">${esc(tagToLocal(t, state.planSystem))}</span>`).join('');
+      return `
+        <div class="plan-combo-row" tabindex="0" role="button"
+             aria-label="Apply this subject combination in Check Combination mode"
+             data-tags="${esc(JSON.stringify(combo))}">
+          ${tags}
+          <span class="plan-combo-arrow" aria-hidden="true">→</span>
+          <div class="plan-combo-results">
+            <span class="badge badge--success">✓ ${green}</span>
+            ${amber > 0 ? `<span class="badge badge--warning">◑ ${amber}</span>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+
+    $('planCombinations').innerHTML = `
+      <h3 class="plan-section-head">Subject combinations that open the most doors</h3>
+      <p class="plan-section-sub">Combinations ranked by how many ${esc(catLabel)} courses become accessible. Click any row to try it in Check Combination.</p>
+      <div class="plan-combo-list">${rowsHtml}</div>
+    `;
+
+    $$('#planCombinations .plan-combo-row').forEach(row => {
+      const go = () => switchToPlanCombo(JSON.parse(row.dataset.tags), state.planSystem);
+      row.addEventListener('click', go);
+      row.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+    });
+  }
+
+  $('planResults').classList.remove('hidden');
+  requestAnimationFrame(() =>
+    $('planResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  );
+}
+
+function switchToPlanCombo(tags, systemKey) {
+  switchMode('check');
+  state.checkSystem      = systemKey;
+  state.selectedSubjects = [];
+  state.selectedTags     = new Set();
+  $('checkSystemSelect').value = systemKey;
+  buildSubjectPicker(systemKey);
+
+  const targetNames = new Set(tags.map(t => tagToLocal(t, systemKey)));
+  $$('#subjectPicker input[type="checkbox"]').forEach(cb => {
+    if (targetNames.has(cb.value)) cb.checked = true;
+  });
+
+  onSubjectToggle();
+
+  if (state.planCategory) {
+    state.selectedCategories.clear();
+    state.selectedCategories.add(state.planCategory);
+    $$('#categoryPicker .category-chip').forEach(btn => {
+      const active = btn.dataset.category === state.planCategory;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', String(active));
+    });
+    renderCheckResults();
+  }
+
+  requestAnimationFrame(() => {
+    const results = $('checkResultsSection');
+    if (!results.classList.contains('hidden'))
+      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
  * UTILITY
  * ═══════════════════════════════════════════════════════════════ */
 
@@ -694,6 +885,7 @@ function init() {
   populateSystemSelects();
   buildCountryFilterBar();
   buildCategoryPicker();
+  buildPlanCategoryGrid();
 
   $$('.mode-btn').forEach(btn =>
     btn.addEventListener('click', () => switchMode(btn.dataset.mode))
@@ -710,6 +902,13 @@ function init() {
     state.reverseSystem = state.checkSystem;
     if (state.searchQuery) renderReverseResults();
   });
+
+  $('planSystemSelect').addEventListener('change', e => {
+    state.planSystem = e.target.value;
+    if (state.planCategory && state.planSystem) renderPlanResults();
+  });
+
+  $('planSwitchToCheck').addEventListener('click', () => switchMode('check'));
 }
 
 init();

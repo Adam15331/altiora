@@ -57,6 +57,16 @@
           <span class="mode-btn__icon" aria-hidden="true">↩</span>
           Reverse Course Finder
         </button>
+        <button
+          class="mode-btn"
+          data-mode="plan"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-plan"
+        >
+          <span class="mode-btn__icon" aria-hidden="true">📚</span>
+          Subject Planner
+        </button>
       </div>
 
       <!-- ═══════════════════════════════════════════════════════
@@ -214,6 +224,56 @@
 
       </div><!-- /panel-reverse -->
 
+      <!-- ═══════════════════════════════════════════════════════
+           Panel C — Subject Planner
+           ═══════════════════════════════════════════════════════ -->
+      <div id="panel-plan" class="panel hidden" role="tabpanel">
+
+        <p class="panel-intro">
+          Choose what you want to study and see which subjects to pick — so you keep
+          your university options open before committing to A-levels or equivalent.
+        </p>
+
+        <!-- Step 1: Subject area -->
+        <div class="plan-step">
+          <span class="control-label">What do you want to study?</span>
+          <div
+            id="planCategoryGrid"
+            class="plan-category-grid"
+            role="group"
+            aria-label="Select a subject area"
+          >
+            <!-- cards inserted by JS -->
+          </div>
+        </div>
+
+        <!-- Step 2: Qualification system (revealed after category chosen) -->
+        <div id="planStep2" class="plan-step hidden" aria-live="polite">
+          <div class="control-group">
+            <label class="control-label" for="planSystemSelect">
+              Your qualification system
+            </label>
+            <div class="select-wrap">
+              <select id="planSystemSelect" aria-label="Select your qualification system">
+                <!-- populated by JS -->
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Results (revealed after system chosen) -->
+        <div id="planResults" class="hidden" aria-live="polite">
+          <div id="planEssentials"></div>
+          <div id="planCombinations"></div>
+          <p class="plan-footer-note">
+            Subject requirements only — grades and admission tests matter equally.
+            <button class="plan-switch-link" id="planSwitchToCheck" type="button">Use Check Combination</button>
+            for full course-by-course details.
+          </p>
+        </div>
+
+      </div><!-- /panel-plan -->
+
     </div><!-- /content -->
   </main>
 
@@ -226,8 +286,9 @@
   <div id="toast" class="toast" role="status" aria-live="assertive"></div>
 
   <!-- Data layer must be loaded before main.js -->
-  <script src="data/qualificationMappings.js"></script>
-  <script src="data/courseRequirements.js"></script>
-  <script src="main.js"></script>
+  <script src="data/qualificationMappings.js?v=3"></script>
+  <script src="data/courseRequirements.js?v=3"></script>
+  <script src="data/university-profiles.js?v=1"></script>
+  <script src="main.js?v=4"></script>
 </body>
 </html>
