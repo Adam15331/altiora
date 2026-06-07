@@ -18,7 +18,7 @@
  * handler functions so the render path stays predictable.
  * ─────────────────────────────────────────────────────────────── */
 const state = {
-  mode:               'check',
+  mode:               'strengths',
   checkSystem:        '',
   reverseSystem:      '',
   planCategory:       '',
@@ -1498,7 +1498,7 @@ function renderStrengthsResults(strength) {
                 <span class="card-meta-sep">·</span>
                 <span>${esc(course.degreeLevel)}</span>
               </div>
-              <button class="btn-primary" style="margin-top: var(--space-3); width: 100%;"
+              <button class="copy-btn" style="margin-top: var(--space-3); width: 100%; justify-content: center; border-color: var(--color-match-strong); color: var(--color-match-strong);"
                       data-explore-course="${esc(course.id)}">Explore this course →</button>
             </div>
           `).join('')}
@@ -1568,10 +1568,12 @@ function init() {
 
   $('planSwitchToCheck').addEventListener('click', () => switchMode('check'));
 
-  // Auto-open strengths mode when arriving from ?mode=strengths
+  // Strengths is the default panel — populate the grid immediately
+  renderStrengthsGrid();
+
+  // Override default if arriving from ?mode=strengths (already default, but clears the flag)
   if (window.sessionStorage.getItem('openStrengthsMode') === 'true') {
     window.sessionStorage.removeItem('openStrengthsMode');
-    switchMode('strengths');
   }
 }
 
