@@ -1212,6 +1212,39 @@ function renderPlanResults() {
     `;
   }
 
+  /* ── Section 1.5: Critical pairs ── */
+  const pairRules = {
+    medicine:     [['Chemistry', 'Biology']],
+    engineering:  [['Mathematics_Advanced', 'Physics']],
+    cs:           [],
+    economics:    [['Mathematics_Standard', 'Economics']],
+    sciences:     [['Chemistry', 'Biology'], ['Chemistry', 'Mathematics_Advanced']],
+    mathematics:  [],
+    law:          [],
+    psychology:   [['Psychology', 'Biology']],
+    architecture: [['Art_Design', 'Mathematics_Standard']],
+    business:     [['Mathematics_Standard', 'Economics']],
+  };
+  const tagPresence = new Set(sortedTags.map(([t]) => t));
+  const validPairs = (pairRules[state.planCategory] ?? [])
+    .filter(pair => pair.every(t => tagPresence.has(t)));
+
+  if (validPairs.length > 0) {
+    const pairsHtml = validPairs.map(pair =>
+      `<div class="plan-subject-chip" style="background: var(--color-cat-cs-bg); border-color: var(--color-cat-cs);">
+         <span class="plan-subject-chip__name">${pair.map(t => esc(tagToLocal(t, state.planSystem))).join(' + ')}</span>
+         <span class="plan-subject-chip__count">required together for most courses</span>
+       </div>`
+    ).join('');
+    $('planCriticalPairs').innerHTML = `
+      <h3 class="plan-section-head" style="margin-top: var(--space-8);">Critical pairs</h3>
+      <p class="plan-section-sub">Most ${esc(catLabel)} courses require both subjects, not just one. Plan to take them together.</p>
+      <div class="plan-essentials-grid">${pairsHtml}</div>
+    `;
+  } else {
+    $('planCriticalPairs').innerHTML = '';
+  }
+
   /* ── Section B: top subject combinations ── */
   const topTags = sortedTags.slice(0, 6).map(([t]) => t);
   const combos  = [];
