@@ -7,7 +7,6 @@
   <title>Altiora</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="tokens.css" />
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -44,7 +43,12 @@
           aria-selected="true"
           aria-controls="panel-check"
         >
-          <span class="mode-btn__icon" aria-hidden="true">⊞</span>
+          <span class="mode-btn__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="6" height="6" rx="1.2"/><rect x="11" y="3" width="6" height="6" rx="1.2"/>
+              <rect x="3" y="11" width="6" height="6" rx="1.2"/><rect x="11" y="11" width="6" height="6" rx="1.2"/>
+            </svg>
+          </span>
           <span class="mode-btn__label">Check Combination</span>
           <span class="mode-btn__label--short" aria-hidden="true">Check</span>
         </button>
@@ -55,7 +59,11 @@
           aria-selected="false"
           aria-controls="panel-reverse"
         >
-          <span class="mode-btn__icon" aria-hidden="true">↩</span>
+          <span class="mode-btn__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="9" cy="9" r="5.5"/><path d="M14.5 14.5l2.5 2.5"/>
+            </svg>
+          </span>
           <span class="mode-btn__label">Course Finder</span>
           <span class="mode-btn__label--short" aria-hidden="true">Find</span>
         </button>
@@ -66,7 +74,12 @@
           aria-selected="false"
           aria-controls="panel-plan"
         >
-          <span class="mode-btn__icon" aria-hidden="true">📚</span>
+          <span class="mode-btn__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M10 5.5c0-1.5-1.3-2.5-3.5-2.5H3.5v11H6.5c2.2 0 3.5 1 3.5 1V5.5z"/>
+              <path d="M10 5.5c0-1.5 1.3-2.5 3.5-2.5h3v11h-3c-2.2 0-3.5 1-3.5 1V5.5z"/>
+            </svg>
+          </span>
           <span class="mode-btn__label">Subject Planner</span>
           <span class="mode-btn__label--short" aria-hidden="true">Plan</span>
         </button>
