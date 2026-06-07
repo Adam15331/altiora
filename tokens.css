@@ -1,11 +1,103 @@
-/* ============================================================
-   Altiora Design System — global entry point
-   Consumers link THIS file. It only @imports; no rules live here.
-   ============================================================ */
+/* Altiora Design System v2 — Notion-inspired
+ * Single source of truth for all design tokens.
+ * Import this before styles.css.
+ */
 
-@import url('tokens/fonts.css');
-@import url('tokens/colors.css');
-@import url('tokens/typography.css');
-@import url('tokens/spacing.css');
-@import url('tokens/effects.css');
-@import url('tokens/base.css');
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap');
+
+:root {
+  /* ── Base palette ──────────────────────────────────── */
+  --color-bg:             #F7F6F3;
+  --color-surface:        #FFFFFF;
+  --color-border:         #E8E7E3;
+  --color-text-primary:   #1A1916;
+  --color-text-secondary: #6B6860;
+  --color-text-tertiary:  #9B9A97;
+
+  /* ── Category accent colours ───────────────────────── */
+  --color-cat-medicine:        #E03E3E;
+  --color-cat-medicine-bg:     #FBE4E4;
+  --color-cat-cs:              #0F7DDB;
+  --color-cat-cs-bg:           #E7F3FC;
+  --color-cat-engineering:     #D9730D;
+  --color-cat-engineering-bg:  #FAEEE0;
+  --color-cat-economics:       #0F7957;
+  --color-cat-economics-bg:    #E5F3EE;
+  --color-cat-law:             #6940A5;
+  --color-cat-law-bg:          #EEE8F5;
+  --color-cat-business:        #AD1A72;
+  --color-cat-business-bg:     #F5E0EE;
+  --color-cat-sciences:        #2B6CB0;
+  --color-cat-sciences-bg:     #E4EDF7;
+  --color-cat-mathematics:     #E03E3E;
+  --color-cat-mathematics-bg:  #FBE4E4;
+  --color-cat-psychology:      #0F7957;
+  --color-cat-psychology-bg:   #E5F3EE;
+  --color-cat-architecture:    #D9730D;
+  --color-cat-architecture-bg: #FAEEE0;
+
+  /* ── Match state colours ────────────────────────────── */
+  --color-match-strong:      #4A7C59;
+  --color-match-strong-bg:   #EDF3EF;
+  --color-match-possible:    #8B6914;
+  --color-match-possible-bg: #F9F3E3;
+  --color-match-reach:       #8B3A2F;
+  --color-match-reach-bg:    #F9EDED;
+  --color-match-grade:       #6B6860;
+  --color-match-grade-bg:    #F1F0EE;
+
+  /* ── Typography ─────────────────────────────────────── */
+  --font-display: 'Lora', Georgia, serif;
+  --font-sans:    'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  --text-xs:      0.75rem;
+  --text-sm:      0.875rem;
+  --text-base:    1rem;
+  --text-lg:      1.125rem;
+  --text-xl:      1.25rem;
+  --text-2xl:     1.5rem;
+  --text-display: 2.5rem;
+
+  /* ── Spacing ─────────────────────────────────────────── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* ── Border radius ───────────────────────────────────── */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-full: 999px;
+
+  /* ── Motion ──────────────────────────────────────────── */
+  --t-fast: 100ms ease;
+  --t-base: 150ms ease;
+
+  /* ── Layout ──────────────────────────────────────────── */
+  --max-w: 980px;
+  --pad:   32px;
+
+  /* ── Legacy aliases (keeps main.js inline styles working) ── */
+  --bg:           var(--color-bg);
+  --surface:      var(--color-surface);
+  --border:       var(--color-border);
+  --text:         var(--color-text-primary);
+  --text-muted:   var(--color-text-secondary);
+  --text-faint:   var(--color-text-tertiary);
+  --accent:       var(--color-cat-cs);
+  --accent-light: var(--color-cat-cs-bg);
+  --accent-dark:  #0B6BBF;
+  --font:         var(--font-sans);
+  --radius:       var(--radius-md);
+  --radius-lg:    var(--radius-lg);
+  --t:            var(--t-base);
+}
