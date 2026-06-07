@@ -1,0 +1,80 @@
+/* ============================================================
+   Altiora — Typography tokens
+   Humanist sans base, serif for display moments, mono for grades.
+   ============================================================ */
+
+:root {
+  /* ---- Families -------------------------------------------- */
+  --font-sans:  'Instrument Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Lora', ui-serif, Georgia, 'Times New Roman', serif;
+  --font-mono:  'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* ---- Weights --------------------------------------------- */
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+
+  /* ---- Type scale (size / line-height / tracking) ---------- */
+  /* Display — hero headings, serif, generous, slightly tracked */
+  --display-size:    clamp(2.75rem, 1.6rem + 4.4vw, 4.5rem);
+  --display-line:    1.06;
+  --display-track:   -0.018em;
+
+  /* H1 */
+  --h1-size:  clamp(2rem, 1.4rem + 2.2vw, 2.75rem);
+  --h1-line:  1.12;
+  --h1-track: -0.015em;
+
+  /* H2 */
+  --h2-size:  1.75rem;   /* 28px */
+  --h2-line:  1.18;
+  --h2-track: -0.012em;
+
+  /* H3 */
+  --h3-size:  1.375rem;  /* 22px */
+  --h3-line:  1.25;
+  --h3-track: -0.008em;
+
+  /* H4 */
+  --h4-size:  1.125rem;  /* 18px */
+  --h4-line:  1.35;
+  --h4-track: -0.004em;
+
+  /* Body */
+  --body-lg-size: 1.125rem; /* 18px */
+  --body-lg-line: 1.6;
+  --body-size:    1rem;     /* 16px */
+  --body-line:    1.6;
+  --body-sm-size: 0.875rem; /* 14px */
+  --body-sm-line: 1.55;
+
+  /* UI label — smaller, tighter, slightly tracked up for caps */
+  --label-size:  0.8125rem; /* 13px */
+  --label-line:  1.2;
+  --label-track: 0.01em;
+  --overline-size:  0.75rem; /* 12px */
+  --overline-track: 0.08em;  /* uppercase eyebrow */
+
+  /* Mono — grade strings, course codes */
+  --mono-size:  0.8125rem;  /* 13px */
+  --mono-track: 0.01em;
+}
+
+/* ---- Optional helper classes (components may use tokens directly) ---- */
+.t-display {
+  font-family: var(--font-serif);
+  font-weight: var(--weight-500, 500);
+  font-size: var(--display-size);
+  line-height: var(--display-line);
+  letter-spacing: var(--display-track);
+}
+.t-h1 { font-family: var(--font-sans); font-weight: var(--weight-semibold); font-size: var(--h1-size); line-height: var(--h1-line); letter-spacing: var(--h1-track); }
+.t-h2 { font-family: var(--font-sans); font-weight: var(--weight-semibold); font-size: var(--h2-size); line-height: var(--h2-line); letter-spacing: var(--h2-track); }
+.t-h3 { font-family: var(--font-sans); font-weight: var(--weight-semibold); font-size: var(--h3-size); line-height: var(--h3-line); letter-spacing: var(--h3-track); }
+.t-h4 { font-family: var(--font-sans); font-weight: var(--weight-semibold); font-size: var(--h4-size); line-height: var(--h4-line); letter-spacing: var(--h4-track); }
+.t-body { font-family: var(--font-sans); font-weight: var(--weight-regular); font-size: var(--body-size); line-height: var(--body-line); }
+.t-body-sm { font-family: var(--font-sans); font-weight: var(--weight-regular); font-size: var(--body-sm-size); line-height: var(--body-sm-line); }
+.t-label { font-family: var(--font-sans); font-weight: var(--weight-medium); font-size: var(--label-size); line-height: var(--label-line); letter-spacing: var(--label-track); }
+.t-overline { font-family: var(--font-sans); font-weight: var(--weight-semibold); font-size: var(--overline-size); letter-spacing: var(--overline-track); text-transform: uppercase; }
+.t-mono { font-family: var(--font-mono); font-size: var(--mono-size); letter-spacing: var(--mono-track); }

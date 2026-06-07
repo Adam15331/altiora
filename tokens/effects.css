@@ -1,0 +1,26 @@
+/* ============================================================
+   Altiora — Elevation, motion, focus
+   No heavy drop shadows. Calm, precise transitions. No bounce.
+   ============================================================ */
+
+:root {
+  /* ---- Shadows: soft, low, warm-tinted ---------------------- */
+  --shadow-none: none;
+  --shadow-xs: 0 1px 2px rgba(26, 26, 24, 0.04);
+  --shadow-sm: 0 1px 3px rgba(26, 26, 24, 0.05), 0 1px 2px rgba(26, 26, 24, 0.03);
+  --shadow-md: 0 4px 12px rgba(26, 26, 24, 0.06), 0 1px 3px rgba(26, 26, 24, 0.04);
+  --shadow-lg: 0 12px 32px rgba(26, 26, 24, 0.08), 0 2px 8px rgba(26, 26, 24, 0.04);
+
+  /* ring used on focus + selected states */
+  --ring-accent: 0 0 0 3px rgba(38, 52, 79, 0.16);
+  --ring-focus:  0 0 0 3px rgba(94, 110, 140, 0.35);
+
+  /* ---- Motion ---------------------------------------------- */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-in-out:   cubic-bezier(0.45, 0, 0.2, 1);
+  --dur-micro:  150ms;   /* chip select, tab switch, hover */
+  --dur-expand: 200ms;   /* expandable sections */
+  --dur-slow:   320ms;   /* drawers, overlays */
+
+  --hover-lift: -2px;    /* card hover translateY */
+}
