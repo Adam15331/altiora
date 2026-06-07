@@ -411,15 +411,15 @@ function renderCheckResults() {
   let cardIndex = 0;
 
   if (byStatus.green.length) {
-    container.appendChild(buildGroup('green', '✓ Strong matches', byStatus.green, cardIndex));
+    container.appendChild(buildGroup('green', 'Strong matches', byStatus.green, cardIndex));
     cardIndex += byStatus.green.length;
   }
   if (byStatus.amber.length) {
-    container.appendChild(buildGroup('amber', '◑ Possible with right grades', byStatus.amber, cardIndex));
+    container.appendChild(buildGroup('amber', 'Possible', byStatus.amber, cardIndex));
     cardIndex += byStatus.amber.length;
   }
   if (byStatus.red.length) {
-    container.appendChild(buildGroup('red', '✗ Out of reach', byStatus.red, cardIndex, true));
+    container.appendChild(buildGroup('red', 'Out of reach', byStatus.red, cardIndex, true));
   }
 }
 
@@ -428,9 +428,14 @@ function buildGroup(status, headerText, items, startIndex, collapsed = false) {
   section.id        = `results-group-${status}`;
   section.className = 'results-group';
 
+  const groupIcons = {
+    green: `<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M7 10l2 2 4-4"/></svg>`,
+    amber: `<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3a7 7 0 0 1 0 14V3z"/><circle cx="10" cy="10" r="7"/></svg>`,
+    red:   `<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M8 8l4 4M12 8l-4 4"/></svg>`,
+  };
   const header = document.createElement('h2');
   header.className   = `results-group__header results-group__header--${status}`;
-  header.textContent = `${headerText} (${items.length})`;
+  header.innerHTML   = `${groupIcons[status]} ${headerText} <span style="font-weight:400;opacity:.65">(${items.length})</span>`;
   section.appendChild(header);
 
   const cardsDiv = document.createElement('div');
@@ -447,13 +452,16 @@ function buildGroup(status, headerText, items, startIndex, collapsed = false) {
     const toggle = document.createElement('button');
     toggle.type      = 'button';
     toggle.className = 'results-group__toggle';
+    const chevSvg = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg>`;
     toggle.setAttribute('aria-expanded', 'false');
-    toggle.textContent = `Show ${items.length} out-of-reach courses`;
+    toggle.innerHTML = `${chevSvg} Show ${items.length} out-of-reach courses`;
     toggle.addEventListener('click', () => {
       const nowOpen = cardsDiv.hidden;
       cardsDiv.hidden = !nowOpen;
       toggle.setAttribute('aria-expanded', String(nowOpen));
-      toggle.textContent = nowOpen ? 'Hide out-of-reach courses' : `Show ${items.length} out-of-reach courses`;
+      toggle.innerHTML = nowOpen
+        ? `${chevSvg} Hide out-of-reach courses`
+        : `${chevSvg} Show ${items.length} out-of-reach courses`;
     });
     section.appendChild(toggle);
     section.appendChild(cardsDiv);
@@ -511,49 +519,62 @@ function buildCheckCard(course, result) {
   const card = document.createElement('div');
   card.className = `course-card ${cfg.cardCls}`;
   card.setAttribute('role', 'listitem');
+  card.dataset.category = course.category ?? '';
+
+  // Status label icons (SVG, Notion-style)
+  const statusIcons = {
+    green: `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M7 10l2 2 4-4"/></svg>`,
+    amber: `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3a7 7 0 0 1 0 14V3z"/><circle cx="10" cy="10" r="7"/></svg>`,
+    red:   `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M8 8l4 4M12 8l-4 4"/></svg>`,
+  };
+  const graduationIcon = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l7-4 7 4-7 4-7-4z"/><path d="M7 10v3.5c0 1.5 1.3 2 3 2s3-.5 3-2V10"/><path d="M17 8v4"/></svg>`;
+  const chevronIcon    = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg>`;
+  const externalIcon   = `<svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4h5v5M15 4l-7 7M9 5H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-4"/></svg>`;
 
   let uniInfoHtml = '';
   if (profile) {
-    const cityLine  = profile.city ? `<span class="card-uni-city">${esc(profile.city)}</span>` : '';
-    const tagLine   = profile.tagline ? `<p class="card-uni-tagline">${esc(profile.tagline)}</p>` : '';
-    const noteLine  = profile.internationalNote ? `<p class="card-uni-note">${esc(profile.internationalNote)}</p>` : '';
-    const webLink   = profile.websiteUrl
-      ? `<a class="card-uni-link" href="${esc(profile.websiteUrl)}" target="_blank" rel="noopener noreferrer">Visit university website ↗</a>`
+    const tagLine  = profile.tagline         ? `<p class="card-uni-tagline">${esc(profile.tagline)}</p>` : '';
+    const noteLine = profile.internationalNote? `<p class="card-uni-note">${esc(profile.internationalNote)}</p>` : '';
+    const webLink  = profile.websiteUrl
+      ? `<a class="card-uni-link" href="${esc(profile.websiteUrl)}" target="_blank" rel="noopener noreferrer">${externalIcon} Visit website</a>`
       : '';
+    const cityPart = profile.city ? ` · ${esc(profile.city)}` : '';
     uniInfoHtml = `
       <details class="card-uni-info">
-        <summary>About this university${cityLine ? ` · ${profile.city}` : ''}</summary>
-        ${tagLine}${noteLine}${webLink}
+        <summary>About this university${cityPart} ${chevronIcon}</summary>
+        <div class="card-uni-info__body">${tagLine}${noteLine}${webLink}</div>
       </details>`;
   } else if (course.universityContext?.notes) {
     uniInfoHtml = `
       <details class="card-uni-info">
-        <summary>About this university</summary>
-        <p class="card-uni-info__notes">${esc(course.universityContext.notes)}</p>
+        <summary>About this university ${chevronIcon}</summary>
+        <div class="card-uni-info__body"><p class="card-uni-info__notes">${esc(course.universityContext.notes)}</p></div>
       </details>`;
   }
 
   card.innerHTML = `
+    <div class="card-status card-status--${status}">${statusIcons[status]} ${cfg.label}</div>
     <div class="card-header">
       <div class="card-title-group">
         <span class="card-flag" aria-hidden="true">${flag}</span>
         <div class="card-titles">
           <div class="card-name">${esc(course.name)}</div>
-          <div class="card-uni">${esc(course.university)}</div>
+          <div class="card-uni">${graduationIcon} ${esc(course.university)}</div>
           ${tierLabel ? `<div class="card-tier">${esc(tierLabel)}</div>` : ''}
         </div>
       </div>
-      <span class="badge ${cfg.badgeCls}">${cfg.icon}&thinsp;${cfg.label}</span>
     </div>
     <div class="card-meta">
-      <span class="badge badge--neutral">${esc(course.degreeLevel)}</span>
-      <span class="badge badge--neutral">${flag}&thinsp;${esc(country)}</span>
-      <span class="badge badge--neutral">${esc(catLabel)}</span>
+      <span>${flag}&thinsp;${esc(country)}</span>
+      <span class="card-meta-sep">·</span>
+      <span>${esc(course.degreeLevel)}</span>
+      <span class="card-meta-sep">·</span>
+      <span class="card-cat-badge">${esc(catLabel)}</span>
     </div>
     ${gradeStr ? `<div class="card-grades">${esc(gradeStr)}</div>` : ''}
     ${tests.length ? `
       <div class="card-admission-tests">
-        ${tests.map(t => `<span class="badge badge--warning">${esc(t)} required</span>`).join('')}
+        ${tests.map(t => `<span class="admission-test-tag">${esc(t)} required</span>`).join('')}
       </div>` : ''}
     ${footerHtml}
     ${uniInfoHtml}
@@ -705,6 +726,19 @@ function buildRequirementsText(course) {
  * SUBJECT PLANNER (Mode C)
  * ═══════════════════════════════════════════════════════════════ */
 
+const CATEGORY_ICONS = {
+  medicine:     `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3c-3.9 0-7 3.1-7 7s3.1 7 7 7 7-3.1 7-7-3.1-7-7-7z"/><path d="M10 7v6M7 10h6"/></svg>`,
+  cs:           `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7l-3 3 3 3M14 7l3 3-3 3M11 5l-2 10"/></svg>`,
+  engineering:  `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5a2 2 0 0 0-2.8 0L5 12.2V15h2.8l7.2-7.2A2 2 0 0 0 15 5z"/><path d="M11.5 6.5l2 2"/></svg>`,
+  economics:    `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14l4-4 3 3 5-6"/><path d="M14 7h3v3"/></svg>`,
+  law:          `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v14M5 6l5-3 5 3"/><path d="M4 10l2 4H2l2-4zM14 10l2 4h-4l2-4z"/></svg>`,
+  business:     `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="16" height="10" rx="1.5"/><path d="M7 7V6a3 3 0 0 1 6 0v1"/><path d="M2 11h16"/></svg>`,
+  sciences:     `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v7L4.5 15.5A1 1 0 0 0 5.4 17h9.2a1 1 0 0 0 .9-1.5L12 10V3"/><path d="M7 3h6"/></svg>`,
+  mathematics:  `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12M10 4v12M5 5l10 10M15 5L5 15"/></svg>`,
+  psychology:   `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3a5 5 0 0 1 4.5 7.2L17 17H3l2.5-6.8A5 5 0 0 1 10 3z"/><path d="M8 13h4"/></svg>`,
+  architecture: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h14M5 17V9l5-5 5 5v8"/><path d="M9 17v-4h2v4"/></svg>`,
+};
+
 function buildPlanCategoryGrid() {
   const grid = $('planCategoryGrid');
   CATEGORIES.forEach(cat => {
@@ -713,7 +747,7 @@ function buildPlanCategoryGrid() {
     btn.className = 'plan-cat-card';
     btn.dataset.category = cat.id;
     btn.innerHTML = `
-      <span class="plan-cat-card__icon" aria-hidden="true">${cat.icon}</span>
+      <span class="plan-cat-card__icon" aria-hidden="true">${CATEGORY_ICONS[cat.id] ?? cat.icon}</span>
       <span class="plan-cat-card__label">${esc(cat.label)}</span>
     `;
     btn.addEventListener('click', () => {
