@@ -427,7 +427,7 @@ function switchMode(mode) {
   $('panel-plan')     .classList.toggle('hidden', mode !== 'plan');
   $('panel-strengths').classList.toggle('hidden', mode !== 'strengths');
 
-  if (mode === 'strengths' && !$('strengthsGrid').hasChildNodes()) {
+  if (mode === 'strengths' && $('strengthsGrid').children.length === 0) {
     renderStrengthsGrid();
   }
 }
