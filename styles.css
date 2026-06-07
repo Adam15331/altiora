@@ -315,6 +315,34 @@ main     { flex: 1; padding: var(--pad); }
   font-weight: 600;
 }
 
+/* Auto-added chip (e.g. Mathematics when Further Mathematics is selected) */
+.subject-chip.chip--auto-added.selected::after {
+  content: 'auto-added';
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--color-text-primary);
+  background: rgba(255,255,255,.25);
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-left: 6px;
+}
+
+/* Warning: standard maths deselected while advanced maths is active */
+.subject-chip.chip--imply-warning {
+  border-color: var(--color-match-possible);
+  color: var(--color-match-possible);
+}
+.subject-chip.chip--imply-warning::after {
+  content: '⚠ requires Maths';
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--color-match-possible);
+  margin-left: 6px;
+  white-space: nowrap;
+}
+
 .picker-hint {
   margin-top: var(--space-3);
   font-size: var(--text-xs);

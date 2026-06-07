@@ -89,14 +89,14 @@ const courses = [
     id: "uk-engineering-oxford", name: "Engineering Science MEng",
     university: "University of Oxford", country: "UK", degreeLevel: "MEng", category: "engineering",
     requirements: { essential: ["Mathematics_Standard","Physics"], preferred: ["Mathematics_Advanced"], useful: ["Chemistry","Computer_Science"] },
-    grades: { aLevels: "A*AAA", ib: "40 points", ap: null, vwo: null, sgALevels: null, hkDse: null },
+    grades: { aLevels: "A*AA", ib: "40 points", ap: null, vwo: null, sgALevels: null, hkDse: null },
     admissionTests: ["PAT"],
     universityContext: {
       tier: "world-top-10",
       intlFriendly: true,
       notes: "Requires a separate college application; all courses include a rigorous interview.",
     },
-    notes: "A*AAA. PAT recommended. Further Mathematics very strongly recommended.",
+    notes: "A*AA. PAT recommended. Further Mathematics very strongly recommended.",
   },
   {
     id: "uk-law-oxford", name: "Law (Jurisprudence) BA",

@@ -32,8 +32,8 @@ const state = {
 };
 
 /* ─── Constants ─────────────────────────────────────────────────── */
-const COUNTRY_FLAGS  = { UK:'🇬🇧', US:'🇺🇸', CA:'🇨🇦', Netherlands:'🇳🇱', Singapore:'🇸🇬', Hong_Kong:'🇭🇰' };
-const COUNTRY_LABELS = { UK:'UK',  US:'US',  CA:'Canada', Netherlands:'Netherlands', Singapore:'Singapore', Hong_Kong:'Hong Kong' };
+const COUNTRY_FLAGS  = { UK:'🇬🇧', US:'🇺🇸', CA:'🇨🇦', NL:'🇳🇱', SG:'🇸🇬', HK:'🇭🇰' };
+const COUNTRY_LABELS = { UK:'UK',  US:'US',  CA:'Canada', NL:'Netherlands', SG:'Singapore', HK:'Hong Kong' };
 
 // Minimum number of subjects required before results can show as GREEN.
 // Below this threshold results are capped at AMBER — no university admits on 1-2 subjects alone.
@@ -141,6 +141,23 @@ function tagToLocal(tag, systemKey) {
 }
 
 function humanTag(tag) { return tag.replace(/_/g, ' '); }
+
+/* ─── Further Maths → Maths auto-imply ──────────────────────────
+ * UK A-Level: "Further Mathematics" is a separate A-level that must
+ * be taken alongside "Mathematics". Auto-select Maths when Further
+ * Maths is chosen.
+ * SG A-Level: "H2 Further Mathematics" requires "H2 Mathematics".
+ * IB: not needed — HL and SL maths are mutually exclusive; the tag
+ * engine already handles this via deriveTagsFromSubjects.
+ * ─────────────────────────────────────────────────────────────── */
+const MATHS_IMPLY = {
+  UK_A_Level: { advanced: 'Further Mathematics',   standard: 'Mathematics'    },
+  SG_A_Level: { advanced: 'H2 Further Mathematics', standard: 'H2 Mathematics' },
+};
+
+// Subjects the user has explicitly deselected despite auto-imply.
+// Cleared when the qualification system changes.
+const _suppressedAutoImply = new Set();
 
 /* ═══════════════════════════════════════════════════════════════
  * TAG DERIVATION
@@ -413,7 +430,8 @@ function buildSubjectPicker(systemKey) {
   picker.appendChild(frag);
   section.classList.remove('hidden');
 
-  // Reset category state when system changes
+  // Reset auto-imply suppression and category state when system changes
+  _suppressedAutoImply.clear();
   state.selectedCategories.clear();
   $$('#categoryPicker .category-chip').forEach(b => b.classList.remove('active'));
   $('categoryPickerSection').classList.add('hidden');
@@ -454,12 +472,55 @@ function buildCategoryPicker() {
   picker.appendChild(frag);
 }
 
-function onSubjectToggle() {
+function onSubjectToggle(e = null) {
+  const changedValue = e?.target?.value ?? null;
+  const wasChecked   = e?.target?.checked ?? null;
+  const imply        = MATHS_IMPLY[state.checkSystem];
+
+  // If user manually deselects the standard maths subject while the advanced
+  // one is still selected, record the suppression so we don't re-add it.
+  if (imply && changedValue === imply.standard && wasChecked === false) {
+    const allInputs = Array.from($$('#subjectPicker input'));
+    const advInput  = allInputs.find(i => i.value === imply.advanced);
+    if (advInput?.checked) _suppressedAutoImply.add(imply.standard);
+  }
+  // Clear suppression when the user explicitly re-selects a subject.
+  if (changedValue && wasChecked === true) _suppressedAutoImply.delete(changedValue);
+
+  // Read current checkbox state from DOM.
   state.selectedSubjects = Array.from($$('#subjectPicker input:checked')).map(c => c.value);
-  state.selectedTags     = deriveTagsFromSubjects(state.selectedSubjects, state.checkSystem);
-  $$('#subjectPicker .subject-chip').forEach(chip =>
-    chip.classList.toggle('selected', chip.querySelector('input').checked)
-  );
+
+  // Apply auto-imply: if advanced maths is selected and standard is not (and not suppressed),
+  // programmatically check the standard maths chip.
+  const autoAdded = new Set();
+  if (imply) {
+    const hasAdv  = state.selectedSubjects.includes(imply.advanced);
+    const hasStd  = state.selectedSubjects.includes(imply.standard);
+    const suppressed = _suppressedAutoImply.has(imply.standard);
+    if (hasAdv && !hasStd && !suppressed) {
+      const stdInput = Array.from($$('#subjectPicker input')).find(i => i.value === imply.standard);
+      if (stdInput) {
+        stdInput.checked = true;
+        autoAdded.add(imply.standard);
+        state.selectedSubjects.push(imply.standard);
+      }
+    }
+  }
+
+  state.selectedTags = deriveTagsFromSubjects(state.selectedSubjects, state.checkSystem);
+
+  // Show warning if user has suppressed the standard maths while advanced is active.
+  const warnSubject = (imply && _suppressedAutoImply.has(imply.standard) &&
+    state.selectedSubjects.includes(imply.advanced))
+    ? imply.standard : null;
+
+  $$('#subjectPicker .subject-chip').forEach(chip => {
+    const input = chip.querySelector('input');
+    chip.classList.toggle('selected', input.checked);
+    chip.classList.toggle('chip--auto-added', autoAdded.has(input.value));
+    chip.classList.toggle('chip--imply-warning', input.value === warnSubject);
+  });
+
   syncSubjectCount();
   $('categoryPickerSection').classList.toggle('hidden', state.selectedSubjects.length === 0);
   renderCheckEmptyState();
