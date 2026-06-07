@@ -28,7 +28,7 @@ const state = {
   countryFilter:      'All',
   selectedCategories: new Set(),
   searchQuery:        '',
-  predictedGrade:     null,   // null = not entered; A-Level: 'A*'|'A'|'B'|'C'|'D'; IB: number string
+  predictedGrade:     null,
 };
 
 /* ─── Constants ─────────────────────────────────────────────────── */
@@ -62,8 +62,8 @@ const CATEGORIES = [
 const STATUS = {
   green: { label:'Strong match', badgeCls:'badge--success', icon:'✓', cardCls:'course-card--green' },
   amber: { label:'Possible',     badgeCls:'badge--warning', icon:'◑', cardCls:'course-card--amber' },
-  red:   { label:'Out of reach',           badgeCls:'badge--error',   icon:'✗', cardCls:'course-card--red'   },
-  grey:  { label:'Grade threshold high',   badgeCls:'badge--grey',    icon:'◯', cardCls:'course-card--grey'  },
+  red:   { label:'Out of reach',         badgeCls:'badge--error',   icon:'✗', cardCls:'course-card--red'   },
+  grey:  { label:'Grade threshold high', badgeCls:'badge--grey',    icon:'◯', cardCls:'course-card--grey'  },
 };
 const STATUS_SORT = { green:0, amber:1, grey:2, red:3 };
 
@@ -197,18 +197,13 @@ let _subjectDebounce = null;
 function renderCheckEmptyState() {
   const el = $('checkEmptyState');
   if (!el) return;
-
   const show = !!state.checkSystem && state.selectedSubjects.length === 0;
   el.classList.toggle('hidden', !show);
   if (!show) return;
-
-  // Rebuild only when system changes
   if (el.dataset.builtFor === state.checkSystem) return;
   el.dataset.builtFor = state.checkSystem;
-
   const suggestions = EMPTY_SUGGESTIONS[state.checkSystem] ?? EMPTY_SUGGESTIONS.UK_A_Level;
   const sysLabel = qualificationMappings[state.checkSystem]?.systemLabel ?? state.checkSystem;
-
   el.innerHTML = `
     <div class="check-empty-state__inner">
       <div class="check-empty-state__icon" aria-hidden="true">🎯</div>
@@ -221,7 +216,6 @@ function renderCheckEmptyState() {
       </div>
     </div>
   `;
-
   el.querySelectorAll('.suggestion-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const targets = JSON.parse(btn.dataset.subjects);
@@ -241,57 +235,42 @@ function renderCheckEmptyState() {
 const A_LEVEL_RANK = { 'A*': 5, 'A': 4, 'B': 3, 'C': 2, 'D': 1, 'E': 0 };
 
 function parseALevelGrades(str) {
-  // "A*AA" → ['A*', 'A', 'A']
   return (str ?? '').match(/A\*|[A-E]/g) ?? [];
 }
 
-// Returns true if the course's typical grade offer is likely above the student's predicted grade.
 function isGradeAboveStudent(course, system, studentGrade) {
   if (!studentGrade) return false;
-
   if (system === 'UK_A_Level') {
     const gradeStr = course.grades?.aLevels;
     if (!gradeStr) return false;
     const grades = parseALevelGrades(gradeStr);
     const top3 = grades.slice(0, 3);
-    if (studentGrade === 'A*') return false;  // A* students: nothing is out of grade range
+    if (studentGrade === 'A*') return false;
     if (studentGrade === 'A')  return top3.some(g => g === 'A*');
     if (studentGrade === 'B')  return top3.every(g => A_LEVEL_RANK[g] >= A_LEVEL_RANK['A']);
     if (studentGrade === 'C')  return top3.some(g => A_LEVEL_RANK[g] >= A_LEVEL_RANK['A']);
     if (studentGrade === 'D')  return top3.some(g => A_LEVEL_RANK[g] >= A_LEVEL_RANK['B']);
     return false;
   }
-
   if (system === 'IB') {
     const ibStr = course.grades?.ib;
     if (!ibStr) return false;
     const studentPts = parseInt(studentGrade, 10);
     if (isNaN(studentPts)) return false;
-    // Take the lower bound from strings like "38 points" or "38–40 points"
     const m = ibStr.match(/\d+/);
     if (!m) return false;
     return studentPts < parseInt(m[0], 10);
   }
-
   return false;
 }
 
-/* ─── Grade Input Section ──────────────────────────────────────
- * Builds and wires the predicted-grade UI for Mode A.
- * Called whenever the qualification system changes.
- * ─────────────────────────────────────────────────────────────── */
-
 function buildGradeInput(systemKey) {
   const section = $('gradeInputSection');
+  if (!section) return;
   state.predictedGrade = null;
+  if (!systemKey) { section.classList.add('hidden'); section.innerHTML = ''; return; }
 
-  if (!systemKey) {
-    section.classList.add('hidden');
-    section.innerHTML = '';
-    return;
-  }
-
-  const tooltipText = "We use this to flag courses where the typical offer is higher than your predicted grades. It’s a guide, not a hard filter.";
+  const tooltipText = "We use this to flag courses where the typical offer is higher than your predicted grades. It's a guide, not a hard filter.";
 
   if (systemKey === 'UK_A_Level') {
     section.innerHTML = `
@@ -301,18 +280,16 @@ function buildGradeInput(systemKey) {
         <span class="picker-hint-inline">Optional — flags courses likely out of grade range</span>
       </div>
       <div class="grade-input-body">
-        <div class="grade-select-wrap">
-          <label class="grade-option-label" for="gradeSelectALevel">Average predicted grade across your A-Level subjects</label>
-          <div class="select-wrap">
-            <select id="gradeSelectALevel" class="grade-select">
-              <option value="">Skip — don’t filter by grades</option>
-              <option value="A*">A* (predicting mostly A*s)</option>
-              <option value="A">A (predicting mostly As)</option>
-              <option value="B">B (predicting mostly Bs)</option>
-              <option value="C">C (predicting mostly Cs)</option>
-              <option value="D">D (predicting mostly Ds)</option>
-            </select>
-          </div>
+        <label class="grade-option-label" for="gradeSelectALevel">Average predicted grade across your A-Level subjects</label>
+        <div class="select-wrap">
+          <select id="gradeSelectALevel" class="grade-select">
+            <option value="">Skip — don't filter by grades</option>
+            <option value="A*">A* (predicting mostly A*s)</option>
+            <option value="A">A (predicting mostly As)</option>
+            <option value="B">B (predicting mostly Bs)</option>
+            <option value="C">C (predicting mostly Cs)</option>
+            <option value="D">D (predicting mostly Ds)</option>
+          </select>
         </div>
       </div>
     `;
@@ -321,7 +298,6 @@ function buildGradeInput(systemKey) {
       state.predictedGrade = e.target.value || null;
       renderCheckResults();
     });
-
   } else if (systemKey === 'IB') {
     section.innerHTML = `
       <div class="grade-input-header">
@@ -331,14 +307,7 @@ function buildGradeInput(systemKey) {
       </div>
       <div class="grade-input-body">
         <label class="grade-option-label" for="gradeInputIB">Predicted IB total points (24–45)</label>
-        <input
-          type="number"
-          id="gradeInputIB"
-          class="grade-number-input"
-          min="24" max="45"
-          placeholder="e.g. 38"
-          autocomplete="off"
-        />
+        <input type="number" id="gradeInputIB" class="grade-number-input" min="24" max="45" placeholder="e.g. 38" autocomplete="off"/>
       </div>
     `;
     section.classList.remove('hidden');
@@ -347,9 +316,7 @@ function buildGradeInput(systemKey) {
       state.predictedGrade = (!isNaN(v) && v >= 24 && v <= 45) ? String(v) : null;
       renderCheckResults();
     });
-
   } else {
-    // VWO, SG, DSE, AP — coming soon
     section.innerHTML = `
       <div class="grade-input-header">
         <span class="control-label">Your predicted grades</span>
@@ -605,11 +572,8 @@ function renderCheckResults() {
   pool.forEach(course => {
     const result = classify(course, state.selectedTags);
     if (tooFew && result.status === 'green') result.status = 'amber';
-    // Grade-aware grey: demote green/amber if grade threshold is likely above student's predicted
     if (state.predictedGrade && (result.status === 'green' || result.status === 'amber')) {
-      if (isGradeAboveStudent(course, state.checkSystem, state.predictedGrade)) {
-        result.status = 'grey';
-      }
+      if (isGradeAboveStudent(course, state.checkSystem, state.predictedGrade)) result.status = 'grey';
     }
     byStatus[result.status].push({ course, result });
   });
@@ -624,9 +588,7 @@ function renderCheckResults() {
 
   renderSummaryBar(state.selectedSubjects.length, counts, total);
 
-  const greyBadge = counts.grey
-    ? `<span class="badge badge--grey">◯&thinsp;${counts.grey}</span>`
-    : '';
+  const greyBadge = counts.grey ? `<span class="badge badge--grey">◯&thinsp;${counts.grey}</span>` : '';
   $('resultSummaryBadges').innerHTML = `
     <span class="badge badge--success">✓&thinsp;${counts.green}</span>
     <span class="badge badge--warning">◑&thinsp;${counts.amber}</span>
@@ -640,19 +602,19 @@ function renderCheckResults() {
   let cardIndex = 0;
 
   if (byStatus.green.length) {
-    container.appendChild(buildGroup('green', '✓ Strong matches', byStatus.green, cardIndex));
+    container.appendChild(buildGroup('green', 'Strong matches', byStatus.green, cardIndex));
     cardIndex += byStatus.green.length;
   }
   if (byStatus.amber.length) {
-    container.appendChild(buildGroup('amber', '◑ Possible with right grades', byStatus.amber, cardIndex));
+    container.appendChild(buildGroup('amber', 'Possible', byStatus.amber, cardIndex));
     cardIndex += byStatus.amber.length;
   }
   if (byStatus.grey.length) {
-    container.appendChild(buildGroup('grey', '◯ Subject match, but grade threshold is high', byStatus.grey, cardIndex, true));
+    container.appendChild(buildGroup('grey', 'Subject match, but grade threshold is high', byStatus.grey, cardIndex, true));
     cardIndex += byStatus.grey.length;
   }
   if (byStatus.red.length) {
-    container.appendChild(buildGroup('red', '✗ Out of reach', byStatus.red, cardIndex, true));
+    container.appendChild(buildGroup('red', 'Out of reach', byStatus.red, cardIndex, true));
   }
 }
 
@@ -661,9 +623,14 @@ function buildGroup(status, headerText, items, startIndex, collapsed = false) {
   section.id        = `results-group-${status}`;
   section.className = 'results-group';
 
+  const groupIcons = {
+    green: `<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M7 10l2 2 4-4"/></svg>`,
+    amber: `<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3a7 7 0 0 1 0 14V3z"/><circle cx="10" cy="10" r="7"/></svg>`,
+    red:   `<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M8 8l4 4M12 8l-4 4"/></svg>`,
+  };
   const header = document.createElement('h2');
   header.className   = `results-group__header results-group__header--${status}`;
-  header.textContent = `${headerText} (${items.length})`;
+  header.innerHTML   = `${groupIcons[status]} ${headerText} <span style="font-weight:400;opacity:.65">(${items.length})</span>`;
   section.appendChild(header);
 
   const cardsDiv = document.createElement('div');
@@ -680,19 +647,16 @@ function buildGroup(status, headerText, items, startIndex, collapsed = false) {
     const toggle = document.createElement('button');
     toggle.type      = 'button';
     toggle.className = 'results-group__toggle';
+    const chevSvg = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg>`;
     toggle.setAttribute('aria-expanded', 'false');
-    const toggleLabel = status === 'grey'
-      ? `Show ${items.length} courses with high grade threshold`
-      : `Show ${items.length} out-of-reach courses`;
-    toggle.className  = `results-group__toggle results-group__toggle--${status}`;
-    toggle.textContent = toggleLabel;
+    toggle.innerHTML = `${chevSvg} Show ${items.length} out-of-reach courses`;
     toggle.addEventListener('click', () => {
       const nowOpen = cardsDiv.hidden;
       cardsDiv.hidden = !nowOpen;
       toggle.setAttribute('aria-expanded', String(nowOpen));
-      toggle.textContent = nowOpen
-        ? (status === 'grey' ? 'Hide high-threshold courses' : 'Hide out-of-reach courses')
-        : toggleLabel;
+      toggle.innerHTML = nowOpen
+        ? `${chevSvg} Hide out-of-reach courses`
+        : `${chevSvg} Show ${items.length} out-of-reach courses`;
     });
     section.appendChild(toggle);
     section.appendChild(cardsDiv);
@@ -750,49 +714,62 @@ function buildCheckCard(course, result) {
   const card = document.createElement('div');
   card.className = `course-card ${cfg.cardCls}`;
   card.setAttribute('role', 'listitem');
+  card.dataset.category = course.category ?? '';
+
+  // Status label icons (SVG, Notion-style)
+  const statusIcons = {
+    green: `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M7 10l2 2 4-4"/></svg>`,
+    amber: `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3a7 7 0 0 1 0 14V3z"/><circle cx="10" cy="10" r="7"/></svg>`,
+    red:   `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M8 8l4 4M12 8l-4 4"/></svg>`,
+  };
+  const graduationIcon = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l7-4 7 4-7 4-7-4z"/><path d="M7 10v3.5c0 1.5 1.3 2 3 2s3-.5 3-2V10"/><path d="M17 8v4"/></svg>`;
+  const chevronIcon    = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg>`;
+  const externalIcon   = `<svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4h5v5M15 4l-7 7M9 5H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-4"/></svg>`;
 
   let uniInfoHtml = '';
   if (profile) {
-    const cityLine  = profile.city ? `<span class="card-uni-city">${esc(profile.city)}</span>` : '';
-    const tagLine   = profile.tagline ? `<p class="card-uni-tagline">${esc(profile.tagline)}</p>` : '';
-    const noteLine  = profile.internationalNote ? `<p class="card-uni-note">${esc(profile.internationalNote)}</p>` : '';
-    const webLink   = profile.websiteUrl
-      ? `<a class="card-uni-link" href="${esc(profile.websiteUrl)}" target="_blank" rel="noopener noreferrer">Visit university website ↗</a>`
+    const tagLine  = profile.tagline         ? `<p class="card-uni-tagline">${esc(profile.tagline)}</p>` : '';
+    const noteLine = profile.internationalNote? `<p class="card-uni-note">${esc(profile.internationalNote)}</p>` : '';
+    const webLink  = profile.websiteUrl
+      ? `<a class="card-uni-link" href="${esc(profile.websiteUrl)}" target="_blank" rel="noopener noreferrer">${externalIcon} Visit website</a>`
       : '';
+    const cityPart = profile.city ? ` · ${esc(profile.city)}` : '';
     uniInfoHtml = `
       <details class="card-uni-info">
-        <summary>About this university${cityLine ? ` · ${profile.city}` : ''}</summary>
-        ${tagLine}${noteLine}${webLink}
+        <summary>About this university${cityPart} ${chevronIcon}</summary>
+        <div class="card-uni-info__body">${tagLine}${noteLine}${webLink}</div>
       </details>`;
   } else if (course.universityContext?.notes) {
     uniInfoHtml = `
       <details class="card-uni-info">
-        <summary>About this university</summary>
-        <p class="card-uni-info__notes">${esc(course.universityContext.notes)}</p>
+        <summary>About this university ${chevronIcon}</summary>
+        <div class="card-uni-info__body"><p class="card-uni-info__notes">${esc(course.universityContext.notes)}</p></div>
       </details>`;
   }
 
   card.innerHTML = `
+    <div class="card-status card-status--${status}">${statusIcons[status]} ${cfg.label}</div>
     <div class="card-header">
       <div class="card-title-group">
         <span class="card-flag" aria-hidden="true">${flag}</span>
         <div class="card-titles">
           <div class="card-name">${esc(course.name)}</div>
-          <div class="card-uni">${esc(course.university)}</div>
+          <div class="card-uni">${graduationIcon} ${esc(course.university)}</div>
           ${tierLabel ? `<div class="card-tier">${esc(tierLabel)}</div>` : ''}
         </div>
       </div>
-      <span class="badge ${cfg.badgeCls}">${cfg.icon}&thinsp;${cfg.label}</span>
     </div>
     <div class="card-meta">
-      <span class="badge badge--neutral">${esc(course.degreeLevel)}</span>
-      <span class="badge badge--neutral">${flag}&thinsp;${esc(country)}</span>
-      <span class="badge badge--neutral">${esc(catLabel)}</span>
+      <span>${flag}&thinsp;${esc(country)}</span>
+      <span class="card-meta-sep">·</span>
+      <span>${esc(course.degreeLevel)}</span>
+      <span class="card-meta-sep">·</span>
+      <span class="card-cat-badge">${esc(catLabel)}</span>
     </div>
     ${gradeStr ? `<div class="card-grades">${esc(gradeStr)}</div>` : ''}
     ${tests.length ? `
       <div class="card-admission-tests">
-        ${tests.map(t => `<span class="badge badge--warning">${esc(t)} required</span>`).join('')}
+        ${tests.map(t => `<span class="admission-test-tag">${esc(t)} required</span>`).join('')}
       </div>` : ''}
     ${footerHtml}
     ${uniInfoHtml}
@@ -944,6 +921,19 @@ function buildRequirementsText(course) {
  * SUBJECT PLANNER (Mode C)
  * ═══════════════════════════════════════════════════════════════ */
 
+const CATEGORY_ICONS = {
+  medicine:     `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3c-3.9 0-7 3.1-7 7s3.1 7 7 7 7-3.1 7-7-3.1-7-7-7z"/><path d="M10 7v6M7 10h6"/></svg>`,
+  cs:           `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7l-3 3 3 3M14 7l3 3-3 3M11 5l-2 10"/></svg>`,
+  engineering:  `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5a2 2 0 0 0-2.8 0L5 12.2V15h2.8l7.2-7.2A2 2 0 0 0 15 5z"/><path d="M11.5 6.5l2 2"/></svg>`,
+  economics:    `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14l4-4 3 3 5-6"/><path d="M14 7h3v3"/></svg>`,
+  law:          `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v14M5 6l5-3 5 3"/><path d="M4 10l2 4H2l2-4zM14 10l2 4h-4l2-4z"/></svg>`,
+  business:     `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="16" height="10" rx="1.5"/><path d="M7 7V6a3 3 0 0 1 6 0v1"/><path d="M2 11h16"/></svg>`,
+  sciences:     `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v7L4.5 15.5A1 1 0 0 0 5.4 17h9.2a1 1 0 0 0 .9-1.5L12 10V3"/><path d="M7 3h6"/></svg>`,
+  mathematics:  `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12M10 4v12M5 5l10 10M15 5L5 15"/></svg>`,
+  psychology:   `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3a5 5 0 0 1 4.5 7.2L17 17H3l2.5-6.8A5 5 0 0 1 10 3z"/><path d="M8 13h4"/></svg>`,
+  architecture: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h14M5 17V9l5-5 5 5v8"/><path d="M9 17v-4h2v4"/></svg>`,
+};
+
 function buildPlanCategoryGrid() {
   const grid = $('planCategoryGrid');
   CATEGORIES.forEach(cat => {
@@ -952,7 +942,7 @@ function buildPlanCategoryGrid() {
     btn.className = 'plan-cat-card';
     btn.dataset.category = cat.id;
     btn.innerHTML = `
-      <span class="plan-cat-card__icon" aria-hidden="true">${cat.icon}</span>
+      <span class="plan-cat-card__icon" aria-hidden="true">${CATEGORY_ICONS[cat.id] ?? cat.icon}</span>
       <span class="plan-cat-card__label">${esc(cat.label)}</span>
     `;
     btn.addEventListener('click', () => {
@@ -1137,7 +1127,7 @@ function init() {
     state.predictedGrade   = null;
     $('checkResultsSection').classList.add('hidden');
     const emptyEl = $('checkEmptyState');
-    if (emptyEl) delete emptyEl.dataset.builtFor;  // force rebuild for new system
+    if (emptyEl) delete emptyEl.dataset.builtFor;
     buildSubjectPicker(state.checkSystem);
     // Mirror to reverse panel so both start on the same system
     $('reverseSystemSelect').value = state.checkSystem;
