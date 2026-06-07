@@ -171,6 +171,9 @@ const MATHS_IMPLY = {
 // Subjects the user has explicitly deselected despite auto-imply.
 // Cleared when the qualification system changes.
 const _suppressedAutoImply = new Set();
+// True after the user clicks "Dismiss" on the maths warning banner.
+// Cleared when system changes or user re-selects standard maths.
+let _dismissedMathsWarning = false;
 
 /* ═══════════════════════════════════════════════════════════════
  * TAG DERIVATION
@@ -454,6 +457,8 @@ function buildSubjectPicker(systemKey) {
 
   // Reset auto-imply suppression and category state when system changes
   _suppressedAutoImply.clear();
+  _dismissedMathsWarning = false;
+  hideMathsWarningBanner();
   state.selectedCategories.clear();
   $$('#categoryPicker .category-chip').forEach(b => b.classList.remove('active'));
   $('categoryPickerSection').classList.add('hidden');
@@ -494,6 +499,41 @@ function buildCategoryPicker() {
   picker.appendChild(frag);
 }
 
+function showMathsWarningBanner(imply) {
+  if ($('mathsWarningBanner')) return;
+  const banner = document.createElement('div');
+  banner.id = 'mathsWarningBanner';
+  banner.className = 'maths-warning-banner';
+  banner.innerHTML = `
+    <span class="maths-warning-banner__msg">Mathematics is required alongside Further Mathematics</span>
+    <div class="maths-warning-banner__actions">
+      <button class="maths-warning-banner__add" type="button">Add Mathematics (recommended)</button>
+      <button class="maths-warning-banner__dismiss" type="button">Dismiss (not recommended for most courses)</button>
+    </div>
+  `;
+  banner.querySelector('.maths-warning-banner__add').addEventListener('click', () => {
+    _suppressedAutoImply.delete(imply.standard);
+    _dismissedMathsWarning = false;
+    const stdInput = Array.from($$('#subjectPicker input')).find(i => i.value === imply.standard);
+    if (stdInput) stdInput.checked = true;
+    hideMathsWarningBanner();
+    onSubjectToggle();
+    showToast('Mathematics added — this keeps more course options open');
+  });
+  banner.querySelector('.maths-warning-banner__dismiss').addEventListener('click', () => {
+    _dismissedMathsWarning = true;
+    hideMathsWarningBanner();
+    showToast('Mathematics suppressed — some courses may be out of reach');
+  });
+  const pickerSection = $('subjectPickerSection');
+  pickerSection.parentNode.insertBefore(banner, pickerSection);
+}
+
+function hideMathsWarningBanner() {
+  const banner = $('mathsWarningBanner');
+  if (banner) banner.remove();
+}
+
 function onSubjectToggle(e = null) {
   const changedValue = e?.target?.value ?? null;
   const wasChecked   = e?.target?.checked ?? null;
@@ -506,8 +546,11 @@ function onSubjectToggle(e = null) {
     const advInput  = allInputs.find(i => i.value === imply.advanced);
     if (advInput?.checked) _suppressedAutoImply.add(imply.standard);
   }
-  // Clear suppression when the user explicitly re-selects a subject.
-  if (changedValue && wasChecked === true) _suppressedAutoImply.delete(changedValue);
+  // Clear suppression (and any dismissed state) when the user explicitly re-selects a subject.
+  if (changedValue && wasChecked === true) {
+    _suppressedAutoImply.delete(changedValue);
+    if (imply && changedValue === imply.standard) _dismissedMathsWarning = false;
+  }
 
   // Read current checkbox state from DOM.
   state.selectedSubjects = Array.from($$('#subjectPicker input:checked')).map(c => c.value);
@@ -531,17 +574,18 @@ function onSubjectToggle(e = null) {
 
   state.selectedTags = deriveTagsFromSubjects(state.selectedSubjects, state.checkSystem);
 
-  // Show warning if user has suppressed the standard maths while advanced is active.
-  const warnSubject = (imply && _suppressedAutoImply.has(imply.standard) &&
-    state.selectedSubjects.includes(imply.advanced))
-    ? imply.standard : null;
-
   $$('#subjectPicker .subject-chip').forEach(chip => {
     const input = chip.querySelector('input');
     chip.classList.toggle('selected', input.checked);
     chip.classList.toggle('chip--auto-added', autoAdded.has(input.value));
-    chip.classList.toggle('chip--imply-warning', input.value === warnSubject);
   });
+
+  const shouldWarn = imply
+    && _suppressedAutoImply.has(imply.standard)
+    && state.selectedSubjects.includes(imply.advanced)
+    && !_dismissedMathsWarning;
+  if (shouldWarn) showMathsWarningBanner(imply);
+  else hideMathsWarningBanner();
 
   syncSubjectCount();
   $('categoryPickerSection').classList.toggle('hidden', state.selectedSubjects.length === 0);
