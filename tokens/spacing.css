@@ -1,0 +1,40 @@
+/* ============================================================
+   Altiora — Spacing, radii, layout
+   Base unit: 4px. Calm, generous rhythm.
+   ============================================================ */
+
+:root {
+  /* ---- Spacing scale (4px base) ---------------------------- */
+  --space-0:   0;
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-6:   24px;
+  --space-8:   32px;
+  --space-12:  48px;
+  --space-16:  64px;
+  --space-24:  96px;
+
+  /* ---- Radii ----------------------------------------------- */
+  --radius-xs:   4px;
+  --radius-sm:   6px;
+  --radius-md:   10px;   /* default card / input */
+  --radius-lg:   14px;
+  --radius-xl:   20px;
+  --radius-pill: 999px;
+
+  /* ---- Layout ---------------------------------------------- */
+  --content-max:   1200px;
+  --content-prose: 680px;
+  --grid-columns:  12;
+  --grid-gutter:   24px;
+
+  /* ---- Card padding ---------------------------------------- */
+  --card-pad-desktop: 24px;
+  --card-pad-mobile:  16px;
+
+  /* ---- Border widths --------------------------------------- */
+  --border-hairline: 1px;
+  --border-accent:   3px;  /* result-card left accent */
+}

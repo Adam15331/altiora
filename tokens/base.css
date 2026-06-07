@@ -1,0 +1,34 @@
+/* ============================================================
+   Altiora — Base element defaults
+   Minimal, opinionated reset so the system feels consistent
+   wherever it's dropped in. Tokens come from the other files.
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  font-weight: var(--weight-regular);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--ink-100);
+  color: var(--ink-800);
+}
+
+a { color: var(--color-text-accent); text-underline-offset: 2px; }
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--ring-focus);
+  border-radius: var(--radius-xs);
+}
