@@ -156,6 +156,85 @@ function deriveTagsFromSubjects(subjects, systemKey) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+ * EMPTY STATE — MODE A SUGGESTIONS
+ * ═══════════════════════════════════════════════════════════════ */
+
+const EMPTY_SUGGESTIONS = {
+  UK_A_Level: [
+    { label: 'Maths + Chemistry + Biology',        subjects: ['Mathematics','Chemistry','Biology'] },
+    { label: 'Maths + Further Maths + Physics',    subjects: ['Mathematics','Further Mathematics','Physics'] },
+    { label: 'History + Economics + Politics',     subjects: ['History','Economics','Politics'] },
+  ],
+  IB: [
+    { label: 'Maths AA HL + Chemistry HL + Biology HL',  subjects: ['Mathematics: Analysis and Approaches HL','Chemistry HL','Biology HL'] },
+    { label: 'Maths AA HL + Physics HL + CS HL',         subjects: ['Mathematics: Analysis and Approaches HL','Physics HL','Computer Science HL'] },
+    { label: 'History HL + Economics HL + Politics HL',  subjects: ['History HL','Economics HL','Global Politics HL'] },
+  ],
+  US_AP: [
+    { label: 'Calc BC + Chemistry + Biology',            subjects: ['AP Calculus BC','AP Chemistry','AP Biology'] },
+    { label: 'Calc BC + Physics C + CS A',               subjects: ['AP Calculus BC','AP Physics C: Mechanics','AP Computer Science A'] },
+    { label: 'US History + Macroeconomics + English Lit',subjects: ['AP US History','AP Macroeconomics','AP English Literature and Composition'] },
+  ],
+  NL_VWO: [
+    { label: 'Wiskunde B + Scheikunde + Biologie',           subjects: ['Wiskunde B','Scheikunde','Biologie'] },
+    { label: 'Wiskunde B + Natuurkunde + Informatica',       subjects: ['Wiskunde B','Natuurkunde','Informatica'] },
+    { label: 'Economie + Geschiedenis + Maatschappijwetenschappen', subjects: ['Economie','Geschiedenis','Maatschappijwetenschappen'] },
+  ],
+  SG_A_Level: [
+    { label: 'H2 Maths + H2 Chemistry + H2 Biology',        subjects: ['H2 Mathematics','H2 Chemistry','H2 Biology'] },
+    { label: 'H2 Maths + H2 Physics + H2 Further Maths',    subjects: ['H2 Mathematics','H2 Physics','H2 Further Mathematics'] },
+    { label: 'H2 Economics + H2 History + H2 Geography',    subjects: ['H2 Economics','H2 History','H2 Geography'] },
+  ],
+  HK_DSE: [
+    { label: 'Maths + Chemistry + Biology',                  subjects: ['Mathematics Compulsory Part','Chemistry','Biology'] },
+    { label: 'Maths M2 + Physics + Chemistry',               subjects: ['Mathematics Extended Part Module 2 (M2)','Physics','Chemistry'] },
+    { label: 'Economics + History + Geography',              subjects: ['Economics','History','Geography'] },
+  ],
+};
+
+let _subjectDebounce = null;
+
+function renderCheckEmptyState() {
+  const el = $('checkEmptyState');
+  if (!el) return;
+
+  const show = !!state.checkSystem && state.selectedSubjects.length === 0;
+  el.classList.toggle('hidden', !show);
+  if (!show) return;
+
+  // Rebuild only when system changes
+  if (el.dataset.builtFor === state.checkSystem) return;
+  el.dataset.builtFor = state.checkSystem;
+
+  const suggestions = EMPTY_SUGGESTIONS[state.checkSystem] ?? EMPTY_SUGGESTIONS.UK_A_Level;
+  const sysLabel = qualificationMappings[state.checkSystem]?.systemLabel ?? state.checkSystem;
+
+  el.innerHTML = `
+    <div class="check-empty-state__inner">
+      <div class="check-empty-state__icon" aria-hidden="true">🎯</div>
+      <p class="check-empty-state__heading">Select your subjects above to see matching courses</p>
+      <p class="check-empty-state__sub">Not sure where to start? Try one of these ${esc(sysLabel)} combinations:</p>
+      <div class="check-empty-state__suggestions">
+        ${suggestions.map(s =>
+          `<button type="button" class="suggestion-btn" data-subjects="${esc(JSON.stringify(s.subjects))}">Try: ${esc(s.label)}</button>`
+        ).join('')}
+      </div>
+    </div>
+  `;
+
+  el.querySelectorAll('.suggestion-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targets = JSON.parse(btn.dataset.subjects);
+      $$('#subjectPicker input:checked').forEach(cb => { cb.checked = false; });
+      $$('#subjectPicker input').forEach(cb => {
+        if (targets.includes(cb.value)) cb.checked = true;
+      });
+      onSubjectToggle();
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
  * GRADE-AWARE HELPERS
  * ═══════════════════════════════════════════════════════════════ */
 
@@ -374,6 +453,7 @@ function buildSubjectPicker(systemKey) {
 
   buildGradeInput(systemKey);
   syncSubjectCount();
+  renderCheckEmptyState();
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -415,7 +495,9 @@ function onSubjectToggle() {
   );
   syncSubjectCount();
   $('categoryPickerSection').classList.toggle('hidden', state.selectedSubjects.length === 0);
-  renderCheckResults();
+  renderCheckEmptyState();
+  clearTimeout(_subjectDebounce);
+  _subjectDebounce = setTimeout(renderCheckResults, 100);
 }
 
 function syncSubjectCount() {
@@ -1052,7 +1134,10 @@ function init() {
     state.checkSystem      = e.target.value;
     state.selectedSubjects = [];
     state.selectedTags     = new Set();
+    state.predictedGrade   = null;
     $('checkResultsSection').classList.add('hidden');
+    const emptyEl = $('checkEmptyState');
+    if (emptyEl) delete emptyEl.dataset.builtFor;  // force rebuild for new system
     buildSubjectPicker(state.checkSystem);
     // Mirror to reverse panel so both start on the same system
     $('reverseSystemSelect').value = state.checkSystem;
