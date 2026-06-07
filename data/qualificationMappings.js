@@ -19,7 +19,8 @@
  * Sociology              – sociology
  * Philosophy             – philosophy / theory of knowledge
  * Law                    – legal studies
- * Art                    – visual art / fine art
+ * Art                    – visual art / fine art (general)
+ * Art_Design             – architecture-specific art/design portfolio subjects
  * Design_Technology      – design, engineering graphics, product design
  * Music                  – music
  * Drama                  – drama / theatre studies
@@ -62,8 +63,8 @@ const qualificationMappings = {
       "Sociology":                      "Sociology",
       "Philosophy":                     "Philosophy",
       "Law":                            "Law",
-      "Art and Design":                 "Art",
-      "Fine Art":                       "Art",
+      "Art and Design":                 "Art_Design",
+      "Fine Art":                       "Art_Design",
       "Design and Technology":          "Design_Technology",
       "Product Design":                 "Design_Technology",
       "Music":                          "Music",
@@ -151,9 +152,10 @@ const qualificationMappings = {
       "Design Technology SL": "Design_Technology",
 
       // Group 5 – Mathematics
+      // Both HL courses (AA HL and AI HL) satisfy advanced maths requirements at most universities.
       "Mathematics: Analysis and Approaches HL":           "Mathematics_Advanced",
       "Mathematics: Analysis and Approaches SL":           "Mathematics_Standard",
-      "Mathematics: Applications and Interpretation HL":   "Mathematics_Standard",
+      "Mathematics: Applications and Interpretation HL":   "Mathematics_Advanced",
       "Mathematics: Applications and Interpretation SL":   "Mathematics_Standard",
       // Legacy (pre-2019)
       "Mathematics HL":                                    "Mathematics_Advanced",
@@ -162,8 +164,8 @@ const qualificationMappings = {
       "Further Mathematics HL":                            "Mathematics_Advanced",
 
       // Group 6 – The Arts
-      "Visual Arts HL":  "Art",
-      "Visual Arts SL":  "Art",
+      "Visual Arts HL":  "Art_Design",
+      "Visual Arts SL":  "Art_Design",
       "Music HL":        "Music",
       "Music SL":        "Music",
       "Theatre HL":      "Drama",
@@ -220,11 +222,11 @@ const qualificationMappings = {
 
       // Arts
       "AP Art History":              "History",
-      "AP Studio Art":               "Art",
+      "AP Studio Art":               "Art_Design",
       "AP Music Theory":             "Music",
 
       // Other
-      "AP Art and Design":           "Art",
+      "AP Art and Design":           "Art_Design",
       "AP Seminar":                  "Philosophy",
       "AP Research":                 "Philosophy",
     },
@@ -280,7 +282,7 @@ const qualificationMappings = {
       "H2 Psychology":               "Psychology",
       "H2 Management of Business":   "Business",
       "H2 Business Studies":         "Business",
-      "H2 Art":                      "Art",
+      "H2 Art":                      "Art_Design",
       "H2 Music":                    "Music",
       "H2 Drama":                    "Drama",
     },
@@ -326,7 +328,7 @@ const qualificationMappings = {
       "Japanese":             "Language_Mandarin",  // closest available tag
 
       // Elective – Arts
-      "Visual Arts":          "Art",
+      "Visual Arts":          "Art_Design",
       "Music":                "Music",
       "Design and Applied Technology": "Design_Technology",
       "Physical Education":   "Physical_Education",
