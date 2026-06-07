@@ -723,6 +723,49 @@ main     { flex: 1; padding: var(--pad); }
 .course-card[data-category="psychology"]  .admission-test-tag { background: var(--color-cat-psychology-bg);  color: var(--color-cat-psychology); }
 .course-card[data-category="architecture"].admission-test-tag { background: var(--color-cat-architecture-bg);color: var(--color-cat-architecture); }
 
+/* AP warning tag (amber pill, same shape as admission-test-tag) */
+.admission-test-tag--ap {
+  background: var(--color-match-possible-bg);
+  color: var(--color-match-possible);
+  font-weight: 600;
+}
+
+/* AP holistic note — small muted text below tests */
+.card-ap-note {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-2);
+  font-style: italic;
+}
+
+/* IB HL requirement chips */
+.card-ib-hl {
+  display: flex; flex-wrap: wrap; gap: 5px;
+  margin-top: var(--space-2);
+}
+.card-ib-chip {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+}
+.card-ib-chip--note {
+  background: var(--color-match-grade-bg);
+  border-color: transparent;
+  font-weight: 600;
+}
+/* IB HL warning — shown when required HL subjects may not be covered */
+.card-ib-hl-warn {
+  font-size: var(--text-xs);
+  color: var(--color-match-possible);
+  margin-top: var(--space-1);
+  font-weight: 500;
+}
+
 /* Category badge on cards */
 .card-cat-badge {
   display: inline-block;
@@ -1096,6 +1139,16 @@ footer p {
   font-size: var(--text-xs);
   color: var(--color-text-tertiary);
   white-space: nowrap;
+}
+.plan-subject-chip__hl {
+  display: inline-block;
+  font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .05em;
+  color: var(--color-cat-cs);
+  background: var(--color-cat-cs-bg);
+  padding: 0 4px; border-radius: 3px;
+  vertical-align: super;
+  margin-left: 4px;
 }
 
 .plan-combo-list {

@@ -89,6 +89,21 @@ const SYSTEM_GRADE_KEY = {
 
 const CATEGORY_LABEL_MAP = Object.fromEntries(CATEGORIES.map(c => [c.id, c.label]));
 
+// Short display labels for universal tags used in IB HL chips
+const HL_TAG_LABELS = {
+  'Mathematics_Advanced': 'Maths HL',
+  'Mathematics_Standard': 'Maths',
+  'Chemistry':            'Chemistry',
+  'Biology':              'Biology',
+  'Physics':              'Physics',
+  'Computer_Science':     'Computer Science',
+  'Economics':            'Economics',
+  'English':              'English',
+};
+function hlTagLabel(tag) {
+  return HL_TAG_LABELS[tag] ?? tag.replace(/_/g, ' ');
+}
+
 /* ─── DOM shortcuts ──────────────────────────────────────────────── */
 const $  = id  => document.getElementById(id);
 const $$ = sel => document.querySelectorAll(sel);
@@ -636,6 +651,17 @@ function renderCheckResults() {
     if (state.predictedGrade && (result.status === 'green' || result.status === 'amber')) {
       if (isGradeAboveStudent(course, state.checkSystem, state.predictedGrade)) result.status = 'grey';
     }
+    // IB HL eligibility: if required HL subjects aren't covered, downgrade GREEN→AMBER
+    if (state.checkSystem === 'IB' && (result.status === 'green' || result.status === 'amber')) {
+      const ibHL = course.grades?.ibHL ?? [];
+      if (ibHL.length) {
+        const missingHL = ibHL.filter(tag => !state.selectedTags.has(tag));
+        if (missingHL.length) {
+          if (result.status === 'green') result.status = 'amber';
+          result.ibHLWarning = missingHL;
+        }
+      }
+    }
     byStatus[result.status].push({ course, result });
   });
 
@@ -770,6 +796,41 @@ function buildCheckCard(course, result) {
       </p>`;
   }
 
+  // ── AP context UI ────────────────────────────────────────────
+  let apWarningHtml = '';
+  let apNoteHtml    = '';
+  if (sys === 'US_AP' && course.country === 'US' && course.apContext) {
+    const ctx     = course.apContext;
+    const apCount = state.selectedSubjects.length;
+    apNoteHtml = `<p class="card-ap-note">${esc(ctx.note)}</p>`;
+    if (apCount < ctx.minCompetitiveAPs) {
+      apWarningHtml = `
+      <div class="card-admission-tests">
+        <span class="admission-test-tag admission-test-tag--ap">Typically ${ctx.minCompetitiveAPs}+ APs expected · ${apCount} selected</span>
+      </div>`;
+    }
+  }
+
+  // ── IB HL chips ───────────────────────────────────────────────
+  let ibHlHtml = '';
+  if (sys === 'IB') {
+    const ibHL     = course.grades?.ibHL     ?? [];
+    const ibHLNote = course.grades?.ibHLNote ?? null;
+    if (ibHL.length || ibHLNote) {
+      const hlChip   = ibHL.length
+        ? `<span class="card-ib-chip">HL: ${ibHL.map(t => esc(hlTagLabel(t))).join(' · ')}</span>`
+        : '';
+      const noteChip = ibHLNote
+        ? `<span class="card-ib-chip card-ib-chip--note">${esc(ibHLNote)}</span>`
+        : '';
+      ibHlHtml = `<div class="card-ib-hl">${hlChip}${noteChip}</div>`;
+    }
+    if (result.ibHLWarning?.length) {
+      const subjects = result.ibHLWarning.map(t => esc(hlTagLabel(t))).join(', ');
+      ibHlHtml += `<p class="card-ib-hl-warn">Check HL requirements — ${subjects} may need to be at HL</p>`;
+    }
+  }
+
   const profile = (typeof universityProfiles !== 'undefined') ? (universityProfiles[course.university] ?? null) : null;
 
   const card = document.createElement('div');
@@ -828,10 +889,13 @@ function buildCheckCard(course, result) {
       <span class="card-cat-badge">${esc(catLabel)}</span>
     </div>
     ${gradeStr ? `<div class="card-grades">${esc(gradeStr)}</div>` : ''}
+    ${ibHlHtml}
+    ${apWarningHtml}
     ${tests.length ? `
       <div class="card-admission-tests">
         ${tests.map(t => `<span class="admission-test-tag">${esc(t)} required</span>`).join('')}
       </div>` : ''}
+    ${apNoteHtml}
     ${footerHtml}
     ${uniInfoHtml}
   `;
@@ -1047,16 +1111,29 @@ function renderPlanResults() {
   );
   const sortedTags = Object.entries(tagFreq).sort((a, b) => b[1] - a[1]);
 
+  // Collect ibHL tags commonly required for this category (for IB HL badges)
+  const ibHLTagsForCategory = new Set();
+  if (state.planSystem === 'IB') {
+    catCourses.forEach(c => {
+      if (c.country !== 'US') (c.grades?.ibHL ?? []).forEach(t => ibHLTagsForCategory.add(t));
+    });
+  }
+
   if (sortedTags.length === 0) {
     $('planEssentials').innerHTML = `
       <h3 class="plan-section-head">Essential subjects</h3>
       <p class="plan-section-sub">No specific subject requirements — ${esc(catLabel)} courses are broadly open.</p>`;
   } else {
-    const chipsHtml = sortedTags.map(([tag, count]) => `
+    const chipsHtml = sortedTags.map(([tag, count]) => {
+      const hlBadge = ibHLTagsForCategory.has(tag)
+        ? `<span class="plan-subject-chip__hl">HL</span>`
+        : '';
+      return `
       <div class="plan-subject-chip">
-        <span class="plan-subject-chip__name">${esc(tagToLocal(tag, state.planSystem))}</span>
+        <span class="plan-subject-chip__name">${esc(tagToLocal(tag, state.planSystem))}${hlBadge}</span>
         <span class="plan-subject-chip__count">unlocks ${count} course${count !== 1 ? 's' : ''}</span>
-      </div>`).join('');
+      </div>`;
+    }).join('');
     $('planEssentials').innerHTML = `
       <h3 class="plan-section-head">Essential subjects</h3>
       <p class="plan-section-sub">Subjects that appear as required across ${esc(catLabel)} courses in our database.</p>
