@@ -28,6 +28,7 @@ const state = {
   countryFilter:      'All',
   selectedCategories: new Set(),
   searchQuery:        '',
+  predictedGrade:     null,   // null = not entered; A-Level: 'A*'|'A'|'B'|'C'|'D'; IB: number string
 };
 
 /* ─── Constants ─────────────────────────────────────────────────── */
@@ -61,9 +62,10 @@ const CATEGORIES = [
 const STATUS = {
   green: { label:'Strong match', badgeCls:'badge--success', icon:'✓', cardCls:'course-card--green' },
   amber: { label:'Possible',     badgeCls:'badge--warning', icon:'◑', cardCls:'course-card--amber' },
-  red:   { label:'Out of reach', badgeCls:'badge--error',   icon:'✗', cardCls:'course-card--red'   },
+  red:   { label:'Out of reach',           badgeCls:'badge--error',   icon:'✗', cardCls:'course-card--red'   },
+  grey:  { label:'Grade threshold high',   badgeCls:'badge--grey',    icon:'◯', cardCls:'course-card--grey'  },
 };
-const STATUS_SORT = { green:0, amber:1, red:2 };
+const STATUS_SORT = { green:0, amber:1, grey:2, red:3 };
 
 const TIER_LABELS = {
   'world-top-10':     'World Top 10',
@@ -154,6 +156,132 @@ function deriveTagsFromSubjects(subjects, systemKey) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+ * GRADE-AWARE HELPERS
+ * ═══════════════════════════════════════════════════════════════ */
+
+const A_LEVEL_RANK = { 'A*': 5, 'A': 4, 'B': 3, 'C': 2, 'D': 1, 'E': 0 };
+
+function parseALevelGrades(str) {
+  // "A*AA" → ['A*', 'A', 'A']
+  return (str ?? '').match(/A\*|[A-E]/g) ?? [];
+}
+
+// Returns true if the course's typical grade offer is likely above the student's predicted grade.
+function isGradeAboveStudent(course, system, studentGrade) {
+  if (!studentGrade) return false;
+
+  if (system === 'UK_A_Level') {
+    const gradeStr = course.grades?.aLevels;
+    if (!gradeStr) return false;
+    const grades = parseALevelGrades(gradeStr);
+    const top3 = grades.slice(0, 3);
+    if (studentGrade === 'A*') return false;  // A* students: nothing is out of grade range
+    if (studentGrade === 'A')  return top3.some(g => g === 'A*');
+    if (studentGrade === 'B')  return top3.every(g => A_LEVEL_RANK[g] >= A_LEVEL_RANK['A']);
+    if (studentGrade === 'C')  return top3.some(g => A_LEVEL_RANK[g] >= A_LEVEL_RANK['A']);
+    if (studentGrade === 'D')  return top3.some(g => A_LEVEL_RANK[g] >= A_LEVEL_RANK['B']);
+    return false;
+  }
+
+  if (system === 'IB') {
+    const ibStr = course.grades?.ib;
+    if (!ibStr) return false;
+    const studentPts = parseInt(studentGrade, 10);
+    if (isNaN(studentPts)) return false;
+    // Take the lower bound from strings like "38 points" or "38–40 points"
+    const m = ibStr.match(/\d+/);
+    if (!m) return false;
+    return studentPts < parseInt(m[0], 10);
+  }
+
+  return false;
+}
+
+/* ─── Grade Input Section ──────────────────────────────────────
+ * Builds and wires the predicted-grade UI for Mode A.
+ * Called whenever the qualification system changes.
+ * ─────────────────────────────────────────────────────────────── */
+
+function buildGradeInput(systemKey) {
+  const section = $('gradeInputSection');
+  state.predictedGrade = null;
+
+  if (!systemKey) {
+    section.classList.add('hidden');
+    section.innerHTML = '';
+    return;
+  }
+
+  const tooltipText = "We use this to flag courses where the typical offer is higher than your predicted grades. It’s a guide, not a hard filter.";
+
+  if (systemKey === 'UK_A_Level') {
+    section.innerHTML = `
+      <div class="grade-input-header">
+        <span class="control-label">Your predicted grades</span>
+        <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
+        <span class="picker-hint-inline">Optional — flags courses likely out of grade range</span>
+      </div>
+      <div class="grade-input-body">
+        <div class="grade-select-wrap">
+          <label class="grade-option-label" for="gradeSelectALevel">Average predicted grade across your A-Level subjects</label>
+          <div class="select-wrap">
+            <select id="gradeSelectALevel" class="grade-select">
+              <option value="">Skip — don’t filter by grades</option>
+              <option value="A*">A* (predicting mostly A*s)</option>
+              <option value="A">A (predicting mostly As)</option>
+              <option value="B">B (predicting mostly Bs)</option>
+              <option value="C">C (predicting mostly Cs)</option>
+              <option value="D">D (predicting mostly Ds)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    `;
+    section.classList.remove('hidden');
+    $('gradeSelectALevel').addEventListener('change', e => {
+      state.predictedGrade = e.target.value || null;
+      renderCheckResults();
+    });
+
+  } else if (systemKey === 'IB') {
+    section.innerHTML = `
+      <div class="grade-input-header">
+        <span class="control-label">Your predicted grades</span>
+        <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
+        <span class="picker-hint-inline">Optional — flags courses likely out of grade range</span>
+      </div>
+      <div class="grade-input-body">
+        <label class="grade-option-label" for="gradeInputIB">Predicted IB total points (24–45)</label>
+        <input
+          type="number"
+          id="gradeInputIB"
+          class="grade-number-input"
+          min="24" max="45"
+          placeholder="e.g. 38"
+          autocomplete="off"
+        />
+      </div>
+    `;
+    section.classList.remove('hidden');
+    $('gradeInputIB').addEventListener('input', e => {
+      const v = parseInt(e.target.value, 10);
+      state.predictedGrade = (!isNaN(v) && v >= 24 && v <= 45) ? String(v) : null;
+      renderCheckResults();
+    });
+
+  } else {
+    // VWO, SG, DSE, AP — coming soon
+    section.innerHTML = `
+      <div class="grade-input-header">
+        <span class="control-label">Your predicted grades</span>
+        <span class="picker-hint-inline">Grade filtering coming soon for this system</span>
+      </div>
+    `;
+    section.classList.remove('hidden');
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
  * ELIGIBILITY ENGINE
  * ═══════════════════════════════════════════════════════════════ */
 
@@ -221,6 +349,7 @@ function buildSubjectPicker(systemKey) {
     section.classList.add('hidden');
     picker.innerHTML = '';
     $('categoryPickerSection').classList.add('hidden');
+    buildGradeInput('');
     return;
   }
 
@@ -243,6 +372,7 @@ function buildSubjectPicker(systemKey) {
   $$('#categoryPicker .category-chip').forEach(b => b.classList.remove('active'));
   $('categoryPickerSection').classList.add('hidden');
 
+  buildGradeInput(systemKey);
   syncSubjectCount();
 }
 
@@ -330,9 +460,14 @@ function buildCountryFilterBar() {
 function renderSummaryBar(subjectCount, counts, total) {
   const bar = $('summaryBar');
 
-  const gPct = total ? (counts.green / total * 100) : 0;
-  const aPct = total ? (counts.amber / total * 100) : 0;
-  const rPct = total ? (counts.red   / total * 100) : 0;
+  const gPct  = total ? (counts.green / total * 100) : 0;
+  const aPct  = total ? (counts.amber / total * 100) : 0;
+  const grPct = total ? (counts.grey  / total * 100) : 0;
+  const rPct  = total ? (counts.red   / total * 100) : 0;
+
+  const greySummary = counts.grey
+    ? `<span class="summary-dot">·</span><a href="#results-group-grey" class="summary-link summary-link--grey">${counts.grey} grade threshold high</a>`
+    : '';
 
   bar.innerHTML = `
     <div class="results-new-summary">
@@ -340,12 +475,14 @@ function renderSummaryBar(subjectCount, counts, total) {
       <a href="#results-group-green" class="summary-link summary-link--green">${counts.green} strong match${counts.green !== 1 ? 'es' : ''}</a>
       <span class="summary-dot">·</span>
       <a href="#results-group-amber" class="summary-link summary-link--amber">${counts.amber} possible</a>
+      ${greySummary}
       <span class="summary-dot">·</span>
       <a href="#results-group-red" class="summary-link summary-link--red">${counts.red} out of reach</a>
     </div>
-    <div class="summary-progress" role="img" aria-label="Course eligibility: ${counts.green} strong matches, ${counts.amber} possible, ${counts.red} out of reach">
+    <div class="summary-progress" role="img" aria-label="Course eligibility: ${counts.green} strong matches, ${counts.amber} possible, ${counts.grey} grade threshold high, ${counts.red} out of reach">
       <div class="summary-seg summary-seg--green" style="width:${gPct.toFixed(2)}%"></div>
       <div class="summary-seg summary-seg--amber" style="width:${aPct.toFixed(2)}%"></div>
+      <div class="summary-seg summary-seg--grey"  style="width:${grPct.toFixed(2)}%"></div>
       <div class="summary-seg summary-seg--red"   style="width:${rPct.toFixed(2)}%"></div>
     </div>
   `;
@@ -382,26 +519,36 @@ function renderCheckResults() {
     .filter(c => state.countryFilter === 'All' || c.country === state.countryFilter)
     .filter(c => state.selectedCategories.size === 0 || state.selectedCategories.has(c.category));
 
-  const byStatus = { green: [], amber: [], red: [] };
+  const byStatus = { green: [], amber: [], grey: [], red: [] };
   pool.forEach(course => {
     const result = classify(course, state.selectedTags);
     if (tooFew && result.status === 'green') result.status = 'amber';
+    // Grade-aware grey: demote green/amber if grade threshold is likely above student's predicted
+    if (state.predictedGrade && (result.status === 'green' || result.status === 'amber')) {
+      if (isGradeAboveStudent(course, state.checkSystem, state.predictedGrade)) {
+        result.status = 'grey';
+      }
+    }
     byStatus[result.status].push({ course, result });
   });
 
   // Sort each group by university name
-  ['green', 'amber', 'red'].forEach(s =>
+  ['green', 'amber', 'grey', 'red'].forEach(s =>
     byStatus[s].sort((a, b) => a.course.university.localeCompare(b.course.university))
   );
 
-  const counts = { green: byStatus.green.length, amber: byStatus.amber.length, red: byStatus.red.length };
-  const total  = counts.green + counts.amber + counts.red;
+  const counts = { green: byStatus.green.length, amber: byStatus.amber.length, grey: byStatus.grey.length, red: byStatus.red.length };
+  const total  = counts.green + counts.amber + counts.grey + counts.red;
 
   renderSummaryBar(state.selectedSubjects.length, counts, total);
 
+  const greyBadge = counts.grey
+    ? `<span class="badge badge--grey">◯&thinsp;${counts.grey}</span>`
+    : '';
   $('resultSummaryBadges').innerHTML = `
     <span class="badge badge--success">✓&thinsp;${counts.green}</span>
     <span class="badge badge--warning">◑&thinsp;${counts.amber}</span>
+    ${greyBadge}
     <span class="badge badge--error">✗&thinsp;${counts.red}</span>
     <span class="badge badge--neutral">${total} shown</span>
   `;
@@ -417,6 +564,10 @@ function renderCheckResults() {
   if (byStatus.amber.length) {
     container.appendChild(buildGroup('amber', '◑ Possible with right grades', byStatus.amber, cardIndex));
     cardIndex += byStatus.amber.length;
+  }
+  if (byStatus.grey.length) {
+    container.appendChild(buildGroup('grey', '◯ Subject match, but grade threshold is high', byStatus.grey, cardIndex, true));
+    cardIndex += byStatus.grey.length;
   }
   if (byStatus.red.length) {
     container.appendChild(buildGroup('red', '✗ Out of reach', byStatus.red, cardIndex, true));
@@ -448,12 +599,18 @@ function buildGroup(status, headerText, items, startIndex, collapsed = false) {
     toggle.type      = 'button';
     toggle.className = 'results-group__toggle';
     toggle.setAttribute('aria-expanded', 'false');
-    toggle.textContent = `Show ${items.length} out-of-reach courses`;
+    const toggleLabel = status === 'grey'
+      ? `Show ${items.length} courses with high grade threshold`
+      : `Show ${items.length} out-of-reach courses`;
+    toggle.className  = `results-group__toggle results-group__toggle--${status}`;
+    toggle.textContent = toggleLabel;
     toggle.addEventListener('click', () => {
       const nowOpen = cardsDiv.hidden;
       cardsDiv.hidden = !nowOpen;
       toggle.setAttribute('aria-expanded', String(nowOpen));
-      toggle.textContent = nowOpen ? 'Hide out-of-reach courses' : `Show ${items.length} out-of-reach courses`;
+      toggle.textContent = nowOpen
+        ? (status === 'grey' ? 'Hide high-threshold courses' : 'Hide out-of-reach courses')
+        : toggleLabel;
     });
     section.appendChild(toggle);
     section.appendChild(cardsDiv);

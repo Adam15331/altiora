@@ -361,6 +361,7 @@ main     { flex: 1; padding: var(--pad); }
 }
 .summary-seg--green { background: var(--success); }
 .summary-seg--amber { background: var(--warning); }
+.summary-seg--grey  { background: var(--text-faint); }
 .summary-seg--red   { background: var(--error); }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -475,6 +476,7 @@ main     { flex: 1; padding: var(--pad); }
 .badge--success { background: var(--success-light); color: var(--success); }
 .badge--warning { background: var(--warning-light); color: var(--warning); }
 .badge--error   { background: var(--error-light);   color: var(--error-text); }
+.badge--grey    { background: #F1F0EE; color: #6B6860; }
 .badge--neutral {
   background: var(--surface); color: var(--text-muted);
   border: 1px solid var(--border);
@@ -515,6 +517,7 @@ main     { flex: 1; padding: var(--pad); }
 .course-card--green { border-left-color: var(--success); }
 .course-card--amber { border-left-color: var(--warning); }
 .course-card--red   { border-left-color: var(--error);   }
+.course-card--grey  { border-left-color: #C8C7C3; opacity: .8; }
 
 /* Shared card header */
 .card-header {
@@ -757,6 +760,7 @@ footer p { font-size: 13px; }
 .summary-link:hover { opacity: .75; text-decoration: underline; }
 .summary-link--green { color: var(--success); }
 .summary-link--amber { color: var(--warning); }
+.summary-link--grey  { color: var(--text-muted); }
 .summary-link--red   { color: var(--error);   }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -795,6 +799,11 @@ footer p { font-size: 13px; }
   border-color: rgba(217,79,71,.2);
   color: var(--error-text);
 }
+.results-group__header--grey {
+  background: #F5F4F1;
+  border-color: #C8C7C3;
+  color: #6B6860;
+}
 
 .results-group__grid {
   display: grid;
@@ -829,6 +838,84 @@ footer p { font-size: 13px; }
   border-color: rgba(217,79,71,.25);
   background: var(--error-light);
   color: var(--error-text);
+}
+.results-group__toggle--grey:hover,
+.results-group__toggle--grey[aria-expanded="true"] {
+  background: #F5F4F1;
+  border-color: #C8C7C3;
+  color: #6B6860;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * Grade input section
+ * ═══════════════════════════════════════════════════════════════ */
+.grade-input-section {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+.grade-input-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.grade-input-tooltip {
+  font-size: 13px;
+  color: var(--text-faint);
+  cursor: help;
+  flex-shrink: 0;
+}
+.grade-input-tooltip:focus { outline: 2px solid var(--accent); border-radius: 2px; }
+.grade-input-body {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.grade-option-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.grade-select {
+  font-family: var(--font);
+  font-size: 13px;
+  padding: 6px 28px 6px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  min-width: 240px;
+}
+.grade-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(77,121,196,.12);
+}
+.grade-number-input {
+  font-family: var(--font);
+  font-size: 13px;
+  padding: 6px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  width: 100px;
+}
+.grade-number-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(77,121,196,.12);
 }
 
 /* ═══════════════════════════════════════════════════════════════
