@@ -28,7 +28,6 @@
  * Language_German        – German
  * Language_Spanish       – Spanish
  * Language_Mandarin      – Mandarin Chinese / Chinese
- * Language_Dutch         – Dutch
  * Language_Malay         – Malay
  * Language_Tamil         – Tamil
  * Language_Cantonese     – Cantonese / Chinese (HK)
@@ -228,51 +227,6 @@ const qualificationMappings = {
       "AP Art and Design":           "Art",
       "AP Seminar":                  "Philosophy",
       "AP Research":                 "Philosophy",
-    },
-  },
-
-  /* ─────────────────────────────────────────────────────────────
-   * NETHERLANDS VWO (Voorbereidend Wetenschappelijk Onderwijs)
-   * ───────────────────────────────────────────────────────────── */
-  "NL_VWO": {
-    systemLabel: "Netherlands VWO",
-    subjects: {
-      // Mathematics
-      "Wiskunde B":           "Mathematics_Advanced",
-      "Wiskunde A":           "Mathematics_Standard",
-      "Wiskunde C":           "Mathematics_Standard",
-      "Wiskunde D":           "Mathematics_Advanced",   // additional/enrichment
-
-      // Sciences
-      "Biologie":             "Biology",
-      "Scheikunde":           "Chemistry",
-      "Natuurkunde":          "Physics",
-      "Informatica":          "Computer_Science",
-      "Natuur, Leven en Technologie": "Environmental_Science",
-      "Natuur, Leven en Technologie (NLT)": "Environmental_Science",
-
-      // Languages
-      "Nederlands":           "English",                // Dutch first language maps to English tag
-      "Engels":               "English",
-      "Duits":                "Language_German",
-      "Frans":                "Language_French",
-      "Spaans":               "Language_Spanish",
-      "Chinees":              "Language_Mandarin",
-
-      // Social sciences & humanities
-      "Economie":             "Economics",
-      "Bedrijfseconomie":     "Business",
-      "Maatschappijwetenschappen": "Sociology",
-      "Aardrijkskunde":       "Geography",
-      "Geschiedenis":         "History",
-      "Filosofie":            "Philosophy",
-      "Kunst (Beeldende vormgeving)": "Art",
-      "Muziek":               "Music",
-      "Culturele en Kunstzinnige Vorming": "Art",
-      "Godsdienst/Levensbeschouwing": "Religious_Studies",
-      "Latijn":               "History",               // classical studies; closest tag
-      "Grieks":               "History",
-      "Lichamelijke Opvoeding": "Physical_Education",
     },
   },
 
