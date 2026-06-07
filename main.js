@@ -97,6 +97,22 @@ const HL_TAG_LABELS = {
   'Computer_Science':     'Computer Science',
   'Economics':            'Economics',
   'English':              'English',
+  'History':              'History',
+  // IB-specific long names
+  'Mathematics: Analysis and Approaches HL':         'Maths AA HL',
+  'Mathematics: Applications and Interpretation HL': 'Maths AI HL',
+  'Mathematics: Analysis and Approaches SL':         'Maths AA SL',
+  'Mathematics: Applications and Interpretation SL': 'Maths AI SL',
+  'Computer Science HL':   'CS HL',
+  'Economics HL':          'Econ HL',
+  'Physics HL':            'Physics HL',
+  'Chemistry HL':          'Chem HL',
+  'Biology HL':            'Bio HL',
+  'History HL':            'History HL',
+  'Psychology HL':         'Psych HL',
+  'Philosophy HL':         'Phil HL',
+  'Business Management HL':'Business HL',
+  'Visual Arts HL':        'Art HL',
 };
 function hlTagLabel(tag) {
   return HL_TAG_LABELS[tag] ?? tag.replace(/_/g, ' ');
