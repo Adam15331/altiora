@@ -32,8 +32,8 @@ const state = {
 };
 
 /* ─── Constants ─────────────────────────────────────────────────── */
-const COUNTRY_FLAGS  = { UK:'🇬🇧', US:'🇺🇸', CA:'🇨🇦', NL:'🇳🇱', SG:'🇸🇬', HK:'🇭🇰' };
-const COUNTRY_LABELS = { UK:'UK',  US:'US',  CA:'Canada', NL:'Netherlands', SG:'Singapore', HK:'Hong Kong' };
+const COUNTRY_FLAGS  = { UK:'🇬🇧', US:'🇺🇸', CA:'🇨🇦', SG:'🇸🇬', HK:'🇭🇰' };
+const COUNTRY_LABELS = { UK:'UK',  US:'US',  CA:'Canada', SG:'Singapore', HK:'Hong Kong' };
 
 // Minimum number of subjects required before results can show as GREEN.
 // Below this threshold results are capped at AMBER — no university admits on 1-2 subjects alone.
@@ -41,7 +41,6 @@ const MIN_SUBJECTS = {
   UK_A_Level:   3,
   IB:           5,
   US_AP:        4,
-  NL_VWO:       4,
   SG_A_Level:   3,
   HK_DSE:       5,
 };
@@ -82,7 +81,6 @@ const SYSTEM_GRADE_KEY = {
   UK_A_Level: 'aLevels',
   IB:         'ib',
   US_AP:      'ap',
-  NL_VWO:     'vwo',
   SG_A_Level: 'sgALevels',
   HK_DSE:     'hkDse',
 };
@@ -206,11 +204,6 @@ const EMPTY_SUGGESTIONS = {
     { label: 'Calc BC + Chemistry + Biology',            subjects: ['AP Calculus BC','AP Chemistry','AP Biology'] },
     { label: 'Calc BC + Physics C + CS A',               subjects: ['AP Calculus BC','AP Physics C: Mechanics','AP Computer Science A'] },
     { label: 'US History + Macroeconomics + English Lit',subjects: ['AP US History','AP Macroeconomics','AP English Literature and Composition'] },
-  ],
-  NL_VWO: [
-    { label: 'Wiskunde B + Scheikunde + Biologie',           subjects: ['Wiskunde B','Scheikunde','Biologie'] },
-    { label: 'Wiskunde B + Natuurkunde + Informatica',       subjects: ['Wiskunde B','Natuurkunde','Informatica'] },
-    { label: 'Economie + Geschiedenis + Maatschappijwetenschappen', subjects: ['Economie','Geschiedenis','Maatschappijwetenschappen'] },
   ],
   SG_A_Level: [
     { label: 'H2 Maths + H2 Chemistry + H2 Biology',        subjects: ['H2 Mathematics','H2 Chemistry','H2 Biology'] },
