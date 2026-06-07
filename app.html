@@ -45,7 +45,8 @@
           aria-controls="panel-check"
         >
           <span class="mode-btn__icon" aria-hidden="true">⊞</span>
-          Check Combination
+          <span class="mode-btn__label">Check Combination</span>
+          <span class="mode-btn__label--short" aria-hidden="true">Check</span>
         </button>
         <button
           class="mode-btn"
@@ -55,7 +56,8 @@
           aria-controls="panel-reverse"
         >
           <span class="mode-btn__icon" aria-hidden="true">↩</span>
-          Reverse Course Finder
+          <span class="mode-btn__label">Course Finder</span>
+          <span class="mode-btn__label--short" aria-hidden="true">Find</span>
         </button>
         <button
           class="mode-btn"
@@ -65,7 +67,8 @@
           aria-controls="panel-plan"
         >
           <span class="mode-btn__icon" aria-hidden="true">📚</span>
-          Subject Planner
+          <span class="mode-btn__label">Subject Planner</span>
+          <span class="mode-btn__label--short" aria-hidden="true">Plan</span>
         </button>
       </div>
 
@@ -118,6 +121,11 @@
             <!-- chip labels inserted by JS -->
           </div>
           <p class="picker-hint">Select 3–5 subjects for best results. Results update instantly.</p>
+        </div>
+
+        <!-- Empty state — shown when system is chosen but no subjects selected yet -->
+        <div id="checkEmptyState" class="hidden" aria-live="polite">
+          <!-- populated by JS -->
         </div>
 
         <!-- Grade input — shown after system is chosen -->
@@ -224,7 +232,7 @@
           class="results-section"
           aria-live="polite"
         >
-          <p class="search-hint">Start typing to find courses…</p>
+          <p class="search-hint">Search for a course or university above to see subject requirements.</p>
         </div>
 
       </div><!-- /panel-reverse -->
@@ -284,7 +292,7 @@
 
   <!-- ── Footer ──────────────────────────────────────────────── -->
   <footer>
-    <p>Built by a student, for students. &mdash; Altiora &copy; 2025</p>
+    <p>Covers UK, US, Canada, Netherlands, Singapore &amp; Hong Kong &middot; 350+ courses &middot; Subject matching only &mdash; always verify with the university directly.</p>
   </footer>
 
   <!-- Clipboard toast notification -->
@@ -294,6 +302,6 @@
   <script src="data/qualificationMappings.js?v=3"></script>
   <script src="data/courseRequirements.js?v=3"></script>
   <script src="data/university-profiles.js?v=1"></script>
-  <script src="main.js?v=4"></script>
+  <script src="main.js?v=5"></script>
 </body>
 </html>

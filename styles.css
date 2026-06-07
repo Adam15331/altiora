@@ -160,7 +160,8 @@ main     { flex: 1; padding: var(--pad); }
   box-shadow: var(--shadow-sm);
   font-weight: 600;
 }
-.mode-btn__icon { font-size: 14px; }
+.mode-btn__icon       { font-size: 14px; }
+.mode-btn__label--short { display: none; }
 
 /* ═══════════════════════════════════════════════════════════════
  * Panels
@@ -707,6 +708,54 @@ main     { flex: 1; padding: var(--pad); }
 .empty-state p     { font-size: 15px; color: var(--text-muted); }
 .empty-state strong{ color: var(--text); }
 
+/* Check mode empty state with suggestions */
+.check-empty-state__inner {
+  text-align: center;
+  padding: 36px 24px 28px;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  margin-bottom: 20px;
+  animation: panelIn .2s ease both;
+}
+.check-empty-state__icon   { font-size: 32px; margin-bottom: 12px; }
+.check-empty-state__heading {
+  font-size: 15px; font-weight: 600; color: var(--text);
+  margin-bottom: 6px;
+}
+.check-empty-state__sub {
+  font-size: 13px; color: var(--text-muted);
+  margin-bottom: 18px;
+}
+.check-empty-state__suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+.suggestion-btn {
+  display: block;
+  width: 100%;
+  padding: 10px 18px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--t), background var(--t), color var(--t);
+  min-height: 44px;
+}
+.suggestion-btn:hover {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  color: var(--accent-dark);
+}
+
 /* ═══════════════════════════════════════════════════════════════
  * Footer
  * ═══════════════════════════════════════════════════════════════ */
@@ -1144,41 +1193,80 @@ footer p { font-size: 13px; }
  * Responsive
  * ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 680px) {
-  :root { --pad: 18px; }
+  :root { --pad: 16px; }
 
   h1 { font-size: 23px; }
 
-  .mode-toggle      { width: 100%; }
-  .mode-btn         { flex: 1; justify-content: center; padding: 9px 8px; }
+  /* Tab bar — full width, equal columns */
+  .mode-toggle  { width: 100%; }
+  .mode-btn     { flex: 1; justify-content: center; padding: 9px 6px; font-size: 13px; }
 
+  /* Controls */
   .panel-controls--row  { flex-direction: column; }
   .control-group--grow  { width: 100%; }
 
+  /* Subject filter: full width on mobile */
+  .subject-filter-input { max-width: 100%; }
+
+  /* Result cards: single column, no hover scale */
   .course-grid      { grid-template-columns: 1fr; }
+  .course-card      { padding: 14px 14px 12px; }
   .course-card:hover{ transform: none; box-shadow: var(--shadow-sm); }
 
+  /* Card text: minimum 14px on mobile */
+  .card-name  { font-size: 14px; }
+  .card-uni   { font-size: 13px; }
+
+  /* Country filter: horizontal scroll, no wrap, no scrollbar */
+  .filter-bar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .filter-btn { min-height: 44px; flex-shrink: 0; }
+
+  /* Toolbar stacks */
   .results-toolbar  { flex-direction: column; }
   .summary-text     { font-size: 13px; }
 
-  .card-header      { flex-wrap: wrap; gap: 8px; }
+  /* Summary bar wraps gracefully */
+  .results-new-summary { font-size: 13px; line-height: 1.8; }
 
-  .nav__tagline     { display: none; }
+  /* Card header */
+  .card-header { flex-wrap: wrap; gap: 8px; }
 
-  .results-group__grid { grid-template-columns: 1fr; }
-  .results-new-summary { font-size: 13px; }
-  .results-group__header { top: 46px; }
+  /* Nav */
+  .nav__tagline { display: none; }
+
+  /* Results groups */
+  .results-group__grid   { grid-template-columns: 1fr; }
+  .results-group__header { top: 46px; font-size: 12px; }
+  .results-group__toggle { min-height: 44px; }
+
+  /* Grade input: full width */
+  .grade-input-body   { flex-direction: column; align-items: stretch; }
+  .grade-select       { min-width: 0; width: 100%; }
+  .grade-number-input { width: 100%; }
+  .grade-option-label { margin-bottom: 4px; }
+
+  /* Plan grid */
+  .plan-category-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 480px) {
   .disclaimer-banner { font-size: 12px; gap: 8px; }
-  .card-admission-tests .badge { font-size: 11px; padding: 2px 8px; }
-  .results-new-summary { line-height: 1.8; }
-  .plan-category-grid { grid-template-columns: repeat(2, 1fr); }
+  /* Admission test badges: readable minimum size */
+  .card-admission-tests .badge { font-size: 12px; padding: 3px 8px; }
   .plan-combo-tag { font-size: 11px; padding: 3px 9px; }
 }
 
+/* At 375px: swap to short tab labels so all three fit on one line */
 @media (max-width: 400px) {
-  .filter-bar     { gap: 4px; }
-  .filter-btn     { font-size: 11px; padding: 4px 10px; }
-  .mode-btn__icon { display: none; }
+  .mode-btn__label        { display: none; }
+  .mode-btn__label--short { display: inline; }
+  /* Keep icons visible at this width */
+  .mode-btn { font-size: 12px; gap: 4px; }
 }
