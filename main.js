@@ -66,13 +66,14 @@ const STATUS = {
 const STATUS_SORT = { green:0, amber:1, red:2 };
 
 const TIER_LABELS = {
-  'world-top-10':    'World Top 10',
-  'world-top-50':    'World Top 50',
-  'world-top-100':   'World Top 100',
-  'national-top-10': 'National Top 10',
-  'national-top-25': 'National Top 25',
-  'national-top-50': 'National Top 50',
-  'regional':        'Regional University',
+  'world-top-10':     'World Top 10',
+  'world-top-50':     'World Top 50',
+  'world-top-100':    'World Top 100',
+  'national-top-10':  'National Top 10',
+  'national-top-25':  'National Top 25',
+  'national-top-50':  'National Top 50',
+  'national-leading': 'National University',
+  'regional':         'Regional University',
 };
 
 const SYSTEM_GRADE_KEY = {
@@ -505,11 +506,33 @@ function buildCheckCard(course, result) {
       </p>`;
   }
 
-  const uniNotes = course.universityContext?.notes;
+  const profile = (typeof universityProfiles !== 'undefined') ? (universityProfiles[course.university] ?? null) : null;
 
   const card = document.createElement('div');
   card.className = `course-card ${cfg.cardCls}`;
   card.setAttribute('role', 'listitem');
+
+  let uniInfoHtml = '';
+  if (profile) {
+    const cityLine  = profile.city ? `<span class="card-uni-city">${esc(profile.city)}</span>` : '';
+    const tagLine   = profile.tagline ? `<p class="card-uni-tagline">${esc(profile.tagline)}</p>` : '';
+    const noteLine  = profile.internationalNote ? `<p class="card-uni-note">${esc(profile.internationalNote)}</p>` : '';
+    const webLink   = profile.websiteUrl
+      ? `<a class="card-uni-link" href="${esc(profile.websiteUrl)}" target="_blank" rel="noopener noreferrer">Visit university website ↗</a>`
+      : '';
+    uniInfoHtml = `
+      <details class="card-uni-info">
+        <summary>About this university${cityLine ? ` · ${profile.city}` : ''}</summary>
+        ${tagLine}${noteLine}${webLink}
+      </details>`;
+  } else if (course.universityContext?.notes) {
+    uniInfoHtml = `
+      <details class="card-uni-info">
+        <summary>About this university</summary>
+        <p class="card-uni-info__notes">${esc(course.universityContext.notes)}</p>
+      </details>`;
+  }
+
   card.innerHTML = `
     <div class="card-header">
       <div class="card-title-group">
@@ -533,11 +556,7 @@ function buildCheckCard(course, result) {
         ${tests.map(t => `<span class="badge badge--warning">${esc(t)} required</span>`).join('')}
       </div>` : ''}
     ${footerHtml}
-    ${uniNotes ? `
-      <details class="card-uni-info">
-        <summary>About this university</summary>
-        <p class="card-uni-info__notes">${esc(uniNotes)}</p>
-      </details>` : ''}
+    ${uniInfoHtml}
   `;
   return card;
 }
@@ -683,7 +702,7 @@ function buildRequirementsText(course) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
- * SUBJECT PLANNER  (Mode C)
+ * SUBJECT PLANNER (Mode C)
  * ═══════════════════════════════════════════════════════════════ */
 
 function buildPlanCategoryGrid() {
@@ -736,7 +755,6 @@ function renderPlanResults() {
   catCourses.forEach(c =>
     (c.requirements.essential ?? []).forEach(t => { tagFreq[t] = (tagFreq[t] ?? 0) + 1; })
   );
-
   const sortedTags = Object.entries(tagFreq).sort((a, b) => b[1] - a[1]);
 
   if (sortedTags.length === 0) {
@@ -749,7 +767,6 @@ function renderPlanResults() {
         <span class="plan-subject-chip__name">${esc(tagToLocal(tag, state.planSystem))}</span>
         <span class="plan-subject-chip__count">unlocks ${count} course${count !== 1 ? 's' : ''}</span>
       </div>`).join('');
-
     $('planEssentials').innerHTML = `
       <h3 class="plan-section-head">Essential subjects</h3>
       <p class="plan-section-sub">Subjects that appear as required across ${esc(catLabel)} courses in our database.</p>
@@ -758,7 +775,6 @@ function renderPlanResults() {
   }
 
   /* ── Section B: top subject combinations ── */
-  // Take the most-frequent essential tags (up to 6), enumerate combos of size 2–4, cap at 20
   const topTags = sortedTags.slice(0, 6).map(([t]) => t);
   const combos  = [];
   for (let size = 2; size <= 4 && combos.length < 20; size++) {
@@ -768,7 +784,6 @@ function renderPlanResults() {
     }
   }
 
-  // Score each combo against category courses
   const scored = combos.map(combo => {
     const tagSet = new Set(combo);
     if (tagSet.has('Mathematics_Advanced')) tagSet.add('Mathematics_Standard');
@@ -807,7 +822,6 @@ function renderPlanResults() {
       <div class="plan-combo-list">${rowsHtml}</div>
     `;
 
-    // Wire up click/keyboard handlers now that innerHTML is set
     $$('#planCombinations .plan-combo-row').forEach(row => {
       const go = () => switchToPlanCombo(JSON.parse(row.dataset.tags), state.planSystem);
       row.addEventListener('click', go);
@@ -822,7 +836,6 @@ function renderPlanResults() {
 }
 
 function switchToPlanCombo(tags, systemKey) {
-  // Switch to Check mode with the plan's qualification system
   switchMode('check');
   state.checkSystem      = systemKey;
   state.selectedSubjects = [];
@@ -830,16 +843,13 @@ function switchToPlanCombo(tags, systemKey) {
   $('checkSystemSelect').value = systemKey;
   buildSubjectPicker(systemKey);
 
-  // Pre-check the subjects that correspond to the tags
   const targetNames = new Set(tags.map(t => tagToLocal(t, systemKey)));
   $$('#subjectPicker input[type="checkbox"]').forEach(cb => {
     if (targetNames.has(cb.value)) cb.checked = true;
   });
 
-  // Sync state and re-render results
   onSubjectToggle();
 
-  // Also pre-apply the matching category filter in Mode A
   if (state.planCategory) {
     state.selectedCategories.clear();
     state.selectedCategories.add(state.planCategory);
@@ -851,7 +861,6 @@ function switchToPlanCombo(tags, systemKey) {
     renderCheckResults();
   }
 
-  // Scroll to results
   requestAnimationFrame(() => {
     const results = $('checkResultsSection');
     if (!results.classList.contains('hidden'))

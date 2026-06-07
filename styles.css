@@ -885,6 +885,27 @@ footer p { font-size: 13px; }
   margin: 0;
   font-style: italic;
 }
+.card-uni-tagline {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 6px;
+  line-height: 1.4;
+}
+.card-uni-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0 0 8px;
+}
+.card-uni-link {
+  display: inline-block;
+  font-size: 11px;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+.card-uni-link:hover { text-decoration: underline; }
 
 /* ═══════════════════════════════════════════════════════════════
  * Subject Planner mode (Mode C)
@@ -936,7 +957,6 @@ footer p { font-size: 13px; }
 }
 .plan-cat-card.active .plan-cat-card__label { color: var(--accent-dark); }
 
-/* Results section headings */
 .plan-section-head {
   font-size: 15px;
   font-weight: 700;
@@ -950,7 +970,6 @@ footer p { font-size: 13px; }
   margin-bottom: 14px;
 }
 
-/* Essential subject chips */
 .plan-essentials-grid {
   display: flex;
   flex-wrap: wrap;
@@ -971,7 +990,6 @@ footer p { font-size: 13px; }
 .plan-subject-chip__name  { font-size: 13px; font-weight: 600; color: var(--text); }
 .plan-subject-chip__count { font-size: 11px; color: var(--text-faint); white-space: nowrap; }
 
-/* Combination rows */
 .plan-combo-list {
   display: flex;
   flex-direction: column;
@@ -1014,7 +1032,6 @@ footer p { font-size: 13px; }
   flex-shrink: 0;
 }
 
-/* Footer note & switch link */
 .plan-footer-note {
   font-size: 12px;
   color: var(--text-faint);
@@ -1063,16 +1080,12 @@ footer p { font-size: 13px; }
   .results-group__grid { grid-template-columns: 1fr; }
   .results-new-summary { font-size: 13px; }
   .results-group__header { top: 46px; }
-
-  .plan-category-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
-  .plan-combo-results { margin-left: 0; width: 100%; }
 }
 
 @media (max-width: 480px) {
   .disclaimer-banner { font-size: 12px; gap: 8px; }
   .card-admission-tests .badge { font-size: 11px; padding: 2px 8px; }
   .results-new-summary { line-height: 1.8; }
-
   .plan-category-grid { grid-template-columns: repeat(2, 1fr); }
   .plan-combo-tag { font-size: 11px; padding: 3px 9px; }
 }
