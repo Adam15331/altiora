@@ -360,13 +360,30 @@ function buildGradeInput(systemKey) {
   if (!systemKey) { section.classList.add('hidden'); section.innerHTML = ''; return; }
 
   const tooltipText = "We use this to flag courses where the typical offer is higher than your predicted grades. It's a guide, not a hard filter.";
+  const hint        = 'Affects which courses show as strong matches';
+  const clearBtn    = '<button type="button" id="clearGradeBtn" class="clear-grade-btn hidden" aria-label="Clear predicted grades">✕ Clear grades</button>';
+
+  function wireSelectGrade(selectId) {
+    const sel = $(selectId);
+    sel.addEventListener('change', e => {
+      state.predictedGrade = e.target.value || null;
+      $('clearGradeBtn').classList.toggle('hidden', !state.predictedGrade);
+      renderCheckResults();
+    });
+    $('clearGradeBtn').addEventListener('click', () => {
+      state.predictedGrade = null;
+      sel.value = '';
+      $('clearGradeBtn').classList.add('hidden');
+      renderCheckResults();
+    });
+  }
 
   if (systemKey === 'UK_A_Level') {
     section.innerHTML = `
       <div class="grade-input-header">
         <span class="control-label">Your predicted grades</span>
         <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
-        <span class="picker-hint-inline">Optional — flags courses likely out of grade range</span>
+        <span class="picker-hint-inline">${hint}</span>
       </div>
       <div class="grade-input-body">
         <label class="grade-option-label" for="gradeSelectALevel">Average predicted grade across your A-Level subjects</label>
@@ -381,28 +398,34 @@ function buildGradeInput(systemKey) {
           </select>
         </div>
       </div>
+      ${clearBtn}
     `;
     section.classList.remove('hidden');
-    $('gradeSelectALevel').addEventListener('change', e => {
-      state.predictedGrade = e.target.value || null;
-      renderCheckResults();
-    });
+    wireSelectGrade('gradeSelectALevel');
   } else if (systemKey === 'IB') {
     section.innerHTML = `
       <div class="grade-input-header">
         <span class="control-label">Your predicted grades</span>
         <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
-        <span class="picker-hint-inline">Optional — flags courses likely out of grade range</span>
+        <span class="picker-hint-inline">${hint}</span>
       </div>
       <div class="grade-input-body">
         <label class="grade-option-label" for="gradeInputIB">Predicted IB total points (24–45)</label>
         <input type="number" id="gradeInputIB" class="grade-number-input" min="24" max="45" placeholder="e.g. 38" autocomplete="off"/>
       </div>
+      ${clearBtn}
     `;
     section.classList.remove('hidden');
     $('gradeInputIB').addEventListener('input', e => {
       const v = parseInt(e.target.value, 10);
       state.predictedGrade = (!isNaN(v) && v >= 24 && v <= 45) ? String(v) : null;
+      $('clearGradeBtn').classList.toggle('hidden', !state.predictedGrade);
+      renderCheckResults();
+    });
+    $('clearGradeBtn').addEventListener('click', () => {
+      state.predictedGrade = null;
+      $('gradeInputIB').value = '';
+      $('clearGradeBtn').classList.add('hidden');
       renderCheckResults();
     });
   } else if (systemKey === 'US_AP') {
@@ -410,7 +433,7 @@ function buildGradeInput(systemKey) {
       <div class="grade-input-header">
         <span class="control-label">Your predicted grades</span>
         <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
-        <span class="picker-hint-inline">Optional — flags courses likely out of grade range</span>
+        <span class="picker-hint-inline">${hint}</span>
       </div>
       <div class="grade-input-body">
         <label class="grade-option-label" for="gradeSelectAP">Average predicted AP score across your exams</label>
@@ -425,18 +448,16 @@ function buildGradeInput(systemKey) {
           </select>
         </div>
       </div>
+      ${clearBtn}
     `;
     section.classList.remove('hidden');
-    $('gradeSelectAP').addEventListener('change', e => {
-      state.predictedGrade = e.target.value || null;
-      renderCheckResults();
-    });
+    wireSelectGrade('gradeSelectAP');
   } else if (systemKey === 'SG_A_Level') {
     section.innerHTML = `
       <div class="grade-input-header">
         <span class="control-label">Your predicted grades</span>
         <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
-        <span class="picker-hint-inline">Optional — flags courses likely out of grade range</span>
+        <span class="picker-hint-inline">${hint}</span>
       </div>
       <div class="grade-input-body">
         <label class="grade-option-label" for="gradeSelectSG">Average predicted grade across your H2 subjects</label>
@@ -451,18 +472,16 @@ function buildGradeInput(systemKey) {
           </select>
         </div>
       </div>
+      ${clearBtn}
     `;
     section.classList.remove('hidden');
-    $('gradeSelectSG').addEventListener('change', e => {
-      state.predictedGrade = e.target.value || null;
-      renderCheckResults();
-    });
+    wireSelectGrade('gradeSelectSG');
   } else if (systemKey === 'HK_DSE') {
     section.innerHTML = `
       <div class="grade-input-header">
         <span class="control-label">Your predicted grades</span>
         <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
-        <span class="picker-hint-inline">Optional — flags courses likely out of grade range</span>
+        <span class="picker-hint-inline">${hint}</span>
       </div>
       <div class="grade-input-body">
         <label class="grade-option-label" for="gradeSelectDSE">Average predicted level across your elective subjects</label>
@@ -479,12 +498,10 @@ function buildGradeInput(systemKey) {
           </select>
         </div>
       </div>
+      ${clearBtn}
     `;
     section.classList.remove('hidden');
-    $('gradeSelectDSE').addEventListener('change', e => {
-      state.predictedGrade = e.target.value || null;
-      renderCheckResults();
-    });
+    wireSelectGrade('gradeSelectDSE');
   } else {
     section.classList.add('hidden');
     section.innerHTML = '';
@@ -817,16 +834,23 @@ function renderCheckResults() {
 
   const minNeeded = MIN_SUBJECTS[state.checkSystem] ?? 3;
   const tooFew    = state.selectedSubjects.length < minNeeded;
+  const noGrade   = !state.predictedGrade;
 
-  // Remove any existing warning banner
-  const existingWarn = section.querySelector('.subject-count-warning');
-  if (existingWarn) existingWarn.remove();
+  // Remove any existing banners before re-rendering
+  section.querySelectorAll('.subject-count-warning, .grade-missing-banner').forEach(el => el.remove());
 
   if (tooFew) {
     const warn = document.createElement('p');
     warn.className = 'subject-count-warning';
     warn.textContent = `Universities require a full subject combination — please select at least ${minNeeded} subjects to see accurate results. Results below are indicative only.`;
     $('summaryBar').before(warn);
+  }
+
+  if (noGrade) {
+    const banner = document.createElement('p');
+    banner.className = 'grade-missing-banner';
+    banner.textContent = `⚠️ You haven't entered your predicted grades. Results may show courses you don't meet the grade requirements for. Enter your grades above for accurate matching.`;
+    $('summaryBar').before(banner);
   }
 
   const pool = courses
@@ -836,7 +860,8 @@ function renderCheckResults() {
   const byStatus = { green: [], amber: [], grey: [], red: [] };
   pool.forEach(course => {
     const result = classify(course, state.selectedTags);
-    if (tooFew && result.status === 'green') result.status = 'amber';
+    if (tooFew  && result.status === 'green') result.status = 'amber';
+    if (noGrade && result.status === 'green') result.status = 'amber';
     if (state.predictedGrade && (result.status === 'green' || result.status === 'amber')) {
       if (isGradeAboveStudent(course, state.checkSystem, state.predictedGrade)) result.status = 'grey';
     }
@@ -902,7 +927,8 @@ function renderCheckResults() {
     cardIndex += byStatus.green.length;
   }
   if (byStatus.amber.length) {
-    container.appendChild(buildGroup('amber', 'Possible', byStatus.amber, cardIndex));
+    const amberLabel = noGrade ? 'Subject matches — enter grades to see strong matches' : 'Possible';
+    container.appendChild(buildGroup('amber', amberLabel, byStatus.amber, cardIndex));
     cardIndex += byStatus.amber.length;
   }
   if (byStatus.grey.length) {
