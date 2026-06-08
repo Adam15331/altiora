@@ -20,7 +20,7 @@
 const state = {
   mode:               'check',
   checkSystem:        '',
-  reverseSystem:      '',
+  reverseSystem:      'UK_A_Level',
   planCategory:       '',
   planSystem:         '',
   selectedSubjects:   [],
@@ -158,15 +158,28 @@ function subjectDisplayScore(name) {
  * Sort: score DESC → length DESC (longer = more specific) → alpha ASC.
  */
 function tagToLocal(tag, systemKey) {
-  if (!systemKey) return humanTag(tag);
+  if (!systemKey) return readableTag(tag);
   const options = getReverseMap(systemKey)[tag];
-  if (!options?.length) return humanTag(tag);
+  if (!options?.length) return readableTag(tag);
   return [...options].sort((a, b) => {
     const byScore = subjectDisplayScore(b) - subjectDisplayScore(a);
     if (byScore !== 0) return byScore;
     const byLen = b.length - a.length;
     return byLen !== 0 ? byLen : a.localeCompare(b);
   })[0];
+}
+
+// Qualifier words that describe a level/tier rather than the subject itself.
+// When a tag ends with one of these, it's wrapped in parentheses for clarity.
+const _TAG_QUALIFIERS = new Set(['Advanced', 'Standard', 'Higher', 'Basic', 'Core', 'Extended', 'Foundation', 'HL', 'SL']);
+
+function readableTag(tag) {
+  const parts = tag.split('_');
+  const last  = parts[parts.length - 1];
+  if (parts.length > 1 && _TAG_QUALIFIERS.has(last)) {
+    return `${parts.slice(0, -1).join(' ')} (${last})`;
+  }
+  return parts.join(' ');
 }
 
 function humanTag(tag) { return tag.replace(/_/g, ' '); }
@@ -626,7 +639,7 @@ function populateSystemSelects() {
     .map(([k, sys]) => `<option value="${k}">${esc(sys.systemLabel)}</option>`)
     .join('');
   $('checkSystemSelect').innerHTML   = `<option value="">Select your system…</option>${optHtml}`;
-  $('reverseSystemSelect').innerHTML = `<option value="">Show as universal tags</option>${optHtml}`;
+  $('reverseSystemSelect').innerHTML = optHtml;
   $('planSystemSelect').innerHTML    = `<option value="">Select your system…</option>${optHtml}`;
 }
 
@@ -1852,6 +1865,7 @@ function logEvent(eventName, properties = {}) {
 
 function init() {
   populateSystemSelects();
+  $('reverseSystemSelect').value = 'UK_A_Level';
   buildCountryFilterBar();
   buildCategoryPicker();
   buildPlanCategoryGrid();
