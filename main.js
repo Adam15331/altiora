@@ -18,7 +18,7 @@
  * handler functions so the render path stays predictable.
  * ─────────────────────────────────────────────────────────────── */
 const state = {
-  mode:               'strengths',
+  mode:               'check',
   checkSystem:        '',
   reverseSystem:      '',
   planCategory:       '',
@@ -291,9 +291,15 @@ function renderCheckEmptyState() {
  * ═══════════════════════════════════════════════════════════════ */
 
 const A_LEVEL_RANK = { 'A*': 5, 'A': 4, 'B': 3, 'C': 2, 'D': 1, 'E': 0 };
+const AP_TO_LETTER  = { '5': 'A*', '4': 'A', '3': 'B', '2': 'C', '1': 'D' };
+const DSE_RANK      = { '5**': 7, '5*': 6, '5': 5, '4': 4, '3': 3, '2': 2, '1': 1 };
 
 function parseALevelGrades(str) {
   return (str ?? '').match(/A\*|[A-E]/g) ?? [];
+}
+
+function parseDseGrades(str) {
+  return (str ?? '').match(/5\*\*|5\*|[1-5]/g) ?? [];
 }
 
 function isGradeAboveStudent(course, system, studentGrade) {
@@ -319,6 +325,31 @@ function isGradeAboveStudent(course, system, studentGrade) {
     if (!m) return false;
     return studentPts < parseInt(m[0], 10);
   }
+  if (system === 'US_AP') {
+    const apStr = course.grades?.ap;
+    if (!apStr) return false;
+    const digits = apStr.match(/[1-5]/g);
+    if (!digits?.length) return false;
+    const minScore = Math.min(...digits.map(Number));
+    const courseMinLetter = AP_TO_LETTER[String(minScore)];
+    return A_LEVEL_RANK[studentGrade] < A_LEVEL_RANK[courseMinLetter];
+  }
+  if (system === 'SG_A_Level') {
+    const sgStr = course.grades?.sgALevels;
+    if (!sgStr) return false;
+    const grades = parseALevelGrades(sgStr);
+    if (!grades.length) return false;
+    const minRank = Math.min(...grades.map(g => A_LEVEL_RANK[g] ?? 0));
+    return A_LEVEL_RANK[studentGrade] < minRank;
+  }
+  if (system === 'HK_DSE') {
+    const dseStr = course.grades?.hkDse;
+    if (!dseStr) return false;
+    const grades = parseDseGrades(dseStr);
+    if (!grades.length) return false;
+    const minRank = Math.min(...grades.map(g => DSE_RANK[g] ?? 0));
+    return (DSE_RANK[studentGrade] ?? 0) < minRank;
+  }
   return false;
 }
 
@@ -329,13 +360,30 @@ function buildGradeInput(systemKey) {
   if (!systemKey) { section.classList.add('hidden'); section.innerHTML = ''; return; }
 
   const tooltipText = "We use this to flag courses where the typical offer is higher than your predicted grades. It's a guide, not a hard filter.";
+  const hint        = 'Affects which courses show as strong matches';
+  const clearBtn    = '<button type="button" id="clearGradeBtn" class="clear-grade-btn hidden" aria-label="Clear predicted grades">✕ Clear grades</button>';
+
+  function wireSelectGrade(selectId) {
+    const sel = $(selectId);
+    sel.addEventListener('change', e => {
+      state.predictedGrade = e.target.value || null;
+      $('clearGradeBtn').classList.toggle('hidden', !state.predictedGrade);
+      renderCheckResults();
+    });
+    $('clearGradeBtn').addEventListener('click', () => {
+      state.predictedGrade = null;
+      sel.value = '';
+      $('clearGradeBtn').classList.add('hidden');
+      renderCheckResults();
+    });
+  }
 
   if (systemKey === 'UK_A_Level') {
     section.innerHTML = `
       <div class="grade-input-header">
         <span class="control-label">Your predicted grades</span>
         <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
-        <span class="picker-hint-inline">Optional — flags courses likely out of grade range</span>
+        <span class="picker-hint-inline">${hint}</span>
       </div>
       <div class="grade-input-body">
         <label class="grade-option-label" for="gradeSelectALevel">Average predicted grade across your A-Level subjects</label>
@@ -350,38 +398,113 @@ function buildGradeInput(systemKey) {
           </select>
         </div>
       </div>
+      ${clearBtn}
     `;
     section.classList.remove('hidden');
-    $('gradeSelectALevel').addEventListener('change', e => {
-      state.predictedGrade = e.target.value || null;
-      renderCheckResults();
-    });
+    wireSelectGrade('gradeSelectALevel');
   } else if (systemKey === 'IB') {
     section.innerHTML = `
       <div class="grade-input-header">
         <span class="control-label">Your predicted grades</span>
         <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
-        <span class="picker-hint-inline">Optional — flags courses likely out of grade range</span>
+        <span class="picker-hint-inline">${hint}</span>
       </div>
       <div class="grade-input-body">
         <label class="grade-option-label" for="gradeInputIB">Predicted IB total points (24–45)</label>
         <input type="number" id="gradeInputIB" class="grade-number-input" min="24" max="45" placeholder="e.g. 38" autocomplete="off"/>
       </div>
+      ${clearBtn}
     `;
     section.classList.remove('hidden');
     $('gradeInputIB').addEventListener('input', e => {
       const v = parseInt(e.target.value, 10);
       state.predictedGrade = (!isNaN(v) && v >= 24 && v <= 45) ? String(v) : null;
+      $('clearGradeBtn').classList.toggle('hidden', !state.predictedGrade);
       renderCheckResults();
     });
-  } else {
+    $('clearGradeBtn').addEventListener('click', () => {
+      state.predictedGrade = null;
+      $('gradeInputIB').value = '';
+      $('clearGradeBtn').classList.add('hidden');
+      renderCheckResults();
+    });
+  } else if (systemKey === 'US_AP') {
     section.innerHTML = `
       <div class="grade-input-header">
         <span class="control-label">Your predicted grades</span>
-        <span class="picker-hint-inline">Grade filtering coming soon for this system</span>
+        <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
+        <span class="picker-hint-inline">${hint}</span>
       </div>
+      <div class="grade-input-body">
+        <label class="grade-option-label" for="gradeSelectAP">Average predicted AP score across your exams</label>
+        <div class="select-wrap">
+          <select id="gradeSelectAP" class="grade-select">
+            <option value="">Skip — don't filter by grades</option>
+            <option value="A*">5 (A*) — predicting mostly 5s</option>
+            <option value="A">4 (A) — predicting mostly 4s</option>
+            <option value="B">3 (B) — predicting mostly 3s</option>
+            <option value="C">2 (C) — predicting mostly 2s</option>
+            <option value="D">1 (D) — predicting mostly 1s</option>
+          </select>
+        </div>
+      </div>
+      ${clearBtn}
     `;
     section.classList.remove('hidden');
+    wireSelectGrade('gradeSelectAP');
+  } else if (systemKey === 'SG_A_Level') {
+    section.innerHTML = `
+      <div class="grade-input-header">
+        <span class="control-label">Your predicted grades</span>
+        <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
+        <span class="picker-hint-inline">${hint}</span>
+      </div>
+      <div class="grade-input-body">
+        <label class="grade-option-label" for="gradeSelectSG">Average predicted grade across your H2 subjects</label>
+        <div class="select-wrap">
+          <select id="gradeSelectSG" class="grade-select">
+            <option value="">Skip — don't filter by grades</option>
+            <option value="A">A — predicting mostly As</option>
+            <option value="B">B — predicting mostly Bs</option>
+            <option value="C">C — predicting mostly Cs</option>
+            <option value="D">D — predicting mostly Ds</option>
+            <option value="E">E — predicting mostly Es</option>
+          </select>
+        </div>
+      </div>
+      ${clearBtn}
+    `;
+    section.classList.remove('hidden');
+    wireSelectGrade('gradeSelectSG');
+  } else if (systemKey === 'HK_DSE') {
+    section.innerHTML = `
+      <div class="grade-input-header">
+        <span class="control-label">Your predicted grades</span>
+        <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
+        <span class="picker-hint-inline">${hint}</span>
+      </div>
+      <div class="grade-input-body">
+        <label class="grade-option-label" for="gradeSelectDSE">Average predicted level across your elective subjects</label>
+        <div class="select-wrap">
+          <select id="gradeSelectDSE" class="grade-select">
+            <option value="">Skip — don't filter by grades</option>
+            <option value="5**">5** — predicting mostly 5**s</option>
+            <option value="5*">5* — predicting mostly 5*s</option>
+            <option value="5">5 — predicting mostly 5s</option>
+            <option value="4">4 — predicting mostly 4s</option>
+            <option value="3">3 — predicting mostly 3s</option>
+            <option value="2">2 — predicting mostly 2s</option>
+            <option value="1">1 — predicting mostly 1s</option>
+          </select>
+        </div>
+      </div>
+      ${clearBtn}
+    `;
+    section.classList.remove('hidden');
+    wireSelectGrade('gradeSelectDSE');
+  } else {
+    section.classList.add('hidden');
+    section.innerHTML = '';
   }
 }
 
@@ -478,6 +601,7 @@ function buildSubjectPicker(systemKey) {
   section.classList.remove('hidden');
 
   // Reset auto-imply suppression and category state when system changes
+  selectedSubjectsWithLevel.clear();
   _suppressedAutoImply.clear();
   _dismissedMathsWarning = false;
   hideMathsWarningBanner();
@@ -710,16 +834,23 @@ function renderCheckResults() {
 
   const minNeeded = MIN_SUBJECTS[state.checkSystem] ?? 3;
   const tooFew    = state.selectedSubjects.length < minNeeded;
+  const noGrade   = !state.predictedGrade;
 
-  // Remove any existing warning banner
-  const existingWarn = section.querySelector('.subject-count-warning');
-  if (existingWarn) existingWarn.remove();
+  // Remove any existing banners before re-rendering
+  section.querySelectorAll('.subject-count-warning, .grade-missing-banner').forEach(el => el.remove());
 
   if (tooFew) {
     const warn = document.createElement('p');
     warn.className = 'subject-count-warning';
     warn.textContent = `Universities require a full subject combination — please select at least ${minNeeded} subjects to see accurate results. Results below are indicative only.`;
     $('summaryBar').before(warn);
+  }
+
+  if (noGrade) {
+    const banner = document.createElement('p');
+    banner.className = 'grade-missing-banner';
+    banner.textContent = `⚠️ You haven't entered your predicted grades. Results may show courses you don't meet the grade requirements for. Enter your grades above for accurate matching.`;
+    $('summaryBar').before(banner);
   }
 
   const pool = courses
@@ -729,7 +860,8 @@ function renderCheckResults() {
   const byStatus = { green: [], amber: [], grey: [], red: [] };
   pool.forEach(course => {
     const result = classify(course, state.selectedTags);
-    if (tooFew && result.status === 'green') result.status = 'amber';
+    if (tooFew  && result.status === 'green') result.status = 'amber';
+    if (noGrade && result.status === 'green') result.status = 'amber';
     if (state.predictedGrade && (result.status === 'green' || result.status === 'amber')) {
       if (isGradeAboveStudent(course, state.checkSystem, state.predictedGrade)) result.status = 'grey';
     }
@@ -749,12 +881,19 @@ function renderCheckResults() {
           if (result.status === 'green') result.status = 'amber';
           result.ibHLWarning = missingHL;
         } else {
-          // Student has all required HL subjects — clear any previous warning
           result.ibHLWarning = null;
         }
       } else {
-        // No HL requirements for this course — ensure no warning persists
         result.ibHLWarning = null;
+      }
+      // UK universities require a minimum of 3 HL subjects
+      if (course.country === 'UK') {
+        const hlCount = Array.from(selectedSubjectsWithLevel.values()).filter(item => item.isHL).length;
+        if (hlCount < 3) {
+          if (result.status === 'green') result.status = 'amber';
+          if (!result.ibHLWarning) result.ibHLWarning = [];
+          result.ibHLWarning.push('Need at least 3 HL subjects for UK universities');
+        }
       }
     }
     byStatus[result.status].push({ course, result });
@@ -788,7 +927,8 @@ function renderCheckResults() {
     cardIndex += byStatus.green.length;
   }
   if (byStatus.amber.length) {
-    container.appendChild(buildGroup('amber', 'Possible', byStatus.amber, cardIndex));
+    const amberLabel = noGrade ? 'Subject matches — enter grades to see strong matches' : 'Possible';
+    container.appendChild(buildGroup('amber', amberLabel, byStatus.amber, cardIndex));
     cardIndex += byStatus.amber.length;
   }
   if (byStatus.grey.length) {
@@ -899,9 +1039,10 @@ function buildCheckCard(course, result) {
     const apCount = state.selectedSubjects.length;
     apNoteHtml = `<p class="card-ap-note">${esc(ctx.note)}</p>`;
     if (apCount < ctx.minCompetitiveAPs) {
+      const apTooltip = 'US universities consider essays, projects, and extracurriculars equally with AP scores';
       apWarningHtml = `
       <div class="card-admission-tests">
-        <span class="admission-test-tag admission-test-tag--ap">Typically ${ctx.minCompetitiveAPs}+ APs expected · ${apCount} selected</span>
+        <span class="admission-test-tag admission-test-tag--ap-note">Competitive applicants often have ${ctx.minCompetitiveAPs}+ APs · ${apCount} selected — holistic review means exceptions are common <span class="ap-info-icon" aria-label="${esc(apTooltip)}" title="${esc(apTooltip)}" tabindex="0">ⓘ</span></span>
       </div>`;
     }
   }
@@ -921,8 +1062,15 @@ function buildCheckCard(course, result) {
       ibHlHtml = `<div class="card-ib-hl">${hlChip}${noteChip}</div>`;
     }
     if (result.ibHLWarning && result.ibHLWarning.length > 0) {
-      const subjects = result.ibHLWarning.map(t => esc(hlTagLabel(t))).join(', ');
-      ibHlHtml += `<p class="card-ib-hl-warn">⚠️ Check HL requirements — ${subjects} need to be at Higher Level</p>`;
+      const tagWarnings = result.ibHLWarning.filter(w => !w.includes(' '));
+      const msgWarnings = result.ibHLWarning.filter(w =>  w.includes(' '));
+      if (tagWarnings.length > 0) {
+        const subjects = tagWarnings.map(t => esc(hlTagLabel(t))).join(', ');
+        ibHlHtml += `<p class="card-ib-hl-warn">⚠️ Check HL requirements — ${subjects} need to be at Higher Level</p>`;
+      }
+      for (const msg of msgWarnings) {
+        ibHlHtml += `<p class="card-ib-hl-warn">⚠️ ${esc(msg)}</p>`;
+      }
     }
   }
 
@@ -1096,21 +1244,28 @@ function buildReverseCard(course) {
     </div>
   `;
 
-  // Copy-to-clipboard handler (attached after innerHTML so the button exists)
+  // Copy-to-clipboard handler — timerId is scoped per card instance
+  let copyTimerId = null;
   card.querySelector('.copy-btn').addEventListener('click', e => {
     e.stopPropagation();
     const btn = e.currentTarget;
+    if (btn.classList.contains('copying')) return;
+    btn.classList.add('copying');
     navigator.clipboard.writeText(buildRequirementsText(course))
       .then(() => {
         btn.textContent = '✓  Copied!';
         btn.classList.add('copy-btn--done');
         showToast('Requirements copied to clipboard');
-        setTimeout(() => {
+        clearTimeout(copyTimerId);
+        copyTimerId = setTimeout(() => {
           btn.innerHTML = '⎘&ensp;Copy requirements';
-          btn.classList.remove('copy-btn--done');
+          btn.classList.remove('copy-btn--done', 'copying');
         }, 2200);
       })
-      .catch(() => showToast('Copy failed — try selecting the text manually'));
+      .catch(() => {
+        btn.classList.remove('copying');
+        showToast('Copy failed — try selecting the text manually');
+      });
   });
 
   return card;
@@ -1593,9 +1748,11 @@ function esc(str) {
 }
 
 function logEvent(eventName, properties = {}) {
-  const payload = { event: eventName, timestamp: new Date().toISOString(), ...properties };
-  console.log('[Analytics]', payload);
-  // Later: replace with Plausible or similar
+  if (typeof window.plausible === 'function') {
+    window.plausible(eventName, { props: properties });
+  } else {
+    console.log('[Analytics]', eventName, properties);
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1617,6 +1774,7 @@ function init() {
     state.selectedSubjects = [];
     state.selectedTags     = new Set();
     state.predictedGrade   = null;
+    selectedSubjectsWithLevel.clear();
     $('checkResultsSection').classList.add('hidden');
     const emptyEl = $('checkEmptyState');
     if (emptyEl) delete emptyEl.dataset.builtFor;
@@ -1634,12 +1792,10 @@ function init() {
 
   $('planSwitchToCheck').addEventListener('click', () => switchMode('check'));
 
-  // Strengths is the default panel — populate the grid immediately
-  renderStrengthsGrid();
-
-  // Override default if arriving from ?mode=strengths (already default, but clears the flag)
+  // Lazily populate strengths grid when first opened
   if (window.sessionStorage.getItem('openStrengthsMode') === 'true') {
     window.sessionStorage.removeItem('openStrengthsMode');
+    switchMode('strengths');
   }
 }
 
