@@ -291,9 +291,15 @@ function renderCheckEmptyState() {
  * ═══════════════════════════════════════════════════════════════ */
 
 const A_LEVEL_RANK = { 'A*': 5, 'A': 4, 'B': 3, 'C': 2, 'D': 1, 'E': 0 };
+const AP_TO_LETTER  = { '5': 'A*', '4': 'A', '3': 'B', '2': 'C', '1': 'D' };
+const DSE_RANK      = { '5**': 7, '5*': 6, '5': 5, '4': 4, '3': 3, '2': 2, '1': 1 };
 
 function parseALevelGrades(str) {
   return (str ?? '').match(/A\*|[A-E]/g) ?? [];
+}
+
+function parseDseGrades(str) {
+  return (str ?? '').match(/5\*\*|5\*|[1-5]/g) ?? [];
 }
 
 function isGradeAboveStudent(course, system, studentGrade) {
@@ -318,6 +324,31 @@ function isGradeAboveStudent(course, system, studentGrade) {
     const m = ibStr.match(/\d+/);
     if (!m) return false;
     return studentPts < parseInt(m[0], 10);
+  }
+  if (system === 'US_AP') {
+    const apStr = course.grades?.ap;
+    if (!apStr) return false;
+    const digits = apStr.match(/[1-5]/g);
+    if (!digits?.length) return false;
+    const minScore = Math.min(...digits.map(Number));
+    const courseMinLetter = AP_TO_LETTER[String(minScore)];
+    return A_LEVEL_RANK[studentGrade] < A_LEVEL_RANK[courseMinLetter];
+  }
+  if (system === 'SG_A_Level') {
+    const sgStr = course.grades?.sgALevels;
+    if (!sgStr) return false;
+    const grades = parseALevelGrades(sgStr);
+    if (!grades.length) return false;
+    const minRank = Math.min(...grades.map(g => A_LEVEL_RANK[g] ?? 0));
+    return A_LEVEL_RANK[studentGrade] < minRank;
+  }
+  if (system === 'HK_DSE') {
+    const dseStr = course.grades?.hkDse;
+    if (!dseStr) return false;
+    const grades = parseDseGrades(dseStr);
+    if (!grades.length) return false;
+    const minRank = Math.min(...grades.map(g => DSE_RANK[g] ?? 0));
+    return (DSE_RANK[studentGrade] ?? 0) < minRank;
   }
   return false;
 }
@@ -374,14 +405,89 @@ function buildGradeInput(systemKey) {
       state.predictedGrade = (!isNaN(v) && v >= 24 && v <= 45) ? String(v) : null;
       renderCheckResults();
     });
-  } else {
+  } else if (systemKey === 'US_AP') {
     section.innerHTML = `
       <div class="grade-input-header">
         <span class="control-label">Your predicted grades</span>
-        <span class="picker-hint-inline">Grade filtering coming soon for this system</span>
+        <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
+        <span class="picker-hint-inline">Optional — flags courses likely out of grade range</span>
+      </div>
+      <div class="grade-input-body">
+        <label class="grade-option-label" for="gradeSelectAP">Average predicted AP score across your exams</label>
+        <div class="select-wrap">
+          <select id="gradeSelectAP" class="grade-select">
+            <option value="">Skip — don't filter by grades</option>
+            <option value="A*">5 (A*) — predicting mostly 5s</option>
+            <option value="A">4 (A) — predicting mostly 4s</option>
+            <option value="B">3 (B) — predicting mostly 3s</option>
+            <option value="C">2 (C) — predicting mostly 2s</option>
+            <option value="D">1 (D) — predicting mostly 1s</option>
+          </select>
+        </div>
       </div>
     `;
     section.classList.remove('hidden');
+    $('gradeSelectAP').addEventListener('change', e => {
+      state.predictedGrade = e.target.value || null;
+      renderCheckResults();
+    });
+  } else if (systemKey === 'SG_A_Level') {
+    section.innerHTML = `
+      <div class="grade-input-header">
+        <span class="control-label">Your predicted grades</span>
+        <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
+        <span class="picker-hint-inline">Optional — flags courses likely out of grade range</span>
+      </div>
+      <div class="grade-input-body">
+        <label class="grade-option-label" for="gradeSelectSG">Average predicted grade across your H2 subjects</label>
+        <div class="select-wrap">
+          <select id="gradeSelectSG" class="grade-select">
+            <option value="">Skip — don't filter by grades</option>
+            <option value="A">A — predicting mostly As</option>
+            <option value="B">B — predicting mostly Bs</option>
+            <option value="C">C — predicting mostly Cs</option>
+            <option value="D">D — predicting mostly Ds</option>
+            <option value="E">E — predicting mostly Es</option>
+          </select>
+        </div>
+      </div>
+    `;
+    section.classList.remove('hidden');
+    $('gradeSelectSG').addEventListener('change', e => {
+      state.predictedGrade = e.target.value || null;
+      renderCheckResults();
+    });
+  } else if (systemKey === 'HK_DSE') {
+    section.innerHTML = `
+      <div class="grade-input-header">
+        <span class="control-label">Your predicted grades</span>
+        <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
+        <span class="picker-hint-inline">Optional — flags courses likely out of grade range</span>
+      </div>
+      <div class="grade-input-body">
+        <label class="grade-option-label" for="gradeSelectDSE">Average predicted level across your elective subjects</label>
+        <div class="select-wrap">
+          <select id="gradeSelectDSE" class="grade-select">
+            <option value="">Skip — don't filter by grades</option>
+            <option value="5**">5** — predicting mostly 5**s</option>
+            <option value="5*">5* — predicting mostly 5*s</option>
+            <option value="5">5 — predicting mostly 5s</option>
+            <option value="4">4 — predicting mostly 4s</option>
+            <option value="3">3 — predicting mostly 3s</option>
+            <option value="2">2 — predicting mostly 2s</option>
+            <option value="1">1 — predicting mostly 1s</option>
+          </select>
+        </div>
+      </div>
+    `;
+    section.classList.remove('hidden');
+    $('gradeSelectDSE').addEventListener('change', e => {
+      state.predictedGrade = e.target.value || null;
+      renderCheckResults();
+    });
+  } else {
+    section.classList.add('hidden');
+    section.innerHTML = '';
   }
 }
 
