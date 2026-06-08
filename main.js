@@ -18,7 +18,7 @@
  * handler functions so the render path stays predictable.
  * ─────────────────────────────────────────────────────────────── */
 const state = {
-  mode:               'strengths',
+  mode:               'check',
   checkSystem:        '',
   reverseSystem:      '',
   planCategory:       '',
@@ -1757,12 +1757,10 @@ function init() {
 
   $('planSwitchToCheck').addEventListener('click', () => switchMode('check'));
 
-  // Strengths is the default panel — populate the grid immediately
-  renderStrengthsGrid();
-
-  // Override default if arriving from ?mode=strengths (already default, but clears the flag)
+  // Lazily populate strengths grid when first opened
   if (window.sessionStorage.getItem('openStrengthsMode') === 'true') {
     window.sessionStorage.removeItem('openStrengthsMode');
+    switchMode('strengths');
   }
 }
 
