@@ -757,11 +757,17 @@ main     { flex: 1; padding: var(--pad); }
 .course-card[data-category="psychology"]  .admission-test-tag { background: var(--color-cat-psychology-bg);  color: var(--color-cat-psychology); }
 .course-card[data-category="architecture"].admission-test-tag { background: var(--color-cat-architecture-bg);color: var(--color-cat-architecture); }
 
-/* AP warning tag (amber pill, same shape as admission-test-tag) */
-.admission-test-tag--ap {
-  background: var(--color-match-possible-bg);
-  color: var(--color-match-possible);
-  font-weight: 600;
+/* AP holistic note tag — neutral grey, not a warning */
+.admission-test-tag--ap-note {
+  background: var(--color-border);
+  color: var(--color-text-secondary);
+  font-weight: 400;
+}
+
+.ap-info-icon {
+  font-style: normal;
+  cursor: help;
+  opacity: 0.7;
 }
 
 /* AP holistic note — small muted text below tests */
