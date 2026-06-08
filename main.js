@@ -18,7 +18,7 @@
  * handler functions so the render path stays predictable.
  * ─────────────────────────────────────────────────────────────── */
 const state = {
-  mode:               'check',
+  mode:               'strengths',
   checkSystem:        '',
   reverseSystem:      'UK_A_Level',
   planCategory:       '',
