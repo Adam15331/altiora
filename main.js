@@ -725,17 +725,26 @@ function renderCheckResults() {
     }
     if (state.checkSystem === 'IB' && (result.status === 'green' || result.status === 'amber')) {
       const requiredHLTags = course.grades?.ibHL ?? [];
-      if (requiredHLTags.length) {
-        // Check if student HAS the required HL subjects at HL level
-        const studentHLSubjects = Array.from(selectedSubjectsWithLevel.values())
-          .filter(item => item.isHL)
+      if (requiredHLTags.length > 0) {
+        // Get student's HL subjects as tags
+        const studentHLTags = Array.from(selectedSubjectsWithLevel.values())
+          .filter(item => item.isHL === true)
           .map(item => item.tag);
 
-        const missingHL = requiredHLTags.filter(tag => !studentHLSubjects.includes(tag));
-        if (missingHL.length) {
+        // Find which required HL tags are missing
+        const missingHL = requiredHLTags.filter(tag => !studentHLTags.includes(tag));
+
+        // Only downgrade and show warning if there are ACTUAL missing HL subjects
+        if (missingHL.length > 0) {
           if (result.status === 'green') result.status = 'amber';
           result.ibHLWarning = missingHL;
+        } else {
+          // Student has all required HL subjects — clear any previous warning
+          result.ibHLWarning = null;
         }
+      } else {
+        // No HL requirements for this course — ensure no warning persists
+        result.ibHLWarning = null;
       }
     }
     byStatus[result.status].push({ course, result });
@@ -901,9 +910,9 @@ function buildCheckCard(course, result) {
         : '';
       ibHlHtml = `<div class="card-ib-hl">${hlChip}${noteChip}</div>`;
     }
-    if (result.ibHLWarning?.length) {
+    if (result.ibHLWarning && result.ibHLWarning.length > 0) {
       const subjects = result.ibHLWarning.map(t => esc(hlTagLabel(t))).join(', ');
-      ibHlHtml += `<p class="card-ib-hl-warn">Check HL requirements — ${subjects} may need to be at HL</p>`;
+      ibHlHtml += `<p class="card-ib-hl-warn">⚠️ Check HL requirements — ${subjects} need to be at Higher Level</p>`;
     }
   }
 
@@ -1510,15 +1519,23 @@ function renderStrengthsResults(strength) {
   resultsDiv.innerHTML = html;
   section.classList.remove('hidden');
 
-  resultsDiv.querySelectorAll('[data-explore-course]').forEach(btn => {
+  document.querySelectorAll('[data-explore-course]').forEach(btn => {
     btn.addEventListener('click', () => {
-      const course = courses.find(c => c.id === btn.dataset.exploreCourse);
-      if (!course) return;
-      switchMode('reverse');
-      $('courseSearchInput').value = course.name;
-      state.searchQuery = course.name;
-      renderReverseResults();
-      $('reverseResultsSection').scrollIntoView({ behavior: 'smooth' });
+      const courseId = btn.dataset.exploreCourse;
+      const course = courses.find(c => c.id === courseId);
+      if (course) {
+        switchMode('reverse');
+        const searchInput = $('courseSearchInput');
+        if (searchInput) {
+          searchInput.value = course.name;
+          state.searchQuery = course.name;
+          renderReverseResults();
+          const resultsSection = $('reverseResultsSection');
+          if (resultsSection) {
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      }
     });
   });
 }
