@@ -1218,21 +1218,28 @@ function buildReverseCard(course) {
     </div>
   `;
 
-  // Copy-to-clipboard handler (attached after innerHTML so the button exists)
+  // Copy-to-clipboard handler — timerId is scoped per card instance
+  let copyTimerId = null;
   card.querySelector('.copy-btn').addEventListener('click', e => {
     e.stopPropagation();
     const btn = e.currentTarget;
+    if (btn.classList.contains('copying')) return;
+    btn.classList.add('copying');
     navigator.clipboard.writeText(buildRequirementsText(course))
       .then(() => {
         btn.textContent = '✓  Copied!';
         btn.classList.add('copy-btn--done');
         showToast('Requirements copied to clipboard');
-        setTimeout(() => {
+        clearTimeout(copyTimerId);
+        copyTimerId = setTimeout(() => {
           btn.innerHTML = '⎘&ensp;Copy requirements';
-          btn.classList.remove('copy-btn--done');
+          btn.classList.remove('copy-btn--done', 'copying');
         }, 2200);
       })
-      .catch(() => showToast('Copy failed — try selecting the text manually'));
+      .catch(() => {
+        btn.classList.remove('copying');
+        showToast('Copy failed — try selecting the text manually');
+      });
   });
 
   return card;
