@@ -869,6 +869,12 @@ main     { flex: 1; padding: var(--pad); }
   font-style: italic;
 }
 
+.card-ap-recs {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-1);
+}
+
 /* IB HL requirement chips */
 .card-ib-hl {
   display: flex; flex-wrap: wrap; gap: 5px;

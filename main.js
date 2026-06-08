@@ -1197,6 +1197,7 @@ function buildCheckCard(course, result) {
   // ── AP context UI ────────────────────────────────────────────
   let apWarningHtml = '';
   let apNoteHtml    = '';
+  let apRecsHtml    = '';
   if (sys === 'US_AP' && course.country === 'US' && course.apContext) {
     const ctx     = course.apContext;
     const apCount = state.selectedSubjects.length;
@@ -1207,6 +1208,9 @@ function buildCheckCard(course, result) {
       <div class="card-admission-tests">
         <span class="admission-test-tag admission-test-tag--ap-note">Competitive applicants often have ${ctx.minCompetitiveAPs}+ APs · ${apCount} selected — holistic review means exceptions are common <button type="button" class="ap-info-btn" aria-label="${esc(apTooltip)}" title="${esc(apTooltip)}">ⓘ</button></span>
       </div>`;
+    }
+    if (ctx.recommendedSubjects?.length) {
+      apRecsHtml = `<p class="card-ap-recs">Recommended APs for this field: ${ctx.recommendedSubjects.map(s => esc(s)).join(', ')}</p>`;
     }
   }
 
@@ -1302,6 +1306,7 @@ function buildCheckCard(course, result) {
         ${tests.map(t => `<span class="admission-test-tag">${esc(t)} required</span>`).join('')}
       </div>` : ''}
     ${apNoteHtml}
+    ${apRecsHtml}
     ${footerHtml}
     ${uniInfoHtml}
   `;
