@@ -609,6 +609,39 @@ function showToast(message) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+ * LOADING SPINNER
+ * ═══════════════════════════════════════════════════════════════ */
+
+const SPINNER_MIN_MS = 150;
+let _spinnerEl    = null;
+let _spinnerStart = 0;
+let _spinnerTimer = null;
+
+// Inserts a spinner as the element immediately before containerId in the DOM.
+// Placing it outside the container means container.innerHTML = '' won't destroy it.
+function showLoadingSpinner(containerId) {
+  clearTimeout(_spinnerTimer);
+  _spinnerStart = Date.now();
+  if (_spinnerEl) return;           // already visible — just reset the timer above
+  _spinnerEl = document.createElement('div');
+  _spinnerEl.className = 'loading-spinner';
+  _spinnerEl.setAttribute('aria-hidden', 'true');
+  $(containerId)?.before(_spinnerEl);
+}
+
+function hideLoadingSpinner() {
+  if (!_spinnerEl) return;
+  const remaining = SPINNER_MIN_MS - (Date.now() - _spinnerStart);
+  clearTimeout(_spinnerTimer);
+  if (remaining > 0) {
+    _spinnerTimer = setTimeout(() => { _spinnerEl?.remove(); _spinnerEl = null; }, remaining);
+  } else {
+    _spinnerEl.remove();
+    _spinnerEl = null;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
  * MODE TOGGLE
  * ═══════════════════════════════════════════════════════════════ */
 
@@ -850,6 +883,7 @@ function onSubjectToggle(e = null) {
   $('categoryPickerSection').classList.toggle('hidden', state.selectedSubjects.length === 0);
   renderCheckEmptyState();
   clearTimeout(_subjectDebounce);
+  if (state.selectedSubjects.length > 0) showLoadingSpinner('courseGrid');
   _subjectDebounce = setTimeout(renderCheckResults, 100);
 }
 
@@ -935,6 +969,10 @@ function renderCheckResults() {
     return;
   }
   section.classList.remove('hidden');
+  showLoadingSpinner('courseGrid');
+
+  // Yield one frame so the spinner paints before synchronous classification work.
+  requestAnimationFrame(() => {
 
   const minNeeded = MIN_SUBJECTS[state.checkSystem] ?? 3;
   const tooFew    = state.selectedSubjects.length < minNeeded;
@@ -1042,6 +1080,9 @@ function renderCheckResults() {
   if (byStatus.red.length) {
     container.appendChild(buildGroup('red', 'Out of reach', byStatus.red, cardIndex, true));
   }
+
+  hideLoadingSpinner();
+  }); // end requestAnimationFrame
 }
 
 function buildGroup(status, headerText, items, startIndex, collapsed = false) {
