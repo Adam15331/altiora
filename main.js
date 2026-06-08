@@ -1469,61 +1469,64 @@ function renderStrengthsResults(strength) {
     (_strengthCategoryMap[cat] || [cat]).forEach(m => targetCategories.add(m));
   });
 
-  const matched = [];
+  // Collect up to 12 total across all categories (not 3 per category)
+  const allMatched = [];
   for (const cat of targetCategories) {
-    courses.filter(c => c.category === cat).slice(0, 3).forEach(c => matched.push(c));
+    for (const c of courses.filter(c => c.category === cat)) {
+      if (allMatched.length >= 12) break;
+      allMatched.push(c);
+    }
   }
 
-  if (!matched.length) {
+  if (!allMatched.length) {
     resultsDiv.innerHTML = '<p class="search-hint">No matching courses found. Try another strength.</p>';
     section.classList.remove('hidden');
     return;
   }
 
-  const grouped = {};
-  matched.forEach(c => { (grouped[c.category] ??= []).push(c); });
-
-  let html = '';
-  for (const [cat, catCourses] of Object.entries(grouped)) {
-    const catName = _strengthCategoryNames[cat] || cat;
-    html += `
-      <div class="results-group">
-        <h2 class="results-group__header">${esc(catName)}</h2>
-        <div class="results-group__grid">
-          ${catCourses.map(course => `
-            <div class="course-card course-card--green">
-              <div class="card-status card-status--green">Suggested for you</div>
-              <div class="card-header">
-                <div class="card-title-group">
-                  <span class="card-flag">${COUNTRY_FLAGS[course.country] ?? ''}</span>
-                  <div class="card-titles">
-                    <div class="card-name">${esc(course.name)}</div>
-                    <div class="card-uni">${esc(course.university)}</div>
-                  </div>
-                </div>
-              </div>
-              <div class="card-meta">
-                <span>${esc(COUNTRY_LABELS[course.country] ?? course.country)}</span>
-                <span class="card-meta-sep">·</span>
-                <span>${esc(course.degreeLevel)}</span>
-              </div>
-              <button class="copy-btn" style="margin-top: var(--space-3); width: 100%; justify-content: center; border-color: var(--color-match-strong); color: var(--color-match-strong);"
-                      data-explore-course="${esc(course.id)}">Explore this course →</button>
+  function buildCardHtml(course) {
+    return `
+      <div class="course-card course-card--green">
+        <div class="card-status card-status--green">Suggested for you</div>
+        <div class="card-header">
+          <div class="card-title-group">
+            <span class="card-flag">${COUNTRY_FLAGS[course.country] ?? ''}</span>
+            <div class="card-titles">
+              <div class="card-name">${esc(course.name)}</div>
+              <div class="card-uni">${esc(course.university)}</div>
             </div>
-          `).join('')}
+          </div>
         </div>
-      </div>
-    `;
+        <div class="card-meta">
+          <span>${esc(COUNTRY_LABELS[course.country] ?? course.country)}</span>
+          <span class="card-meta-sep">·</span>
+          <span>${esc(course.degreeLevel)}</span>
+        </div>
+        <button class="copy-btn" style="margin-top: var(--space-3); width: 100%; justify-content: center; border-color: var(--color-match-strong); color: var(--color-match-strong);"
+                data-explore-course="${esc(course.id)}">Explore this course →</button>
+      </div>`;
   }
 
-  resultsDiv.innerHTML = html;
-  section.classList.remove('hidden');
+  function buildGroupedHtml(courseList) {
+    const grouped = {};
+    courseList.forEach(c => { (grouped[c.category] ??= []).push(c); });
+    let html = '';
+    for (const [cat, catCourses] of Object.entries(grouped)) {
+      const catName = _strengthCategoryNames[cat] || cat;
+      html += `
+        <div class="results-group">
+          <h2 class="results-group__header">${esc(catName)}</h2>
+          <div class="results-group__grid">${catCourses.map(buildCardHtml).join('')}</div>
+        </div>`;
+    }
+    return html;
+  }
 
-  document.querySelectorAll('[data-explore-course]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const courseId = btn.dataset.exploreCourse;
-      const course = courses.find(c => c.id === courseId);
-      if (course) {
+  function attachExploreListeners() {
+    resultsDiv.querySelectorAll('[data-explore-course]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const course = courses.find(c => c.id === btn.dataset.exploreCourse);
+        if (!course) return;
         switchMode('reverse');
         const searchInput = $('courseSearchInput');
         if (searchInput) {
@@ -1531,13 +1534,36 @@ function renderStrengthsResults(strength) {
           state.searchQuery = course.name;
           renderReverseResults();
           const resultsSection = $('reverseResultsSection');
-          if (resultsSection) {
-            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
+          if (resultsSection) resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-      }
+      });
     });
-  });
+  }
+
+  const initial = allMatched.slice(0, 3);
+  const rest    = allMatched.slice(3);
+
+  let html = buildGroupedHtml(initial);
+  if (rest.length > 0) {
+    html += `<button class="plan-switch-link" id="strengthsShowMore"
+               style="display: block; margin: var(--space-4) auto; font-size: var(--text-sm);">
+               Show more suggestions (+${rest.length} more)
+             </button>`;
+  }
+
+  resultsDiv.innerHTML = html;
+  section.classList.remove('hidden');
+  attachExploreListeners();
+
+  if (rest.length > 0) {
+    const showMoreBtn = $('strengthsShowMore');
+    if (showMoreBtn) {
+      showMoreBtn.addEventListener('click', () => {
+        resultsDiv.innerHTML = buildGroupedHtml(allMatched);
+        attachExploreListeners();
+      });
+    }
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
