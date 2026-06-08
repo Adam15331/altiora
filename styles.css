@@ -804,6 +804,24 @@ main     { flex: 1; padding: var(--pad); }
   color: var(--color-match-possible);
   margin-top: var(--space-1);
   font-weight: 500;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 480px) {
+  .card-ib-hl {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .card-ib-chip {
+    display: inline-block;
+    width: fit-content;
+    font-size: 11px;
+    padding: 2px 6px;
+  }
+  .card-ib-hl-warn {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
 }
 
 /* Category badge on cards */
