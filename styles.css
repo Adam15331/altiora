@@ -315,19 +315,8 @@ main     { flex: 1; padding: var(--pad); }
   font-weight: 600;
 }
 
-/* Auto-added chip (e.g. Mathematics when Further Mathematics is selected) */
-.subject-chip.chip--auto-added.selected::after {
-  content: 'auto-added';
-  font-size: 9px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .04em;
-  color: var(--color-text-primary);
-  background: rgba(255,255,255,.25);
-  padding: 1px 5px;
-  border-radius: 3px;
-  margin-left: 6px;
-}
+/* .chip--auto-added is set in JS for debugging but carries no extra styling —
+   auto-implied chips look identical to manually selected ones. */
 
 /* Banner: standard maths deselected while Further Maths is active */
 .maths-warning-banner {
