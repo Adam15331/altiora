@@ -404,18 +404,24 @@ main     { flex: 1; padding: var(--pad); }
 .clear-grade-btn {
   display: inline-block;
   margin-top: var(--space-2);
-  padding: 3px 10px;
-  background: none;
+  padding: 4px 12px;
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: transparent;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-full);
-  font-size: var(--text-xs);
-  color: var(--color-text-secondary);
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: all var(--t-fast);
 }
 .clear-grade-btn:hover {
-  background: var(--color-bg);
+  border-color: var(--color-text-tertiary);
   color: var(--color-text-primary);
+  background: var(--color-bg);
+}
+.clear-grade-btn.hidden {
+  display: none;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -783,10 +789,16 @@ main     { flex: 1; padding: var(--pad); }
   font-weight: 400;
 }
 
-.ap-info-icon {
-  font-style: normal;
+.ap-info-btn {
+  display: inline;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
   cursor: help;
   opacity: 0.7;
+  color: inherit;
+  vertical-align: baseline;
 }
 
 /* AP holistic note — small muted text below tests */

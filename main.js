@@ -18,7 +18,7 @@
  * handler functions so the render path stays predictable.
  * ─────────────────────────────────────────────────────────────── */
 const state = {
-  mode:               'strengths',
+  mode:               'check',
   checkSystem:        '',
   reverseSystem:      '',
   planCategory:       '',
@@ -42,7 +42,7 @@ const MIN_SUBJECTS = {
   IB:           5,
   US_AP:        4,
   SG_A_Level:   3,
-  HK_DSE:       5,
+  HK_DSE:       6,
 };
 
 const CATEGORIES = [
@@ -842,7 +842,9 @@ function renderCheckResults() {
   if (tooFew) {
     const warn = document.createElement('p');
     warn.className = 'subject-count-warning';
-    warn.textContent = `Universities require a full subject combination — please select at least ${minNeeded} subjects to see accurate results. Results below are indicative only.`;
+    warn.textContent = state.checkSystem === 'HK_DSE'
+      ? 'DSE students typically need 4 core subjects + 2 electives (6 subjects total). Select more subjects for accurate results.'
+      : `Universities require a full subject combination — please select at least ${minNeeded} subjects to see accurate results. Results below are indicative only.`;
     $('summaryBar').before(warn);
   }
 
@@ -1042,7 +1044,7 @@ function buildCheckCard(course, result) {
       const apTooltip = 'US universities consider essays, projects, and extracurriculars equally with AP scores';
       apWarningHtml = `
       <div class="card-admission-tests">
-        <span class="admission-test-tag admission-test-tag--ap-note">Competitive applicants often have ${ctx.minCompetitiveAPs}+ APs · ${apCount} selected — holistic review means exceptions are common <span class="ap-info-icon" aria-label="${esc(apTooltip)}" title="${esc(apTooltip)}" tabindex="0">ⓘ</span></span>
+        <span class="admission-test-tag admission-test-tag--ap-note">Competitive applicants often have ${ctx.minCompetitiveAPs}+ APs · ${apCount} selected — holistic review means exceptions are common <button type="button" class="ap-info-btn" aria-label="${esc(apTooltip)}" title="${esc(apTooltip)}">ⓘ</button></span>
       </div>`;
     }
   }
@@ -1064,13 +1066,13 @@ function buildCheckCard(course, result) {
     if (result.ibHLWarning && result.ibHLWarning.length > 0) {
       const tagWarnings = result.ibHLWarning.filter(w => !w.includes(' '));
       const msgWarnings = result.ibHLWarning.filter(w =>  w.includes(' '));
+      const parts = [];
       if (tagWarnings.length > 0) {
         const subjects = tagWarnings.map(t => esc(hlTagLabel(t))).join(', ');
-        ibHlHtml += `<p class="card-ib-hl-warn">⚠️ Check HL requirements — ${subjects} need to be at Higher Level</p>`;
+        parts.push(`Check HL requirements — ${subjects} need to be at Higher Level`);
       }
-      for (const msg of msgWarnings) {
-        ibHlHtml += `<p class="card-ib-hl-warn">⚠️ ${esc(msg)}</p>`;
-      }
+      parts.push(...msgWarnings.map(m => esc(m)));
+      ibHlHtml += `<p class="card-ib-hl-warn">⚠️ ${parts.join('. ')}</p>`;
     }
   }
 
