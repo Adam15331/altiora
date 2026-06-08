@@ -184,6 +184,67 @@ const MATHS_IMPLY = {
   SG_A_Level: { advanced: 'H2 Further Mathematics', standard: 'H2 Mathematics' },
 };
 
+// IB mutual-exclusion groups.
+// Each entry is { label, subjects[] }. When a user selects a subject that
+// belongs to a group, any other already-selected subject in the same group
+// is automatically deselected.
+// Language B: each language is its own group so you can take French B + German B,
+// but not French B HL + French B SL simultaneously.
+const IB_MUTUAL_EXCLUSION_GROUPS = [
+  {
+    label: 'Mathematics',
+    subjects: [
+      'Mathematics: Analysis and Approaches HL',
+      'Mathematics: Analysis and Approaches SL',
+      'Mathematics: Applications and Interpretation HL',
+      'Mathematics: Applications and Interpretation SL',
+      'Mathematics HL',
+      'Mathematics SL',
+      'Mathematical Studies SL',
+      'Further Mathematics HL',
+    ],
+  },
+  {
+    label: 'Language A',
+    subjects: [
+      'Language A: Literature HL',
+      'Language A: Literature SL',
+      'Language A: Language and Literature HL',
+      'Language A: Language and Literature SL',
+      'English A: Literature HL',
+      'English A: Literature SL',
+      'English A: Language and Literature HL',
+      'English A: Language and Literature SL',
+      'French A: Literature HL',
+      'French A: Literature SL',
+      'French A: Language and Literature HL',
+      'French A: Language and Literature SL',
+      'German A: Literature HL',
+      'German A: Literature SL',
+      'German A: Language and Literature HL',
+      'German A: Language and Literature SL',
+      'Spanish A: Literature HL',
+      'Spanish A: Literature SL',
+      'Spanish A: Language and Literature HL',
+      'Spanish A: Language and Literature SL',
+      'Mandarin A: Literature HL',
+      'Mandarin A: Literature SL',
+      'Mandarin A: Language and Literature HL',
+      'Mandarin A: Language and Literature SL',
+    ],
+  },
+  // Language B: one group per language (can mix French B + German B, but not HL + SL of same)
+  { label: 'French B',   subjects: ['French B HL',   'French B SL']   },
+  { label: 'German B',   subjects: ['German B HL',   'German B SL']   },
+  { label: 'Spanish B',  subjects: ['Spanish B HL',  'Spanish B SL']  },
+  { label: 'Mandarin B', subjects: ['Mandarin B HL', 'Mandarin B SL'] },
+  { label: 'Chinese B',  subjects: ['Chinese B HL',  'Chinese B SL']  },
+  // Sciences: same subject at different levels conflicts
+  { label: 'Biology',   subjects: ['Biology HL',   'Biology SL']   },
+  { label: 'Chemistry', subjects: ['Chemistry HL', 'Chemistry SL'] },
+  { label: 'Physics',   subjects: ['Physics HL',   'Physics SL']   },
+];
+
 // Subjects the user has explicitly deselected despite auto-imply.
 // Cleared when the qualification system changes.
 const _suppressedAutoImply = new Set();
@@ -680,6 +741,13 @@ function hideMathsWarningBanner() {
   if (banner) banner.remove();
 }
 
+// Returns the exclusion group entry the subject belongs to, or null.
+// Only active for the IB system.
+function getExclusionGroup(subjectName, systemKey) {
+  if (systemKey !== 'IB') return null;
+  return IB_MUTUAL_EXCLUSION_GROUPS.find(g => g.subjects.includes(subjectName)) ?? null;
+}
+
 function onSubjectToggle(e = null) {
   const changedValue = e?.target?.value ?? null;
   const wasChecked   = e?.target?.checked ?? null;
@@ -696,6 +764,20 @@ function onSubjectToggle(e = null) {
   if (changedValue && wasChecked === true) {
     _suppressedAutoImply.delete(changedValue);
     if (imply && changedValue === imply.standard) _dismissedMathsWarning = false;
+  }
+
+  // IB mutual exclusivity: when a subject is checked, uncheck any other subject
+  // in the same exclusion group and notify the user.
+  if (changedValue && wasChecked === true) {
+    const group = getExclusionGroup(changedValue, state.checkSystem);
+    if (group) {
+      $$('#subjectPicker input:checked').forEach(input => {
+        if (input.value !== changedValue && group.subjects.includes(input.value)) {
+          input.checked = false;
+          showToast(`Only one ${group.label} subject allowed. Switched to ${changedValue}.`);
+        }
+      });
+    }
   }
 
   // Read current checkbox state from DOM.
