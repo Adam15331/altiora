@@ -318,6 +318,13 @@ main     { flex: 1; padding: var(--pad); }
 /* .chip--auto-added is set in JS for debugging but carries no extra styling —
    auto-implied chips look identical to manually selected ones. */
 
+.auto-indicator {
+  font-size: 10px;
+  opacity: 0.5;
+  margin-left: 4px;
+  transition: opacity var(--t-fast);
+}
+
 /* Banner: standard maths deselected while Further Maths is active */
 .maths-warning-banner {
   display: flex;

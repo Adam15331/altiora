@@ -652,7 +652,7 @@ function buildSubjectPicker(systemKey) {
   subjects.forEach(name => {
     const label = document.createElement('label');
     label.className = 'subject-chip';
-    label.innerHTML = `<input type="checkbox" value="${esc(name)}"><span>${esc(name)}</span>`;
+    label.innerHTML = `<input type="checkbox" value="${esc(name)}"><span>${esc(name)}</span><span class="auto-indicator hidden" aria-hidden="true"> ↻</span>`;
     label.querySelector('input').addEventListener('change', onSubjectToggle);
     frag.appendChild(label);
   });
@@ -812,9 +812,18 @@ function onSubjectToggle(e = null) {
   }
 
   $$('#subjectPicker .subject-chip').forEach(chip => {
-    const input = chip.querySelector('input');
+    const input     = chip.querySelector('input');
+    const indicator = chip.querySelector('.auto-indicator');
     chip.classList.toggle('selected', input.checked);
     chip.classList.toggle('chip--auto-added', autoAdded.has(input.value));
+    if (indicator) {
+      if (autoAdded.has(input.value)) {
+        indicator.classList.remove('hidden');
+        if (imply) indicator.title = `Added automatically because you selected ${imply.advanced}`;
+      } else if (!input.checked) {
+        indicator.classList.add('hidden');
+      }
+    }
   });
 
   const shouldWarn = imply
