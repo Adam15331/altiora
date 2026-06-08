@@ -1722,9 +1722,11 @@ function esc(str) {
 }
 
 function logEvent(eventName, properties = {}) {
-  const payload = { event: eventName, timestamp: new Date().toISOString(), ...properties };
-  console.log('[Analytics]', payload);
-  // Later: replace with Plausible or similar
+  if (typeof window.plausible === 'function') {
+    window.plausible(eventName, { props: properties });
+  } else {
+    console.log('[Analytics]', eventName, properties);
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
