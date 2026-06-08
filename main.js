@@ -42,7 +42,7 @@ const MIN_SUBJECTS = {
   IB:           5,
   US_AP:        4,
   SG_A_Level:   3,
-  HK_DSE:       5,
+  HK_DSE:       6,
 };
 
 const CATEGORIES = [
@@ -842,7 +842,9 @@ function renderCheckResults() {
   if (tooFew) {
     const warn = document.createElement('p');
     warn.className = 'subject-count-warning';
-    warn.textContent = `Universities require a full subject combination — please select at least ${minNeeded} subjects to see accurate results. Results below are indicative only.`;
+    warn.textContent = state.checkSystem === 'HK_DSE'
+      ? 'DSE students typically need 4 core subjects + 2 electives (6 subjects total). Select more subjects for accurate results.'
+      : `Universities require a full subject combination — please select at least ${minNeeded} subjects to see accurate results. Results below are indicative only.`;
     $('summaryBar').before(warn);
   }
 
