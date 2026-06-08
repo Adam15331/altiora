@@ -417,6 +417,7 @@ function showToast(message) {
 
 function switchMode(mode) {
   state.mode = mode;
+  logEvent('mode_switch', { mode });
   $$('.mode-btn').forEach(btn => {
     const active = btn.dataset.mode === mode;
     btn.classList.toggle('active', active);
@@ -594,6 +595,15 @@ function onSubjectToggle(e = null) {
   }
 
   state.selectedTags = deriveTagsFromSubjects(state.selectedSubjects, state.checkSystem);
+
+  if (changedValue) {
+    logEvent('subject_toggle', {
+      system:   state.checkSystem,
+      subject:  changedValue,
+      selected: wasChecked === true,
+      count:    state.selectedSubjects.length,
+    });
+  }
 
   $$('#subjectPicker .subject-chip').forEach(chip => {
     const input = chip.querySelector('input');
@@ -1015,6 +1025,8 @@ function renderReverseResults() {
     c.university.toLowerCase().includes(q) ||
     (COUNTRY_LABELS[c.country] ?? '').toLowerCase().includes(q)
   );
+
+  logEvent('course_search', { query: state.searchQuery, result_count: matched.length });
 
   if (!matched.length) {
     section.innerHTML = `
@@ -1527,6 +1539,11 @@ function renderStrengthsResults(strength) {
       btn.addEventListener('click', () => {
         const course = courses.find(c => c.id === btn.dataset.exploreCourse);
         if (!course) return;
+        logEvent('strengths_explore', {
+          strength:    strength.id,
+          course_name: course.name,
+          university:  course.university,
+        });
         switchMode('reverse');
         const searchInput = $('courseSearchInput');
         if (searchInput) {
@@ -1573,6 +1590,12 @@ function renderStrengthsResults(strength) {
 function esc(str) {
   return String(str)
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function logEvent(eventName, properties = {}) {
+  const payload = { event: eventName, timestamp: new Date().toISOString(), ...properties };
+  console.log('[Analytics]', payload);
+  // Later: replace with Plausible or similar
 }
 
 /* ═══════════════════════════════════════════════════════════════
