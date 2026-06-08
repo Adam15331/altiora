@@ -855,12 +855,19 @@ function renderCheckResults() {
           if (result.status === 'green') result.status = 'amber';
           result.ibHLWarning = missingHL;
         } else {
-          // Student has all required HL subjects — clear any previous warning
           result.ibHLWarning = null;
         }
       } else {
-        // No HL requirements for this course — ensure no warning persists
         result.ibHLWarning = null;
+      }
+      // UK universities require a minimum of 3 HL subjects
+      if (course.country === 'UK') {
+        const hlCount = Array.from(selectedSubjectsWithLevel.values()).filter(item => item.isHL).length;
+        if (hlCount < 3) {
+          if (result.status === 'green') result.status = 'amber';
+          if (!result.ibHLWarning) result.ibHLWarning = [];
+          result.ibHLWarning.push('Need at least 3 HL subjects for UK universities');
+        }
       }
     }
     byStatus[result.status].push({ course, result });
@@ -1028,8 +1035,15 @@ function buildCheckCard(course, result) {
       ibHlHtml = `<div class="card-ib-hl">${hlChip}${noteChip}</div>`;
     }
     if (result.ibHLWarning && result.ibHLWarning.length > 0) {
-      const subjects = result.ibHLWarning.map(t => esc(hlTagLabel(t))).join(', ');
-      ibHlHtml += `<p class="card-ib-hl-warn">⚠️ Check HL requirements — ${subjects} need to be at Higher Level</p>`;
+      const tagWarnings = result.ibHLWarning.filter(w => !w.includes(' '));
+      const msgWarnings = result.ibHLWarning.filter(w =>  w.includes(' '));
+      if (tagWarnings.length > 0) {
+        const subjects = tagWarnings.map(t => esc(hlTagLabel(t))).join(', ');
+        ibHlHtml += `<p class="card-ib-hl-warn">⚠️ Check HL requirements — ${subjects} need to be at Higher Level</p>`;
+      }
+      for (const msg of msgWarnings) {
+        ibHlHtml += `<p class="card-ib-hl-warn">⚠️ ${esc(msg)}</p>`;
+      }
     }
   }
 
