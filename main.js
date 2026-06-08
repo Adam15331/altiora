@@ -888,14 +888,12 @@ function renderCheckResults() {
       } else {
         result.ibHLWarning = null;
       }
-      // UK universities require a minimum of 3 HL subjects
-      if (course.country === 'UK') {
-        const hlCount = Array.from(selectedSubjectsWithLevel.values()).filter(item => item.isHL).length;
-        if (hlCount < 3) {
-          if (result.status === 'green') result.status = 'amber';
-          if (!result.ibHLWarning) result.ibHLWarning = [];
-          result.ibHLWarning.push('Need at least 3 HL subjects for UK universities');
-        }
+      // Most universities worldwide expect 3 HL subjects for IB Diploma
+      const hlCount = Array.from(selectedSubjectsWithLevel.values()).filter(item => item.isHL).length;
+      if (hlCount < 3) {
+        if (result.status === 'green') result.status = 'amber';
+        if (!result.ibHLWarning) result.ibHLWarning = [];
+        result.ibHLWarning.push('Most universities expect at least 3 HL subjects for the full IB Diploma');
       }
     }
     byStatus[result.status].push({ course, result });
