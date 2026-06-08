@@ -1042,7 +1042,7 @@ function buildCheckCard(course, result) {
       const apTooltip = 'US universities consider essays, projects, and extracurriculars equally with AP scores';
       apWarningHtml = `
       <div class="card-admission-tests">
-        <span class="admission-test-tag admission-test-tag--ap-note">Competitive applicants often have ${ctx.minCompetitiveAPs}+ APs · ${apCount} selected — holistic review means exceptions are common <span class="ap-info-icon" aria-label="${esc(apTooltip)}" title="${esc(apTooltip)}" tabindex="0">ⓘ</span></span>
+        <span class="admission-test-tag admission-test-tag--ap-note">Competitive applicants often have ${ctx.minCompetitiveAPs}+ APs · ${apCount} selected — holistic review means exceptions are common <button type="button" class="ap-info-btn" aria-label="${esc(apTooltip)}" title="${esc(apTooltip)}">ⓘ</button></span>
       </div>`;
     }
   }
