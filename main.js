@@ -1064,13 +1064,13 @@ function buildCheckCard(course, result) {
     if (result.ibHLWarning && result.ibHLWarning.length > 0) {
       const tagWarnings = result.ibHLWarning.filter(w => !w.includes(' '));
       const msgWarnings = result.ibHLWarning.filter(w =>  w.includes(' '));
+      const parts = [];
       if (tagWarnings.length > 0) {
         const subjects = tagWarnings.map(t => esc(hlTagLabel(t))).join(', ');
-        ibHlHtml += `<p class="card-ib-hl-warn">⚠️ Check HL requirements — ${subjects} need to be at Higher Level</p>`;
+        parts.push(`Check HL requirements — ${subjects} need to be at Higher Level`);
       }
-      for (const msg of msgWarnings) {
-        ibHlHtml += `<p class="card-ib-hl-warn">⚠️ ${esc(msg)}</p>`;
-      }
+      parts.push(...msgWarnings.map(m => esc(m)));
+      ibHlHtml += `<p class="card-ib-hl-warn">⚠️ ${parts.join('. ')}</p>`;
     }
   }
 
