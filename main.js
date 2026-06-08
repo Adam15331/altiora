@@ -1510,15 +1510,23 @@ function renderStrengthsResults(strength) {
   resultsDiv.innerHTML = html;
   section.classList.remove('hidden');
 
-  resultsDiv.querySelectorAll('[data-explore-course]').forEach(btn => {
+  document.querySelectorAll('[data-explore-course]').forEach(btn => {
     btn.addEventListener('click', () => {
-      const course = courses.find(c => c.id === btn.dataset.exploreCourse);
-      if (!course) return;
-      switchMode('reverse');
-      $('courseSearchInput').value = course.name;
-      state.searchQuery = course.name;
-      renderReverseResults();
-      $('reverseResultsSection').scrollIntoView({ behavior: 'smooth' });
+      const courseId = btn.dataset.exploreCourse;
+      const course = courses.find(c => c.id === courseId);
+      if (course) {
+        switchMode('reverse');
+        const searchInput = $('courseSearchInput');
+        if (searchInput) {
+          searchInput.value = course.name;
+          state.searchQuery = course.name;
+          renderReverseResults();
+          const resultsSection = $('reverseResultsSection');
+          if (resultsSection) {
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      }
     });
   });
 }
