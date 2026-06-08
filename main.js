@@ -1792,11 +1792,12 @@ function init() {
 
   $('planSwitchToCheck').addEventListener('click', () => switchMode('check'));
 
-  // Strengths is the default panel — populate the grid immediately
-  renderStrengthsGrid();
+  // Activate the default panel — unhides it and populates the strengths grid
+  switchMode(state.mode);
 
   if (window.sessionStorage.getItem('openStrengthsMode') === 'true') {
     window.sessionStorage.removeItem('openStrengthsMode');
+    switchMode('strengths');
   }
 }
 
