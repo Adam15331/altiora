@@ -37,15 +37,15 @@
 
       <!-- ── Mode toggle ──────────────────────────────────────── -->
       <div class="mode-toggle" role="tablist" aria-label="Application mode">
-        <button class="mode-btn active" data-mode="strengths" role="tab" aria-selected="true" aria-controls="panel-strengths">
+        <button class="mode-btn active" data-mode="check" role="tab" aria-selected="true" aria-controls="panel-check">
           <span class="mode-btn__icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M10 3a7 7 0 0 1 7 7c0 2-1 4-2.5 5.5L10 19l-4.5-3.5A7 7 0 0 1 10 3z"/>
-              <path d="M7 8h6M10 8v5"/>
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="6" height="6" rx="1.2"/><rect x="11" y="3" width="6" height="6" rx="1.2"/>
+              <rect x="3" y="11" width="6" height="6" rx="1.2"/><rect x="11" y="11" width="6" height="6" rx="1.2"/>
             </svg>
           </span>
-          <span class="mode-btn__label">Start with strengths</span>
-          <span class="mode-btn__label--short" aria-hidden="true">Strengths</span>
+          <span class="mode-btn__label">Check Combination</span>
+          <span class="mode-btn__label--short" aria-hidden="true">Check</span>
         </button>
         <button class="mode-btn" data-mode="reverse" role="tab" aria-selected="false" aria-controls="panel-reverse">
           <span class="mode-btn__icon" aria-hidden="true">
@@ -66,15 +66,15 @@
           <span class="mode-btn__label">Subject Planner</span>
           <span class="mode-btn__label--short" aria-hidden="true">Plan</span>
         </button>
-        <button class="mode-btn" data-mode="check" role="tab" aria-selected="false" aria-controls="panel-check">
+        <button class="mode-btn" data-mode="strengths" role="tab" aria-selected="false" aria-controls="panel-strengths">
           <span class="mode-btn__icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="3" y="3" width="6" height="6" rx="1.2"/><rect x="11" y="3" width="6" height="6" rx="1.2"/>
-              <rect x="3" y="11" width="6" height="6" rx="1.2"/><rect x="11" y="11" width="6" height="6" rx="1.2"/>
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M10 3a7 7 0 0 1 7 7c0 2-1 4-2.5 5.5L10 19l-4.5-3.5A7 7 0 0 1 10 3z"/>
+              <path d="M7 8h6M10 8v5"/>
             </svg>
           </span>
-          <span class="mode-btn__label">Check Combination</span>
-          <span class="mode-btn__label--short" aria-hidden="true">Check</span>
+          <span class="mode-btn__label">Start with strengths</span>
+          <span class="mode-btn__label--short" aria-hidden="true">Strengths</span>
         </button>
       </div>
 
