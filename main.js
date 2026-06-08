@@ -28,7 +28,7 @@ const dataLoadError =
 const state = {
   mode:               'check',
   checkSystem:        '',
-  reverseSystem:      '',
+  reverseSystem:      'UK_A_Level',
   planCategory:       '',
   planSystem:         '',
   selectedSubjects:   [],
@@ -166,15 +166,28 @@ function subjectDisplayScore(name) {
  * Sort: score DESC → length DESC (longer = more specific) → alpha ASC.
  */
 function tagToLocal(tag, systemKey) {
-  if (!systemKey) return humanTag(tag);
+  if (!systemKey) return readableTag(tag);
   const options = getReverseMap(systemKey)[tag];
-  if (!options?.length) return humanTag(tag);
+  if (!options?.length) return readableTag(tag);
   return [...options].sort((a, b) => {
     const byScore = subjectDisplayScore(b) - subjectDisplayScore(a);
     if (byScore !== 0) return byScore;
     const byLen = b.length - a.length;
     return byLen !== 0 ? byLen : a.localeCompare(b);
   })[0];
+}
+
+// Qualifier words that describe a level/tier rather than the subject itself.
+// When a tag ends with one of these, it's wrapped in parentheses for clarity.
+const _TAG_QUALIFIERS = new Set(['Advanced', 'Standard', 'Higher', 'Basic', 'Core', 'Extended', 'Foundation', 'HL', 'SL']);
+
+function readableTag(tag) {
+  const parts = tag.split('_');
+  const last  = parts[parts.length - 1];
+  if (parts.length > 1 && _TAG_QUALIFIERS.has(last)) {
+    return `${parts.slice(0, -1).join(' ')} (${last})`;
+  }
+  return parts.join(' ');
 }
 
 function humanTag(tag) { return tag.replace(/_/g, ' '); }
@@ -191,6 +204,67 @@ const MATHS_IMPLY = {
   UK_A_Level: { advanced: 'Further Mathematics',   standard: 'Mathematics'    },
   SG_A_Level: { advanced: 'H2 Further Mathematics', standard: 'H2 Mathematics' },
 };
+
+// IB mutual-exclusion groups.
+// Each entry is { label, subjects[] }. When a user selects a subject that
+// belongs to a group, any other already-selected subject in the same group
+// is automatically deselected.
+// Language B: each language is its own group so you can take French B + German B,
+// but not French B HL + French B SL simultaneously.
+const IB_MUTUAL_EXCLUSION_GROUPS = [
+  {
+    label: 'Mathematics',
+    subjects: [
+      'Mathematics: Analysis and Approaches HL',
+      'Mathematics: Analysis and Approaches SL',
+      'Mathematics: Applications and Interpretation HL',
+      'Mathematics: Applications and Interpretation SL',
+      'Mathematics HL',
+      'Mathematics SL',
+      'Mathematical Studies SL',
+      'Further Mathematics HL',
+    ],
+  },
+  {
+    label: 'Language A',
+    subjects: [
+      'Language A: Literature HL',
+      'Language A: Literature SL',
+      'Language A: Language and Literature HL',
+      'Language A: Language and Literature SL',
+      'English A: Literature HL',
+      'English A: Literature SL',
+      'English A: Language and Literature HL',
+      'English A: Language and Literature SL',
+      'French A: Literature HL',
+      'French A: Literature SL',
+      'French A: Language and Literature HL',
+      'French A: Language and Literature SL',
+      'German A: Literature HL',
+      'German A: Literature SL',
+      'German A: Language and Literature HL',
+      'German A: Language and Literature SL',
+      'Spanish A: Literature HL',
+      'Spanish A: Literature SL',
+      'Spanish A: Language and Literature HL',
+      'Spanish A: Language and Literature SL',
+      'Mandarin A: Literature HL',
+      'Mandarin A: Literature SL',
+      'Mandarin A: Language and Literature HL',
+      'Mandarin A: Language and Literature SL',
+    ],
+  },
+  // Language B: one group per language (can mix French B + German B, but not HL + SL of same)
+  { label: 'French B',   subjects: ['French B HL',   'French B SL']   },
+  { label: 'German B',   subjects: ['German B HL',   'German B SL']   },
+  { label: 'Spanish B',  subjects: ['Spanish B HL',  'Spanish B SL']  },
+  { label: 'Mandarin B', subjects: ['Mandarin B HL', 'Mandarin B SL'] },
+  { label: 'Chinese B',  subjects: ['Chinese B HL',  'Chinese B SL']  },
+  // Sciences: same subject at different levels conflicts
+  { label: 'Biology',   subjects: ['Biology HL',   'Biology SL']   },
+  { label: 'Chemistry', subjects: ['Chemistry HL', 'Chemistry SL'] },
+  { label: 'Physics',   subjects: ['Physics HL',   'Physics SL']   },
+];
 
 // Subjects the user has explicitly deselected despite auto-imply.
 // Cleared when the qualification system changes.
@@ -551,6 +625,39 @@ function showToast(message) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+ * LOADING SPINNER
+ * ═══════════════════════════════════════════════════════════════ */
+
+const SPINNER_MIN_MS = 150;
+let _spinnerEl    = null;
+let _spinnerStart = 0;
+let _spinnerTimer = null;
+
+// Inserts a spinner as the element immediately before containerId in the DOM.
+// Placing it outside the container means container.innerHTML = '' won't destroy it.
+function showLoadingSpinner(containerId) {
+  clearTimeout(_spinnerTimer);
+  _spinnerStart = Date.now();
+  if (_spinnerEl) return;           // already visible — just reset the timer above
+  _spinnerEl = document.createElement('div');
+  _spinnerEl.className = 'loading-spinner';
+  _spinnerEl.setAttribute('aria-hidden', 'true');
+  $(containerId)?.before(_spinnerEl);
+}
+
+function hideLoadingSpinner() {
+  if (!_spinnerEl) return;
+  const remaining = SPINNER_MIN_MS - (Date.now() - _spinnerStart);
+  clearTimeout(_spinnerTimer);
+  if (remaining > 0) {
+    _spinnerTimer = setTimeout(() => { _spinnerEl?.remove(); _spinnerEl = null; }, remaining);
+  } else {
+    _spinnerEl.remove();
+    _spinnerEl = null;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
  * MODE TOGGLE
  * ═══════════════════════════════════════════════════════════════ */
 
@@ -581,7 +688,7 @@ function populateSystemSelects() {
     .map(([k, sys]) => `<option value="${k}">${esc(sys.systemLabel)}</option>`)
     .join('');
   $('checkSystemSelect').innerHTML   = `<option value="">Select your system…</option>${optHtml}`;
-  $('reverseSystemSelect').innerHTML = `<option value="">Show as universal tags</option>${optHtml}`;
+  $('reverseSystemSelect').innerHTML = optHtml;
   $('planSystemSelect').innerHTML    = `<option value="">Select your system…</option>${optHtml}`;
 }
 
@@ -607,7 +714,7 @@ function buildSubjectPicker(systemKey) {
   subjects.forEach(name => {
     const label = document.createElement('label');
     label.className = 'subject-chip';
-    label.innerHTML = `<input type="checkbox" value="${esc(name)}"><span>${esc(name)}</span>`;
+    label.innerHTML = `<input type="checkbox" value="${esc(name)}"><span>${esc(name)}</span><span class="auto-indicator hidden" aria-hidden="true"> ↻</span>`;
     label.querySelector('input').addEventListener('change', onSubjectToggle);
     frag.appendChild(label);
   });
@@ -697,6 +804,13 @@ function hideMathsWarningBanner() {
   if (banner) banner.remove();
 }
 
+// Returns the exclusion group entry the subject belongs to, or null.
+// Only active for the IB system.
+function getExclusionGroup(subjectName, systemKey) {
+  if (systemKey !== 'IB') return null;
+  return IB_MUTUAL_EXCLUSION_GROUPS.find(g => g.subjects.includes(subjectName)) ?? null;
+}
+
 function onSubjectToggle(e = null) {
   const changedValue = e?.target?.value ?? null;
   const wasChecked   = e?.target?.checked ?? null;
@@ -713,6 +827,20 @@ function onSubjectToggle(e = null) {
   if (changedValue && wasChecked === true) {
     _suppressedAutoImply.delete(changedValue);
     if (imply && changedValue === imply.standard) _dismissedMathsWarning = false;
+  }
+
+  // IB mutual exclusivity: when a subject is checked, uncheck any other subject
+  // in the same exclusion group and notify the user.
+  if (changedValue && wasChecked === true) {
+    const group = getExclusionGroup(changedValue, state.checkSystem);
+    if (group) {
+      $$('#subjectPicker input:checked').forEach(input => {
+        if (input.value !== changedValue && group.subjects.includes(input.value)) {
+          input.checked = false;
+          showToast(`Only one ${group.label} subject allowed. Switched to ${changedValue}.`);
+        }
+      });
+    }
   }
 
   // Read current checkbox state from DOM.
@@ -747,9 +875,18 @@ function onSubjectToggle(e = null) {
   }
 
   $$('#subjectPicker .subject-chip').forEach(chip => {
-    const input = chip.querySelector('input');
+    const input     = chip.querySelector('input');
+    const indicator = chip.querySelector('.auto-indicator');
     chip.classList.toggle('selected', input.checked);
     chip.classList.toggle('chip--auto-added', autoAdded.has(input.value));
+    if (indicator) {
+      if (autoAdded.has(input.value)) {
+        indicator.classList.remove('hidden');
+        if (imply) indicator.title = `Added automatically because you selected ${imply.advanced}`;
+      } else if (!input.checked) {
+        indicator.classList.add('hidden');
+      }
+    }
   });
 
   const shouldWarn = imply
@@ -763,6 +900,7 @@ function onSubjectToggle(e = null) {
   $('categoryPickerSection').classList.toggle('hidden', state.selectedSubjects.length === 0);
   renderCheckEmptyState();
   clearTimeout(_subjectDebounce);
+  if (state.selectedSubjects.length > 0) showLoadingSpinner('courseGrid');
   _subjectDebounce = setTimeout(renderCheckResults, 100);
 }
 
@@ -849,6 +987,10 @@ function renderCheckResults() {
     return;
   }
   section.classList.remove('hidden');
+  showLoadingSpinner('courseGrid');
+
+  // Yield one frame so the spinner paints before synchronous classification work.
+  requestAnimationFrame(() => {
 
   const minNeeded = MIN_SUBJECTS[state.checkSystem] ?? 3;
   const tooFew    = state.selectedSubjects.length < minNeeded;
@@ -906,14 +1048,12 @@ function renderCheckResults() {
       } else {
         result.ibHLWarning = null;
       }
-      // UK universities require a minimum of 3 HL subjects
-      if (course.country === 'UK') {
-        const hlCount = Array.from(selectedSubjectsWithLevel.values()).filter(item => item.isHL).length;
-        if (hlCount < 3) {
-          if (result.status === 'green') result.status = 'amber';
-          if (!result.ibHLWarning) result.ibHLWarning = [];
-          result.ibHLWarning.push('Need at least 3 HL subjects for UK universities');
-        }
+      // Most universities worldwide expect 3 HL subjects for IB Diploma
+      const hlCount = Array.from(selectedSubjectsWithLevel.values()).filter(item => item.isHL).length;
+      if (hlCount < 3) {
+        if (result.status === 'green') result.status = 'amber';
+        if (!result.ibHLWarning) result.ibHLWarning = [];
+        result.ibHLWarning.push('Most universities expect at least 3 HL subjects for the full IB Diploma');
       }
     }
     byStatus[result.status].push({ course, result });
@@ -958,6 +1098,9 @@ function renderCheckResults() {
   if (byStatus.red.length) {
     container.appendChild(buildGroup('red', 'Out of reach', byStatus.red, cardIndex, true));
   }
+
+  hideLoadingSpinner();
+  }); // end requestAnimationFrame
 }
 
 function buildGroup(status, headerText, items, startIndex, collapsed = false) {
@@ -1799,6 +1942,7 @@ function init() {
   }
 
   populateSystemSelects();
+  $('reverseSystemSelect').value = 'UK_A_Level';
   buildCountryFilterBar();
   buildCategoryPicker();
   buildPlanCategoryGrid();

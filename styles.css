@@ -173,6 +173,21 @@ main     { flex: 1; padding: var(--pad); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-cat-cs);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin: var(--space-4) 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* ═══════════════════════════════════════════════════════════════
  * Controls
  * ═══════════════════════════════════════════════════════════════ */
@@ -317,6 +332,13 @@ main     { flex: 1; padding: var(--pad); }
 
 /* .chip--auto-added is set in JS for debugging but carries no extra styling —
    auto-implied chips look identical to manually selected ones. */
+
+.auto-indicator {
+  font-size: 10px;
+  opacity: 0.5;
+  margin-left: 4px;
+  transition: opacity var(--t-fast);
+}
 
 /* Banner: standard maths deselected while Further Maths is active */
 .maths-warning-banner {
