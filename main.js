@@ -584,6 +584,7 @@ function buildSubjectPicker(systemKey) {
   section.classList.remove('hidden');
 
   // Reset auto-imply suppression and category state when system changes
+  selectedSubjectsWithLevel.clear();
   _suppressedAutoImply.clear();
   _dismissedMathsWarning = false;
   hideMathsWarningBanner();
@@ -1738,6 +1739,7 @@ function init() {
     state.selectedSubjects = [];
     state.selectedTags     = new Set();
     state.predictedGrade   = null;
+    selectedSubjectsWithLevel.clear();
     $('checkResultsSection').classList.add('hidden');
     const emptyEl = $('checkEmptyState');
     if (emptyEl) delete emptyEl.dataset.builtFor;
