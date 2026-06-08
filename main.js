@@ -13,6 +13,14 @@
 
 'use strict';
 
+/* ─── Data load guard ───────────────────────────────────────────
+ * Checked at parse time so init() and render functions can bail
+ * immediately if a required data script failed to load.
+ * ─────────────────────────────────────────────────────────────── */
+const dataLoadError =
+  typeof qualificationMappings === 'undefined' ||
+  typeof courses               === 'undefined';
+
 /* ─── State ─────────────────────────────────────────────────────
  * Single source of truth. Read everywhere; mutate only in named
  * handler functions so the render path stays predictable.
@@ -190,6 +198,10 @@ const _suppressedAutoImply = new Set();
 // True after the user clicks "Dismiss" on the maths warning banner.
 // Cleared when system changes or user re-selects standard maths.
 let _dismissedMathsWarning = false;
+// True when the user explicitly chose "Skip" on the grade selector, or
+// cleared a grade they previously entered — suppresses the grade banner.
+// Cleared on system change so a fresh context prompts again.
+let gradeInputDismissed = false;
 
 /* ═══════════════════════════════════════════════════════════════
  * TAG DERIVATION
@@ -366,12 +378,14 @@ function buildGradeInput(systemKey) {
   function wireSelectGrade(selectId) {
     const sel = $(selectId);
     sel.addEventListener('change', e => {
-      state.predictedGrade = e.target.value || null;
+      state.predictedGrade  = e.target.value || null;
+      gradeInputDismissed   = !e.target.value; // Skip = dismissed; grade chosen = not dismissed
       $('clearGradeBtn').classList.toggle('hidden', !state.predictedGrade);
       renderCheckResults();
     });
     $('clearGradeBtn').addEventListener('click', () => {
       state.predictedGrade = null;
+      gradeInputDismissed  = true; // user has seen/used grade input — don't nag again
       sel.value = '';
       $('clearGradeBtn').classList.add('hidden');
       renderCheckResults();
@@ -419,11 +433,13 @@ function buildGradeInput(systemKey) {
     $('gradeInputIB').addEventListener('input', e => {
       const v = parseInt(e.target.value, 10);
       state.predictedGrade = (!isNaN(v) && v >= 24 && v <= 45) ? String(v) : null;
+      gradeInputDismissed  = false; // actively entering — reset dismissal
       $('clearGradeBtn').classList.toggle('hidden', !state.predictedGrade);
       renderCheckResults();
     });
     $('clearGradeBtn').addEventListener('click', () => {
       state.predictedGrade = null;
+      gradeInputDismissed  = true; // seen/used grade input — don't nag again
       $('gradeInputIB').value = '';
       $('clearGradeBtn').classList.add('hidden');
       renderCheckResults();
@@ -604,6 +620,7 @@ function buildSubjectPicker(systemKey) {
   selectedSubjectsWithLevel.clear();
   _suppressedAutoImply.clear();
   _dismissedMathsWarning = false;
+  gradeInputDismissed = false;
   hideMathsWarningBanner();
   state.selectedCategories.clear();
   $$('#categoryPicker .category-chip').forEach(b => b.classList.remove('active'));
@@ -824,6 +841,7 @@ function renderSummaryBar(subjectCount, counts, total) {
  * ═══════════════════════════════════════════════════════════════ */
 
 function renderCheckResults() {
+  if (dataLoadError) return;
   const section = $('checkResultsSection');
 
   if (state.selectedSubjects.length === 0) {
@@ -834,7 +852,7 @@ function renderCheckResults() {
 
   const minNeeded = MIN_SUBJECTS[state.checkSystem] ?? 3;
   const tooFew    = state.selectedSubjects.length < minNeeded;
-  const noGrade   = !state.predictedGrade;
+  const noGrade   = !state.predictedGrade && !gradeInputDismissed;
 
   // Remove any existing banners before re-rendering
   section.querySelectorAll('.subject-count-warning, .grade-missing-banner').forEach(el => el.remove());
@@ -1162,6 +1180,7 @@ $('reverseSystemSelect').addEventListener('change', e => {
 });
 
 function renderReverseResults() {
+  if (dataLoadError) return;
   const section = $('reverseResultsSection');
   const q = state.searchQuery.toLowerCase();
 
@@ -1346,6 +1365,7 @@ function getCombinations(arr, size) {
 }
 
 function renderPlanResults() {
+  if (dataLoadError) return;
   if (!state.planCategory || !state.planSystem) return;
 
   const catCourses = courses.filter(c => c.category === state.planCategory);
@@ -1630,6 +1650,7 @@ function renderStrengthsGrid() {
 }
 
 function renderStrengthsResults(strength) {
+  if (dataLoadError) return;
   const resultsDiv = $('strengthsSuggestions');
   const section    = $('strengthsResults');
 
@@ -1762,6 +1783,21 @@ function logEvent(eventName, properties = {}) {
  * ═══════════════════════════════════════════════════════════════ */
 
 function init() {
+  if (dataLoadError) {
+    const main = document.querySelector('main');
+    if (main) {
+      main.innerHTML = `
+        <div class="data-error-banner" role="alert" aria-live="assertive">
+          <p class="data-error-banner__msg">
+            ⚠️ Failed to load course data. Please check your internet connection and refresh the page.
+            If the problem persists, <a href="mailto:support@altiora.app">contact support</a>.
+          </p>
+          <button type="button" class="data-error-banner__retry" onclick="window.location.reload()">↺ Retry</button>
+        </div>`;
+    }
+    return;
+  }
+
   populateSystemSelects();
   buildCountryFilterBar();
   buildCategoryPicker();
