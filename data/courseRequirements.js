@@ -63,7 +63,7 @@ const courses = [
     id: "uk-physics-oxford", name: "Physics BA/MPhys",
     university: "University of Oxford", country: "UK", degreeLevel: "MPhys", category: "sciences",
     requirements: { essential: ["Mathematics_Standard","Physics"], preferred: ["Mathematics_Advanced"], useful: ["Chemistry"] },
-    grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Chemistry"], ibHLNote: "665 at HL" },
+    grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Chemistry"], ibHLNote: "776 at HL"},
     admissionTests: ["PAT"],
     universityContext: {
       tier: "world-top-10",
@@ -115,7 +115,7 @@ const courses = [
     id: "uk-biochemistry-oxford", name: "Biochemistry MBiochem",
     university: "University of Oxford", country: "UK", degreeLevel: "MBiochem", category: "sciences",
     requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
-    grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Chemistry"], ibHLNote: "665 at HL" },
+    grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Chemistry"], ibHLNote: "776 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-10",
@@ -245,7 +245,7 @@ const courses = [
     id: "uk-medicine-imperial", name: "Medicine MBBS",
     university: "Imperial College London", country: "UK", degreeLevel: "MBBS", category: "medicine",
     requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
-    grades: { aLevels: "AAA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "776 at HL" },
+    grades: { aLevels: "AAA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "666 at HL"},
     admissionTests: ["UCAT"],
     universityContext: {
       tier: "world-top-10",
@@ -310,7 +310,7 @@ const courses = [
     id: "uk-physics-imperial", name: "Physics BSc/MSci",
     university: "Imperial College London", country: "UK", degreeLevel: "MSci", category: "sciences",
     requirements: { essential: ["Mathematics_Standard","Physics"], preferred: ["Mathematics_Advanced"], useful: ["Chemistry"] },
-    grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Chemistry"], ibHLNote: "665 at HL" },
+    grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Chemistry"], ibHLNote: "776 at HL"},
     admissionTests: ["PAT"],
     universityContext: {
       tier: "world-top-10",
@@ -323,7 +323,7 @@ const courses = [
     id: "uk-maths-imperial", name: "Mathematics BSc/MSci",
     university: "Imperial College London", country: "UK", degreeLevel: "MSci", category: "mathematics",
     requirements: { essential: ["Mathematics_Standard","Mathematics_Advanced"], preferred: [], useful: ["Physics","Statistics"] },
-    grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "776 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-10",
@@ -440,7 +440,7 @@ const courses = [
     id: "uk-cs-ucl", name: "Computer Science BSc/MEng",
     university: "University College London", country: "UK", degreeLevel: "MEng", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "776 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-50",
@@ -453,7 +453,7 @@ const courses = [
     id: "uk-engineering-ucl", name: "Engineering (general) MEng",
     university: "University College London", country: "UK", degreeLevel: "MEng", category: "engineering",
     requirements: { essential: ["Mathematics_Standard","Physics"], preferred: ["Mathematics_Advanced"], useful: ["Chemistry","Computer_Science"] },
-    grades: { aLevels: "AAA", ib: 37, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "665 at HL" },
+    grades: { aLevels: "AAA", ib: 37, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "776 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-50",
@@ -544,7 +544,7 @@ const courses = [
     id: "uk-maths-ucl", name: "Mathematics BSc/MSci",
     university: "University College London", country: "UK", degreeLevel: "MSci", category: "mathematics",
     requirements: { essential: ["Mathematics_Standard","Mathematics_Advanced"], preferred: [], useful: ["Physics","Statistics"] },
-    grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "776 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-50",
@@ -570,7 +570,7 @@ const courses = [
     id: "uk-cs-edinburgh", name: "Computer Science BSc",
     university: "University of Edinburgh", country: "UK", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "AAA", ib: 35, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: "AAA", ib: 35, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-50",
@@ -739,7 +739,7 @@ const courses = [
     id: "uk-cs-manchester", name: "Computer Science BSc/MEng",
     university: "University of Manchester", country: "UK", degreeLevel: "MEng", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "AAA", ib: 35, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: "AAA", ib: 35, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-50",
@@ -830,7 +830,7 @@ const courses = [
     id: "uk-maths-warwick", name: "Mathematics BSc/MMath",
     university: "University of Warwick", country: "UK", degreeLevel: "MMath", category: "mathematics",
     requirements: { essential: ["Mathematics_Standard","Mathematics_Advanced"], preferred: [], useful: ["Physics","Statistics"] },
-    grades: { aLevels: "A*A*A", ib: 40, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: "A*A*A", ib: 40, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -843,7 +843,7 @@ const courses = [
     id: "uk-cs-warwick", name: "Computer Science BSc/MEng",
     university: "University of Warwick", country: "UK", degreeLevel: "MEng", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -895,7 +895,7 @@ const courses = [
     id: "uk-cs-bristol", name: "Computer Science BSc/MEng",
     university: "University of Bristol", country: "UK", degreeLevel: "MEng", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "A*AA", ib: 37, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: "A*AA", ib: 37, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -973,7 +973,7 @@ const courses = [
     id: "uk-cs-durham", name: "Computer Science BSc",
     university: "Durham University", country: "UK", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "AAA", ib: 37, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: "AAA", ib: 37, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -1025,7 +1025,7 @@ const courses = [
     id: "uk-cs-bath", name: "Computer Science BSc",
     university: "University of Bath", country: "UK", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "AAA", ib: 36, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: "AAA", ib: 36, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -1103,7 +1103,7 @@ const courses = [
     id: "uk-cs-glasgow", name: "Computing Science BSc",
     university: "University of Glasgow", country: "UK", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "AAB", ib: 33, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: "AAB", ib: 33, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -1155,7 +1155,7 @@ const courses = [
     id: "uk-cs-standrews", name: "Computer Science BSc",
     university: "University of St Andrews", country: "UK", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "AAA", ib: 35, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: "AAA", ib: 35, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -1194,7 +1194,7 @@ const courses = [
     id: "uk-maths-standrews", name: "Mathematics BSc/MMath",
     university: "University of St Andrews", country: "UK", degreeLevel: "MMath", category: "mathematics",
     requirements: { essential: ["Mathematics_Standard","Mathematics_Advanced"], preferred: [], useful: ["Physics","Statistics"] },
-    grades: { aLevels: "AAA", ib: 35, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: "AAA", ib: 35, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -1220,7 +1220,7 @@ const courses = [
     id: "uk-cs-leeds", name: "Computer Science BSc",
     university: "University of Leeds", country: "UK", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "AAA", ib: 34, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: "AAA", ib: 34, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -1285,7 +1285,7 @@ const courses = [
     id: "uk-cs-nottingham", name: "Computer Science BSc",
     university: "University of Nottingham", country: "UK", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "AAA", ib: 35, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: "AAA", ib: 35, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -1350,7 +1350,7 @@ const courses = [
     id: "uk-cs-birmingham", name: "Computer Science BSc",
     university: "University of Birmingham", country: "UK", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "ABB", ib: 31, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: "ABB", ib: 31, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -1428,7 +1428,7 @@ const courses = [
     id: "uk-cs-exeter", name: "Computer Science BSc",
     university: "University of Exeter", country: "UK", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "AAB", ib: 31, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: "AAB", ib: 31, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "national-leading",
@@ -2366,7 +2366,7 @@ const courses = [
     id: "sg-cs-nus", name: "Computer Science BSc",
     university: "National University of Singapore", country: "SG", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Physics"], useful: ["Computer_Science"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-50",
@@ -2470,7 +2470,7 @@ const courses = [
     id: "sg-cs-ntu", name: "Computer Science BSc",
     university: "Nanyang Technological University", country: "SG", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Physics"], useful: ["Computer_Science"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-50",
@@ -2587,7 +2587,7 @@ const courses = [
     id: "sg-cs-smu", name: "Computer Science BSc (SCIS)",
     university: "Singapore Management University", country: "SG", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Physics"], useful: ["Computer_Science"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "national-leading",
@@ -2643,7 +2643,7 @@ const courses = [
     id: "hk-cs-hku", name: "Computer Science BSc",
     university: "University of Hong Kong", country: "HK", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Physics"], useful: ["Computer_Science"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-50",
@@ -2760,7 +2760,7 @@ const courses = [
     id: "hk-cs-cuhk", name: "Computer Science BSc",
     university: "Chinese University of Hong Kong", country: "HK", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Physics"], useful: ["Computer_Science"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -2851,7 +2851,7 @@ const courses = [
     id: "hk-cs-hkust", name: "Computer Science BSc",
     university: "HKUST", country: "HK", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Physics"], useful: ["Computer_Science"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-50",
@@ -2916,7 +2916,7 @@ const courses = [
     id: "hk-maths-hkust", name: "Mathematics BSc",
     university: "HKUST", country: "HK", degreeLevel: "BSc", category: "mathematics",
     requirements: { essential: ["Mathematics_Advanced"], preferred: [], useful: ["Physics","Statistics"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-50",
@@ -2994,7 +2994,7 @@ const courses = [
     id: "hk-cs-polyu", name: "Computing BSc",
     university: "Hong Kong Polytechnic University", country: "HK", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Physics"], useful: ["Computer_Science"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "national-leading",
@@ -3007,7 +3007,7 @@ const courses = [
     id: "hk-cs-cityu", name: "Computer Science BSc",
     university: "City University of Hong Kong", country: "HK", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Physics"], useful: ["Computer_Science"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "national-leading",
@@ -3746,7 +3746,7 @@ const courses = [
     id: "ca-cs-utoronto", name: "Computer Science BSc",
     university: "University of Toronto", country: "CA", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-50",
@@ -3824,7 +3824,7 @@ const courses = [
     id: "ca-cs-mcgill", name: "Computer Science BSc",
     university: "McGill University", country: "CA", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -3876,7 +3876,7 @@ const courses = [
     id: "ca-cs-ubc", name: "Computer Science BSc",
     university: "University of British Columbia", country: "CA", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-50",
@@ -3928,7 +3928,7 @@ const courses = [
     id: "ca-cs-waterloo", name: "Computer Science BSc",
     university: "University of Waterloo", country: "CA", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -3954,7 +3954,7 @@ const courses = [
     id: "ca-mathematics-waterloo", name: "Mathematics BSc",
     university: "University of Waterloo", country: "CA", degreeLevel: "BSc", category: "mathematics",
     requirements: { essential: ["Mathematics_Advanced"], preferred: [], useful: ["Physics","Computer_Science","Statistics"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -4006,7 +4006,7 @@ const courses = [
     id: "ca-cs-mcmaster", name: "Computer Science BSc",
     university: "McMaster University", country: "CA", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "national-leading",
@@ -4032,7 +4032,7 @@ const courses = [
     id: "ca-cs-western", name: "Computer Science BSc",
     university: "Western University", country: "CA", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "national-leading",
@@ -4110,7 +4110,7 @@ const courses = [
     id: "ca-cs-alberta", name: "Computer Science BSc",
     university: "University of Alberta", country: "CA", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "national-leading",
@@ -4136,7 +4136,7 @@ const courses = [
     id: "ca-cs-sfu", name: "Computer Science BSc",
     university: "Simon Fraser University", country: "CA", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "national-leading",
@@ -4201,7 +4201,7 @@ const courses = [
     id: "ca-cs-ottawa", name: "Computer Science BSc",
     university: "University of Ottawa", country: "CA", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "national-leading",
@@ -4253,7 +4253,7 @@ const courses = [
     id: "ca-cs-concordia", name: "Computer Science BSc",
     university: "Concordia University", country: "CA", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "national-leading",
@@ -4305,7 +4305,7 @@ const courses = [
     id: "ca-cs-uvic", name: "Computer Science BSc",
     university: "University of Victoria", country: "CA", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
-    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL"},
     admissionTests: [],
     universityContext: {
       tier: "national-leading",
