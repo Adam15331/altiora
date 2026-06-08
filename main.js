@@ -13,6 +13,14 @@
 
 'use strict';
 
+/* ─── Data load guard ───────────────────────────────────────────
+ * Checked at parse time so init() and render functions can bail
+ * immediately if a required data script failed to load.
+ * ─────────────────────────────────────────────────────────────── */
+const dataLoadError =
+  typeof qualificationMappings === 'undefined' ||
+  typeof courses               === 'undefined';
+
 /* ─── State ─────────────────────────────────────────────────────
  * Single source of truth. Read everywhere; mutate only in named
  * handler functions so the render path stays predictable.
@@ -824,6 +832,7 @@ function renderSummaryBar(subjectCount, counts, total) {
  * ═══════════════════════════════════════════════════════════════ */
 
 function renderCheckResults() {
+  if (dataLoadError) return;
   const section = $('checkResultsSection');
 
   if (state.selectedSubjects.length === 0) {
@@ -1162,6 +1171,7 @@ $('reverseSystemSelect').addEventListener('change', e => {
 });
 
 function renderReverseResults() {
+  if (dataLoadError) return;
   const section = $('reverseResultsSection');
   const q = state.searchQuery.toLowerCase();
 
@@ -1346,6 +1356,7 @@ function getCombinations(arr, size) {
 }
 
 function renderPlanResults() {
+  if (dataLoadError) return;
   if (!state.planCategory || !state.planSystem) return;
 
   const catCourses = courses.filter(c => c.category === state.planCategory);
@@ -1630,6 +1641,7 @@ function renderStrengthsGrid() {
 }
 
 function renderStrengthsResults(strength) {
+  if (dataLoadError) return;
   const resultsDiv = $('strengthsSuggestions');
   const section    = $('strengthsResults');
 
@@ -1762,6 +1774,21 @@ function logEvent(eventName, properties = {}) {
  * ═══════════════════════════════════════════════════════════════ */
 
 function init() {
+  if (dataLoadError) {
+    const main = document.querySelector('main');
+    if (main) {
+      main.innerHTML = `
+        <div class="data-error-banner" role="alert" aria-live="assertive">
+          <p class="data-error-banner__msg">
+            ⚠️ Failed to load course data. Please check your internet connection and refresh the page.
+            If the problem persists, <a href="mailto:support@altiora.app">contact support</a>.
+          </p>
+          <button type="button" class="data-error-banner__retry" onclick="window.location.reload()">↺ Retry</button>
+        </div>`;
+    }
+    return;
+  }
+
   populateSystemSelects();
   buildCountryFilterBar();
   buildCategoryPicker();
