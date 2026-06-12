@@ -1993,6 +1993,107 @@ function setTier(tier) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+ * PERSONAL STATEMENT COACH  (Plus/Pro — mock AI, demo only)
+ * ═══════════════════════════════════════════════════════════════ */
+
+const PS_STORAGE_KEY = 'altiora_personal_statement';
+const PS_MOCK_DELAY  = 1500;
+
+// Canned rewrite shown for any selection — replace with real API later.
+const PS_MOCK_IMPROVED = 'During a week of work experience on a stroke ward, I watched a physiotherapist coax a patient through her first steps after surgery — that moment crystallised exactly why I want to study medicine.';
+
+let _psRewriteRange = null;   // { start, end } of the selection being rewritten
+let _psSpinnerEl    = null;
+
+function updatePsCharCount() {
+  const ta = $('psTextarea');
+  $('psCharCount').textContent = `${ta.value.length} / 4000`;
+}
+
+function psShowSpinner(beforeEl) {
+  psHideSpinner();
+  _psSpinnerEl = document.createElement('div');
+  _psSpinnerEl.className = 'loading-spinner';
+  _psSpinnerEl.setAttribute('aria-hidden', 'true');
+  beforeEl.before(_psSpinnerEl);
+}
+
+function psHideSpinner() {
+  _psSpinnerEl?.remove();
+  _psSpinnerEl = null;
+}
+
+function initPersonalStatement() {
+  const ta = $('psTextarea');
+  if (!ta) return;
+
+  // Restore saved draft
+  const saved = localStorage.getItem(PS_STORAGE_KEY);
+  if (saved) ta.value = saved;
+  updatePsCharCount();
+
+  ta.addEventListener('input', updatePsCharCount);
+
+  $('psSaveBtn').addEventListener('click', () => {
+    localStorage.setItem(PS_STORAGE_KEY, ta.value);
+    showToast('Draft saved');
+    logEvent('ps_draft_save', { length: ta.value.length });
+  });
+
+  $('psFeedbackBtn').addEventListener('click', () => {
+    if (!ta.value.trim()) {
+      showToast('Write or paste a draft first');
+      return;
+    }
+    const btn = $('psFeedbackBtn');
+    btn.disabled = true;
+    $('psFeedback').classList.add('hidden');
+    psShowSpinner($('psFeedback'));
+    logEvent('ps_feedback_request', { length: ta.value.length });
+    setTimeout(() => {
+      psHideSpinner();
+      btn.disabled = false;
+      $('psFeedback').classList.remove('hidden');
+      $('psFeedback').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, PS_MOCK_DELAY);
+  });
+
+  $('psRewriteBtn').addEventListener('click', () => {
+    const start = ta.selectionStart;
+    const end   = ta.selectionEnd;
+    const selected = ta.value.slice(start, end).trim();
+    if (!selected) {
+      showToast('Highlight some text in your draft first');
+      return;
+    }
+    _psRewriteRange = { start, end };
+    const btn = $('psRewriteBtn');
+    btn.disabled = true;
+    $('psRewriteResult').classList.add('hidden');
+    psShowSpinner($('psRewriteResult'));
+    logEvent('ps_rewrite_request', { length: selected.length });
+    setTimeout(() => {
+      psHideSpinner();
+      btn.disabled = false;
+      $('psRewriteOriginal').textContent = selected;
+      $('psRewriteImproved').textContent = PS_MOCK_IMPROVED;
+      $('psRewriteResult').classList.remove('hidden');
+      $('psRewriteResult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, PS_MOCK_DELAY);
+  });
+
+  $('psApplyRewriteBtn').addEventListener('click', () => {
+    if (!_psRewriteRange) return;
+    const { start, end } = _psRewriteRange;
+    ta.value = ta.value.slice(0, start) + PS_MOCK_IMPROVED + ta.value.slice(end);
+    _psRewriteRange = null;
+    $('psRewriteResult').classList.add('hidden');
+    updatePsCharCount();
+    showToast('Rewrite applied to draft');
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
  * INIT
  * ═══════════════════════════════════════════════════════════════ */
 
@@ -2009,6 +2110,7 @@ function init() {
   $('pricingOverlay')?.addEventListener('click', e => { if (e.target === $('pricingOverlay')) closePricingModal(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('pricingOverlay').classList.contains('hidden')) closePricingModal(); });
   updateTierUI();
+  initPersonalStatement();
 
   $$('.mode-btn').forEach(btn =>
     btn.addEventListener('click', () => switchMode(btn.dataset.mode))

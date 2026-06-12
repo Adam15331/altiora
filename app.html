@@ -345,11 +345,64 @@
            ═══════════════════════════════════════════════════════ -->
       <div id="panel-personal-statement" class="panel hidden" role="tabpanel">
         <div id="psUnlocked" class="hidden">
-          <p class="panel-intro">AI Personal Statement Coach — paste a draft and get structured feedback.</p>
-          <div class="coming-soon-box">
-            <span class="coming-soon-box__icon">📝</span>
-            <h3 class="coming-soon-box__title">Personal Statement Coach</h3>
-            <p class="coming-soon-box__text">Coming soon — this is a demo placeholder for the Plus-tier AI coach.</p>
+          <p class="panel-intro">AI Personal Statement Coach — write or paste your draft below, then get structured feedback. <em>(Demo mode — responses are mocked.)</em></p>
+
+          <div class="ps-editor">
+            <textarea id="psTextarea" class="ps-textarea" maxlength="4000"
+              placeholder="Paste or write your personal statement draft here…"
+              aria-label="Personal statement draft"></textarea>
+            <div class="ps-editor__bar">
+              <span id="psCharCount" class="ps-char-count">0 / 4000</span>
+              <div class="ps-editor__actions">
+                <button id="psSaveBtn" class="ps-btn ps-btn--ghost">Save Draft</button>
+                <button id="psRewriteBtn" class="ps-btn ps-btn--ghost">✨ Improve with AI</button>
+                <button id="psFeedbackBtn" class="ps-btn ps-btn--primary">Get AI Feedback</button>
+              </div>
+            </div>
+            <p class="ps-hint">Tip: highlight a sentence in your draft, then click “Improve with AI” to rewrite it.</p>
+          </div>
+
+          <div id="psRewriteResult" class="ps-rewrite hidden" aria-live="polite">
+            <h4 class="ps-section-head">✨ Suggested rewrite</h4>
+            <div class="ps-rewrite__row">
+              <div class="ps-rewrite__col">
+                <span class="ps-rewrite__label">Original</span>
+                <p id="psRewriteOriginal" class="ps-rewrite__text ps-rewrite__text--original"></p>
+              </div>
+              <div class="ps-rewrite__col">
+                <span class="ps-rewrite__label">Improved</span>
+                <p id="psRewriteImproved" class="ps-rewrite__text ps-rewrite__text--improved"></p>
+              </div>
+            </div>
+            <button id="psApplyRewriteBtn" class="ps-btn ps-btn--ghost">Apply to draft</button>
+          </div>
+
+          <div id="psFeedback" class="ps-feedback hidden" aria-live="polite">
+            <div class="ps-feedback__header">
+              <h4 class="ps-section-head">AI Feedback</h4>
+              <span class="ps-score">Overall: <strong>7/10</strong></span>
+            </div>
+            <div class="ps-feedback__group ps-feedback__group--strengths">
+              <span class="ps-feedback__label">Strengths</span>
+              <ul>
+                <li>Good opening hook</li>
+                <li>Clear motivation for medicine</li>
+              </ul>
+            </div>
+            <div class="ps-feedback__group ps-feedback__group--weaknesses">
+              <span class="ps-feedback__label">Weaknesses</span>
+              <ul>
+                <li>Second paragraph is generic</li>
+                <li>Missing specific examples</li>
+              </ul>
+            </div>
+            <div class="ps-feedback__group ps-feedback__group--suggestions">
+              <span class="ps-feedback__label">Suggestions</span>
+              <ul>
+                <li>Instead of “I want to help people”, describe a moment you helped someone</li>
+              </ul>
+            </div>
+            <p class="ps-feedback__disclaimer">Demo feedback — identical for every draft. Real AI analysis coming soon.</p>
           </div>
         </div>
         <div id="psLocked" class="locked-panel">

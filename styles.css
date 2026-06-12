@@ -347,6 +347,149 @@ main     { flex: 1; padding: var(--pad); }
 }
 .locked-panel__btn:hover { opacity: .88; }
 
+/* ── Personal Statement Coach ───────────────────────────────── */
+.ps-editor { max-width: 720px; }
+.ps-textarea {
+  width: 100%;
+  min-height: 280px;
+  resize: vertical;
+  padding: var(--space-4);
+  border: 1.5px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  color: var(--color-text-primary);
+  transition: border-color var(--t-base);
+}
+.ps-textarea:focus { outline: none; border-color: var(--color-text-secondary); }
+.ps-editor__bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--space-3); flex-wrap: wrap;
+  margin-top: var(--space-2);
+}
+.ps-char-count {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+.ps-editor__actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+.ps-btn {
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity var(--t-base), border-color var(--t-base);
+}
+.ps-btn:disabled { opacity: .5; cursor: wait; }
+.ps-btn--primary {
+  border: none;
+  background: var(--color-match-strong);
+  color: #fff;
+}
+.ps-btn--primary:hover:not(:disabled) { opacity: .88; }
+.ps-btn--ghost {
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+.ps-btn--ghost:hover:not(:disabled) { border-color: var(--color-text-secondary); }
+.ps-hint {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-2);
+}
+.ps-section-head {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Rewrite comparison */
+.ps-rewrite {
+  max-width: 720px;
+  margin-top: var(--space-6);
+  padding: var(--space-5);
+  border: 1.5px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+.ps-rewrite__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  margin: var(--space-4) 0;
+}
+.ps-rewrite__label {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+.ps-rewrite__text {
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  margin: var(--space-2) 0 0;
+  padding: var(--space-3);
+  border-radius: 8px;
+}
+.ps-rewrite__text--original { background: var(--color-bg); color: var(--color-text-secondary); }
+.ps-rewrite__text--improved { background: #f0f7f2; color: var(--color-text-primary); border: 1px solid var(--color-match-strong); }
+
+/* Feedback block */
+.ps-feedback {
+  max-width: 720px;
+  margin-top: var(--space-6);
+  padding: var(--space-5);
+  border: 1.5px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+.ps-feedback__header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--space-3); flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+.ps-score {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+.ps-score strong { color: var(--color-match-strong); font-size: var(--text-base); }
+.ps-feedback__group { margin-bottom: var(--space-4); }
+.ps-feedback__label {
+  display: block;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-1);
+}
+.ps-feedback__group--strengths   .ps-feedback__label { color: var(--color-match-strong); }
+.ps-feedback__group--weaknesses  .ps-feedback__label { color: var(--color-match-possible); }
+.ps-feedback__group--suggestions .ps-feedback__label { color: var(--color-text-secondary); }
+.ps-feedback__group ul {
+  margin: 0; padding-left: var(--space-5);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+}
+.ps-feedback__disclaimer {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  font-style: italic;
+  margin: var(--space-2) 0 0;
+}
+
+@media (max-width: 640px) {
+  .ps-rewrite__row { grid-template-columns: 1fr; }
+}
+
 /* Coming-soon placeholder for unlocked demo panels */
 .coming-soon-box {
   text-align: center;
