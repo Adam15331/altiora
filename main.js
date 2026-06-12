@@ -2094,6 +2094,205 @@ function initPersonalStatement() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+ * INTERVIEW COACH  (Pro — mock AI, demo only)
+ * ═══════════════════════════════════════════════════════════════ */
+
+const IC_STORAGE_KEY = 'altiora_interview_history';
+const IC_AI_DELAY    = 900;
+
+const IC_QUESTIONS = [
+  'Why do you want to study Computer Science?',
+  'Tell me about a time you solved a difficult problem.',
+  'What recent development in your field excites you most, and why?',
+  'How would you explain a complex technical concept to someone non-technical?',
+  'A classmate asks to copy your coursework. What do you do, and why?',
+];
+
+const IC_FOLLOW_UPS = [
+  'Interesting — and what first sparked that interest?',
+  'Good example. What would you do differently next time?',
+  'Nice choice. How do you keep up with developments like that?',
+  'Clear explanation. Communication matters as much as knowledge.',
+  'Ethics questions rarely have one right answer — reasoning is what counts.',
+];
+
+// Canned model answers surfaced for the weakest responses in the results screen.
+const IC_SUGGESTED_ANSWERS = [
+  'Tie your motivation to a concrete moment — a project you built, a problem that hooked you — rather than general enthusiasm.',
+  'Use the STAR structure: Situation, Task, Action, Result. Name the obstacle and quantify the outcome.',
+  'Pick one specific development, explain what it changes, and connect it to something you have read or tried yourself.',
+  'Use an analogy from everyday life, check understanding as you go, and avoid jargon entirely.',
+  'Acknowledge the conflict between loyalty and integrity, state your decision clearly, and explain the principle behind it.',
+];
+
+const IC_MOCK_TRANSCRIPT = 'Mock transcript: I am passionate about this subject because of a project I built last year that solved a real problem for my school.';
+
+let _icQuestionIndex = -1;        // -1 = not started
+let _icAnswers       = [];
+let _icVoiceMode     = false;
+
+function icAddMessage(role, text) {
+  const chat = $('icChat');
+  const msg  = document.createElement('div');
+  msg.className = `ic-msg ic-msg--${role}`;
+  msg.innerHTML = `<span class="ic-msg__who">${role === 'ai' ? '🎓 Interviewer' : 'You'}</span><p>${esc(text)}</p>`;
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function icAskCurrentQuestion() {
+  icAddMessage('ai', `Question ${_icQuestionIndex + 1} of ${IC_QUESTIONS.length}: ${IC_QUESTIONS[_icQuestionIndex]}`);
+}
+
+function icStart() {
+  _icQuestionIndex = 0;
+  _icAnswers       = [];
+  $('icChat').innerHTML = '';
+  $('icChat').classList.remove('hidden');
+  $('icInputBar').classList.remove('hidden');
+  $('icResults').classList.add('hidden');
+  $('icStartBtn').textContent = 'Restart Interview';
+  icAddMessage('ai', "Welcome! I'll ask you 5 questions. Take your time — answer as you would in a real interview.");
+  icAskCurrentQuestion();
+  $('icAnswerInput').focus();
+  logEvent('ic_interview_start', { mode: _icVoiceMode ? 'voice' : 'text' });
+}
+
+// Score from answer lengths: detailed answers score higher (demo heuristic).
+function icComputeScore() {
+  const avg = _icAnswers.reduce((s, a) => s + a.length, 0) / _icAnswers.length;
+  if (avg < 50)  return 55;
+  if (avg < 150) return 68;
+  return 78;
+}
+
+function icFinish() {
+  $('icInputBar').classList.add('hidden');
+  const score   = icComputeScore();
+  const brief   = score < 78;
+
+  // Two shortest answers get suggested model answers
+  const ranked = _icAnswers
+    .map((a, i) => ({ i, len: a.length }))
+    .sort((a, b) => a.len - b.len)
+    .slice(0, 2)
+    .sort((a, b) => a.i - b.i);
+
+  const suggestionsHtml = ranked.map(({ i }) => `
+    <div class="ic-suggestion">
+      <p class="ic-suggestion__q">Q${i + 1}: ${esc(IC_QUESTIONS[i])}</p>
+      <p class="ic-suggestion__a">${esc(IC_SUGGESTED_ANSWERS[i])}</p>
+    </div>`).join('');
+
+  $('icResults').innerHTML = `
+    <div class="ps-feedback__header">
+      <h4 class="ps-section-head">Interview Results</h4>
+      <span class="ps-score">Score: <strong>${score}/100</strong></span>
+    </div>
+    <div class="ps-feedback__group ps-feedback__group--strengths">
+      <span class="ps-feedback__label">Strengths</span>
+      <ul><li>Clear answers</li><li>Good subject knowledge</li></ul>
+    </div>
+    <div class="ps-feedback__group ps-feedback__group--weaknesses">
+      <span class="ps-feedback__label">Weaknesses</span>
+      <ul>
+        ${brief ? '<li>Answers were too brief — aim for 3–4 sentences with a concrete example</li>' : '<li>Needs more concise responses</li>'}
+        <li>Hesitation on ethics</li>
+      </ul>
+    </div>
+    <div class="ps-feedback__group ps-feedback__group--suggestions">
+      <span class="ps-feedback__label">Suggested answers for your weakest questions</span>
+      ${suggestionsHtml}
+    </div>
+    <p class="ps-feedback__disclaimer">Demo feedback — score is based only on answer length. Real AI analysis coming soon.</p>`;
+  $('icResults').classList.remove('hidden');
+  $('icResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  // Persist to interview history
+  const history = JSON.parse(localStorage.getItem(IC_STORAGE_KEY) ?? '[]');
+  history.push({
+    date: new Date().toISOString(),
+    mode: _icVoiceMode ? 'voice' : 'text',
+    score,
+    answers: _icAnswers,
+  });
+  localStorage.setItem(IC_STORAGE_KEY, JSON.stringify(history));
+  logEvent('ic_interview_complete', { score, mode: _icVoiceMode ? 'voice' : 'text' });
+}
+
+function icHandleSend() {
+  const input  = $('icAnswerInput');
+  const answer = input.value.trim();
+  if (!answer) {
+    showToast('Type an answer first');
+    return;
+  }
+  icAddMessage('user', answer);
+  _icAnswers.push(answer);
+  input.value = '';
+
+  const qIdx = _icQuestionIndex;
+  $('icSendBtn').disabled = true;
+
+  setTimeout(() => {
+    icAddMessage('ai', IC_FOLLOW_UPS[qIdx]);
+    _icQuestionIndex += 1;
+    if (_icQuestionIndex < IC_QUESTIONS.length) {
+      setTimeout(() => {
+        icAskCurrentQuestion();
+        $('icSendBtn').disabled = false;
+        $('icAnswerInput').focus();
+      }, IC_AI_DELAY);
+    } else {
+      $('icSendBtn').disabled = false;
+      setTimeout(icFinish, IC_AI_DELAY);
+    }
+  }, IC_AI_DELAY);
+}
+
+function initInterviewCoach() {
+  if (!$('icStartBtn')) return;
+
+  $('icStartBtn').addEventListener('click', icStart);
+  $('icSendBtn').addEventListener('click', icHandleSend);
+
+  // Enter sends (Shift+Enter for newline)
+  $('icAnswerInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      if (!$('icSendBtn').disabled) icHandleSend();
+    }
+  });
+
+  // Text / Voice mode toggle
+  const setMode = voice => {
+    _icVoiceMode = voice;
+    $('icTextModeBtn').classList.toggle('active', !voice);
+    $('icVoiceModeBtn').classList.toggle('active', voice);
+    $('icTextModeBtn').setAttribute('aria-pressed', String(!voice));
+    $('icVoiceModeBtn').setAttribute('aria-pressed', String(voice));
+    $('icSpeakBtn').classList.toggle('hidden', !voice);
+  };
+  $('icTextModeBtn').addEventListener('click', () => setMode(false));
+  $('icVoiceModeBtn').addEventListener('click', () => setMode(true));
+
+  // Mock speech-to-text. Real implementation would use the Web Speech API:
+  //   const rec = new (window.SpeechRecognition ?? window.webkitSpeechRecognition)();
+  //   rec.onresult = e => { input.value = e.results[0][0].transcript; };
+  $('icSpeakBtn').addEventListener('click', () => {
+    const btn = $('icSpeakBtn');
+    btn.disabled = true;
+    btn.textContent = '🎙 Listening…';
+    setTimeout(() => {
+      $('icAnswerInput').value = IC_MOCK_TRANSCRIPT;
+      btn.disabled = false;
+      btn.textContent = '🎙 Speak';
+      $('icAnswerInput').focus();
+    }, 1200);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
  * INIT
  * ═══════════════════════════════════════════════════════════════ */
 
@@ -2111,6 +2310,7 @@ function init() {
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('pricingOverlay').classList.contains('hidden')) closePricingModal(); });
   updateTierUI();
   initPersonalStatement();
+  initInterviewCoach();
 
   $$('.mode-btn').forEach(btn =>
     btn.addEventListener('click', () => switchMode(btn.dataset.mode))

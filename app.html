@@ -418,11 +418,26 @@
            ═══════════════════════════════════════════════════════ -->
       <div id="panel-interview-coach" class="panel hidden" role="tabpanel">
         <div id="icUnlocked" class="hidden">
-          <p class="panel-intro">AI Interview Coach — practise university interview questions with instant feedback.</p>
-          <div class="coming-soon-box">
-            <span class="coming-soon-box__icon">🎤</span>
-            <h3 class="coming-soon-box__title">Interview Coach</h3>
-            <p class="coming-soon-box__text">Coming soon — this is a demo placeholder for the Pro-tier AI coach.</p>
+          <p class="panel-intro">AI Interview Coach — answer 5 mock interview questions and get scored feedback. <em>(Demo mode — responses are mocked.)</em></p>
+
+          <div class="ic-mode-toggle" role="group" aria-label="Answer mode">
+            <button id="icTextModeBtn" class="ic-mode-btn active" aria-pressed="true">⌨️ Text Mode</button>
+            <button id="icVoiceModeBtn" class="ic-mode-btn" aria-pressed="false">🎙 Voice Mode</button>
+          </div>
+
+          <div id="icChat" class="ic-chat hidden" role="log" aria-live="polite" aria-label="Interview conversation"></div>
+
+          <div id="icInputBar" class="ic-input-bar hidden">
+            <textarea id="icAnswerInput" class="ic-answer-input" rows="2"
+              placeholder="Type your answer…" aria-label="Your answer"></textarea>
+            <button id="icSpeakBtn" class="ps-btn ps-btn--ghost hidden">🎙 Speak</button>
+            <button id="icSendBtn" class="ps-btn ps-btn--primary">Send</button>
+          </div>
+
+          <div id="icResults" class="ic-results hidden" aria-live="polite"></div>
+
+          <div class="ic-controls">
+            <button id="icStartBtn" class="ps-btn ps-btn--primary">Start Interview</button>
           </div>
         </div>
         <div id="icLocked" class="locked-panel">
