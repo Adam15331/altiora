@@ -1989,10 +1989,11 @@ function resetDemoData() {
 function setTier(tier) {
   _currentTier = tier;
   localStorage.setItem('altiora_tier', tier);
+  // Bounce away from any now-locked panel BEFORE updating panel content,
+  // so the locked state never flashes inside a still-visible panel.
+  if (!tierAllowsMode(state.mode)) switchMode('strengths');
   updateTierUI();
   closePricingModal();
-  // If a downgrade locked the currently open panel, bounce back to strengths
-  if (!tierAllowsMode(state.mode)) switchMode('strengths');
   if (tier === 'free') {
     showToast('Reset to Free plan');
   } else {
