@@ -20,7 +20,10 @@
         <span class="nav__logo">Altiora</span>
         <span class="nav__tagline">Your journey, guided.</span>
       </a>
-      <a href="index.html" class="nav__back">← Home</a>
+      <div class="nav__actions">
+        <button id="upgradeTierBtn" class="nav__upgrade-btn" aria-haspopup="dialog">✨ Upgrade</button>
+        <a href="index.html" class="nav__back">← Home</a>
+      </div>
     </div>
   </nav>
 
@@ -323,10 +326,66 @@
   <!-- ── Footer ──────────────────────────────────────────────── -->
   <footer>
     <p>Covers UK, US, Canada, Singapore &amp; Hong Kong &middot; 295 courses &middot; Subject matching only &mdash; always verify with the university directly.</p>
+    <p class="footer-reset"><button class="footer-reset-btn" onclick="setTier('free')">Reset to Free plan</button></p>
   </footer>
 
   <!-- Clipboard toast notification -->
   <div id="toast" class="toast" role="status" aria-live="assertive"></div>
+
+  <!-- Pricing modal -->
+  <div id="pricingOverlay" class="pricing-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="pricingTitle">
+    <div class="pricing-modal">
+      <div class="pricing-modal__header">
+        <h2 id="pricingTitle" class="pricing-modal__title">Choose your plan</h2>
+        <button class="pricing-modal__close" id="pricingClose" aria-label="Close pricing">✕</button>
+      </div>
+      <p class="pricing-modal__sub">Demo mode — no real charges. Plans unlock future AI features.</p>
+
+      <div class="pricing-cards">
+
+        <!-- Free -->
+        <div class="pricing-card" data-tier="free">
+          <div class="pricing-card__name">Free</div>
+          <div class="pricing-card__price">$0 <span class="pricing-card__period">/ mo</span></div>
+          <ul class="pricing-card__features">
+            <li>295+ courses across 5 countries</li>
+            <li>5 qualification systems</li>
+            <li>IB HL &amp; AP context tracking</li>
+            <li>Subject Planner &amp; Course Finder</li>
+          </ul>
+          <button class="pricing-card__btn" onclick="setTier('free')">Select Free</button>
+        </div>
+
+        <!-- Plus -->
+        <div class="pricing-card" data-tier="plus">
+          <div class="pricing-card__name">Plus</div>
+          <div class="pricing-card__price">$9 <span class="pricing-card__period">/ mo</span></div>
+          <ul class="pricing-card__features">
+            <li>Everything in Free</li>
+            <li>✦ AI Personal Statement Coach</li>
+            <li>✦ Draft review &amp; feedback</li>
+            <li>✦ University-specific tips</li>
+          </ul>
+          <button class="pricing-card__btn pricing-card__btn--plus" onclick="setTier('plus')">Select Plus</button>
+        </div>
+
+        <!-- Pro -->
+        <div class="pricing-card pricing-card--featured" data-tier="pro">
+          <div class="pricing-card__badge">Most popular</div>
+          <div class="pricing-card__name">Pro</div>
+          <div class="pricing-card__price">$19 <span class="pricing-card__period">/ mo</span></div>
+          <ul class="pricing-card__features">
+            <li>Everything in Plus</li>
+            <li>✦ AI Interview Coach</li>
+            <li>✦ Mock interview sessions</li>
+            <li>✦ Subject &amp; university Q&amp;A prep</li>
+          </ul>
+          <button class="pricing-card__btn pricing-card__btn--pro" onclick="setTier('pro')">Select Pro</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
   <!-- Data layer must be loaded before main.js -->
   <script src="data/qualificationMappings.js?v=3"></script>

@@ -1906,6 +1906,58 @@ function logEvent(eventName, properties = {}) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+ * TIER / PRICING
+ * ═══════════════════════════════════════════════════════════════ */
+
+const TIER_NAV_LABELS = { free: '✨ Upgrade', plus: '⭐ Plus', pro: '⭐ Pro' };
+
+let _currentTier = localStorage.getItem('altiora_tier') || 'free';
+
+function updateTierUI() {
+  const btn = $('upgradeTierBtn');
+  if (!btn) return;
+  btn.textContent = TIER_NAV_LABELS[_currentTier] ?? '✨ Upgrade';
+  btn.classList.toggle('nav__upgrade-btn--active', _currentTier !== 'free');
+
+  // Mark the current plan card inside the modal
+  document.querySelectorAll('.pricing-card').forEach(card => {
+    const isCurrent = card.dataset.tier === _currentTier;
+    card.classList.toggle('pricing-card--current', isCurrent);
+    const cardBtn = card.querySelector('.pricing-card__btn');
+    if (cardBtn) {
+      cardBtn.classList.toggle('pricing-card__btn--current', isCurrent);
+      cardBtn.textContent = isCurrent ? 'Current plan' : `Select ${card.querySelector('.pricing-card__name').textContent}`;
+    }
+  });
+}
+
+function openPricingModal() {
+  updateTierUI();
+  $('pricingOverlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  $('pricingClose').focus();
+}
+
+function closePricingModal() {
+  $('pricingOverlay').classList.add('hidden');
+  document.body.style.overflow = '';
+  $('upgradeTierBtn').focus();
+}
+
+function setTier(tier) {
+  _currentTier = tier;
+  localStorage.setItem('altiora_tier', tier);
+  updateTierUI();
+  closePricingModal();
+  if (tier === 'free') {
+    showToast('Reset to Free plan');
+  } else {
+    const name = tier.charAt(0).toUpperCase() + tier.slice(1);
+    showToast(`You are now on the ${name} plan (demo mode — no charges)`);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
  * INIT
  * ═══════════════════════════════════════════════════════════════ */
 
@@ -1915,6 +1967,13 @@ function init() {
   buildCountryFilterBar();
   buildCategoryPicker();
   buildPlanCategoryGrid();
+
+  // Pricing modal
+  $('upgradeTierBtn')?.addEventListener('click', openPricingModal);
+  $('pricingClose')?.addEventListener('click', closePricingModal);
+  $('pricingOverlay')?.addEventListener('click', e => { if (e.target === $('pricingOverlay')) closePricingModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('pricingOverlay').classList.contains('hidden')) closePricingModal(); });
+  updateTierUI();
 
   $$('.mode-btn').forEach(btn =>
     btn.addEventListener('click', () => switchMode(btn.dataset.mode))
