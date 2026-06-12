@@ -1977,6 +1977,15 @@ function closePricingModal() {
   $('upgradeTierBtn').focus();
 }
 
+// Clears all demo state (tier, saved draft, interview history) and reloads.
+// Removes only altiora_* keys rather than localStorage.clear() so nothing
+// else on the origin is affected.
+function resetDemoData() {
+  ['altiora_tier', 'altiora_personal_statement', 'altiora_interview_history']
+    .forEach(k => localStorage.removeItem(k));
+  window.location.reload();
+}
+
 function setTier(tier) {
   _currentTier = tier;
   localStorage.setItem('altiora_tier', tier);

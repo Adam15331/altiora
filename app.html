@@ -13,6 +13,9 @@
 </head>
 <body>
 
+  <!-- Demo mode badge — fixed corner indicator -->
+  <div class="demo-badge" role="note" title="All AI features are simulated — no real AI or payments">🧪 Demo Mode</div>
+
   <!-- ── Navigation ─────────────────────────────────────────── -->
   <nav class="nav" aria-label="Main navigation">
     <div class="nav__inner">
@@ -345,7 +348,7 @@
            ═══════════════════════════════════════════════════════ -->
       <div id="panel-personal-statement" class="panel hidden" role="tabpanel">
         <div id="psUnlocked" class="hidden">
-          <p class="panel-intro">AI Personal Statement Coach — write or paste your draft below, then get structured feedback. <em>(Demo mode — responses are mocked.)</em></p>
+          <p class="panel-intro">AI Personal Statement Coach — write or paste your draft below, then get structured feedback. <em>Demo — AI responses are simulated.</em></p>
 
           <div class="ps-editor">
             <textarea id="psTextarea" class="ps-textarea" maxlength="4000"
@@ -418,7 +421,7 @@
            ═══════════════════════════════════════════════════════ -->
       <div id="panel-interview-coach" class="panel hidden" role="tabpanel">
         <div id="icUnlocked" class="hidden">
-          <p class="panel-intro">AI Interview Coach — answer 5 mock interview questions and get scored feedback. <em>(Demo mode — responses are mocked.)</em></p>
+          <p class="panel-intro">AI Interview Coach — answer 5 mock interview questions and get scored feedback. <em>Demo — AI responses are simulated.</em></p>
 
           <div class="ic-mode-toggle" role="group" aria-label="Answer mode">
             <button id="icTextModeBtn" class="ic-mode-btn active" aria-pressed="true">⌨️ Text Mode</button>
@@ -454,7 +457,11 @@
   <!-- ── Footer ──────────────────────────────────────────────── -->
   <footer>
     <p>Covers UK, US, Canada, Singapore &amp; Hong Kong &middot; 295 courses &middot; Subject matching only &mdash; always verify with the university directly.</p>
-    <p class="footer-reset"><button class="footer-reset-btn" onclick="setTier('free')">Reset to Free plan</button></p>
+    <p class="footer-reset">
+      <button class="footer-reset-btn" onclick="setTier('free')">Reset to Free plan</button>
+      <span class="footer-reset-sep">·</span>
+      <button class="footer-reset-btn" onclick="resetDemoData()">Reset all demo data</button>
+    </p>
   </footer>
 
   <!-- Clipboard toast notification -->
