@@ -13,6 +13,9 @@
 </head>
 <body>
 
+  <!-- Demo mode badge — fixed corner indicator -->
+  <div class="demo-badge" role="note" title="All AI features are simulated — no real AI or payments">🧪 Demo Mode</div>
+
   <!-- ── Navigation ─────────────────────────────────────────── -->
   <nav class="nav" aria-label="Main navigation">
     <div class="nav__inner">
@@ -20,7 +23,10 @@
         <span class="nav__logo">Altiora</span>
         <span class="nav__tagline">Your journey, guided.</span>
       </a>
-      <a href="index.html" class="nav__back">← Home</a>
+      <div class="nav__actions">
+        <button id="upgradeTierBtn" class="nav__upgrade-btn" aria-haspopup="dialog">✨ Upgrade</button>
+        <a href="index.html" class="nav__back">← Home</a>
+      </div>
     </div>
   </nav>
 
@@ -75,6 +81,26 @@
           </span>
           <span class="mode-btn__label">Check Combination</span>
           <span class="mode-btn__label--short" aria-hidden="true">Check</span>
+        </button>
+        <button class="mode-btn" data-mode="personal-statement" data-tier-required="plus" role="tab" aria-selected="false" aria-controls="panel-personal-statement">
+          <span class="mode-btn__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 3h9l3 3v11H4V3z"/><path d="M13 3v3h3M7 9h6M7 12h6M7 15h4"/>
+            </svg>
+          </span>
+          <span class="mode-btn__label">Personal Statement</span>
+          <span class="mode-btn__label--short" aria-hidden="true">Statement</span>
+          <span class="mode-btn__lock" aria-hidden="true">🔒</span>
+        </button>
+        <button class="mode-btn" data-mode="interview-coach" data-tier-required="pro" role="tab" aria-selected="false" aria-controls="panel-interview-coach">
+          <span class="mode-btn__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 4h14v9H8l-4 3v-3H3V4z"/><path d="M7 8h6"/>
+            </svg>
+          </span>
+          <span class="mode-btn__label">Interview Coach</span>
+          <span class="mode-btn__label--short" aria-hidden="true">Interview</span>
+          <span class="mode-btn__lock" aria-hidden="true">🔒</span>
         </button>
       </div>
 
@@ -317,16 +343,184 @@
         </div>
       </div><!-- /panel-strengths -->
 
+      <!-- ═══════════════════════════════════════════════════════
+           Panel E — Personal Statement (Plus/Pro)
+           ═══════════════════════════════════════════════════════ -->
+      <div id="panel-personal-statement" class="panel hidden" role="tabpanel">
+        <div id="psUnlocked" class="hidden">
+          <p class="panel-intro">AI Personal Statement Coach — write or paste your draft below, then get structured feedback. <em>Demo — AI responses are simulated.</em></p>
+
+          <div class="ps-editor">
+            <textarea id="psTextarea" class="ps-textarea" maxlength="4000"
+              placeholder="Paste or write your personal statement draft here…"
+              aria-label="Personal statement draft"></textarea>
+            <div class="ps-editor__bar">
+              <span id="psCharCount" class="ps-char-count">0 / 4000</span>
+              <div class="ps-editor__actions">
+                <button id="psSaveBtn" class="ps-btn ps-btn--ghost">Save Draft</button>
+                <button id="psRewriteBtn" class="ps-btn ps-btn--ghost">✨ Improve with AI</button>
+                <button id="psFeedbackBtn" class="ps-btn ps-btn--primary">Get AI Feedback</button>
+              </div>
+            </div>
+            <p class="ps-hint">Tip: highlight a sentence in your draft, then click “Improve with AI” to rewrite it.</p>
+          </div>
+
+          <div id="psRewriteResult" class="ps-rewrite hidden" aria-live="polite">
+            <h4 class="ps-section-head">✨ Suggested rewrite</h4>
+            <div class="ps-rewrite__row">
+              <div class="ps-rewrite__col">
+                <span class="ps-rewrite__label">Original</span>
+                <p id="psRewriteOriginal" class="ps-rewrite__text ps-rewrite__text--original"></p>
+              </div>
+              <div class="ps-rewrite__col">
+                <span class="ps-rewrite__label">Improved</span>
+                <p id="psRewriteImproved" class="ps-rewrite__text ps-rewrite__text--improved"></p>
+              </div>
+            </div>
+            <button id="psApplyRewriteBtn" class="ps-btn ps-btn--ghost">Apply to draft</button>
+          </div>
+
+          <div id="psFeedback" class="ps-feedback hidden" aria-live="polite">
+            <div class="ps-feedback__header">
+              <h4 class="ps-section-head">AI Feedback</h4>
+              <span class="ps-score">Overall: <strong>7/10</strong></span>
+            </div>
+            <div class="ps-feedback__group ps-feedback__group--strengths">
+              <span class="ps-feedback__label">Strengths</span>
+              <ul>
+                <li>Good opening hook</li>
+                <li>Clear motivation for medicine</li>
+              </ul>
+            </div>
+            <div class="ps-feedback__group ps-feedback__group--weaknesses">
+              <span class="ps-feedback__label">Weaknesses</span>
+              <ul>
+                <li>Second paragraph is generic</li>
+                <li>Missing specific examples</li>
+              </ul>
+            </div>
+            <div class="ps-feedback__group ps-feedback__group--suggestions">
+              <span class="ps-feedback__label">Suggestions</span>
+              <ul>
+                <li>Instead of “I want to help people”, describe a moment you helped someone</li>
+              </ul>
+            </div>
+            <p class="ps-feedback__disclaimer">Demo feedback — identical for every draft. Real AI analysis coming soon.</p>
+          </div>
+        </div>
+        <div id="psLocked" class="locked-panel">
+          <span class="locked-panel__icon">🔒</span>
+          <h3 class="locked-panel__title">Personal Statement Coach is a Plus feature</h3>
+          <p class="locked-panel__text">Upgrade to Plus or Pro to get AI-powered feedback on your personal statement drafts.</p>
+          <button class="locked-panel__btn" onclick="openPricingModal()">Upgrade to unlock</button>
+        </div>
+      </div><!-- /panel-personal-statement -->
+
+      <!-- ═══════════════════════════════════════════════════════
+           Panel F — Interview Coach (Pro)
+           ═══════════════════════════════════════════════════════ -->
+      <div id="panel-interview-coach" class="panel hidden" role="tabpanel">
+        <div id="icUnlocked" class="hidden">
+          <p class="panel-intro">AI Interview Coach — answer 5 mock interview questions and get scored feedback. <em>Demo — AI responses are simulated.</em></p>
+
+          <div class="ic-mode-toggle" role="group" aria-label="Answer mode">
+            <button id="icTextModeBtn" class="ic-mode-btn active" aria-pressed="true">⌨️ Text Mode</button>
+            <button id="icVoiceModeBtn" class="ic-mode-btn" aria-pressed="false">🎙 Voice Mode</button>
+          </div>
+
+          <div id="icChat" class="ic-chat hidden" role="log" aria-live="polite" aria-label="Interview conversation"></div>
+
+          <div id="icInputBar" class="ic-input-bar hidden">
+            <textarea id="icAnswerInput" class="ic-answer-input" rows="2"
+              placeholder="Type your answer…" aria-label="Your answer"></textarea>
+            <button id="icSpeakBtn" class="ps-btn ps-btn--ghost hidden">🎙 Speak</button>
+            <button id="icSendBtn" class="ps-btn ps-btn--primary">Send</button>
+          </div>
+
+          <div id="icResults" class="ic-results hidden" aria-live="polite"></div>
+
+          <div class="ic-controls">
+            <button id="icStartBtn" class="ps-btn ps-btn--primary">Start Interview</button>
+          </div>
+        </div>
+        <div id="icLocked" class="locked-panel">
+          <span class="locked-panel__icon">🔒</span>
+          <h3 class="locked-panel__title">Interview Coach is a Pro feature</h3>
+          <p class="locked-panel__text">Upgrade to Pro to practise mock interviews with university-specific questions.</p>
+          <button class="locked-panel__btn" onclick="openPricingModal()">Upgrade to unlock</button>
+        </div>
+      </div><!-- /panel-interview-coach -->
+
     </div><!-- /content -->
   </main>
 
   <!-- ── Footer ──────────────────────────────────────────────── -->
   <footer>
     <p>Covers UK, US, Canada, Singapore &amp; Hong Kong &middot; 295 courses &middot; Subject matching only &mdash; always verify with the university directly.</p>
+    <p class="footer-reset">
+      <button class="footer-reset-btn" onclick="setTier('free')">Reset to Free plan</button>
+      <span class="footer-reset-sep">·</span>
+      <button class="footer-reset-btn" onclick="resetDemoData()">Reset all demo data</button>
+    </p>
   </footer>
 
   <!-- Clipboard toast notification -->
   <div id="toast" class="toast" role="status" aria-live="assertive"></div>
+
+  <!-- Pricing modal -->
+  <div id="pricingOverlay" class="pricing-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="pricingTitle">
+    <div class="pricing-modal">
+      <div class="pricing-modal__header">
+        <h2 id="pricingTitle" class="pricing-modal__title">Choose your plan</h2>
+        <button class="pricing-modal__close" id="pricingClose" aria-label="Close pricing">✕</button>
+      </div>
+      <p class="pricing-modal__sub">Demo mode — no real charges. Plans unlock future AI features.</p>
+
+      <div class="pricing-cards">
+
+        <!-- Free -->
+        <div class="pricing-card" data-tier="free">
+          <div class="pricing-card__name">Free</div>
+          <div class="pricing-card__price">$0 <span class="pricing-card__period">/ mo</span></div>
+          <ul class="pricing-card__features">
+            <li>295+ courses across 5 countries</li>
+            <li>5 qualification systems</li>
+            <li>IB HL &amp; AP context tracking</li>
+            <li>Subject Planner &amp; Course Finder</li>
+          </ul>
+          <button class="pricing-card__btn" onclick="setTier('free')">Select Free</button>
+        </div>
+
+        <!-- Plus -->
+        <div class="pricing-card" data-tier="plus">
+          <div class="pricing-card__name">Plus</div>
+          <div class="pricing-card__price">$9 <span class="pricing-card__period">/ mo</span></div>
+          <ul class="pricing-card__features">
+            <li>Everything in Free</li>
+            <li>✦ AI Personal Statement Coach</li>
+            <li>✦ Draft review &amp; feedback</li>
+            <li>✦ University-specific tips</li>
+          </ul>
+          <button class="pricing-card__btn pricing-card__btn--plus" onclick="setTier('plus')">Select Plus</button>
+        </div>
+
+        <!-- Pro -->
+        <div class="pricing-card pricing-card--featured" data-tier="pro">
+          <div class="pricing-card__badge">Most popular</div>
+          <div class="pricing-card__name">Pro</div>
+          <div class="pricing-card__price">$19 <span class="pricing-card__period">/ mo</span></div>
+          <ul class="pricing-card__features">
+            <li>Everything in Plus</li>
+            <li>✦ AI Interview Coach</li>
+            <li>✦ Mock interview sessions</li>
+            <li>✦ Subject &amp; university Q&amp;A prep</li>
+          </ul>
+          <button class="pricing-card__btn pricing-card__btn--pro" onclick="setTier('pro')">Select Pro</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
   <!-- Data layer must be loaded before main.js -->
   <script src="data/qualificationMappings.js?v=3"></script>

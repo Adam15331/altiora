@@ -661,7 +661,25 @@ function hideLoadingSpinner() {
  * MODE TOGGLE
  * ═══════════════════════════════════════════════════════════════ */
 
+// Minimum tier required per gated mode. Modes not listed are free.
+const MODE_TIER_REQUIREMENTS = {
+  'personal-statement': ['plus', 'pro'],
+  'interview-coach':    ['pro'],
+};
+
+function tierAllowsMode(mode) {
+  const allowed = MODE_TIER_REQUIREMENTS[mode];
+  return !allowed || allowed.includes(_currentTier);
+}
+
 function switchMode(mode) {
+  // Locked tab: open the pricing modal instead of switching
+  if (!tierAllowsMode(mode)) {
+    logEvent('locked_tab_click', { mode, tier: _currentTier });
+    openPricingModal();
+    return;
+  }
+
   state.mode = mode;
   logEvent('mode_switch', { mode });
   $$('.mode-btn').forEach(btn => {
@@ -669,10 +687,12 @@ function switchMode(mode) {
     btn.classList.toggle('active', active);
     btn.setAttribute('aria-selected', String(active));
   });
-  $('panel-check')    .classList.toggle('hidden', mode !== 'check');
-  $('panel-reverse')  .classList.toggle('hidden', mode !== 'reverse');
-  $('panel-plan')     .classList.toggle('hidden', mode !== 'plan');
-  $('panel-strengths').classList.toggle('hidden', mode !== 'strengths');
+  $('panel-check')             .classList.toggle('hidden', mode !== 'check');
+  $('panel-reverse')           .classList.toggle('hidden', mode !== 'reverse');
+  $('panel-plan')              .classList.toggle('hidden', mode !== 'plan');
+  $('panel-strengths')         .classList.toggle('hidden', mode !== 'strengths');
+  $('panel-personal-statement').classList.toggle('hidden', mode !== 'personal-statement');
+  $('panel-interview-coach')   .classList.toggle('hidden', mode !== 'interview-coach');
 
   if (mode === 'strengths' && $('strengthsGrid').children.length === 0) {
     renderStrengthsGrid();
@@ -1927,6 +1947,382 @@ function logEvent(eventName, properties = {}) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+ * TIER / PRICING
+ * ═══════════════════════════════════════════════════════════════ */
+
+const TIER_NAV_LABELS = { free: '✨ Upgrade', plus: '⭐ Plus', pro: '⭐ Pro' };
+
+let _currentTier = localStorage.getItem('altiora_tier') || 'free';
+
+function updateTierUI() {
+  const btn = $('upgradeTierBtn');
+  if (!btn) return;
+  btn.textContent = TIER_NAV_LABELS[_currentTier] ?? '✨ Upgrade';
+  btn.classList.toggle('nav__upgrade-btn--active', _currentTier !== 'free');
+
+  // Mark the current plan card inside the modal
+  document.querySelectorAll('.pricing-card').forEach(card => {
+    const isCurrent = card.dataset.tier === _currentTier;
+    card.classList.toggle('pricing-card--current', isCurrent);
+    const cardBtn = card.querySelector('.pricing-card__btn');
+    if (cardBtn) {
+      cardBtn.classList.toggle('pricing-card__btn--current', isCurrent);
+      cardBtn.textContent = isCurrent ? 'Current plan' : `Select ${card.querySelector('.pricing-card__name').textContent}`;
+    }
+  });
+
+  // Tab lock states for tier-gated modes
+  $$('.mode-btn[data-tier-required]').forEach(tab => {
+    tab.classList.toggle('mode-btn--locked', !tierAllowsMode(tab.dataset.mode));
+  });
+
+  // Locked/unlocked panel content
+  const psOk = tierAllowsMode('personal-statement');
+  const icOk = tierAllowsMode('interview-coach');
+  $('psUnlocked')?.classList.toggle('hidden', !psOk);
+  $('psLocked')  ?.classList.toggle('hidden',  psOk);
+  $('icUnlocked')?.classList.toggle('hidden', !icOk);
+  $('icLocked')  ?.classList.toggle('hidden',  icOk);
+}
+
+function openPricingModal() {
+  updateTierUI();
+  $('pricingOverlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  $('pricingClose').focus();
+}
+
+function closePricingModal() {
+  $('pricingOverlay').classList.add('hidden');
+  document.body.style.overflow = '';
+  $('upgradeTierBtn').focus();
+}
+
+// Clears all demo state (tier, saved draft, interview history) and reloads.
+// Removes only altiora_* keys rather than localStorage.clear() so nothing
+// else on the origin is affected.
+function resetDemoData() {
+  ['altiora_tier', 'altiora_personal_statement', 'altiora_interview_history']
+    .forEach(k => localStorage.removeItem(k));
+  window.location.reload();
+}
+
+function setTier(tier) {
+  _currentTier = tier;
+  localStorage.setItem('altiora_tier', tier);
+  updateTierUI();
+  closePricingModal();
+  // If a downgrade locked the currently open panel, bounce back to strengths
+  if (!tierAllowsMode(state.mode)) switchMode('strengths');
+  if (tier === 'free') {
+    showToast('Reset to Free plan');
+  } else {
+    const name = tier.charAt(0).toUpperCase() + tier.slice(1);
+    showToast(`You are now on the ${name} plan (demo mode — no charges)`);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * PERSONAL STATEMENT COACH  (Plus/Pro — mock AI, demo only)
+ * ═══════════════════════════════════════════════════════════════ */
+
+const PS_STORAGE_KEY = 'altiora_personal_statement';
+const PS_MOCK_DELAY  = 1500;
+
+// Canned rewrite shown for any selection — replace with real API later.
+const PS_MOCK_IMPROVED = 'During a week of work experience on a stroke ward, I watched a physiotherapist coax a patient through her first steps after surgery — that moment crystallised exactly why I want to study medicine.';
+
+let _psRewriteRange = null;   // { start, end } of the selection being rewritten
+let _psSpinnerEl    = null;
+
+function updatePsCharCount() {
+  const ta = $('psTextarea');
+  $('psCharCount').textContent = `${ta.value.length} / 4000`;
+}
+
+function psShowSpinner(beforeEl) {
+  psHideSpinner();
+  _psSpinnerEl = document.createElement('div');
+  _psSpinnerEl.className = 'loading-spinner';
+  _psSpinnerEl.setAttribute('aria-hidden', 'true');
+  beforeEl.before(_psSpinnerEl);
+}
+
+function psHideSpinner() {
+  _psSpinnerEl?.remove();
+  _psSpinnerEl = null;
+}
+
+function initPersonalStatement() {
+  const ta = $('psTextarea');
+  if (!ta) return;
+
+  // Restore saved draft
+  const saved = localStorage.getItem(PS_STORAGE_KEY);
+  if (saved) ta.value = saved;
+  updatePsCharCount();
+
+  ta.addEventListener('input', updatePsCharCount);
+
+  $('psSaveBtn').addEventListener('click', () => {
+    localStorage.setItem(PS_STORAGE_KEY, ta.value);
+    showToast('Draft saved');
+    logEvent('ps_draft_save', { length: ta.value.length });
+  });
+
+  $('psFeedbackBtn').addEventListener('click', () => {
+    if (!ta.value.trim()) {
+      showToast('Write or paste a draft first');
+      return;
+    }
+    const btn = $('psFeedbackBtn');
+    btn.disabled = true;
+    $('psFeedback').classList.add('hidden');
+    psShowSpinner($('psFeedback'));
+    logEvent('ps_feedback_request', { length: ta.value.length });
+    setTimeout(() => {
+      psHideSpinner();
+      btn.disabled = false;
+      $('psFeedback').classList.remove('hidden');
+      $('psFeedback').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, PS_MOCK_DELAY);
+  });
+
+  $('psRewriteBtn').addEventListener('click', () => {
+    const start = ta.selectionStart;
+    const end   = ta.selectionEnd;
+    const selected = ta.value.slice(start, end).trim();
+    if (!selected) {
+      showToast('Highlight some text in your draft first');
+      return;
+    }
+    _psRewriteRange = { start, end };
+    const btn = $('psRewriteBtn');
+    btn.disabled = true;
+    $('psRewriteResult').classList.add('hidden');
+    psShowSpinner($('psRewriteResult'));
+    logEvent('ps_rewrite_request', { length: selected.length });
+    setTimeout(() => {
+      psHideSpinner();
+      btn.disabled = false;
+      $('psRewriteOriginal').textContent = selected;
+      $('psRewriteImproved').textContent = PS_MOCK_IMPROVED;
+      $('psRewriteResult').classList.remove('hidden');
+      $('psRewriteResult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, PS_MOCK_DELAY);
+  });
+
+  $('psApplyRewriteBtn').addEventListener('click', () => {
+    if (!_psRewriteRange) return;
+    const { start, end } = _psRewriteRange;
+    ta.value = ta.value.slice(0, start) + PS_MOCK_IMPROVED + ta.value.slice(end);
+    _psRewriteRange = null;
+    $('psRewriteResult').classList.add('hidden');
+    updatePsCharCount();
+    showToast('Rewrite applied to draft');
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * INTERVIEW COACH  (Pro — mock AI, demo only)
+ * ═══════════════════════════════════════════════════════════════ */
+
+const IC_STORAGE_KEY = 'altiora_interview_history';
+const IC_AI_DELAY    = 900;
+
+const IC_QUESTIONS = [
+  'Why do you want to study Computer Science?',
+  'Tell me about a time you solved a difficult problem.',
+  'What recent development in your field excites you most, and why?',
+  'How would you explain a complex technical concept to someone non-technical?',
+  'A classmate asks to copy your coursework. What do you do, and why?',
+];
+
+const IC_FOLLOW_UPS = [
+  'Interesting — and what first sparked that interest?',
+  'Good example. What would you do differently next time?',
+  'Nice choice. How do you keep up with developments like that?',
+  'Clear explanation. Communication matters as much as knowledge.',
+  'Ethics questions rarely have one right answer — reasoning is what counts.',
+];
+
+// Canned model answers surfaced for the weakest responses in the results screen.
+const IC_SUGGESTED_ANSWERS = [
+  'Tie your motivation to a concrete moment — a project you built, a problem that hooked you — rather than general enthusiasm.',
+  'Use the STAR structure: Situation, Task, Action, Result. Name the obstacle and quantify the outcome.',
+  'Pick one specific development, explain what it changes, and connect it to something you have read or tried yourself.',
+  'Use an analogy from everyday life, check understanding as you go, and avoid jargon entirely.',
+  'Acknowledge the conflict between loyalty and integrity, state your decision clearly, and explain the principle behind it.',
+];
+
+const IC_MOCK_TRANSCRIPT = 'Mock transcript: I am passionate about this subject because of a project I built last year that solved a real problem for my school.';
+
+let _icQuestionIndex = -1;        // -1 = not started
+let _icAnswers       = [];
+let _icVoiceMode     = false;
+
+function icAddMessage(role, text) {
+  const chat = $('icChat');
+  const msg  = document.createElement('div');
+  msg.className = `ic-msg ic-msg--${role}`;
+  msg.innerHTML = `<span class="ic-msg__who">${role === 'ai' ? '🎓 Interviewer' : 'You'}</span><p>${esc(text)}</p>`;
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function icAskCurrentQuestion() {
+  icAddMessage('ai', `Question ${_icQuestionIndex + 1} of ${IC_QUESTIONS.length}: ${IC_QUESTIONS[_icQuestionIndex]}`);
+}
+
+function icStart() {
+  _icQuestionIndex = 0;
+  _icAnswers       = [];
+  $('icChat').innerHTML = '';
+  $('icChat').classList.remove('hidden');
+  $('icInputBar').classList.remove('hidden');
+  $('icResults').classList.add('hidden');
+  $('icStartBtn').textContent = 'Restart Interview';
+  icAddMessage('ai', "Welcome! I'll ask you 5 questions. Take your time — answer as you would in a real interview.");
+  icAskCurrentQuestion();
+  $('icAnswerInput').focus();
+  logEvent('ic_interview_start', { mode: _icVoiceMode ? 'voice' : 'text' });
+}
+
+// Score from answer lengths: detailed answers score higher (demo heuristic).
+function icComputeScore() {
+  const avg = _icAnswers.reduce((s, a) => s + a.length, 0) / _icAnswers.length;
+  if (avg < 50)  return 55;
+  if (avg < 150) return 68;
+  return 78;
+}
+
+function icFinish() {
+  $('icInputBar').classList.add('hidden');
+  const score   = icComputeScore();
+  const brief   = score < 78;
+
+  // Two shortest answers get suggested model answers
+  const ranked = _icAnswers
+    .map((a, i) => ({ i, len: a.length }))
+    .sort((a, b) => a.len - b.len)
+    .slice(0, 2)
+    .sort((a, b) => a.i - b.i);
+
+  const suggestionsHtml = ranked.map(({ i }) => `
+    <div class="ic-suggestion">
+      <p class="ic-suggestion__q">Q${i + 1}: ${esc(IC_QUESTIONS[i])}</p>
+      <p class="ic-suggestion__a">${esc(IC_SUGGESTED_ANSWERS[i])}</p>
+    </div>`).join('');
+
+  $('icResults').innerHTML = `
+    <div class="ps-feedback__header">
+      <h4 class="ps-section-head">Interview Results</h4>
+      <span class="ps-score">Score: <strong>${score}/100</strong></span>
+    </div>
+    <div class="ps-feedback__group ps-feedback__group--strengths">
+      <span class="ps-feedback__label">Strengths</span>
+      <ul><li>Clear answers</li><li>Good subject knowledge</li></ul>
+    </div>
+    <div class="ps-feedback__group ps-feedback__group--weaknesses">
+      <span class="ps-feedback__label">Weaknesses</span>
+      <ul>
+        ${brief ? '<li>Answers were too brief — aim for 3–4 sentences with a concrete example</li>' : '<li>Needs more concise responses</li>'}
+        <li>Hesitation on ethics</li>
+      </ul>
+    </div>
+    <div class="ps-feedback__group ps-feedback__group--suggestions">
+      <span class="ps-feedback__label">Suggested answers for your weakest questions</span>
+      ${suggestionsHtml}
+    </div>
+    <p class="ps-feedback__disclaimer">Demo feedback — score is based only on answer length. Real AI analysis coming soon.</p>`;
+  $('icResults').classList.remove('hidden');
+  $('icResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  // Persist to interview history
+  const history = JSON.parse(localStorage.getItem(IC_STORAGE_KEY) ?? '[]');
+  history.push({
+    date: new Date().toISOString(),
+    mode: _icVoiceMode ? 'voice' : 'text',
+    score,
+    answers: _icAnswers,
+  });
+  localStorage.setItem(IC_STORAGE_KEY, JSON.stringify(history));
+  logEvent('ic_interview_complete', { score, mode: _icVoiceMode ? 'voice' : 'text' });
+}
+
+function icHandleSend() {
+  const input  = $('icAnswerInput');
+  const answer = input.value.trim();
+  if (!answer) {
+    showToast('Type an answer first');
+    return;
+  }
+  icAddMessage('user', answer);
+  _icAnswers.push(answer);
+  input.value = '';
+
+  const qIdx = _icQuestionIndex;
+  $('icSendBtn').disabled = true;
+
+  setTimeout(() => {
+    icAddMessage('ai', IC_FOLLOW_UPS[qIdx]);
+    _icQuestionIndex += 1;
+    if (_icQuestionIndex < IC_QUESTIONS.length) {
+      setTimeout(() => {
+        icAskCurrentQuestion();
+        $('icSendBtn').disabled = false;
+        $('icAnswerInput').focus();
+      }, IC_AI_DELAY);
+    } else {
+      $('icSendBtn').disabled = false;
+      setTimeout(icFinish, IC_AI_DELAY);
+    }
+  }, IC_AI_DELAY);
+}
+
+function initInterviewCoach() {
+  if (!$('icStartBtn')) return;
+
+  $('icStartBtn').addEventListener('click', icStart);
+  $('icSendBtn').addEventListener('click', icHandleSend);
+
+  // Enter sends (Shift+Enter for newline)
+  $('icAnswerInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      if (!$('icSendBtn').disabled) icHandleSend();
+    }
+  });
+
+  // Text / Voice mode toggle
+  const setMode = voice => {
+    _icVoiceMode = voice;
+    $('icTextModeBtn').classList.toggle('active', !voice);
+    $('icVoiceModeBtn').classList.toggle('active', voice);
+    $('icTextModeBtn').setAttribute('aria-pressed', String(!voice));
+    $('icVoiceModeBtn').setAttribute('aria-pressed', String(voice));
+    $('icSpeakBtn').classList.toggle('hidden', !voice);
+  };
+  $('icTextModeBtn').addEventListener('click', () => setMode(false));
+  $('icVoiceModeBtn').addEventListener('click', () => setMode(true));
+
+  // Mock speech-to-text. Real implementation would use the Web Speech API:
+  //   const rec = new (window.SpeechRecognition ?? window.webkitSpeechRecognition)();
+  //   rec.onresult = e => { input.value = e.results[0][0].transcript; };
+  $('icSpeakBtn').addEventListener('click', () => {
+    const btn = $('icSpeakBtn');
+    btn.disabled = true;
+    btn.textContent = '🎙 Listening…';
+    setTimeout(() => {
+      $('icAnswerInput').value = IC_MOCK_TRANSCRIPT;
+      btn.disabled = false;
+      btn.textContent = '🎙 Speak';
+      $('icAnswerInput').focus();
+    }, 1200);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
  * INIT
  * ═══════════════════════════════════════════════════════════════ */
 
@@ -1951,6 +2347,15 @@ function init() {
   buildCountryFilterBar();
   buildCategoryPicker();
   buildPlanCategoryGrid();
+
+  // Pricing modal
+  $('upgradeTierBtn')?.addEventListener('click', openPricingModal);
+  $('pricingClose')?.addEventListener('click', closePricingModal);
+  $('pricingOverlay')?.addEventListener('click', e => { if (e.target === $('pricingOverlay')) closePricingModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('pricingOverlay').classList.contains('hidden')) closePricingModal(); });
+  updateTierUI();
+  initPersonalStatement();
+  initInterviewCoach();
 
   $$('.mode-btn').forEach(btn =>
     btn.addEventListener('click', () => switchMode(btn.dataset.mode))
