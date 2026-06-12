@@ -79,6 +79,26 @@
           <span class="mode-btn__label">Check Combination</span>
           <span class="mode-btn__label--short" aria-hidden="true">Check</span>
         </button>
+        <button class="mode-btn" data-mode="personal-statement" data-tier-required="plus" role="tab" aria-selected="false" aria-controls="panel-personal-statement">
+          <span class="mode-btn__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 3h9l3 3v11H4V3z"/><path d="M13 3v3h3M7 9h6M7 12h6M7 15h4"/>
+            </svg>
+          </span>
+          <span class="mode-btn__label">Personal Statement</span>
+          <span class="mode-btn__label--short" aria-hidden="true">Statement</span>
+          <span class="mode-btn__lock" aria-hidden="true">🔒</span>
+        </button>
+        <button class="mode-btn" data-mode="interview-coach" data-tier-required="pro" role="tab" aria-selected="false" aria-controls="panel-interview-coach">
+          <span class="mode-btn__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 4h14v9H8l-4 3v-3H3V4z"/><path d="M7 8h6"/>
+            </svg>
+          </span>
+          <span class="mode-btn__label">Interview Coach</span>
+          <span class="mode-btn__label--short" aria-hidden="true">Interview</span>
+          <span class="mode-btn__lock" aria-hidden="true">🔒</span>
+        </button>
       </div>
 
       <!-- ═══════════════════════════════════════════════════════
@@ -319,6 +339,46 @@
           <div id="strengthsSuggestions" class="results-groups-container"></div>
         </div>
       </div><!-- /panel-strengths -->
+
+      <!-- ═══════════════════════════════════════════════════════
+           Panel E — Personal Statement (Plus/Pro)
+           ═══════════════════════════════════════════════════════ -->
+      <div id="panel-personal-statement" class="panel hidden" role="tabpanel">
+        <div id="psUnlocked" class="hidden">
+          <p class="panel-intro">AI Personal Statement Coach — paste a draft and get structured feedback.</p>
+          <div class="coming-soon-box">
+            <span class="coming-soon-box__icon">📝</span>
+            <h3 class="coming-soon-box__title">Personal Statement Coach</h3>
+            <p class="coming-soon-box__text">Coming soon — this is a demo placeholder for the Plus-tier AI coach.</p>
+          </div>
+        </div>
+        <div id="psLocked" class="locked-panel">
+          <span class="locked-panel__icon">🔒</span>
+          <h3 class="locked-panel__title">Personal Statement Coach is a Plus feature</h3>
+          <p class="locked-panel__text">Upgrade to Plus or Pro to get AI-powered feedback on your personal statement drafts.</p>
+          <button class="locked-panel__btn" onclick="openPricingModal()">Upgrade to unlock</button>
+        </div>
+      </div><!-- /panel-personal-statement -->
+
+      <!-- ═══════════════════════════════════════════════════════
+           Panel F — Interview Coach (Pro)
+           ═══════════════════════════════════════════════════════ -->
+      <div id="panel-interview-coach" class="panel hidden" role="tabpanel">
+        <div id="icUnlocked" class="hidden">
+          <p class="panel-intro">AI Interview Coach — practise university interview questions with instant feedback.</p>
+          <div class="coming-soon-box">
+            <span class="coming-soon-box__icon">🎤</span>
+            <h3 class="coming-soon-box__title">Interview Coach</h3>
+            <p class="coming-soon-box__text">Coming soon — this is a demo placeholder for the Pro-tier AI coach.</p>
+          </div>
+        </div>
+        <div id="icLocked" class="locked-panel">
+          <span class="locked-panel__icon">🔒</span>
+          <h3 class="locked-panel__title">Interview Coach is a Pro feature</h3>
+          <p class="locked-panel__text">Upgrade to Pro to practise mock interviews with university-specific questions.</p>
+          <button class="locked-panel__btn" onclick="openPricingModal()">Upgrade to unlock</button>
+        </div>
+      </div><!-- /panel-interview-coach -->
 
     </div><!-- /content -->
   </main>

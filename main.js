@@ -645,7 +645,25 @@ function hideLoadingSpinner() {
  * MODE TOGGLE
  * ═══════════════════════════════════════════════════════════════ */
 
+// Minimum tier required per gated mode. Modes not listed are free.
+const MODE_TIER_REQUIREMENTS = {
+  'personal-statement': ['plus', 'pro'],
+  'interview-coach':    ['pro'],
+};
+
+function tierAllowsMode(mode) {
+  const allowed = MODE_TIER_REQUIREMENTS[mode];
+  return !allowed || allowed.includes(_currentTier);
+}
+
 function switchMode(mode) {
+  // Locked tab: open the pricing modal instead of switching
+  if (!tierAllowsMode(mode)) {
+    logEvent('locked_tab_click', { mode, tier: _currentTier });
+    openPricingModal();
+    return;
+  }
+
   state.mode = mode;
   logEvent('mode_switch', { mode });
   $$('.mode-btn').forEach(btn => {
@@ -653,10 +671,12 @@ function switchMode(mode) {
     btn.classList.toggle('active', active);
     btn.setAttribute('aria-selected', String(active));
   });
-  $('panel-check')    .classList.toggle('hidden', mode !== 'check');
-  $('panel-reverse')  .classList.toggle('hidden', mode !== 'reverse');
-  $('panel-plan')     .classList.toggle('hidden', mode !== 'plan');
-  $('panel-strengths').classList.toggle('hidden', mode !== 'strengths');
+  $('panel-check')             .classList.toggle('hidden', mode !== 'check');
+  $('panel-reverse')           .classList.toggle('hidden', mode !== 'reverse');
+  $('panel-plan')              .classList.toggle('hidden', mode !== 'plan');
+  $('panel-strengths')         .classList.toggle('hidden', mode !== 'strengths');
+  $('panel-personal-statement').classList.toggle('hidden', mode !== 'personal-statement');
+  $('panel-interview-coach')   .classList.toggle('hidden', mode !== 'interview-coach');
 
   if (mode === 'strengths' && $('strengthsGrid').children.length === 0) {
     renderStrengthsGrid();
@@ -1929,6 +1949,19 @@ function updateTierUI() {
       cardBtn.textContent = isCurrent ? 'Current plan' : `Select ${card.querySelector('.pricing-card__name').textContent}`;
     }
   });
+
+  // Tab lock states for tier-gated modes
+  $$('.mode-btn[data-tier-required]').forEach(tab => {
+    tab.classList.toggle('mode-btn--locked', !tierAllowsMode(tab.dataset.mode));
+  });
+
+  // Locked/unlocked panel content
+  const psOk = tierAllowsMode('personal-statement');
+  const icOk = tierAllowsMode('interview-coach');
+  $('psUnlocked')?.classList.toggle('hidden', !psOk);
+  $('psLocked')  ?.classList.toggle('hidden',  psOk);
+  $('icUnlocked')?.classList.toggle('hidden', !icOk);
+  $('icLocked')  ?.classList.toggle('hidden',  icOk);
 }
 
 function openPricingModal() {
@@ -1949,6 +1982,8 @@ function setTier(tier) {
   localStorage.setItem('altiora_tier', tier);
   updateTierUI();
   closePricingModal();
+  // If a downgrade locked the currently open panel, bounce back to strengths
+  if (!tierAllowsMode(state.mode)) switchMode('strengths');
   if (tier === 'free') {
     showToast('Reset to Free plan');
   } else {

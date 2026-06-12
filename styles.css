@@ -304,6 +304,73 @@ main     { flex: 1; padding: var(--pad); }
 }
 .mode-btn.active .mode-btn__icon { opacity: 1; }
 
+/* Tier-locked tabs */
+.mode-btn__lock { display: none; font-size: 11px; }
+.mode-btn--locked { opacity: .55; }
+.mode-btn--locked .mode-btn__lock { display: inline; }
+.mode-btn--locked:hover { opacity: .75; }
+
+/* Locked panel state (Free tier viewing a gated panel) */
+.locked-panel {
+  text-align: center;
+  padding: var(--space-12) var(--space-6);
+  border: 1.5px dashed var(--color-border);
+  border-radius: 12px;
+  max-width: 480px;
+  margin: var(--space-8) auto;
+}
+.locked-panel__icon  { font-size: 2rem; display: block; margin-bottom: var(--space-3); }
+.locked-panel__title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin: 0 0 var(--space-2);
+  color: var(--color-text-primary);
+}
+.locked-panel__text {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--space-5);
+  line-height: 1.6;
+}
+.locked-panel__btn {
+  padding: 10px 24px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: var(--color-match-strong);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity var(--t-base);
+}
+.locked-panel__btn:hover { opacity: .88; }
+
+/* Coming-soon placeholder for unlocked demo panels */
+.coming-soon-box {
+  text-align: center;
+  padding: var(--space-12) var(--space-6);
+  border: 1.5px solid var(--color-border);
+  border-radius: 12px;
+  max-width: 480px;
+  margin: var(--space-8) auto;
+  background: var(--color-surface);
+}
+.coming-soon-box__icon  { font-size: 2rem; display: block; margin-bottom: var(--space-3); }
+.coming-soon-box__title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin: 0 0 var(--space-2);
+}
+.coming-soon-box__text {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
 /* ═══════════════════════════════════════════════════════════════
  * Panels
  * ═══════════════════════════════════════════════════════════════ */
