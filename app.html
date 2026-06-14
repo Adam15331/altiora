@@ -93,6 +93,9 @@
       <div id="workspace" class="hidden">
 
         <div class="stage-bar">
+          <button id="homeLink" class="home-link" type="button" aria-label="Workspace home" title="Workspace home">
+            <span aria-hidden="true">🏠</span>
+          </button>
           <div class="stage-bar__indicator">
             <button id="stageIndicatorBtn" class="stage-indicator" aria-haspopup="true" aria-expanded="false" aria-controls="stageMenu">
               <span class="stage-indicator__label">Stage: <strong id="stageIndicatorName">…</strong></span>
@@ -113,6 +116,13 @@
             <span class="shortlist-link__text">My Shortlist (<span id="shortlistCount">0</span>)</span>
           </button>
         </div>
+
+      <!-- ═══════════════════════════════════════════════════════
+           Panel — Workspace home (returning-user landing)
+           ═══════════════════════════════════════════════════════ -->
+      <div id="panel-home" class="panel hidden" role="tabpanel" aria-label="Workspace home">
+        <!-- rendered by JS (renderWorkspaceHome) -->
+      </div><!-- /panel-home -->
 
       <!-- ═══════════════════════════════════════════════════════
            Panel A — Check Combination
@@ -565,7 +575,7 @@
   <script src="data/university-profiles.js?v=1"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
   <script src="state.js?v=2"></script>
-  <script src="main.js?v=7"></script>
+  <script src="main.js?v=8"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);
