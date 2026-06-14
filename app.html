@@ -7,14 +7,14 @@
   <title>Altiora</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="tokens.css" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="tokens.css?v=2" />
+  <link rel="stylesheet" href="styles.css?v=2" />
   <script defer data-domain="altiora.app" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
 
   <!-- Demo mode badge — fixed corner indicator -->
-  <div class="demo-badge" role="note" title="All AI features are simulated — no real AI or payments">🧪 Demo Mode</div>
+  <div class="demo-badge demo-only" role="note" title="All AI features are simulated — no real AI or payments">🧪 Demo Mode</div>
 
   <!-- ── Navigation ─────────────────────────────────────────── -->
   <nav class="nav" aria-label="Main navigation">
@@ -24,7 +24,7 @@
         <span class="nav__tagline">Your journey, guided.</span>
       </a>
       <div class="nav__actions">
-        <button id="upgradeTierBtn" class="nav__upgrade-btn" aria-haspopup="dialog">✨ Upgrade</button>
+        <button id="upgradeTierBtn" class="nav__upgrade-btn demo-only" aria-haspopup="dialog">✨ Upgrade</button>
         <a href="index.html" class="nav__back">← Home</a>
       </div>
     </div>
@@ -504,7 +504,7 @@
   <!-- ── Footer ──────────────────────────────────────────────── -->
   <footer>
     <p>Covers UK, US, Canada, Singapore &amp; Hong Kong &middot; 295 courses &middot; Subject matching only &mdash; always verify with the university directly.</p>
-    <p class="footer-reset">
+    <p class="footer-reset demo-only">
       <button class="footer-reset-btn" onclick="setTier('free')">Reset to Free plan</button>
       <span class="footer-reset-sep">·</span>
       <button class="footer-reset-btn" onclick="resetDemoData()">Reset all demo data</button>
@@ -581,6 +581,11 @@
     const _urlParams = new URLSearchParams(window.location.search);
     if (_urlParams.get('mode') === 'strengths') {
       window.sessionStorage.setItem('openStrengthsMode', 'true');
+    }
+    // Demo/testing scaffolding (Pro badge, Demo Mode pill, reset links)
+    // is hidden by default; ?demo=true reveals it for testing only.
+    if (_urlParams.get('demo') === 'true') {
+      document.body.classList.add('demo-enabled');
     }
   </script>
 </body>

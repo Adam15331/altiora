@@ -554,114 +554,140 @@ main     { flex: 1; padding: var(--pad); }
 .shortlist-empty { margin-top: var(--space-10); }
 
 /* ═══════════════════════════════════════════════════════════════
- * Workspace home (returning-user landing)
+ * Demo scaffolding — hidden unless ?demo=true adds body.demo-enabled
+ * ═══════════════════════════════════════════════════════════════ */
+body:not(.demo-enabled) .demo-only { display: none !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+ * Workspace home (returning-user landing) — the design anchor.
+ * Calm, generously spaced; whitespace and type do the work, colour
+ * is used sparingly. All values come from the design tokens.
  * ═══════════════════════════════════════════════════════════════ */
 .home-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px; height: 36px;
+  width: var(--space-10); height: var(--space-10);
   flex-shrink: 0;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-full);
   background: var(--color-surface);
-  font-size: 15px;
+  font-size: var(--text-base);
   cursor: pointer;
   transition: border-color var(--t-fast), background var(--t-fast);
 }
 .home-link:hover { border-color: var(--color-text-primary); }
 .home-link--active { border-color: var(--color-text-primary); background: var(--color-bg); }
 
-.home { max-width: 760px; margin: 0 auto; }
-.home__header { margin-bottom: var(--space-8); }
-.home__welcome { margin: 0 0 var(--space-2); }
+.home {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: var(--space-10) 0 var(--space-12);
+}
+
+/* Header */
+.home__header { margin-bottom: var(--space-12); }
+.home__welcome {
+  font-family: var(--font-display);
+  font-size: var(--text-display);
+  font-weight: 600;
+  letter-spacing: -.5px;
+  line-height: 1.1;
+  margin: 0 0 var(--space-3);
+}
 .home__stage {
-  font-size: var(--text-base);
+  font-size: var(--text-lg);
   color: var(--color-text-secondary);
   margin: 0;
   line-height: 1.6;
+  max-width: 60ch;
 }
-.home__stage strong { color: var(--color-text-primary); }
+.home__stage strong { color: var(--color-text-primary); font-weight: 600; }
 
-/* Next step — the prominent guiding element */
+/* ── Next step — the hero of the page ────────────────────────────
+ * Focal through size + a soft accent tint, not a heavy border. The
+ * CTA sits fully inside the generous padding. */
 .home-next {
-  padding: var(--space-7) var(--space-7);
-  border: 1.5px solid var(--color-text-primary);
-  border-radius: 16px;
-  background: var(--color-surface);
-  margin-bottom: var(--space-8);
+  background: var(--color-cat-cs-bg);
+  border-radius: var(--radius-lg);
+  padding: var(--space-10);
+  margin-bottom: var(--space-12);
 }
 .home-next__eyebrow {
   display: inline-block;
+  font-family: var(--font-sans);
   font-size: var(--text-xs);
-  font-weight: 600;
-  letter-spacing: .08em;
+  font-weight: 700;
+  letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--color-cat-cs);
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-3);
 }
 .home-next__text {
   font-family: var(--font-display);
-  font-size: var(--text-xl, 1.4rem);
+  font-size: var(--text-2xl);
   font-weight: 600;
   color: var(--color-text-primary);
-  line-height: 1.4;
-  margin: 0 0 var(--space-5);
+  line-height: 1.35;
+  margin: 0 0 var(--space-6);
+  max-width: 36ch;
 }
 .home-next__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+
+/* Primary CTA: solid ink, moderate radius — inviting, not a heavy pill */
 .home-next__btn {
-  padding: 10px 20px;
+  padding: var(--space-3) var(--space-6);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-md);
   background: var(--color-surface);
   color: var(--color-text-primary);
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   font-weight: 600;
   cursor: pointer;
-  transition: opacity var(--t-base), border-color var(--t-fast);
+  transition: opacity var(--t-base), border-color var(--t-fast), background var(--t-fast);
 }
-.home-next__btn:hover { border-color: var(--color-text-primary); }
+.home-next__btn:hover { border-color: var(--color-text-tertiary); }
 .home-next__btn--primary {
   background: var(--color-text-primary);
   color: var(--color-surface);
   border-color: var(--color-text-primary);
 }
-.home-next__btn--primary:hover { opacity: .88; }
+.home-next__btn--primary:hover { opacity: .9; }
 
-/* Summary cards */
+/* ── Summary cards ───────────────────────────────────────────── */
 .home-cards {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-4);
-  margin-bottom: var(--space-8);
+  gap: var(--space-6);
+  margin-bottom: var(--space-12);
 }
 .home-card {
-  padding: var(--space-5) var(--space-6);
+  padding: var(--space-8);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   background: var(--color-surface);
 }
 .home-card__title {
   font-family: var(--font-display);
-  font-size: var(--text-base);
+  font-size: var(--text-lg);
   font-weight: 600;
-  margin: 0 0 var(--space-3);
+  margin: 0 0 var(--space-6);
   color: var(--color-text-primary);
 }
-.home-card__dl { margin: 0 0 var(--space-4); display: flex; flex-direction: column; gap: var(--space-3); }
-.home-card__dl > div { display: flex; flex-direction: column; gap: 2px; }
+.home-card__dl { margin: 0 0 var(--space-6); display: flex; flex-direction: column; gap: var(--space-5); }
+.home-card__dl > div { display: flex; flex-direction: column; gap: var(--space-1); }
 .home-card__dl dt {
   font-size: var(--text-xs);
   font-weight: 600;
-  letter-spacing: .04em;
+  letter-spacing: .06em;
   text-transform: uppercase;
-  color: var(--color-text-tertiary, var(--color-text-secondary));
+  color: var(--color-text-tertiary);
 }
-.home-card__dl dd { margin: 0; font-size: var(--text-sm); color: var(--color-text-primary); line-height: 1.5; }
-.home-card p { font-size: var(--text-sm); color: var(--color-text-secondary); margin: 0 0 var(--space-4); line-height: 1.6; }
+.home-card__dl dd { margin: 0; font-size: var(--text-base); color: var(--color-text-primary); line-height: 1.5; }
+.home-card p { font-size: var(--text-sm); color: var(--color-text-secondary); margin: 0 0 var(--space-6); line-height: 1.7; }
 .home-card p strong { color: var(--color-text-primary); }
-.home-card__muted { color: var(--color-text-tertiary, var(--color-text-secondary)); font-style: italic; }
+.home-card__muted { color: var(--color-text-tertiary); font-style: italic; }
 .home-card__link {
   border: none;
   background: none;
@@ -671,10 +697,11 @@ main     { flex: 1; padding: var(--pad); }
   font-size: var(--text-sm);
   font-weight: 600;
   cursor: pointer;
+  transition: opacity var(--t-fast);
 }
-.home-card__link:hover { text-decoration: underline; }
+.home-card__link:hover { opacity: .75; }
 
-/* Quick access */
+/* ── Quick access — light, subtle controls ───────────────────── */
 .home-quick__label {
   display: block;
   font-size: var(--text-xs);
@@ -682,13 +709,13 @@ main     { flex: 1; padding: var(--pad); }
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--color-text-secondary);
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
 }
-.home-quick__row { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.home-quick__row { display: flex; flex-wrap: wrap; gap: var(--space-3); }
 .home-quick__btn {
-  padding: 8px 16px;
+  padding: var(--space-2) var(--space-4);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-md);
   background: var(--color-surface);
   color: var(--color-text-secondary);
   font-family: var(--font-sans);
@@ -1025,7 +1052,13 @@ main     { flex: 1; padding: var(--pad); }
   .stage-bar { flex-direction: column; align-items: flex-start; }
   .stage-tool-nav { width: 100%; overflow-x: auto; }
   .shortlist-link { margin-left: 0; }
-  .home-cards { grid-template-columns: 1fr; }
+  /* Workspace home — tighter but still generous on mobile */
+  .home { padding: var(--space-6) 0 var(--space-10); }
+  .home__welcome { font-size: var(--text-2xl); }
+  .home__header { margin-bottom: var(--space-10); }
+  .home-next { padding: var(--space-6); margin-bottom: var(--space-10); }
+  .home-cards { grid-template-columns: 1fr; gap: var(--space-4); margin-bottom: var(--space-10); }
+  .home-card { padding: var(--space-5); }
 }
 
 /* Coming-soon placeholder for unlocked demo panels */
