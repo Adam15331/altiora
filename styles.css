@@ -440,6 +440,119 @@ main     { flex: 1; padding: var(--pad); }
 .stage-tool--locked { opacity: .6; }
 .stage-tool__lock { font-size: 11px; }
 
+/* "My Shortlist (n)" link — pushed to the right of the stage bar */
+.shortlist-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  padding: 7px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color var(--t-fast), color var(--t-fast), background var(--t-fast);
+}
+.shortlist-link:hover { border-color: var(--color-text-primary); color: var(--color-text-primary); }
+.shortlist-link--active {
+  background: var(--color-text-primary);
+  color: var(--color-surface);
+  border-color: var(--color-text-primary);
+}
+.shortlist-link__icon { font-size: 13px; }
+
+/* ═══════════════════════════════════════════════════════════════
+ * Save / bookmark button on course cards
+ * ═══════════════════════════════════════════════════════════════ */
+.save-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  padding: 5px 11px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color var(--t-fast), color var(--t-fast), background var(--t-fast);
+}
+.save-btn:hover { border-color: var(--color-match-strong); color: var(--color-match-strong); }
+.save-btn__icon { display: flex; align-items: center; }
+.save-btn--saved {
+  border-color: var(--color-match-strong);
+  color: var(--color-match-strong);
+  background: var(--color-match-strong-bg, var(--color-cat-cs-bg));
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * Shortlist view — insights + saved cards
+ * ═══════════════════════════════════════════════════════════════ */
+.shortlist-insights {
+  padding: var(--space-5) var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  margin-bottom: var(--space-8);
+}
+.shortlist-insights__title {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 600;
+  margin: 0 0 var(--space-3);
+  color: var(--color-text-primary);
+}
+.shortlist-insights__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.shortlist-insights__list li {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+.shortlist-insights__list strong { color: var(--color-text-primary); }
+.shortlist-insight-label { color: var(--color-text-secondary); }
+.shortlist-insight-tag {
+  display: inline-block;
+  padding: 2px 9px;
+  margin: 2px 2px 0 0;
+  border-radius: var(--radius-full);
+  background: var(--color-cat-cs-bg);
+  color: var(--color-cat-cs);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.course-card--saved { border-left-color: var(--color-match-strong); }
+.remove-btn {
+  flex-shrink: 0;
+  padding: 5px 11px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color var(--t-fast), color var(--t-fast);
+}
+.remove-btn:hover { border-color: var(--color-match-reach); color: var(--color-match-reach); }
+.shortlist-empty { margin-top: var(--space-10); }
+
 /* ═══════════════════════════════════════════════════════════════
  * Applying panel — saved shortlist
  * ═══════════════════════════════════════════════════════════════ */

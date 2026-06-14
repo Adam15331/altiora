@@ -681,12 +681,20 @@ function switchMode(mode) {
   $('panel-personal-statement').classList.toggle('hidden', mode !== 'personal-statement');
   $('panel-interview-coach')   .classList.toggle('hidden', mode !== 'interview-coach');
   $('panel-applying')          .classList.toggle('hidden', mode !== 'applying');
+  $('panel-shortlist')         .classList.toggle('hidden', mode !== 'shortlist');
+
+  // The shortlist is a cross-stage view, not a stage tool — highlight
+  // its own link rather than a stage-tool button.
+  $('shortlistLink')?.classList.toggle('shortlist-link--active', mode === 'shortlist');
 
   if (mode === 'strengths' && $('strengthsGrid').children.length === 0) {
     renderStrengthsGrid();
   }
   if (mode === 'applying') {
     renderApplyingPanel();
+  }
+  if (mode === 'shortlist') {
+    renderShortlist();
   }
 }
 
@@ -805,6 +813,218 @@ function closeStageMenu() {
 function toggleStageMenu() {
   if ($('stageMenu')?.classList.contains('hidden')) openStageMenu();
   else closeStageMenu();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * SAVED SHORTLIST
+ * Save/bookmark buttons on course cards toggle membership in the
+ * AltioraState shortlist (persisted to localStorage). The shortlist
+ * view reuses the card visual system and shows live insights.
+ * ═══════════════════════════════════════════════════════════════ */
+
+const ICON_BOOKMARK_OUTLINE = `<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5h10a1 1 0 0 1 1 1V17l-6-3.5L4 17V4.5a1 1 0 0 1 1-1z"/></svg>`;
+const ICON_BOOKMARK_FILLED  = `<svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5h10a1 1 0 0 1 1 1V17l-6-3.5L4 17V4.5a1 1 0 0 1 1-1z"/></svg>`;
+
+// HTML for a save/bookmark toggle reflecting current shortlist state.
+function saveButtonHtml(courseId) {
+  const saved = AltioraState.isInShortlist(courseId);
+  return `<button class="save-btn${saved ? ' save-btn--saved' : ''}" type="button"
+      data-save-course="${esc(courseId)}" aria-pressed="${saved}"
+      aria-label="${saved ? 'Remove from shortlist' : 'Save to shortlist'}">
+      <span class="save-btn__icon" aria-hidden="true">${saved ? ICON_BOOKMARK_FILLED : ICON_BOOKMARK_OUTLINE}</span>
+      <span class="save-btn__label">${saved ? 'Saved' : 'Save'}</span>
+    </button>`;
+}
+
+function setSaveButtonState(btn, saved) {
+  btn.classList.toggle('save-btn--saved', saved);
+  btn.setAttribute('aria-pressed', String(saved));
+  btn.setAttribute('aria-label', saved ? 'Remove from shortlist' : 'Save to shortlist');
+  const icon  = btn.querySelector('.save-btn__icon');
+  const label = btn.querySelector('.save-btn__label');
+  if (icon)  icon.innerHTML  = saved ? ICON_BOOKMARK_FILLED : ICON_BOOKMARK_OUTLINE;
+  if (label) label.textContent = saved ? 'Saved' : 'Save';
+}
+
+// Course ids are simple slugs ([a-z0-9-]), so they are safe to embed in
+// an attribute selector without escaping. Updates every visible button
+// for the course (a course can appear in more than one place).
+function syncSaveButtons(courseId) {
+  const saved = AltioraState.isInShortlist(courseId);
+  document.querySelectorAll(`.save-btn[data-save-course="${courseId}"]`)
+    .forEach(btn => setSaveButtonState(btn, saved));
+}
+
+// Toggle a course in the shortlist and keep all dependent UI in sync.
+function toggleShortlist(courseId) {
+  const willSave = !AltioraState.isInShortlist(courseId);
+  if (willSave) {
+    AltioraState.addToShortlist(courseId);
+    showToast('Saved to your shortlist');
+  } else {
+    AltioraState.removeFromShortlist(courseId);
+    showToast('Removed from your shortlist');
+  }
+  logEvent(willSave ? 'shortlist_add' : 'shortlist_remove', { courseId });
+  syncSaveButtons(courseId);
+  updateShortlistCount();
+  if (state.mode === 'shortlist') renderShortlist();
+  if (state.mode === 'applying')  renderApplyingPanel();
+}
+
+// Attach the click handler to a save button inside a freshly-built card.
+function wireSaveButton(cardEl) {
+  const btn = cardEl.querySelector('.save-btn[data-save-course]');
+  if (!btn) return;
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    toggleShortlist(btn.dataset.saveCourse);
+  });
+}
+
+// Update the "My Shortlist (n)" count in the stage bar.
+function updateShortlistCount() {
+  const el = $('shortlistCount');
+  if (el) el.textContent = String(AltioraState.getShortlist().length);
+}
+
+/* ─── Shortlist view ──────────────────────────────────────────── */
+
+function renderShortlist() {
+  const panel = $('panel-shortlist');
+  if (!panel) return;
+
+  const ids   = AltioraState.getShortlist();
+  const saved = ids.map(id => courses.find(c => c.id === id)).filter(Boolean);
+
+  if (!saved.length) {
+    panel.innerHTML = `
+      <div class="empty-state shortlist-empty">
+        <div class="empty-state__icon">🔖</div>
+        <p>You haven't saved any courses yet.</p>
+        <p class="mt-8">When you find courses you're interested in, save them here to build your list.</p>
+      </div>`;
+    return;
+  }
+
+  panel.innerHTML = buildShortlistInsightsHtml(saved) + `<div id="shortlistGroups"></div>`;
+
+  // Group saved courses by country, sorted by country label then university.
+  const byCountry = {};
+  saved.forEach(c => (byCountry[c.country] ||= []).push(c));
+  const order = Object.keys(byCountry)
+    .sort((a, b) => (COUNTRY_LABELS[a] ?? a).localeCompare(COUNTRY_LABELS[b] ?? b));
+
+  const wrap = panel.querySelector('#shortlistGroups');
+  order.forEach(country => {
+    const list = byCountry[country].sort((a, b) => a.university.localeCompare(b.university));
+    const group = document.createElement('section');
+    group.className = 'results-group';
+    const header = document.createElement('h2');
+    header.className = 'results-group__header';
+    header.innerHTML = `${COUNTRY_FLAGS[country] ?? ''} ${esc(COUNTRY_LABELS[country] ?? country)} <span style="font-weight:400;opacity:.65">(${list.length})</span>`;
+    group.appendChild(header);
+    const grid = document.createElement('div');
+    grid.className = 'results-group__grid';
+    list.forEach(c => grid.appendChild(buildShortlistCard(c)));
+    group.appendChild(grid);
+    wrap.appendChild(group);
+  });
+}
+
+// Live, factual insights computed from the saved courses.
+function buildShortlistInsightsHtml(saved) {
+  const unis      = new Set(saved.map(c => c.university));
+  const countries = new Set(saved.map(c => c.country));
+  const tests     = new Set();
+  saved.forEach(c => (Array.isArray(c.admissionTests) ? c.admissionTests : []).forEach(t => tests.add(t)));
+  const gradeRange = shortlistGradeRange(saved);
+
+  const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+  const testsHtml = tests.size
+    ? [...tests].sort().map(t => `<span class="shortlist-insight-tag">${esc(t)}</span>`).join(' ')
+    : `<span class="text-secondary">None across your saved courses</span>`;
+
+  return `
+    <div class="shortlist-insights">
+      <h2 class="shortlist-insights__title">Your shortlist at a glance</h2>
+      <ul class="shortlist-insights__list">
+        <li><strong>${plural(saved.length, 'course', 'courses')}</strong> saved across
+            <strong>${plural(unis.size, 'university', 'universities')}</strong> in
+            <strong>${plural(countries.size, 'country', 'countries')}</strong></li>
+        <li><span class="shortlist-insight-label">Admission tests you'll need:</span> ${testsHtml}</li>
+        ${gradeRange ? `<li><span class="shortlist-insight-label">Grade range:</span> <strong>${esc(gradeRange)}</strong></li>` : ''}
+      </ul>
+    </div>`;
+}
+
+// Expresses the requirement spread across saved courses. IB points are
+// numeric and span all countries, so they are the primary scale; UK
+// A-Level offers are a fallback when no saved course lists IB points.
+function shortlistGradeRange(saved) {
+  const ibPts = saved.map(c => c.grades?.ib).filter(v => typeof v === 'number' && !isNaN(v));
+  if (ibPts.length) {
+    const lo = Math.min(...ibPts), hi = Math.max(...ibPts);
+    return lo === hi ? `${lo} IB points` : `${lo}–${hi} IB points`;
+  }
+  const offers = saved.map(c => c.grades?.aLevels).filter(Boolean);
+  if (offers.length) {
+    const ranked = offers.slice().sort((a, b) => aLevelOfferStrength(a) - aLevelOfferStrength(b));
+    const lo = ranked[0], hi = ranked[ranked.length - 1];
+    return lo === hi ? `${lo} (A-Level)` : `${lo} to ${hi} (A-Level)`;
+  }
+  return null;
+}
+
+// Total rank of the top three A-Level grades, for ordering offers.
+function aLevelOfferStrength(str) {
+  return parseALevelGrades(str).slice(0, 3)
+    .reduce((sum, g) => sum + (A_LEVEL_RANK[g] ?? 0), 0);
+}
+
+// A saved-course card: same visual system and info as a result card,
+// with a Remove action instead of a match-status pill.
+function buildShortlistCard(course) {
+  const flag      = COUNTRY_FLAGS[course.country] ?? '';
+  const country   = COUNTRY_LABELS[course.country] ?? course.country;
+  const catLabel  = CATEGORY_LABEL_MAP[course.category] ?? course.category;
+  const tierLabel = course.universityContext?.tier ? (TIER_LABELS[course.universityContext.tier] ?? null) : null;
+  const tests     = Array.isArray(course.admissionTests) ? course.admissionTests : [];
+
+  const card = document.createElement('div');
+  card.className = 'course-card course-card--saved';
+  card.setAttribute('role', 'listitem');
+  card.dataset.category = course.category ?? '';
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="card-title-group">
+        <span class="card-flag" aria-hidden="true">${flag}</span>
+        <div class="card-titles">
+          <div class="card-name">${esc(course.name)}</div>
+          <div class="card-uni">${esc(course.university)}</div>
+          ${tierLabel ? `<div class="card-tier">${esc(tierLabel)}</div>` : ''}
+        </div>
+      </div>
+      <button class="remove-btn" type="button" data-remove-course="${esc(course.id)}"
+        aria-label="Remove ${esc(course.name)} from shortlist">✕ Remove</button>
+    </div>
+    <div class="card-meta">
+      <span>${flag}&thinsp;${esc(country)}</span>
+      <span class="card-meta-sep">·</span>
+      <span>${esc(course.degreeLevel)}</span>
+      <span class="card-meta-sep">·</span>
+      <span class="card-cat-badge">${esc(catLabel)}</span>
+    </div>
+    ${tests.length ? `
+      <div class="card-admission-tests">
+        ${tests.map(t => `<span class="admission-test-tag">${esc(t)} required</span>`).join('')}
+      </div>` : ''}
+  `;
+  card.querySelector('.remove-btn').addEventListener('click', e => {
+    e.stopPropagation();
+    toggleShortlist(course.id);   // course is saved → this removes it
+  });
+  return card;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1416,6 +1636,7 @@ function buildCheckCard(course, result) {
           ${tierLabel ? `<div class="card-tier">${esc(tierLabel)}</div>` : ''}
         </div>
       </div>
+      ${saveButtonHtml(course.id)}
     </div>
     <div class="card-meta">
       <span>${flag}&thinsp;${esc(country)}</span>
@@ -1436,6 +1657,7 @@ function buildCheckCard(course, result) {
     ${footerHtml}
     ${uniInfoHtml}
   `;
+  wireSaveButton(card);
   return card;
 }
 
@@ -1532,11 +1754,14 @@ function buildReverseCard(course) {
     </div>
     ${course.notes ? `<p class="reverse-notes">${esc(course.notes)}</p>` : ''}
     <div class="reverse-card-footer">
+      ${saveButtonHtml(course.id)}
       <button class="copy-btn" type="button" aria-label="Copy requirements for ${esc(course.name)} to clipboard">
         ⎘&ensp;Copy requirements
       </button>
     </div>
   `;
+
+  wireSaveButton(card);
 
   // Copy-to-clipboard handler — timerId is scoped per card instance
   let copyTimerId = null;
@@ -2474,6 +2699,12 @@ function init() {
   // Click-away and Escape close the stage menu
   document.addEventListener('click', closeStageMenu);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeStageMenu(); });
+
+  // Saved shortlist: persistent link + live count (kept in sync via the
+  // state subscription so it reflects changes from anywhere).
+  $('shortlistLink')?.addEventListener('click', () => switchMode('shortlist'));
+  AltioraState.subscribe(updateShortlistCount);
+  updateShortlistCount();
 
   $('checkSystemSelect').addEventListener('change', e => {
     state.checkSystem      = e.target.value;
