@@ -2512,7 +2512,7 @@ function closePricingModal() {
 // Removes only altiora_* keys rather than localStorage.clear() so nothing
 // else on the origin is affected.
 function resetDemoData() {
-  ['altiora_tier', 'altiora_personal_statement', 'altiora_interview_history']
+  [AltioraState.STORAGE_KEY, 'altiora_tier', 'altiora_personal_statement', 'altiora_interview_history']
     .forEach(k => localStorage.removeItem(k));
   window.location.reload();
 }
