@@ -339,21 +339,50 @@ const EMPTY_SUGGESTIONS = {
 
 let _subjectDebounce = null;
 
+// Field-relevant combinations for the active field, translated to the
+// selected system. Returns null if no field filter, no system, or none
+// of the field's combinations are valid for that system.
+function fieldEmptySuggestions(category, system) {
+  const combos = FIELD_COMBO_TAGS[category];
+  if (!combos || !system) return null;
+  const rmap = getReverseMap(system);
+  const seen = new Set();
+  const out = [];
+  for (const tags of combos) {
+    if (!tags.every(t => rmap[t]?.length)) continue;       // every subject must exist here
+    const subjects = tags.map(t => tagToLocal(t, system));
+    const key = [...subjects].sort().join('|');
+    if (seen.has(key)) continue;                            // dedupe identical sets
+    seen.add(key);
+    out.push({ label: subjects.join(' + '), subjects });
+  }
+  return out.length ? out : null;
+}
+
 function renderCheckEmptyState() {
   const el = $('checkEmptyState');
   if (!el) return;
   const show = !!state.checkSystem && state.selectedSubjects.length === 0;
   el.classList.toggle('hidden', !show);
   if (!show) return;
-  if (el.dataset.builtFor === state.checkSystem) return;
-  el.dataset.builtFor = state.checkSystem;
-  const suggestions = EMPTY_SUGGESTIONS[state.checkSystem] ?? EMPTY_SUGGESTIONS.UK_A_Level;
+
+  const ef = state.exploreField;
+  const fieldSugg = ef ? fieldEmptySuggestions(ef.category, state.checkSystem) : null;
+  // Rebuild when the system OR the active field changes.
+  const builtKey = `${state.checkSystem}|${fieldSugg ? ef.category : ''}`;
+  if (el.dataset.builtFor === builtKey) return;
+  el.dataset.builtFor = builtKey;
+
+  const suggestions = fieldSugg ?? (EMPTY_SUGGESTIONS[state.checkSystem] ?? EMPTY_SUGGESTIONS.UK_A_Level);
   const sysLabel = qualificationMappings[state.checkSystem]?.systemLabel ?? state.checkSystem;
+  const subText = fieldSugg
+    ? `Strong ${esc(sysLabel)} combinations for ${esc(ef.name)}:`
+    : `Not sure where to start? Try one of these ${esc(sysLabel)} combinations:`;
   el.innerHTML = `
     <div class="check-empty-state__inner">
       <div class="check-empty-state__icon" aria-hidden="true">🎯</div>
       <p class="check-empty-state__heading">Select your subjects above to see matching courses</p>
-      <p class="check-empty-state__sub">Not sure where to start? Try one of these ${esc(sysLabel)} combinations:</p>
+      <p class="check-empty-state__sub">${subText}</p>
       <div class="check-empty-state__suggestions">
         ${suggestions.map(s =>
           `<button type="button" class="suggestion-btn" data-subjects="${esc(JSON.stringify(s.subjects))}">Try: ${esc(s.label)}</button>`
@@ -700,6 +729,7 @@ function switchMode(mode) {
   $('panel-applying')          .classList.toggle('hidden', mode !== 'applying');
   $('panel-shortlist')         .classList.toggle('hidden', mode !== 'shortlist');
   $('panel-home')              .classList.toggle('hidden', mode !== 'home');
+  $('panel-field-overview')    .classList.toggle('hidden', mode !== 'field-overview');
 
   // The shortlist and home are cross-stage views, not stage tools —
   // highlight their own controls rather than a stage-tool button.
@@ -2064,6 +2094,43 @@ function getCombinations(arr, size) {
   return out;
 }
 
+// Rank subject combinations for a category by how many of its courses
+// they unlock (green then amber), reading live from the course data.
+// Shared by Subject Planner and the Field Overview screen. Returns
+// [{ combo: tags[], green, amber }], strongest first.
+function rankCategoryCombinations(category, limit = 5) {
+  const catCourses = courses.filter(c => c.category === category);
+  if (!catCourses.length) return [];
+
+  const tagFreq = {};
+  catCourses.forEach(c =>
+    (c.requirements.essential ?? []).forEach(t => { tagFreq[t] = (tagFreq[t] ?? 0) + 1; })
+  );
+  const topTags = Object.entries(tagFreq).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([t]) => t);
+
+  const combos = [];
+  for (let size = 2; size <= 4 && combos.length < 20; size++) {
+    for (const c of getCombinations(topTags, size)) {
+      if (combos.length >= 20) break;
+      combos.push(c);
+    }
+  }
+
+  return combos.map(combo => {
+    const tagSet = new Set(combo);
+    if (tagSet.has('Mathematics_Advanced')) tagSet.add('Mathematics_Standard');
+    let green = 0, amber = 0;
+    catCourses.forEach(course => {
+      const r = classify(course, tagSet);
+      if (r.status === 'green') green++;
+      else if (r.status === 'amber') amber++;
+    });
+    return { combo, green, amber };
+  }).sort((a, b) => b.green - a.green || b.amber - a.amber)
+    .slice(0, limit)
+    .filter(s => s.green + s.amber > 0);
+}
+
 function renderPlanResults() {
   if (dataLoadError) return;
   if (!state.planCategory || !state.planSystem) return;
@@ -2149,28 +2216,7 @@ function renderPlanResults() {
   }
 
   /* ── Section B: top subject combinations ── */
-  const topTags = sortedTags.slice(0, 6).map(([t]) => t);
-  const combos  = [];
-  for (let size = 2; size <= 4 && combos.length < 20; size++) {
-    for (const c of getCombinations(topTags, size)) {
-      if (combos.length >= 20) break;
-      combos.push(c);
-    }
-  }
-
-  const scored = combos.map(combo => {
-    const tagSet = new Set(combo);
-    if (tagSet.has('Mathematics_Advanced')) tagSet.add('Mathematics_Standard');
-    let green = 0, amber = 0;
-    catCourses.forEach(course => {
-      const r = classify(course, tagSet);
-      if (r.status === 'green') green++;
-      else if (r.status === 'amber') amber++;
-    });
-    return { combo, green, amber };
-  }).sort((a, b) => b.green - a.green || b.amber - a.amber);
-
-  const top5 = scored.slice(0, 5).filter(s => s.green + s.amber > 0);
+  const top5 = rankCategoryCombinations(state.planCategory, 5);
 
   if (top5.length === 0) {
     $('planCombinations').innerHTML = '';
@@ -2331,8 +2377,37 @@ const STRENGTH_FIELDS = {
 // Canonical order, used to break ties when fields match equally.
 const FIELD_ORDER = ['engineering','cs','mathematics','physics','architecture','medicine','natural-sciences','psychology','law','economics','business'];
 
+// Resolve a course category to its canonical field (for "about this field"
+// links that start from a category rather than a specific field).
+const CATEGORY_TO_FIELD = {
+  engineering:'engineering', cs:'cs', mathematics:'mathematics', sciences:'natural-sciences',
+  architecture:'architecture', medicine:'medicine', psychology:'psychology', law:'law',
+  economics:'economics', business:'business',
+};
+
+// Field-relevant suggested combinations, as canonical tags (translated to
+// the active qualification system at render time). Used on the Check
+// empty state when a field filter is active.
+const FIELD_COMBO_TAGS = {
+  cs:           [['Mathematics_Standard','Mathematics_Advanced','Physics'], ['Mathematics_Standard','Computer_Science','Physics']],
+  engineering:  [['Mathematics_Standard','Physics','Mathematics_Advanced'], ['Mathematics_Standard','Physics','Chemistry']],
+  medicine:     [['Chemistry','Biology','Mathematics_Standard'], ['Chemistry','Biology','Physics']],
+  economics:    [['Mathematics_Standard','Economics','Mathematics_Advanced'], ['Mathematics_Standard','Economics','History']],
+  law:          [['History','English','Sociology'], ['English','History','Economics']],
+  mathematics:  [['Mathematics_Standard','Mathematics_Advanced','Physics'], ['Mathematics_Standard','Mathematics_Advanced','Computer_Science']],
+  sciences:     [['Chemistry','Biology','Mathematics_Standard'], ['Chemistry','Physics','Mathematics_Standard']],
+  psychology:   [['Biology','Psychology','Mathematics_Standard'], ['Biology','Chemistry','Psychology']],
+  architecture: [['Mathematics_Standard','Art','Physics'], ['Mathematics_Standard','Physics','Art_Design']],
+  business:     [['Mathematics_Standard','Economics','Business'], ['Mathematics_Standard','Business','Economics']],
+};
+
 // Strengths are multi-select; this holds the current selection.
 const _selectedStrengths = new Set();
+
+// Field Overview context: where the student arrived from, and which
+// strengths they carried in (for the alignment highlight).
+let _overviewFrom = 'strengths';
+let _overviewStrengths = [];
 
 function renderStrengthsGrid() {
   const grid = $('strengthsGrid');
@@ -2388,10 +2463,9 @@ function renderStrengthsResults() {
   section.classList.remove('hidden');
 
   resultsDiv.querySelectorAll('[data-explore-field]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const f = STRENGTH_FIELDS[btn.dataset.exploreField];
-      if (f) exploreFieldInCheck(f.category, btn.dataset.exploreField);
-    });
+    btn.addEventListener('click', () =>
+      openFieldOverview(btn.dataset.exploreField, { from: 'strengths', strengths: [..._selectedStrengths] })
+    );
   });
 }
 
@@ -2409,34 +2483,201 @@ function buildFieldCardHtml(fieldId) {
     </article>`;
 }
 
-// The ONLY path from a field to specific courses: open Check Combination
-// pre-filtered to the field's category, across ALL countries. This is the
-// exploring → building step of the funnel. The field context is stored on
-// state.exploreField so it survives picking a qualification system (which
-// otherwise clears the category filter) and stays visible via a banner.
-function exploreFieldInCheck(category, fieldId) {
-  const name = STRENGTH_FIELDS[fieldId]?.name ?? fieldId;
-  logEvent('strengths_explore_field', { field: fieldId, category });
+/* ═══════════════════════════════════════════════════════════════
+ * FIELD OVERVIEW  ("What [Field] needs")
+ * A reusable orientation screen rendered from one function, reachable
+ * from Start with Strengths, an "about this field" link in Check
+ * Combination, and a ?field= URL parameter. All content is read live
+ * from the course data + field descriptions.
+ * ═══════════════════════════════════════════════════════════════ */
 
-  // Advance into the building stage, whose primary tool is Check Combination.
+// Resolve a field id OR a category id to a field id.
+function resolveFieldId(key) {
+  if (STRENGTH_FIELDS[key]) return key;
+  return CATEGORY_TO_FIELD[key] ?? null;
+}
+
+// Open the overview for a field/category. opts: { from, strengths }.
+function openFieldOverview(key, opts = {}) {
+  const fieldId = resolveFieldId(key);
+  const f = fieldId && STRENGTH_FIELDS[fieldId];
+  if (!f) return;
+
+  // Make sure the workspace chrome is visible (covers direct ?field= entry).
+  const stage = (typeof AltioraState !== 'undefined' && AltioraState.getProfile().stage) || DEFAULT_STAGE;
+  applyStageChrome(stage);
+
+  state.exploreField = { category: f.category, name: f.name, fieldId };
+  _overviewFrom = opts.from || 'strengths';
+  _overviewStrengths = opts.strengths || [...(_selectedStrengths || [])];
+
+  logEvent('field_overview_open', { field: fieldId, from: _overviewFrom });
+  switchMode('field-overview');
+  renderFieldOverview(fieldId);
+  requestAnimationFrame(() =>
+    $('panel-field-overview')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  );
+}
+
+function renderFieldOverview(fieldId) {
+  const panel = $('panel-field-overview');
+  const f = STRENGTH_FIELDS[fieldId];
+  if (!panel || !f) return;
+
+  const cat        = f.category;
+  const sys        = state.checkSystem;            // may be '' → generic terms
+  const catCourses = courses.filter(c => c.category === cat);
+  const subjName   = t => sys ? tagToLocal(t, sys) : readableTag(t);
+
+  // ── Subjects: essential + preferred tags, by frequency ──────────
+  const essFreq = {}, prefFreq = {};
+  catCourses.forEach(c => {
+    (c.requirements.essential ?? []).forEach(t => { essFreq[t] = (essFreq[t] ?? 0) + 1; });
+    (c.requirements.preferred ?? []).forEach(t => { prefFreq[t] = (prefFreq[t] ?? 0) + 1; });
+  });
+  const essential = Object.entries(essFreq).sort((a, b) => b[1] - a[1]).map(([t]) => t).slice(0, 6);
+  const preferred = Object.entries(prefFreq).sort((a, b) => b[1] - a[1])
+    .map(([t]) => t).filter(t => !essFreq[t]).slice(0, 6);
+
+  const chips = tags => tags.length
+    ? `<div class="fo-chips">${tags.map(t => `<span class="fo-chip">${esc(subjName(t))}</span>`).join('')}</div>`
+    : `<p class="fo-muted">No specific subjects — courses here are broadly open.</p>`;
+
+  // ── Strong combinations (reused planner ranking) ────────────────
+  const combos = rankCategoryCombinations(cat, 3);
+  const combosHtml = combos.length
+    ? combos.map(({ combo, green, amber }) => `
+        <div class="fo-combo">
+          <span class="fo-combo__subjects">${combo.map(t => `<span class="fo-chip fo-chip--accent">${esc(subjName(t))}</span>`).join('')}</span>
+          <span class="fo-combo__count">opens ${green + amber} course${green + amber === 1 ? '' : 's'}</span>
+        </div>`).join('')
+    : `<p class="fo-muted">No standout combinations — most courses here are flexible on subjects.</p>`;
+
+  // Alignment highlight from carried strengths.
+  const aligned = (_overviewStrengths || [])
+    .map(sid => STRENGTHS_OPTIONS.find(o => o.id === sid))
+    .filter(o => o && o.fields.includes(fieldId))
+    .map(o => o.label);
+  const alignHtml = aligned.length
+    ? `<p class="fo-align">✓ Your strengths (${esc(aligned.join(', '))}) align well with this field.</p>`
+    : '';
+
+  // ── What to expect: admission tests + grade range ───────────────
+  const testFreq = {};
+  catCourses.forEach(c => (c.admissionTests ?? []).forEach(t => { testFreq[t] = (testFreq[t] ?? 0) + 1; }));
+  const tests = Object.entries(testFreq).sort((a, b) => b[1] - a[1]).map(([t]) => t);
+  const testsLine = tests.length
+    ? `Top courses may require: ${tests.map(t => `<strong>${esc(t)}</strong>`).join(', ')}.`
+    : `Most courses in this field don't require an admission test.`;
+
+  const offers = catCourses.map(c => c.grades?.aLevels).filter(Boolean);
+  let gradeLine = '';
+  if (offers.length) {
+    const ranked = offers.slice().sort((a, b) => aLevelOfferStrength(a) - aLevelOfferStrength(b));
+    const lo = ranked[Math.floor(ranked.length * 0.15)] || ranked[0];
+    const hi = ranked[ranked.length - 1];
+    gradeLine = lo === hi
+      ? `Strong courses typically ask for around ${esc(hi)} at A-Level or equivalent.`
+      : `Strong courses typically ask for ${esc(lo)}–${esc(hi)} at A-Level or equivalent.`;
+  }
+  const usShare = catCourses.length ? catCourses.filter(c => c.country === 'US').length / catCourses.length : 0;
+  const holisticLine = usShare >= 0.3
+    ? `Many courses here (especially US) use holistic admissions — grades are one factor alongside essays, activities, and recommendations.`
+    : '';
+
+  const accent = `--fo-accent: var(--color-cat-${cat}); --fo-accent-bg: var(--color-cat-${cat}-bg);`;
+  const backLabel = _overviewFrom === 'check' ? '← Back to Check Combination'
+                  : _overviewFrom === 'plan'  ? '← Back to Subject Planner'
+                  : '← Back to fields';
+
+  panel.innerHTML = `
+    <div class="fo" style="${accent}">
+      <header class="fo__header">
+        <span class="fo__eyebrow">What this field needs</span>
+        <h1 class="fo__title">${esc(f.name)}</h1>
+        <p class="fo__desc">${esc(f.what)}</p>
+        ${alignHtml}
+      </header>
+
+      <section class="fo-section">
+        <h2 class="fo-section__head">Subjects this field needs</h2>
+        <div class="fo-subjects">
+          <div>
+            <span class="fo-label">Usually required</span>
+            ${chips(essential)}
+          </div>
+          <div>
+            <span class="fo-label">Helpful, not always required</span>
+            ${chips(preferred)}
+          </div>
+        </div>
+        ${sys ? '' : `<p class="fo-muted fo-muted--hint">Pick a qualification system in Check Combination to see these in your own subjects.</p>`}
+      </section>
+
+      <section class="fo-section">
+        <h2 class="fo-section__head">Typical strong combinations</h2>
+        <div class="fo-combos">${combosHtml}</div>
+      </section>
+
+      <section class="fo-section">
+        <h2 class="fo-section__head">What to expect</h2>
+        <p class="fo-expect">${testsLine}</p>
+        ${gradeLine ? `<p class="fo-expect">${gradeLine}</p>` : ''}
+        ${holisticLine ? `<p class="fo-expect fo-expect--muted">${holisticLine}</p>` : ''}
+      </section>
+
+      <section class="fo-section">
+        <h2 class="fo-section__head">Where it leads</h2>
+        <p class="fo-expect">${esc(f.leads)}</p>
+      </section>
+
+      <div class="fo-fork">
+        <button type="button" class="fo-btn fo-btn--primary" id="foSeeCourses">See courses I qualify for →</button>
+        <button type="button" class="fo-btn" id="foPlanSubjects">Help me plan my subjects →</button>
+        <button type="button" class="fo-back" id="foBack">${esc(backLabel)}</button>
+      </div>
+    </div>`;
+
+  $('foSeeCourses')?.addEventListener('click', proceedToCheckFromField);
+  $('foPlanSubjects')?.addEventListener('click', planForField);
+  $('foBack')?.addEventListener('click', () => {
+    if (_overviewFrom === 'check') switchMode('check');
+    else if (_overviewFrom === 'plan') switchMode('plan');
+    else switchMode('strengths');
+  });
+}
+
+// Action fork → Check Combination, with the field filter active and no
+// country assumption. The exploring → building step of the funnel.
+function proceedToCheckFromField() {
+  if (!state.exploreField) return;
+  logEvent('field_overview_to_check', { field: state.exploreField.fieldId });
   enterStage('building');
-
-  // No country assumption — explicitly show all countries.
   state.countryFilter = 'All';
   $$('#countryFilterBar .filter-btn').forEach(b =>
     b.classList.toggle('active', b.dataset.country === 'All'));
-
-  // Remember the field context, apply its category filter, show the banner.
-  state.exploreField = { category, name };
   applyExploreFieldFilter();
   renderExploreContextBanner();
-
-  // If subjects are already chosen, refresh results; otherwise the check
-  // flow guides them to pick a system and subjects (with the filter ready).
+  renderCheckEmptyState();
   if (state.selectedSubjects.length > 0) renderCheckResults();
-
   requestAnimationFrame(() =>
     $('panel-check')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  );
+}
+
+// Action fork → Subject Planner, pre-selected to this field's category.
+function planForField() {
+  const cat = state.exploreField?.category;
+  if (!cat) return;
+  logEvent('field_overview_to_plan', { field: state.exploreField.fieldId });
+  enterStage('choosing');   // choosing stage's primary tool is the planner
+  state.planCategory = cat;
+  $$('#planCategoryGrid .plan-cat-card').forEach(c =>
+    c.classList.toggle('active', c.dataset.category === cat));
+  $('planStep2')?.classList.remove('hidden');
+  if (state.planSystem) renderPlanResults();
+  requestAnimationFrame(() =>
+    $('panel-plan')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   );
 }
 
@@ -2474,10 +2715,15 @@ function renderExploreContextBanner() {
       <p class="explore-context__text">
         <strong>Exploring ${esc(ef.name)} courses</strong> — ${count} course${count === 1 ? '' : 's'} across all countries.${prompt}
       </p>
-      <button type="button" class="explore-context__clear" id="exploreContextClear">Clear field filter</button>
+      <div class="explore-context__actions">
+        ${ef.fieldId ? `<button type="button" class="explore-context__about" id="exploreContextAbout">About ${esc(ef.name)} →</button>` : ''}
+        <button type="button" class="explore-context__clear" id="exploreContextClear">Clear field filter</button>
+      </div>
     </div>`;
   banner.classList.remove('hidden');
   $('exploreContextClear')?.addEventListener('click', clearExploreField);
+  $('exploreContextAbout')?.addEventListener('click', () =>
+    openFieldOverview(ef.fieldId, { from: 'check' }));
 }
 
 // Remove the field context and its category filter; show all courses again.
@@ -2489,6 +2735,7 @@ function clearExploreField() {
     b.setAttribute('aria-pressed', 'false');
   });
   renderExploreContextBanner();
+  renderCheckEmptyState();
   logEvent('explore_field_clear', {});
   if (state.selectedSubjects.length > 0) renderCheckResults();
 }
@@ -3003,6 +3250,12 @@ function init() {
     showWorkspaceHome();
   } else {
     showStageSelect();
+  }
+
+  // Deep link: ?field=cs (or a category) opens that Field Overview directly.
+  const _fieldParam = new URLSearchParams(window.location.search).get('field');
+  if (_fieldParam && resolveFieldId(_fieldParam)) {
+    openFieldOverview(_fieldParam, { from: 'direct' });
   }
 }
 
