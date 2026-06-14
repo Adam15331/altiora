@@ -34,75 +34,81 @@
   <main>
     <div class="content">
 
-      <!-- Hero -->
-      <section class="hero" aria-labelledby="heroHeading">
-        <span class="hero__eyebrow">University Course Finder</span>
-        <h1 id="heroHeading">Find courses that match your subjects</h1>
-        <p>Works with UK&nbsp;A-Levels, IB, US&nbsp;APs, Singapore&nbsp;A-Levels, and Hong&nbsp;Kong&nbsp;DSE.</p>
+      <!-- ═══════════════════════════════════════════════════════
+           Stage selection — full-screen entry (new users)
+           ═══════════════════════════════════════════════════════ -->
+      <section id="stageSelect" class="stage-select hidden" aria-labelledby="stageSelectHeading">
+        <h1 id="stageSelectHeading" class="stage-select__heading">Where are you in your journey?</h1>
+        <p class="stage-select__sub">We'll guide you from here. You can change this anytime.</p>
+
+        <div class="stage-cards" role="list">
+          <button class="stage-card" data-stage="exploring" role="listitem">
+            <span class="stage-card__icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>
+              </svg>
+            </span>
+            <span class="stage-card__title">I'm exploring</span>
+            <span class="stage-card__desc">I don't know what I want to study yet. Help me discover what fits me.</span>
+          </button>
+
+          <button class="stage-card" data-stage="choosing" role="listitem">
+            <span class="stage-card__icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 5.5C4 4 5.5 3 8 3s3.5 1 4 2v13c-.5-1-1.5-2-4-2s-4 1-4 2V5.5z"/>
+                <path d="M20 5.5C20 4 18.5 3 16 3s-3.5 1-4 2"/><path d="M16.5 14.5l4-4 1.5 1.5-4 4-2 .5z"/>
+              </svg>
+            </span>
+            <span class="stage-card__title">I'm choosing my subjects</span>
+            <span class="stage-card__desc">I have some idea, but I need to pick the right exams and subjects to keep my options open.</span>
+          </button>
+
+          <button class="stage-card" data-stage="building" role="listitem">
+            <span class="stage-card__icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 6h12M8 12h12M8 18h12"/><path d="M3.5 5.5l1 1 1.5-2M3.5 11.5l1 1 1.5-2M3.5 17.5l1 1 1.5-2"/>
+              </svg>
+            </span>
+            <span class="stage-card__title">I'm building my university list</span>
+            <span class="stage-card__desc">I've chosen my subjects. Help me find courses I qualify for and build my shortlist.</span>
+          </button>
+
+          <button class="stage-card" data-stage="applying" role="listitem">
+            <span class="stage-card__icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 3L10 14"/><path d="M21 3l-7 18-4-8-8-4 19-6z"/>
+              </svg>
+            </span>
+            <span class="stage-card__title">I'm applying</span>
+            <span class="stage-card__desc">My list is set. Help me with personal statements, admission tests, and interviews.</span>
+          </button>
+        </div>
       </section>
 
-      <!-- ── Mode toggle ──────────────────────────────────────── -->
-      <div class="mode-toggle" role="tablist" aria-label="Application mode">
-        <button class="mode-btn active" data-mode="strengths" role="tab" aria-selected="true" aria-controls="panel-strengths">
-          <span class="mode-btn__icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M10 3a7 7 0 0 1 7 7c0 2-1 4-2.5 5.5L10 19l-4.5-3.5A7 7 0 0 1 10 3z"/>
-              <path d="M7 8h6M10 8v5"/>
-            </svg>
-          </span>
-          <span class="mode-btn__label">Start with strengths</span>
-          <span class="mode-btn__label--short" aria-hidden="true">Strengths</span>
-        </button>
-        <button class="mode-btn" data-mode="plan" role="tab" aria-selected="false" aria-controls="panel-plan">
-          <span class="mode-btn__icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M10 5.5c0-1.5-1.3-2.5-3.5-2.5H3.5v11H6.5c2.2 0 3.5 1 3.5 1V5.5z"/>
-              <path d="M10 5.5c0-1.5 1.3-2.5 3.5-2.5h3v11h-3c-2.2 0-3.5 1-3.5 1V5.5z"/>
-            </svg>
-          </span>
-          <span class="mode-btn__label">Subject Planner</span>
-          <span class="mode-btn__label--short" aria-hidden="true">Plan</span>
-        </button>
-        <button class="mode-btn" data-mode="reverse" role="tab" aria-selected="false" aria-controls="panel-reverse">
-          <span class="mode-btn__icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="9" cy="9" r="5.5"/><path d="M14.5 14.5l2.5 2.5"/>
-            </svg>
-          </span>
-          <span class="mode-btn__label">Course Finder</span>
-          <span class="mode-btn__label--short" aria-hidden="true">Find</span>
-        </button>
-        <button class="mode-btn" data-mode="check" role="tab" aria-selected="false" aria-controls="panel-check">
-          <span class="mode-btn__icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="3" y="3" width="6" height="6" rx="1.2"/><rect x="11" y="3" width="6" height="6" rx="1.2"/>
-              <rect x="3" y="11" width="6" height="6" rx="1.2"/><rect x="11" y="11" width="6" height="6" rx="1.2"/>
-            </svg>
-          </span>
-          <span class="mode-btn__label">Check Combination</span>
-          <span class="mode-btn__label--short" aria-hidden="true">Check</span>
-        </button>
-        <button class="mode-btn" data-mode="personal-statement" data-tier-required="plus" role="tab" aria-selected="false" aria-controls="panel-personal-statement">
-          <span class="mode-btn__icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M4 3h9l3 3v11H4V3z"/><path d="M13 3v3h3M7 9h6M7 12h6M7 15h4"/>
-            </svg>
-          </span>
-          <span class="mode-btn__label">Personal Statement</span>
-          <span class="mode-btn__label--short" aria-hidden="true">Statement</span>
-          <span class="mode-btn__lock" aria-hidden="true">🔒</span>
-        </button>
-        <button class="mode-btn" data-mode="interview-coach" data-tier-required="pro" role="tab" aria-selected="false" aria-controls="panel-interview-coach">
-          <span class="mode-btn__icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M3 4h14v9H8l-4 3v-3H3V4z"/><path d="M7 8h6"/>
-            </svg>
-          </span>
-          <span class="mode-btn__label">Interview Coach</span>
-          <span class="mode-btn__label--short" aria-hidden="true">Interview</span>
-          <span class="mode-btn__lock" aria-hidden="true">🔒</span>
-        </button>
-      </div>
+      <!-- ═══════════════════════════════════════════════════════
+           Workspace — shown once a stage is chosen.
+           The stage bar (indicator + tool sub-nav) replaces the old
+           horizontal tab bar.
+           ═══════════════════════════════════════════════════════ -->
+      <div id="workspace" class="hidden">
+
+        <div class="stage-bar">
+          <div class="stage-bar__indicator">
+            <button id="stageIndicatorBtn" class="stage-indicator" aria-haspopup="true" aria-expanded="false" aria-controls="stageMenu">
+              <span class="stage-indicator__label">Stage: <strong id="stageIndicatorName">…</strong></span>
+              <span class="stage-indicator__caret" aria-hidden="true">▾</span>
+            </button>
+            <div id="stageMenu" class="stage-menu hidden" role="menu" aria-label="Switch stage">
+              <button class="stage-menu__item" data-stage="exploring"  role="menuitem">Exploring options</button>
+              <button class="stage-menu__item" data-stage="choosing"  role="menuitem">Choosing my subjects</button>
+              <button class="stage-menu__item" data-stage="building"  role="menuitem">Building my university list</button>
+              <button class="stage-menu__item" data-stage="applying"  role="menuitem">Applying</button>
+            </div>
+          </div>
+          <nav id="stageToolNav" class="stage-tool-nav" aria-label="Tools for this stage">
+            <!-- rendered by JS for the active stage -->
+          </nav>
+        </div>
 
       <!-- ═══════════════════════════════════════════════════════
            Panel A — Check Combination
@@ -323,7 +329,7 @@
       <!-- ═══════════════════════════════════════════════════════
            Panel D — Strengths First
            ═══════════════════════════════════════════════════════ -->
-      <div id="panel-strengths" class="panel" role="tabpanel">
+      <div id="panel-strengths" class="panel hidden" role="tabpanel">
         <p class="panel-intro">
           Tell us what you're good at — we'll show you degree paths that match your natural abilities.
         </p>
@@ -450,6 +456,26 @@
           <button class="locked-panel__btn" onclick="openPricingModal()">Upgrade to unlock</button>
         </div>
       </div><!-- /panel-interview-coach -->
+
+      <!-- ═══════════════════════════════════════════════════════
+           Panel — Applying (placeholder + saved shortlist)
+           ═══════════════════════════════════════════════════════ -->
+      <div id="panel-applying" class="panel hidden" role="tabpanel">
+        <div class="coming-soon-box">
+          <span class="coming-soon-box__icon" aria-hidden="true">🚀</span>
+          <h3 class="coming-soon-box__title">Coming soon: application tools</h3>
+          <p class="coming-soon-box__text">We're building guided support for personal statements, admission tests, and interviews. Plus and Pro members can preview the Personal Statement and Interview coaches above.</p>
+        </div>
+
+        <div class="applying-shortlist">
+          <h4 class="applying-shortlist__head">Your shortlist</h4>
+          <div id="applyingShortlist" aria-live="polite">
+            <!-- rendered by JS -->
+          </div>
+        </div>
+      </div><!-- /panel-applying -->
+
+      </div><!-- /workspace -->
 
     </div><!-- /content -->
   </main>

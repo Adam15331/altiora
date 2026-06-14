@@ -682,21 +682,145 @@ function switchMode(mode) {
 
   state.mode = mode;
   logEvent('mode_switch', { mode });
-  $$('.mode-btn').forEach(btn => {
+
+  // Highlight the active tool in the stage sub-nav
+  $$('.stage-tool').forEach(btn => {
     const active = btn.dataset.mode === mode;
-    btn.classList.toggle('active', active);
-    btn.setAttribute('aria-selected', String(active));
+    btn.classList.toggle('stage-tool--active', active);
+    btn.setAttribute('aria-current', active ? 'page' : 'false');
   });
+
   $('panel-check')             .classList.toggle('hidden', mode !== 'check');
   $('panel-reverse')           .classList.toggle('hidden', mode !== 'reverse');
   $('panel-plan')              .classList.toggle('hidden', mode !== 'plan');
   $('panel-strengths')         .classList.toggle('hidden', mode !== 'strengths');
   $('panel-personal-statement').classList.toggle('hidden', mode !== 'personal-statement');
   $('panel-interview-coach')   .classList.toggle('hidden', mode !== 'interview-coach');
+  $('panel-applying')          .classList.toggle('hidden', mode !== 'applying');
 
   if (mode === 'strengths' && $('strengthsGrid').children.length === 0) {
     renderStrengthsGrid();
   }
+  if (mode === 'applying') {
+    renderApplyingPanel();
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * JOURNEY STAGES
+ * Each stage has one PRIMARY tool (shown by default) plus SECONDARY
+ * tools surfaced as lighter sub-nav links — replacing the old bar of
+ * co-equal tabs. The stage is persisted via AltioraState.
+ * ═══════════════════════════════════════════════════════════════ */
+
+const STAGES = {
+  exploring: { name: 'Exploring options',          primary: 'strengths', secondary: ['plan'] },
+  choosing:  { name: 'Choosing my subjects',       primary: 'plan',      secondary: ['check'] },
+  building:  { name: 'Building my university list', primary: 'check',     secondary: ['reverse'] },
+  applying:  { name: 'Applying',                    primary: 'applying',  secondary: ['personal-statement', 'interview-coach'] },
+};
+
+const MODE_LABELS = {
+  strengths:            'Start with Strengths',
+  plan:                 'Subject Planner',
+  reverse:              'Course Finder',
+  check:                'Check Combination',
+  applying:             'Application Tools',
+  'personal-statement': 'Personal Statement',
+  'interview-coach':    'Interview Coach',
+};
+
+const DEFAULT_STAGE = 'exploring';
+
+// Show the full-screen stage-selection screen (onboarding / re-pick).
+function showStageSelect() {
+  closeStageMenu();
+  $('workspace').classList.add('hidden');
+  $('stageSelect').classList.remove('hidden');
+}
+
+// Route into a stage: reveal the workspace, update the indicator, build
+// the tool sub-nav, and open the stage's primary tool.
+function routeToStage(stage) {
+  if (!STAGES[stage]) stage = DEFAULT_STAGE;
+  const cfg = STAGES[stage];
+
+  $('stageSelect').classList.add('hidden');
+  $('workspace').classList.remove('hidden');
+  closeStageMenu();
+
+  $('stageIndicatorName').textContent = cfg.name;
+  $$('.stage-menu__item').forEach(item =>
+    item.classList.toggle('stage-menu__item--current', item.dataset.stage === stage)
+  );
+
+  renderStageToolNav(stage);
+  switchMode(cfg.primary);
+  logEvent('stage_route', { stage });
+}
+
+// Persist the chosen stage, mark onboarded, then route there.
+function enterStage(stage) {
+  if (!STAGES[stage]) stage = DEFAULT_STAGE;
+  AltioraState.setStage(stage);
+  AltioraState.setOnboarded(true);
+  logEvent('stage_select', { stage });
+  routeToStage(stage);
+}
+
+// Build the per-stage tool sub-nav: primary tool front and centre,
+// secondary tools as lighter links. Tier-gated tools show a lock; a
+// locked click opens the pricing modal (handled inside switchMode).
+function renderStageToolNav(stage) {
+  if (!STAGES[stage]) stage = DEFAULT_STAGE;
+  const cfg = STAGES[stage];
+  const nav = $('stageToolNav');
+  if (!nav) return;
+
+  const tools = [cfg.primary, ...cfg.secondary];
+  nav.innerHTML = tools.map((mode, i) => {
+    const primary = i === 0;
+    const locked  = !tierAllowsMode(mode);
+    const lock    = locked ? ' <span class="stage-tool__lock" aria-hidden="true">🔒</span>' : '';
+    const cls = `stage-tool${primary ? ' stage-tool--primary' : ''}${locked ? ' stage-tool--locked' : ''}`;
+    return `<button class="${cls}" data-mode="${mode}">${esc(MODE_LABELS[mode] || mode)}${lock}</button>`;
+  }).join('');
+
+  $$('#stageToolNav .stage-tool').forEach(btn =>
+    btn.addEventListener('click', () => switchMode(btn.dataset.mode))
+  );
+}
+
+// Render the saved shortlist inside the Applying placeholder panel.
+function renderApplyingPanel() {
+  const wrap = $('applyingShortlist');
+  if (!wrap) return;
+  const ids = (typeof AltioraState !== 'undefined') ? AltioraState.getShortlist() : [];
+
+  if (!ids.length) {
+    wrap.innerHTML =
+      `<p class="applying-shortlist__empty">No courses shortlisted yet. Switch to “Building my university list” to find courses you qualify for.</p>`;
+    return;
+  }
+  wrap.innerHTML = ids.map(id => {
+    const course = (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null;
+    const label  = course ? `${course.name} — ${course.university}` : id;
+    return `<div class="applying-shortlist__item">${esc(label)}</div>`;
+  }).join('');
+}
+
+/* ─── Stage indicator dropdown (switch stage anytime) ──────────── */
+function openStageMenu() {
+  $('stageMenu')?.classList.remove('hidden');
+  $('stageIndicatorBtn')?.setAttribute('aria-expanded', 'true');
+}
+function closeStageMenu() {
+  $('stageMenu')?.classList.add('hidden');
+  $('stageIndicatorBtn')?.setAttribute('aria-expanded', 'false');
+}
+function toggleStageMenu() {
+  if ($('stageMenu')?.classList.contains('hidden')) openStageMenu();
+  else closeStageMenu();
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1971,11 +2095,6 @@ function updateTierUI() {
     }
   });
 
-  // Tab lock states for tier-gated modes
-  $$('.mode-btn[data-tier-required]').forEach(tab => {
-    tab.classList.toggle('mode-btn--locked', !tierAllowsMode(tab.dataset.mode));
-  });
-
   // Locked/unlocked panel content
   const psOk = tierAllowsMode('personal-statement');
   const icOk = tierAllowsMode('interview-coach');
@@ -1983,6 +2102,17 @@ function updateTierUI() {
   $('psLocked')  ?.classList.toggle('hidden',  psOk);
   $('icUnlocked')?.classList.toggle('hidden', !icOk);
   $('icLocked')  ?.classList.toggle('hidden',  icOk);
+
+  // Refresh the stage sub-nav so tier locks reflect the new tier,
+  // preserving which tool is currently active.
+  if (typeof AltioraState !== 'undefined' && !$('workspace')?.classList.contains('hidden')) {
+    const stage = AltioraState.getProfile().stage;
+    if (stage && STAGES[stage]) {
+      renderStageToolNav(stage);
+      $$('#stageToolNav .stage-tool').forEach(btn =>
+        btn.classList.toggle('stage-tool--active', btn.dataset.mode === state.mode));
+    }
+  }
 }
 
 function openPricingModal() {
@@ -2010,9 +2140,15 @@ function resetDemoData() {
 function setTier(tier) {
   _currentTier = tier;
   localStorage.setItem('altiora_tier', tier);
-  // Bounce away from any now-locked panel BEFORE updating panel content,
+  // Bounce away from any now-locked tool BEFORE updating panel content,
   // so the locked state never flashes inside a still-visible panel.
-  if (!tierAllowsMode(state.mode)) switchMode('strengths');
+  // Bounce to the current stage's primary tool (always free) to keep
+  // the student in their stage rather than yanking them to strengths.
+  if (!tierAllowsMode(state.mode)) {
+    const stage = (typeof AltioraState !== 'undefined') ? AltioraState.getProfile().stage : null;
+    const primary = (stage && STAGES[stage]) ? STAGES[stage].primary : 'strengths';
+    switchMode(primary);
+  }
   updateTierUI();
   closePricingModal();
   if (tier === 'free') {
@@ -2358,9 +2494,22 @@ function init() {
   initPersonalStatement();
   initInterviewCoach();
 
-  $$('.mode-btn').forEach(btn =>
-    btn.addEventListener('click', () => switchMode(btn.dataset.mode))
+  // Stage selection cards (onboarding)
+  $$('#stageSelect .stage-card').forEach(card =>
+    card.addEventListener('click', () => enterStage(card.dataset.stage))
   );
+
+  // Stage indicator dropdown (switch stage anytime)
+  $('stageIndicatorBtn')?.addEventListener('click', e => {
+    e.stopPropagation();
+    toggleStageMenu();
+  });
+  $$('#stageMenu .stage-menu__item').forEach(item =>
+    item.addEventListener('click', () => enterStage(item.dataset.stage))
+  );
+  // Click-away and Escape close the stage menu
+  document.addEventListener('click', closeStageMenu);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeStageMenu(); });
 
   $('checkSystemSelect').addEventListener('change', e => {
     state.checkSystem      = e.target.value;
@@ -2385,12 +2534,18 @@ function init() {
 
   $('planSwitchToCheck').addEventListener('click', () => switchMode('check'));
 
-  // Activate the default panel — unhides it and populates the strengths grid
-  switchMode(state.mode);
-
+  // ── Entry router ─────────────────────────────────────────────
+  // New users see the stage-selection screen; returning users land on
+  // their last stage's primary tool. The "Find my path" CTA from the
+  // homepage (?mode=strengths) drops the student straight into the
+  // exploring stage.
   if (window.sessionStorage.getItem('openStrengthsMode') === 'true') {
     window.sessionStorage.removeItem('openStrengthsMode');
-    switchMode('strengths');
+    enterStage('exploring');
+  } else if (AltioraState.getState().meta.hasOnboarded) {
+    routeToStage(AltioraState.getProfile().stage || DEFAULT_STAGE);
+  } else {
+    showStageSelect();
   }
 }
 

@@ -198,6 +198,13 @@ const AltioraState = (() => {
     _commit();
   }
 
+  // Mark whether the student has completed the entry/stage-selection
+  // flow. Defaults to true so callers can just call setOnboarded().
+  function setOnboarded(value = true) {
+    _state.meta.hasOnboarded = !!value;
+    _commit();
+  }
+
   // Wipe everything back to a fresh first-visit state, persist, notify.
   function resetState() {
     const now = new Date().toISOString();
@@ -231,6 +238,7 @@ const AltioraState = (() => {
     removeFromShortlist,
     isInShortlist,
     setProgress,
+    setOnboarded,
     resetState,
     subscribe,
     // Exposed for debugging / future migrations.
