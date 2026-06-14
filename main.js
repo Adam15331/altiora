@@ -698,10 +698,12 @@ function switchMode(mode) {
   $('panel-interview-coach')   .classList.toggle('hidden', mode !== 'interview-coach');
   $('panel-applying')          .classList.toggle('hidden', mode !== 'applying');
   $('panel-shortlist')         .classList.toggle('hidden', mode !== 'shortlist');
+  $('panel-home')              .classList.toggle('hidden', mode !== 'home');
 
-  // The shortlist is a cross-stage view, not a stage tool — highlight
-  // its own link rather than a stage-tool button.
+  // The shortlist and home are cross-stage views, not stage tools —
+  // highlight their own controls rather than a stage-tool button.
   $('shortlistLink')?.classList.toggle('shortlist-link--active', mode === 'shortlist');
+  $('homeLink')?.classList.toggle('home-link--active', mode === 'home');
 
   if (mode === 'strengths' && $('strengthsGrid').children.length === 0) {
     renderStrengthsGrid();
@@ -711,6 +713,9 @@ function switchMode(mode) {
   }
   if (mode === 'shortlist') {
     renderShortlist();
+  }
+  if (mode === 'home') {
+    renderWorkspaceHome();
   }
 }
 
@@ -747,24 +752,34 @@ function showStageSelect() {
   $('stageSelect').classList.remove('hidden');
 }
 
-// Route into a stage: reveal the workspace, update the indicator, build
-// the tool sub-nav, and open the stage's primary tool.
-function routeToStage(stage) {
+// Reveal the workspace and set up the stage chrome (indicator + sub-nav)
+// for a stage, without choosing which view to show.
+function applyStageChrome(stage) {
   if (!STAGES[stage]) stage = DEFAULT_STAGE;
-  const cfg = STAGES[stage];
-
   $('stageSelect').classList.add('hidden');
   $('workspace').classList.remove('hidden');
   closeStageMenu();
-
-  $('stageIndicatorName').textContent = cfg.name;
+  $('stageIndicatorName').textContent = STAGES[stage].name;
   $$('.stage-menu__item').forEach(item =>
     item.classList.toggle('stage-menu__item--current', item.dataset.stage === stage)
   );
-
   renderStageToolNav(stage);
-  switchMode(cfg.primary);
+}
+
+// Route into a stage and open its primary tool (resume / fresh entry).
+function routeToStage(stage) {
+  if (!STAGES[stage]) stage = DEFAULT_STAGE;
+  applyStageChrome(stage);
+  switchMode(STAGES[stage].primary);
   logEvent('stage_route', { stage });
+}
+
+// Returning-user landing: workspace home for the saved stage.
+function showWorkspaceHome() {
+  const stage = AltioraState.getProfile().stage || DEFAULT_STAGE;
+  applyStageChrome(stage);
+  switchMode('home');
+  logEvent('workspace_home', { stage });
 }
 
 // Persist the chosen stage, mark onboarded, then route there.
@@ -1041,6 +1056,162 @@ function buildShortlistCard(course) {
     toggleShortlist(course.id);   // course is saved → this removes it
   });
   return card;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * WORKSPACE HOME  (returning-user home base)
+ * Calm landing for returning users: where they are, one clear next
+ * step, a live summary, and quick access to their tools.
+ * ═══════════════════════════════════════════════════════════════ */
+
+const STAGE_SUMMARY = {
+  exploring: 'discovering what you might want to study.',
+  choosing:  'choosing the subjects that keep your options open.',
+  building:  'building your list of courses to apply to.',
+  applying:  'working on your applications.',
+};
+
+// Write-through: mirror the live Check-Combination selections into the
+// persisted profile so the workspace home reflects them on return.
+function syncProfileFromCheck() {
+  if (typeof AltioraState === 'undefined') return;
+  AltioraState.setProfile({
+    qualificationSystem: state.checkSystem || null,
+    subjects:            Array.isArray(state.selectedSubjects) ? state.selectedSubjects.slice() : [],
+    predictedGrades:     state.predictedGrade || null,
+  });
+}
+
+// The single guiding action for the current stage + state. Returns a
+// sentence plus an ordered list of { tool, label } actions (first is
+// primary). This is the heart of the workspace home.
+function computeNextStep(stage, profile, shortlistCount) {
+  const hasSubjects  = (profile.subjects?.length  || 0) > 0;
+  const hasInterests = (profile.interests?.length || 0) > 0;
+
+  switch (stage) {
+    case 'exploring':
+      return {
+        text: (hasInterests || hasSubjects)
+          ? 'Keep exploring the degree paths that fit you.'
+          : 'Discover what fits you.',
+        actions: [{ tool: 'strengths', label: 'Start with Strengths' }],
+      };
+    case 'choosing':
+      return {
+        text: hasSubjects
+          ? 'Refine the subjects that keep your options open.'
+          : 'Plan your subjects.',
+        actions: [{ tool: 'plan', label: 'Subject Planner' }],
+      };
+    case 'building':
+      if (!shortlistCount) return {
+        text: 'Find courses you qualify for.',
+        actions: [{ tool: 'check', label: 'Check Combination' }],
+      };
+      return {
+        text: `You have ${shortlistCount} saved course${shortlistCount === 1 ? '' : 's'}. Review your list or find more.`,
+        actions: [
+          { tool: 'shortlist', label: 'Review your shortlist' },
+          { tool: 'check',     label: 'Find more courses' },
+        ],
+      };
+    case 'applying':
+      return {
+        text: shortlistCount
+          ? `Work on applications for your ${shortlistCount} saved course${shortlistCount === 1 ? '' : 's'}.`
+          : 'Save the courses you want to apply to, then work on your applications.',
+        actions: shortlistCount
+          ? [{ tool: 'applying', label: 'Open application tools' }, { tool: 'shortlist', label: 'View shortlist' }]
+          : [{ tool: 'check', label: 'Find courses to apply to' }],
+      };
+    default:
+      return { text: 'Pick up where you left off.', actions: [] };
+  }
+}
+
+function renderWorkspaceHome() {
+  const panel = $('panel-home');
+  if (!panel) return;
+
+  const profile = AltioraState.getProfile();
+  const stage   = profile.stage || DEFAULT_STAGE;
+  const cfg     = STAGES[stage] || STAGES[DEFAULT_STAGE];
+  const saved   = AltioraState.getShortlist();
+  const next    = computeNextStep(stage, profile, saved.length);
+
+  const sysLabel = profile.qualificationSystem
+    ? (qualificationMappings[profile.qualificationSystem]?.systemLabel ?? profile.qualificationSystem)
+    : null;
+  const subjects = Array.isArray(profile.subjects) ? profile.subjects : [];
+  const grades   = profile.predictedGrades || null;
+
+  // Next-step buttons (first = primary)
+  const actionBtns = next.actions.map((a, i) =>
+    `<button class="home-next__btn${i === 0 ? ' home-next__btn--primary' : ''}" data-go-tool="${esc(a.tool)}">${esc(a.label)} →</button>`
+  ).join('');
+
+  // Quick-access stage tools (primary first, then secondary)
+  const toolBtns = [cfg.primary, ...cfg.secondary].map((mode, i) =>
+    `<button class="home-quick__btn${i === 0 ? ' home-quick__btn--primary' : ''}" data-go-tool="${esc(mode)}">${esc(MODE_LABELS[mode] || mode)}</button>`
+  ).join('');
+
+  // Shortlist mini-summary
+  const savedCourses = saved.map(id => courses.find(c => c.id === id)).filter(Boolean);
+  let shortlistHtml;
+  if (savedCourses.length) {
+    const unis      = new Set(savedCourses.map(c => c.university));
+    const countries = new Set(savedCourses.map(c => c.country));
+    shortlistHtml = `<p><strong>${savedCourses.length}</strong> course${savedCourses.length === 1 ? '' : 's'} across
+      <strong>${unis.size}</strong> universit${unis.size === 1 ? 'y' : 'ies'} in
+      <strong>${countries.size}</strong> countr${countries.size === 1 ? 'y' : 'ies'}.</p>`;
+  } else {
+    shortlistHtml = `<p class="home-card__muted">No courses saved yet.</p>`;
+  }
+
+  const muted = txt => `<span class="home-card__muted">${esc(txt)}</span>`;
+
+  panel.innerHTML = `
+    <div class="home">
+      <header class="home__header">
+        <h1 class="home__welcome">Welcome back.</h1>
+        <p class="home__stage">You're in the <strong>${esc(cfg.name)}</strong> stage — ${esc(STAGE_SUMMARY[stage] ?? '')}</p>
+      </header>
+
+      <section class="home-next" aria-label="Your next step">
+        <span class="home-next__eyebrow">Your next step</span>
+        <p class="home-next__text">${esc(next.text)}</p>
+        <div class="home-next__actions">${actionBtns}</div>
+      </section>
+
+      <div class="home-cards">
+        <section class="home-card">
+          <h2 class="home-card__title">Your profile</h2>
+          <dl class="home-card__dl">
+            <div><dt>Qualification</dt><dd>${sysLabel ? esc(sysLabel) : muted('Not set yet')}</dd></div>
+            <div><dt>Subjects</dt><dd>${subjects.length ? esc(subjects.join(', ')) : muted('None selected yet')}</dd></div>
+            <div><dt>Predicted grades</dt><dd>${grades ? esc(grades) : muted('Not set yet')}</dd></div>
+          </dl>
+          <button class="home-card__link" data-go-tool="check">Update profile →</button>
+        </section>
+
+        <section class="home-card">
+          <h2 class="home-card__title">Your shortlist</h2>
+          ${shortlistHtml}
+          <button class="home-card__link" data-go-tool="shortlist">View shortlist →</button>
+        </section>
+      </div>
+
+      <section class="home-quick" aria-label="Quick access">
+        <span class="home-quick__label">Quick access</span>
+        <div class="home-quick__row">
+          ${toolBtns}
+          <button class="home-quick__btn" data-go-tool="shortlist">🔖 My Shortlist (${saved.length})</button>
+          <button class="home-quick__btn" data-change-stage>Change stage</button>
+        </div>
+      </section>
+    </div>
+  `;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1345,6 +1516,11 @@ function renderSummaryBar(subjectCount, counts, total) {
 function renderCheckResults() {
   if (dataLoadError) return;
   const section = $('checkResultsSection');
+
+  // Mirror the live Check selections into the persisted profile so the
+  // workspace home reflects them (runs before the early return so it
+  // also captures grade-only and cleared-subject changes).
+  syncProfileFromCheck();
 
   if (state.selectedSubjects.length === 0) {
     section.classList.add('hidden');
@@ -2742,6 +2918,14 @@ function init() {
   AltioraState.subscribe(updateShortlistCount);
   updateShortlistCount();
 
+  // Workspace home: persistent link + delegated actions on the home panel.
+  $('homeLink')?.addEventListener('click', () => switchMode('home'));
+  $('panel-home')?.addEventListener('click', e => {
+    const toolBtn = e.target.closest('[data-go-tool]');
+    if (toolBtn) { switchMode(toolBtn.dataset.goTool); return; }
+    if (e.target.closest('[data-change-stage]')) showStageSelect();
+  });
+
   $('checkSystemSelect').addEventListener('change', e => {
     state.checkSystem      = e.target.value;
     state.selectedSubjects = [];
@@ -2756,6 +2940,7 @@ function init() {
     $('reverseSystemSelect').value = state.checkSystem;
     state.reverseSystem = state.checkSystem;
     if (state.searchQuery) renderReverseResults();
+    syncProfileFromCheck();
   });
 
   $('planSystemSelect').addEventListener('change', e => {
@@ -2774,7 +2959,8 @@ function init() {
     window.sessionStorage.removeItem('openStrengthsMode');
     enterStage('exploring');
   } else if (AltioraState.getState().meta.hasOnboarded) {
-    routeToStage(AltioraState.getProfile().stage || DEFAULT_STAGE);
+    // Returning user → workspace home (their resume / next-step base).
+    showWorkspaceHome();
   } else {
     showStageSelect();
   }
