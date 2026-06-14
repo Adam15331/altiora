@@ -108,6 +108,10 @@
           <nav id="stageToolNav" class="stage-tool-nav" aria-label="Tools for this stage">
             <!-- rendered by JS for the active stage -->
           </nav>
+          <button id="shortlistLink" class="shortlist-link" type="button" aria-label="View your saved shortlist">
+            <span class="shortlist-link__icon" aria-hidden="true">🔖</span>
+            <span class="shortlist-link__text">My Shortlist (<span id="shortlistCount">0</span>)</span>
+          </button>
         </div>
 
       <!-- ═══════════════════════════════════════════════════════
@@ -458,6 +462,13 @@
       </div><!-- /panel-interview-coach -->
 
       <!-- ═══════════════════════════════════════════════════════
+           Panel — My Shortlist (saved courses + insights)
+           ═══════════════════════════════════════════════════════ -->
+      <div id="panel-shortlist" class="panel hidden" role="tabpanel" aria-label="My shortlist">
+        <!-- rendered by JS (renderShortlist) -->
+      </div><!-- /panel-shortlist -->
+
+      <!-- ═══════════════════════════════════════════════════════
            Panel — Applying (placeholder + saved shortlist)
            ═══════════════════════════════════════════════════════ -->
       <div id="panel-applying" class="panel hidden" role="tabpanel">
@@ -554,7 +565,7 @@
   <script src="data/university-profiles.js?v=1"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
   <script src="state.js?v=2"></script>
-  <script src="main.js?v=6"></script>
+  <script src="main.js?v=7"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);
