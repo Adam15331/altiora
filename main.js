@@ -2239,94 +2239,99 @@ function switchToPlanCombo(tags, systemKey) {
  * STRENGTHS MODE (Mode D)
  * ═══════════════════════════════════════════════════════════════ */
 
+// Six strengths a student can recognise in themselves. Each maps to a set
+// of FIELDS (degree areas) — never to specific courses or universities.
 const STRENGTHS_OPTIONS = [
-  {
-    id: 'maths_physics',
-    label: 'Maths & Physics',
-    icon: '📐',
-    description: 'You enjoy problem-solving, patterns, and understanding how things work.',
-    categories: ['engineering', 'cs', 'physics', 'mathematics'],
-  },
-  {
-    id: 'biology_chemistry',
-    label: 'Biology & Chemistry',
-    icon: '🧬',
-    description: "You're curious about living systems, health, and the molecular world.",
-    categories: ['medicine', 'biochemistry', 'pharmacy', 'biological-sciences'],
-  },
-  {
-    id: 'essays_writing',
-    label: 'Essay writing & argument',
-    icon: '📝',
-    description: 'You express ideas clearly, love reading, and can argue both sides.',
-    categories: ['law', 'history', 'politics', 'english'],
-  },
-  {
-    id: 'data_code',
-    label: 'Data & code',
-    icon: '📊',
-    description: 'You spot patterns in data and enjoy making computers do the work.',
-    categories: ['cs', 'data-science', 'economics', 'statistics'],
-  },
-  {
-    id: 'creative_design',
-    label: 'Creative & design',
-    icon: '🎨',
-    description: 'You think visually and enjoy creating things that are both beautiful and functional.',
-    categories: ['architecture', 'design', 'art'],
-  },
-  {
-    id: 'people_society',
-    label: 'People & society',
-    icon: '👥',
-    description: 'You care about how people think, behave, and organise themselves.',
-    categories: ['psychology', 'sociology', 'anthropology', 'politics'],
-  },
+  { id:'maths_physics',     label:'Maths & Physics',          icon:'📐', description:'You enjoy problem-solving, patterns, and understanding how things work.',                          fields:['engineering','cs','physics','mathematics','architecture'] },
+  { id:'biology_chemistry', label:'Biology & Chemistry',      icon:'🧬', description:"You're curious about living systems, health, and the molecular world.",                          fields:['medicine','natural-sciences','psychology'] },
+  { id:'essays_writing',    label:'Essay writing & argument', icon:'📝', description:'You express ideas clearly, love reading, and can argue both sides.',                              fields:['law','economics','psychology'] },
+  { id:'data_code',         label:'Data & code',              icon:'📊', description:'You spot patterns in data and enjoy making computers do the work.',                              fields:['cs','mathematics','economics'] },
+  { id:'creative_design',   label:'Creative & design',        icon:'🎨', description:'You think visually and enjoy creating things that are both beautiful and functional.',           fields:['architecture','business'] },
+  { id:'people_society',    label:'People & society',         icon:'👥', description:'You care about how people think, behave, and organise themselves.',                              fields:['psychology','law','business','economics'] },
 ];
 
-// Maps strength category strings to actual course category ids in the data
-const _strengthCategoryMap = {
-  engineering:          ['engineering'],
-  cs:                   ['cs'],
-  physics:              ['sciences', 'mathematics'],
-  mathematics:          ['mathematics'],
-  medicine:             ['medicine'],
-  biochemistry:         ['sciences', 'medicine'],
-  pharmacy:             ['medicine'],
-  'biological-sciences':['sciences', 'medicine'],
-  law:                  ['law'],
-  history:              ['law'],
-  politics:             ['economics', 'law'],
-  english:              ['law'],
-  'data-science':       ['cs', 'economics'],
-  economics:            ['economics', 'business'],
-  statistics:           ['mathematics', 'economics'],
-  architecture:         ['architecture'],
-  design:               ['architecture', 'engineering'],
-  art:                  ['architecture'],
-  psychology:           ['psychology'],
-  sociology:            ['psychology', 'law'],
-  anthropology:         ['psychology', 'law'],
+// Fields of study (degree areas). `category` is the course-data category
+// used to pre-filter Check Combination — country is never assumed.
+const STRENGTH_FIELDS = {
+  engineering: {
+    name: 'Engineering', category: 'engineering',
+    what: 'Designing and building the physical and digital systems the world runs on, from bridges and engines to renewable energy and robotics. Combines maths and physics with hands-on problem solving.',
+    leads: 'Civil, mechanical, electrical or aerospace engineering, robotics, energy and sustainability, product design, and increasingly tech and finance.',
+    needs: 'Maths essential, Physics usually required.',
+  },
+  cs: {
+    name: 'Computer Science', category: 'cs',
+    what: 'How computers and software actually work, from the logic underneath to building applications, AI systems, and large-scale platforms. More about problem-solving and logical thinking than just coding.',
+    leads: 'Software engineering, AI and machine learning, cybersecurity, data science, fintech, startups, and research.',
+    needs: 'Maths essential; Computer Science or Physics helpful but rarely required.',
+  },
+  mathematics: {
+    name: 'Mathematics', category: 'mathematics',
+    what: 'The deep study of patterns, structures, and logic that underpins almost every other field. Abstract and rigorous, rewarding for those who enjoy problems for their own sake.',
+    leads: 'Finance and quantitative trading, data science, AI research, actuarial work, academia, and almost any analytical career.',
+    needs: 'Maths essential, Further Maths strongly preferred.',
+  },
+  physics: {
+    name: 'Physics', category: 'sciences',
+    what: 'Understanding how the universe works at every scale, from subatomic particles to galaxies. The most fundamental science, heavy on maths and conceptual thinking.',
+    leads: 'Research, engineering, finance, data science, energy, aerospace, and technology.',
+    needs: 'Maths and Physics essential.',
+  },
+  architecture: {
+    name: 'Architecture', category: 'architecture',
+    what: 'Designing buildings and spaces where form meets function, blending creative vision with technical and structural understanding. A long professional path (typically 7 years to qualify).',
+    leads: 'Architecture, urban design, landscape architecture, interior design, and the wider built environment.',
+    needs: 'Usually no specific subjects, but a portfolio and often Maths or Art help.',
+  },
+  medicine: {
+    name: 'Medicine', category: 'medicine',
+    what: 'Training to diagnose, treat, and care for patients, combining deep science with human responsibility. A long, demanding, highly competitive path with admission tests and interviews.',
+    leads: 'Hospital medicine, general practice, surgery, research, and specialist fields.',
+    needs: 'Chemistry essential, Biology usually required; admission test (UCAT) and interviews.',
+  },
+  'natural-sciences': {
+    name: 'Natural Sciences', category: 'sciences',
+    what: 'Studying the living and physical world, spanning biology, chemistry, and related sciences, often with flexibility to specialise later.',
+    leads: 'Research, biotech, pharmaceuticals, medicine-adjacent fields, environmental science, and academia.',
+    needs: 'Two or more sciences, usually including Chemistry.',
+  },
+  psychology: {
+    name: 'Psychology', category: 'psychology',
+    what: 'The science of how people think, feel, and behave, combining biology, statistics, and social science. More rigorous and data-driven than many expect.',
+    leads: 'Clinical and counselling psychology, research, human resources, UX and design, marketing, and healthcare.',
+    needs: 'Usually no specific subjects, though Biology or Maths can help; some courses prefer a science.',
+  },
+  law: {
+    name: 'Law', category: 'law',
+    what: 'The study of how societies create and enforce rules, developing sharp reasoning, argument, and written analysis. Intellectually demanding and highly transferable.',
+    leads: 'Solicitor or barrister, corporate and commercial law, politics, journalism, business, and policy.',
+    needs: 'No specific subjects, but strong essay-writing; some courses require the LNAT admission test.',
+  },
+  economics: {
+    name: 'Economics', category: 'economics',
+    what: 'How individuals, businesses, and governments make decisions and allocate resources, blending maths, data, and social science.',
+    leads: 'Finance, banking, consulting, government and policy, data analysis, and academia.',
+    needs: 'Maths essential at most strong universities; Economics A-level rarely required.',
+  },
+  business: {
+    name: 'Business', category: 'business',
+    what: 'How organisations are built, run, and grown, covering strategy, finance, marketing, and management. Practical and applied.',
+    leads: 'Management, consulting, marketing, entrepreneurship, finance, and operations.',
+    needs: 'Usually no specific subjects, though Maths helps for finance-heavy courses.',
+  },
 };
 
-const _strengthCategoryNames = {
-  medicine:     'Medicine & Health',
-  cs:           'Computer Science',
-  engineering:  'Engineering',
-  economics:    'Economics & Finance',
-  law:          'Law',
-  business:     'Business',
-  sciences:     'Natural Sciences',
-  psychology:   'Psychology',
-  architecture: 'Architecture',
-  mathematics:  'Mathematics',
-};
+// Canonical order, used to break ties when fields match equally.
+const FIELD_ORDER = ['engineering','cs','mathematics','physics','architecture','medicine','natural-sciences','psychology','law','economics','business'];
+
+// Strengths are multi-select; this holds the current selection.
+const _selectedStrengths = new Set();
 
 function renderStrengthsGrid() {
   const grid = $('strengthsGrid');
   if (!grid) return;
   grid.innerHTML = STRENGTHS_OPTIONS.map(opt => `
-    <button class="plan-cat-card" data-strength="${opt.id}">
+    <button class="plan-cat-card${_selectedStrengths.has(opt.id) ? ' active' : ''}" data-strength="${opt.id}" aria-pressed="${_selectedStrengths.has(opt.id)}">
       <span class="plan-cat-card__icon" style="font-size: 28px;">${opt.icon}</span>
       <span class="plan-cat-card__label">${esc(opt.label)}</span>
       <span class="picker-hint-inline" style="font-size: 11px; margin-top: 6px;">${esc(opt.description)}</span>
@@ -2334,125 +2339,100 @@ function renderStrengthsGrid() {
   `).join('');
   grid.querySelectorAll('.plan-cat-card').forEach(btn => {
     btn.addEventListener('click', () => {
-      grid.querySelectorAll('.plan-cat-card').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const strength = STRENGTHS_OPTIONS.find(s => s.id === btn.dataset.strength);
-      if (strength) renderStrengthsResults(strength);
+      const id = btn.dataset.strength;
+      const nowOn = !_selectedStrengths.has(id);
+      if (nowOn) _selectedStrengths.add(id); else _selectedStrengths.delete(id);
+      btn.classList.toggle('active', nowOn);
+      btn.setAttribute('aria-pressed', String(nowOn));
+      renderStrengthsResults();
     });
   });
 }
 
-function renderStrengthsResults(strength) {
+// Output FIELDS that match the selected strengths — never specific
+// courses. Fields matching MORE of the selected strengths come first.
+function renderStrengthsResults() {
   if (dataLoadError) return;
   const resultsDiv = $('strengthsSuggestions');
   const section    = $('strengthsResults');
+  if (!resultsDiv || !section) return;
 
-  const targetCategories = new Set();
-  strength.categories.forEach(cat => {
-    (_strengthCategoryMap[cat] || [cat]).forEach(m => targetCategories.add(m));
-  });
-
-  // Collect up to 12 total across all categories (not 3 per category)
-  const allMatched = [];
-  for (const cat of targetCategories) {
-    for (const c of courses.filter(c => c.category === cat)) {
-      if (allMatched.length >= 12) break;
-      allMatched.push(c);
-    }
-  }
-
-  if (!allMatched.length) {
-    resultsDiv.innerHTML = '<p class="search-hint">No matching courses found. Try another strength.</p>';
-    section.classList.remove('hidden');
+  if (_selectedStrengths.size === 0) {
+    section.classList.add('hidden');
+    resultsDiv.innerHTML = '';
     return;
   }
 
-  function buildCardHtml(course) {
-    return `
-      <div class="course-card course-card--green">
-        <div class="card-status card-status--green">Suggested for you</div>
-        <div class="card-header">
-          <div class="card-title-group">
-            <span class="card-flag">${COUNTRY_FLAGS[course.country] ?? ''}</span>
-            <div class="card-titles">
-              <div class="card-name">${esc(course.name)}</div>
-              <div class="card-uni">${esc(course.university)}</div>
-            </div>
-          </div>
-        </div>
-        <div class="card-meta">
-          <span>${esc(COUNTRY_LABELS[course.country] ?? course.country)}</span>
-          <span class="card-meta-sep">·</span>
-          <span>${esc(course.degreeLevel)}</span>
-        </div>
-        <button class="copy-btn" style="margin-top: var(--space-3); width: 100%; justify-content: center; border-color: var(--color-match-strong); color: var(--color-match-strong);"
-                data-explore-course="${esc(course.id)}">Explore this course →</button>
-      </div>`;
-  }
+  // Tally how many selected strengths point at each field.
+  const counts = new Map();
+  _selectedStrengths.forEach(sid => {
+    const opt = STRENGTHS_OPTIONS.find(o => o.id === sid);
+    (opt?.fields || []).forEach(fid => counts.set(fid, (counts.get(fid) || 0) + 1));
+  });
 
-  function buildGroupedHtml(courseList) {
-    const grouped = {};
-    courseList.forEach(c => { (grouped[c.category] ??= []).push(c); });
-    let html = '';
-    for (const [cat, catCourses] of Object.entries(grouped)) {
-      const catName = _strengthCategoryNames[cat] || cat;
-      html += `
-        <div class="results-group">
-          <h2 class="results-group__header">${esc(catName)}</h2>
-          <div class="results-group__grid">${catCourses.map(buildCardHtml).join('')}</div>
-        </div>`;
-    }
-    return html;
-  }
+  const fieldIds = [...counts.keys()].sort((a, b) => {
+    const byCount = counts.get(b) - counts.get(a);
+    return byCount !== 0 ? byCount : FIELD_ORDER.indexOf(a) - FIELD_ORDER.indexOf(b);
+  });
 
-  function attachExploreListeners() {
-    resultsDiv.querySelectorAll('[data-explore-course]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const course = courses.find(c => c.id === btn.dataset.exploreCourse);
-        if (!course) return;
-        logEvent('strengths_explore', {
-          strength:    strength.id,
-          course_name: course.name,
-          university:  course.university,
-        });
-        switchMode('reverse');
-        const searchInput = $('courseSearchInput');
-        if (searchInput) {
-          searchInput.value = course.name;
-          state.searchQuery = course.name;
-          renderReverseResults();
-          const resultsSection = $('reverseResultsSection');
-          if (resultsSection) resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
-    });
-  }
+  logEvent('strengths_fields', { strengths: [..._selectedStrengths], field_count: fieldIds.length });
 
-  const initial = allMatched.slice(0, 3);
-  const rest    = allMatched.slice(3);
-
-  let html = buildGroupedHtml(initial);
-  if (rest.length > 0) {
-    html += `<button class="plan-switch-link" id="strengthsShowMore"
-               style="display: block; margin: var(--space-4) auto; font-size: var(--text-sm);">
-               Show more suggestions (+${rest.length} more)
-             </button>`;
-  }
-
-  resultsDiv.innerHTML = html;
+  resultsDiv.innerHTML = `<div class="field-cards">${fieldIds.map(buildFieldCardHtml).join('')}</div>`;
   section.classList.remove('hidden');
-  attachExploreListeners();
 
-  if (rest.length > 0) {
-    const showMoreBtn = $('strengthsShowMore');
-    if (showMoreBtn) {
-      showMoreBtn.addEventListener('click', () => {
-        resultsDiv.innerHTML = buildGroupedHtml(allMatched);
-        attachExploreListeners();
-      });
-    }
-  }
+  resultsDiv.querySelectorAll('[data-explore-field]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const f = STRENGTH_FIELDS[btn.dataset.exploreField];
+      if (f) exploreFieldInCheck(f.category, btn.dataset.exploreField);
+    });
+  });
 }
+
+function buildFieldCardHtml(fieldId) {
+  const f = STRENGTH_FIELDS[fieldId];
+  if (!f) return '';
+  return `
+    <article class="field-card" data-category="${esc(f.category)}"
+      style="--field-accent: var(--color-cat-${f.category}); --field-accent-bg: var(--color-cat-${f.category}-bg);">
+      <h3 class="field-card__name">${esc(f.name)}</h3>
+      <p class="field-card__what">${esc(f.what)}</p>
+      <p class="field-card__line"><span class="field-card__label">Where it leads</span>${esc(f.leads)}</p>
+      <p class="field-card__line"><span class="field-card__label">Typically needs</span>${esc(f.needs)}</p>
+      <button class="field-card__btn" type="button" data-explore-field="${esc(fieldId)}">Explore ${esc(f.name)} courses →</button>
+    </article>`;
+}
+
+// The ONLY path from a field to specific courses: open Check Combination
+// pre-filtered to the field's category, across ALL countries. This is the
+// exploring → building step of the funnel.
+function exploreFieldInCheck(category, fieldId) {
+  logEvent('strengths_explore_field', { field: fieldId, category });
+
+  // Advance into the building stage, whose primary tool is Check Combination.
+  enterStage('building');
+
+  // No country assumption — explicitly show all countries.
+  state.countryFilter = 'All';
+  $$('#countryFilterBar .filter-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.country === 'All'));
+
+  // Pre-filter to this field's category and reflect it in the picker.
+  state.selectedCategories = new Set([category]);
+  $$('#categoryPicker .category-chip').forEach(btn => {
+    const active = btn.dataset.category === category;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', String(active));
+  });
+
+  // If subjects are already chosen, refresh results; otherwise the check
+  // flow guides them to pick a system and subjects (with the filter ready).
+  if (state.selectedSubjects.length > 0) renderCheckResults();
+
+  requestAnimationFrame(() =>
+    $('panel-check')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  );
+}
+
 
 /* ═══════════════════════════════════════════════════════════════
  * UTILITY

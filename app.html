@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="tokens.css?v=2" />
-  <link rel="stylesheet" href="styles.css?v=2" />
+  <link rel="stylesheet" href="styles.css?v=3" />
   <script defer data-domain="altiora.app" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
@@ -345,11 +345,12 @@
            ═══════════════════════════════════════════════════════ -->
       <div id="panel-strengths" class="panel hidden" role="tabpanel">
         <p class="panel-intro">
-          Tell us what you're good at — we'll show you degree paths that match your natural abilities.
+          Tell us what you're good at — we'll show you fields of study that match your natural abilities.
         </p>
 
         <div class="plan-step">
           <span class="control-label">What are you good at?</span>
+          <span class="picker-hint-inline">Select one or more</span>
           <div id="strengthsGrid" class="plan-category-grid" role="group" aria-label="Select your strengths">
             <!-- Populated by JS -->
           </div>
@@ -357,7 +358,7 @@
 
         <div id="strengthsResults" class="hidden results-section">
           <div class="disclaimer-banner" role="note">
-            <p>These are degree categories that typically match your strengths. Click any to explore specific courses in Check Combination mode.</p>
+            <p>These are fields of study that match your strengths — not specific courses yet. Pick a field to explore real courses in Check Combination, across all countries.</p>
           </div>
           <div id="strengthsSuggestions" class="results-groups-container"></div>
         </div>
@@ -575,7 +576,7 @@
   <script src="data/university-profiles.js?v=1"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
   <script src="state.js?v=2"></script>
-  <script src="main.js?v=9"></script>
+  <script src="main.js?v=10"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);
