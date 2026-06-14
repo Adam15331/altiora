@@ -790,6 +790,44 @@ body:not(.demo-enabled) .demo-only { display: none !important; }
 }
 .field-card__btn:hover { opacity: .82; }
 
+/* Field-exploration context banner (top of Check Combination) */
+.explore-context {
+  margin-bottom: var(--space-6);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-cat-cs-bg);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-cat-cs);
+  border-radius: var(--radius-md);
+}
+.explore-context__body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+.explore-context__text {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+.explore-context__text strong { color: var(--color-text-primary); }
+.explore-context__clear {
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color var(--t-fast), color var(--t-fast);
+}
+.explore-context__clear:hover { border-color: var(--color-text-primary); color: var(--color-text-primary); }
+
 /* ═══════════════════════════════════════════════════════════════
  * Applying panel — saved shortlist
  * ═══════════════════════════════════════════════════════════════ */
@@ -2204,6 +2242,16 @@ footer p {
 .plan-cat-card:hover {
   border-color: var(--color-text-tertiary);
 }
+
+/* Generic selected state — used by the multi-select strength cards,
+   which carry no data-category. Category cards (data-category) override
+   this with their own accent below. */
+.plan-cat-card.active {
+  border-width: 2px;
+  border-color: var(--color-cat-cs);
+  background: var(--color-cat-cs-bg);
+}
+.plan-cat-card.active .plan-cat-card__label { color: var(--color-cat-cs); }
 
 /* Active state: category-specific colour */
 .plan-cat-card[data-category="medicine"].active    { border-width: 2px; border-color: var(--color-cat-medicine);    background: var(--color-cat-medicine-bg); }

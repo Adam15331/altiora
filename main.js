@@ -37,6 +37,7 @@ const state = {
   selectedCategories: new Set(),
   searchQuery:        '',
   predictedGrade:     null,
+  exploreField:       null,   // { category, name } when arriving from Start with Strengths
 };
 
 /* ─── Constants ─────────────────────────────────────────────────── */
@@ -1268,6 +1269,12 @@ function buildSubjectPicker(systemKey) {
   $$('#categoryPicker .category-chip').forEach(b => b.classList.remove('active'));
   $('categoryPickerSection').classList.add('hidden');
 
+  // Preserve an active field-exploration filter across the system change
+  // (the chip/category reset above would otherwise drop it) and refresh
+  // the context banner so its "pick a system" prompt updates.
+  applyExploreFieldFilter();
+  renderExploreContextBanner();
+
   buildGradeInput(systemKey);
   syncSubjectCount();
   renderCheckEmptyState();
@@ -2404,8 +2411,11 @@ function buildFieldCardHtml(fieldId) {
 
 // The ONLY path from a field to specific courses: open Check Combination
 // pre-filtered to the field's category, across ALL countries. This is the
-// exploring → building step of the funnel.
+// exploring → building step of the funnel. The field context is stored on
+// state.exploreField so it survives picking a qualification system (which
+// otherwise clears the category filter) and stays visible via a banner.
 function exploreFieldInCheck(category, fieldId) {
+  const name = STRENGTH_FIELDS[fieldId]?.name ?? fieldId;
   logEvent('strengths_explore_field', { field: fieldId, category });
 
   // Advance into the building stage, whose primary tool is Check Combination.
@@ -2416,13 +2426,10 @@ function exploreFieldInCheck(category, fieldId) {
   $$('#countryFilterBar .filter-btn').forEach(b =>
     b.classList.toggle('active', b.dataset.country === 'All'));
 
-  // Pre-filter to this field's category and reflect it in the picker.
-  state.selectedCategories = new Set([category]);
-  $$('#categoryPicker .category-chip').forEach(btn => {
-    const active = btn.dataset.category === category;
-    btn.classList.toggle('active', active);
-    btn.setAttribute('aria-pressed', String(active));
-  });
+  // Remember the field context, apply its category filter, show the banner.
+  state.exploreField = { category, name };
+  applyExploreFieldFilter();
+  renderExploreContextBanner();
 
   // If subjects are already chosen, refresh results; otherwise the check
   // flow guides them to pick a system and subjects (with the filter ready).
@@ -2431,6 +2438,59 @@ function exploreFieldInCheck(category, fieldId) {
   requestAnimationFrame(() =>
     $('panel-check')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   );
+}
+
+// Apply the active field's category to the live filter + category chips.
+// Safe to call repeatedly (e.g. after buildSubjectPicker clears the chips).
+function applyExploreFieldFilter() {
+  if (!state.exploreField) return;
+  const cat = state.exploreField.category;
+  state.selectedCategories = new Set([cat]);
+  $$('#categoryPicker .category-chip').forEach(btn => {
+    const active = btn.dataset.category === cat;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', String(active));
+  });
+}
+
+// Context banner at the top of Check Combination, shown while a field is
+// being explored. Persists even before a qualification system is picked.
+function renderExploreContextBanner() {
+  const banner = $('exploreContextBanner');
+  if (!banner) return;
+  const ef = state.exploreField;
+  if (!ef) {
+    banner.classList.add('hidden');
+    banner.innerHTML = '';
+    return;
+  }
+  const count = (typeof courses !== 'undefined')
+    ? courses.filter(c => c.category === ef.category).length : 0;
+  const prompt = state.checkSystem
+    ? ''
+    : ' Select your qualification system to see what you qualify for.';
+  banner.innerHTML = `
+    <div class="explore-context__body">
+      <p class="explore-context__text">
+        <strong>Exploring ${esc(ef.name)} courses</strong> — ${count} course${count === 1 ? '' : 's'} across all countries.${prompt}
+      </p>
+      <button type="button" class="explore-context__clear" id="exploreContextClear">Clear field filter</button>
+    </div>`;
+  banner.classList.remove('hidden');
+  $('exploreContextClear')?.addEventListener('click', clearExploreField);
+}
+
+// Remove the field context and its category filter; show all courses again.
+function clearExploreField() {
+  state.exploreField = null;
+  state.selectedCategories.clear();
+  $$('#categoryPicker .category-chip').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-pressed', 'false');
+  });
+  renderExploreContextBanner();
+  logEvent('explore_field_clear', {});
+  if (state.selectedSubjects.length > 0) renderCheckResults();
 }
 
 
