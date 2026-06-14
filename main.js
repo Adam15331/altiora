@@ -193,6 +193,81 @@ function readableTag(tag) {
 
 function humanTag(tag) { return tag.replace(/_/g, ' '); }
 
+/* ─── Mathematics Advanced/Standard normalisation ───────────────
+ * Mathematics_Advanced (Further Maths) implies Mathematics_Standard
+ * (Maths) in the matching logic, so showing both as separate required
+ * subjects is redundant and confusing. These shared helpers collapse
+ * the pair consistently EVERYWHERE subjects or combinations display.
+ * ─────────────────────────────────────────────────────────────── */
+const MATHS_STD = 'Mathematics_Standard';
+const MATHS_ADV = 'Mathematics_Advanced';
+const COLLAPSED_MATHS_LABEL = 'Mathematics (Advanced preferred)';
+
+// Display label for a single subject tag. Uses the local subject name
+// when a system is set, else readable maths names ("Mathematics" /
+// "Further Mathematics") so generic combinations still read naturally.
+function subjectTagLabel(tag, system) {
+  if (system) return tagToLocal(tag, system);
+  if (tag === MATHS_STD) return 'Mathematics';
+  if (tag === MATHS_ADV) return 'Further Mathematics';
+  return readableTag(tag);
+}
+
+// Collapse the Advanced/Standard maths pair within ONE displayed list of
+// requirement tags. Returns [{ tag, label }] in order; when both are
+// present they fuse into a single "Mathematics (Advanced preferred)".
+function normaliseSubjectsForDisplay(tags, system) {
+  const collapse = tags.includes(MATHS_ADV) && tags.includes(MATHS_STD);
+  const out = [];
+  const seen = new Set();
+  for (const t of tags) {
+    if (collapse && t === MATHS_STD) continue;
+    const label = (collapse && t === MATHS_ADV) ? COLLAPSED_MATHS_LABEL : subjectTagLabel(t, system);
+    if (seen.has(label)) continue;
+    seen.add(label);
+    out.push({ tag: t, label });
+  }
+  return out;
+}
+
+// Convenience: just the labels from normaliseSubjectsForDisplay.
+function normalisedSubjectLabels(tags, system) {
+  return normaliseSubjectsForDisplay(tags, system).map(e => e.label);
+}
+
+// For combination GENERATION: Advanced implies Standard, so a combo that
+// contains Advanced must also contain Standard (they read as "Maths +
+// Further Maths"), never just bare Advanced. Removes the redundant form.
+function normaliseComboTags(tags) {
+  const out = [...tags];
+  if (out.includes(MATHS_ADV) && !out.includes(MATHS_STD)) out.push(MATHS_STD);
+  return [...new Set(out)];
+}
+
+// Count-aware collapse for the Subject Planner essential chips. Takes a
+// [tag, count][] list and fuses the maths pair into one entry (keeping
+// the higher count), labelled "Mathematics (Advanced preferred)".
+// Returns [{ tag, count, label }] (label null = use the normal name).
+function collapseEssentialChips(sortedTags) {
+  const hasAdv = sortedTags.some(([t]) => t === MATHS_ADV);
+  const hasStd = sortedTags.some(([t]) => t === MATHS_STD);
+  if (!(hasAdv && hasStd)) return sortedTags.map(([tag, count]) => ({ tag, count, label: null }));
+  const stdC = (sortedTags.find(([x]) => x === MATHS_STD) || [])[1] ?? 0;
+  const advC = (sortedTags.find(([x]) => x === MATHS_ADV) || [])[1] ?? 0;
+  const out = [];
+  let mathsDone = false;
+  for (const [tag, count] of sortedTags) {
+    if (tag === MATHS_STD || tag === MATHS_ADV) {
+      if (mathsDone) continue;
+      mathsDone = true;
+      out.push({ tag: MATHS_ADV, count: Math.max(stdC, advC), label: COLLAPSED_MATHS_LABEL });
+    } else {
+      out.push({ tag, count, label: null });
+    }
+  }
+  return out;
+}
+
 /* ─── Further Maths → Maths auto-imply ──────────────────────────
  * UK A-Level: "Further Mathematics" is a separate A-level that must
  * be taken alongside "Mathematics". Auto-select Maths when Further
@@ -1750,7 +1825,7 @@ function buildCheckCard(course, result) {
   const tests = Array.isArray(course.admissionTests) ? course.admissionTests : [];
 
   const missingTagsHtml = tags =>
-    tags.map(t => `<span class="missing-tag">${esc(tagToLocal(t, sys))}</span>`).join(', ');
+    normalisedSubjectLabels(tags, sys).map(l => `<span class="missing-tag">${esc(l)}</span>`).join(', ');
 
   let footerHtml = '';
   if (status === 'red' && missingEssential.length) {
@@ -1760,7 +1835,7 @@ function buildCheckCard(course, result) {
         ${missingTagsHtml(missingEssential)}
       </p>`;
   } else if (status === 'amber' && missingPreferred.length) {
-    const topSubject = tagToLocal(missingPreferred[0], sys);
+    const topSubject = subjectTagLabel(missingPreferred[0], sys);
     const extras     = missingPreferred.length > 1
       ? ` <span style="color:var(--text-faint);font-weight:400"> + ${missingPreferred.length - 1} more</span>`
       : '';
@@ -1952,7 +2027,7 @@ function buildReverseCard(course) {
 
   const tagPills = tags => {
     if (!tags.length) return '<span class="text-secondary" style="font-size:13px">None specified</span>';
-    return tags.map(t => `<span class="subject-tag">${esc(tagToLocal(t, sys))}</span>`).join('');
+    return normalisedSubjectLabels(tags, sys).map(l => `<span class="subject-tag">${esc(l)}</span>`).join('');
   };
 
   const rows = [
@@ -2029,7 +2104,7 @@ function buildReverseCard(course) {
 function buildRequirementsText(course) {
   const sys     = state.reverseSystem;
   const country = COUNTRY_LABELS[course.country] ?? course.country;
-  const fmt     = tags => tags.map(t => tagToLocal(t, sys)).join(', ');
+  const fmt     = tags => normalisedSubjectLabels(tags, sys).join(', ');
   const { essential = [], preferred = [], useful = [] } = course.requirements;
 
   const lines = [
@@ -2108,27 +2183,52 @@ function rankCategoryCombinations(category, limit = 5) {
   );
   const topTags = Object.entries(tagFreq).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([t]) => t);
 
-  const combos = [];
-  for (let size = 2; size <= 4 && combos.length < 20; size++) {
-    for (const c of getCombinations(topTags, size)) {
-      if (combos.length >= 20) break;
-      combos.push(c);
+  // Generate candidate combos of 2–3 subjects, normalise the maths pair
+  // (Advanced implies Standard, so "Further Maths" reads as "Maths +
+  // Further Maths"), drop anything beyond 3 subjects (not a realistic
+  // choice), and dedupe identical tag sets.
+  const byKey = new Map();
+  for (let size = 2; size <= 3; size++) {
+    for (const raw of getCombinations(topTags, size)) {
+      const tags = normaliseComboTags(raw);
+      if (tags.length > 3) continue;
+      const key = [...tags].sort().join('|');
+      if (!byKey.has(key)) byKey.set(key, tags);
     }
   }
 
-  return combos.map(combo => {
-    const tagSet = new Set(combo);
-    if (tagSet.has('Mathematics_Advanced')) tagSet.add('Mathematics_Standard');
+  // Score each combo: which courses it opens (green/amber), as a set.
+  const scored = [...byKey.values()].map(tags => {
+    const tagSet = new Set(tags);
+    const opened = new Set();
     let green = 0, amber = 0;
     catCourses.forEach(course => {
       const r = classify(course, tagSet);
-      if (r.status === 'green') green++;
-      else if (r.status === 'amber') amber++;
+      if (r.status === 'green') { green++; opened.add(course.id); }
+      else if (r.status === 'amber') { amber++; opened.add(course.id); }
     });
-    return { combo, green, amber };
-  }).sort((a, b) => b.green - a.green || b.amber - a.amber)
+    return { tags, green, amber, total: green + amber };
+  }).filter(s => s.total > 0);
+
+  // Drop redundant supersets: if combo B's tags are a superset of a simpler
+  // combo A and they open the same number of courses, B's extra subject
+  // adds nothing — keep only the simpler, genuinely-distinct A.
+  const kept = scored.filter(b =>
+    !scored.some(a =>
+      a !== b &&
+      a.tags.length < b.tags.length &&
+      a.tags.every(t => b.tags.includes(t)) &&
+      a.total === b.total
+    )
+  );
+
+  // Order each combo's subjects for display: Maths, then Further Maths,
+  // then the rest.
+  const order = t => t === MATHS_STD ? 0 : t === MATHS_ADV ? 1 : 2;
+  return kept
+    .sort((a, b) => b.green - a.green || b.amber - a.amber)
     .slice(0, limit)
-    .filter(s => s.green + s.amber > 0);
+    .map(({ tags, green, amber }) => ({ combo: [...tags].sort((x, y) => order(x) - order(y)), green, amber }));
 }
 
 function renderPlanResults() {
@@ -2165,13 +2265,14 @@ function renderPlanResults() {
       <h3 class="plan-section-head">Essential subjects</h3>
       <p class="plan-section-sub">No specific subject requirements — ${esc(catLabel)} courses are broadly open.</p>`;
   } else {
-    const chipsHtml = sortedTags.map(([tag, count]) => {
+    const chipsHtml = collapseEssentialChips(sortedTags).map(({ tag, count, label }) => {
       const hlBadge = ibHLTagsForCategory.has(tag)
         ? `<span class="plan-subject-chip__hl">HL</span>`
         : '';
+      const name = label ?? tagToLocal(tag, state.planSystem);
       return `
       <div class="plan-subject-chip">
-        <span class="plan-subject-chip__name">${esc(tagToLocal(tag, state.planSystem))}${hlBadge}</span>
+        <span class="plan-subject-chip__name">${esc(name)}${hlBadge}</span>
         <span class="plan-subject-chip__count">unlocks ${count} course${count !== 1 ? 's' : ''}</span>
       </div>`;
     }).join('');
@@ -2202,7 +2303,7 @@ function renderPlanResults() {
   if (validPairs.length > 0) {
     const pairsHtml = validPairs.map(pair =>
       `<div class="plan-subject-chip" style="background: var(--color-cat-cs-bg); border-color: var(--color-cat-cs);">
-         <span class="plan-subject-chip__name">${pair.map(t => esc(tagToLocal(t, state.planSystem))).join(' + ')}</span>
+         <span class="plan-subject-chip__name">${pair.map(t => esc(subjectTagLabel(t, state.planSystem))).join(' + ')}</span>
          <span class="plan-subject-chip__count">required together for most courses</span>
        </div>`
     ).join('');
@@ -2222,7 +2323,7 @@ function renderPlanResults() {
     $('planCombinations').innerHTML = '';
   } else {
     const rowsHtml = top5.map(({ combo, green, amber }) => {
-      const tags = combo.map(t => `<span class="plan-combo-tag">${esc(tagToLocal(t, state.planSystem))}</span>`).join('');
+      const tags = combo.map(t => `<span class="plan-combo-tag">${esc(subjectTagLabel(t, state.planSystem))}</span>`).join('');
       return `
         <div class="plan-combo-row" tabindex="0" role="button"
              aria-label="Apply this subject combination in Check Combination mode"
@@ -2527,7 +2628,6 @@ function renderFieldOverview(fieldId) {
   const cat        = f.category;
   const sys        = state.checkSystem;            // may be '' → generic terms
   const catCourses = courses.filter(c => c.category === cat);
-  const subjName   = t => sys ? tagToLocal(t, sys) : readableTag(t);
 
   // ── Subjects: essential + preferred tags, by frequency ──────────
   const essFreq = {}, prefFreq = {};
@@ -2539,16 +2639,20 @@ function renderFieldOverview(fieldId) {
   const preferred = Object.entries(prefFreq).sort((a, b) => b[1] - a[1])
     .map(([t]) => t).filter(t => !essFreq[t]).slice(0, 6);
 
-  const chips = tags => tags.length
-    ? `<div class="fo-chips">${tags.map(t => `<span class="fo-chip">${esc(subjName(t))}</span>`).join('')}</div>`
-    : `<p class="fo-muted">No specific subjects — courses here are broadly open.</p>`;
+  // Collapse the Advanced/Standard maths pair before rendering each list.
+  const chips = tags => {
+    const labels = normalisedSubjectLabels(tags, sys);
+    return labels.length
+      ? `<div class="fo-chips">${labels.map(l => `<span class="fo-chip">${esc(l)}</span>`).join('')}</div>`
+      : `<p class="fo-muted">No specific subjects — courses here are broadly open.</p>`;
+  };
 
   // ── Strong combinations (reused planner ranking) ────────────────
   const combos = rankCategoryCombinations(cat, 3);
   const combosHtml = combos.length
     ? combos.map(({ combo, green, amber }) => `
         <div class="fo-combo">
-          <span class="fo-combo__subjects">${combo.map(t => `<span class="fo-chip fo-chip--accent">${esc(subjName(t))}</span>`).join('')}</span>
+          <span class="fo-combo__subjects">${combo.map(t => `<span class="fo-chip fo-chip--accent">${esc(subjectTagLabel(t, sys))}</span>`).join('')}</span>
           <span class="fo-combo__count">opens ${green + amber} course${green + amber === 1 ? '' : 's'}</span>
         </div>`).join('')
     : `<p class="fo-muted">No standout combinations — most courses here are flexible on subjects.</p>`;
