@@ -483,6 +483,12 @@ let _dismissedMathsWarning = false;
 // Cleared on system change so a fresh context prompts again.
 let gradeInputDismissed = false;
 
+// Mirror of profile.gradesExplicitlySkipped — the student confirmed via the
+// checkbox that they don't have predicted grades yet, so subject-only matching
+// is allowed even in the building/applying stages. Loaded from the persisted
+// profile in buildGradeInput() and written back through syncProfileFromCheck().
+let gradesExplicitlySkipped = false;
+
 /* ═══════════════════════════════════════════════════════════════
  * TAG DERIVATION
  * ═══════════════════════════════════════════════════════════════ */
@@ -687,30 +693,41 @@ function buildGradeInput(systemKey) {
   const hint        = 'Affects which courses show as strong matches';
   const clearBtn    = '<button type="button" id="clearGradeBtn" class="clear-grade-btn hidden" aria-label="Clear predicted grades">✕ Clear grades</button>';
 
-  function wireSelectGrade(selectId) {
-    const sel = $(selectId);
-    sel.addEventListener('change', e => {
-      state.predictedGrade  = e.target.value || null;
-      gradeInputDismissed   = !e.target.value; // Skip = dismissed; grade chosen = not dismissed
-      $('clearGradeBtn').classList.toggle('hidden', !state.predictedGrade);
-      renderCheckResults();
-    });
-    $('clearGradeBtn').addEventListener('click', () => {
-      state.predictedGrade = null;
-      gradeInputDismissed  = true; // user has seen/used grade input — don't nag again
-      sel.value = '';
-      $('clearGradeBtn').classList.add('hidden');
-      renderCheckResults();
-    });
-  }
+  // Stage decides whether grades are pressed for. building/applying are the
+  // grade-relevant stages: there we recommend grades and offer the skip box.
+  const profile            = (typeof AltioraState !== 'undefined') ? AltioraState.getProfile() : {};
+  const stage              = profile.stage || DEFAULT_STAGE;
+  const stageRequiresGrade = (stage === 'building' || stage === 'applying');
+  gradesExplicitlySkipped  = profile.gradesExplicitlySkipped === true;
 
-  if (systemKey === 'UK_A_Level') {
-    section.innerHTML = `
+  const helpText = stageRequiresGrade
+    ? "Enter your predicted grades for accurate matches. If you don't have them yet, check the box below."
+    : "If you have predicted grades, enter them – but you can skip for now.";
+
+  // The skip checkbox is offered only for the grade-relevant stages.
+  const skipCheckHtml = stageRequiresGrade ? `
+      <label class="grade-skip-check">
+        <input type="checkbox" id="gradeSkipCheck"${gradesExplicitlySkipped ? ' checked' : ''}/>
+        <span>I don't have predicted grades yet (continue with subject-only matching)</span>
+      </label>` : '';
+
+  const header = `
       <div class="grade-input-header">
         <span class="control-label">Your predicted grades</span>
         <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
         <span class="picker-hint-inline">${hint}</span>
-      </div>
+      </div>`;
+  const footer = `
+      <p class="grade-input-help">${esc(helpText)}</p>
+      ${clearBtn}
+      ${skipCheckHtml}`;
+
+  // Per-system grade body + a wiring callback. Everything else is shared.
+  let bodyHtml = '';
+  let wire     = null;
+
+  if (systemKey === 'UK_A_Level') {
+    bodyHtml = `
       <div class="grade-input-body">
         <label class="grade-option-label" for="gradeSelectALevel">Average predicted grade across your A-Level subjects</label>
         <div class="select-wrap">
@@ -723,46 +740,34 @@ function buildGradeInput(systemKey) {
             <option value="D">D (predicting mostly Ds)</option>
           </select>
         </div>
-      </div>
-      ${clearBtn}
-    `;
-    section.classList.remove('hidden');
-    wireSelectGrade('gradeSelectALevel');
+      </div>`;
+    wire = () => wireSelectGrade('gradeSelectALevel');
   } else if (systemKey === 'IB') {
-    section.innerHTML = `
-      <div class="grade-input-header">
-        <span class="control-label">Your predicted grades</span>
-        <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
-        <span class="picker-hint-inline">${hint}</span>
-      </div>
+    bodyHtml = `
       <div class="grade-input-body">
         <label class="grade-option-label" for="gradeInputIB">Predicted IB total points (24–45)</label>
         <input type="number" id="gradeInputIB" class="grade-number-input" min="24" max="45" placeholder="e.g. 38" autocomplete="off"/>
-      </div>
-      ${clearBtn}
-    `;
-    section.classList.remove('hidden');
-    $('gradeInputIB').addEventListener('input', e => {
-      const v = parseInt(e.target.value, 10);
-      state.predictedGrade = (!isNaN(v) && v >= 24 && v <= 45) ? String(v) : null;
-      gradeInputDismissed  = false; // actively entering — reset dismissal
-      $('clearGradeBtn').classList.toggle('hidden', !state.predictedGrade);
-      renderCheckResults();
-    });
-    $('clearGradeBtn').addEventListener('click', () => {
-      state.predictedGrade = null;
-      gradeInputDismissed  = true; // seen/used grade input — don't nag again
-      $('gradeInputIB').value = '';
-      $('clearGradeBtn').classList.add('hidden');
-      renderCheckResults();
-    });
+      </div>`;
+    wire = () => {
+      $('gradeInputIB').addEventListener('input', e => {
+        const v = parseInt(e.target.value, 10);
+        state.predictedGrade = (!isNaN(v) && v >= 24 && v <= 45) ? String(v) : null;
+        gradeInputDismissed  = false; // actively entering — reset dismissal
+        if (state.predictedGrade) clearGradeSkip(); // entering a grade clears the skip flag
+        $('clearGradeBtn').classList.toggle('hidden', !state.predictedGrade);
+        renderCheckResults();
+      });
+      $('clearGradeBtn').addEventListener('click', () => {
+        state.predictedGrade = null;
+        gradeInputDismissed  = true; // seen/used grade input — don't nag again
+        $('gradeInputIB').value = '';
+        clearGradeSkip();
+        $('clearGradeBtn').classList.add('hidden');
+        renderCheckResults();
+      });
+    };
   } else if (systemKey === 'US_AP') {
-    section.innerHTML = `
-      <div class="grade-input-header">
-        <span class="control-label">Your predicted grades</span>
-        <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
-        <span class="picker-hint-inline">${hint}</span>
-      </div>
+    bodyHtml = `
       <div class="grade-input-body">
         <label class="grade-option-label" for="gradeSelectAP">Average predicted AP score across your exams</label>
         <div class="select-wrap">
@@ -775,18 +780,10 @@ function buildGradeInput(systemKey) {
             <option value="D">1 (D) — predicting mostly 1s</option>
           </select>
         </div>
-      </div>
-      ${clearBtn}
-    `;
-    section.classList.remove('hidden');
-    wireSelectGrade('gradeSelectAP');
+      </div>`;
+    wire = () => wireSelectGrade('gradeSelectAP');
   } else if (systemKey === 'SG_A_Level') {
-    section.innerHTML = `
-      <div class="grade-input-header">
-        <span class="control-label">Your predicted grades</span>
-        <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
-        <span class="picker-hint-inline">${hint}</span>
-      </div>
+    bodyHtml = `
       <div class="grade-input-body">
         <label class="grade-option-label" for="gradeSelectSG">Average predicted grade across your H2 subjects</label>
         <div class="select-wrap">
@@ -799,18 +796,10 @@ function buildGradeInput(systemKey) {
             <option value="E">E — predicting mostly Es</option>
           </select>
         </div>
-      </div>
-      ${clearBtn}
-    `;
-    section.classList.remove('hidden');
-    wireSelectGrade('gradeSelectSG');
+      </div>`;
+    wire = () => wireSelectGrade('gradeSelectSG');
   } else if (systemKey === 'HK_DSE') {
-    section.innerHTML = `
-      <div class="grade-input-header">
-        <span class="control-label">Your predicted grades</span>
-        <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
-        <span class="picker-hint-inline">${hint}</span>
-      </div>
+    bodyHtml = `
       <div class="grade-input-body">
         <label class="grade-option-label" for="gradeSelectDSE">Average predicted level across your elective subjects</label>
         <div class="select-wrap">
@@ -825,14 +814,61 @@ function buildGradeInput(systemKey) {
             <option value="1">1 — predicting mostly 1s</option>
           </select>
         </div>
-      </div>
-      ${clearBtn}
-    `;
-    section.classList.remove('hidden');
-    wireSelectGrade('gradeSelectDSE');
+      </div>`;
+    wire = () => wireSelectGrade('gradeSelectDSE');
   } else {
     section.classList.add('hidden');
     section.innerHTML = '';
+    return;
+  }
+
+  section.innerHTML = header + bodyHtml + footer;
+  section.classList.remove('hidden');
+  wire();
+  wireGradeSkipCheck();
+}
+
+// Shared wiring for the select-based grade inputs (all systems except IB).
+function wireSelectGrade(selectId) {
+  const sel = $(selectId);
+  sel.addEventListener('change', e => {
+    state.predictedGrade  = e.target.value || null;
+    gradeInputDismissed   = !e.target.value; // Skip = dismissed; grade chosen = not dismissed
+    if (state.predictedGrade) clearGradeSkip(); // entering a grade clears the skip flag
+    $('clearGradeBtn').classList.toggle('hidden', !state.predictedGrade);
+    renderCheckResults();
+  });
+  $('clearGradeBtn').addEventListener('click', () => {
+    state.predictedGrade = null;
+    gradeInputDismissed  = true; // user has seen/used grade input — don't nag again
+    sel.value = '';
+    clearGradeSkip();
+    $('clearGradeBtn').classList.add('hidden');
+    renderCheckResults();
+  });
+}
+
+// Wire the "I don't have predicted grades yet" checkbox (building/applying only).
+function wireGradeSkipCheck() {
+  const cb = $('gradeSkipCheck');
+  if (!cb) return;
+  cb.addEventListener('change', e => {
+    gradesExplicitlySkipped = e.target.checked;
+    if (typeof AltioraState !== 'undefined') {
+      AltioraState.setProfile({ gradesExplicitlySkipped });
+    }
+    renderCheckResults();
+  });
+}
+
+// Clear the skip flag and untick its checkbox — called when the student
+// enters/clears a grade so the two controls never disagree.
+function clearGradeSkip() {
+  gradesExplicitlySkipped = false;
+  const cb = $('gradeSkipCheck');
+  if (cb) cb.checked = false;
+  if (typeof AltioraState !== 'undefined') {
+    AltioraState.setProfile({ gradesExplicitlySkipped: false });
   }
 }
 
@@ -1315,9 +1351,10 @@ const STAGE_SUMMARY = {
 function syncProfileFromCheck() {
   if (typeof AltioraState === 'undefined') return;
   AltioraState.setProfile({
-    qualificationSystem: state.checkSystem || null,
-    subjects:            Array.isArray(state.selectedSubjects) ? state.selectedSubjects.slice() : [],
-    predictedGrades:     state.predictedGrade || null,
+    qualificationSystem:     state.checkSystem || null,
+    subjects:                Array.isArray(state.selectedSubjects) ? state.selectedSubjects.slice() : [],
+    predictedGrades:         state.predictedGrade || null,
+    gradesExplicitlySkipped: gradesExplicitlySkipped === true,
   });
 }
 
@@ -1779,7 +1816,17 @@ function renderCheckResults() {
 
   const minNeeded = MIN_SUBJECTS[state.checkSystem] ?? 3;
   const tooFew    = state.selectedSubjects.length < minNeeded;
-  const noGrade   = !state.predictedGrade && !gradeInputDismissed;
+
+  // Stage-aware grade requirement. GREEN matches are allowed when the student
+  // has entered a grade, has explicitly confirmed they have none yet, OR is in
+  // a stage where grades aren't yet relevant (exploring/choosing). Only in the
+  // building/applying stages, with no grade and no skip confirmation, do we
+  // warn and demote GREEN → AMBER.
+  const profile            = (typeof AltioraState !== 'undefined') ? AltioraState.getProfile() : {};
+  const stage              = profile.stage || DEFAULT_STAGE;
+  const stageRequiresGrade = (stage === 'building' || stage === 'applying');
+  const allowGreen         = !!state.predictedGrade || gradesExplicitlySkipped === true || !stageRequiresGrade;
+  const noGrade            = !allowGreen;
 
   // Remove any existing banners before re-rendering
   section.querySelectorAll('.subject-count-warning, .grade-missing-banner').forEach(el => el.remove());
@@ -1796,7 +1843,7 @@ function renderCheckResults() {
   if (noGrade) {
     const banner = document.createElement('p');
     banner.className = 'grade-missing-banner';
-    banner.textContent = `⚠️ You haven't entered your predicted grades. Results may show courses you don't meet the grade requirements for. Enter your grades above for accurate matching.`;
+    banner.textContent = `⚠️ You haven't entered your predicted grades. Strong matches are shown as possible matches until you do. Enter your grades above for accurate matching, or tick "I don't have predicted grades yet" to continue with subject-only matching.`;
     $('summaryBar').before(banner);
   }
 

@@ -2646,6 +2646,29 @@ footer p {
   outline: none;
   border-color: var(--color-text-secondary);
 }
+.grade-input-help {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  line-height: 1.5;
+}
+.grade-skip-check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+.grade-skip-check input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  accent-color: var(--color-cat-cs);
+  cursor: pointer;
+}
+.grade-skip-check span { line-height: 1.4; }
 
 /* ═══════════════════════════════════════════════════════════════
  * Empty state — Mode A suggestions

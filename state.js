@@ -37,6 +37,7 @@ const AltioraState = (() => {
         qualificationSystem: null,
         subjects:            [],      // subject tag strings
         predictedGrades:     null,    // grade string or IB number
+        gradesExplicitlySkipped: false, // student confirmed they have no predicted grades yet
         interests:           [],      // category strings
       },
       shortlist: [],                  // course id strings
@@ -165,7 +166,7 @@ const AltioraState = (() => {
   // a stray field can't pollute the shape.
   function setProfile(partial) {
     if (!partial || typeof partial !== 'object') return;
-    const allowed = ['stage', 'qualificationSystem', 'subjects', 'predictedGrades', 'interests'];
+    const allowed = ['stage', 'qualificationSystem', 'subjects', 'predictedGrades', 'gradesExplicitlySkipped', 'interests'];
     allowed.forEach(key => {
       if (key in partial) _state.profile[key] = partial[key];
     });
