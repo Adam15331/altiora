@@ -1990,9 +1990,12 @@ function buildCheckCard(course, result) {
     apNoteHtml = `<p class="card-ap-note">${esc(ctx.note)}</p>`;
     if (apCount < ctx.minCompetitiveAPs) {
       const apTooltip = 'US universities consider essays, projects, and extracurriculars equally with AP scores';
+      const mostCompetitive = (ctx.recommendedAPs && ctx.recommendedAPs > ctx.minCompetitiveAPs)
+        ? `; the most competitive have ${ctx.recommendedAPs}+`
+        : '';
       apWarningHtml = `
       <div class="card-admission-tests">
-        <span class="admission-test-tag admission-test-tag--ap-note">Competitive applicants often have ${ctx.minCompetitiveAPs}+ APs · ${apCount} selected — holistic review means exceptions are common <button type="button" class="ap-info-btn" aria-label="${esc(apTooltip)}" title="${esc(apTooltip)}">ⓘ</button></span>
+        <span class="admission-test-tag admission-test-tag--ap-note">Competitive applicants often have ${ctx.minCompetitiveAPs}+ APs${mostCompetitive} · ${apCount} selected — holistic review means exceptions are common <button type="button" class="ap-info-btn" aria-label="${esc(apTooltip)}" title="${esc(apTooltip)}">ⓘ</button></span>
       </div>`;
     }
     if (ctx.recommendedSubjects?.length) {
@@ -2085,7 +2088,7 @@ function buildCheckCard(course, result) {
       <span class="card-meta-sep">·</span>
       <span class="card-cat-badge">${esc(catLabel)}</span>
     </div>
-    ${gradeStr ? `<div class="card-grades">${esc(gradeStr)}</div>` : ''}
+    ${gradeStr ? `<div class="card-grades">${esc(sys === 'IB' ? `${gradeStr} IB points` : gradeStr)}</div>` : ''}
     ${ibHlHtml}
     ${apWarningHtml}
     ${tests.length ? `
