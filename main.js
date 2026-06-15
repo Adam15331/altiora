@@ -247,9 +247,46 @@ function subjectTagLabel(tag, system, isQuant = false) {
   return readableTag(tag);
 }
 
+// Does a tag have a real subject in the selected system? Maths tags always
+// resolve (MATHS_RESOLUTION); other tags must exist in the system's subject
+// list — so we never recommend e.g. Psychology to a HK DSE student.
+function tagExistsInSystem(tag, system) {
+  if (!system) return true;
+  if (tag === MATHS_STD || tag === MATHS_ADV) return true;
+  return !!getReverseMap(system)[tag]?.length;
+}
+
+// Split a subject name into its base and level rank, generally across
+// systems: IB "X SL/HL", Singapore "H1/H2/H3 X". Used to collapse the
+// SAME base subject appearing at two levels in one list (impossible — a
+// student takes a subject at one level). Distinct subjects (e.g. UK
+// Mathematics vs Further Mathematics) have different bases and are kept.
+function subjectBaseAndLevel(name) {
+  let m = name.match(/^(.*\S)\s+(SL|HL)$/);
+  if (m) return { base: m[1], rank: m[2] === 'HL' ? 2 : 1 };
+  m = name.match(/^H([123])\s+(.*)$/);
+  if (m) return { base: m[2], rank: Number(m[1]) };
+  return { base: name, rank: 0 };
+}
+
+// Collapse any base subject that appears at multiple levels to a single
+// entry, keeping the highest level. Order of first appearance preserved.
+function collapseSameBaseLevels(labels) {
+  const best = new Map();
+  const order = [];
+  for (const l of labels) {
+    const { base, rank } = subjectBaseAndLevel(l);
+    if (!best.has(base)) { best.set(base, { label: l, rank }); order.push(base); }
+    else if (rank > best.get(base).rank) best.set(base, { label: l, rank });
+  }
+  return order.map(b => best.get(b).label);
+}
+
 // Labels for a REQUIREMENT LIST: the maths pair always becomes ONE entry
-// (you take one maths choice). Returns deduped label strings, order kept.
+// (you take one maths choice). Subjects not offered in the system are
+// dropped, and any base subject at two levels is collapsed.
 function requirementLabels(tags, system, isQuant) {
+  tags = tags.filter(t => tagExistsInSystem(t, system));
   const hasStd = tags.includes(MATHS_STD), hasAdv = tags.includes(MATHS_ADV);
   const out = [], seen = new Set();
   const add = l => { if (l && !seen.has(l)) { seen.add(l); out.push(l); } };
@@ -267,13 +304,15 @@ function requirementLabels(tags, system, isQuant) {
     }
     add(subjectTagLabel(t, system, isQuant));
   }
-  return out;
+  return collapseSameBaseLevels(out);
 }
 
 // Labels for a COMBINATION: the maths pair stays two subjects only where
-// the system treats them as separate (UK); elsewhere it collapses to one
-// (so we never produce an impossible "same subject at two levels" combo).
+// the system treats them as separate (UK); elsewhere it collapses to one.
+// Subjects not offered in the system are dropped, and any base subject at
+// two levels is collapsed — so a combo never shows the same subject twice.
 function comboLabels(combo, system, isQuant) {
+  combo = combo.filter(t => tagExistsInSystem(t, system));
   const hasStd = combo.includes(MATHS_STD), hasAdv = combo.includes(MATHS_ADV);
   const both = hasStd && hasAdv;
   const out = [], seen = new Set();
@@ -293,7 +332,7 @@ function comboLabels(combo, system, isQuant) {
     }
     add(subjectTagLabel(t, system, isQuant));
   }
-  return out;
+  return collapseSameBaseLevels(out);
 }
 
 // For combination GENERATION: Advanced implies Standard in the matching
@@ -2334,8 +2373,10 @@ function combosForDisplay(category, system, isQuant, limit) {
   const seen = new Set();
   const out = [];
   for (const c of rankCategoryCombinations(category, 16)) {
+    // Skip combos that rely on a subject not offered in this system.
+    if (!c.combo.every(t => tagExistsInSystem(t, system))) continue;
     const key = comboLabels(c.combo, system, isQuant).join(' + ');
-    if (seen.has(key)) continue;
+    if (!key || seen.has(key)) continue;
     seen.add(key);
     out.push(c);
     if (out.length >= limit) break;
