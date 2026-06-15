@@ -193,79 +193,170 @@ function readableTag(tag) {
 
 function humanTag(tag) { return tag.replace(/_/g, ' '); }
 
-/* ─── Mathematics Advanced/Standard normalisation ───────────────
- * Mathematics_Advanced (Further Maths) implies Mathematics_Standard
- * (Maths) in the matching logic, so showing both as separate required
- * subjects is redundant and confusing. These shared helpers collapse
- * the pair consistently EVERYWHERE subjects or combinations display.
+/* ─── Subject display normalisation (system + field aware) ───────
+ * Two subtleties handled here, consistently across every screen:
+ *  1) Maths variant — quantitative fields need the RIGOROUS maths in
+ *     each system (IB Analysis & Approaches not Applications; AP Calc BC;
+ *     SG H2; HK Extended Module), never the lighter applied variant.
+ *  2) Maths levels — Mathematics_Standard/Advanced are two separate
+ *     A-levels in the UK, but the SAME subject at two levels elsewhere
+ *     (IB SL/HL, AP AB/BC, SG H1/H2, HK core/M2). They must never show
+ *     as two subjects in a system where that is impossible.
  * ─────────────────────────────────────────────────────────────── */
 const MATHS_STD = 'Mathematics_Standard';
 const MATHS_ADV = 'Mathematics_Advanced';
 const COLLAPSED_MATHS_LABEL = 'Mathematics (Advanced preferred)';
 
-// Display label for a single subject tag. Uses the local subject name
-// when a system is set, else readable maths names ("Mathematics" /
-// "Further Mathematics") so generic combinations still read naturally.
-function subjectTagLabel(tag, system) {
+// Fields whose maths requirement must resolve to the rigorous variant.
+const QUANTITATIVE_CATEGORIES = new Set(['engineering', 'cs', 'mathematics', 'sciences', 'economics']);
+function isQuantitativeCategory(cat) { return QUANTITATIVE_CATEGORIES.has(cat); }
+
+// Per-system maths subjects. `std` = standard level, `stdRigorous` =
+// the variant a quantitative field needs at standard level, `adv` =
+// advanced/rigorous level. `separate` = Advanced is a genuinely separate
+// subject taken ALONGSIDE Standard (UK only); elsewhere the two are one
+// subject at different levels and must collapse.
+const MATHS_RESOLUTION = {
+  UK_A_Level: { std: 'Mathematics', stdRigorous: 'Mathematics', adv: 'Further Mathematics', separate: true },
+  IB:         { std: 'Mathematics: Analysis and Approaches SL', stdRigorous: 'Mathematics: Analysis and Approaches SL', adv: 'Mathematics: Analysis and Approaches HL', separate: false },
+  US_AP:      { std: 'AP Calculus AB', stdRigorous: 'AP Calculus BC', adv: 'AP Calculus BC', separate: false },
+  SG_A_Level: { std: 'H1 Mathematics', stdRigorous: 'H2 Mathematics', adv: 'H2 Mathematics', separate: false },
+  HK_DSE:     { std: 'Mathematics Compulsory Part', stdRigorous: 'Mathematics Extended Part Module 2 (M2)', adv: 'Mathematics Extended Part Module 2 (M2)', separate: false },
+};
+
+// Does this system take Advanced maths as a separate subject (vs a level)?
+function mathsAdvancedIsSeparate(system) {
+  if (!system) return true;                 // generic: "Maths + Further Maths"
+  return !!(MATHS_RESOLUTION[system]?.separate);
+}
+
+// Resolve a maths tag to a subject name for a system + quant context.
+function mathsSubjectName(tag, system, isQuant) {
+  if (!system) return tag === MATHS_ADV ? 'Further Mathematics' : 'Mathematics';
+  const r = MATHS_RESOLUTION[system];
+  if (!r) return tagToLocal(tag, system);
+  if (tag === MATHS_ADV) return r.adv;
+  return isQuant ? r.stdRigorous : r.std;
+}
+
+// Display label for a single subject tag, system + quant aware. Generic
+// names (no HL/SL/AA/AI/H1-H2) when no system is selected.
+function subjectTagLabel(tag, system, isQuant = false) {
+  if (tag === MATHS_STD || tag === MATHS_ADV) return mathsSubjectName(tag, system, isQuant);
   if (system) return tagToLocal(tag, system);
-  if (tag === MATHS_STD) return 'Mathematics';
-  if (tag === MATHS_ADV) return 'Further Mathematics';
   return readableTag(tag);
 }
 
-// Collapse the Advanced/Standard maths pair within ONE displayed list of
-// requirement tags. Returns [{ tag, label }] in order; when both are
-// present they fuse into a single "Mathematics (Advanced preferred)".
-function normaliseSubjectsForDisplay(tags, system) {
-  const collapse = tags.includes(MATHS_ADV) && tags.includes(MATHS_STD);
-  const out = [];
-  const seen = new Set();
+// Labels for a REQUIREMENT LIST: the maths pair always becomes ONE entry
+// (you take one maths choice). Returns deduped label strings, order kept.
+function requirementLabels(tags, system, isQuant) {
+  const hasStd = tags.includes(MATHS_STD), hasAdv = tags.includes(MATHS_ADV);
+  const out = [], seen = new Set();
+  const add = l => { if (l && !seen.has(l)) { seen.add(l); out.push(l); } };
+  let mathsDone = false;
   for (const t of tags) {
-    if (collapse && t === MATHS_STD) continue;
-    const label = (collapse && t === MATHS_ADV) ? COLLAPSED_MATHS_LABEL : subjectTagLabel(t, system);
-    if (seen.has(label)) continue;
-    seen.add(label);
-    out.push({ tag: t, label });
+    if (t === MATHS_STD || t === MATHS_ADV) {
+      if (mathsDone) continue;
+      mathsDone = true;
+      if (hasStd && hasAdv && mathsAdvancedIsSeparate(system)) {
+        add(COLLAPSED_MATHS_LABEL);                               // "Mathematics (Advanced preferred)"
+      } else {
+        add(mathsSubjectName(hasAdv ? MATHS_ADV : MATHS_STD, system, isQuant));
+      }
+      continue;
+    }
+    add(subjectTagLabel(t, system, isQuant));
   }
   return out;
 }
 
-// Convenience: just the labels from normaliseSubjectsForDisplay.
-function normalisedSubjectLabels(tags, system) {
-  return normaliseSubjectsForDisplay(tags, system).map(e => e.label);
+// Labels for a COMBINATION: the maths pair stays two subjects only where
+// the system treats them as separate (UK); elsewhere it collapses to one
+// (so we never produce an impossible "same subject at two levels" combo).
+function comboLabels(combo, system, isQuant) {
+  const hasStd = combo.includes(MATHS_STD), hasAdv = combo.includes(MATHS_ADV);
+  const both = hasStd && hasAdv;
+  const out = [], seen = new Set();
+  const add = l => { if (l && !seen.has(l)) { seen.add(l); out.push(l); } };
+  let mathsDone = false;
+  for (const t of combo) {
+    if (t === MATHS_STD || t === MATHS_ADV) {
+      if (mathsDone) continue;
+      mathsDone = true;
+      if (both && mathsAdvancedIsSeparate(system)) {
+        add(mathsSubjectName(MATHS_STD, system, isQuant));
+        add(mathsSubjectName(MATHS_ADV, system, isQuant));
+      } else {
+        add(mathsSubjectName(both || hasAdv ? MATHS_ADV : MATHS_STD, system, isQuant));
+      }
+      continue;
+    }
+    add(subjectTagLabel(t, system, isQuant));
+  }
+  return out;
 }
 
-// For combination GENERATION: Advanced implies Standard, so a combo that
-// contains Advanced must also contain Standard (they read as "Maths +
-// Further Maths"), never just bare Advanced. Removes the redundant form.
+// For combination GENERATION: Advanced implies Standard in the matching
+// logic, so a combo containing Advanced also carries Standard.
 function normaliseComboTags(tags) {
   const out = [...tags];
   if (out.includes(MATHS_ADV) && !out.includes(MATHS_STD)) out.push(MATHS_STD);
   return [...new Set(out)];
 }
 
-// Count-aware collapse for the Subject Planner essential chips. Takes a
-// [tag, count][] list and fuses the maths pair into one entry (keeping
-// the higher count), labelled "Mathematics (Advanced preferred)".
-// Returns [{ tag, count, label }] (label null = use the normal name).
-function collapseEssentialChips(sortedTags) {
-  const hasAdv = sortedTags.some(([t]) => t === MATHS_ADV);
-  const hasStd = sortedTags.some(([t]) => t === MATHS_STD);
-  if (!(hasAdv && hasStd)) return sortedTags.map(([tag, count]) => ({ tag, count, label: null }));
-  const stdC = (sortedTags.find(([x]) => x === MATHS_STD) || [])[1] ?? 0;
-  const advC = (sortedTags.find(([x]) => x === MATHS_ADV) || [])[1] ?? 0;
-  const out = [];
-  let mathsDone = false;
-  for (const [tag, count] of sortedTags) {
-    if (tag === MATHS_STD || tag === MATHS_ADV) {
-      if (mathsDone) continue;
-      mathsDone = true;
-      out.push({ tag: MATHS_ADV, count: Math.max(stdC, advC), label: COLLAPSED_MATHS_LABEL });
-    } else {
-      out.push({ tag, count, label: null });
-    }
+/* ─── Field-level requirement aggregation ───────────────────────
+ * What a TYPICAL course in a field needs — not the union of every
+ * outlier. Maths (Standard/Advanced) is treated as ONE subject so its
+ * level split doesn't fragment the share. Returns tag lists.
+ *  core    – essential in a majority (>50%) of the field's courses
+ *  helpful – appears (essential or preferred) in >50%, not core
+ *  outliers- some courses have essential subjects outside the above
+ *  poolTags- the meaningful subjects, used to build combinations
+ * ─────────────────────────────────────────────────────────────── */
+function fieldSubjectTags(category) {
+  const cc = (typeof courses !== 'undefined' ? courses : []).filter(c => c.category === category);
+  const n = cc.length || 1;
+
+  const essCount = {}, anyCount = {};
+  let mathsEss = 0, mathsAny = 0, advEss = 0, advAny = 0;
+  cc.forEach(c => {
+    const ess = c.requirements?.essential ?? [];
+    const pref = c.requirements?.preferred ?? [];
+    const anyAll = [...ess, ...pref];
+    new Set(ess.filter(t => t !== MATHS_STD && t !== MATHS_ADV)).forEach(t => essCount[t] = (essCount[t] || 0) + 1);
+    new Set(anyAll.filter(t => t !== MATHS_STD && t !== MATHS_ADV)).forEach(t => anyCount[t] = (anyCount[t] || 0) + 1);
+    if (ess.includes(MATHS_STD) || ess.includes(MATHS_ADV)) mathsEss++;
+    if (anyAll.includes(MATHS_STD) || anyAll.includes(MATHS_ADV)) mathsAny++;
+    if (ess.includes(MATHS_ADV)) advEss++;
+    if (anyAll.includes(MATHS_ADV)) advAny++;
+  });
+
+  const core = [], helpful = [];
+  let outliers = false;
+
+  // Maths placement (collapsed across levels).
+  const mathsAdvanced = advEss / n > 0.7 || advAny / n > 0.5;
+  if (mathsEss / n > 0.5) {
+    core.push(MATHS_STD);
+    if (advEss / n > 0.7) core.push(MATHS_ADV);
+    else if (advAny / n > 0.5) helpful.push(MATHS_ADV);
+  } else if (mathsAny / n > 0.5) {
+    helpful.push(MATHS_STD);
+    if (advAny / n > 0.5) helpful.push(MATHS_ADV);
   }
-  return out;
+
+  // Non-maths subjects.
+  new Set([...Object.keys(essCount), ...Object.keys(anyCount)]).forEach(t => {
+    const essShare = (essCount[t] || 0) / n, anyShare = (anyCount[t] || 0) / n;
+    if (essShare > 0.5) core.push(t);
+    else if (anyShare > 0.5) helpful.push(t);
+    else if ((essCount[t] || 0) > 0) outliers = true;
+  });
+
+  const byCount = (a, b) => (anyCount[b] ?? 0) - (anyCount[a] ?? 0);
+  core.sort(byCount);
+  helpful.sort(byCount);
+  return { core, helpful, outliers, mathsAdvanced, poolTags: [...new Set([...core, ...helpful])] };
 }
 
 /* ─── Further Maths → Maths auto-imply ──────────────────────────
@@ -420,12 +511,15 @@ let _subjectDebounce = null;
 function fieldEmptySuggestions(category, system) {
   const combos = FIELD_COMBO_TAGS[category];
   if (!combos || !system) return null;
+  const isQuant = isQuantitativeCategory(category);
   const rmap = getReverseMap(system);
   const seen = new Set();
   const out = [];
   for (const tags of combos) {
     if (!tags.every(t => rmap[t]?.length)) continue;       // every subject must exist here
-    const subjects = tags.map(t => tagToLocal(t, system));
+    // System/quant-aware labels (rigorous maths; one maths entry where
+    // the system has levels rather than a separate Further Maths subject).
+    const subjects = comboLabels(tags, system, isQuant);
     const key = [...subjects].sort().join('|');
     if (seen.has(key)) continue;                            // dedupe identical sets
     seen.add(key);
@@ -1824,8 +1918,9 @@ function buildCheckCard(course, result) {
   // Admission tests
   const tests = Array.isArray(course.admissionTests) ? course.admissionTests : [];
 
+  const isQuant = isQuantitativeCategory(course.category);
   const missingTagsHtml = tags =>
-    normalisedSubjectLabels(tags, sys).map(l => `<span class="missing-tag">${esc(l)}</span>`).join(', ');
+    requirementLabels(tags, sys, isQuant).map(l => `<span class="missing-tag">${esc(l)}</span>`).join(', ');
 
   let footerHtml = '';
   if (status === 'red' && missingEssential.length) {
@@ -1835,7 +1930,7 @@ function buildCheckCard(course, result) {
         ${missingTagsHtml(missingEssential)}
       </p>`;
   } else if (status === 'amber' && missingPreferred.length) {
-    const topSubject = subjectTagLabel(missingPreferred[0], sys);
+    const topSubject = subjectTagLabel(missingPreferred[0], sys, isQuant);
     const extras     = missingPreferred.length > 1
       ? ` <span style="color:var(--text-faint);font-weight:400"> + ${missingPreferred.length - 1} more</span>`
       : '';
@@ -2025,9 +2120,10 @@ function buildReverseCard(course) {
   const country = COUNTRY_LABELS[course.country] ?? course.country;
   const { essential = [], preferred = [], useful = [] } = course.requirements;
 
+  const isQuant = isQuantitativeCategory(course.category);
   const tagPills = tags => {
     if (!tags.length) return '<span class="text-secondary" style="font-size:13px">None specified</span>';
-    return normalisedSubjectLabels(tags, sys).map(l => `<span class="subject-tag">${esc(l)}</span>`).join('');
+    return requirementLabels(tags, sys, isQuant).map(l => `<span class="subject-tag">${esc(l)}</span>`).join('');
   };
 
   const rows = [
@@ -2104,7 +2200,7 @@ function buildReverseCard(course) {
 function buildRequirementsText(course) {
   const sys     = state.reverseSystem;
   const country = COUNTRY_LABELS[course.country] ?? course.country;
-  const fmt     = tags => normalisedSubjectLabels(tags, sys).join(', ');
+  const fmt     = tags => requirementLabels(tags, sys, isQuantitativeCategory(course.category)).join(', ');
   const { essential = [], preferred = [], useful = [] } = course.requirements;
 
   const lines = [
@@ -2177,11 +2273,11 @@ function rankCategoryCombinations(category, limit = 5) {
   const catCourses = courses.filter(c => c.category === category);
   if (!catCourses.length) return [];
 
-  const tagFreq = {};
-  catCourses.forEach(c =>
-    (c.requirements.essential ?? []).forEach(t => { tagFreq[t] = (tagFreq[t] ?? 0) + 1; })
-  );
-  const topTags = Object.entries(tagFreq).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([t]) => t);
+  // Build combos only from the field's MEANINGFUL subjects (core +
+  // helpful), so outlier requirements (e.g. Biology for general
+  // Engineering) never form a recommended combination.
+  const topTags = fieldSubjectTags(category).poolTags.slice(0, 6);
+  if (!topTags.length) return [];
 
   // Generate candidate combos of 2–3 subjects, normalise the maths pair
   // (Advanced implies Standard, so "Further Maths" reads as "Maths +
@@ -2227,8 +2323,24 @@ function rankCategoryCombinations(category, limit = 5) {
   const order = t => t === MATHS_STD ? 0 : t === MATHS_ADV ? 1 : 2;
   return kept
     .sort((a, b) => b.green - a.green || b.amber - a.amber)
-    .slice(0, limit)
-    .map(({ tags, green, amber }) => ({ combo: [...tags].sort((x, y) => order(x) - order(y)), green, amber }));
+    .map(({ tags, green, amber }) => ({ combo: [...tags].sort((x, y) => order(x) - order(y)), green, amber }))
+    .slice(0, limit);
+}
+
+// Dedupe ranked combos by how they DISPLAY in a given system — e.g. in
+// AP/SG the standard and advanced maths resolve to the same subject, so
+// two tag-combos can render identically; keep the strongest of each.
+function combosForDisplay(category, system, isQuant, limit) {
+  const seen = new Set();
+  const out = [];
+  for (const c of rankCategoryCombinations(category, 16)) {
+    const key = comboLabels(c.combo, system, isQuant).join(' + ');
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(c);
+    if (out.length >= limit) break;
+  }
+  return out;
 }
 
 function renderPlanResults() {
@@ -2260,26 +2372,47 @@ function renderPlanResults() {
     });
   }
 
-  if (sortedTags.length === 0) {
+  // Field-level requirements: what a MAJORITY of courses need (maths
+  // collapsed across levels), with system + quant-aware labels.
+  const isQuant = isQuantitativeCategory(state.planCategory);
+  const ft = fieldSubjectTags(state.planCategory);
+  const essCount = {};
+  catCourses.forEach(c => new Set(c.requirements.essential ?? []).forEach(t => { essCount[t] = (essCount[t] ?? 0) + 1; }));
+  const mathsEssN = catCourses.filter(c => (c.requirements.essential ?? []).some(t => t === MATHS_STD || t === MATHS_ADV)).length;
+
+  if (ft.core.length === 0) {
     $('planEssentials').innerHTML = `
       <h3 class="plan-section-head">Essential subjects</h3>
       <p class="plan-section-sub">No specific subject requirements — ${esc(catLabel)} courses are broadly open.</p>`;
   } else {
-    const chipsHtml = collapseEssentialChips(sortedTags).map(({ tag, count, label }) => {
-      const hlBadge = ibHLTagsForCategory.has(tag)
-        ? `<span class="plan-subject-chip__hl">HL</span>`
-        : '';
-      const name = label ?? tagToLocal(tag, state.planSystem);
+    const entries = [];
+    let mathsDone = false;
+    ft.core.forEach(t => {
+      if (t === MATHS_STD || t === MATHS_ADV) {
+        if (mathsDone) return;
+        mathsDone = true;
+        const label = requirementLabels(ft.core.filter(x => x === MATHS_STD || x === MATHS_ADV), state.planSystem, isQuant)[0];
+        entries.push({ tag: t, label, count: mathsEssN });
+      } else {
+        entries.push({ tag: t, label: subjectTagLabel(t, state.planSystem, isQuant), count: essCount[t] ?? 0 });
+      }
+    });
+    const chipsHtml = entries.map(({ tag, label, count }) => {
+      const hlBadge = ibHLTagsForCategory.has(tag) ? `<span class="plan-subject-chip__hl">HL</span>` : '';
       return `
       <div class="plan-subject-chip">
-        <span class="plan-subject-chip__name">${esc(name)}${hlBadge}</span>
+        <span class="plan-subject-chip__name">${esc(label)}${hlBadge}</span>
         <span class="plan-subject-chip__count">unlocks ${count} course${count !== 1 ? 's' : ''}</span>
       </div>`;
     }).join('');
+    const note = ft.outliers
+      ? `<p class="plan-section-sub plan-section-note">Some specialised courses (e.g. niche or interdisciplinary degrees) have different requirements — check individual courses.</p>`
+      : '';
     $('planEssentials').innerHTML = `
       <h3 class="plan-section-head">Essential subjects</h3>
-      <p class="plan-section-sub">Subjects that appear as required across ${esc(catLabel)} courses in our database.</p>
+      <p class="plan-section-sub">Subjects that a majority of ${esc(catLabel)} courses require.</p>
       <div class="plan-essentials-grid">${chipsHtml}</div>
+      ${note}
     `;
   }
 
@@ -2303,7 +2436,7 @@ function renderPlanResults() {
   if (validPairs.length > 0) {
     const pairsHtml = validPairs.map(pair =>
       `<div class="plan-subject-chip" style="background: var(--color-cat-cs-bg); border-color: var(--color-cat-cs);">
-         <span class="plan-subject-chip__name">${pair.map(t => esc(subjectTagLabel(t, state.planSystem))).join(' + ')}</span>
+         <span class="plan-subject-chip__name">${esc(comboLabels(pair, state.planSystem, isQuant).join(' + '))}</span>
          <span class="plan-subject-chip__count">required together for most courses</span>
        </div>`
     ).join('');
@@ -2317,13 +2450,13 @@ function renderPlanResults() {
   }
 
   /* ── Section B: top subject combinations ── */
-  const top5 = rankCategoryCombinations(state.planCategory, 5);
+  const top5 = combosForDisplay(state.planCategory, state.planSystem, isQuant, 5);
 
   if (top5.length === 0) {
     $('planCombinations').innerHTML = '';
   } else {
     const rowsHtml = top5.map(({ combo, green, amber }) => {
-      const tags = combo.map(t => `<span class="plan-combo-tag">${esc(subjectTagLabel(t, state.planSystem))}</span>`).join('');
+      const tags = comboLabels(combo, state.planSystem, isQuant).map(l => `<span class="plan-combo-tag">${esc(l)}</span>`).join('');
       return `
         <div class="plan-combo-row" tabindex="0" role="button"
              aria-label="Apply this subject combination in Check Combination mode"
@@ -2627,32 +2760,28 @@ function renderFieldOverview(fieldId) {
 
   const cat        = f.category;
   const sys        = state.checkSystem;            // may be '' → generic terms
+  const isQuant    = isQuantitativeCategory(cat);
   const catCourses = courses.filter(c => c.category === cat);
 
-  // ── Subjects: essential + preferred tags, by frequency ──────────
-  const essFreq = {}, prefFreq = {};
-  catCourses.forEach(c => {
-    (c.requirements.essential ?? []).forEach(t => { essFreq[t] = (essFreq[t] ?? 0) + 1; });
-    (c.requirements.preferred ?? []).forEach(t => { prefFreq[t] = (prefFreq[t] ?? 0) + 1; });
-  });
-  const essential = Object.entries(essFreq).sort((a, b) => b[1] - a[1]).map(([t]) => t).slice(0, 6);
-  const preferred = Object.entries(prefFreq).sort((a, b) => b[1] - a[1])
-    .map(([t]) => t).filter(t => !essFreq[t]).slice(0, 6);
-
-  // Collapse the Advanced/Standard maths pair before rendering each list.
-  const chips = tags => {
-    const labels = normalisedSubjectLabels(tags, sys);
-    return labels.length
-      ? `<div class="fo-chips">${labels.map(l => `<span class="fo-chip">${esc(l)}</span>`).join('')}</div>`
-      : `<p class="fo-muted">No specific subjects — courses here are broadly open.</p>`;
-  };
+  // ── Subjects this field needs — what a MAJORITY of courses require,
+  //    not the union of outliers; maths collapsed; system/quant labels.
+  const ft = fieldSubjectTags(cat);
+  const helpfulTags = ft.helpful.filter(t => !ft.core.includes(t));
+  const coreLabels    = requirementLabels(ft.core, sys, isQuant);
+  const helpfulLabels = requirementLabels(helpfulTags, sys, isQuant).filter(l => !coreLabels.includes(l));
+  const chipsFrom = labels => labels.length
+    ? `<div class="fo-chips">${labels.map(l => `<span class="fo-chip">${esc(l)}</span>`).join('')}</div>`
+    : `<p class="fo-muted">No specific subjects — courses here are broadly open.</p>`;
+  const outlierNote = ft.outliers
+    ? `<p class="fo-muted fo-muted--hint">Some specialised courses (e.g. interdisciplinary or niche degrees) have different requirements — check individual courses.</p>`
+    : '';
 
   // ── Strong combinations (reused planner ranking) ────────────────
-  const combos = rankCategoryCombinations(cat, 3);
+  const combos = combosForDisplay(cat, sys, isQuant, 3);
   const combosHtml = combos.length
     ? combos.map(({ combo, green, amber }) => `
         <div class="fo-combo">
-          <span class="fo-combo__subjects">${combo.map(t => `<span class="fo-chip fo-chip--accent">${esc(subjectTagLabel(t, sys))}</span>`).join('')}</span>
+          <span class="fo-combo__subjects">${comboLabels(combo, sys, isQuant).map(l => `<span class="fo-chip fo-chip--accent">${esc(l)}</span>`).join('')}</span>
           <span class="fo-combo__count">opens ${green + amber} course${green + amber === 1 ? '' : 's'}</span>
         </div>`).join('')
     : `<p class="fo-muted">No standout combinations — most courses here are flexible on subjects.</p>`;
@@ -2708,13 +2837,14 @@ function renderFieldOverview(fieldId) {
         <div class="fo-subjects">
           <div>
             <span class="fo-label">Usually required</span>
-            ${chips(essential)}
+            ${chipsFrom(coreLabels)}
           </div>
           <div>
             <span class="fo-label">Helpful, not always required</span>
-            ${chips(preferred)}
+            ${chipsFrom(helpfulLabels)}
           </div>
         </div>
+        ${outlierNote}
         ${sys ? '' : `<p class="fo-muted fo-muted--hint">Pick a qualification system in Check Combination to see these in your own subjects.</p>`}
       </section>
 
