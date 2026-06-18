@@ -546,6 +546,12 @@ main     { flex: 1; padding: var(--pad); }
 }
 .shortlist-insights__list strong { color: var(--color-text-primary); }
 .shortlist-insight-label { color: var(--color-text-secondary); }
+.shortlist-grade-rows {
+  list-style: none;
+  margin: var(--space-1) 0 0;
+  padding: 0 0 0 var(--space-3);
+}
+.shortlist-grade-rows li { font-size: var(--text-sm); }
 .shortlist-insight-tag {
   display: inline-block;
   padding: 2px 9px;
@@ -1974,6 +1980,7 @@ body:not(.demo-enabled) .demo-only { display: none !important; }
 .card-status--green { color: var(--color-match-strong); }
 .card-status--amber { color: var(--color-match-possible); }
 .card-status--red   { color: var(--color-match-reach); }
+.card-status--none  { color: var(--color-text-tertiary); text-transform: none; letter-spacing: 0; font-weight: 500; }
 
 .card-header {
   display: flex; align-items: flex-start;

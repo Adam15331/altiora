@@ -1249,6 +1249,21 @@ function exportShortlistToCSV() {
   logEvent('shortlist_export_csv', { count: saved.length });
 }
 
+// Pure tag derivation from the saved profile (subjects + system). Unlike
+// deriveTagsFromSubjects it has NO side effects, so it's safe to call when
+// rendering the shortlist without disturbing live Check Combination state.
+function tagsFromProfile() {
+  const tags = new Set();
+  if (typeof AltioraState === 'undefined') return tags;
+  const p = AltioraState.getProfile();
+  const forward = qualificationMappings[p.qualificationSystem]?.subjects ?? {};
+  (Array.isArray(p.subjects) ? p.subjects : []).forEach(name => {
+    const t = forward[name];
+    if (t) tags.add(t);
+  });
+  return tags;
+}
+
 function renderShortlist() {
   const panel = $('panel-shortlist');
   if (!panel) return;
@@ -1274,6 +1289,14 @@ function renderShortlist() {
     + `<div id="shortlistGroups"></div>`;
   panel.querySelector('#exportCsvBtn')?.addEventListener('click', exportShortlistToCSV);
 
+  // Student's subject tags for the match badge: prefer the live Check
+  // Combination selection, else fall back to the saved profile (pure
+  // derivation — never touches the live selectedSubjectsWithLevel state).
+  const studentTags = (state.selectedTags && state.selectedTags.size)
+    ? state.selectedTags
+    : tagsFromProfile();
+  const hasSubjects = studentTags.size > 0;
+
   // Group saved courses by country, sorted by country label then university.
   const byCountry = {};
   saved.forEach(c => (byCountry[c.country] ||= []).push(c));
@@ -1291,7 +1314,7 @@ function renderShortlist() {
     group.appendChild(header);
     const grid = document.createElement('div');
     grid.className = 'results-group__grid';
-    list.forEach(c => grid.appendChild(buildShortlistCard(c)));
+    list.forEach(c => grid.appendChild(buildShortlistCard(c, studentTags, hasSubjects)));
     group.appendChild(grid);
     wrap.appendChild(group);
   });
@@ -1301,14 +1324,32 @@ function renderShortlist() {
 function buildShortlistInsightsHtml(saved) {
   const unis      = new Set(saved.map(c => c.university));
   const countries = new Set(saved.map(c => c.country));
-  const tests     = new Set();
-  saved.forEach(c => (Array.isArray(c.admissionTests) ? c.admissionTests : []).forEach(t => tests.add(t)));
-  const gradeRange = shortlistGradeRange(saved);
+  const plural    = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
-  const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
-  const testsHtml = tests.size
-    ? [...tests].sort().map(t => `<span class="shortlist-insight-tag">${esc(t)}</span>`).join(' ')
+  // Admission tests with per-test course counts (not blindly deduplicated),
+  // most-required first.
+  const testCounts = {};
+  saved.forEach(c => (Array.isArray(c.admissionTests) ? c.admissionTests : [])
+    .forEach(t => { testCounts[t] = (testCounts[t] ?? 0) + 1; }));
+  const testEntries = Object.entries(testCounts)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  const testsHtml = testEntries.length
+    ? testEntries.map(([t, n]) =>
+        `<span class="shortlist-insight-tag">${esc(t)} (${n} course${n === 1 ? '' : 's'})</span>`).join(' ')
     : `<span class="text-secondary">None across your saved courses</span>`;
+
+  // Grade ranges computed per qualification system (mixed systems → one row each).
+  const gradeRows = shortlistGradeRange(saved);
+  let gradeHtml = '';
+  if (gradeRows.length === 1) {
+    const r = gradeRows[0];
+    gradeHtml = `<li><span class="shortlist-insight-label">Grade range:</span> <strong>${esc(r.label)}: ${esc(r.range)}</strong></li>`;
+  } else if (gradeRows.length > 1) {
+    gradeHtml = `<li><span class="shortlist-insight-label">Grade ranges:</span>
+        <ul class="shortlist-grade-rows">
+          ${gradeRows.map(r => `<li><strong>${esc(r.label)}:</strong> ${esc(r.range)}</li>`).join('')}
+        </ul></li>`;
+  }
 
   return `
     <div class="shortlist-insights">
@@ -1318,27 +1359,47 @@ function buildShortlistInsightsHtml(saved) {
             <strong>${plural(unis.size, 'university', 'universities')}</strong> in
             <strong>${plural(countries.size, 'country', 'countries')}</strong></li>
         <li><span class="shortlist-insight-label">Admission tests you'll need:</span> ${testsHtml}</li>
-        ${gradeRange ? `<li><span class="shortlist-insight-label">Grade range:</span> <strong>${esc(gradeRange)}</strong></li>` : ''}
+        ${gradeHtml}
       </ul>
     </div>`;
 }
 
-// Expresses the requirement spread across saved courses. IB points are
-// numeric and span all countries, so they are the primary scale; UK
-// A-Level offers are a fallback when no saved course lists IB points.
+// Grade spread across saved courses, computed SEPARATELY per qualification
+// system so mixed shortlists report e.g. "IB: 38–40" and "A-Level: A*AA–AAA"
+// rather than collapsing systems into one misleading range. Returns an array
+// of { label, range }, one entry per system that has data.
 function shortlistGradeRange(saved) {
-  const ibPts = saved.map(c => c.grades?.ib).filter(v => typeof v === 'number' && !isNaN(v));
-  if (ibPts.length) {
-    const lo = Math.min(...ibPts), hi = Math.max(...ibPts);
-    return lo === hi ? `${lo} IB points` : `${lo}–${hi} IB points`;
+  const rows = [];
+
+  // IB — numeric points.
+  const ib = saved.map(c => c.grades?.ib).filter(v => typeof v === 'number' && !isNaN(v));
+  if (ib.length) {
+    const lo = Math.min(...ib), hi = Math.max(...ib);
+    rows.push({ label: 'IB', range: lo === hi ? `${lo} points` : `${lo}–${hi} points` });
   }
-  const offers = saved.map(c => c.grades?.aLevels).filter(Boolean);
-  if (offers.length) {
-    const ranked = offers.slice().sort((a, b) => aLevelOfferStrength(a) - aLevelOfferStrength(b));
-    const lo = ranked[0], hi = ranked[ranked.length - 1];
-    return lo === hi ? `${lo} (A-Level)` : `${lo} to ${hi} (A-Level)`;
+
+  // Letter-grade offers (A-Level & Singapore A-Level share the same format),
+  // ranked by offer strength.
+  for (const [key, label] of [['aLevels', 'A-Level'], ['sgALevels', 'Singapore A-Level']]) {
+    const offers = saved.map(c => c.grades?.[key]).filter(Boolean);
+    if (offers.length) {
+      // Strongest offer first, e.g. "A*AA–AAA".
+      const ranked = offers.slice().sort((a, b) => aLevelOfferStrength(b) - aLevelOfferStrength(a));
+      const strongest = ranked[0], weakest = ranked[ranked.length - 1];
+      rows.push({ label, range: strongest === weakest ? strongest : `${strongest}–${weakest}` });
+    }
   }
-  return null;
+
+  // HK DSE / AP — list the distinct spread (no reliable cross-grade ranking).
+  for (const [key, label] of [['hkDse', 'HK DSE'], ['ap', 'AP']]) {
+    const vals = saved.map(c => c.grades?.[key]).filter(Boolean);
+    if (vals.length) {
+      const uniq = [...new Set(vals)].sort();
+      rows.push({ label, range: uniq.length === 1 ? uniq[0] : `${uniq[0]}–${uniq[uniq.length - 1]}` });
+    }
+  }
+
+  return rows;
 }
 
 // Total rank of the top three A-Level grades, for ordering offers.
@@ -1347,20 +1408,32 @@ function aLevelOfferStrength(str) {
     .reduce((sum, g) => sum + (A_LEVEL_RANK[g] ?? 0), 0);
 }
 
-// A saved-course card: same visual system and info as a result card,
-// with a Remove action instead of a match-status pill.
-function buildShortlistCard(course) {
+// A saved-course card: same visual system and info as a result card, plus a
+// GREEN/AMBER/RED match badge (target / possible / stretch) and a Remove
+// action. The badge needs the student's subjects; when none are known it
+// shows a neutral prompt rather than a misleading status.
+function buildShortlistCard(course, studentTags, hasSubjects) {
   const flag      = COUNTRY_FLAGS[course.country] ?? '';
   const country   = COUNTRY_LABELS[course.country] ?? course.country;
   const catLabel  = CATEGORY_LABEL_MAP[course.category] ?? course.category;
   const tierLabel = course.universityContext?.tier ? (TIER_LABELS[course.universityContext.tier] ?? null) : null;
   const tests     = Array.isArray(course.admissionTests) ? course.admissionTests : [];
 
+  let badgeHtml;
+  if (hasSubjects) {
+    const { status } = classify(course, studentTags);
+    const cfg = STATUS[status];
+    badgeHtml = `<div class="card-status card-status--${status}">${cfg.icon} ${esc(cfg.label)}</div>`;
+  } else {
+    badgeHtml = `<div class="card-status card-status--none">Pick your subjects to see your match</div>`;
+  }
+
   const card = document.createElement('div');
   card.className = 'course-card course-card--saved';
   card.setAttribute('role', 'listitem');
   card.dataset.category = course.category ?? '';
   card.innerHTML = `
+    ${badgeHtml}
     <div class="card-header">
       <div class="card-title-group">
         <span class="card-flag" aria-hidden="true">${flag}</span>
