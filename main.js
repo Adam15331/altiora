@@ -2409,31 +2409,89 @@ function buildReverseCard(course) {
 
   wireSaveButton(card);
 
-  // Copy-to-clipboard handler — timerId is scoped per card instance
+  // Copy-to-clipboard handler — timerId is scoped per card instance.
   let copyTimerId = null;
   card.querySelector('.copy-btn').addEventListener('click', e => {
     e.stopPropagation();
     const btn = e.currentTarget;
     if (btn.classList.contains('copying')) return;
     btn.classList.add('copying');
-    navigator.clipboard.writeText(buildRequirementsText(course))
-      .then(() => {
-        btn.textContent = '✓  Copied!';
-        btn.classList.add('copy-btn--done');
-        showToast('Requirements copied to clipboard');
-        clearTimeout(copyTimerId);
-        copyTimerId = setTimeout(() => {
-          btn.innerHTML = '⎘&ensp;Copy requirements';
-          btn.classList.remove('copy-btn--done', 'copying');
-        }, 2200);
-      })
-      .catch(() => {
-        btn.classList.remove('copying');
-        showToast('Copy failed — try selecting the text manually');
-      });
+    const text = buildRequirementsText(course);
+
+    const onSuccess = () => {
+      card.querySelector('.copy-fallback')?.classList.add('hidden');
+      btn.textContent = '✓  Copied!';
+      btn.classList.add('copy-btn--done');
+      showToast('Requirements copied to clipboard');
+      clearTimeout(copyTimerId);
+      copyTimerId = setTimeout(() => {
+        btn.innerHTML = '⎘&ensp;Copy requirements';
+        btn.classList.remove('copy-btn--done', 'copying');
+      }, 2200);
+    };
+
+    const onFailure = () => {
+      // Try the legacy execCommand path; if that also fails, surface a
+      // pre-selected textarea so the user can copy manually with Ctrl/⌘+C.
+      if (legacyCopyText(text)) { onSuccess(); return; }
+      btn.classList.remove('copying');
+      showManualCopyBox(card, text);
+      showToast('Couldn’t copy automatically — the text is selected below, press Ctrl+C (⌘C on Mac).');
+    };
+
+    // navigator.clipboard can be undefined (insecure context / old browsers),
+    // in which case the call throws synchronously rather than rejecting.
+    try {
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text).then(onSuccess).catch(onFailure);
+      } else {
+        onFailure();
+      }
+    } catch (_) {
+      onFailure();
+    }
   });
 
   return card;
+}
+
+// Legacy clipboard path for browsers/contexts where the async Clipboard API is
+// unavailable or blocked. Returns true on success.
+function legacyCopyText(text) {
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '0';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  } catch (_) {
+    return false;
+  }
+}
+
+// Last-resort fallback: reveal a read-only textarea pre-filled and selected so
+// the user can copy manually. Reused (one per card) across repeated clicks.
+function showManualCopyBox(card, text) {
+  let box = card.querySelector('.copy-fallback');
+  if (!box) {
+    box = document.createElement('textarea');
+    box.className = 'copy-fallback';
+    box.setAttribute('readonly', '');
+    box.setAttribute('aria-label', 'Course requirements — select all and copy');
+    box.rows = 5;
+    card.querySelector('.reverse-card-footer').after(box);
+  }
+  box.value = text;
+  box.classList.remove('hidden');
+  box.focus();
+  box.select();
 }
 
 /**
@@ -2446,11 +2504,17 @@ function buildRequirementsText(course) {
   const fmt     = tags => requirementLabels(tags, sys, isQuantitativeCategory(course.category)).join(', ');
   const { essential = [], preferred = [], useful = [] } = course.requirements;
 
+  // US admissions is holistic — there are no hard subject requirements, so
+  // label the essential line accordingly instead of the misleading "Required".
+  const essentialLabel = course.country === 'US'
+    ? 'Recommended for competitive applicants:'
+    : 'Required:';
+
   const lines = [
     `${course.name}`,
     `${course.university} · ${country} · ${course.degreeLevel}`,
     '',
-    `Required:  ${essential.length  ? fmt(essential)  : 'None specified'}`,
+    `${essentialLabel} ${essential.length ? fmt(essential) : 'None specified'}`,
     ...(preferred.length ? [`Preferred: ${fmt(preferred)}`] : []),
     ...(useful.length    ? [`Useful:    ${fmt(useful)}`]    : []),
     ...(course.notes     ? ['', `Notes: ${course.notes}`]   : []),
