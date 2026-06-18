@@ -2823,7 +2823,13 @@ function switchToPlanCombo(tags, systemKey) {
   $('checkSystemSelect').value = systemKey;
   buildSubjectPicker(systemKey);
 
-  const targetNames = new Set(tags.map(t => tagToLocal(t, systemKey)));
+  // Tick the exact subjects the planner DISPLAYED, via the shared comboLabels
+  // logic — never one tag at a time. This keeps the selection consistent with
+  // the combo shown and resolves maths correctly per system: one rigorous maths
+  // for level-based systems (e.g. IB AA HL, not SL+HL or the applied variant;
+  // SG H2, not H1+H2), and Maths + Further Maths only where genuinely separate.
+  const isQuant = isQuantitativeCategory(state.planCategory);
+  const targetNames = new Set(comboLabels(tags, systemKey, isQuant));
   $$('#subjectPicker input[type="checkbox"]').forEach(cb => {
     if (targetNames.has(cb.value)) cb.checked = true;
   });
