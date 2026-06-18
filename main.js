@@ -472,11 +472,6 @@ const IB_MUTUAL_EXCLUSION_GROUPS = [
   { label: 'Physics',   subjects: ['Physics HL',   'Physics SL']   },
 ];
 
-// True when the user explicitly chose "Skip" on the grade selector, or
-// cleared a grade they previously entered — suppresses the grade banner.
-// Cleared on system change so a fresh context prompts again.
-let gradeInputDismissed = false;
-
 // Mirror of profile.gradesExplicitlySkipped — the student confirmed via the
 // checkbox that they don't have predicted grades yet, so subject-only matching
 // is allowed even in the building/applying stages. Loaded from the persisted
@@ -760,14 +755,12 @@ function buildGradeInput(systemKey) {
       $('gradeInputIB').addEventListener('input', e => {
         const v = parseInt(e.target.value, 10);
         state.predictedGrade = (!isNaN(v) && v >= 24 && v <= 45) ? String(v) : null;
-        gradeInputDismissed  = false; // actively entering — reset dismissal
         if (state.predictedGrade) clearGradeSkip(); // entering a grade clears the skip flag
         $('clearGradeBtn').classList.toggle('hidden', !state.predictedGrade);
         renderCheckResults();
       });
       $('clearGradeBtn').addEventListener('click', () => {
         state.predictedGrade = null;
-        gradeInputDismissed  = true; // seen/used grade input — don't nag again
         $('gradeInputIB').value = '';
         clearGradeSkip();
         $('clearGradeBtn').classList.add('hidden');
@@ -841,14 +834,12 @@ function wireSelectGrade(selectId) {
   const sel = $(selectId);
   sel.addEventListener('change', e => {
     state.predictedGrade  = e.target.value || null;
-    gradeInputDismissed   = !e.target.value; // Skip = dismissed; grade chosen = not dismissed
     if (state.predictedGrade) clearGradeSkip(); // entering a grade clears the skip flag
     $('clearGradeBtn').classList.toggle('hidden', !state.predictedGrade);
     renderCheckResults();
   });
   $('clearGradeBtn').addEventListener('click', () => {
     state.predictedGrade = null;
-    gradeInputDismissed  = true; // user has seen/used grade input — don't nag again
     sel.value = '';
     clearGradeSkip();
     $('clearGradeBtn').classList.add('hidden');
@@ -857,11 +848,22 @@ function wireSelectGrade(selectId) {
 }
 
 // Wire the "I don't have predicted grades yet" checkbox (building/applying only).
+// Skip and an entered grade are mutually exclusive: ticking skip wipes any
+// grade the student had entered.
 function wireGradeSkipCheck() {
   const cb = $('gradeSkipCheck');
   if (!cb) return;
   cb.addEventListener('change', e => {
     gradesExplicitlySkipped = e.target.checked;
+    if (e.target.checked) {
+      // Mutually exclusive with an entered grade — clear the input + value.
+      state.predictedGrade = null;
+      const field = document.querySelector(
+        '#gradeInputSection select.grade-select, #gradeInputSection input.grade-number-input'
+      );
+      if (field) field.value = '';
+      $('clearGradeBtn')?.classList.add('hidden');
+    }
     if (typeof AltioraState !== 'undefined') {
       AltioraState.setProfile({ gradesExplicitlySkipped });
     }
@@ -1607,7 +1609,6 @@ function buildSubjectPicker(systemKey) {
 
   // Reset category state when the system changes.
   selectedSubjectsWithLevel.clear();
-  gradeInputDismissed = false;
   hideMathsWarningBanner();
   state.selectedCategories.clear();
   $$('#categoryPicker .category-chip').forEach(b => b.classList.remove('active'));
@@ -1878,16 +1879,12 @@ function renderCheckResults() {
   const minNeeded = MIN_SUBJECTS[state.checkSystem] ?? 3;
   const tooFew    = state.selectedSubjects.length < minNeeded;
 
-  // Stage-aware grade requirement. GREEN matches are allowed when the student
-  // has entered a grade, has explicitly confirmed they have none yet, OR is in
-  // a stage where grades aren't yet relevant (exploring/choosing). Only in the
-  // building/applying stages, with no grade and no skip confirmation, do we
-  // warn and demote GREEN → AMBER.
-  const profile            = (typeof AltioraState !== 'undefined') ? AltioraState.getProfile() : {};
-  const stage              = profile.stage || DEFAULT_STAGE;
-  const stageRequiresGrade = (stage === 'building' || stage === 'applying');
-  const allowGreen         = !!state.predictedGrade || gradesExplicitlySkipped === true || !stageRequiresGrade;
-  const noGrade            = !allowGreen;
+  // Grades never affect the subject-based match status: strong subjects always
+  // show GREEN. When no grade is entered we surface a purely informational
+  // banner so students know grade-based filtering is available, but the status
+  // is left untouched. (A grade, once entered, still greys out courses whose
+  // typical offer is above the student — see isGradeAboveStudent below.)
+  const noGradeYet = !state.predictedGrade && gradesExplicitlySkipped !== true;
 
   // Remove any existing banners before re-rendering
   section.querySelectorAll('.subject-count-warning, .grade-missing-banner').forEach(el => el.remove());
@@ -1901,10 +1898,10 @@ function renderCheckResults() {
     $('summaryBar').before(warn);
   }
 
-  if (noGrade) {
+  if (noGradeYet) {
     const banner = document.createElement('p');
-    banner.className = 'grade-missing-banner';
-    banner.textContent = `⚠️ You haven't entered your predicted grades. Strong matches are shown as possible matches until you do. Enter your grades above for accurate matching, or tick "I don't have predicted grades yet" to continue with subject-only matching.`;
+    banner.className = 'grade-missing-banner grade-missing-banner--info';
+    banner.textContent = 'ℹ️ Enter predicted grades to see grade-based filtering.';
     $('summaryBar').before(banner);
   }
 
@@ -1915,8 +1912,7 @@ function renderCheckResults() {
   const byStatus = { green: [], amber: [], grey: [], red: [] };
   pool.forEach(course => {
     const result = classify(course, state.selectedTags);
-    if (tooFew  && result.status === 'green') result.status = 'amber';
-    if (noGrade && result.status === 'green') result.status = 'amber';
+    if (tooFew && result.status === 'green') result.status = 'amber';
     if (state.predictedGrade && (result.status === 'green' || result.status === 'amber')) {
       if (isGradeAboveStudent(course, state.checkSystem, state.predictedGrade)) result.status = 'grey';
     }
@@ -1975,8 +1971,7 @@ function renderCheckResults() {
     cardIndex += byStatus.green.length;
   }
   if (byStatus.amber.length) {
-    const amberLabel = noGrade ? 'Subject matches — enter grades to see strong matches' : 'Possible';
-    container.appendChild(buildGroup('amber', amberLabel, byStatus.amber, cardIndex));
+    container.appendChild(buildGroup('amber', 'Possible', byStatus.amber, cardIndex));
     cardIndex += byStatus.amber.length;
   }
   if (byStatus.grey.length) {
