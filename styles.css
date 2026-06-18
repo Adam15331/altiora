@@ -869,6 +869,32 @@ body:not(.demo-enabled) .demo-only { display: none !important; }
 }
 .explore-context__about:hover { opacity: .8; }
 
+/* Prominent "pick a system" prompt (no saved system, e.g. from Field Overview) */
+.system-prompt {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-match-possible-bg);
+  border: 1px solid var(--color-match-possible);
+  border-left: 3px solid var(--color-match-possible);
+  border-radius: var(--radius-md);
+}
+.system-prompt__icon {
+  font-size: var(--text-lg);
+  color: var(--color-match-possible);
+  flex-shrink: 0;
+}
+.system-prompt__text {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-match-possible);
+  line-height: 1.5;
+}
+.system-prompt__text strong { font-weight: 700; }
+
 /* ═══════════════════════════════════════════════════════════════
  * Field Overview — "What [Field] needs" orientation screen.
  * The field's category accent is passed in via --fo-accent /

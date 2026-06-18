@@ -3134,6 +3134,46 @@ function renderFieldOverview(fieldId) {
 
 // Action fork → Check Combination, with the field filter active and no
 // country assumption. The exploring → building step of the funnel.
+// Set the active qualification system for Check Combination and rebuild the
+// dependent UI. Shared by the system dropdown and by flows that auto-select a
+// system (e.g. arriving from Field Overview). buildSubjectPicker re-applies any
+// active field filter, so the exploration context is preserved.
+function selectSystemForCheck(systemKey) {
+  state.checkSystem      = systemKey;
+  state.selectedSubjects = [];
+  state.selectedTags     = new Set();
+  state.predictedGrade   = null;
+  selectedSubjectsWithLevel.clear();
+  $('checkSystemSelect').value = systemKey;
+  $('checkResultsSection').classList.add('hidden');
+  const emptyEl = $('checkEmptyState');
+  if (emptyEl) delete emptyEl.dataset.builtFor;
+  buildSubjectPicker(systemKey);
+  // Mirror to the reverse panel so both start on the same system.
+  $('reverseSystemSelect').value = systemKey;
+  state.reverseSystem = systemKey;
+  if (state.searchQuery) renderReverseResults();
+  renderSystemPrompt();
+  syncProfileFromCheck();
+}
+
+// Prominent "pick a system" prompt, shown inside Check Combination when a field
+// is being explored but no qualification system is selected yet.
+function renderSystemPrompt() {
+  const el = $('systemPrompt');
+  if (!el) return;
+  if (state.exploreField && !state.checkSystem) {
+    el.innerHTML = `
+      <span class="system-prompt__icon" aria-hidden="true">⤴</span>
+      <p class="system-prompt__text">Pick your qualification system above to see
+        <strong>${esc(state.exploreField.name)}</strong> courses you qualify for.</p>`;
+    el.classList.remove('hidden');
+  } else {
+    el.classList.add('hidden');
+    el.innerHTML = '';
+  }
+}
+
 function proceedToCheckFromField() {
   if (!state.exploreField) return;
   logEvent('field_overview_to_check', { field: state.exploreField.fieldId });
@@ -3141,8 +3181,21 @@ function proceedToCheckFromField() {
   state.countryFilter = 'All';
   $$('#countryFilterBar .filter-btn').forEach(b =>
     b.classList.toggle('active', b.dataset.country === 'All'));
+
+  // Ensure a system is selected so the student never lands in an empty state:
+  // auto-select their saved system if they have one, otherwise prompt for one.
+  if (!state.checkSystem) {
+    const saved = (typeof AltioraState !== 'undefined')
+      ? AltioraState.getProfile().qualificationSystem : null;
+    if (saved && qualificationMappings[saved]) {
+      logEvent('field_overview_autoselect_system', { system: saved });
+      selectSystemForCheck(saved);   // builds picker + re-applies the field filter
+    }
+  }
+
   applyExploreFieldFilter();
   renderExploreContextBanner();
+  renderSystemPrompt();
   renderCheckEmptyState();
   if (state.selectedSubjects.length > 0) renderCheckResults();
   requestAnimationFrame(() =>
@@ -3220,6 +3273,7 @@ function clearExploreField() {
     b.setAttribute('aria-pressed', 'false');
   });
   renderExploreContextBanner();
+  renderSystemPrompt();
   renderCheckEmptyState();
   logEvent('explore_field_clear', {});
   if (state.selectedSubjects.length > 0) renderCheckResults();
@@ -3699,20 +3753,7 @@ function init() {
   });
 
   $('checkSystemSelect').addEventListener('change', e => {
-    state.checkSystem      = e.target.value;
-    state.selectedSubjects = [];
-    state.selectedTags     = new Set();
-    state.predictedGrade   = null;
-    selectedSubjectsWithLevel.clear();
-    $('checkResultsSection').classList.add('hidden');
-    const emptyEl = $('checkEmptyState');
-    if (emptyEl) delete emptyEl.dataset.builtFor;
-    buildSubjectPicker(state.checkSystem);
-    // Mirror to reverse panel so both start on the same system
-    $('reverseSystemSelect').value = state.checkSystem;
-    state.reverseSystem = state.checkSystem;
-    if (state.searchQuery) renderReverseResults();
-    syncProfileFromCheck();
+    selectSystemForCheck(e.target.value);
   });
 
   $('planSystemSelect').addEventListener('change', e => {
