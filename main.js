@@ -472,17 +472,6 @@ const IB_MUTUAL_EXCLUSION_GROUPS = [
   { label: 'Physics',   subjects: ['Physics HL',   'Physics SL']   },
 ];
 
-// Subjects the user has explicitly deselected despite auto-imply.
-// Cleared when the qualification system changes.
-const _suppressedAutoImply = new Set();
-// True after the user clicks "Dismiss" on the maths warning banner.
-// Cleared when system changes or user re-selects standard maths.
-let _dismissedMathsWarning = false;
-// True when the user explicitly chose "Skip" on the grade selector, or
-// cleared a grade they previously entered — suppresses the grade banner.
-// Cleared on system change so a fresh context prompts again.
-let gradeInputDismissed = false;
-
 // Mirror of profile.gradesExplicitlySkipped — the student confirmed via the
 // checkbox that they don't have predicted grades yet, so subject-only matching
 // is allowed even in the building/applying stages. Loaded from the persisted
@@ -683,6 +672,24 @@ function isGradeAboveStudent(course, system, studentGrade) {
   return false;
 }
 
+// For a grey course (predicted grade below the typical offer), describe the
+// gap as { have, need } strings in the active qualification system, e.g.
+// { have: "A*", need: "A*A*A" } or { have: "37 points", need: "39 points" }.
+function gradeGapInfo(course, system, studentGrade) {
+  if (!studentGrade) return null;
+  const need = course.grades?.[SYSTEM_GRADE_KEY[system]] ?? null;
+  if (!need) return null;
+  if (system === 'IB') return { have: `${studentGrade} points`, need: `${need} points` };
+  return { have: String(studentGrade), need: String(need) };
+}
+
+const GRADE_CONVERSION_HINTS = {
+  IB:         'IB 38 points ≈ A*AA at A-Level. Check university websites for specific conversion policies.',
+  US_AP:      'AP 5 ≈ A* at A-Level. US universities use holistic review – grades are one factor.',
+  SG_A_Level: 'Singapore A-Level grades are roughly equivalent to UK A-Levels. Confirm with each university.',
+  HK_DSE:     'DSE 5** ≈ A*; 5 ≈ A. Conversions vary – always verify.',
+};
+
 function buildGradeInput(systemKey) {
   const section = $('gradeInputSection');
   if (!section) return;
@@ -711,6 +718,12 @@ function buildGradeInput(systemKey) {
         <span>I don't have predicted grades yet (continue with subject-only matching)</span>
       </label>` : '';
 
+  // Rough cross-system conversion guidance (UK A-Level is the baseline, so
+  // it has no hint). Always advise verifying with each university.
+  const conversionHint = GRADE_CONVERSION_HINTS[systemKey]
+    ? `<p class="grade-conversion-hint">${esc(GRADE_CONVERSION_HINTS[systemKey])}</p>`
+    : '';
+
   const header = `
       <div class="grade-input-header">
         <span class="control-label">Your predicted grades</span>
@@ -718,6 +731,7 @@ function buildGradeInput(systemKey) {
         <span class="picker-hint-inline">${hint}</span>
       </div>`;
   const footer = `
+      ${conversionHint}
       <p class="grade-input-help">${esc(helpText)}</p>
       ${clearBtn}
       ${skipCheckHtml}`;
@@ -752,14 +766,12 @@ function buildGradeInput(systemKey) {
       $('gradeInputIB').addEventListener('input', e => {
         const v = parseInt(e.target.value, 10);
         state.predictedGrade = (!isNaN(v) && v >= 24 && v <= 45) ? String(v) : null;
-        gradeInputDismissed  = false; // actively entering — reset dismissal
         if (state.predictedGrade) clearGradeSkip(); // entering a grade clears the skip flag
         $('clearGradeBtn').classList.toggle('hidden', !state.predictedGrade);
         renderCheckResults();
       });
       $('clearGradeBtn').addEventListener('click', () => {
         state.predictedGrade = null;
-        gradeInputDismissed  = true; // seen/used grade input — don't nag again
         $('gradeInputIB').value = '';
         clearGradeSkip();
         $('clearGradeBtn').classList.add('hidden');
@@ -833,14 +845,12 @@ function wireSelectGrade(selectId) {
   const sel = $(selectId);
   sel.addEventListener('change', e => {
     state.predictedGrade  = e.target.value || null;
-    gradeInputDismissed   = !e.target.value; // Skip = dismissed; grade chosen = not dismissed
     if (state.predictedGrade) clearGradeSkip(); // entering a grade clears the skip flag
     $('clearGradeBtn').classList.toggle('hidden', !state.predictedGrade);
     renderCheckResults();
   });
   $('clearGradeBtn').addEventListener('click', () => {
     state.predictedGrade = null;
-    gradeInputDismissed  = true; // user has seen/used grade input — don't nag again
     sel.value = '';
     clearGradeSkip();
     $('clearGradeBtn').classList.add('hidden');
@@ -849,11 +859,22 @@ function wireSelectGrade(selectId) {
 }
 
 // Wire the "I don't have predicted grades yet" checkbox (building/applying only).
+// Skip and an entered grade are mutually exclusive: ticking skip wipes any
+// grade the student had entered.
 function wireGradeSkipCheck() {
   const cb = $('gradeSkipCheck');
   if (!cb) return;
   cb.addEventListener('change', e => {
     gradesExplicitlySkipped = e.target.checked;
+    if (e.target.checked) {
+      // Mutually exclusive with an entered grade — clear the input + value.
+      state.predictedGrade = null;
+      const field = document.querySelector(
+        '#gradeInputSection select.grade-select, #gradeInputSection input.grade-number-input'
+      );
+      if (field) field.value = '';
+      $('clearGradeBtn')?.classList.add('hidden');
+    }
     if (typeof AltioraState !== 'undefined') {
       AltioraState.setProfile({ gradesExplicitlySkipped });
     }
@@ -1196,6 +1217,64 @@ function updateShortlistCount() {
 
 /* ─── Shortlist view ──────────────────────────────────────────── */
 
+// Download the saved courses as a CSV file (client-side, no backend).
+function exportShortlistToCSV() {
+  const saved = AltioraState.getShortlist().map(id => courses.find(c => c.id === id)).filter(Boolean);
+  if (!saved.length) { showToast('No saved courses to export'); return; }
+
+  const headers = ['Course Name', 'University', 'Country', 'Degree Level', 'Category', 'Admission Tests', 'Typical Grades'];
+  const cell = v => {
+    const s = String(v ?? '');
+    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+  const gradesOf = c => {
+    const parts = [];
+    if (c.grades?.aLevels) parts.push(`A-Level ${c.grades.aLevels}`);
+    if (typeof c.grades?.ib === 'number') parts.push(`IB ${c.grades.ib}`);
+    if (c.grades?.sgALevels) parts.push(`SG ${c.grades.sgALevels}`);
+    if (c.grades?.hkDse) parts.push(`DSE ${c.grades.hkDse}`);
+    return parts.join('; ');
+  };
+
+  const rows = saved.map(c => [
+    c.name,
+    c.university,
+    COUNTRY_LABELS[c.country] ?? c.country,
+    c.degreeLevel ?? '',
+    CATEGORY_LABEL_MAP[c.category] ?? c.category,
+    Array.isArray(c.admissionTests) ? c.admissionTests.join('; ') : '',
+    gradesOf(c),
+  ].map(cell).join(','));
+
+  // Leading BOM so Excel reads UTF-8 (and the ≈/£ etc.) correctly.
+  const csv  = '﻿' + [headers.join(','), ...rows].join('\r\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = 'altiora-shortlist.csv';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  logEvent('shortlist_export_csv', { count: saved.length });
+}
+
+// Pure tag derivation from the saved profile (subjects + system). Unlike
+// deriveTagsFromSubjects it has NO side effects, so it's safe to call when
+// rendering the shortlist without disturbing live Check Combination state.
+function tagsFromProfile() {
+  const tags = new Set();
+  if (typeof AltioraState === 'undefined') return tags;
+  const p = AltioraState.getProfile();
+  const forward = qualificationMappings[p.qualificationSystem]?.subjects ?? {};
+  (Array.isArray(p.subjects) ? p.subjects : []).forEach(name => {
+    const t = forward[name];
+    if (t) tags.add(t);
+  });
+  return tags;
+}
+
 function renderShortlist() {
   const panel = $('panel-shortlist');
   if (!panel) return;
@@ -1213,7 +1292,21 @@ function renderShortlist() {
     return;
   }
 
-  panel.innerHTML = buildShortlistInsightsHtml(saved) + `<div id="shortlistGroups"></div>`;
+  panel.innerHTML =
+    `<div class="shortlist-toolbar">
+       <button id="exportCsvBtn" class="export-csv-btn" type="button">⬇ Export CSV</button>
+     </div>`
+    + buildShortlistInsightsHtml(saved)
+    + `<div id="shortlistGroups"></div>`;
+  panel.querySelector('#exportCsvBtn')?.addEventListener('click', exportShortlistToCSV);
+
+  // Student's subject tags for the match badge: prefer the live Check
+  // Combination selection, else fall back to the saved profile (pure
+  // derivation — never touches the live selectedSubjectsWithLevel state).
+  const studentTags = (state.selectedTags && state.selectedTags.size)
+    ? state.selectedTags
+    : tagsFromProfile();
+  const hasSubjects = studentTags.size > 0;
 
   // Group saved courses by country, sorted by country label then university.
   const byCountry = {};
@@ -1232,7 +1325,7 @@ function renderShortlist() {
     group.appendChild(header);
     const grid = document.createElement('div');
     grid.className = 'results-group__grid';
-    list.forEach(c => grid.appendChild(buildShortlistCard(c)));
+    list.forEach(c => grid.appendChild(buildShortlistCard(c, studentTags, hasSubjects)));
     group.appendChild(grid);
     wrap.appendChild(group);
   });
@@ -1242,14 +1335,32 @@ function renderShortlist() {
 function buildShortlistInsightsHtml(saved) {
   const unis      = new Set(saved.map(c => c.university));
   const countries = new Set(saved.map(c => c.country));
-  const tests     = new Set();
-  saved.forEach(c => (Array.isArray(c.admissionTests) ? c.admissionTests : []).forEach(t => tests.add(t)));
-  const gradeRange = shortlistGradeRange(saved);
+  const plural    = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
-  const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
-  const testsHtml = tests.size
-    ? [...tests].sort().map(t => `<span class="shortlist-insight-tag">${esc(t)}</span>`).join(' ')
+  // Admission tests with per-test course counts (not blindly deduplicated),
+  // most-required first.
+  const testCounts = {};
+  saved.forEach(c => (Array.isArray(c.admissionTests) ? c.admissionTests : [])
+    .forEach(t => { testCounts[t] = (testCounts[t] ?? 0) + 1; }));
+  const testEntries = Object.entries(testCounts)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  const testsHtml = testEntries.length
+    ? testEntries.map(([t, n]) =>
+        `<span class="shortlist-insight-tag">${esc(t)} (${n} course${n === 1 ? '' : 's'})</span>`).join(' ')
     : `<span class="text-secondary">None across your saved courses</span>`;
+
+  // Grade ranges computed per qualification system (mixed systems → one row each).
+  const gradeRows = shortlistGradeRange(saved);
+  let gradeHtml = '';
+  if (gradeRows.length === 1) {
+    const r = gradeRows[0];
+    gradeHtml = `<li><span class="shortlist-insight-label">Grade range:</span> <strong>${esc(r.label)}: ${esc(r.range)}</strong></li>`;
+  } else if (gradeRows.length > 1) {
+    gradeHtml = `<li><span class="shortlist-insight-label">Grade ranges:</span>
+        <ul class="shortlist-grade-rows">
+          ${gradeRows.map(r => `<li><strong>${esc(r.label)}:</strong> ${esc(r.range)}</li>`).join('')}
+        </ul></li>`;
+  }
 
   return `
     <div class="shortlist-insights">
@@ -1259,27 +1370,47 @@ function buildShortlistInsightsHtml(saved) {
             <strong>${plural(unis.size, 'university', 'universities')}</strong> in
             <strong>${plural(countries.size, 'country', 'countries')}</strong></li>
         <li><span class="shortlist-insight-label">Admission tests you'll need:</span> ${testsHtml}</li>
-        ${gradeRange ? `<li><span class="shortlist-insight-label">Grade range:</span> <strong>${esc(gradeRange)}</strong></li>` : ''}
+        ${gradeHtml}
       </ul>
     </div>`;
 }
 
-// Expresses the requirement spread across saved courses. IB points are
-// numeric and span all countries, so they are the primary scale; UK
-// A-Level offers are a fallback when no saved course lists IB points.
+// Grade spread across saved courses, computed SEPARATELY per qualification
+// system so mixed shortlists report e.g. "IB: 38–40" and "A-Level: A*AA–AAA"
+// rather than collapsing systems into one misleading range. Returns an array
+// of { label, range }, one entry per system that has data.
 function shortlistGradeRange(saved) {
-  const ibPts = saved.map(c => c.grades?.ib).filter(v => typeof v === 'number' && !isNaN(v));
-  if (ibPts.length) {
-    const lo = Math.min(...ibPts), hi = Math.max(...ibPts);
-    return lo === hi ? `${lo} IB points` : `${lo}–${hi} IB points`;
+  const rows = [];
+
+  // IB — numeric points.
+  const ib = saved.map(c => c.grades?.ib).filter(v => typeof v === 'number' && !isNaN(v));
+  if (ib.length) {
+    const lo = Math.min(...ib), hi = Math.max(...ib);
+    rows.push({ label: 'IB', range: lo === hi ? `${lo} points` : `${lo}–${hi} points` });
   }
-  const offers = saved.map(c => c.grades?.aLevels).filter(Boolean);
-  if (offers.length) {
-    const ranked = offers.slice().sort((a, b) => aLevelOfferStrength(a) - aLevelOfferStrength(b));
-    const lo = ranked[0], hi = ranked[ranked.length - 1];
-    return lo === hi ? `${lo} (A-Level)` : `${lo} to ${hi} (A-Level)`;
+
+  // Letter-grade offers (A-Level & Singapore A-Level share the same format),
+  // ranked by offer strength.
+  for (const [key, label] of [['aLevels', 'A-Level'], ['sgALevels', 'Singapore A-Level']]) {
+    const offers = saved.map(c => c.grades?.[key]).filter(Boolean);
+    if (offers.length) {
+      // Strongest offer first, e.g. "A*AA–AAA".
+      const ranked = offers.slice().sort((a, b) => aLevelOfferStrength(b) - aLevelOfferStrength(a));
+      const strongest = ranked[0], weakest = ranked[ranked.length - 1];
+      rows.push({ label, range: strongest === weakest ? strongest : `${strongest}–${weakest}` });
+    }
   }
-  return null;
+
+  // HK DSE / AP — list the distinct spread (no reliable cross-grade ranking).
+  for (const [key, label] of [['hkDse', 'HK DSE'], ['ap', 'AP']]) {
+    const vals = saved.map(c => c.grades?.[key]).filter(Boolean);
+    if (vals.length) {
+      const uniq = [...new Set(vals)].sort();
+      rows.push({ label, range: uniq.length === 1 ? uniq[0] : `${uniq[0]}–${uniq[uniq.length - 1]}` });
+    }
+  }
+
+  return rows;
 }
 
 // Total rank of the top three A-Level grades, for ordering offers.
@@ -1288,20 +1419,32 @@ function aLevelOfferStrength(str) {
     .reduce((sum, g) => sum + (A_LEVEL_RANK[g] ?? 0), 0);
 }
 
-// A saved-course card: same visual system and info as a result card,
-// with a Remove action instead of a match-status pill.
-function buildShortlistCard(course) {
+// A saved-course card: same visual system and info as a result card, plus a
+// GREEN/AMBER/RED match badge (target / possible / stretch) and a Remove
+// action. The badge needs the student's subjects; when none are known it
+// shows a neutral prompt rather than a misleading status.
+function buildShortlistCard(course, studentTags, hasSubjects) {
   const flag      = COUNTRY_FLAGS[course.country] ?? '';
   const country   = COUNTRY_LABELS[course.country] ?? course.country;
   const catLabel  = CATEGORY_LABEL_MAP[course.category] ?? course.category;
   const tierLabel = course.universityContext?.tier ? (TIER_LABELS[course.universityContext.tier] ?? null) : null;
   const tests     = Array.isArray(course.admissionTests) ? course.admissionTests : [];
 
+  let badgeHtml;
+  if (hasSubjects) {
+    const { status } = classify(course, studentTags);
+    const cfg = STATUS[status];
+    badgeHtml = `<div class="card-status card-status--${status}">${cfg.icon} ${esc(cfg.label)}</div>`;
+  } else {
+    badgeHtml = `<div class="card-status card-status--none">Pick your subjects to see your match</div>`;
+  }
+
   const card = document.createElement('div');
   card.className = 'course-card course-card--saved';
   card.setAttribute('role', 'listitem');
   card.dataset.category = course.category ?? '';
   card.innerHTML = `
+    ${badgeHtml}
     <div class="card-header">
       <div class="card-title-group">
         <span class="card-flag" aria-hidden="true">${flag}</span>
@@ -1512,6 +1655,10 @@ function buildSubjectPicker(systemKey) {
   const picker  = $('subjectPicker');
   $('subjectFilterInput').value = '';
 
+  // The IB maths-help banner lives outside #subjectPicker; clear any stale one
+  // before (re)building so it never lingers across a system change.
+  $('ibMathsHelp')?.remove();
+
   if (!systemKey) {
     section.classList.add('hidden');
     picker.innerHTML = '';
@@ -1534,11 +1681,18 @@ function buildSubjectPicker(systemKey) {
   picker.appendChild(frag);
   section.classList.remove('hidden');
 
-  // Reset auto-imply suppression and category state when system changes
+  // IB students may take only one mathematics course — surface a persistent
+  // help banner below the picker (the easily-missed toast wasn't enough).
+  if (systemKey === 'IB') {
+    const help = document.createElement('div');
+    help.id = 'ibMathsHelp';
+    help.className = 'ib-maths-help';
+    help.textContent = 'ℹ️ IB students take only one mathematics course. Choose the level (HL/SL) that suits your target course.';
+    picker.insertAdjacentElement('afterend', help);
+  }
+
+  // Reset category state when the system changes.
   selectedSubjectsWithLevel.clear();
-  _suppressedAutoImply.clear();
-  _dismissedMathsWarning = false;
-  gradeInputDismissed = false;
   hideMathsWarningBanner();
   state.selectedCategories.clear();
   $$('#categoryPicker .category-chip').forEach(b => b.classList.remove('active'));
@@ -1586,32 +1740,15 @@ function buildCategoryPicker() {
   picker.appendChild(frag);
 }
 
+// Purely informational: standard Maths is auto-added (and locked) whenever
+// Further Maths is selected, so the banner just explains what happened.
 function showMathsWarningBanner(imply) {
   if ($('mathsWarningBanner')) return;
   const banner = document.createElement('div');
   banner.id = 'mathsWarningBanner';
   banner.className = 'maths-warning-banner';
-  banner.innerHTML = `
-    <span class="maths-warning-banner__msg">Mathematics is required alongside Further Mathematics</span>
-    <div class="maths-warning-banner__actions">
-      <button class="maths-warning-banner__add" type="button">Add Mathematics (recommended)</button>
-      <button class="maths-warning-banner__dismiss" type="button">Dismiss (not recommended for most courses)</button>
-    </div>
-  `;
-  banner.querySelector('.maths-warning-banner__add').addEventListener('click', () => {
-    _suppressedAutoImply.delete(imply.standard);
-    _dismissedMathsWarning = false;
-    const stdInput = Array.from($$('#subjectPicker input')).find(i => i.value === imply.standard);
-    if (stdInput) stdInput.checked = true;
-    hideMathsWarningBanner();
-    onSubjectToggle();
-    showToast('Mathematics added — this keeps more course options open');
-  });
-  banner.querySelector('.maths-warning-banner__dismiss').addEventListener('click', () => {
-    _dismissedMathsWarning = true;
-    hideMathsWarningBanner();
-    showToast('Mathematics suppressed — some courses may be out of reach');
-  });
+  banner.innerHTML =
+    `<span class="maths-warning-banner__msg">ℹ️ ${esc(imply.standard)} is required alongside ${esc(imply.advanced)} — we've added it for you.</span>`;
   const pickerSection = $('subjectPickerSection');
   pickerSection.parentNode.insertBefore(banner, pickerSection);
 }
@@ -1619,6 +1756,22 @@ function showMathsWarningBanner(imply) {
 function hideMathsWarningBanner() {
   const banner = $('mathsWarningBanner');
   if (banner) banner.remove();
+}
+
+// When an IB maths choice replaces a previously-selected one, confirm the
+// switch in the persistent help banner (it auto-reverts to the default hint).
+let _ibMathsHelpTimer = null;
+function updateIbMathsHelp(subjectName) {
+  const help = $('ibMathsHelp');
+  if (!help) return;
+  const DEFAULT = 'ℹ️ IB students take only one mathematics course. Choose the level (HL/SL) that suits your target course.';
+  help.textContent = `✓ Switched to ${subjectName} – only one maths allowed.`;
+  help.classList.add('ib-maths-help--confirm');
+  clearTimeout(_ibMathsHelpTimer);
+  _ibMathsHelpTimer = setTimeout(() => {
+    const el = $('ibMathsHelp');
+    if (el) { el.textContent = DEFAULT; el.classList.remove('ib-maths-help--confirm'); }
+  }, 4000);
 }
 
 // Returns the exclusion group entry the subject belongs to, or null.
@@ -1633,49 +1786,46 @@ function onSubjectToggle(e = null) {
   const wasChecked   = e?.target?.checked ?? null;
   const imply        = MATHS_IMPLY[state.checkSystem];
 
-  // If user manually deselects the standard maths subject while the advanced
-  // one is still selected, record the suppression so we don't re-add it.
-  if (imply && changedValue === imply.standard && wasChecked === false) {
-    const allInputs = Array.from($$('#subjectPicker input'));
-    const advInput  = allInputs.find(i => i.value === imply.advanced);
-    if (advInput?.checked) _suppressedAutoImply.add(imply.standard);
-  }
-  // Clear suppression (and any dismissed state) when the user explicitly re-selects a subject.
-  if (changedValue && wasChecked === true) {
-    _suppressedAutoImply.delete(changedValue);
-    if (imply && changedValue === imply.standard) _dismissedMathsWarning = false;
-  }
-
   // IB mutual exclusivity: when a subject is checked, uncheck any other subject
-  // in the same exclusion group and notify the user.
+  // in the same exclusion group and notify the user. Track whether the switch
+  // was within the Mathematics group so we can update the IB maths help text.
+  let mathsSwitchedTo = null;
   if (changedValue && wasChecked === true) {
     const group = getExclusionGroup(changedValue, state.checkSystem);
     if (group) {
       $$('#subjectPicker input:checked').forEach(input => {
         if (input.value !== changedValue && group.subjects.includes(input.value)) {
           input.checked = false;
-          showToast(`Only one ${group.label} subject allowed. Switched to ${changedValue}.`);
+          if (group.label === 'Mathematics') mathsSwitchedTo = changedValue;
+          else showToast(`Only one ${group.label} subject allowed. Switched to ${changedValue}.`);
         }
       });
     }
   }
+  if (mathsSwitchedTo) updateIbMathsHelp(mathsSwitchedTo);
 
   // Read current checkbox state from DOM.
   state.selectedSubjects = Array.from($$('#subjectPicker input:checked')).map(c => c.value);
 
-  // Apply auto-imply: if advanced maths is selected and standard is not (and not suppressed),
-  // programmatically check the standard maths chip.
+  // Auto-imply: Further Maths cannot stand alone, so standard Maths is forced
+  // on and locked (disabled) for as long as Further Maths is selected. When
+  // Further Maths is dropped, standard Maths is unlocked again.
   const autoAdded = new Set();
   if (imply) {
-    const hasAdv  = state.selectedSubjects.includes(imply.advanced);
-    const hasStd  = state.selectedSubjects.includes(imply.standard);
-    const suppressed = _suppressedAutoImply.has(imply.standard);
-    if (hasAdv && !hasStd && !suppressed) {
-      const stdInput = Array.from($$('#subjectPicker input')).find(i => i.value === imply.standard);
-      if (stdInput) {
-        stdInput.checked = true;
+    const stdInput = Array.from($$('#subjectPicker input')).find(i => i.value === imply.standard);
+    const hasAdv   = state.selectedSubjects.includes(imply.advanced);
+    if (stdInput) {
+      if (hasAdv) {
+        if (!stdInput.checked) {
+          stdInput.checked = true;
+          state.selectedSubjects.push(imply.standard);
+        }
+        stdInput.disabled = true;
+        stdInput.closest('.subject-chip')?.classList.add('subject-chip--locked');
         autoAdded.add(imply.standard);
-        state.selectedSubjects.push(imply.standard);
+      } else {
+        stdInput.disabled = false;
+        stdInput.closest('.subject-chip')?.classList.remove('subject-chip--locked');
       }
     }
   }
@@ -1706,11 +1856,7 @@ function onSubjectToggle(e = null) {
     }
   });
 
-  const shouldWarn = imply
-    && _suppressedAutoImply.has(imply.standard)
-    && state.selectedSubjects.includes(imply.advanced)
-    && !_dismissedMathsWarning;
-  if (shouldWarn) showMathsWarningBanner(imply);
+  if (imply && state.selectedSubjects.includes(imply.advanced)) showMathsWarningBanner(imply);
   else hideMathsWarningBanner();
 
   syncSubjectCount();
@@ -1724,6 +1870,15 @@ function onSubjectToggle(e = null) {
 function syncSubjectCount() {
   const n = state.selectedSubjects.length;
   $('subjectCountBadge').textContent = n === 0 ? 'none selected' : `${n} selected`;
+  $('clearSubjectsBtn')?.classList.toggle('hidden', n === 0);
+}
+
+// Uncheck every subject and reset to the empty state — a one-click "start over".
+function clearAllSubjects() {
+  $$('#subjectPicker input:checked').forEach(cb => { cb.checked = false; });
+  // onSubjectToggle re-derives state, re-enables any locked Maths chip, hides
+  // the results, updates the count, and re-renders the empty state.
+  onSubjectToggle();
 }
 
 $('subjectFilterInput').addEventListener('input', e => {
@@ -1732,6 +1887,8 @@ $('subjectFilterInput').addEventListener('input', e => {
     chip.classList.toggle('hidden', !!q && !chip.querySelector('span').textContent.toLowerCase().includes(q));
   });
 });
+
+$('clearSubjectsBtn')?.addEventListener('click', clearAllSubjects);
 
 /* ═══════════════════════════════════════════════════════════════
  * COUNTRY FILTER BAR
@@ -1817,16 +1974,12 @@ function renderCheckResults() {
   const minNeeded = MIN_SUBJECTS[state.checkSystem] ?? 3;
   const tooFew    = state.selectedSubjects.length < minNeeded;
 
-  // Stage-aware grade requirement. GREEN matches are allowed when the student
-  // has entered a grade, has explicitly confirmed they have none yet, OR is in
-  // a stage where grades aren't yet relevant (exploring/choosing). Only in the
-  // building/applying stages, with no grade and no skip confirmation, do we
-  // warn and demote GREEN → AMBER.
-  const profile            = (typeof AltioraState !== 'undefined') ? AltioraState.getProfile() : {};
-  const stage              = profile.stage || DEFAULT_STAGE;
-  const stageRequiresGrade = (stage === 'building' || stage === 'applying');
-  const allowGreen         = !!state.predictedGrade || gradesExplicitlySkipped === true || !stageRequiresGrade;
-  const noGrade            = !allowGreen;
+  // Grades never affect the subject-based match status: strong subjects always
+  // show GREEN. When no grade is entered we surface a purely informational
+  // banner so students know grade-based filtering is available, but the status
+  // is left untouched. (A grade, once entered, still greys out courses whose
+  // typical offer is above the student — see isGradeAboveStudent below.)
+  const noGradeYet = !state.predictedGrade && gradesExplicitlySkipped !== true;
 
   // Remove any existing banners before re-rendering
   section.querySelectorAll('.subject-count-warning, .grade-missing-banner').forEach(el => el.remove());
@@ -1840,10 +1993,10 @@ function renderCheckResults() {
     $('summaryBar').before(warn);
   }
 
-  if (noGrade) {
+  if (noGradeYet) {
     const banner = document.createElement('p');
-    banner.className = 'grade-missing-banner';
-    banner.textContent = `⚠️ You haven't entered your predicted grades. Strong matches are shown as possible matches until you do. Enter your grades above for accurate matching, or tick "I don't have predicted grades yet" to continue with subject-only matching.`;
+    banner.className = 'grade-missing-banner grade-missing-banner--info';
+    banner.textContent = 'ℹ️ Enter predicted grades to see grade-based filtering.';
     $('summaryBar').before(banner);
   }
 
@@ -1854,10 +2007,12 @@ function renderCheckResults() {
   const byStatus = { green: [], amber: [], grey: [], red: [] };
   pool.forEach(course => {
     const result = classify(course, state.selectedTags);
-    if (tooFew  && result.status === 'green') result.status = 'amber';
-    if (noGrade && result.status === 'green') result.status = 'amber';
+    if (tooFew && result.status === 'green') result.status = 'amber';
     if (state.predictedGrade && (result.status === 'green' || result.status === 'amber')) {
-      if (isGradeAboveStudent(course, state.checkSystem, state.predictedGrade)) result.status = 'grey';
+      if (isGradeAboveStudent(course, state.checkSystem, state.predictedGrade)) {
+        result.status = 'grey';
+        result.gradeGap = gradeGapInfo(course, state.checkSystem, state.predictedGrade);
+      }
     }
     if (state.checkSystem === 'IB' && (result.status === 'green' || result.status === 'amber')) {
       const requiredHLTags = course.grades?.ibHL ?? [];
@@ -1870,7 +2025,9 @@ function renderCheckResults() {
         // Find which required HL tags are missing
         const missingHL = requiredHLTags.filter(tag => !studentHLTags.includes(tag));
 
-        // Only downgrade and show warning if there are ACTUAL missing HL subjects
+        // Only downgrade and warn for ACTUAL missing HL subjects this course
+        // lists. Courses with no ibHL requirements get no HL warning at all —
+        // no blanket "expect 3 HLs" message and no GREEN→AMBER demotion.
         if (missingHL.length > 0) {
           if (result.status === 'green') result.status = 'amber';
           result.ibHLWarning = missingHL;
@@ -1879,13 +2036,6 @@ function renderCheckResults() {
         }
       } else {
         result.ibHLWarning = null;
-      }
-      // Most universities worldwide expect 3 HL subjects for IB Diploma
-      const hlCount = Array.from(selectedSubjectsWithLevel.values()).filter(item => item.isHL).length;
-      if (hlCount < 3) {
-        if (result.status === 'green') result.status = 'amber';
-        if (!result.ibHLWarning) result.ibHLWarning = [];
-        result.ibHLWarning.push('Most universities expect at least 3 HL subjects for the full IB Diploma');
       }
     }
     byStatus[result.status].push({ course, result });
@@ -1919,12 +2069,13 @@ function renderCheckResults() {
     cardIndex += byStatus.green.length;
   }
   if (byStatus.amber.length) {
-    const amberLabel = noGrade ? 'Subject matches — enter grades to see strong matches' : 'Possible';
-    container.appendChild(buildGroup('amber', amberLabel, byStatus.amber, cardIndex));
+    container.appendChild(buildGroup('amber', 'Possible', byStatus.amber, cardIndex));
     cardIndex += byStatus.amber.length;
   }
   if (byStatus.grey.length) {
-    container.appendChild(buildGroup('grey', 'Subject match, but grade threshold is high', byStatus.grey, cardIndex, true));
+    // Visible by default (no collapse) — subject matches where the predicted
+    // grade is below the typical offer. Each card shows the grade gap.
+    container.appendChild(buildGroup('grey', 'Subject match, but grade threshold is high', byStatus.grey, cardIndex));
     cardIndex += byStatus.grey.length;
   }
   if (byStatus.red.length) {
@@ -1982,6 +2133,16 @@ function buildGroup(status, headerText, items, startIndex, collapsed = false) {
   }
 
   return section;
+}
+
+// A small "report data issue" link for course cards. Opens a pre-filled
+// mailto so students can flag outdated requirements/grades.
+function reportIssueLinkHtml(course) {
+  const country = COUNTRY_LABELS[course.country] ?? course.country;
+  const subject = `Data issue: ${course.name} at ${course.university}`;
+  const body    = `Course: ${course.name}\nUniversity: ${course.university}\nCountry: ${country}\nDegree level: ${course.degreeLevel ?? ''}\nCourse ID: ${course.id}\n\nWhat looks outdated or incorrect?\n`;
+  const href    = `mailto:support@altiora.app?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  return `<a class="report-issue-link" href="${href}">📝 Data outdated? Let us know.</a>`;
 }
 
 function buildCheckCard(course, result) {
@@ -2089,6 +2250,7 @@ function buildCheckCard(course, result) {
     green: `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M7 10l2 2 4-4"/></svg>`,
     amber: `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3a7 7 0 0 1 0 14V3z"/><circle cx="10" cy="10" r="7"/></svg>`,
     red:   `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M8 8l4 4M12 8l-4 4"/></svg>`,
+    grey:  `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.5L18.5 17H1.5L10 2.5z"/><path d="M10 8v4M10 14.5v.5"/></svg>`,
   };
   const graduationIcon = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l7-4 7 4-7 4-7-4z"/><path d="M7 10v3.5c0 1.5 1.3 2 3 2s3-.5 3-2V10"/><path d="M17 8v4"/></svg>`;
   const chevronIcon    = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg>`;
@@ -2136,6 +2298,7 @@ function buildCheckCard(course, result) {
       <span class="card-cat-badge">${esc(catLabel)}</span>
     </div>
     ${gradeStr ? `<div class="card-grades">${esc(sys === 'IB' ? `${gradeStr} IB points` : gradeStr)}</div>` : ''}
+    ${(status === 'grey' && result.gradeGap) ? `<p class="card-grade-gap">⚠️ You have ${esc(result.gradeGap.have)}, course asks for ${esc(result.gradeGap.need)}</p>` : ''}
     ${ibHlHtml}
     ${apWarningHtml}
     ${tests.length ? `
@@ -2146,6 +2309,7 @@ function buildCheckCard(course, result) {
     ${apRecsHtml}
     ${footerHtml}
     ${uniInfoHtml}
+    ${reportIssueLinkHtml(course)}
   `;
   wireSaveButton(card);
   return card;
@@ -2251,35 +2415,94 @@ function buildReverseCard(course) {
         ⎘&ensp;Copy requirements
       </button>
     </div>
+    ${reportIssueLinkHtml(course)}
   `;
 
   wireSaveButton(card);
 
-  // Copy-to-clipboard handler — timerId is scoped per card instance
+  // Copy-to-clipboard handler — timerId is scoped per card instance.
   let copyTimerId = null;
   card.querySelector('.copy-btn').addEventListener('click', e => {
     e.stopPropagation();
     const btn = e.currentTarget;
     if (btn.classList.contains('copying')) return;
     btn.classList.add('copying');
-    navigator.clipboard.writeText(buildRequirementsText(course))
-      .then(() => {
-        btn.textContent = '✓  Copied!';
-        btn.classList.add('copy-btn--done');
-        showToast('Requirements copied to clipboard');
-        clearTimeout(copyTimerId);
-        copyTimerId = setTimeout(() => {
-          btn.innerHTML = '⎘&ensp;Copy requirements';
-          btn.classList.remove('copy-btn--done', 'copying');
-        }, 2200);
-      })
-      .catch(() => {
-        btn.classList.remove('copying');
-        showToast('Copy failed — try selecting the text manually');
-      });
+    const text = buildRequirementsText(course);
+
+    const onSuccess = () => {
+      card.querySelector('.copy-fallback')?.classList.add('hidden');
+      btn.textContent = '✓  Copied!';
+      btn.classList.add('copy-btn--done');
+      showToast('Requirements copied to clipboard');
+      clearTimeout(copyTimerId);
+      copyTimerId = setTimeout(() => {
+        btn.innerHTML = '⎘&ensp;Copy requirements';
+        btn.classList.remove('copy-btn--done', 'copying');
+      }, 2200);
+    };
+
+    const onFailure = () => {
+      // Try the legacy execCommand path; if that also fails, surface a
+      // pre-selected textarea so the user can copy manually with Ctrl/⌘+C.
+      if (legacyCopyText(text)) { onSuccess(); return; }
+      btn.classList.remove('copying');
+      showManualCopyBox(card, text);
+      showToast('Couldn’t copy automatically — the text is selected below, press Ctrl+C (⌘C on Mac).');
+    };
+
+    // navigator.clipboard can be undefined (insecure context / old browsers),
+    // in which case the call throws synchronously rather than rejecting.
+    try {
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text).then(onSuccess).catch(onFailure);
+      } else {
+        onFailure();
+      }
+    } catch (_) {
+      onFailure();
+    }
   });
 
   return card;
+}
+
+// Legacy clipboard path for browsers/contexts where the async Clipboard API is
+// unavailable or blocked. Returns true on success.
+function legacyCopyText(text) {
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '0';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  } catch (_) {
+    return false;
+  }
+}
+
+// Last-resort fallback: reveal a read-only textarea pre-filled and selected so
+// the user can copy manually. Reused (one per card) across repeated clicks.
+function showManualCopyBox(card, text) {
+  let box = card.querySelector('.copy-fallback');
+  if (!box) {
+    box = document.createElement('textarea');
+    box.className = 'copy-fallback';
+    box.setAttribute('readonly', '');
+    box.setAttribute('aria-label', 'Course requirements — select all and copy');
+    box.rows = 5;
+    card.querySelector('.reverse-card-footer').after(box);
+  }
+  box.value = text;
+  box.classList.remove('hidden');
+  box.focus();
+  box.select();
 }
 
 /**
@@ -2292,11 +2515,17 @@ function buildRequirementsText(course) {
   const fmt     = tags => requirementLabels(tags, sys, isQuantitativeCategory(course.category)).join(', ');
   const { essential = [], preferred = [], useful = [] } = course.requirements;
 
+  // US admissions is holistic — there are no hard subject requirements, so
+  // label the essential line accordingly instead of the misleading "Required".
+  const essentialLabel = course.country === 'US'
+    ? 'Recommended for competitive applicants:'
+    : 'Required:';
+
   const lines = [
     `${course.name}`,
     `${course.university} · ${country} · ${course.degreeLevel}`,
     '',
-    `Required:  ${essential.length  ? fmt(essential)  : 'None specified'}`,
+    `${essentialLabel} ${essential.length ? fmt(essential) : 'None specified'}`,
     ...(preferred.length ? [`Preferred: ${fmt(preferred)}`] : []),
     ...(useful.length    ? [`Useful:    ${fmt(useful)}`]    : []),
     ...(course.notes     ? ['', `Notes: ${course.notes}`]   : []),
@@ -2585,10 +2814,22 @@ function switchToPlanCombo(tags, systemKey) {
   state.checkSystem      = systemKey;
   state.selectedSubjects = [];
   state.selectedTags     = new Set();
+  // Arriving from the Planner: the planned category is the intent, so drop any
+  // stale field-exploration context. Otherwise buildSubjectPicker →
+  // applyExploreFieldFilter would re-apply the old field's category (wrong chip
+  // + "Exploring X" banner) and a later system change would snap the filter
+  // back to it instead of the planned category.
+  state.exploreField = null;
   $('checkSystemSelect').value = systemKey;
   buildSubjectPicker(systemKey);
 
-  const targetNames = new Set(tags.map(t => tagToLocal(t, systemKey)));
+  // Tick the exact subjects the planner DISPLAYED, via the shared comboLabels
+  // logic — never one tag at a time. This keeps the selection consistent with
+  // the combo shown and resolves maths correctly per system: one rigorous maths
+  // for level-based systems (e.g. IB AA HL, not SL+HL or the applied variant;
+  // SG H2, not H1+H2), and Maths + Further Maths only where genuinely separate.
+  const isQuant = isQuantitativeCategory(state.planCategory);
+  const targetNames = new Set(comboLabels(tags, systemKey, isQuant));
   $$('#subjectPicker input[type="checkbox"]').forEach(cb => {
     if (targetNames.has(cb.value)) cb.checked = true;
   });
@@ -2974,6 +3215,46 @@ function renderFieldOverview(fieldId) {
 
 // Action fork → Check Combination, with the field filter active and no
 // country assumption. The exploring → building step of the funnel.
+// Set the active qualification system for Check Combination and rebuild the
+// dependent UI. Shared by the system dropdown and by flows that auto-select a
+// system (e.g. arriving from Field Overview). buildSubjectPicker re-applies any
+// active field filter, so the exploration context is preserved.
+function selectSystemForCheck(systemKey) {
+  state.checkSystem      = systemKey;
+  state.selectedSubjects = [];
+  state.selectedTags     = new Set();
+  state.predictedGrade   = null;
+  selectedSubjectsWithLevel.clear();
+  $('checkSystemSelect').value = systemKey;
+  $('checkResultsSection').classList.add('hidden');
+  const emptyEl = $('checkEmptyState');
+  if (emptyEl) delete emptyEl.dataset.builtFor;
+  buildSubjectPicker(systemKey);
+  // Mirror to the reverse panel so both start on the same system.
+  $('reverseSystemSelect').value = systemKey;
+  state.reverseSystem = systemKey;
+  if (state.searchQuery) renderReverseResults();
+  renderSystemPrompt();
+  syncProfileFromCheck();
+}
+
+// Prominent "pick a system" prompt, shown inside Check Combination when a field
+// is being explored but no qualification system is selected yet.
+function renderSystemPrompt() {
+  const el = $('systemPrompt');
+  if (!el) return;
+  if (state.exploreField && !state.checkSystem) {
+    el.innerHTML = `
+      <span class="system-prompt__icon" aria-hidden="true">⤴</span>
+      <p class="system-prompt__text">Pick your qualification system above to see
+        <strong>${esc(state.exploreField.name)}</strong> courses you qualify for.</p>`;
+    el.classList.remove('hidden');
+  } else {
+    el.classList.add('hidden');
+    el.innerHTML = '';
+  }
+}
+
 function proceedToCheckFromField() {
   if (!state.exploreField) return;
   logEvent('field_overview_to_check', { field: state.exploreField.fieldId });
@@ -2981,8 +3262,21 @@ function proceedToCheckFromField() {
   state.countryFilter = 'All';
   $$('#countryFilterBar .filter-btn').forEach(b =>
     b.classList.toggle('active', b.dataset.country === 'All'));
+
+  // Ensure a system is selected so the student never lands in an empty state:
+  // auto-select their saved system if they have one, otherwise prompt for one.
+  if (!state.checkSystem) {
+    const saved = (typeof AltioraState !== 'undefined')
+      ? AltioraState.getProfile().qualificationSystem : null;
+    if (saved && qualificationMappings[saved]) {
+      logEvent('field_overview_autoselect_system', { system: saved });
+      selectSystemForCheck(saved);   // builds picker + re-applies the field filter
+    }
+  }
+
   applyExploreFieldFilter();
   renderExploreContextBanner();
+  renderSystemPrompt();
   renderCheckEmptyState();
   if (state.selectedSubjects.length > 0) renderCheckResults();
   requestAnimationFrame(() =>
@@ -3060,6 +3354,7 @@ function clearExploreField() {
     b.setAttribute('aria-pressed', 'false');
   });
   renderExploreContextBanner();
+  renderSystemPrompt();
   renderCheckEmptyState();
   logEvent('explore_field_clear', {});
   if (state.selectedSubjects.length > 0) renderCheckResults();
@@ -3539,20 +3834,7 @@ function init() {
   });
 
   $('checkSystemSelect').addEventListener('change', e => {
-    state.checkSystem      = e.target.value;
-    state.selectedSubjects = [];
-    state.selectedTags     = new Set();
-    state.predictedGrade   = null;
-    selectedSubjectsWithLevel.clear();
-    $('checkResultsSection').classList.add('hidden');
-    const emptyEl = $('checkEmptyState');
-    if (emptyEl) delete emptyEl.dataset.builtFor;
-    buildSubjectPicker(state.checkSystem);
-    // Mirror to reverse panel so both start on the same system
-    $('reverseSystemSelect').value = state.checkSystem;
-    state.reverseSystem = state.checkSystem;
-    if (state.searchQuery) renderReverseResults();
-    syncProfileFromCheck();
+    selectSystemForCheck(e.target.value);
   });
 
   $('planSystemSelect').addEventListener('change', e => {

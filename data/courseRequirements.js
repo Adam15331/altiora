@@ -1457,7 +1457,7 @@ const courses = [
   {
     id: "us-cs-mit", name: "Computer Science & Engineering BS",
     university: "MIT", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Computer_Science"], useful: ["Chemistry"] },
+    requirements: { essential: [], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1475,7 +1475,7 @@ const courses = [
   {
     id: "us-engineering-mit", name: "Electrical Engineering & Computer Science BS",
     university: "MIT", country: "US", degreeLevel: "BS", category: "engineering",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Computer_Science"], useful: ["Chemistry"] },
+    requirements: { essential: [], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1493,7 +1493,7 @@ const courses = [
   {
     id: "us-mechanical-mit", name: "Mechanical Engineering BS",
     university: "MIT", country: "US", degreeLevel: "BS", category: "engineering",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1511,7 +1511,7 @@ const courses = [
   {
     id: "us-physics-mit", name: "Physics BS",
     university: "MIT", country: "US", degreeLevel: "BS", category: "sciences",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1529,7 +1529,7 @@ const courses = [
   {
     id: "us-economics-mit", name: "Economics BS",
     university: "MIT", country: "US", degreeLevel: "BS", category: "economics",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Economics","Statistics"], useful: ["Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1547,7 +1547,7 @@ const courses = [
   {
     id: "us-maths-mit", name: "Mathematics BS",
     university: "MIT", country: "US", degreeLevel: "BS", category: "mathematics",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: [], useful: ["Physics","Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1565,7 +1565,7 @@ const courses = [
   {
     id: "us-cs-stanford", name: "Computer Science BS",
     university: "Stanford University", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1583,7 +1583,7 @@ const courses = [
   {
     id: "us-engineering-stanford", name: "Engineering BS",
     university: "Stanford University", country: "US", degreeLevel: "BS", category: "engineering",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Computer_Science"], useful: ["Chemistry"] },
+    requirements: { essential: [], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1601,7 +1601,7 @@ const courses = [
   {
     id: "us-economics-stanford", name: "Economics BA",
     university: "Stanford University", country: "US", degreeLevel: "BA", category: "economics",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Economics","Statistics"], useful: ["Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1619,7 +1619,7 @@ const courses = [
   {
     id: "us-cs-harvard", name: "Computer Science AB/SM",
     university: "Harvard University", country: "US", degreeLevel: "AB", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1637,7 +1637,7 @@ const courses = [
   {
     id: "us-economics-harvard", name: "Economics AB",
     university: "Harvard University", country: "US", degreeLevel: "AB", category: "economics",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Economics","Statistics"], useful: ["Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1655,7 +1655,7 @@ const courses = [
   {
     id: "us-law-harvard", name: "Law JD (pre-law track)",
     university: "Harvard University", country: "US", degreeLevel: "AB", category: "law",
-    requirements: { essential: [], preferred: ["History","English"], useful: ["Philosophy","Economics"] },
+    requirements: { essential: [], preferred: [], useful: ["Philosophy","Economics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1673,7 +1673,7 @@ const courses = [
   {
     id: "us-biology-harvard", name: "Biological Sciences AB",
     university: "Harvard University", country: "US", degreeLevel: "AB", category: "sciences",
-    requirements: { essential: ["Biology","Chemistry"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
+    requirements: { essential: [], preferred: [], useful: ["Physics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1691,7 +1691,7 @@ const courses = [
   {
     id: "us-maths-harvard", name: "Mathematics AB",
     university: "Harvard University", country: "US", degreeLevel: "AB", category: "mathematics",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: [], useful: ["Physics","Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1709,7 +1709,7 @@ const courses = [
   {
     id: "us-cs-princeton", name: "Computer Science AB/BSE",
     university: "Princeton University", country: "US", degreeLevel: "BSE", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1727,7 +1727,7 @@ const courses = [
   {
     id: "us-engineering-princeton", name: "Engineering & Applied Science BSE",
     university: "Princeton University", country: "US", degreeLevel: "BSE", category: "engineering",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry","Computer_Science"], useful: [] },
+    requirements: { essential: [], preferred: [], useful: [] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1745,7 +1745,7 @@ const courses = [
   {
     id: "us-economics-princeton", name: "Economics AB",
     university: "Princeton University", country: "US", degreeLevel: "AB", category: "economics",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Economics","Statistics"], useful: ["Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1763,7 +1763,7 @@ const courses = [
   {
     id: "us-maths-princeton", name: "Mathematics AB",
     university: "Princeton University", country: "US", degreeLevel: "AB", category: "mathematics",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: [], useful: ["Physics","Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1781,7 +1781,7 @@ const courses = [
   {
     id: "us-cs-yale", name: "Computer Science BS",
     university: "Yale University", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1799,7 +1799,7 @@ const courses = [
   {
     id: "us-economics-yale", name: "Economics BA",
     university: "Yale University", country: "US", degreeLevel: "BA", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1817,7 +1817,7 @@ const courses = [
   {
     id: "us-law-yale", name: "Law BA (pre-law)",
     university: "Yale University", country: "US", degreeLevel: "BA", category: "law",
-    requirements: { essential: [], preferred: ["History","English"], useful: ["Philosophy","Economics"] },
+    requirements: { essential: [], preferred: [], useful: ["Philosophy","Economics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1835,7 +1835,7 @@ const courses = [
   {
     id: "us-biology-yale", name: "Molecular, Cellular & Developmental Biology BS",
     university: "Yale University", country: "US", degreeLevel: "BS", category: "sciences",
-    requirements: { essential: ["Biology","Chemistry"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
+    requirements: { essential: [], preferred: [], useful: ["Physics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1853,7 +1853,7 @@ const courses = [
   {
     id: "us-cs-columbia", name: "Computer Science BS",
     university: "Columbia University", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1871,7 +1871,7 @@ const courses = [
   {
     id: "us-economics-columbia", name: "Economics BA",
     university: "Columbia University", country: "US", degreeLevel: "BA", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1889,7 +1889,7 @@ const courses = [
   {
     id: "us-engineering-columbia", name: "Engineering & Applied Science BS",
     university: "Columbia University", country: "US", degreeLevel: "BS", category: "engineering",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry","Computer_Science"], useful: [] },
+    requirements: { essential: [], preferred: [], useful: [] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1907,7 +1907,7 @@ const courses = [
   {
     id: "us-business-wharton", name: "Business Administration BS (Wharton)",
     university: "University of Pennsylvania", country: "US", degreeLevel: "BS", category: "business",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Economics","Statistics"], useful: ["Computer_Science","Business"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science","Business"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1925,7 +1925,7 @@ const courses = [
   {
     id: "us-cs-penn", name: "Computer & Information Science BS",
     university: "University of Pennsylvania", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1943,7 +1943,7 @@ const courses = [
   {
     id: "us-economics-penn", name: "Economics BA",
     university: "University of Pennsylvania", country: "US", degreeLevel: "BA", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1961,7 +1961,7 @@ const courses = [
   {
     id: "us-cs-caltech", name: "Computer Science BS",
     university: "Caltech", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Computer_Science"], useful: ["Chemistry"] },
+    requirements: { essential: [], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1979,7 +1979,7 @@ const courses = [
   {
     id: "us-physics-caltech", name: "Physics BS",
     university: "Caltech", country: "US", degreeLevel: "BS", category: "sciences",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -1997,7 +1997,7 @@ const courses = [
   {
     id: "us-engineering-caltech", name: "Electrical Engineering BS",
     university: "Caltech", country: "US", degreeLevel: "BS", category: "engineering",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Computer_Science"], useful: ["Chemistry"] },
+    requirements: { essential: [], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2015,7 +2015,7 @@ const courses = [
   {
     id: "us-cs-cmu", name: "Computer Science BS",
     university: "Carnegie Mellon University", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2033,7 +2033,7 @@ const courses = [
   {
     id: "us-engineering-cmu", name: "Electrical & Computer Engineering BS",
     university: "Carnegie Mellon University", country: "US", degreeLevel: "BS", category: "engineering",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Computer_Science"], useful: ["Chemistry"] },
+    requirements: { essential: [], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2051,7 +2051,7 @@ const courses = [
   {
     id: "us-business-cmu", name: "Business Administration BS (Tepper)",
     university: "Carnegie Mellon University", country: "US", degreeLevel: "BS", category: "business",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Economics","Statistics"], useful: ["Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2069,7 +2069,7 @@ const courses = [
   {
     id: "us-cs-berkeley", name: "EECS / Computer Science BS",
     university: "UC Berkeley", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2087,7 +2087,7 @@ const courses = [
   {
     id: "us-engineering-berkeley", name: "Mechanical Engineering BS",
     university: "UC Berkeley", country: "US", degreeLevel: "BS", category: "engineering",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2105,7 +2105,7 @@ const courses = [
   {
     id: "us-economics-berkeley", name: "Economics BA",
     university: "UC Berkeley", country: "US", degreeLevel: "BA", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2123,7 +2123,7 @@ const courses = [
   {
     id: "us-business-berkeley", name: "Business Administration BS (Haas)",
     university: "UC Berkeley", country: "US", degreeLevel: "BS", category: "business",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics","Business"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics","Business"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2141,7 +2141,7 @@ const courses = [
   {
     id: "us-cs-michigan", name: "Computer Science BS",
     university: "University of Michigan", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2159,7 +2159,7 @@ const courses = [
   {
     id: "us-engineering-michigan", name: "Engineering BS",
     university: "University of Michigan", country: "US", degreeLevel: "BS", category: "engineering",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2177,7 +2177,7 @@ const courses = [
   {
     id: "us-business-michigan", name: "Business Administration BBA (Ross)",
     university: "University of Michigan", country: "US", degreeLevel: "BBA", category: "business",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics","Business"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics","Business"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2195,7 +2195,7 @@ const courses = [
   {
     id: "us-economics-michigan", name: "Economics BA",
     university: "University of Michigan", country: "US", degreeLevel: "BA", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2213,7 +2213,7 @@ const courses = [
   {
     id: "us-business-nyu", name: "Business (Stern School) BS",
     university: "New York University", country: "US", degreeLevel: "BS", category: "business",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics","Business"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics","Business"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2231,7 +2231,7 @@ const courses = [
   {
     id: "us-cs-nyu", name: "Computer Science BS",
     university: "New York University", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2249,7 +2249,7 @@ const courses = [
   {
     id: "us-law-georgetown", name: "Law BA (pre-law)",
     university: "Georgetown University", country: "US", degreeLevel: "BA", category: "law",
-    requirements: { essential: [], preferred: ["History","English"], useful: ["Philosophy","Economics"] },
+    requirements: { essential: [], preferred: [], useful: ["Philosophy","Economics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2267,7 +2267,7 @@ const courses = [
   {
     id: "us-business-georgetown", name: "Business Administration BSBA",
     university: "Georgetown University", country: "US", degreeLevel: "BSBA", category: "business",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2285,7 +2285,7 @@ const courses = [
   {
     id: "us-cs-duke", name: "Computer Science BS",
     university: "Duke University", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2303,7 +2303,7 @@ const courses = [
   {
     id: "us-economics-duke", name: "Economics BA",
     university: "Duke University", country: "US", degreeLevel: "BA", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2321,7 +2321,7 @@ const courses = [
   {
     id: "us-biomedical-jhu", name: "Biomedical Engineering BS",
     university: "Johns Hopkins University", country: "US", degreeLevel: "BS", category: "engineering",
-    requirements: { essential: ["Mathematics_Advanced","Biology"], preferred: ["Chemistry","Physics"], useful: ["Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2339,7 +2339,7 @@ const courses = [
   {
     id: "us-cs-jhu", name: "Computer Science BS",
     university: "Johns Hopkins University", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -2393,7 +2393,7 @@ const courses = [
     university: "National University of Singapore", country: "SG", degreeLevel: "MBBS", category: "medicine",
     requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "655 at HL" },
-    admissionTests: ["UCAT"],
+    admissionTests: [],
     universityContext: {
       tier: "world-top-50",
       intlFriendly: true,
@@ -2510,7 +2510,7 @@ const courses = [
     university: "Nanyang Technological University", country: "SG", degreeLevel: "MBBS", category: "medicine",
     requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "655 at HL" },
-    admissionTests: ["UCAT"],
+    admissionTests: ["UCAT"], // verify
     universityContext: {
       tier: "world-top-50",
       intlFriendly: true,
@@ -2549,7 +2549,7 @@ const courses = [
     university: "Singapore Management University", country: "SG", degreeLevel: "LLB", category: "law",
     requirements: { essential: ["English"], preferred: ["History","Economics"], useful: ["Mathematics_Standard"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
-    admissionTests: ["LSAT"],
+    admissionTests: ["LSAT"], // verify
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -2748,7 +2748,7 @@ const courses = [
     university: "Chinese University of Hong Kong", country: "HK", degreeLevel: "MBChB", category: "medicine",
     requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "655 at HL" },
-    admissionTests: ["UCAT"],
+    admissionTests: ["UCAT"], // verify
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -3075,7 +3075,7 @@ const courses = [
   {
     id: "us-cs-northwestern", name: "Computer Science BS",
     university: "Northwestern University", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3093,7 +3093,7 @@ const courses = [
   {
     id: "us-economics-northwestern", name: "Economics BA",
     university: "Northwestern University", country: "US", degreeLevel: "BA", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3111,7 +3111,7 @@ const courses = [
   {
     id: "us-engineering-northwestern", name: "Engineering BS (McCormick)",
     university: "Northwestern University", country: "US", degreeLevel: "BS", category: "engineering",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3129,7 +3129,7 @@ const courses = [
   {
     id: "us-cs-dartmouth", name: "Computer Science AB",
     university: "Dartmouth College", country: "US", degreeLevel: "AB", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3147,7 +3147,7 @@ const courses = [
   {
     id: "us-economics-dartmouth", name: "Economics AB",
     university: "Dartmouth College", country: "US", degreeLevel: "AB", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3165,7 +3165,7 @@ const courses = [
   {
     id: "us-cs-brown", name: "Computer Science ScB",
     university: "Brown University", country: "US", degreeLevel: "ScB", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3183,7 +3183,7 @@ const courses = [
   {
     id: "us-economics-brown", name: "Economics AB",
     university: "Brown University", country: "US", degreeLevel: "AB", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3201,7 +3201,7 @@ const courses = [
   {
     id: "us-cs-cornell", name: "Computer Science BS",
     university: "Cornell University", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3219,7 +3219,7 @@ const courses = [
   {
     id: "us-engineering-cornell", name: "Engineering BS",
     university: "Cornell University", country: "US", degreeLevel: "BS", category: "engineering",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3237,7 +3237,7 @@ const courses = [
   {
     id: "us-economics-cornell", name: "Economics BA",
     university: "Cornell University", country: "US", degreeLevel: "BA", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3255,7 +3255,7 @@ const courses = [
   {
     id: "us-business-cornell", name: "Business Administration BS (Dyson / Hotel)",
     university: "Cornell University", country: "US", degreeLevel: "BS", category: "business",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3273,7 +3273,7 @@ const courses = [
   {
     id: "us-cs-rice", name: "Computer Science BS",
     university: "Rice University", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3291,7 +3291,7 @@ const courses = [
   {
     id: "us-engineering-rice", name: "Engineering BS",
     university: "Rice University", country: "US", degreeLevel: "BS", category: "engineering",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3309,7 +3309,7 @@ const courses = [
   {
     id: "us-economics-vanderbilt", name: "Economics BA",
     university: "Vanderbilt University", country: "US", degreeLevel: "BA", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3327,7 +3327,7 @@ const courses = [
   {
     id: "us-cs-vanderbilt", name: "Computer Science BS",
     university: "Vanderbilt University", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3345,7 +3345,7 @@ const courses = [
   {
     id: "us-business-notredame", name: "Business Administration BBA (Mendoza)",
     university: "University of Notre Dame", country: "US", degreeLevel: "BBA", category: "business",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3363,7 +3363,7 @@ const courses = [
   {
     id: "us-cs-notredame", name: "Computer Science BS",
     university: "University of Notre Dame", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3381,7 +3381,7 @@ const courses = [
   {
     id: "us-cs-washu", name: "Computer Science BS",
     university: "Washington University in St. Louis", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3399,7 +3399,7 @@ const courses = [
   {
     id: "us-business-washu", name: "Business Administration BSBA (Olin)",
     university: "Washington University in St. Louis", country: "US", degreeLevel: "BSBA", category: "business",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3417,7 +3417,7 @@ const courses = [
   {
     id: "us-business-emory", name: "Business Administration BBA (Goizueta)",
     university: "Emory University", country: "US", degreeLevel: "BBA", category: "business",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3435,7 +3435,7 @@ const courses = [
   {
     id: "us-economics-emory", name: "Economics BA",
     university: "Emory University", country: "US", degreeLevel: "BA", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3453,7 +3453,7 @@ const courses = [
   {
     id: "us-cs-ucla", name: "Computer Science BS",
     university: "UCLA", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3471,7 +3471,7 @@ const courses = [
   {
     id: "us-engineering-ucla", name: "Mechanical Engineering BS",
     university: "UCLA", country: "US", degreeLevel: "BS", category: "engineering",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3489,7 +3489,7 @@ const courses = [
   {
     id: "us-economics-ucla", name: "Economics BA",
     university: "UCLA", country: "US", degreeLevel: "BA", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3507,7 +3507,7 @@ const courses = [
   {
     id: "us-business-usc", name: "Business Administration BS (Marshall)",
     university: "University of Southern California", country: "US", degreeLevel: "BS", category: "business",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3525,7 +3525,7 @@ const courses = [
   {
     id: "us-cs-usc", name: "Computer Science BS",
     university: "University of Southern California", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3543,7 +3543,7 @@ const courses = [
   {
     id: "us-cs-gatech", name: "Computer Science BS",
     university: "Georgia Tech", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3561,7 +3561,7 @@ const courses = [
   {
     id: "us-engineering-gatech", name: "Engineering BS",
     university: "Georgia Tech", country: "US", degreeLevel: "BS", category: "engineering",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3579,7 +3579,7 @@ const courses = [
   {
     id: "us-business-uva", name: "Commerce BS (McIntire)",
     university: "University of Virginia", country: "US", degreeLevel: "BS", category: "business",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3597,7 +3597,7 @@ const courses = [
   {
     id: "us-cs-uva", name: "Computer Science BS",
     university: "University of Virginia", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3615,7 +3615,7 @@ const courses = [
   {
     id: "us-economics-uva", name: "Economics BA",
     university: "University of Virginia", country: "US", degreeLevel: "BA", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3633,7 +3633,7 @@ const courses = [
   {
     id: "us-cs-uiuc", name: "Computer Science BS",
     university: "University of Illinois Urbana-Champaign", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3651,7 +3651,7 @@ const courses = [
   {
     id: "us-engineering-uiuc", name: "Engineering BS",
     university: "University of Illinois Urbana-Champaign", country: "US", degreeLevel: "BS", category: "engineering",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3669,7 +3669,7 @@ const courses = [
   {
     id: "us-engineering-purdue", name: "Engineering BS",
     university: "Purdue University", country: "US", degreeLevel: "BS", category: "engineering",
-    requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3687,7 +3687,7 @@ const courses = [
   {
     id: "us-cs-purdue", name: "Computer Science BS",
     university: "Purdue University", country: "US", degreeLevel: "BS", category: "cs",
-    requirements: { essential: ["Mathematics_Advanced"], preferred: ["Computer_Science","Physics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3705,7 +3705,7 @@ const courses = [
   {
     id: "us-business-unc", name: "Business Administration BSBA (Kenan-Flagler)",
     university: "UNC Chapel Hill", country: "US", degreeLevel: "BSBA", category: "business",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Business","Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3723,7 +3723,7 @@ const courses = [
   {
     id: "us-economics-unc", name: "Economics BA",
     university: "UNC Chapel Hill", country: "US", degreeLevel: "BA", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     apContext: {
@@ -3812,7 +3812,7 @@ const courses = [
     university: "McGill University", country: "CA", degreeLevel: "MDCM", category: "medicine",
     requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "655 at HL" },
-    admissionTests: ["MCAT"],
+    admissionTests: ["MCAT"], // verify
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,

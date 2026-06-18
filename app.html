@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="tokens.css?v=2" />
-  <link rel="stylesheet" href="styles.css?v=5" />
+  <link rel="stylesheet" href="styles.css?v=12" />
   <script defer data-domain="altiora.app" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
@@ -160,6 +160,10 @@
           </div>
         </div>
 
+        <!-- Prominent prompt to pick a system (e.g. arriving from Field Overview
+             with no saved qualification system) — populated/toggled by JS -->
+        <div id="systemPrompt" class="system-prompt hidden" role="status" aria-live="polite"></div>
+
         <!-- Grade input — shown after system is chosen, above subject picker -->
         <div id="gradeInputSection" class="grade-input-section hidden" aria-live="polite">
           <!-- populated by JS -->
@@ -170,6 +174,7 @@
           <div class="subject-picker-header">
             <span class="control-label">Your subjects</span>
             <span id="subjectCountBadge" class="count-badge">none selected</span>
+            <button type="button" id="clearSubjectsBtn" class="clear-subjects-btn hidden" aria-label="Clear all selected subjects">Clear all</button>
           </div>
           <div class="subject-search-bar">
             <input
@@ -588,7 +593,7 @@
   <script src="data/university-profiles.js?v=1"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
   <script src="state.js?v=2"></script>
-  <script src="main.js?v=16"></script>
+  <script src="main.js?v=25"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);
