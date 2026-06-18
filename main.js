@@ -2721,6 +2721,12 @@ function switchToPlanCombo(tags, systemKey) {
   state.checkSystem      = systemKey;
   state.selectedSubjects = [];
   state.selectedTags     = new Set();
+  // Arriving from the Planner: the planned category is the intent, so drop any
+  // stale field-exploration context. Otherwise buildSubjectPicker →
+  // applyExploreFieldFilter would re-apply the old field's category (wrong chip
+  // + "Exploring X" banner) and a later system change would snap the filter
+  // back to it instead of the planned category.
+  state.exploreField = null;
   $('checkSystemSelect').value = systemKey;
   buildSubjectPicker(systemKey);
 
