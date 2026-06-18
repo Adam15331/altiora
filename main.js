@@ -672,6 +672,17 @@ function isGradeAboveStudent(course, system, studentGrade) {
   return false;
 }
 
+// For a grey course (predicted grade below the typical offer), describe the
+// gap as { have, need } strings in the active qualification system, e.g.
+// { have: "A*", need: "A*A*A" } or { have: "37 points", need: "39 points" }.
+function gradeGapInfo(course, system, studentGrade) {
+  if (!studentGrade) return null;
+  const need = course.grades?.[SYSTEM_GRADE_KEY[system]] ?? null;
+  if (!need) return null;
+  if (system === 'IB') return { have: `${studentGrade} points`, need: `${need} points` };
+  return { have: String(studentGrade), need: String(need) };
+}
+
 const GRADE_CONVERSION_HINTS = {
   IB:         'IB 38 points ≈ A*AA at A-Level. Check university websites for specific conversion policies.',
   US_AP:      'AP 5 ≈ A* at A-Level. US universities use holistic review – grades are one factor.',
@@ -1987,7 +1998,10 @@ function renderCheckResults() {
     const result = classify(course, state.selectedTags);
     if (tooFew && result.status === 'green') result.status = 'amber';
     if (state.predictedGrade && (result.status === 'green' || result.status === 'amber')) {
-      if (isGradeAboveStudent(course, state.checkSystem, state.predictedGrade)) result.status = 'grey';
+      if (isGradeAboveStudent(course, state.checkSystem, state.predictedGrade)) {
+        result.status = 'grey';
+        result.gradeGap = gradeGapInfo(course, state.checkSystem, state.predictedGrade);
+      }
     }
     if (state.checkSystem === 'IB' && (result.status === 'green' || result.status === 'amber')) {
       const requiredHLTags = course.grades?.ibHL ?? [];
@@ -2048,7 +2062,9 @@ function renderCheckResults() {
     cardIndex += byStatus.amber.length;
   }
   if (byStatus.grey.length) {
-    container.appendChild(buildGroup('grey', 'Subject match, but grade threshold is high', byStatus.grey, cardIndex, true));
+    // Visible by default (no collapse) — subject matches where the predicted
+    // grade is below the typical offer. Each card shows the grade gap.
+    container.appendChild(buildGroup('grey', 'Subject match, but grade threshold is high', byStatus.grey, cardIndex));
     cardIndex += byStatus.grey.length;
   }
   if (byStatus.red.length) {
@@ -2223,6 +2239,7 @@ function buildCheckCard(course, result) {
     green: `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M7 10l2 2 4-4"/></svg>`,
     amber: `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3a7 7 0 0 1 0 14V3z"/><circle cx="10" cy="10" r="7"/></svg>`,
     red:   `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M8 8l4 4M12 8l-4 4"/></svg>`,
+    grey:  `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.5L18.5 17H1.5L10 2.5z"/><path d="M10 8v4M10 14.5v.5"/></svg>`,
   };
   const graduationIcon = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l7-4 7 4-7 4-7-4z"/><path d="M7 10v3.5c0 1.5 1.3 2 3 2s3-.5 3-2V10"/><path d="M17 8v4"/></svg>`;
   const chevronIcon    = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg>`;
@@ -2270,6 +2287,7 @@ function buildCheckCard(course, result) {
       <span class="card-cat-badge">${esc(catLabel)}</span>
     </div>
     ${gradeStr ? `<div class="card-grades">${esc(sys === 'IB' ? `${gradeStr} IB points` : gradeStr)}</div>` : ''}
+    ${(status === 'grey' && result.gradeGap) ? `<p class="card-grade-gap">⚠️ You have ${esc(result.gradeGap.have)}, course asks for ${esc(result.gradeGap.need)}</p>` : ''}
     ${ibHlHtml}
     ${apWarningHtml}
     ${tests.length ? `

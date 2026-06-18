@@ -1966,7 +1966,20 @@ body:not(.demo-enabled) .demo-only { display: none !important; }
 .course-card--green { border-left-color: var(--color-match-strong); }
 .course-card--amber { border-left-color: var(--color-match-possible); }
 .course-card--red   { border-left-color: var(--color-match-reach); }
-.course-card--grey  { border-left-color: var(--color-border); opacity: .75; }
+/* Grey = subject match but predicted grade below the typical offer. Shown in
+   the main list (not collapsed) with a dashed warning border. */
+.course-card--grey {
+  border-style: dashed;
+  border-color: var(--color-match-possible);
+  border-left-color: var(--color-match-possible);
+}
+.card-grade-gap {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-match-possible);
+  line-height: 1.5;
+}
 
 /* Status line — tiny icon + label, uppercase, match colour */
 .card-status {
@@ -1980,6 +1993,7 @@ body:not(.demo-enabled) .demo-only { display: none !important; }
 .card-status--green { color: var(--color-match-strong); }
 .card-status--amber { color: var(--color-match-possible); }
 .card-status--red   { color: var(--color-match-reach); }
+.card-status--grey  { color: var(--color-match-possible); }
 .card-status--none  { color: var(--color-text-tertiary); text-transform: none; letter-spacing: 0; font-weight: 500; }
 
 .card-header {
