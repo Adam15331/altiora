@@ -1931,7 +1931,9 @@ function renderCheckResults() {
         // Find which required HL tags are missing
         const missingHL = requiredHLTags.filter(tag => !studentHLTags.includes(tag));
 
-        // Only downgrade and show warning if there are ACTUAL missing HL subjects
+        // Only downgrade and warn for ACTUAL missing HL subjects this course
+        // lists. Courses with no ibHL requirements get no HL warning at all —
+        // no blanket "expect 3 HLs" message and no GREEN→AMBER demotion.
         if (missingHL.length > 0) {
           if (result.status === 'green') result.status = 'amber';
           result.ibHLWarning = missingHL;
@@ -1940,13 +1942,6 @@ function renderCheckResults() {
         }
       } else {
         result.ibHLWarning = null;
-      }
-      // Most universities worldwide expect 3 HL subjects for IB Diploma
-      const hlCount = Array.from(selectedSubjectsWithLevel.values()).filter(item => item.isHL).length;
-      if (hlCount < 3) {
-        if (result.status === 'green') result.status = 'amber';
-        if (!result.ibHLWarning) result.ibHLWarning = [];
-        result.ibHLWarning.push('Most universities expect at least 3 HL subjects for the full IB Diploma');
       }
     }
     byStatus[result.status].push({ course, result });
