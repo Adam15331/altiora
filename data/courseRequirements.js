@@ -2393,7 +2393,7 @@ const courses = [
     university: "National University of Singapore", country: "SG", degreeLevel: "MBBS", category: "medicine",
     requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "655 at HL" },
-    admissionTests: ["UCAT"],
+    admissionTests: [],
     universityContext: {
       tier: "world-top-50",
       intlFriendly: true,
@@ -2510,7 +2510,7 @@ const courses = [
     university: "Nanyang Technological University", country: "SG", degreeLevel: "MBBS", category: "medicine",
     requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "655 at HL" },
-    admissionTests: ["UCAT"],
+    admissionTests: ["UCAT"], // verify
     universityContext: {
       tier: "world-top-50",
       intlFriendly: true,
@@ -2549,7 +2549,7 @@ const courses = [
     university: "Singapore Management University", country: "SG", degreeLevel: "LLB", category: "law",
     requirements: { essential: ["English"], preferred: ["History","Economics"], useful: ["Mathematics_Standard"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
-    admissionTests: ["LSAT"],
+    admissionTests: ["LSAT"], // verify
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -2748,7 +2748,7 @@ const courses = [
     university: "Chinese University of Hong Kong", country: "HK", degreeLevel: "MBChB", category: "medicine",
     requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "655 at HL" },
-    admissionTests: ["UCAT"],
+    admissionTests: ["UCAT"], // verify
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -3812,7 +3812,7 @@ const courses = [
     university: "McGill University", country: "CA", degreeLevel: "MDCM", category: "medicine",
     requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "655 at HL" },
-    admissionTests: ["MCAT"],
+    admissionTests: ["MCAT"], // verify
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
