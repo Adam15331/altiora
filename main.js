@@ -1870,6 +1870,15 @@ function onSubjectToggle(e = null) {
 function syncSubjectCount() {
   const n = state.selectedSubjects.length;
   $('subjectCountBadge').textContent = n === 0 ? 'none selected' : `${n} selected`;
+  $('clearSubjectsBtn')?.classList.toggle('hidden', n === 0);
+}
+
+// Uncheck every subject and reset to the empty state — a one-click "start over".
+function clearAllSubjects() {
+  $$('#subjectPicker input:checked').forEach(cb => { cb.checked = false; });
+  // onSubjectToggle re-derives state, re-enables any locked Maths chip, hides
+  // the results, updates the count, and re-renders the empty state.
+  onSubjectToggle();
 }
 
 $('subjectFilterInput').addEventListener('input', e => {
@@ -1878,6 +1887,8 @@ $('subjectFilterInput').addEventListener('input', e => {
     chip.classList.toggle('hidden', !!q && !chip.querySelector('span').textContent.toLowerCase().includes(q));
   });
 });
+
+$('clearSubjectsBtn')?.addEventListener('click', clearAllSubjects);
 
 /* ═══════════════════════════════════════════════════════════════
  * COUNTRY FILTER BAR

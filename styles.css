@@ -1515,6 +1515,24 @@ body:not(.demo-enabled) .demo-only { display: none !important; }
   font-size: var(--text-xs);
   font-weight: 600;
 }
+.clear-subjects-btn {
+  margin-left: auto;
+  padding: 3px 10px;
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: border-color var(--t-fast), color var(--t-fast);
+}
+.clear-subjects-btn:hover {
+  border-color: var(--color-text-tertiary);
+  color: var(--color-text-primary);
+}
+.clear-subjects-btn.hidden { display: none; }
 .subject-search-bar   { margin-bottom: var(--space-3); }
 .subject-filter-input {
   width: 100%; max-width: 300px;
