@@ -975,6 +975,10 @@ function switchMode(mode) {
     return;
   }
 
+  // Leaving the TMUA tool: stop any running mock timer so it can't fire
+  // against a torn-down panel.
+  if (state.mode === 'tmua' && mode !== 'tmua') tmuaStopTimer();
+
   state.mode = mode;
   logEvent('mode_switch', { mode });
 
@@ -992,6 +996,7 @@ function switchMode(mode) {
   $('panel-personal-statement').classList.toggle('hidden', mode !== 'personal-statement');
   $('panel-interview-coach')   .classList.toggle('hidden', mode !== 'interview-coach');
   $('panel-applying')          .classList.toggle('hidden', mode !== 'applying');
+  $('panel-tmua')              .classList.toggle('hidden', mode !== 'tmua');
   $('panel-shortlist')         .classList.toggle('hidden', mode !== 'shortlist');
   $('panel-home')              .classList.toggle('hidden', mode !== 'home');
   $('panel-field-overview')    .classList.toggle('hidden', mode !== 'field-overview');
@@ -1006,6 +1011,9 @@ function switchMode(mode) {
   }
   if (mode === 'applying') {
     renderApplyingPanel();
+  }
+  if (mode === 'tmua') {
+    renderTmua();
   }
   if (mode === 'shortlist') {
     renderShortlist();
@@ -1025,8 +1033,8 @@ function switchMode(mode) {
 const STAGES = {
   exploring: { name: 'Exploring options',          primary: 'strengths', secondary: ['plan'] },
   choosing:  { name: 'Choosing my subjects',       primary: 'plan',      secondary: ['check'] },
-  building:  { name: 'Building my university list', primary: 'check',     secondary: ['reverse'] },
-  applying:  { name: 'Applying',                    primary: 'applying',  secondary: ['personal-statement', 'interview-coach'] },
+  building:  { name: 'Building my university list', primary: 'check',     secondary: ['reverse', 'tmua'] },
+  applying:  { name: 'Applying',                    primary: 'applying',  secondary: ['tmua', 'personal-statement', 'interview-coach'] },
 };
 
 const MODE_LABELS = {
@@ -1035,6 +1043,7 @@ const MODE_LABELS = {
   reverse:              'Course Finder',
   check:                'Check Combination',
   applying:             'Application Tools',
+  tmua:                 'TMUA Practice',
   'personal-statement': 'Personal Statement',
   'interview-coach':    'Interview Coach',
 };
@@ -1126,6 +1135,589 @@ function renderApplyingPanel() {
     const label  = course ? `${course.name} — ${course.university}` : id;
     return `<div class="applying-shortlist__item">${esc(label)}</div>`;
   }).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * TMUA PRACTICE ENGINE
+ * Admission-test practice for the TMUA. Two modes (Quick Practice and
+ * Full Mock) share one engine. Questions come from getQuestions() — the
+ * single sourcing boundary that returns a Promise so the stub bank can be
+ * swapped for an AI/Netlify backend later without touching the engine.
+ * Progress persists via AltioraState (the retention mechanic).
+ * ═══════════════════════════════════════════════════════════════ */
+
+const TMUA_PAPER_NAMES = {
+  1: 'Paper 1 · Applications of Mathematical Knowledge',
+  2: 'Paper 2 · Mathematical Reasoning',
+};
+const TMUA_MINUTES_PER_PAPER = 75;
+const TMUA_MOCK_QUESTIONS_PER_PAPER = 20;
+
+// View state for the whole tool. `session` holds the active practice run.
+const tmuaState = {
+  view: 'home',                 // home | quick-setup | mock-setup | session | results | progress
+  session: null,
+  quickCfg: { paper: 'mixed', topic: 'any', count: 10 },
+  mockCfg:  { papers: [1] },
+  lastResult: null,
+  _timerId: null,
+};
+
+/* ─── Question sourcing BOUNDARY ──────────────────────────────────
+ * getQuestions(paper, topic, count) → Promise<question[]>
+ * The ONLY place that knows where questions come from. Today it draws
+ * from the hand-written TMUA_QUESTIONS stub bank; later this body is
+ * replaced with a call to the AI generation backend (e.g. a Netlify
+ * function). The engine depends only on this contract, so that swap is
+ * a contained change.
+ *   paper: 1 | 2 | 'mixed'
+ *   topic: a topic string, or 'any'
+ *   count: how many questions to return
+ * ───────────────────────────────────────────────────────────────── */
+function getQuestions(paper, topic, count) {
+  const bank = (typeof TMUA_QUESTIONS !== 'undefined') ? TMUA_QUESTIONS : [];
+  let pool = bank.filter(q => paper === 'mixed' || q.paper === paper);
+  if (topic && topic !== 'any') pool = pool.filter(q => q.topic === topic);
+  pool = tmuaShuffle(pool.slice());
+
+  // The stub bank is small, so to exercise the full format now (e.g. a
+  // 20-question mock from 10 stub questions) we cycle through the pool.
+  // The AI source will later return `count` unique questions instead.
+  const out = [];
+  for (let i = 0; out.length < count && pool.length; i++) out.push(pool[i % pool.length]);
+  return Promise.resolve(out);
+}
+
+/* ─── small helpers ─────────────────────────────────────────────── */
+function tmuaShuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// Render simple maths notation: `^N` / `^(...)` → superscript. Most stems
+// use Unicode (², √, ≤ …) directly; this handles the rest. Escapes HTML.
+function tmuaMath(s) {
+  let h = esc(String(s ?? ''));
+  h = h.replace(/\^\(([^)]+)\)/g, '<sup>$1</sup>');
+  h = h.replace(/\^(-?[0-9A-Za-z]+)/g, '<sup>$1</sup>');
+  return h;
+}
+
+// Approximate raw → TMUA scaled score (1.0–9.0 in 0.5 steps). Placeholder
+// linear conversion until a real calibration is wired in.
+function tmuaScaled(correct, total) {
+  if (!total) return 1.0;
+  let s = 1 + (correct / total) * 8;
+  s = Math.round(s * 2) / 2;
+  return Math.min(9, Math.max(1, s));
+}
+
+function tmuaFmtTime(totalSec) {
+  const m = Math.floor(totalSec / 60), s = totalSec % 60;
+  return `${m}:${String(s).padStart(2, '0')}`;
+}
+function tmuaFmtClock(sec) {
+  const m = Math.round(sec / 60);
+  return m <= 1 ? `${sec}s` : `${m} min`;
+}
+
+const LETTERS = ['A', 'B', 'C', 'D', 'E'];
+
+// Per-topic correct/total for one session (answers keyed by question index).
+function tmuaSessionTopics(session) {
+  const t = {};
+  session.questions.forEach((q, i) => {
+    const r = (t[q.topic] ??= { correct: 0, total: 0 });
+    r.total++;
+    if (session.answers[i] === q.correctAnswer) r.correct++;
+  });
+  return t;
+}
+
+/* ─── timer (mock mode) ─────────────────────────────────────────── */
+function tmuaStopTimer() {
+  if (tmuaState._timerId) { clearInterval(tmuaState._timerId); tmuaState._timerId = null; }
+}
+function tmuaStartTimer() {
+  tmuaStopTimer();
+  const tick = () => {
+    const s = tmuaState.session;
+    if (!s || !s.deadline) return;
+    const remain = Math.max(0, Math.round((s.deadline - Date.now()) / 1000));
+    const el = $('tmuaTimer');
+    if (el) {
+      el.textContent = `⏱ ${tmuaFmtTime(remain)}`;
+      el.classList.toggle('tmua-timer--warn', remain <= 300);
+    }
+    if (remain <= 0) { tmuaStopTimer(); finishTmuaSession(true); }
+  };
+  tick();
+  tmuaState._timerId = setInterval(tick, 1000);
+}
+
+/* ─── start / navigate / finish ─────────────────────────────────── */
+function startTmuaQuick() {
+  const { paper, topic, count } = tmuaState.quickCfg;
+  const paperVal = paper === 'mixed' ? 'mixed' : Number(paper);
+  getQuestions(paperVal, topic, count).then(questions => {
+    if (!questions.length) { showToast('No questions available for that selection'); return; }
+    tmuaState.session = {
+      mode: 'quick',
+      papers: paper === 'mixed' ? [1, 2] : [Number(paper)],
+      questions, answers: {}, checked: {}, idx: 0,
+      startedAt: Date.now(), timed: false,
+    };
+    tmuaState.view = 'session';
+    logEvent('tmua_start', { mode: 'quick', paper, topic, count });
+    renderTmua();
+  });
+}
+
+function startTmuaMock() {
+  const papers = tmuaState.mockCfg.papers.slice();
+  // Fetch each paper's block in order, then concatenate for a single run.
+  Promise.all(papers.map(p => getQuestions(p, 'any', TMUA_MOCK_QUESTIONS_PER_PAPER)))
+    .then(blocks => {
+      const questions = blocks.flat();
+      if (!questions.length) { showToast('No questions available'); return; }
+      const durationSec = papers.length * TMUA_MINUTES_PER_PAPER * 60;
+      tmuaState.session = {
+        mode: 'mock', papers,
+        questions, answers: {}, checked: {}, idx: 0,
+        startedAt: Date.now(), timed: true,
+        durationSec, deadline: Date.now() + durationSec * 1000,
+      };
+      tmuaState.view = 'session';
+      logEvent('tmua_start', { mode: 'mock', papers });
+      renderTmua();
+      tmuaStartTimer();
+    });
+}
+
+function finishTmuaSession(auto = false) {
+  tmuaStopTimer();
+  const s = tmuaState.session;
+  if (!s) return;
+  const total = s.questions.length;
+  let correct = 0;
+  s.questions.forEach((q, i) => { if (s.answers[i] === q.correctAnswer) correct++; });
+  const perTopic = tmuaSessionTopics(s);
+  const timeSec = Math.round((Date.now() - s.startedAt) / 1000);
+  const scaled = tmuaScaled(correct, total);
+
+  const record = {
+    id: 'tmua_' + Date.now(),
+    date: new Date().toISOString(),
+    mode: s.mode,
+    papers: s.papers,
+    total, correct, scaled, timeSec,
+    perTopic,
+  };
+  if (typeof AltioraState !== 'undefined') AltioraState.addTmuaSession(record);
+  logEvent('tmua_complete', { mode: s.mode, correct, total, scaled, auto });
+
+  tmuaState.lastResult = { record, session: s, auto };
+  tmuaState.view = 'results';
+  renderTmua();
+}
+
+/* ─── progress analytics ────────────────────────────────────────── */
+function tmuaAggregateTopics(sessions) {
+  const agg = {};
+  sessions.forEach(s => {
+    for (const [topic, r] of Object.entries(s.perTopic || {})) {
+      const a = (agg[topic] ??= { correct: 0, total: 0 });
+      a.correct += r.correct; a.total += r.total;
+    }
+  });
+  return agg;
+}
+function tmuaWeakTopics(agg) {
+  return Object.entries(agg)
+    .filter(([, r]) => r.total >= 3)
+    .map(([topic, r]) => ({ topic, acc: r.correct / r.total }))
+    .filter(t => t.acc < 0.7)
+    .sort((a, b) => a.acc - b.acc)
+    .slice(0, 3);
+}
+function tmuaActivity(sessions) {
+  const days = new Set(sessions.map(s => (s.date || '').slice(0, 10)));
+  let streak = 0;
+  const d = new Date();
+  while (days.has(d.toISOString().slice(0, 10))) { streak++; d.setDate(d.getDate() - 1); }
+  return { sessions: sessions.length, days: days.size, streak };
+}
+
+/* ─── render dispatcher ─────────────────────────────────────────── */
+function renderTmua() {
+  const panel = $('panel-tmua');
+  if (!panel) return;
+  switch (tmuaState.view) {
+    case 'quick-setup': return renderTmuaQuickSetup(panel);
+    case 'mock-setup':  return renderTmuaMockSetup(panel);
+    case 'session':     return renderTmuaSession(panel);
+    case 'results':     return renderTmuaResults(panel);
+    case 'progress':    return renderTmuaProgress(panel);
+    default:            return renderTmuaHome(panel);
+  }
+}
+
+function tmuaGo(view) { tmuaState.view = view; renderTmua(); }
+
+const TMUA_DISCLAIMER = `
+  <p class="tmua-note" role="note">
+    These are original practice questions written in the <strong>style of the TMUA</strong> —
+    not official past papers or specimen questions. For the real test interface and official
+    materials, see
+    <a href="https://www.uat.ac.uk/tmua" target="_blank" rel="noopener noreferrer">UAT UK's TMUA page</a>.
+  </p>`;
+
+function renderTmuaHome(panel) {
+  const sessions = (typeof AltioraState !== 'undefined') ? AltioraState.getTmuaSessions() : [];
+  const act = tmuaActivity(sessions);
+  const stat = sessions.length
+    ? `<p class="tmua-home__stat">${act.sessions} session${act.sessions === 1 ? '' : 's'} ·
+        ${act.streak > 0 ? `🔥 ${act.streak}-day streak` : 'start a streak today'}</p>`
+    : '';
+  panel.innerHTML = `
+    <div class="tmua">
+      <header class="tmua__header">
+        <h1 class="tmua__title">TMUA Practice</h1>
+        <p class="tmua__sub">Test of Mathematics for University Admission — practise in the real format and track your progress over time.</p>
+      </header>
+      ${TMUA_DISCLAIMER}
+      <div class="tmua-modes">
+        <button class="tmua-mode-card" data-go="quick-setup">
+          <span class="tmua-mode-card__icon" aria-hidden="true">⚡</span>
+          <span class="tmua-mode-card__title">Quick Practice</span>
+          <span class="tmua-mode-card__desc">A few questions, instant feedback after each. Pick a paper, topic and length. Low-pressure, drop in any time.</span>
+        </button>
+        <button class="tmua-mode-card" data-go="mock-setup">
+          <span class="tmua-mode-card__icon" aria-hidden="true">📝</span>
+          <span class="tmua-mode-card__title">Full Mock</span>
+          <span class="tmua-mode-card__desc">Real format: 20 questions, 75-minute timer per paper, exam conditions, scored 1.0–9.0 with a full breakdown.</span>
+        </button>
+      </div>
+      <div class="tmua-home__footer">
+        <button class="tmua-btn tmua-btn--ghost" data-go="progress">📈 View my progress</button>
+        ${stat}
+      </div>
+    </div>`;
+  panel.querySelectorAll('[data-go]').forEach(b =>
+    b.addEventListener('click', () => tmuaGo(b.dataset.go)));
+}
+
+function renderTmuaQuickSetup(panel) {
+  const cfg = tmuaState.quickCfg;
+  const bank = (typeof TMUA_QUESTIONS !== 'undefined') ? TMUA_QUESTIONS : [];
+  const paperFilter = cfg.paper === 'mixed' ? () => true : q => q.paper === Number(cfg.paper);
+  const topics = [...new Set(bank.filter(paperFilter).map(q => q.topic))].sort();
+  if (!topics.includes(cfg.topic)) cfg.topic = 'any';
+
+  panel.innerHTML = `
+    <div class="tmua">
+      <button class="tmua-back" data-go="home">← Back</button>
+      <h2 class="tmua__title">Quick Practice</h2>
+      <div class="tmua-setup">
+        <label class="tmua-field">
+          <span class="tmua-field__label">Paper</span>
+          <div class="select-wrap"><select id="tmuaQPaper" class="grade-select">
+            <option value="mixed"${cfg.paper === 'mixed' ? ' selected' : ''}>Mixed (both papers)</option>
+            <option value="1"${String(cfg.paper) === '1' ? ' selected' : ''}>Paper 1 — Applications</option>
+            <option value="2"${String(cfg.paper) === '2' ? ' selected' : ''}>Paper 2 — Reasoning</option>
+          </select></div>
+        </label>
+        <label class="tmua-field">
+          <span class="tmua-field__label">Topic</span>
+          <div class="select-wrap"><select id="tmuaQTopic" class="grade-select">
+            <option value="any">Any topic</option>
+            ${topics.map(t => `<option value="${esc(t)}"${cfg.topic === t ? ' selected' : ''}>${esc(t)}</option>`).join('')}
+          </select></div>
+        </label>
+        <div class="tmua-field">
+          <span class="tmua-field__label">Number of questions</span>
+          <div class="tmua-count">
+            ${[5, 10, 15].map(n => `<button class="tmua-count__btn${cfg.count === n ? ' tmua-count__btn--active' : ''}" data-count="${n}">${n}</button>`).join('')}
+          </div>
+        </div>
+      </div>
+      <button class="tmua-btn tmua-btn--primary" id="tmuaQStart">Start practice →</button>
+      <p class="tmua-note">Immediate feedback after each question. Untimed — go at your own pace.</p>
+    </div>`;
+
+  panel.querySelector('#tmuaQPaper').addEventListener('change', e => { cfg.paper = e.target.value; renderTmua(); });
+  panel.querySelector('#tmuaQTopic').addEventListener('change', e => { cfg.topic = e.target.value; });
+  panel.querySelectorAll('[data-count]').forEach(b =>
+    b.addEventListener('click', () => { cfg.count = Number(b.dataset.count); renderTmua(); }));
+  panel.querySelector('#tmuaQStart').addEventListener('click', startTmuaQuick);
+  panel.querySelector('[data-go]').addEventListener('click', () => tmuaGo('home'));
+}
+
+function renderTmuaMockSetup(panel) {
+  const cfg = tmuaState.mockCfg;
+  const key = cfg.papers.join(',');
+  const opts = [
+    { papers: [1],    label: 'Paper 1 only', sub: 'Applications · 20 questions · 75 min' },
+    { papers: [2],    label: 'Paper 2 only', sub: 'Reasoning · 20 questions · 75 min' },
+    { papers: [1, 2], label: 'Both papers (full exam)', sub: '40 questions · 150 min total, back-to-back' },
+  ];
+  panel.innerHTML = `
+    <div class="tmua">
+      <button class="tmua-back" data-go="home">← Back</button>
+      <h2 class="tmua__title">Full Mock</h2>
+      <p class="tmua__sub">Exam conditions: a countdown timer, no feedback until the end, and auto-submit when time runs out.</p>
+      <div class="tmua-setup">
+        ${opts.map(o => `
+          <button class="tmua-radio-card${key === o.papers.join(',') ? ' tmua-radio-card--active' : ''}" data-papers="${o.papers.join(',')}">
+            <span class="tmua-radio-card__title">${esc(o.label)}</span>
+            <span class="tmua-radio-card__sub">${esc(o.sub)}</span>
+          </button>`).join('')}
+      </div>
+      <button class="tmua-btn tmua-btn--primary" id="tmuaMStart">Start mock →</button>
+      <p class="tmua-note">No calculator, no formula sheet, no negative marking — just like the real test.</p>
+    </div>`;
+  panel.querySelectorAll('[data-papers]').forEach(b =>
+    b.addEventListener('click', () => { cfg.papers = b.dataset.papers.split(',').map(Number); renderTmua(); }));
+  panel.querySelector('#tmuaMStart').addEventListener('click', startTmuaMock);
+  panel.querySelector('[data-go]').addEventListener('click', () => tmuaGo('home'));
+}
+
+function renderTmuaSession(panel) {
+  const s = tmuaState.session;
+  if (!s) return tmuaGo('home');
+  const i = s.idx;
+  const q = s.questions[i];
+  const total = s.questions.length;
+  const chosen = s.answers[i] ?? null;
+  const isQuick = s.mode === 'quick';
+  const checked = isQuick && s.checked[i];
+  const pct = Math.round(((i) / total) * 100);
+
+  const optionsHtml = q.options.map((opt, oi) => {
+    const letter = LETTERS[oi];
+    let cls = 'tmua-option';
+    if (chosen === letter) cls += ' tmua-option--chosen';
+    if (checked) {
+      if (letter === q.correctAnswer) cls += ' tmua-option--correct';
+      else if (letter === chosen)     cls += ' tmua-option--wrong';
+    }
+    return `<button class="${cls}" data-opt="${letter}"${checked ? ' disabled' : ''}>
+        <span class="tmua-option__letter">${letter}</span>
+        <span class="tmua-option__text">${tmuaMath(opt)}</span>
+      </button>`;
+  }).join('');
+
+  const feedbackHtml = checked ? `
+    <div class="tmua-feedback tmua-feedback--${chosen === q.correctAnswer ? 'right' : 'wrong'}">
+      <p class="tmua-feedback__verdict">${chosen === q.correctAnswer ? '✓ Correct' : `✗ Not quite — the answer is ${q.correctAnswer}`}</p>
+      <p class="tmua-feedback__explain">${tmuaMath(q.explanation)}</p>
+    </div>` : '';
+
+  const last = i === total - 1;
+  let controls;
+  if (isQuick) {
+    controls = checked
+      ? `<button class="tmua-btn tmua-btn--primary" id="tmuaNext">${last ? 'See results →' : 'Next question →'}</button>`
+      : `<button class="tmua-btn tmua-btn--primary" id="tmuaCheck"${chosen ? '' : ' disabled'}>Check answer</button>`;
+  } else {
+    controls = `
+      <div class="tmua-nav">
+        <button class="tmua-btn tmua-btn--ghost" id="tmuaPrev"${i === 0 ? ' disabled' : ''}>← Previous</button>
+        ${last
+          ? `<button class="tmua-btn tmua-btn--primary" id="tmuaSubmit">Submit mock</button>`
+          : `<button class="tmua-btn tmua-btn--primary" id="tmuaNext">Next →</button>`}
+      </div>`;
+  }
+
+  panel.innerHTML = `
+    <div class="tmua tmua-session">
+      <div class="tmua-session__bar">
+        <span class="tmua-session__counter">Question ${i + 1} of ${total}</span>
+        <span class="tmua-badge">${esc(q.topic)}</span>
+        <span class="tmua-badge tmua-badge--muted">Paper ${q.paper}</span>
+        ${s.timed ? `<span id="tmuaTimer" class="tmua-timer">⏱ —</span>` : ''}
+      </div>
+      <div class="tmua-progressbar"><span style="width:${pct}%"></span></div>
+      <p class="tmua-stem">${tmuaMath(q.stem)}</p>
+      <div class="tmua-options">${optionsHtml}</div>
+      ${feedbackHtml}
+      <div class="tmua-controls">${controls}</div>
+      ${s.timed ? '' : `<button class="tmua-back tmua-back--inline" id="tmuaQuit">Quit practice</button>`}
+    </div>`;
+
+  panel.querySelectorAll('.tmua-option').forEach(b => b.addEventListener('click', () => {
+    if (checked) return;
+    s.answers[i] = b.dataset.opt;
+    renderTmua();
+  }));
+  const wire = (id, fn) => { const el = $(id); if (el) el.addEventListener('click', fn); };
+  wire('tmuaCheck', () => { if (s.answers[i]) { s.checked[i] = true; renderTmua(); } });
+  wire('tmuaNext', () => { if (last && isQuick) finishTmuaSession(); else { s.idx = Math.min(total - 1, i + 1); renderTmua(); } });
+  wire('tmuaPrev', () => { s.idx = Math.max(0, i - 1); renderTmua(); });
+  wire('tmuaSubmit', () => {
+    const unanswered = s.questions.filter((_, qi) => !s.answers[qi]).length;
+    if (unanswered && !confirm(`You have ${unanswered} unanswered question${unanswered === 1 ? '' : 's'}. Submit anyway?`)) return;
+    finishTmuaSession();
+  });
+  wire('tmuaQuit', () => { if (confirm('Quit this practice? Your progress in this session will be lost.')) { tmuaState.session = null; tmuaGo('home'); } });
+
+  if (s.timed) tmuaStartTimer();
+}
+
+function renderTmuaResults(panel) {
+  const res = tmuaState.lastResult;
+  if (!res) return tmuaGo('home');
+  const { record, session, auto } = res;
+  const { correct, total, scaled, timeSec, perTopic } = record;
+  const isMock = record.mode === 'mock';
+
+  const topicRows = Object.entries(perTopic)
+    .sort((a, b) => (a[1].correct / a[1].total) - (b[1].correct / b[1].total))
+    .map(([topic, r]) => {
+      const pct = Math.round((r.correct / r.total) * 100);
+      return `<div class="tmua-topic-row">
+          <span class="tmua-topic-row__name">${esc(topic)}</span>
+          <span class="tmua-bar"><span class="tmua-bar__fill" style="width:${pct}%"></span></span>
+          <span class="tmua-topic-row__score">${r.correct}/${r.total}</span>
+        </div>`;
+    }).join('');
+
+  const reviewHtml = session.questions.map((q, i) => {
+    const yours = session.answers[i] ?? null;
+    const right = yours === q.correctAnswer;
+    return `<div class="tmua-review-item tmua-review-item--${yours == null ? 'skipped' : right ? 'right' : 'wrong'}">
+        <p class="tmua-review-item__q"><span class="tmua-review-item__num">Q${i + 1}</span> ${tmuaMath(q.stem)}</p>
+        <p class="tmua-review-item__ans">
+          Your answer: <strong>${yours ? `${yours}. ${tmuaMath(q.options[LETTERS.indexOf(yours)])}` : 'not answered'}</strong>
+          ${right ? '✓' : `· Correct: <strong>${q.correctAnswer}. ${tmuaMath(q.options[LETTERS.indexOf(q.correctAnswer)])}</strong>`}
+        </p>
+        <p class="tmua-review-item__explain">${tmuaMath(q.explanation)}</p>
+      </div>`;
+  }).join('');
+
+  panel.innerHTML = `
+    <div class="tmua">
+      <h2 class="tmua__title">${isMock ? 'Mock results' : 'Practice complete'}</h2>
+      ${auto ? `<p class="tmua-note">⏱ Time ran out — your mock was auto-submitted.</p>` : ''}
+      <div class="tmua-result-grid">
+        <div class="tmua-result-stat">
+          <span class="tmua-result-stat__value">${correct}/${total}</span>
+          <span class="tmua-result-stat__label">Raw score</span>
+        </div>
+        <div class="tmua-result-stat tmua-result-stat--hero">
+          <span class="tmua-result-stat__value">${scaled.toFixed(1)}</span>
+          <span class="tmua-result-stat__label">${isMock ? 'Scaled score (1.0–9.0)' : 'Scaled (approx)'}</span>
+        </div>
+        <div class="tmua-result-stat">
+          <span class="tmua-result-stat__value">${tmuaFmtClock(timeSec)}</span>
+          <span class="tmua-result-stat__label">Time taken</span>
+        </div>
+      </div>
+      ${isMock ? `<p class="tmua-note">Scaled score is an approximate conversion for now, not an official TMUA result.</p>` : ''}
+
+      <h3 class="tmua-section-head">By topic</h3>
+      <div class="tmua-topic-list">${topicRows}</div>
+
+      <div class="tmua-controls">
+        <button class="tmua-btn tmua-btn--primary" data-go="home">Practise again</button>
+        <button class="tmua-btn tmua-btn--ghost" data-go="progress">📈 View progress</button>
+      </div>
+
+      <h3 class="tmua-section-head">Review every question</h3>
+      <div class="tmua-review">${reviewHtml}</div>
+    </div>`;
+  panel.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => tmuaGo(b.dataset.go)));
+}
+
+function renderTmuaProgress(panel) {
+  const sessions = (typeof AltioraState !== 'undefined') ? AltioraState.getTmuaSessions() : [];
+  if (!sessions.length) {
+    panel.innerHTML = `
+      <div class="tmua">
+        <button class="tmua-back" data-go="home">← Back</button>
+        <h2 class="tmua__title">Your progress</h2>
+        <div class="tmua-empty">
+          <p>No practice yet. Complete a Quick Practice or a Full Mock and your scores, topic mastery and streak will build up here.</p>
+          <button class="tmua-btn tmua-btn--primary" data-go="home">Start practising →</button>
+        </div>
+      </div>`;
+    panel.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => tmuaGo(b.dataset.go)));
+    return;
+  }
+
+  const act = tmuaActivity(sessions);
+  const agg = tmuaAggregateTopics(sessions);
+  const weak = tmuaWeakTopics(agg);
+
+  // Score trend (scaled per session, oldest → newest).
+  const trend = sessions.map(s => s.scaled);
+  const trendBars = trend.map((v, i) => `
+    <span class="tmua-trend__bar" title="Session ${i + 1}: ${v.toFixed(1)}">
+      <span class="tmua-trend__fill" style="height:${Math.round((v / 9) * 100)}%"></span>
+    </span>`).join('');
+  const first = trend[0], lastScore = trend[trend.length - 1];
+  const delta = (lastScore - first);
+  const trendNote = trend.length < 2
+    ? 'Complete more sessions to see your trend.'
+    : delta > 0 ? `↗ Up ${delta.toFixed(1)} since your first session — keep going.`
+    : delta < 0 ? `↘ Down ${Math.abs(delta).toFixed(1)} since your first — review your weak topics below.`
+    : 'Holding steady — push for your weak topics below.';
+
+  // Per-topic mastery, weakest first.
+  const masteryRows = Object.entries(agg)
+    .map(([topic, r]) => ({ topic, acc: r.correct / r.total, r }))
+    .sort((a, b) => a.acc - b.acc)
+    .map(({ topic, acc, r }) => {
+      const pct = Math.round(acc * 100);
+      const band = pct >= 70 ? 'strong' : pct >= 50 ? 'mid' : 'weak';
+      return `<div class="tmua-topic-row">
+          <span class="tmua-topic-row__name">${esc(topic)}</span>
+          <span class="tmua-bar"><span class="tmua-bar__fill tmua-bar__fill--${band}" style="width:${pct}%"></span></span>
+          <span class="tmua-topic-row__score">${pct}% (${r.correct}/${r.total})</span>
+        </div>`;
+    }).join('');
+
+  const weakHtml = weak.length
+    ? `<div class="tmua-weak"><strong>Your weakest topics:</strong> ${weak.map(w => esc(w.topic)).join(', ')} — practise these next.</div>`
+    : `<div class="tmua-weak tmua-weak--ok">No clear weak spots yet — keep practising across topics to build a fuller picture.</div>`;
+
+  const recent = sessions.slice(-8).reverse().map(s => {
+    const d = new Date(s.date);
+    const when = isNaN(d) ? '' : d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    const papers = (s.papers || []).map(p => `P${p}`).join('+');
+    return `<div class="tmua-history-row">
+        <span class="tmua-history-row__date">${esc(when)}</span>
+        <span class="tmua-badge tmua-badge--muted">${s.mode === 'mock' ? 'Mock' : 'Quick'} ${esc(papers)}</span>
+        <span class="tmua-history-row__score">${s.correct}/${s.total} · <strong>${s.scaled.toFixed(1)}</strong></span>
+      </div>`;
+  }).join('');
+
+  panel.innerHTML = `
+    <div class="tmua">
+      <button class="tmua-back" data-go="home">← Back</button>
+      <h2 class="tmua__title">Your progress</h2>
+
+      <div class="tmua-activity">
+        <div class="tmua-activity__stat"><span class="tmua-activity__num">${act.sessions}</span><span>session${act.sessions === 1 ? '' : 's'}</span></div>
+        <div class="tmua-activity__stat"><span class="tmua-activity__num">${act.days}</span><span>day${act.days === 1 ? '' : 's'} practised</span></div>
+        <div class="tmua-activity__stat"><span class="tmua-activity__num">${act.streak > 0 ? '🔥 ' + act.streak : '—'}</span><span>day streak</span></div>
+      </div>
+
+      <h3 class="tmua-section-head">Score trend</h3>
+      <div class="tmua-trend">${trendBars}</div>
+      <p class="tmua-note">${trendNote}</p>
+
+      <h3 class="tmua-section-head">Topic mastery</h3>
+      ${weakHtml}
+      <div class="tmua-topic-list">${masteryRows}</div>
+
+      <h3 class="tmua-section-head">Recent sessions</h3>
+      <div class="tmua-history">${recent}</div>
+    </div>`;
+  panel.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => tmuaGo(b.dataset.go)));
 }
 
 /* ─── Stage indicator dropdown (switch stage anytime) ──────────── */
