@@ -220,7 +220,7 @@ const courses = [
     university: "University of Cambridge", country: "UK", degreeLevel: "BA", category: "economics",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
     grades: { aLevels: "A*AA", ib: 40, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL" },
-    admissionTests: [],
+    admissionTests: ["TMUA"],
     universityContext: {
       tier: "world-top-10",
       intlFriendly: true,
@@ -350,7 +350,7 @@ const courses = [
     university: "London School of Economics", country: "UK", degreeLevel: "BSc", category: "economics",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Economics","Statistics"] },
     grades: { aLevels: "AAA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL" },
-    admissionTests: [],
+    admissionTests: ["TMUA"],
     universityContext: {
       tier: "world-top-50",
       intlFriendly: true,
@@ -818,7 +818,7 @@ const courses = [
     university: "University of Warwick", country: "UK", degreeLevel: "BSc", category: "economics",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Economics","Statistics"] },
     grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: null },
-    admissionTests: [],
+    admissionTests: ["TMUA"],
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -831,7 +831,7 @@ const courses = [
     university: "University of Warwick", country: "UK", degreeLevel: "MMath", category: "mathematics",
     requirements: { essential: ["Mathematics_Standard","Mathematics_Advanced"], preferred: [], useful: ["Physics","Statistics"] },
     grades: { aLevels: "A*A*A", ib: 40, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL"},
-    admissionTests: [],
+    admissionTests: ["TMUA"],
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -844,7 +844,7 @@ const courses = [
     university: "University of Warwick", country: "UK", degreeLevel: "MEng", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
     grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL"},
-    admissionTests: [],
+    admissionTests: ["TMUA"],
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -961,7 +961,7 @@ const courses = [
     university: "Durham University", country: "UK", degreeLevel: "BSc", category: "economics",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
     grades: { aLevels: "AAA", ib: 37, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: null },
-    admissionTests: [],
+    admissionTests: ["TMUA"],
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -974,7 +974,7 @@ const courses = [
     university: "Durham University", country: "UK", degreeLevel: "BSc", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
     grades: { aLevels: "AAA", ib: 37, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL"},
-    admissionTests: [],
+    admissionTests: ["TMUA"],
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -1039,7 +1039,7 @@ const courses = [
     university: "University of Bath", country: "UK", degreeLevel: "BSc", category: "economics",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Statistics"] },
     grades: { aLevels: "AAA", ib: 36, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: null },
-    admissionTests: [],
+    admissionTests: ["TMUA"],
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,

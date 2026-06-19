@@ -2093,42 +2093,74 @@ function syncProfileFromCheck() {
   });
 }
 
+// TMUA relevance + progress snapshot for the workspace home. TMUA is only
+// surfaced when relevant: the student has TMUA-requiring courses shortlisted,
+// or has already started practising. Generalises to other tests later.
+function tmuaHomeContext() {
+  const sessions = (typeof AltioraState !== 'undefined') ? AltioraState.getTmuaSessions() : [];
+  let courseCount = 0;
+  if (typeof AltioraState !== 'undefined' && typeof courses !== 'undefined') {
+    AltioraState.getShortlist().forEach(id => {
+      const c = courses.find(x => x.id === id);
+      if (c && Array.isArray(c.admissionTests) && c.admissionTests.includes('TMUA')) courseCount++;
+    });
+  }
+  let latestScaled = null, weakestTopic = null;
+  if (sessions.length) {
+    latestScaled = sessions[sessions.length - 1].scaled;
+    const weak = tmuaWeakTopics(tmuaAggregateTopics(sessions));
+    weakestTopic = weak.length ? weak[0].topic : null;
+  }
+  const twoDaysAgo = Date.now() - 2 * 86400 * 1000;
+  const recentlyPracticed = sessions.some(s => new Date(s.date).getTime() >= twoDaysAgo);
+  return {
+    relevant: courseCount > 0 || sessions.length > 0,
+    courseCount,
+    sessionCount: sessions.length,
+    latestScaled, weakestTopic,
+    activity: tmuaActivity(sessions),
+    recentlyPracticed,
+  };
+}
+
 // The single guiding action for the current stage + state. Returns a
 // sentence plus an ordered list of { tool, label } actions (first is
 // primary). This is the heart of the workspace home.
-function computeNextStep(stage, profile, shortlistCount) {
+function computeNextStep(stage, profile, shortlistCount, tmuaCtx) {
   const hasSubjects  = (profile.subjects?.length  || 0) > 0;
   const hasInterests = (profile.interests?.length || 0) > 0;
 
+  let base;
   switch (stage) {
     case 'exploring':
-      return {
+      base = {
         text: (hasInterests || hasSubjects)
           ? 'Keep exploring the degree paths that fit you.'
           : 'Discover what fits you.',
         actions: [{ tool: 'strengths', label: 'Start with Strengths' }],
       };
+      break;
     case 'choosing':
-      return {
+      base = {
         text: hasSubjects
           ? 'Refine the subjects that keep your options open.'
           : 'Plan your subjects.',
         actions: [{ tool: 'plan', label: 'Subject Planner' }],
       };
+      break;
     case 'building':
-      if (!shortlistCount) return {
-        text: 'Find courses you qualify for.',
-        actions: [{ tool: 'check', label: 'Check Combination' }],
-      };
-      return {
-        text: `You have ${shortlistCount} saved course${shortlistCount === 1 ? '' : 's'}. Review your list or find more.`,
-        actions: [
-          { tool: 'shortlist', label: 'Review your shortlist' },
-          { tool: 'check',     label: 'Find more courses' },
-        ],
-      };
+      base = !shortlistCount
+        ? { text: 'Find courses you qualify for.', actions: [{ tool: 'check', label: 'Check Combination' }] }
+        : {
+            text: `You have ${shortlistCount} saved course${shortlistCount === 1 ? '' : 's'}. Review your list or find more.`,
+            actions: [
+              { tool: 'shortlist', label: 'Review your shortlist' },
+              { tool: 'check',     label: 'Find more courses' },
+            ],
+          };
+      break;
     case 'applying':
-      return {
+      base = {
         text: shortlistCount
           ? `Work on applications for your ${shortlistCount} saved course${shortlistCount === 1 ? '' : 's'}.`
           : 'Save the courses you want to apply to, then work on your applications.',
@@ -2136,9 +2168,44 @@ function computeNextStep(stage, profile, shortlistCount) {
           ? [{ tool: 'applying', label: 'Open application tools' }, { tool: 'shortlist', label: 'View shortlist' }]
           : [{ tool: 'check', label: 'Find courses to apply to' }],
       };
+      break;
     default:
-      return { text: 'Pick up where you left off.', actions: [] };
+      base = { text: 'Pick up where you left off.', actions: [] };
   }
+
+  // Fold TMUA practice into the next step for building/applying students, but
+  // only when it's relevant (courses need it, or they've started). It becomes
+  // the headline on a strong signal; a recent practice gets a gentle secondary
+  // nudge so we don't nag.
+  if ((stage === 'building' || stage === 'applying') && tmuaCtx && tmuaCtx.relevant) {
+    if (tmuaCtx.recentlyPracticed) {
+      base.actions = [...base.actions, { tool: 'tmua', label: 'Continue TMUA practice', tmuaView: 'quick-setup' }];
+    } else if (tmuaCtx.sessionCount > 0) {
+      const scaled = tmuaCtx.latestScaled != null ? tmuaCtx.latestScaled.toFixed(1) : '—';
+      const weak = tmuaCtx.weakestTopic;
+      base = {
+        text: weak
+          ? `Keep practising the TMUA — you're at ${scaled}/9.0, weakest on ${weak}.`
+          : `Keep practising the TMUA — you're at ${scaled}/9.0.`,
+        actions: [
+          weak
+            ? { tool: 'tmua', label: `Practise ${weak}`, tmuaTopic: weak }
+            : { tool: 'tmua', label: 'Continue practising', tmuaView: 'quick-setup' },
+          ...base.actions,
+        ],
+      };
+    } else if (tmuaCtx.courseCount > 0) {
+      base = {
+        text: `Practise for the TMUA — ${tmuaCtx.courseCount} of your saved course${tmuaCtx.courseCount === 1 ? '' : 's'} need it.`,
+        actions: [
+          { tool: 'tmua', label: 'Start your first session', tmuaView: 'quick-setup' },
+          ...base.actions,
+        ],
+      };
+    }
+  }
+
+  return base;
 }
 
 function renderWorkspaceHome() {
@@ -2149,7 +2216,8 @@ function renderWorkspaceHome() {
   const stage   = profile.stage || DEFAULT_STAGE;
   const cfg     = STAGES[stage] || STAGES[DEFAULT_STAGE];
   const saved   = AltioraState.getShortlist();
-  const next    = computeNextStep(stage, profile, saved.length);
+  const tmuaCtx = tmuaHomeContext();
+  const next    = computeNextStep(stage, profile, saved.length, tmuaCtx);
 
   const sysLabel = profile.qualificationSystem
     ? (qualificationMappings[profile.qualificationSystem]?.systemLabel ?? profile.qualificationSystem)
@@ -2157,10 +2225,13 @@ function renderWorkspaceHome() {
   const subjects = Array.isArray(profile.subjects) ? profile.subjects : [];
   const grades   = profile.predictedGrades || null;
 
-  // Next-step buttons (first = primary)
-  const actionBtns = next.actions.map((a, i) =>
-    `<button class="home-next__btn${i === 0 ? ' home-next__btn--primary' : ''}" data-go-tool="${esc(a.tool)}">${esc(a.label)} →</button>`
-  ).join('');
+  // Next-step buttons (first = primary). TMUA actions may carry a deep-link
+  // into Quick Practice (a weak topic, or the setup screen).
+  const actionBtns = next.actions.map((a, i) => {
+    const topicAttr = a.tmuaTopic ? ` data-tmua-topic="${esc(a.tmuaTopic)}"` : '';
+    const viewAttr  = a.tmuaView  ? ` data-tmua-view="${esc(a.tmuaView)}"`   : '';
+    return `<button class="home-next__btn${i === 0 ? ' home-next__btn--primary' : ''}" data-go-tool="${esc(a.tool)}"${topicAttr}${viewAttr}>${esc(a.label)} →</button>`;
+  }).join('');
 
   // Quick-access stage tools (primary first, then secondary)
   const toolBtns = [cfg.primary, ...cfg.secondary].map((mode, i) =>
@@ -2181,6 +2252,33 @@ function renderWorkspaceHome() {
   }
 
   const muted = txt => `<span class="home-card__muted">${esc(txt)}</span>`;
+
+  // TMUA progress card — only when TMUA is relevant to this student.
+  let tmuaCardHtml = '';
+  if (tmuaCtx.relevant) {
+    if (tmuaCtx.sessionCount > 0) {
+      const scaled = tmuaCtx.latestScaled != null ? tmuaCtx.latestScaled.toFixed(1) : '—';
+      const weak   = tmuaCtx.weakestTopic;
+      const streak = tmuaCtx.activity.streak;
+      tmuaCardHtml = `
+        <section class="home-card">
+          <h2 class="home-card__title">TMUA Practice</h2>
+          <dl class="home-card__dl">
+            <div><dt>Latest score</dt><dd>${scaled} / 9.0</dd></div>
+            <div><dt>Sessions</dt><dd>${tmuaCtx.sessionCount}${streak > 0 ? ` · 🔥 ${streak}-day streak` : ''}</dd></div>
+            <div><dt>Weakest topic</dt><dd>${weak ? esc(weak) : muted('Not enough data yet')}</dd></div>
+          </dl>
+          <button class="home-card__link" data-go-tool="tmua"${weak ? ` data-tmua-topic="${esc(weak)}"` : ''}>Practise now →</button>
+        </section>`;
+    } else {
+      tmuaCardHtml = `
+        <section class="home-card">
+          <h2 class="home-card__title">TMUA Practice</h2>
+          <p>You have <strong>${tmuaCtx.courseCount}</strong> saved course${tmuaCtx.courseCount === 1 ? '' : 's'} that need the TMUA.</p>
+          <button class="home-card__link" data-go-tool="tmua" data-tmua-view="quick-setup">Start practising →</button>
+        </section>`;
+    }
+  }
 
   panel.innerHTML = `
     <div class="home">
@@ -2211,6 +2309,8 @@ function renderWorkspaceHome() {
           ${shortlistHtml}
           <button class="home-card__link" data-go-tool="shortlist">View shortlist →</button>
         </section>
+
+        ${tmuaCardHtml}
       </div>
 
       <section class="home-quick" aria-label="Quick access">
@@ -4421,7 +4521,18 @@ function init() {
   $('homeLink')?.addEventListener('click', () => switchMode('home'));
   $('panel-home')?.addEventListener('click', e => {
     const toolBtn = e.target.closest('[data-go-tool]');
-    if (toolBtn) { switchMode(toolBtn.dataset.goTool); return; }
+    if (toolBtn) {
+      // TMUA entry points can deep-link: a weak topic → Quick Practice
+      // pre-filtered to it; an explicit view; otherwise the tool's home.
+      if (toolBtn.dataset.goTool === 'tmua') {
+        const topic = toolBtn.dataset.tmuaTopic;
+        if (topic)                       { tmuaState.quickCfg = { paper: 'mixed', topic, count: 10 }; tmuaState.view = 'quick-setup'; }
+        else if (toolBtn.dataset.tmuaView) { tmuaState.view = toolBtn.dataset.tmuaView; }
+        else                             { tmuaState.view = 'home'; }
+      }
+      switchMode(toolBtn.dataset.goTool);
+      return;
+    }
     if (e.target.closest('[data-change-stage]')) showStageSelect();
   });
 
