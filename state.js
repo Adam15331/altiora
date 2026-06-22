@@ -42,9 +42,6 @@ const AltioraState = (() => {
       },
       shortlist: [],                  // course id strings
       progress:  {},                  // keyed by course id or milestone
-      tmua: {
-        sessions: [],                 // completed TMUA practice sessions (newest pushed last)
-      },
       meta: {
         firstVisit:  null,            // ISO timestamp
         lastVisit:   null,            // ISO timestamp
@@ -88,11 +85,8 @@ const AltioraState = (() => {
       profile:   { ...base.profile,  ...(parsed.profile  || {}) },
       shortlist: Array.isArray(parsed.shortlist) ? parsed.shortlist.slice() : base.shortlist,
       progress:  (parsed.progress && typeof parsed.progress === 'object') ? { ...parsed.progress } : base.progress,
-      tmua:      {
-        ...base.tmua,
-        ...(parsed.tmua && typeof parsed.tmua === 'object' ? parsed.tmua : {}),
-        sessions: Array.isArray(parsed.tmua?.sessions) ? parsed.tmua.sessions.slice() : base.tmua.sessions,
-      },
+      // Note: any unknown top-level keys in old saves (from removed/experimental
+      // features) are simply not copied here, so they're ignored cleanly.
       meta:      { ...base.meta,     ...(parsed.meta     || {}) },
     };
   }
@@ -207,22 +201,6 @@ const AltioraState = (() => {
     _commit();
   }
 
-  /* ─── TMUA practice history ───────────────────────────────────
-   * Append-only log of completed practice sessions. Each record is a
-   * plain object (see addTmuaSession callers for the shape). Kept here
-   * so a student's progress accumulates across visits.
-   * ───────────────────────────────────────────────────────────── */
-  function addTmuaSession(session) {
-    if (!session || typeof session !== 'object') return;
-    if (!Array.isArray(_state.tmua.sessions)) _state.tmua.sessions = [];
-    _state.tmua.sessions.push(session);
-    _commit();
-  }
-
-  function getTmuaSessions() {
-    return _clone(Array.isArray(_state.tmua?.sessions) ? _state.tmua.sessions : []);
-  }
-
   // Mark whether the student has completed the entry/stage-selection
   // flow. Defaults to true so callers can just call setOnboarded().
   function setOnboarded(value = true) {
@@ -263,8 +241,6 @@ const AltioraState = (() => {
     removeFromShortlist,
     isInShortlist,
     setProgress,
-    addTmuaSession,
-    getTmuaSessions,
     setOnboarded,
     resetState,
     subscribe,
