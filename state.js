@@ -37,7 +37,6 @@ const AltioraState = (() => {
         qualificationSystem: null,
         subjects:            [],      // subject tag strings
         predictedGrades:     null,    // grade string or IB number
-        gradesExplicitlySkipped: false, // student confirmed they have no predicted grades yet
         interests:           [],      // category strings
       },
       shortlist: [],                  // course id strings
@@ -85,6 +84,8 @@ const AltioraState = (() => {
       profile:   { ...base.profile,  ...(parsed.profile  || {}) },
       shortlist: Array.isArray(parsed.shortlist) ? parsed.shortlist.slice() : base.shortlist,
       progress:  (parsed.progress && typeof parsed.progress === 'object') ? { ...parsed.progress } : base.progress,
+      // Note: any unknown top-level keys in old saves (from removed/experimental
+      // features) are simply not copied here, so they're ignored cleanly.
       meta:      { ...base.meta,     ...(parsed.meta     || {}) },
     };
   }
@@ -166,7 +167,7 @@ const AltioraState = (() => {
   // a stray field can't pollute the shape.
   function setProfile(partial) {
     if (!partial || typeof partial !== 'object') return;
-    const allowed = ['stage', 'qualificationSystem', 'subjects', 'predictedGrades', 'gradesExplicitlySkipped', 'interests'];
+    const allowed = ['stage', 'qualificationSystem', 'subjects', 'predictedGrades', 'interests'];
     allowed.forEach(key => {
       if (key in partial) _state.profile[key] = partial[key];
     });

@@ -472,12 +472,6 @@ const IB_MUTUAL_EXCLUSION_GROUPS = [
   { label: 'Physics',   subjects: ['Physics HL',   'Physics SL']   },
 ];
 
-// Mirror of profile.gradesExplicitlySkipped — the student confirmed via the
-// checkbox that they don't have predicted grades yet, so subject-only matching
-// is allowed even in the building/applying stages. Loaded from the persisted
-// profile in buildGradeInput() and written back through syncProfileFromCheck().
-let gradesExplicitlySkipped = false;
-
 /* ═══════════════════════════════════════════════════════════════
  * TAG DERIVATION
  * ═══════════════════════════════════════════════════════════════ */
@@ -538,6 +532,9 @@ const EMPTY_SUGGESTIONS = {
 };
 
 let _subjectDebounce = null;
+// Tracks whether Check results are currently on screen, so we smooth-scroll to
+// them only on their first appearance after an empty state, not every toggle.
+let _checkResultsSeen = false;
 
 // Field-relevant combinations for the active field, translated to the
 // selected system. Returns null if no field filter, no system, or none
@@ -696,27 +693,8 @@ function buildGradeInput(systemKey) {
   state.predictedGrade = null;
   if (!systemKey) { section.classList.add('hidden'); section.innerHTML = ''; return; }
 
-  const tooltipText = "We use this to flag courses where the typical offer is higher than your predicted grades. It's a guide, not a hard filter.";
+  const tooltipText = "Grades affect which courses show as strong matches — it's a guide, not a hard filter.";
   const hint        = 'Affects which courses show as strong matches';
-  const clearBtn    = '<button type="button" id="clearGradeBtn" class="clear-grade-btn hidden" aria-label="Clear predicted grades">✕ Clear grades</button>';
-
-  // Stage decides whether grades are pressed for. building/applying are the
-  // grade-relevant stages: there we recommend grades and offer the skip box.
-  const profile            = (typeof AltioraState !== 'undefined') ? AltioraState.getProfile() : {};
-  const stage              = profile.stage || DEFAULT_STAGE;
-  const stageRequiresGrade = (stage === 'building' || stage === 'applying');
-  gradesExplicitlySkipped  = profile.gradesExplicitlySkipped === true;
-
-  const helpText = stageRequiresGrade
-    ? "Enter your predicted grades for accurate matches. If you don't have them yet, check the box below."
-    : "If you have predicted grades, enter them – but you can skip for now.";
-
-  // The skip checkbox is offered only for the grade-relevant stages.
-  const skipCheckHtml = stageRequiresGrade ? `
-      <label class="grade-skip-check">
-        <input type="checkbox" id="gradeSkipCheck"${gradesExplicitlySkipped ? ' checked' : ''}/>
-        <span>I don't have predicted grades yet (continue with subject-only matching)</span>
-      </label>` : '';
 
   // Rough cross-system conversion guidance (UK A-Level is the baseline, so
   // it has no hint). Always advise verifying with each university.
@@ -730,11 +708,10 @@ function buildGradeInput(systemKey) {
         <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
         <span class="picker-hint-inline">${hint}</span>
       </div>`;
+  // Leaving the input blank is itself "skip" → subject-only matching.
   const footer = `
       ${conversionHint}
-      <p class="grade-input-help">${esc(helpText)}</p>
-      ${clearBtn}
-      ${skipCheckHtml}`;
+      <p class="grade-input-help">Optional — leave blank to skip and match on subjects alone.</p>`;
 
   // Per-system grade body + a wiring callback. Everything else is shared.
   let bodyHtml = '';
@@ -746,7 +723,7 @@ function buildGradeInput(systemKey) {
         <label class="grade-option-label" for="gradeSelectALevel">Average predicted grade across your A-Level subjects</label>
         <div class="select-wrap">
           <select id="gradeSelectALevel" class="grade-select">
-            <option value="">Skip — don't filter by grades</option>
+            <option value="">— Leave blank —</option>
             <option value="A*">A* (predicting mostly A*s)</option>
             <option value="A">A (predicting mostly As)</option>
             <option value="B">B (predicting mostly Bs)</option>
@@ -766,15 +743,6 @@ function buildGradeInput(systemKey) {
       $('gradeInputIB').addEventListener('input', e => {
         const v = parseInt(e.target.value, 10);
         state.predictedGrade = (!isNaN(v) && v >= 24 && v <= 45) ? String(v) : null;
-        if (state.predictedGrade) clearGradeSkip(); // entering a grade clears the skip flag
-        $('clearGradeBtn').classList.toggle('hidden', !state.predictedGrade);
-        renderCheckResults();
-      });
-      $('clearGradeBtn').addEventListener('click', () => {
-        state.predictedGrade = null;
-        $('gradeInputIB').value = '';
-        clearGradeSkip();
-        $('clearGradeBtn').classList.add('hidden');
         renderCheckResults();
       });
     };
@@ -784,7 +752,7 @@ function buildGradeInput(systemKey) {
         <label class="grade-option-label" for="gradeSelectAP">Average predicted AP score across your exams</label>
         <div class="select-wrap">
           <select id="gradeSelectAP" class="grade-select">
-            <option value="">Skip — don't filter by grades</option>
+            <option value="">— Leave blank —</option>
             <option value="A*">5 (A*) — predicting mostly 5s</option>
             <option value="A">4 (A) — predicting mostly 4s</option>
             <option value="B">3 (B) — predicting mostly 3s</option>
@@ -800,7 +768,7 @@ function buildGradeInput(systemKey) {
         <label class="grade-option-label" for="gradeSelectSG">Average predicted grade across your H2 subjects</label>
         <div class="select-wrap">
           <select id="gradeSelectSG" class="grade-select">
-            <option value="">Skip — don't filter by grades</option>
+            <option value="">— Leave blank —</option>
             <option value="A">A — predicting mostly As</option>
             <option value="B">B — predicting mostly Bs</option>
             <option value="C">C — predicting mostly Cs</option>
@@ -816,7 +784,7 @@ function buildGradeInput(systemKey) {
         <label class="grade-option-label" for="gradeSelectDSE">Average predicted level across your elective subjects</label>
         <div class="select-wrap">
           <select id="gradeSelectDSE" class="grade-select">
-            <option value="">Skip — don't filter by grades</option>
+            <option value="">— Leave blank —</option>
             <option value="5**">5** — predicting mostly 5**s</option>
             <option value="5*">5* — predicting mostly 5*s</option>
             <option value="5">5 — predicting mostly 5s</option>
@@ -837,60 +805,15 @@ function buildGradeInput(systemKey) {
   section.innerHTML = header + bodyHtml + footer;
   section.classList.remove('hidden');
   wire();
-  wireGradeSkipCheck();
 }
 
 // Shared wiring for the select-based grade inputs (all systems except IB).
+// Leaving the select on its blank option = no grade = subject-only matching.
 function wireSelectGrade(selectId) {
-  const sel = $(selectId);
-  sel.addEventListener('change', e => {
-    state.predictedGrade  = e.target.value || null;
-    if (state.predictedGrade) clearGradeSkip(); // entering a grade clears the skip flag
-    $('clearGradeBtn').classList.toggle('hidden', !state.predictedGrade);
+  $(selectId).addEventListener('change', e => {
+    state.predictedGrade = e.target.value || null;
     renderCheckResults();
   });
-  $('clearGradeBtn').addEventListener('click', () => {
-    state.predictedGrade = null;
-    sel.value = '';
-    clearGradeSkip();
-    $('clearGradeBtn').classList.add('hidden');
-    renderCheckResults();
-  });
-}
-
-// Wire the "I don't have predicted grades yet" checkbox (building/applying only).
-// Skip and an entered grade are mutually exclusive: ticking skip wipes any
-// grade the student had entered.
-function wireGradeSkipCheck() {
-  const cb = $('gradeSkipCheck');
-  if (!cb) return;
-  cb.addEventListener('change', e => {
-    gradesExplicitlySkipped = e.target.checked;
-    if (e.target.checked) {
-      // Mutually exclusive with an entered grade — clear the input + value.
-      state.predictedGrade = null;
-      const field = document.querySelector(
-        '#gradeInputSection select.grade-select, #gradeInputSection input.grade-number-input'
-      );
-      if (field) field.value = '';
-      $('clearGradeBtn')?.classList.add('hidden');
-    }
-    if (typeof AltioraState !== 'undefined') {
-      AltioraState.setProfile({ gradesExplicitlySkipped });
-    }
-    renderCheckResults();
-  });
-}
-
-// Clear the skip flag and untick its checkbox — called when the student
-// enters/clears a grade so the two controls never disagree.
-function clearGradeSkip() {
-  gradesExplicitlySkipped = false;
-  const cb = $('gradeSkipCheck');
-  if (cb) cb.checked = false;
-  if (typeof AltioraState !== 'undefined') {
-    AltioraState.setProfile({ gradesExplicitlySkipped: false });
-  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -956,25 +879,7 @@ function hideLoadingSpinner() {
  * MODE TOGGLE
  * ═══════════════════════════════════════════════════════════════ */
 
-// Minimum tier required per gated mode. Modes not listed are free.
-const MODE_TIER_REQUIREMENTS = {
-  'personal-statement': ['plus', 'pro'],
-  'interview-coach':    ['pro'],
-};
-
-function tierAllowsMode(mode) {
-  const allowed = MODE_TIER_REQUIREMENTS[mode];
-  return !allowed || allowed.includes(_currentTier);
-}
-
 function switchMode(mode) {
-  // Locked tab: open the pricing modal instead of switching
-  if (!tierAllowsMode(mode)) {
-    logEvent('locked_tab_click', { mode, tier: _currentTier });
-    openPricingModal();
-    return;
-  }
-
   state.mode = mode;
   logEvent('mode_switch', { mode });
 
@@ -989,8 +894,6 @@ function switchMode(mode) {
   $('panel-reverse')           .classList.toggle('hidden', mode !== 'reverse');
   $('panel-plan')              .classList.toggle('hidden', mode !== 'plan');
   $('panel-strengths')         .classList.toggle('hidden', mode !== 'strengths');
-  $('panel-personal-statement').classList.toggle('hidden', mode !== 'personal-statement');
-  $('panel-interview-coach')   .classList.toggle('hidden', mode !== 'interview-coach');
   $('panel-applying')          .classList.toggle('hidden', mode !== 'applying');
   $('panel-shortlist')         .classList.toggle('hidden', mode !== 'shortlist');
   $('panel-home')              .classList.toggle('hidden', mode !== 'home');
@@ -1026,7 +929,7 @@ const STAGES = {
   exploring: { name: 'Exploring options',          primary: 'strengths', secondary: ['plan'] },
   choosing:  { name: 'Choosing my subjects',       primary: 'plan',      secondary: ['check'] },
   building:  { name: 'Building my university list', primary: 'check',     secondary: ['reverse'] },
-  applying:  { name: 'Applying',                    primary: 'applying',  secondary: ['personal-statement', 'interview-coach'] },
+  applying:  { name: 'Applying',                    primary: 'applying',  secondary: [] },
 };
 
 const MODE_LABELS = {
@@ -1035,8 +938,6 @@ const MODE_LABELS = {
   reverse:              'Course Finder',
   check:                'Check Combination',
   applying:             'Application Tools',
-  'personal-statement': 'Personal Statement',
-  'interview-coach':    'Interview Coach',
 };
 
 const DEFAULT_STAGE = 'exploring';
@@ -1088,8 +989,7 @@ function enterStage(stage) {
 }
 
 // Build the per-stage tool sub-nav: primary tool front and centre,
-// secondary tools as lighter links. Tier-gated tools show a lock; a
-// locked click opens the pricing modal (handled inside switchMode).
+// secondary tools as lighter links. Every tool is free.
 function renderStageToolNav(stage) {
   if (!STAGES[stage]) stage = DEFAULT_STAGE;
   const cfg = STAGES[stage];
@@ -1098,11 +998,8 @@ function renderStageToolNav(stage) {
 
   const tools = [cfg.primary, ...cfg.secondary];
   nav.innerHTML = tools.map((mode, i) => {
-    const primary = i === 0;
-    const locked  = !tierAllowsMode(mode);
-    const lock    = locked ? ' <span class="stage-tool__lock" aria-hidden="true">🔒</span>' : '';
-    const cls = `stage-tool${primary ? ' stage-tool--primary' : ''}${locked ? ' stage-tool--locked' : ''}`;
-    return `<button class="${cls}" data-mode="${mode}">${esc(MODE_LABELS[mode] || mode)}${lock}</button>`;
+    const cls = `stage-tool${i === 0 ? ' stage-tool--primary' : ''}`;
+    return `<button class="${cls}" data-mode="${mode}">${esc(MODE_LABELS[mode] || mode)}</button>`;
   }).join('');
 
   $$('#stageToolNav .stage-tool').forEach(btn =>
@@ -1110,22 +1007,76 @@ function renderStageToolNav(stage) {
   );
 }
 
-// Render the saved shortlist inside the Applying placeholder panel.
+// Minimal, honest Applying view: the saved shortlist + a what's-next
+// checklist derived from it + an intentional roadmap note. No dead end.
 function renderApplyingPanel() {
-  const wrap = $('applyingShortlist');
-  if (!wrap) return;
+  const panel = $('panel-applying');
+  if (!panel) return;
   const ids = (typeof AltioraState !== 'undefined') ? AltioraState.getShortlist() : [];
+  const savedCourses = ids
+    .map(id => (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null)
+    .filter(Boolean);
 
-  if (!ids.length) {
-    wrap.innerHTML =
-      `<p class="applying-shortlist__empty">No courses shortlisted yet. Switch to “Building my university list” to find courses you qualify for.</p>`;
+  const roadmap = `
+    <div class="applying-note" role="note">
+      <p><strong>What's coming.</strong> More application tools — personal statement help,
+      interview prep, and deadline tracking — are on the way. For now, use your shortlist to
+      keep your applications organised.</p>
+    </div>`;
+
+  if (!savedCourses.length) {
+    panel.innerHTML = `
+      <div class="applying">
+        <header class="applying__header">
+          <h1 class="applying__title">Applying</h1>
+          <p class="applying__sub">Save courses you're applying to, and we'll help you keep them organised here.</p>
+        </header>
+        <div class="applying-empty">
+          <p>Your shortlist is empty. Save the courses you're applying to, and they'll show up here with a checklist of what's next.</p>
+          <button class="home-next__btn home-next__btn--primary" data-go-applying>Find courses to apply to →</button>
+        </div>
+        ${roadmap}
+      </div>`;
+    panel.querySelector('[data-go-applying]')?.addEventListener('click', () => switchMode('check'));
     return;
   }
-  wrap.innerHTML = ids.map(id => {
-    const course = (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null;
-    const label  = course ? `${course.name} — ${course.university}` : id;
-    return `<div class="applying-shortlist__item">${esc(label)}</div>`;
-  }).join('');
+
+  // Admission tests required across the saved courses (deduped).
+  const tests = [...new Set(savedCourses.flatMap(c => Array.isArray(c.admissionTests) ? c.admissionTests : []))].sort();
+  const testsLine = tests.length
+    ? `<strong>Tests you'll need:</strong> ${tests.map(esc).join(', ')}`
+    : `<strong>No admission tests</strong> required across your saved courses.`;
+
+  panel.innerHTML = `
+    <div class="applying">
+      <header class="applying__header">
+        <h1 class="applying__title">Applying</h1>
+        <p class="applying__sub">Your shortlist: <strong>${savedCourses.length}</strong> course${savedCourses.length === 1 ? '' : 's'}.</p>
+      </header>
+
+      <section class="applying-section">
+        <h2 class="applying-section__head">What's next</h2>
+        <ul class="applying-checklist">
+          <li>${testsLine}</li>
+          <li>Check <strong>UCAS</strong> and the universities' own deadlines for each of your courses.</li>
+          <li>Make sure your personal statement reflects these courses.</li>
+        </ul>
+      </section>
+
+      <section class="applying-section">
+        <h2 class="applying-section__head">Your shortlist</h2>
+        <div id="applyingShortlistGrid" class="results-group__grid"></div>
+        <button class="home-card__link" data-go-shortlist>View full shortlist →</button>
+      </section>
+
+      ${roadmap}
+    </div>`;
+
+  const studentTags = (state.selectedTags && state.selectedTags.size) ? state.selectedTags : tagsFromProfile();
+  const hasSubjects = studentTags.size > 0;
+  const grid = panel.querySelector('#applyingShortlistGrid');
+  savedCourses.forEach(c => grid.appendChild(buildShortlistCard(c, studentTags, hasSubjects)));
+  panel.querySelector('[data-go-shortlist]')?.addEventListener('click', () => switchMode('shortlist'));
 }
 
 /* ─── Stage indicator dropdown (switch stage anytime) ──────────── */
@@ -1489,15 +1440,19 @@ const STAGE_SUMMARY = {
   applying:  'working on your applications.',
 };
 
+// True only when the user was already onboarded at page load (i.e. returning
+// from a previous session). A freshly-onboarded first-timer stays false, so
+// the workspace home greets them as new rather than "Welcome back".
+let _isReturningUser = false;
+
 // Write-through: mirror the live Check-Combination selections into the
 // persisted profile so the workspace home reflects them on return.
 function syncProfileFromCheck() {
   if (typeof AltioraState === 'undefined') return;
   AltioraState.setProfile({
-    qualificationSystem:     state.checkSystem || null,
-    subjects:                Array.isArray(state.selectedSubjects) ? state.selectedSubjects.slice() : [],
-    predictedGrades:         state.predictedGrade || null,
-    gradesExplicitlySkipped: gradesExplicitlySkipped === true,
+    qualificationSystem: state.checkSystem || null,
+    subjects:            Array.isArray(state.selectedSubjects) ? state.selectedSubjects.slice() : [],
+    predictedGrades:     state.predictedGrade || null,
   });
 }
 
@@ -1508,35 +1463,37 @@ function computeNextStep(stage, profile, shortlistCount) {
   const hasSubjects  = (profile.subjects?.length  || 0) > 0;
   const hasInterests = (profile.interests?.length || 0) > 0;
 
+  let base;
   switch (stage) {
     case 'exploring':
-      return {
+      base = {
         text: (hasInterests || hasSubjects)
           ? 'Keep exploring the degree paths that fit you.'
           : 'Discover what fits you.',
         actions: [{ tool: 'strengths', label: 'Start with Strengths' }],
       };
+      break;
     case 'choosing':
-      return {
+      base = {
         text: hasSubjects
           ? 'Refine the subjects that keep your options open.'
           : 'Plan your subjects.',
         actions: [{ tool: 'plan', label: 'Subject Planner' }],
       };
+      break;
     case 'building':
-      if (!shortlistCount) return {
-        text: 'Find courses you qualify for.',
-        actions: [{ tool: 'check', label: 'Check Combination' }],
-      };
-      return {
-        text: `You have ${shortlistCount} saved course${shortlistCount === 1 ? '' : 's'}. Review your list or find more.`,
-        actions: [
-          { tool: 'shortlist', label: 'Review your shortlist' },
-          { tool: 'check',     label: 'Find more courses' },
-        ],
-      };
+      base = !shortlistCount
+        ? { text: 'Find courses you qualify for.', actions: [{ tool: 'check', label: 'Check Combination' }] }
+        : {
+            text: `You have ${shortlistCount} saved course${shortlistCount === 1 ? '' : 's'}. Review your list or find more.`,
+            actions: [
+              { tool: 'shortlist', label: 'Review your shortlist' },
+              { tool: 'check',     label: 'Find more courses' },
+            ],
+          };
+      break;
     case 'applying':
-      return {
+      base = {
         text: shortlistCount
           ? `Work on applications for your ${shortlistCount} saved course${shortlistCount === 1 ? '' : 's'}.`
           : 'Save the courses you want to apply to, then work on your applications.',
@@ -1544,9 +1501,12 @@ function computeNextStep(stage, profile, shortlistCount) {
           ? [{ tool: 'applying', label: 'Open application tools' }, { tool: 'shortlist', label: 'View shortlist' }]
           : [{ tool: 'check', label: 'Find courses to apply to' }],
       };
+      break;
     default:
-      return { text: 'Pick up where you left off.', actions: [] };
+      base = { text: 'Pick up where you left off.', actions: [] };
   }
+
+  return base;
 }
 
 function renderWorkspaceHome() {
@@ -1593,8 +1553,8 @@ function renderWorkspaceHome() {
   panel.innerHTML = `
     <div class="home">
       <header class="home__header">
-        <h1 class="home__welcome">Welcome back.</h1>
-        <p class="home__stage">You're in the <strong>${esc(cfg.name)}</strong> stage — ${esc(STAGE_SUMMARY[stage] ?? '')}</p>
+        <h1 class="home__welcome">${_isReturningUser ? 'Welcome back.' : "You're all set."}</h1>
+        <p class="home__stage">You're in the <strong>${esc(cfg.name)}</strong> stage — ${_isReturningUser ? esc(STAGE_SUMMARY[stage] ?? '') : "here's your next step."}</p>
       </header>
 
       <section class="home-next" aria-label="Your next step">
@@ -1963,8 +1923,11 @@ function renderCheckResults() {
 
   if (state.selectedSubjects.length === 0) {
     section.classList.add('hidden');
+    _checkResultsSeen = false;   // reset so results scroll into view again next time
     return;
   }
+  const firstAppearance = !_checkResultsSeen;
+  _checkResultsSeen = true;
   section.classList.remove('hidden');
   showLoadingSpinner('courseGrid');
 
@@ -1975,14 +1938,12 @@ function renderCheckResults() {
   const tooFew    = state.selectedSubjects.length < minNeeded;
 
   // Grades never affect the subject-based match status: strong subjects always
-  // show GREEN. When no grade is entered we surface a purely informational
-  // banner so students know grade-based filtering is available, but the status
-  // is left untouched. (A grade, once entered, still greys out courses whose
-  // typical offer is above the student — see isGradeAboveStudent below.)
-  const noGradeYet = !state.predictedGrade && gradesExplicitlySkipped !== true;
+  // show GREEN. Entering a grade additionally greys out courses whose typical
+  // offer is above the student (see isGradeAboveStudent below); leaving it
+  // blank simply matches on subjects alone.
 
   // Remove any existing banners before re-rendering
-  section.querySelectorAll('.subject-count-warning, .grade-missing-banner').forEach(el => el.remove());
+  section.querySelectorAll('.subject-count-warning').forEach(el => el.remove());
 
   if (tooFew) {
     const warn = document.createElement('p');
@@ -1991,13 +1952,6 @@ function renderCheckResults() {
       ? 'DSE students typically need 4 core subjects + 2 electives (6 subjects total). Select more subjects for accurate results.'
       : `Universities require a full subject combination — please select at least ${minNeeded} subjects to see accurate results. Results below are indicative only.`;
     $('summaryBar').before(warn);
-  }
-
-  if (noGradeYet) {
-    const banner = document.createElement('p');
-    banner.className = 'grade-missing-banner grade-missing-banner--info';
-    banner.textContent = 'ℹ️ Enter predicted grades to see grade-based filtering.';
-    $('summaryBar').before(banner);
   }
 
   const pool = courses
@@ -2083,6 +2037,13 @@ function renderCheckResults() {
   }
 
   hideLoadingSpinner();
+
+  // On the first appearance of results (a new user's first selection), bring
+  // them into view so it's obvious something happened. Not on later toggles.
+  if (firstAppearance) {
+    requestAnimationFrame(() =>
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }
   }); // end requestAnimationFrame
 }
 
@@ -2133,16 +2094,6 @@ function buildGroup(status, headerText, items, startIndex, collapsed = false) {
   }
 
   return section;
-}
-
-// A small "report data issue" link for course cards. Opens a pre-filled
-// mailto so students can flag outdated requirements/grades.
-function reportIssueLinkHtml(course) {
-  const country = COUNTRY_LABELS[course.country] ?? course.country;
-  const subject = `Data issue: ${course.name} at ${course.university}`;
-  const body    = `Course: ${course.name}\nUniversity: ${course.university}\nCountry: ${country}\nDegree level: ${course.degreeLevel ?? ''}\nCourse ID: ${course.id}\n\nWhat looks outdated or incorrect?\n`;
-  const href    = `mailto:support@altiora.app?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  return `<a class="report-issue-link" href="${href}">📝 Data outdated? Let us know.</a>`;
 }
 
 function buildCheckCard(course, result) {
@@ -2309,7 +2260,6 @@ function buildCheckCard(course, result) {
     ${apRecsHtml}
     ${footerHtml}
     ${uniInfoHtml}
-    ${reportIssueLinkHtml(course)}
   `;
   wireSaveButton(card);
   return card;
@@ -2415,7 +2365,6 @@ function buildReverseCard(course) {
         ⎘&ensp;Copy requirements
       </button>
     </div>
-    ${reportIssueLinkHtml(course)}
   `;
 
   wireSaveButton(card);
@@ -3379,395 +3328,6 @@ function logEvent(eventName, properties = {}) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
- * TIER / PRICING
- * ═══════════════════════════════════════════════════════════════ */
-
-const TIER_NAV_LABELS = { free: '✨ Upgrade', plus: '⭐ Plus', pro: '⭐ Pro' };
-
-let _currentTier = localStorage.getItem('altiora_tier') || 'free';
-
-function updateTierUI() {
-  const btn = $('upgradeTierBtn');
-  if (!btn) return;
-  btn.textContent = TIER_NAV_LABELS[_currentTier] ?? '✨ Upgrade';
-  btn.classList.toggle('nav__upgrade-btn--active', _currentTier !== 'free');
-
-  // Mark the current plan card inside the modal
-  document.querySelectorAll('.pricing-card').forEach(card => {
-    const isCurrent = card.dataset.tier === _currentTier;
-    card.classList.toggle('pricing-card--current', isCurrent);
-    const cardBtn = card.querySelector('.pricing-card__btn');
-    if (cardBtn) {
-      cardBtn.classList.toggle('pricing-card__btn--current', isCurrent);
-      cardBtn.textContent = isCurrent ? 'Current plan' : `Select ${card.querySelector('.pricing-card__name').textContent}`;
-    }
-  });
-
-  // Locked/unlocked panel content
-  const psOk = tierAllowsMode('personal-statement');
-  const icOk = tierAllowsMode('interview-coach');
-  $('psUnlocked')?.classList.toggle('hidden', !psOk);
-  $('psLocked')  ?.classList.toggle('hidden',  psOk);
-  $('icUnlocked')?.classList.toggle('hidden', !icOk);
-  $('icLocked')  ?.classList.toggle('hidden',  icOk);
-
-  // Refresh the stage sub-nav so tier locks reflect the new tier,
-  // preserving which tool is currently active.
-  if (typeof AltioraState !== 'undefined' && !$('workspace')?.classList.contains('hidden')) {
-    const stage = AltioraState.getProfile().stage;
-    if (stage && STAGES[stage]) {
-      renderStageToolNav(stage);
-      $$('#stageToolNav .stage-tool').forEach(btn =>
-        btn.classList.toggle('stage-tool--active', btn.dataset.mode === state.mode));
-    }
-  }
-}
-
-function openPricingModal() {
-  updateTierUI();
-  $('pricingOverlay').classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-  $('pricingClose').focus();
-}
-
-function closePricingModal() {
-  $('pricingOverlay').classList.add('hidden');
-  document.body.style.overflow = '';
-  $('upgradeTierBtn').focus();
-}
-
-// Clears all demo state (tier, saved draft, interview history) and reloads.
-// Removes only altiora_* keys rather than localStorage.clear() so nothing
-// else on the origin is affected.
-function resetDemoData() {
-  [AltioraState.STORAGE_KEY, 'altiora_tier', 'altiora_personal_statement', 'altiora_interview_history']
-    .forEach(k => localStorage.removeItem(k));
-  window.location.reload();
-}
-
-function setTier(tier) {
-  _currentTier = tier;
-  localStorage.setItem('altiora_tier', tier);
-  // Bounce away from any now-locked tool BEFORE updating panel content,
-  // so the locked state never flashes inside a still-visible panel.
-  // Bounce to the current stage's primary tool (always free) to keep
-  // the student in their stage rather than yanking them to strengths.
-  if (!tierAllowsMode(state.mode)) {
-    const stage = (typeof AltioraState !== 'undefined') ? AltioraState.getProfile().stage : null;
-    const primary = (stage && STAGES[stage]) ? STAGES[stage].primary : 'strengths';
-    switchMode(primary);
-  }
-  updateTierUI();
-  closePricingModal();
-  if (tier === 'free') {
-    showToast('Reset to Free plan');
-  } else {
-    const name = tier.charAt(0).toUpperCase() + tier.slice(1);
-    showToast(`You are now on the ${name} plan (demo mode — no charges)`);
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════════
- * PERSONAL STATEMENT COACH  (Plus/Pro — mock AI, demo only)
- * ═══════════════════════════════════════════════════════════════ */
-
-const PS_STORAGE_KEY = 'altiora_personal_statement';
-const PS_MOCK_DELAY  = 1500;
-
-// Canned rewrite shown for any selection — replace with real API later.
-const PS_MOCK_IMPROVED = 'During a week of work experience on a stroke ward, I watched a physiotherapist coax a patient through her first steps after surgery — that moment crystallised exactly why I want to study medicine.';
-
-let _psRewriteRange = null;   // { start, end } of the selection being rewritten
-let _psSpinnerEl    = null;
-
-function updatePsCharCount() {
-  const ta = $('psTextarea');
-  $('psCharCount').textContent = `${ta.value.length} / 4000`;
-}
-
-function psShowSpinner(beforeEl) {
-  psHideSpinner();
-  _psSpinnerEl = document.createElement('div');
-  _psSpinnerEl.className = 'loading-spinner';
-  _psSpinnerEl.setAttribute('aria-hidden', 'true');
-  beforeEl.before(_psSpinnerEl);
-}
-
-function psHideSpinner() {
-  _psSpinnerEl?.remove();
-  _psSpinnerEl = null;
-}
-
-function initPersonalStatement() {
-  const ta = $('psTextarea');
-  if (!ta) return;
-
-  // Restore saved draft
-  const saved = localStorage.getItem(PS_STORAGE_KEY);
-  if (saved) ta.value = saved;
-  updatePsCharCount();
-
-  ta.addEventListener('input', updatePsCharCount);
-
-  $('psSaveBtn').addEventListener('click', () => {
-    localStorage.setItem(PS_STORAGE_KEY, ta.value);
-    showToast('Draft saved');
-    logEvent('ps_draft_save', { length: ta.value.length });
-  });
-
-  $('psFeedbackBtn').addEventListener('click', () => {
-    if (!ta.value.trim()) {
-      showToast('Write or paste a draft first');
-      return;
-    }
-    const btn = $('psFeedbackBtn');
-    btn.disabled = true;
-    $('psFeedback').classList.add('hidden');
-    psShowSpinner($('psFeedback'));
-    logEvent('ps_feedback_request', { length: ta.value.length });
-    setTimeout(() => {
-      psHideSpinner();
-      btn.disabled = false;
-      $('psFeedback').classList.remove('hidden');
-      $('psFeedback').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, PS_MOCK_DELAY);
-  });
-
-  $('psRewriteBtn').addEventListener('click', () => {
-    const start = ta.selectionStart;
-    const end   = ta.selectionEnd;
-    const selected = ta.value.slice(start, end).trim();
-    if (!selected) {
-      showToast('Highlight some text in your draft first');
-      return;
-    }
-    _psRewriteRange = { start, end };
-    const btn = $('psRewriteBtn');
-    btn.disabled = true;
-    $('psRewriteResult').classList.add('hidden');
-    psShowSpinner($('psRewriteResult'));
-    logEvent('ps_rewrite_request', { length: selected.length });
-    setTimeout(() => {
-      psHideSpinner();
-      btn.disabled = false;
-      $('psRewriteOriginal').textContent = selected;
-      $('psRewriteImproved').textContent = PS_MOCK_IMPROVED;
-      $('psRewriteResult').classList.remove('hidden');
-      $('psRewriteResult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, PS_MOCK_DELAY);
-  });
-
-  $('psApplyRewriteBtn').addEventListener('click', () => {
-    if (!_psRewriteRange) return;
-    const { start, end } = _psRewriteRange;
-    ta.value = ta.value.slice(0, start) + PS_MOCK_IMPROVED + ta.value.slice(end);
-    _psRewriteRange = null;
-    $('psRewriteResult').classList.add('hidden');
-    updatePsCharCount();
-    showToast('Rewrite applied to draft');
-  });
-}
-
-/* ═══════════════════════════════════════════════════════════════
- * INTERVIEW COACH  (Pro — mock AI, demo only)
- * ═══════════════════════════════════════════════════════════════ */
-
-const IC_STORAGE_KEY = 'altiora_interview_history';
-const IC_AI_DELAY    = 900;
-
-const IC_QUESTIONS = [
-  'Why do you want to study Computer Science?',
-  'Tell me about a time you solved a difficult problem.',
-  'What recent development in your field excites you most, and why?',
-  'How would you explain a complex technical concept to someone non-technical?',
-  'A classmate asks to copy your coursework. What do you do, and why?',
-];
-
-const IC_FOLLOW_UPS = [
-  'Interesting — and what first sparked that interest?',
-  'Good example. What would you do differently next time?',
-  'Nice choice. How do you keep up with developments like that?',
-  'Clear explanation. Communication matters as much as knowledge.',
-  'Ethics questions rarely have one right answer — reasoning is what counts.',
-];
-
-// Canned model answers surfaced for the weakest responses in the results screen.
-const IC_SUGGESTED_ANSWERS = [
-  'Tie your motivation to a concrete moment — a project you built, a problem that hooked you — rather than general enthusiasm.',
-  'Use the STAR structure: Situation, Task, Action, Result. Name the obstacle and quantify the outcome.',
-  'Pick one specific development, explain what it changes, and connect it to something you have read or tried yourself.',
-  'Use an analogy from everyday life, check understanding as you go, and avoid jargon entirely.',
-  'Acknowledge the conflict between loyalty and integrity, state your decision clearly, and explain the principle behind it.',
-];
-
-const IC_MOCK_TRANSCRIPT = 'Mock transcript: I am passionate about this subject because of a project I built last year that solved a real problem for my school.';
-
-let _icQuestionIndex = -1;        // -1 = not started
-let _icAnswers       = [];
-let _icVoiceMode     = false;
-
-function icAddMessage(role, text) {
-  const chat = $('icChat');
-  const msg  = document.createElement('div');
-  msg.className = `ic-msg ic-msg--${role}`;
-  msg.innerHTML = `<span class="ic-msg__who">${role === 'ai' ? '🎓 Interviewer' : 'You'}</span><p>${esc(text)}</p>`;
-  chat.appendChild(msg);
-  chat.scrollTop = chat.scrollHeight;
-}
-
-function icAskCurrentQuestion() {
-  icAddMessage('ai', `Question ${_icQuestionIndex + 1} of ${IC_QUESTIONS.length}: ${IC_QUESTIONS[_icQuestionIndex]}`);
-}
-
-function icStart() {
-  _icQuestionIndex = 0;
-  _icAnswers       = [];
-  $('icChat').innerHTML = '';
-  $('icChat').classList.remove('hidden');
-  $('icInputBar').classList.remove('hidden');
-  $('icResults').classList.add('hidden');
-  $('icStartBtn').textContent = 'Restart Interview';
-  icAddMessage('ai', "Welcome! I'll ask you 5 questions. Take your time — answer as you would in a real interview.");
-  icAskCurrentQuestion();
-  $('icAnswerInput').focus();
-  logEvent('ic_interview_start', { mode: _icVoiceMode ? 'voice' : 'text' });
-}
-
-// Score from answer lengths: detailed answers score higher (demo heuristic).
-function icComputeScore() {
-  const avg = _icAnswers.reduce((s, a) => s + a.length, 0) / _icAnswers.length;
-  if (avg < 50)  return 55;
-  if (avg < 150) return 68;
-  return 78;
-}
-
-function icFinish() {
-  $('icInputBar').classList.add('hidden');
-  const score   = icComputeScore();
-  const brief   = score < 78;
-
-  // Two shortest answers get suggested model answers
-  const ranked = _icAnswers
-    .map((a, i) => ({ i, len: a.length }))
-    .sort((a, b) => a.len - b.len)
-    .slice(0, 2)
-    .sort((a, b) => a.i - b.i);
-
-  const suggestionsHtml = ranked.map(({ i }) => `
-    <div class="ic-suggestion">
-      <p class="ic-suggestion__q">Q${i + 1}: ${esc(IC_QUESTIONS[i])}</p>
-      <p class="ic-suggestion__a">${esc(IC_SUGGESTED_ANSWERS[i])}</p>
-    </div>`).join('');
-
-  $('icResults').innerHTML = `
-    <div class="ps-feedback__header">
-      <h4 class="ps-section-head">Interview Results</h4>
-      <span class="ps-score">Score: <strong>${score}/100</strong></span>
-    </div>
-    <div class="ps-feedback__group ps-feedback__group--strengths">
-      <span class="ps-feedback__label">Strengths</span>
-      <ul><li>Clear answers</li><li>Good subject knowledge</li></ul>
-    </div>
-    <div class="ps-feedback__group ps-feedback__group--weaknesses">
-      <span class="ps-feedback__label">Weaknesses</span>
-      <ul>
-        ${brief ? '<li>Answers were too brief — aim for 3–4 sentences with a concrete example</li>' : '<li>Needs more concise responses</li>'}
-        <li>Hesitation on ethics</li>
-      </ul>
-    </div>
-    <div class="ps-feedback__group ps-feedback__group--suggestions">
-      <span class="ps-feedback__label">Suggested answers for your weakest questions</span>
-      ${suggestionsHtml}
-    </div>
-    <p class="ps-feedback__disclaimer">Demo feedback — score is based only on answer length. Real AI analysis coming soon.</p>`;
-  $('icResults').classList.remove('hidden');
-  $('icResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-  // Persist to interview history
-  const history = JSON.parse(localStorage.getItem(IC_STORAGE_KEY) ?? '[]');
-  history.push({
-    date: new Date().toISOString(),
-    mode: _icVoiceMode ? 'voice' : 'text',
-    score,
-    answers: _icAnswers,
-  });
-  localStorage.setItem(IC_STORAGE_KEY, JSON.stringify(history));
-  logEvent('ic_interview_complete', { score, mode: _icVoiceMode ? 'voice' : 'text' });
-}
-
-function icHandleSend() {
-  const input  = $('icAnswerInput');
-  const answer = input.value.trim();
-  if (!answer) {
-    showToast('Type an answer first');
-    return;
-  }
-  icAddMessage('user', answer);
-  _icAnswers.push(answer);
-  input.value = '';
-
-  const qIdx = _icQuestionIndex;
-  $('icSendBtn').disabled = true;
-
-  setTimeout(() => {
-    icAddMessage('ai', IC_FOLLOW_UPS[qIdx]);
-    _icQuestionIndex += 1;
-    if (_icQuestionIndex < IC_QUESTIONS.length) {
-      setTimeout(() => {
-        icAskCurrentQuestion();
-        $('icSendBtn').disabled = false;
-        $('icAnswerInput').focus();
-      }, IC_AI_DELAY);
-    } else {
-      $('icSendBtn').disabled = false;
-      setTimeout(icFinish, IC_AI_DELAY);
-    }
-  }, IC_AI_DELAY);
-}
-
-function initInterviewCoach() {
-  if (!$('icStartBtn')) return;
-
-  $('icStartBtn').addEventListener('click', icStart);
-  $('icSendBtn').addEventListener('click', icHandleSend);
-
-  // Enter sends (Shift+Enter for newline)
-  $('icAnswerInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      if (!$('icSendBtn').disabled) icHandleSend();
-    }
-  });
-
-  // Text / Voice mode toggle
-  const setMode = voice => {
-    _icVoiceMode = voice;
-    $('icTextModeBtn').classList.toggle('active', !voice);
-    $('icVoiceModeBtn').classList.toggle('active', voice);
-    $('icTextModeBtn').setAttribute('aria-pressed', String(!voice));
-    $('icVoiceModeBtn').setAttribute('aria-pressed', String(voice));
-    $('icSpeakBtn').classList.toggle('hidden', !voice);
-  };
-  $('icTextModeBtn').addEventListener('click', () => setMode(false));
-  $('icVoiceModeBtn').addEventListener('click', () => setMode(true));
-
-  // Mock speech-to-text. Real implementation would use the Web Speech API:
-  //   const rec = new (window.SpeechRecognition ?? window.webkitSpeechRecognition)();
-  //   rec.onresult = e => { input.value = e.results[0][0].transcript; };
-  $('icSpeakBtn').addEventListener('click', () => {
-    const btn = $('icSpeakBtn');
-    btn.disabled = true;
-    btn.textContent = '🎙 Listening…';
-    setTimeout(() => {
-      $('icAnswerInput').value = IC_MOCK_TRANSCRIPT;
-      btn.disabled = false;
-      btn.textContent = '🎙 Speak';
-      $('icAnswerInput').focus();
-    }, 1200);
-  });
-}
-
-/* ═══════════════════════════════════════════════════════════════
  * INIT
  * ═══════════════════════════════════════════════════════════════ */
 
@@ -3792,15 +3352,6 @@ function init() {
   buildCountryFilterBar();
   buildCategoryPicker();
   buildPlanCategoryGrid();
-
-  // Pricing modal
-  $('upgradeTierBtn')?.addEventListener('click', openPricingModal);
-  $('pricingClose')?.addEventListener('click', closePricingModal);
-  $('pricingOverlay')?.addEventListener('click', e => { if (e.target === $('pricingOverlay')) closePricingModal(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('pricingOverlay').classList.contains('hidden')) closePricingModal(); });
-  updateTierUI();
-  initPersonalStatement();
-  initInterviewCoach();
 
   // Stage selection cards (onboarding)
   $$('#stageSelect .stage-card').forEach(card =>
@@ -3853,7 +3404,8 @@ function init() {
     window.sessionStorage.removeItem('openStrengthsMode');
     enterStage('exploring');
   } else if (AltioraState.getState().meta.hasOnboarded) {
-    // Returning user → workspace home (their resume / next-step base).
+    // Already onboarded at boot → genuinely returning from a prior session.
+    _isReturningUser = true;
     showWorkspaceHome();
   } else {
     showStageSelect();
