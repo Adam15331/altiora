@@ -3084,15 +3084,47 @@ function renderFieldOverview(fieldId) {
     ? `Top courses may require: ${tests.map(t => `<strong>${esc(t)}</strong>`).join(', ')}.`
     : `Most courses in this field don't require an admission test.`;
 
-  const offers = catCourses.map(c => c.grades?.aLevels).filter(Boolean);
-  let gradeLine = '';
-  if (offers.length) {
-    const ranked = offers.slice().sort((a, b) => aLevelOfferStrength(a) - aLevelOfferStrength(b));
-    const lo = ranked[Math.floor(ranked.length * 0.15)] || ranked[0];
-    const hi = ranked[ranked.length - 1];
-    gradeLine = lo === hi
-      ? `Strong courses typically ask for around ${esc(hi)} at A-Level or equivalent.`
-      : `Strong courses typically ask for ${esc(lo)}–${esc(hi)} at A-Level or equivalent.`;
+  // ── Grade expectations, respecting the selected system (or none) ──
+  // Never assume A-Level. Only A-Level and IB have per-course grade data; for
+  // a selected system without data, or no system, we stay honest/multi-system.
+  const sysLabel = sys ? (qualificationMappings[sys]?.systemLabel ?? sys) : null;
+
+  // A-Level letter range, strongest first, trimming the weakest outliers.
+  const alOffers = catCourses.map(c => c.grades?.aLevels).filter(Boolean);
+  let alRange = null;
+  if (alOffers.length) {
+    const ranked = alOffers.slice().sort((a, b) => aLevelOfferStrength(a) - aLevelOfferStrength(b));
+    const weak = ranked[Math.floor(ranked.length * 0.15)] || ranked[0];
+    const strong = ranked[ranked.length - 1];
+    alRange = weak === strong ? strong : `${strong}–${weak}`;
+  }
+  // IB points range (low → high).
+  const ibPts = catCourses.map(c => c.grades?.ib).filter(v => typeof v === 'number' && !isNaN(v));
+  let ibRange = null;
+  if (ibPts.length) {
+    const sorted = ibPts.slice().sort((a, b) => a - b);
+    const lo = sorted[Math.floor(sorted.length * 0.15)] ?? sorted[0];
+    const hi = sorted[sorted.length - 1];
+    ibRange = lo === hi ? `${hi} points` : `${lo}–${hi} points`;
+  }
+
+  const neutralGrade = 'Strong courses are competitive and typically ask for high grades. Pick your qualification system in Check Combination to see the specific requirements for your system.';
+  let gradeLine;
+  if (sys === 'UK_A_Level') {
+    gradeLine = alRange ? `Strong courses typically ask for around ${esc(alRange)} at A-Level.` : neutralGrade;
+  } else if (sys === 'IB') {
+    gradeLine = ibRange ? `Strong courses typically ask for around ${esc(ibRange)} (IB).` : neutralGrade;
+  } else if (sys) {
+    // AP / Singapore A-Level / HK DSE — no per-system grade data in the set yet.
+    gradeLine = `Strong courses are competitive and typically ask for high grades. Check individual courses for specific ${esc(sysLabel)} requirements.`;
+  } else {
+    // No system selected — give a multi-system picture, never A-Level alone.
+    const parts = [];
+    if (alRange) parts.push(`${esc(alRange)} (A-Level)`);
+    if (ibRange) parts.push(`${esc(ibRange)} (IB)`);
+    gradeLine = parts.length
+      ? `Strong courses typically ask for high grades — around ${parts.join(', ')}, or equivalent in other systems.`
+      : neutralGrade;
   }
   const usShare = catCourses.length ? catCourses.filter(c => c.country === 'US').length / catCourses.length : 0;
   const holisticLine = usShare >= 0.3
@@ -3132,6 +3164,7 @@ function renderFieldOverview(fieldId) {
       <section class="fo-section">
         <h2 class="fo-section__head">Typical strong combinations</h2>
         <div class="fo-combos">${combosHtml}</div>
+        ${sys ? '' : `<p class="fo-muted fo-muted--hint">Example combinations shown in general terms — pick your qualification system in Check Combination to see them in your own subjects.</p>`}
       </section>
 
       <section class="fo-section">
