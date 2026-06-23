@@ -82,6 +82,37 @@
       </section>
 
       <!-- ═══════════════════════════════════════════════════════
+           Qualification-system selection — second onboarding step
+           ═══════════════════════════════════════════════════════ -->
+      <section id="systemSelect" class="stage-select hidden" aria-labelledby="systemSelectHeading">
+        <h1 id="systemSelectHeading" class="stage-select__heading">Which qualification are you studying?</h1>
+        <p class="stage-select__sub">This tailors everything to your system. You can change it anytime.</p>
+
+        <div class="stage-cards stage-cards--systems" role="list">
+          <button class="stage-card" data-system="UK_A_Level" role="listitem">
+            <span class="stage-card__title">UK A-Levels</span>
+            <span class="stage-card__desc">A-Levels in England, Wales or Northern Ireland.</span>
+          </button>
+          <button class="stage-card" data-system="IB" role="listitem">
+            <span class="stage-card__title">International Baccalaureate</span>
+            <span class="stage-card__desc">The IB Diploma, with HL and SL subjects.</span>
+          </button>
+          <button class="stage-card" data-system="US_AP" role="listitem">
+            <span class="stage-card__title">US APs</span>
+            <span class="stage-card__desc">US high school with Advanced Placement exams.</span>
+          </button>
+          <button class="stage-card" data-system="SG_A_Level" role="listitem">
+            <span class="stage-card__title">Singapore A-Levels</span>
+            <span class="stage-card__desc">Singapore-Cambridge A-Levels (H1/H2/H3).</span>
+          </button>
+          <button class="stage-card" data-system="HK_DSE" role="listitem">
+            <span class="stage-card__title">Hong Kong DSE</span>
+            <span class="stage-card__desc">The Hong Kong Diploma of Secondary Education.</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
            Workspace — shown once a stage is chosen.
            The stage bar (indicator + tool sub-nav) replaces the old
            horizontal tab bar.
@@ -102,6 +133,19 @@
               <button class="stage-menu__item" data-stage="choosing"  role="menuitem">Choosing my subjects</button>
               <button class="stage-menu__item" data-stage="building"  role="menuitem">Building my university list</button>
               <button class="stage-menu__item" data-stage="applying"  role="menuitem">Applying</button>
+            </div>
+          </div>
+          <div class="stage-bar__indicator">
+            <button id="systemIndicatorBtn" class="stage-indicator" aria-haspopup="true" aria-expanded="false" aria-controls="systemMenu">
+              <span class="stage-indicator__label">System: <strong id="systemIndicatorName">…</strong></span>
+              <span class="stage-indicator__caret" aria-hidden="true">▾</span>
+            </button>
+            <div id="systemMenu" class="stage-menu hidden" role="menu" aria-label="Switch qualification system">
+              <button class="stage-menu__item" data-system="UK_A_Level" role="menuitem">UK A-Levels</button>
+              <button class="stage-menu__item" data-system="IB"         role="menuitem">International Baccalaureate</button>
+              <button class="stage-menu__item" data-system="US_AP"      role="menuitem">US APs</button>
+              <button class="stage-menu__item" data-system="SG_A_Level" role="menuitem">Singapore A-Levels</button>
+              <button class="stage-menu__item" data-system="HK_DSE"     role="menuitem">Hong Kong DSE</button>
             </div>
           </div>
           <nav id="stageToolNav" class="stage-tool-nav" aria-label="Tools for this stage">
@@ -138,11 +182,11 @@
         </div>
 
         <p class="panel-intro">
-          Select your qualification system, pick your subjects, and instantly see which
-          courses are open, possible, or out of reach.
+          Pick your subjects and instantly see which courses are open, possible, or out of reach.
+          Your qualification system is set from your profile — change it anytime here or from the bar above.
         </p>
 
-        <!-- System select -->
+        <!-- System select (reflects your profile system; change it here or in the top bar) -->
         <div class="panel-controls">
           <div class="control-group">
             <label class="control-label" for="checkSystemSelect">
@@ -155,10 +199,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Prominent prompt to pick a system (e.g. arriving from Field Overview
-             with no saved qualification system) — populated/toggled by JS -->
-        <div id="systemPrompt" class="system-prompt hidden" role="status" aria-live="polite"></div>
 
         <!-- Grade input — shown after system is chosen, above subject picker -->
         <div id="gradeInputSection" class="grade-input-section hidden" aria-live="polite">
@@ -413,7 +453,7 @@
   <script src="data/university-profiles.js?v=1"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
   <script src="state.js?v=5"></script>
-  <script src="main.js?v=30"></script>
+  <script src="main.js?v=31"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);

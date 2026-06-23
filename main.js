@@ -27,8 +27,8 @@ const dataLoadError =
  * ─────────────────────────────────────────────────────────────── */
 const state = {
   mode:               'strengths',
-  checkSystem:        '',
-  reverseSystem:      'UK_A_Level',
+  checkSystem:        '',   // set from profile.qualificationSystem after onboarding
+  reverseSystem:      '',
   planCategory:       '',
   planSystem:         '',
   selectedSubjects:   [],
@@ -942,11 +942,35 @@ const MODE_LABELS = {
 
 const DEFAULT_STAGE = 'exploring';
 
+// Short labels for the qualification system indicator/menu. The system is a
+// first-class profile property (set once in onboarding) that drives every
+// system-dependent display — never silently assumed per tool.
+const SYSTEM_SHORT_LABELS = {
+  UK_A_Level: 'A-Levels',
+  IB:         'IB',
+  US_AP:      'US APs',
+  SG_A_Level: 'Singapore A-Levels',
+  HK_DSE:     'Hong Kong DSE',
+};
+
+// Stage chosen during onboarding, held until the system step completes.
+let _pendingStage = null;
+
 // Show the full-screen stage-selection screen (onboarding / re-pick).
 function showStageSelect() {
   closeStageMenu();
   $('workspace').classList.add('hidden');
+  $('systemSelect').classList.add('hidden');
   $('stageSelect').classList.remove('hidden');
+}
+
+// Show the full-screen qualification-system selection screen (onboarding /
+// the one-time prompt for old saves missing a system).
+function showSystemSelect() {
+  closeStageMenu();
+  $('workspace').classList.add('hidden');
+  $('stageSelect').classList.add('hidden');
+  $('systemSelect').classList.remove('hidden');
 }
 
 // Reveal the workspace and set up the stage chrome (indicator + sub-nav)
@@ -954,13 +978,25 @@ function showStageSelect() {
 function applyStageChrome(stage) {
   if (!STAGES[stage]) stage = DEFAULT_STAGE;
   $('stageSelect').classList.add('hidden');
+  $('systemSelect').classList.add('hidden');
   $('workspace').classList.remove('hidden');
   closeStageMenu();
+  closeSystemMenu();
   $('stageIndicatorName').textContent = STAGES[stage].name;
-  $$('.stage-menu__item').forEach(item =>
+  $$('#stageMenu .stage-menu__item').forEach(item =>
     item.classList.toggle('stage-menu__item--current', item.dataset.stage === stage)
   );
+  updateSystemIndicator(AltioraState.getProfile().qualificationSystem);
   renderStageToolNav(stage);
+}
+
+// Reflect the active system in the global indicator + menu.
+function updateSystemIndicator(sys) {
+  const el = $('systemIndicatorName');
+  if (el) el.textContent = SYSTEM_SHORT_LABELS[sys] ?? '—';
+  $$('#systemMenu .stage-menu__item').forEach(item =>
+    item.classList.toggle('stage-menu__item--current', item.dataset.system === sys)
+  );
 }
 
 // Route into a stage and open its primary tool (resume / fresh entry).
@@ -979,13 +1015,94 @@ function showWorkspaceHome() {
   logEvent('workspace_home', { stage });
 }
 
-// Persist the chosen stage, mark onboarded, then route there.
+// Persist the chosen stage, then route there. Entering ANY stage requires a
+// qualification system; if none is set yet (new user, or the homepage CTA),
+// divert to the system step first and resume once it's chosen.
 function enterStage(stage) {
   if (!STAGES[stage]) stage = DEFAULT_STAGE;
   AltioraState.setStage(stage);
-  AltioraState.setOnboarded(true);
   logEvent('stage_select', { stage });
+  const sys = AltioraState.getProfile().qualificationSystem;
+  if (!sys) { _pendingStage = stage; showSystemSelect(); return; }
+  AltioraState.setOnboarded(true);
   routeToStage(stage);
+}
+
+// Onboarding system pick (or the one-time prompt for old saves). Stores the
+// system, applies it everywhere, marks onboarded, then continues the journey.
+function chooseSystem(sys) {
+  if (!qualificationMappings[sys]) return;
+  AltioraState.setProfile({ qualificationSystem: sys });
+  applyProfileSystem(sys);
+  AltioraState.setOnboarded(true);
+  updateSystemIndicator(sys);
+  logEvent('system_select', { system: sys });
+  const stage = _pendingStage || AltioraState.getProfile().stage || DEFAULT_STAGE;
+  if (_pendingStage) { _pendingStage = null; routeToStage(stage); }
+  else { _isReturningUser = true; applyStageChrome(stage); switchMode('home'); } // returning user who lacked a system
+}
+
+// The single global control: change the qualification system everywhere.
+// Persists to the profile, re-applies to every tool, and re-renders the
+// current view in the new system.
+function changeSystem(sys) {
+  if (!qualificationMappings[sys] || sys === AltioraState.getProfile().qualificationSystem) {
+    closeSystemMenu(); return;
+  }
+  AltioraState.setProfile({ qualificationSystem: sys });
+  applyProfileSystem(sys);
+  updateSystemIndicator(sys);
+  closeSystemMenu();
+  logEvent('system_change', { system: sys });
+  rerenderCurrentView();
+  showToast(`Now showing everything in ${SYSTEM_SHORT_LABELS[sys] ?? sys}`);
+}
+
+// Apply the profile system to all tool state + dropdowns and rebuild the
+// (system-specific) subject picker. Does NOT persist or wipe profile.subjects.
+function applyProfileSystem(sys) {
+  if (!qualificationMappings[sys]) return;
+  state.checkSystem   = sys;
+  state.reverseSystem = sys;
+  state.planSystem    = sys;
+  state.selectedSubjects = [];
+  state.selectedTags     = new Set();
+  state.predictedGrade   = null;
+  selectedSubjectsWithLevel.clear();
+  ['checkSystemSelect', 'reverseSystemSelect', 'planSystemSelect'].forEach(id => {
+    const el = $(id); if (el) el.value = sys;
+  });
+  buildSubjectPicker(sys);                 // builds the subject picker + grade input
+  $('checkResultsSection')?.classList.add('hidden');
+  const emptyEl = $('checkEmptyState');
+  if (emptyEl) delete emptyEl.dataset.builtFor;
+}
+
+// Re-render whatever view is currently active (after a system change).
+function rerenderCurrentView() {
+  switch (state.mode) {
+    case 'check':   renderCheckEmptyState(); if (state.selectedSubjects.length) renderCheckResults(); break;
+    case 'plan':    if (state.planCategory) renderPlanResults(); break;
+    case 'reverse': if (state.searchQuery) renderReverseResults(); break;
+    case 'field-overview': if (state.exploreField?.fieldId) renderFieldOverview(state.exploreField.fieldId); break;
+    case 'home':     renderWorkspaceHome(); break;
+    case 'applying': renderApplyingPanel(); break;
+    // strengths: system-agnostic grid — nothing to re-render
+  }
+}
+
+/* ─── System indicator dropdown (global system control) ────────── */
+function openSystemMenu() {
+  $('systemMenu')?.classList.remove('hidden');
+  $('systemIndicatorBtn')?.setAttribute('aria-expanded', 'true');
+}
+function closeSystemMenu() {
+  $('systemMenu')?.classList.add('hidden');
+  $('systemIndicatorBtn')?.setAttribute('aria-expanded', 'false');
+}
+function toggleSystemMenu() {
+  if ($('systemMenu')?.classList.contains('hidden')) openSystemMenu();
+  else closeSystemMenu();
 }
 
 // Build the per-stage tool sub-nav: primary tool front and centre,
@@ -1601,9 +1718,11 @@ function populateSystemSelects() {
   const optHtml = Object.entries(qualificationMappings)
     .map(([k, sys]) => `<option value="${k}">${esc(sys.systemLabel)}</option>`)
     .join('');
-  $('checkSystemSelect').innerHTML   = `<option value="">Select your system…</option>${optHtml}`;
+  // No "Select your system…" placeholder — the system is set in onboarding and
+  // is always present, so these dropdowns just reflect/switch the global system.
+  $('checkSystemSelect').innerHTML   = optHtml;
   $('reverseSystemSelect').innerHTML = optHtml;
-  $('planSystemSelect').innerHTML    = `<option value="">Select your system…</option>${optHtml}`;
+  $('planSystemSelect').innerHTML    = optHtml;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2274,10 +2393,9 @@ $('courseSearchInput').addEventListener('input', e => {
   renderReverseResults();
 });
 
-$('reverseSystemSelect').addEventListener('change', e => {
-  state.reverseSystem = e.target.value;
-  if (state.searchQuery) renderReverseResults();
-});
+// The system dropdowns are now just another way to change the one global
+// system — route them through changeSystem so the whole app stays in sync.
+$('reverseSystemSelect').addEventListener('change', e => changeSystem(e.target.value));
 
 function renderReverseResults() {
   if (dataLoadError) return;
@@ -3201,64 +3319,17 @@ function renderFieldOverview(fieldId) {
 // dependent UI. Shared by the system dropdown and by flows that auto-select a
 // system (e.g. arriving from Field Overview). buildSubjectPicker re-applies any
 // active field filter, so the exploration context is preserved.
-function selectSystemForCheck(systemKey) {
-  state.checkSystem      = systemKey;
-  state.selectedSubjects = [];
-  state.selectedTags     = new Set();
-  state.predictedGrade   = null;
-  selectedSubjectsWithLevel.clear();
-  $('checkSystemSelect').value = systemKey;
-  $('checkResultsSection').classList.add('hidden');
-  const emptyEl = $('checkEmptyState');
-  if (emptyEl) delete emptyEl.dataset.builtFor;
-  buildSubjectPicker(systemKey);
-  // Mirror to the reverse panel so both start on the same system.
-  $('reverseSystemSelect').value = systemKey;
-  state.reverseSystem = systemKey;
-  if (state.searchQuery) renderReverseResults();
-  renderSystemPrompt();
-  syncProfileFromCheck();
-}
-
-// Prominent "pick a system" prompt, shown inside Check Combination when a field
-// is being explored but no qualification system is selected yet.
-function renderSystemPrompt() {
-  const el = $('systemPrompt');
-  if (!el) return;
-  if (state.exploreField && !state.checkSystem) {
-    el.innerHTML = `
-      <span class="system-prompt__icon" aria-hidden="true">⤴</span>
-      <p class="system-prompt__text">Pick your qualification system above to see
-        <strong>${esc(state.exploreField.name)}</strong> courses you qualify for.</p>`;
-    el.classList.remove('hidden');
-  } else {
-    el.classList.add('hidden');
-    el.innerHTML = '';
-  }
-}
-
 function proceedToCheckFromField() {
   if (!state.exploreField) return;
   logEvent('field_overview_to_check', { field: state.exploreField.fieldId });
+  // System is always set (onboarding), so Check opens pre-configured.
   enterStage('building');
   state.countryFilter = 'All';
   $$('#countryFilterBar .filter-btn').forEach(b =>
     b.classList.toggle('active', b.dataset.country === 'All'));
 
-  // Ensure a system is selected so the student never lands in an empty state:
-  // auto-select their saved system if they have one, otherwise prompt for one.
-  if (!state.checkSystem) {
-    const saved = (typeof AltioraState !== 'undefined')
-      ? AltioraState.getProfile().qualificationSystem : null;
-    if (saved && qualificationMappings[saved]) {
-      logEvent('field_overview_autoselect_system', { system: saved });
-      selectSystemForCheck(saved);   // builds picker + re-applies the field filter
-    }
-  }
-
   applyExploreFieldFilter();
   renderExploreContextBanner();
-  renderSystemPrompt();
   renderCheckEmptyState();
   if (state.selectedSubjects.length > 0) renderCheckResults();
   requestAnimationFrame(() =>
@@ -3336,7 +3407,6 @@ function clearExploreField() {
     b.setAttribute('aria-pressed', 'false');
   });
   renderExploreContextBanner();
-  renderSystemPrompt();
   renderCheckEmptyState();
   logEvent('explore_field_clear', {});
   if (state.selectedSubjects.length > 0) renderCheckResults();
@@ -3381,7 +3451,6 @@ function init() {
   }
 
   populateSystemSelects();
-  $('reverseSystemSelect').value = 'UK_A_Level';
   buildCountryFilterBar();
   buildCategoryPicker();
   buildPlanCategoryGrid();
@@ -3389,6 +3458,10 @@ function init() {
   // Stage selection cards (onboarding)
   $$('#stageSelect .stage-card').forEach(card =>
     card.addEventListener('click', () => enterStage(card.dataset.stage))
+  );
+  // System selection cards (second onboarding step)
+  $$('#systemSelect .stage-card').forEach(card =>
+    card.addEventListener('click', () => chooseSystem(card.dataset.system))
   );
 
   // Stage indicator dropdown (switch stage anytime)
@@ -3399,6 +3472,18 @@ function init() {
   $$('#stageMenu .stage-menu__item').forEach(item =>
     item.addEventListener('click', () => enterStage(item.dataset.stage))
   );
+
+  // System indicator dropdown — the single global control for the system.
+  $('systemIndicatorBtn')?.addEventListener('click', e => {
+    e.stopPropagation();
+    toggleSystemMenu();
+  });
+  $$('#systemMenu .stage-menu__item').forEach(item =>
+    item.addEventListener('click', () => changeSystem(item.dataset.system))
+  );
+  document.addEventListener('click', closeSystemMenu);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSystemMenu(); });
+
   // Click-away and Escape close the stage menu
   document.addEventListener('click', closeStageMenu);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeStageMenu(); });
@@ -3417,14 +3502,8 @@ function init() {
     if (e.target.closest('[data-change-stage]')) showStageSelect();
   });
 
-  $('checkSystemSelect').addEventListener('change', e => {
-    selectSystemForCheck(e.target.value);
-  });
-
-  $('planSystemSelect').addEventListener('change', e => {
-    state.planSystem = e.target.value;
-    if (state.planCategory && state.planSystem) renderPlanResults();
-  });
+  $('checkSystemSelect').addEventListener('change', e => changeSystem(e.target.value));
+  $('planSystemSelect').addEventListener('change', e => changeSystem(e.target.value));
 
   $('planSwitchToCheck').addEventListener('click', () => switchMode('check'));
 
@@ -3433,13 +3512,23 @@ function init() {
   // their last stage's primary tool. The "Find my path" CTA from the
   // homepage (?mode=strengths) drops the student straight into the
   // exploring stage.
+  const _profile = AltioraState.getProfile();
+  const _savedSystem = _profile.qualificationSystem;
+  // Apply the saved system globally up front so every screen renders in it.
+  if (_savedSystem && qualificationMappings[_savedSystem]) applyProfileSystem(_savedSystem);
+
   if (window.sessionStorage.getItem('openStrengthsMode') === 'true') {
     window.sessionStorage.removeItem('openStrengthsMode');
-    enterStage('exploring');
+    enterStage('exploring');   // diverts to system step if none set yet
   } else if (AltioraState.getState().meta.hasOnboarded) {
-    // Already onboarded at boot → genuinely returning from a prior session.
-    _isReturningUser = true;
-    showWorkspaceHome();
+    if (!_savedSystem) {
+      // Old save from before systems were first-class — prompt once, then continue.
+      showSystemSelect();
+    } else {
+      // Already onboarded with a system → genuinely returning.
+      _isReturningUser = true;
+      showWorkspaceHome();
+    }
   } else {
     showStageSelect();
   }
