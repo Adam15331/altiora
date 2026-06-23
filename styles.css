@@ -1589,6 +1589,16 @@ main     { flex: 1; padding: var(--pad); }
   font-style: italic;
 }
 
+/* Requirement-data not yet checked against a published source */
+.card-unverified {
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+  line-height: 1.45;
+  color: var(--color-text-tertiary);
+  font-style: italic;
+  opacity: 0.85;
+}
+
 .card-ap-recs {
   font-size: var(--text-xs);
   color: var(--color-text-tertiary);

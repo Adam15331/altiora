@@ -1536,6 +1536,9 @@ function buildShortlistCard(course, studentTags, hasSubjects) {
       <div class="card-admission-tests">
         ${tests.map(t => `<span class="admission-test-tag">${esc(t)} required</span>`).join('')}
       </div>` : ''}
+    ${(course.verification?.status ?? 'unverified') !== 'verified'
+      ? `<p class="card-unverified">⚠ Requirements not yet verified — confirm with the university.</p>`
+      : ''}
   `;
   card.querySelector('.remove-btn').addEventListener('click', e => {
     e.stopPropagation();
@@ -2310,6 +2313,16 @@ function buildCheckCard(course, result) {
 
   const profile = (typeof universityProfiles !== 'undefined') ? (universityProfiles[course.university] ?? null) : null;
 
+  // ── Requirement-data verification caveat ──────────────────────
+  // If these grades/tests haven't been checked against a published
+  // source, say so plainly rather than presenting them as confirmed.
+  const verifyStatus = course.verification?.status ?? 'unverified';
+  const unverifiedHtml = (verifyStatus !== 'verified' && (gradeStr || tests.length))
+    ? `<p class="card-unverified">⚠ ${verifyStatus === 'partial'
+        ? 'Some requirements not yet verified'
+        : 'Requirements not yet verified'} — confirm with the university before relying on these.</p>`
+    : '';
+
   const card = document.createElement('div');
   card.className = `course-card ${cfg.cardCls}`;
   card.setAttribute('role', 'listitem');
@@ -2377,6 +2390,7 @@ function buildCheckCard(course, result) {
       </div>` : ''}
     ${apNoteHtml}
     ${apRecsHtml}
+    ${unverifiedHtml}
     ${footerHtml}
     ${uniInfoHtml}
   `;
