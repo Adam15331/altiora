@@ -633,13 +633,17 @@ function isGradeAboveStudent(course, system, studentGrade) {
     return false;
   }
   if (system === 'IB') {
-    const ibStr = course.grades?.ib;
-    if (!ibStr) return false;
+    // grades.ib is an integer points total (e.g. 39); US/holistic courses
+    // and others without a published total have ib === null → not above.
+    const ibVal = course.grades?.ib;
+    if (ibVal == null) return false;
     const studentPts = parseInt(studentGrade, 10);
     if (isNaN(studentPts)) return false;
-    const m = ibStr.match(/\d+/);
-    if (!m) return false;
-    return studentPts < parseInt(m[0], 10);
+    const need = typeof ibVal === 'number'
+      ? ibVal
+      : parseInt(String(ibVal).match(/\d+/)?.[0], 10);
+    if (isNaN(need)) return false;
+    return studentPts < need;
   }
   if (system === 'US_AP') {
     const apStr = course.grades?.ap;
@@ -2055,6 +2059,9 @@ function renderCheckResults() {
 
   // Yield one frame so the spinner paints before synchronous classification work.
   requestAnimationFrame(() => {
+  // Guard the whole synchronous render: if anything throws, the spinner must
+  // still be cleared (otherwise it hangs forever) and the error surfaced.
+  try {
 
   const minNeeded = MIN_SUBJECTS[state.checkSystem] ?? 3;
   const tooFew    = state.selectedSubjects.length < minNeeded;
@@ -2158,13 +2165,28 @@ function renderCheckResults() {
     container.appendChild(buildGroup('red', 'Out of reach', byStatus.red, cardIndex, true));
   }
 
-  hideLoadingSpinner();
-
   // On the first appearance of results (a new user's first selection), bring
   // them into view so it's obvious something happened. Not on later toggles.
   if (firstAppearance) {
     requestAnimationFrame(() =>
       section.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }
+
+  } catch (err) {
+    // Never leave the spinner spinning: surface the error and show a safe
+    // empty state instead of an indefinite loading state.
+    console.error('renderCheckResults failed:', err);
+    const container = $('courseGrid');
+    if (container) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state__icon">⚠️</div>
+          <p>Something went wrong rendering your results.</p>
+          <p class="mt-8">Try adjusting your subjects, grades, or country filter.</p>
+        </div>`;
+    }
+  } finally {
+    hideLoadingSpinner();
   }
   }); // end requestAnimationFrame
 }
