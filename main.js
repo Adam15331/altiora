@@ -2306,6 +2306,36 @@ function buildCheckCard(course, result) {
     }
   }
 
+  // ── US admissions context (holistic; indicative SAT/ACT range) ────
+  // US degrees have no published grade/IB cutoff, so instead of a grade
+  // line we show the current test policy plus an INDICATIVE admitted
+  // middle-50% range, clearly labelled as a guide rather than a cutoff.
+  let usAdmitHtml = '';
+  if (course.country === 'US' && course.usAdmissions) {
+    const a = course.usAdmissions;
+    const policyLabel = {
+      required:    'SAT/ACT required',
+      optional:    'Test-optional',
+      flexible:    'Test-flexible (SAT/ACT/AP/IB)',
+      recommended: 'SAT/ACT recommended',
+      varies:      'SAT/ACT required for some schools',
+      blind:       'Test-blind — scores not used',
+    }[a.test] ?? a.test;
+    const rangeParts = [];
+    if (a.sat) rangeParts.push(`SAT ${a.sat}`);
+    if (a.act) rangeParts.push(`ACT ${a.act}`);
+    const rangeHtml = rangeParts.length
+      ? `<div class="card-us-admit__range">Typical admitted range (indicative, not a cutoff): ${rangeParts.map(esc).join(' · ')}</div>`
+      : (a.test === 'blind'
+          ? `<div class="card-us-admit__range">SAT/ACT are not considered in admission.</div>`
+          : '');
+    usAdmitHtml = `
+      <div class="card-us-admit">
+        <span class="card-us-admit__policy">🇺🇸 Holistic admissions — no fixed cutoff · ${esc(policyLabel)}</span>
+        ${rangeHtml}
+      </div>`;
+  }
+
   // ── IB HL chips ───────────────────────────────────────────────
   let ibHlHtml = '';
   if (sys === 'IB') {
@@ -2404,6 +2434,7 @@ function buildCheckCard(course, result) {
     </div>
     ${gradeStr ? `<div class="card-grades">${esc(sys === 'IB' ? `${gradeStr} IB points` : gradeStr)}</div>` : ''}
     ${(status === 'grey' && result.gradeGap) ? `<p class="card-grade-gap">⚠️ You have ${esc(result.gradeGap.have)}, course asks for ${esc(result.gradeGap.need)}</p>` : ''}
+    ${usAdmitHtml}
     ${ibHlHtml}
     ${apWarningHtml}
     ${tests.length ? `

@@ -4640,6 +4640,57 @@ courses.forEach(function (c) {
   };
 });
 
+/* ──────────────────────────────────────────────────────────────
+ * US admissions context (institution-level)
+ *
+ * US undergraduate admission is HOLISTIC — there is no published
+ * grade/IB cutoff. Instead we record the current (2026 entry)
+ * standardized-test policy and an INDICATIVE middle-50% admitted
+ * SAT/ACT range where a credible source publishes one. These are
+ * indicative of admitted students, NOT cutoffs. Test-blind schools
+ * (UC system) have no range. Keyed by university; merged onto each
+ * US course below as `course.usAdmissions`.
+ *   test: "required" | "optional" | "flexible" | "recommended" |
+ *         "varies"   | "blind"
+ * ────────────────────────────────────────────────────────────── */
+const usAdmissions = {
+  "MIT":                                 { test: "required",    sat: "1520–1570", act: "35–36" },
+  "Caltech":                             { test: "required",    sat: "1530–1570", act: "35–36" },
+  "Harvard University":                  { test: "required",    sat: "1510–1580", act: "34–36" },
+  "Yale University":                     { test: "flexible",    sat: "1480–1580", act: "34–36" },
+  "Princeton University":                { test: "optional",    sat: "1500–1560", act: "33–35" },
+  "Stanford University":                 { test: "required",    sat: "1510–1570", act: "34–35" },
+  "Columbia University":                 { test: "optional",    sat: "1510–1560", act: "34–35" },
+  "University of Pennsylvania":          { test: "required",    sat: "1500–1570", act: "34–35" },
+  "Cornell University":                  { test: "required",    sat: "1480–1560", act: "33–35" },
+  "Carnegie Mellon University":          { test: "varies",      sat: "1510–1560", act: "33–35" },
+  "UC Berkeley":                         { test: "blind",       sat: null,        act: null },
+  "University of Michigan":              { test: "optional",    sat: "1520–1560", act: "31–34" },
+  "New York University":                 { test: "optional",    sat: "1450–1570", act: "32–35" },
+  "Georgetown University":               { test: "required",    sat: "1390–1550", act: "32–34" },
+  "Duke University":                     { test: "optional",    sat: "1520–1570", act: "34–35" },
+  "Johns Hopkins University":            { test: "required",    sat: "1530–1560", act: "34–36" },
+  "Northwestern University":             { test: "optional",    sat: "1490–1570", act: "33–35" },
+  "Dartmouth College":                   { test: "required",    sat: "1440–1560", act: "33–35" },
+  "Brown University":                    { test: "required",    sat: "1510–1560", act: "34–35" },
+  "Rice University":                     { test: "recommended", sat: "1510–1570", act: "34–35" },
+  "Vanderbilt University":               { test: "optional",    sat: "1510–1560", act: "34–35" },
+  "University of Notre Dame":            { test: "optional",    sat: "1460–1540", act: "33–35" },
+  "Washington University in St. Louis":  { test: "optional",    sat: "1500–1570", act: "33–35" },
+  "Emory University":                    { test: "optional",    sat: "1480–1540", act: null },
+  "UCLA":                                { test: "blind",       sat: null,        act: null },
+  "University of Southern California":   { test: "optional",    sat: "1410–1540", act: "32–35" },
+  "Georgia Tech":                        { test: "required",    sat: "1370–1530", act: "30–34" },
+  "University of Virginia":              { test: "optional",    sat: "1410–1520", act: "32–35" },
+  "University of Illinois Urbana-Champaign": { test: "optional", sat: "1350–1510", act: "30–34" },
+  "Purdue University":                   { test: "required",    sat: "1210–1470", act: "27–34" },
+  "UNC Chapel Hill":                     { test: "optional",    sat: "1400–1530", act: "28–34" },
+};
+
+courses.forEach(function (c) {
+  if (c.country === "US") c.usAdmissions = usAdmissions[c.university] || null;
+});
+
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { courses: courses, courseVerification: courseVerification };
+  module.exports = { courses: courses, courseVerification: courseVerification, usAdmissions: usAdmissions };
 }
