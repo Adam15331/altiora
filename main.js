@@ -1305,6 +1305,11 @@ function exportShortlistToCSV() {
     if (typeof c.grades?.ib === 'number') parts.push(`IB ${c.grades.ib}`);
     if (c.grades?.sgALevels) parts.push(`SG ${c.grades.sgALevels}`);
     if (c.grades?.hkDse) parts.push(`DSE ${c.grades.hkDse}`);
+    // US: holistic, no grade cutoff — give the indicative admitted range.
+    if (c.country === 'US' && c.usAdmissions) {
+      const r = usAdmitRange(c.usAdmissions);
+      parts.push(r ? `${r} (indicative)` : usAdmitPolicyLabel(c.usAdmissions.test));
+    }
     return parts.join('; ');
   };
 
@@ -2639,6 +2644,24 @@ function showManualCopyBox(card, text) {
   box.select();
 }
 
+// US holistic-admissions helpers (shared by copy-text and CSV export).
+function usAdmitPolicyLabel(test) {
+  return {
+    required:    'SAT/ACT required',
+    optional:    'test-optional',
+    flexible:    'test-flexible (SAT/ACT/AP/IB)',
+    recommended: 'SAT/ACT recommended',
+    varies:      'SAT/ACT required for some schools',
+    blind:       'test-blind (scores not used)',
+  }[test] ?? test;
+}
+function usAdmitRange(a) {
+  const p = [];
+  if (a.sat) p.push(`SAT ${a.sat}`);
+  if (a.act) p.push(`ACT ${a.act}`);
+  return p.join(', ');
+}
+
 /**
  * Build a plain-text representation of a course's requirements,
  * with tags translated to the active reverse system.
@@ -2655,6 +2678,16 @@ function buildRequirementsText(course) {
     ? 'Recommended for competitive applicants:'
     : 'Required:';
 
+  // US admissions context: holistic with no grade cutoff — surface the
+  // current test policy and indicative admitted SAT/ACT range as a guide.
+  let usAdmitLines = [];
+  if (course.country === 'US' && course.usAdmissions) {
+    const a = course.usAdmissions;
+    const r = usAdmitRange(a);
+    usAdmitLines = ['', `Admissions: holistic, no fixed cutoff — ${usAdmitPolicyLabel(a.test)}.`,
+      ...(r ? [`Typical admitted range (indicative, not a cutoff): ${r}.`] : [])];
+  }
+
   const lines = [
     `${course.name}`,
     `${course.university} · ${country} · ${course.degreeLevel}`,
@@ -2662,6 +2695,7 @@ function buildRequirementsText(course) {
     `${essentialLabel} ${essential.length ? fmt(essential) : 'None specified'}`,
     ...(preferred.length ? [`Preferred: ${fmt(preferred)}`] : []),
     ...(useful.length    ? [`Useful:    ${fmt(useful)}`]    : []),
+    ...usAdmitLines,
     ...(course.notes     ? ['', `Notes: ${course.notes}`]   : []),
   ];
 
