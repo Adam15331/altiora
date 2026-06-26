@@ -36,6 +36,7 @@ const state = {
   countryFilter:      'All',
   selectedCategories: new Set(),
   searchQuery:        '',
+  resultSearch:       '',   // free-text filter on Check results (uni / course name)
   predictedGrade:     null,
   exploreField:       null,   // { category, name } when arriving from Start with Strengths
 };
@@ -2103,6 +2104,56 @@ function renderSummaryBar(subjectCount, counts, total) {
  * CHECK MODE — RESULTS
  * ═══════════════════════════════════════════════════════════════ */
 
+// Lightweight, instant client-side filter on the already-rendered result
+// cards by university OR course name. Runs on top of the country filter
+// (cards are already country/category-filtered when built) — no re-render,
+// no spinner. Re-applied after every render so it survives country switches.
+function applyResultSearch(rawQuery) {
+  const grid = $('courseGrid');
+  if (!grid) return;
+  const q = (rawQuery ?? '').trim().toLowerCase();
+  let shown = 0;
+
+  grid.querySelectorAll('.results-group').forEach(sec => {
+    let anyMatch = false;
+    sec.querySelectorAll('.course-card').forEach(card => {
+      const match = !q || (card.dataset.search || '').includes(q);
+      card.classList.toggle('hidden', !match);
+      if (match) { anyMatch = true; shown++; }
+    });
+    // Hide a whole group when none of its cards match the search.
+    sec.classList.toggle('hidden', !anyMatch);
+    // The "out of reach" group is collapsed behind a toggle; while a search
+    // is active, reveal its grid so matches there are visible, then restore.
+    const innerGrid = sec.querySelector('.results-group__grid');
+    const toggle    = sec.querySelector('.results-group__toggle');
+    if (innerGrid && toggle) {
+      if (q) {
+        innerGrid.hidden = false;
+        toggle.classList.add('hidden');
+      } else {
+        innerGrid.hidden = true;
+        toggle.classList.remove('hidden');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    }
+  });
+
+  // No-match empty state (reused element, appended once).
+  let empty = grid.querySelector('.results-search-empty');
+  if (q && shown === 0) {
+    if (!empty) {
+      empty = document.createElement('p');
+      empty.className = 'results-search-empty';
+      grid.appendChild(empty);
+    }
+    empty.textContent = `No matches for "${rawQuery.trim()}" — try a different university or course name.`;
+    empty.classList.remove('hidden');
+  } else if (empty) {
+    empty.classList.add('hidden');
+  }
+}
+
 function renderCheckResults() {
   if (dataLoadError) return;
   const section = $('checkResultsSection');
@@ -2241,6 +2292,10 @@ function renderCheckResults() {
   if (byStatus.red.length) {
     container.appendChild(buildGroup('red', 'Out of reach', byStatus.red, cardIndex, true));
   }
+
+  // Re-apply the in-results search filter (the grid was just rebuilt, e.g.
+  // after a country-filter switch) so the typed query stays in effect.
+  if (state.resultSearch) applyResultSearch(state.resultSearch);
 
   // On the first appearance of results (a new user's first selection), bring
   // them into view so it's obvious something happened. Not on later toggles.
@@ -2456,6 +2511,8 @@ function buildCheckCard(course, result) {
   card.className = `course-card ${cfg.cardCls}`;
   card.setAttribute('role', 'listitem');
   card.dataset.category = course.category ?? '';
+  // Lowercased haystack for the in-results search filter (uni + course name).
+  card.dataset.search = `${course.university} ${course.name}`.toLowerCase();
 
   // Status label icons (SVG, Notion-style)
   const statusIcons = {
@@ -3642,6 +3699,15 @@ function init() {
   buildCountryFilterBar();
   buildCategoryPicker();
   buildPlanCategoryGrid();
+
+  // In-results search filter (university / course name) — instant, no re-render.
+  const resultSearchInput = $('resultSearchInput');
+  if (resultSearchInput) {
+    resultSearchInput.addEventListener('input', e => {
+      state.resultSearch = e.target.value;
+      applyResultSearch(state.resultSearch);
+    });
+  }
 
   // Stage selection cards (onboarding)
   $$('#stageSelect .stage-card').forEach(card =>
