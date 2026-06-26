@@ -36,6 +36,7 @@ const state = {
   countryFilter:      'All',
   selectedCategories: new Set(),
   searchQuery:        '',
+  resultSearch:       '',   // free-text filter on Check results (uni / course name)
   predictedGrade:     null,
   exploreField:       null,   // { category, name } when arriving from Start with Strengths
 };
@@ -559,6 +560,49 @@ function fieldEmptySuggestions(category, system) {
   return out.length ? out : null;
 }
 
+// AP admissions context for a field, derived from its US courses' apContext.
+// AP has no fixed subject count — competitiveness is about how many rigorous,
+// field-aligned APs you take. Returns the field-relevant APs and the typical
+// competitive count range (min across tiers → recommended at the top schools).
+function apFieldGuidance(category) {
+  const us = courses.filter(c => c.country === 'US' && c.category === category && c.apContext);
+  if (!us.length) return null;
+  const subs = us[0].apContext.recommendedSubjects ?? [];
+  const mins = us.map(c => c.apContext.minCompetitiveAPs).filter(n => typeof n === 'number');
+  const recs = us.map(c => c.apContext.recommendedAPs).filter(n => typeof n === 'number');
+  if (!mins.length) return null;
+  return {
+    subjects: subs,
+    minLow:  Math.min(...mins),
+    recHigh: Math.max(...(recs.length ? recs : mins)),
+  };
+}
+
+// Shared AP guidance panel (Check empty-state + Subject Planner). Reframes AP
+// away from the "pick N subjects" model: count matters, and the specific APs
+// should align with the intended major. Informational — the student still
+// selects their actual APs in the picker.
+function apGuidancePanelHtml(category) {
+  const g = category ? apFieldGuidance(category) : null;
+  const fieldLabel = category ? (CATEGORY_LABEL_MAP[category] ?? category) : null;
+  const countMsg = g
+    ? `Competitive US applicants typically take <strong>${g.minLow}–${g.recHigh}+ APs</strong> aligned to their intended major — the most selective schools expect <strong>${g.recHigh}+</strong>.`
+    : `There's no fixed number of APs. Competitive US applicants take many — often 7–12 — aligned to their intended major.`;
+  const fieldLine = (g && fieldLabel && g.subjects.length)
+    ? `<p class="ap-guidance__line">APs that align with <strong>${esc(fieldLabel)}</strong>:</p>`
+    : '';
+  const chips = (g && g.subjects.length)
+    ? `<div class="ap-guidance__chips">${g.subjects.map(s => `<span class="ap-guidance__chip">${esc(s)}</span>`).join('')}</div>`
+    : '';
+  return `
+    <div class="ap-guidance">
+      <p class="ap-guidance__lead">🇺🇸 US admissions is holistic — but AP <em>rigour and count</em> are real factors. ${countMsg}</p>
+      ${fieldLine}
+      ${chips}
+      <p class="ap-guidance__foot">Add more rigorous APs across subjects (maths, sciences, humanities) to strengthen your application — a handful of APs is rarely enough on its own for the most selective schools.</p>
+    </div>`;
+}
+
 function renderCheckEmptyState() {
   const el = $('checkEmptyState');
   if (!el) return;
@@ -567,6 +611,23 @@ function renderCheckEmptyState() {
   if (!show) return;
 
   const ef = state.exploreField;
+
+  // AP doesn't have a fixed subject count, so don't present "3-subject
+  // combinations" as a complete answer. Show count + field-aligned guidance.
+  if (state.checkSystem === 'US_AP') {
+    const apCat = ef ? ef.category : null;
+    const builtKey = `US_AP|${apCat ?? ''}`;
+    if (el.dataset.builtFor === builtKey) return;
+    el.dataset.builtFor = builtKey;
+    el.innerHTML = `
+      <div class="check-empty-state__inner">
+        <div class="check-empty-state__icon" aria-hidden="true">🎯</div>
+        <p class="check-empty-state__heading">Select your APs above to see matching courses</p>
+        ${apGuidancePanelHtml(apCat)}
+      </div>`;
+    return;
+  }
+
   const fieldSugg = ef ? fieldEmptySuggestions(ef.category, state.checkSystem) : null;
   // Rebuild when the system OR the active field changes.
   const builtKey = `${state.checkSystem}|${fieldSugg ? ef.category : ''}`;
@@ -2043,6 +2104,56 @@ function renderSummaryBar(subjectCount, counts, total) {
  * CHECK MODE — RESULTS
  * ═══════════════════════════════════════════════════════════════ */
 
+// Lightweight, instant client-side filter on the already-rendered result
+// cards by university OR course name. Runs on top of the country filter
+// (cards are already country/category-filtered when built) — no re-render,
+// no spinner. Re-applied after every render so it survives country switches.
+function applyResultSearch(rawQuery) {
+  const grid = $('courseGrid');
+  if (!grid) return;
+  const q = (rawQuery ?? '').trim().toLowerCase();
+  let shown = 0;
+
+  grid.querySelectorAll('.results-group').forEach(sec => {
+    let anyMatch = false;
+    sec.querySelectorAll('.course-card').forEach(card => {
+      const match = !q || (card.dataset.search || '').includes(q);
+      card.classList.toggle('hidden', !match);
+      if (match) { anyMatch = true; shown++; }
+    });
+    // Hide a whole group when none of its cards match the search.
+    sec.classList.toggle('hidden', !anyMatch);
+    // The "out of reach" group is collapsed behind a toggle; while a search
+    // is active, reveal its grid so matches there are visible, then restore.
+    const innerGrid = sec.querySelector('.results-group__grid');
+    const toggle    = sec.querySelector('.results-group__toggle');
+    if (innerGrid && toggle) {
+      if (q) {
+        innerGrid.hidden = false;
+        toggle.classList.add('hidden');
+      } else {
+        innerGrid.hidden = true;
+        toggle.classList.remove('hidden');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    }
+  });
+
+  // No-match empty state (reused element, appended once).
+  let empty = grid.querySelector('.results-search-empty');
+  if (q && shown === 0) {
+    if (!empty) {
+      empty = document.createElement('p');
+      empty.className = 'results-search-empty';
+      grid.appendChild(empty);
+    }
+    empty.textContent = `No matches for "${rawQuery.trim()}" — try a different university or course name.`;
+    empty.classList.remove('hidden');
+  } else if (empty) {
+    empty.classList.add('hidden');
+  }
+}
+
 function renderCheckResults() {
   if (dataLoadError) return;
   const section = $('checkResultsSection');
@@ -2084,6 +2195,8 @@ function renderCheckResults() {
     warn.className = 'subject-count-warning';
     warn.textContent = state.checkSystem === 'HK_DSE'
       ? 'DSE students typically need 4 core subjects + 2 electives (6 subjects total). Select more subjects for accurate results.'
+      : state.checkSystem === 'US_AP'
+      ? 'Competitive US applicants take several rigorous APs (often 7+), aligned to their major. Add more APs to see a fuller picture — results below are indicative only.'
       : `Universities require a full subject combination — please select at least ${minNeeded} subjects to see accurate results. Results below are indicative only.`;
     $('summaryBar').before(warn);
   }
@@ -2092,10 +2205,20 @@ function renderCheckResults() {
     .filter(c => state.countryFilter === 'All' || c.country === state.countryFilter)
     .filter(c => state.selectedCategories.size === 0 || state.selectedCategories.has(c.category));
 
+  const apCount = state.selectedSubjects.length;
   const byStatus = { green: [], amber: [], grey: [], red: [] };
   pool.forEach(course => {
     const result = classify(course, state.selectedTags);
     if (tooFew && result.status === 'green') result.status = 'amber';
+    // AP: a strong subject match alone doesn't make a few-AP profile a STRONG
+    // match for selective US schools — competitiveness depends on AP count.
+    // Hold back GREEN to POSSIBLE when below the course's competitive AP bar.
+    if (state.checkSystem === 'US_AP' && course.country === 'US' && course.apContext
+        && result.status === 'green'
+        && apCount < course.apContext.minCompetitiveAPs) {
+      result.status = 'amber';
+      result.apCountShort = { have: apCount, need: course.apContext.minCompetitiveAPs };
+    }
     if (state.predictedGrade && (result.status === 'green' || result.status === 'amber')) {
       if (isGradeAboveStudent(course, state.checkSystem, state.predictedGrade)) {
         result.status = 'grey';
@@ -2169,6 +2292,10 @@ function renderCheckResults() {
   if (byStatus.red.length) {
     container.appendChild(buildGroup('red', 'Out of reach', byStatus.red, cardIndex, true));
   }
+
+  // Re-apply the in-results search filter (the grid was just rebuilt, e.g.
+  // after a country-filter switch) so the typed query stays in effect.
+  if (state.resultSearch) applyResultSearch(state.resultSearch);
 
   // On the first appearance of results (a new user's first selection), bring
   // them into view so it's obvious something happened. Not on later toggles.
@@ -2384,6 +2511,8 @@ function buildCheckCard(course, result) {
   card.className = `course-card ${cfg.cardCls}`;
   card.setAttribute('role', 'listitem');
   card.dataset.category = course.category ?? '';
+  // Lowercased haystack for the in-results search filter (uni + course name).
+  card.dataset.search = `${course.university} ${course.name}`.toLowerCase();
 
   // Status label icons (SVG, Notion-style)
   const statusIcons = {
@@ -2937,7 +3066,20 @@ function renderPlanResults() {
     $('planCriticalPairs').innerHTML = '';
   }
 
-  /* ── Section B: top subject combinations ── */
+  /* ── Section B: top subject combinations (or AP guidance) ── */
+  // AP has no fixed-count combination model — replace the ranked 3–5 subject
+  // combos with field-aligned AP guidance driven by apContext.
+  if (state.planSystem === 'US_AP') {
+    $('planCombinations').innerHTML = `
+      <h3 class="plan-section-head">Building a strong AP profile for ${esc(catLabel)}</h3>
+      <p class="plan-section-sub">AP admission isn't about a fixed set of subjects — it's about taking enough rigorous, field-aligned APs.</p>
+      ${apGuidancePanelHtml(state.planCategory)}`;
+    $('planResults').classList.remove('hidden');
+    requestAnimationFrame(() =>
+      $('planResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+    return;
+  }
+
   const top5 = combosForDisplay(state.planCategory, state.planSystem, isQuant, 5);
 
   if (top5.length === 0) {
@@ -3381,9 +3523,11 @@ function renderFieldOverview(fieldId) {
       </section>
 
       <section class="fo-section">
-        <h2 class="fo-section__head">Typical strong combinations</h2>
+        ${sys === 'US_AP'
+          ? `<h2 class="fo-section__head">Building a strong AP profile</h2>${apGuidancePanelHtml(cat)}`
+          : `<h2 class="fo-section__head">Typical strong combinations</h2>
         <div class="fo-combos">${combosHtml}</div>
-        ${sys ? '' : `<p class="fo-muted fo-muted--hint">Example combinations shown in general terms — pick your qualification system in Check Combination to see them in your own subjects.</p>`}
+        ${sys ? '' : `<p class="fo-muted fo-muted--hint">Example combinations shown in general terms — pick your qualification system in Check Combination to see them in your own subjects.</p>`}`}
       </section>
 
       <section class="fo-section">
@@ -3555,6 +3699,15 @@ function init() {
   buildCountryFilterBar();
   buildCategoryPicker();
   buildPlanCategoryGrid();
+
+  // In-results search filter (university / course name) — instant, no re-render.
+  const resultSearchInput = $('resultSearchInput');
+  if (resultSearchInput) {
+    resultSearchInput.addEventListener('input', e => {
+      state.resultSearch = e.target.value;
+      applyResultSearch(state.resultSearch);
+    });
+  }
 
   // Stage selection cards (onboarding)
   $$('#stageSelect .stage-card').forEach(card =>
