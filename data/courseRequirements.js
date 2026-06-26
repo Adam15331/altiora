@@ -1462,7 +1462,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1480,7 +1480,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1498,7 +1498,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1516,7 +1516,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Biology", "AP Chemistry", "AP Calculus BC"],
+      recommendedSubjects: ["AP Biology", "AP Chemistry", "AP Calculus BC", "AP Physics 1"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1534,7 +1534,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1552,7 +1552,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1570,7 +1570,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1588,7 +1588,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1606,7 +1606,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1624,7 +1624,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1642,7 +1642,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1660,7 +1660,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP English Language", "AP US History", "AP Government"],
+      recommendedSubjects: ["AP English Language", "AP US History", "AP US Government", "AP English Literature"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1678,7 +1678,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Biology", "AP Chemistry", "AP Calculus BC"],
+      recommendedSubjects: ["AP Biology", "AP Chemistry", "AP Calculus BC", "AP Physics 1"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1696,7 +1696,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1714,7 +1714,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1732,7 +1732,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1750,7 +1750,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1768,7 +1768,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1786,7 +1786,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1804,7 +1804,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1822,7 +1822,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP English Language", "AP US History", "AP Government"],
+      recommendedSubjects: ["AP English Language", "AP US History", "AP US Government", "AP English Literature"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1840,7 +1840,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Biology", "AP Chemistry", "AP Calculus BC"],
+      recommendedSubjects: ["AP Biology", "AP Chemistry", "AP Calculus BC", "AP Physics 1"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1858,7 +1858,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1876,7 +1876,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1894,7 +1894,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1912,7 +1912,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1930,7 +1930,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1948,7 +1948,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1966,7 +1966,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -1984,7 +1984,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Biology", "AP Chemistry", "AP Calculus BC"],
+      recommendedSubjects: ["AP Biology", "AP Chemistry", "AP Calculus BC", "AP Physics 1"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2002,7 +2002,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2020,7 +2020,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2038,7 +2038,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2056,7 +2056,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2074,7 +2074,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2092,7 +2092,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2110,7 +2110,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2128,7 +2128,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2146,7 +2146,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2164,7 +2164,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2182,7 +2182,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2200,7 +2200,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2218,7 +2218,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2236,7 +2236,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2254,7 +2254,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP English Language", "AP US History", "AP Government"],
+      recommendedSubjects: ["AP English Language", "AP US History", "AP US Government", "AP English Literature"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2272,7 +2272,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2290,7 +2290,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2308,7 +2308,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2326,7 +2326,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -2344,7 +2344,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3080,7 +3080,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3098,7 +3098,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3116,7 +3116,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3134,7 +3134,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3152,7 +3152,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3170,7 +3170,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3188,7 +3188,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3206,7 +3206,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3224,7 +3224,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3242,7 +3242,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3260,7 +3260,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3278,7 +3278,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3296,7 +3296,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3314,7 +3314,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3332,7 +3332,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3350,7 +3350,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3368,7 +3368,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3386,7 +3386,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3404,7 +3404,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3422,7 +3422,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3440,7 +3440,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3458,7 +3458,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3476,7 +3476,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3494,7 +3494,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3512,7 +3512,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3530,7 +3530,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3548,7 +3548,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3566,7 +3566,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3584,7 +3584,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3602,7 +3602,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3620,7 +3620,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3638,7 +3638,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3656,7 +3656,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3674,7 +3674,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3692,7 +3692,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Computer Science A"],
+      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3710,7 +3710,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
@@ -3728,7 +3728,7 @@ const courses = [
     admissionTests: [],
     apContext: {
       minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus AB", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
