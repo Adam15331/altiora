@@ -1503,6 +1503,16 @@ main     { flex: 1; padding: var(--pad); }
   line-height: 1.5;
 }
 
+/* Field-relevance reason — why a course isn't a strong match for these
+   subjects (e.g. "Engineering expects calculus and physics"). */
+.card-field-core {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-xs);
+  line-height: 1.45;
+  color: var(--color-text-secondary);
+  overflow-wrap: anywhere;
+}
+
 /* US holistic-admissions context: policy + indicative admitted range */
 .card-us-admit {
   margin: var(--space-2) 0 0;
