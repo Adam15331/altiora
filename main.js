@@ -885,12 +885,75 @@ function wireSelectGrade(selectId) {
  * ELIGIBILITY ENGINE
  * ═══════════════════════════════════════════════════════════════ */
 
+// ── Field-relevance core subjects ────────────────────────────────
+// Holistic admissions (and minimal essential[] requirements) must NOT mean
+// "everything matches everything". For every field there are CORE subjects a
+// credible applicant is expected to have. Each entry is a list of GROUPS;
+// a group is satisfied if the student has ANY tag in it. Tags cover all
+// systems (e.g. AP US Government maps to 'Sociology', Calculus BC →
+// Mathematics_Advanced, Calculus AB → Mathematics_Standard).
+const MATHS_TAGS = [MATHS_STD, MATHS_ADV];
+const CORE_FIELD_GROUPS = {
+  mathematics:  [ MATHS_TAGS ],
+  engineering:  [ MATHS_TAGS, ['Physics'] ],
+  cs:           [ MATHS_TAGS, ['Computer_Science', 'Physics'] ],
+  sciences:     [ ['Chemistry', 'Biology', 'Physics', ...MATHS_TAGS] ],
+  medicine:     [ ['Chemistry'], ['Biology'] ],
+  economics:    [ [...MATHS_TAGS, 'Statistics', 'Economics'] ],
+  business:     [ [...MATHS_TAGS, 'Statistics', 'Economics', 'Business'] ],
+  law:          [ ['English', 'English_Language', 'History', 'Politics', 'Philosophy', 'Sociology'] ],
+  psychology:   [ ['Psychology', 'Biology', 'Chemistry', 'Physics', ...MATHS_TAGS, 'Statistics'] ],
+  architecture: [ [...MATHS_TAGS, 'Art_Design', 'Physics'] ],
+};
+
+// Field-tailored reason shown when a course is demoted for lacking core subjects.
+const FIELD_CORE_REASON = {
+  mathematics:  'Maths degrees expect strong calculus preparation.',
+  engineering:  'Engineering expects calculus and physics.',
+  cs:           'Computer Science expects calculus and a computing or physics background.',
+  sciences:     'Science courses expect relevant sciences (e.g. biology, chemistry or physics).',
+  medicine:     'Medicine-track courses expect biology and chemistry.',
+  economics:    'Economics expects strong quantitative preparation (calculus or statistics).',
+  business:     'Business courses expect quantitative preparation (calculus or statistics).',
+  law:          'Law-track courses expect strong humanities (e.g. English, history or government).',
+  psychology:   'Psychology expects relevant science or quantitative subjects.',
+  architecture: 'Architecture expects maths and a design or art subject.',
+};
+
+// How many of a field's core subject GROUPS the student satisfies.
+function fieldRelevance(category, userTags) {
+  const groups = CORE_FIELD_GROUPS[category];
+  if (!groups || !groups.length) return null;
+  let satisfied = 0;
+  for (const g of groups) if (g.some(t => userTags.has(t))) satisfied++;
+  return { satisfied, total: groups.length, category };
+}
+
 function classify(course, userTags) {
   const { essential = [], preferred = [] } = course.requirements;
   const missingEssential = essential.filter(t => !userTags.has(t));
   if (missingEssential.length) return { status:'red', missingEssential, missingPreferred:[] };
   const missingPreferred = preferred.filter(t => !userTags.has(t));
-  return { status: missingPreferred.length ? 'amber' : 'green', missingEssential:[], missingPreferred };
+  let status = missingPreferred.length ? 'amber' : 'green';
+
+  // Field-relevance guard: only when the course didn't gate this student out
+  // on subjects (base GREEN). A course with no hard subject requirements must
+  // still require the field's CORE subjects before counting as a STRONG match
+  // — otherwise holistic/empty-requirement courses (e.g. US) match everyone.
+  if (status === 'green') {
+    const fr = fieldRelevance(course.category, userTags);
+    if (fr && fr.satisfied < fr.total) {
+      // None of the field's core subjects → weak (not a match); some but not
+      // all → possible. Never strong without the expected core preparation.
+      return {
+        status: fr.satisfied === 0 ? 'red' : 'amber',
+        missingEssential: [],
+        missingPreferred,
+        fieldCore: fr,
+      };
+    }
+  }
+  return { status, missingEssential:[], missingPreferred };
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2415,6 +2478,13 @@ function buildCheckCard(course, result) {
       </p>`;
   }
 
+  // Field-relevance reason — why a holistic/no-requirement course was held
+  // back from STRONG because the student lacks the field's core subjects.
+  let fieldCoreHtml = '';
+  if (result.fieldCore && FIELD_CORE_REASON[result.fieldCore.category]) {
+    fieldCoreHtml = `<p class="card-field-core">${esc(FIELD_CORE_REASON[result.fieldCore.category])}</p>`;
+  }
+
   // ── AP context UI ────────────────────────────────────────────
   let apWarningHtml = '';
   let apNoteHtml    = '';
@@ -2568,6 +2638,7 @@ function buildCheckCard(course, result) {
     </div>
     ${gradeStr ? `<div class="card-grades">${esc(sys === 'IB' ? `${gradeStr} IB points` : gradeStr)}</div>` : ''}
     ${(status === 'grey' && result.gradeGap) ? `<p class="card-grade-gap">⚠️ You have ${esc(result.gradeGap.have)}, course asks for ${esc(result.gradeGap.need)}</p>` : ''}
+    ${fieldCoreHtml}
     ${usAdmitHtml}
     ${ibHlHtml}
     ${apWarningHtml}
