@@ -2545,3 +2545,248 @@ footer p {
 .footer-meta { margin-top: var(--space-2); }
 .footer-meta a { font-size: var(--text-xs); color: var(--color-text-tertiary); text-decoration: underline; }
 .footer-meta a:hover { color: var(--color-text-secondary); }
+
+/* ═══════════════════════════════════════════════════════════════
+ * CONFIDENT EDITORIAL — design-language proof, anchored on the
+ * Check Combination results area. SCOPED to #panel-check so every
+ * other screen keeps the current look until we propagate. All values
+ * come from the --ce-* tokens (tokens.css) for easy reuse later.
+ * ═══════════════════════════════════════════════════════════════ */
+
+/* Warm editorial canvas for the results screen */
+#panel-check {
+  background: var(--ce-bg);
+  color: var(--ce-ink);
+}
+
+/* ── Country filter pills + result-summary badges ──────────────── */
+#panel-check .filter-btn {
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: .02em;
+  padding: 6px 14px;
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius-pill);
+  background: transparent;
+  color: var(--ce-ink);
+}
+#panel-check .filter-btn:hover {
+  border-color: var(--ce-ink);
+  color: var(--ce-ink);
+  background: transparent;
+}
+#panel-check .filter-btn.active {
+  background: var(--ce-ink);
+  border-color: var(--ce-ink);
+  color: var(--ce-bg);
+  font-weight: 400;
+}
+
+/* Result summary counts (✓ 43 · ◑ 46 · …) — calm mono pills, not loud */
+#panel-check .result-summary .badge {
+  font-family: var(--ce-font-mono);
+  font-weight: 700;
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius-pill);
+  background: transparent;
+}
+#panel-check .result-summary .badge--success { color: var(--ce-status-strong); }
+#panel-check .result-summary .badge--warning { color: var(--ce-status-possible); }
+#panel-check .result-summary .badge--error   { color: var(--ce-status-reach); }
+#panel-check .result-summary .badge--grey    { color: var(--ce-status-grade); }
+#panel-check .result-summary .badge--neutral { color: var(--ce-ink-60); }
+
+/* ── In-results search box ─────────────────────────────────────── */
+#panel-check .results-search__input {
+  font-family: var(--ce-font-mono);
+  font-size: 13px;
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius-pill);
+  background: var(--ce-surface);
+  color: var(--ce-ink);
+}
+#panel-check .results-search__input::placeholder {
+  font-family: var(--ce-font-mono);
+  color: var(--ce-ink-30);
+}
+#panel-check .results-search__input:focus {
+  outline: none;
+  border-color: var(--ce-ink);
+  box-shadow: none;
+}
+#panel-check .results-search__icon { opacity: .45; }
+
+/* ── Section headings: "Strong matches (N)" ────────────────────── */
+#panel-check .results-group__header {
+  font-family: var(--ce-font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: var(--space-2) 0 var(--space-3);
+  border-bottom: var(--ce-hairline);
+  color: var(--ce-ink);
+  background: var(--ce-bg);
+}
+#panel-check .results-group__header--green { color: var(--ce-status-strong); }
+#panel-check .results-group__header--amber { color: var(--ce-status-possible); }
+#panel-check .results-group__header--red   { color: var(--ce-status-reach); }
+#panel-check .results-group__header--grey  { color: var(--ce-status-grade); }
+/* the "(N)" count → mono */
+#panel-check .results-group__header span {
+  font-family: var(--ce-font-mono);
+  font-size: .85rem;
+  opacity: .7 !important;
+}
+
+/* ── The course card ───────────────────────────────────────────── */
+#panel-check .course-card {
+  background: var(--ce-surface);
+  border: var(--ce-hairline);
+  border-left: 3px solid var(--ce-ink-30);
+  border-radius: var(--ce-radius);
+  border-style: solid;
+  padding: var(--space-6);
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+#panel-check .course-card:hover {
+  background: var(--ce-surface);
+  border-color: var(--ce-hairline-color);
+}
+/* keep a calm hairline on hover but let the category left-border stay vivid */
+#panel-check .course-card--grey {
+  border-style: solid;
+  border-color: var(--ce-hairline-color);
+}
+
+/* Category accent — thin coloured left border (the only category colour) */
+#panel-check .course-card[data-category="engineering"]  { border-left-color: var(--ce-cat-engineering); }
+#panel-check .course-card[data-category="mathematics"]  { border-left-color: var(--ce-cat-mathematics); }
+#panel-check .course-card[data-category="architecture"] { border-left-color: var(--ce-cat-architecture); }
+#panel-check .course-card[data-category="cs"]           { border-left-color: var(--ce-cat-cs); }
+#panel-check .course-card[data-category="sciences"]     { border-left-color: var(--ce-cat-sciences); }
+#panel-check .course-card[data-category="medicine"]     { border-left-color: var(--ce-cat-medicine); }
+#panel-check .course-card[data-category="psychology"]   { border-left-color: var(--ce-cat-psychology); }
+#panel-check .course-card[data-category="economics"]    { border-left-color: var(--ce-cat-economics); }
+#panel-check .course-card[data-category="business"]     { border-left-color: var(--ce-cat-business); }
+#panel-check .course-card[data-category="law"]          { border-left-color: var(--ce-cat-law); }
+
+/* Match-status label (STRONG MATCH) — mono, calm colour */
+#panel-check .card-status {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+#panel-check .card-status--green { color: var(--ce-status-strong); }
+#panel-check .card-status--amber { color: var(--ce-status-possible); }
+#panel-check .card-status--red   { color: var(--ce-status-reach); }
+#panel-check .card-status--grey  { color: var(--ce-status-grade); }
+#panel-check .card-status--none  { color: var(--ce-ink-60); font-weight: 400; }
+
+/* Course name — Clash Display, confident */
+#panel-check .card-name {
+  font-family: var(--ce-font-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -.01em;
+  color: var(--ce-ink);
+}
+/* University + location — body font, muted */
+#panel-check .card-uni {
+  font-family: var(--ce-font-body);
+  font-size: .95rem;
+  color: var(--ce-ink-60);
+  margin-top: 4px;
+}
+#panel-check .card-tier {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  color: var(--ce-ink-60);
+}
+
+/* Metadata row — the mono functional layer */
+#panel-check .card-meta {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--ce-ink-60);
+  margin-top: var(--space-3);
+}
+#panel-check .card-meta-sep { color: var(--ce-ink-30); }
+#panel-check .card-cat-badge {
+  background: transparent;
+  color: var(--ce-ink-60);
+  padding: 0;
+  font-weight: 700;
+}
+
+/* Grade chip — hairline pill, mono */
+#panel-check .card-grades {
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  color: var(--ce-ink);
+  background: transparent;
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius-pill);
+  padding: 4px 12px;
+  margin-top: var(--space-3);
+}
+
+/* Admission-test tags — hairline pill, mono */
+#panel-check .admission-test-tag {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  color: var(--ce-ink-60);
+  background: transparent;
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius-pill);
+  padding: 3px 10px;
+}
+
+/* Save button — pill, ink outline, butter-yellow on hover/active */
+#panel-check .save-btn {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  border: 1px solid var(--ce-ink);
+  border-radius: var(--ce-radius-pill);
+  background: transparent;
+  color: var(--ce-ink);
+}
+#panel-check .save-btn:hover {
+  background: var(--ce-accent);
+  border-color: var(--ce-ink);
+  color: var(--ce-ink);
+}
+#panel-check .save-btn--saved {
+  background: var(--ce-accent);
+  border-color: var(--ce-ink);
+  color: var(--ce-ink);
+}
+
+/* Body-font for the card's descriptive lines */
+#panel-check .card-grade-gap,
+#panel-check .card-field-core,
+#panel-check .card-us-admit__range,
+#panel-check .card-unverified,
+#panel-check .card-uni-note,
+#panel-check .card-uni-info__notes { font-family: var(--ce-font-body); }
+#panel-check .card-us-admit__policy { font-family: var(--ce-font-mono); }
+
+/* Disclaimer + summary prose use the body font on this screen */
+#panel-check .disclaimer-banner,
+#panel-check .results-new-summary,
+#panel-check .summary-text { font-family: var(--ce-font-body); }
+
+/* Mobile: keep the language but tighten the card type a touch */
+@media (max-width: 480px) {
+  #panel-check .card-name { font-size: 1.2rem; }
+  #panel-check .results-group__header { font-size: 1.25rem; }
+}

@@ -7,8 +7,8 @@
   <title>Altiora</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="tokens.css?v=4" />
-  <link rel="stylesheet" href="styles.css?v=24" />
+  <link rel="stylesheet" href="tokens.css?v=5" />
+  <link rel="stylesheet" href="styles.css?v=25" />
   <script defer data-domain="altiora.app" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
@@ -183,22 +183,8 @@
 
         <p class="panel-intro">
           Pick your subjects and instantly see which courses are open, possible, or out of reach.
-          Your qualification system is set from your profile — change it anytime here or from the bar above.
+          Your qualification system is set from your profile — change it anytime from the bar above.
         </p>
-
-        <!-- System select (reflects your profile system; change it here or in the top bar) -->
-        <div class="panel-controls">
-          <div class="control-group">
-            <label class="control-label" for="checkSystemSelect">
-              Qualification system
-            </label>
-            <div class="select-wrap">
-              <select id="checkSystemSelect" aria-label="Select your qualification system">
-                <!-- populated by JS -->
-              </select>
-            </div>
-          </div>
-        </div>
 
         <!-- Grade input — shown after system is chosen, above subject picker -->
         <div id="gradeInputSection" class="grade-input-section hidden" aria-live="polite">
@@ -315,20 +301,6 @@
 
         <div class="panel-controls panel-controls--row">
 
-          <div class="control-group">
-            <label class="control-label" for="reverseSystemSelect">
-              Show requirements as
-            </label>
-            <div class="select-wrap">
-              <select
-                id="reverseSystemSelect"
-                aria-label="Translate requirements to this qualification system"
-              >
-                <!-- populated by JS -->
-              </select>
-            </div>
-          </div>
-
           <div class="control-group control-group--grow">
             <label class="control-label" for="courseSearchInput">
               Search degree or university
@@ -365,7 +337,7 @@
           your university options open before committing to A-levels or equivalent.
         </p>
 
-        <!-- Step 1: Subject area -->
+        <!-- Subject area — results render immediately using the global system -->
         <div class="plan-step">
           <span class="control-label">What do you want to study?</span>
           <div
@@ -378,21 +350,7 @@
           </div>
         </div>
 
-        <!-- Step 2: Qualification system (revealed after category chosen) -->
-        <div id="planStep2" class="plan-step hidden" aria-live="polite">
-          <div class="control-group">
-            <label class="control-label" for="planSystemSelect">
-              Your qualification system
-            </label>
-            <div class="select-wrap">
-              <select id="planSystemSelect" aria-label="Select your qualification system">
-                <!-- populated by JS -->
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Step 3: Results (revealed after system chosen) -->
+        <!-- Results (revealed after a subject area is chosen) -->
         <div id="planResults" class="hidden" aria-live="polite">
           <div id="planEssentials"></div>
           <div id="planCriticalPairs"></div>
@@ -462,11 +420,11 @@
 
   <!-- Data layer must be loaded before main.js -->
   <script src="data/qualificationMappings.js?v=3"></script>
-  <script src="data/courseRequirements.js?v=14"></script>
+  <script src="data/courseRequirements.js?v=15"></script>
   <script src="data/university-profiles.js?v=1"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
   <script src="state.js?v=5"></script>
-  <script src="main.js?v=38"></script>
+  <script src="main.js?v=39"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);

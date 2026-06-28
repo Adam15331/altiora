@@ -1851,14 +1851,16 @@ function renderWorkspaceHome() {
  * ═══════════════════════════════════════════════════════════════ */
 
 function populateSystemSelects() {
+  // The qualification system is a single global property, set in onboarding and
+  // changed only via the nav "System: X ▾" control. No in-body system dropdowns
+  // exist on any tool screen, so there is nothing to populate here. Kept as a
+  // guarded no-op in case a per-tool select is ever reintroduced.
   const optHtml = Object.entries(qualificationMappings)
     .map(([k, sys]) => `<option value="${k}">${esc(sys.systemLabel)}</option>`)
     .join('');
-  // No "Select your system…" placeholder — the system is set in onboarding and
-  // is always present, so these dropdowns just reflect/switch the global system.
-  $('checkSystemSelect').innerHTML   = optHtml;
-  $('reverseSystemSelect').innerHTML = optHtml;
-  $('planSystemSelect').innerHTML    = optHtml;
+  ['checkSystemSelect', 'reverseSystemSelect', 'planSystemSelect'].forEach(id => {
+    const el = $(id); if (el) el.innerHTML = optHtml;
+  });
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2665,10 +2667,6 @@ $('courseSearchInput').addEventListener('input', e => {
   renderReverseResults();
 });
 
-// The system dropdowns are now just another way to change the one global
-// system — route them through changeSystem so the whole app stays in sync.
-$('reverseSystemSelect').addEventListener('change', e => changeSystem(e.target.value));
-
 function renderReverseResults() {
   if (dataLoadError) return;
   const section = $('reverseResultsSection');
@@ -2934,9 +2932,8 @@ function buildPlanCategoryGrid() {
       $$('#planCategoryGrid .plan-cat-card').forEach(c => c.classList.remove('active'));
       btn.classList.add('active');
       state.planCategory = cat.id;
-      $('planStep2').classList.remove('hidden');
       $('planResults').classList.add('hidden');
-      if (state.planSystem) renderPlanResults();
+      renderPlanResults();
     });
     grid.appendChild(btn);
   });
@@ -3033,6 +3030,9 @@ function combosForDisplay(category, system, isQuant, limit) {
 
 function renderPlanResults() {
   if (dataLoadError) return;
+  // System is a single global property — read it from the profile rather than
+  // any in-body selector (those were removed; the nav control is the only one).
+  if (!state.planSystem) state.planSystem = AltioraState.getProfile().qualificationSystem;
   if (!state.planCategory || !state.planSystem) return;
 
   const catCourses = courses.filter(c => c.category === state.planCategory);
@@ -3090,7 +3090,7 @@ function renderPlanResults() {
       return `
       <div class="plan-subject-chip">
         <span class="plan-subject-chip__name">${esc(label)}${hlBadge}</span>
-        <span class="plan-subject-chip__count">unlocks ${count} course${count !== 1 ? 's' : ''}</span>
+        <span class="plan-subject-chip__count">required by ${count} course${count !== 1 ? 's' : ''}</span>
       </div>`;
     }).join('');
     const note = ft.outliers
@@ -3156,7 +3156,12 @@ function renderPlanResults() {
   if (top5.length === 0) {
     $('planCombinations').innerHTML = '';
   } else {
+    // Subjects-only screen: report a single, plain course count — how many
+    // courses this combination satisfies the SUBJECT requirements for
+    // (green + amber from classify; red = missing an essential subject). The
+    // grade-aware GREEN/AMBER/RED split lives only in Check Combination.
     const rowsHtml = top5.map(({ combo, green, amber }) => {
+      const opens = green + amber;
       const tags = comboLabels(combo, state.planSystem, isQuant).map(l => `<span class="plan-combo-tag">${esc(l)}</span>`).join('');
       return `
         <div class="plan-combo-row" tabindex="0" role="button"
@@ -3165,8 +3170,7 @@ function renderPlanResults() {
           ${tags}
           <span class="plan-combo-arrow" aria-hidden="true">→</span>
           <div class="plan-combo-results">
-            <span class="badge badge--success">✓ ${green}</span>
-            ${amber > 0 ? `<span class="badge badge--warning">◑ ${amber}</span>` : ''}
+            <span class="badge badge--neutral">opens ${opens} course${opens !== 1 ? 's' : ''}</span>
           </div>
         </div>`;
     }).join('');
@@ -3201,7 +3205,6 @@ function switchToPlanCombo(tags, systemKey) {
   // + "Exploring X" banner) and a later system change would snap the filter
   // back to it instead of the planned category.
   state.exploreField = null;
-  $('checkSystemSelect').value = systemKey;
   buildSubjectPicker(systemKey);
 
   // Tick the exact subjects the planner DISPLAYED, via the shared comboLabels
@@ -3662,8 +3665,7 @@ function planForField() {
   state.planCategory = cat;
   $$('#planCategoryGrid .plan-cat-card').forEach(c =>
     c.classList.toggle('active', c.dataset.category === cat));
-  $('planStep2')?.classList.remove('hidden');
-  if (state.planSystem) renderPlanResults();
+  renderPlanResults();
   requestAnimationFrame(() =>
     $('panel-plan')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   );
@@ -3826,9 +3828,6 @@ function init() {
     if (toolBtn) { switchMode(toolBtn.dataset.goTool); return; }
     if (e.target.closest('[data-change-stage]')) showStageSelect();
   });
-
-  $('checkSystemSelect').addEventListener('change', e => changeSystem(e.target.value));
-  $('planSystemSelect').addEventListener('change', e => changeSystem(e.target.value));
 
   $('planSwitchToCheck').addEventListener('click', () => switchMode('check'));
 
