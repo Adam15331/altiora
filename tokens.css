@@ -125,10 +125,10 @@
   --ce-cat-business:     var(--ce-ink-30);
   --ce-cat-law:          var(--ce-ink-30);
 
-  /* Match status — calm and legible on the warm bg (not traffic-light) */
-  --ce-status-strong:   #2F7048;  /* sage green ink */
-  --ce-status-possible: #8A6A1A;  /* muted ochre */
-  --ce-status-reach:    #A8503D;  /* muted brick */
+  /* Match status — clean, intentional, legible on the warm bg (not neon) */
+  --ce-status-strong:   #1E7A40;  /* clear confident green */
+  --ce-status-possible: #9A6700;  /* clean amber/gold (was murky ochre) */
+  --ce-status-reach:    #B24632;  /* clear clay / terracotta */
   --ce-status-grade:    #6B5E54;  /* muted ink */
 
   /* Radius — sharp editorial corners; pills for controls */
