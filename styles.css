@@ -19,10 +19,10 @@ body  {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3 { color: var(--color-text-primary); line-height: 1.25; }
-h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -.4px; }
-h2 { font-size: 1.375rem; font-weight: 600; letter-spacing: -.2px; }
-h3 { font-size: var(--text-lg); font-weight: 600; }
+h1, h2, h3 { color: var(--color-text-primary); line-height: 1.2; }
+h1 { font-size: 2.5rem; font-weight: 700; letter-spacing: -.7px; }
+h2 { font-size: 1.75rem; font-weight: 600; letter-spacing: -.4px; }
+h3 { font-size: var(--text-xl); font-weight: 600; }
 p  { color: var(--color-text-secondary); }
 strong { color: var(--color-text-primary); }
 
@@ -54,10 +54,10 @@ a:hover { opacity: .8; }
 .nav__brand   { display: flex; flex-direction: column; line-height: 1.2; gap: 1px; }
 .nav__logo    {
   font-family: var(--font-sans);
-  font-size: var(--text-base);
-  font-weight: 700;
+  font-size: 1.125rem;
+  font-weight: 800;
   color: var(--color-text-primary);
-  letter-spacing: -.3px;
+  letter-spacing: -.5px;
 }
 .nav__tagline {
   font-size: 11px;
@@ -113,19 +113,24 @@ main     { flex: 1; padding: var(--pad); }
  * Stage selection — full-screen entry (onboarding)
  * ═══════════════════════════════════════════════════════════════ */
 .stage-select {
-  padding: var(--space-12) 0;
+  padding: var(--space-16) 0 var(--space-12);
   text-align: center;
   animation: panelIn .2s ease both;
 }
 .stage-select__heading {
-  margin-bottom: var(--space-3);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -.6px;
+  line-height: 1.1;
+  margin-bottom: var(--space-4);
 }
 .stage-select__sub {
-  font-size: var(--text-base);
+  font-size: var(--text-lg);
   color: var(--color-text-secondary);
-  max-width: 520px;
+  max-width: 480px;
   margin: 0 auto var(--space-10);
-  line-height: 1.7;
+  line-height: 1.65;
 }
 .stage-cards {
   display: grid;
@@ -141,16 +146,15 @@ main     { flex: 1; padding: var(--pad); }
   text-align: left;
   gap: var(--space-2);
   padding: var(--space-6);
-  border: 1.5px solid var(--color-border);
-  border-radius: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
   background: var(--color-surface);
   cursor: pointer;
-  transition: border-color var(--t-base), box-shadow var(--t-base), transform var(--t-base);
+  transition: border-color var(--t-base), box-shadow var(--t-base);
 }
 .stage-card:hover {
   border-color: var(--color-text-primary);
-  box-shadow: 0 6px 20px rgba(0,0,0,.08);
-  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,.06);
 }
 .stage-card__icon {
   display: flex;
@@ -165,14 +169,15 @@ main     { flex: 1; padding: var(--pad); }
 }
 .stage-card__title {
   font-family: var(--font-display);
-  font-size: var(--text-lg);
+  font-size: var(--text-xl);
   font-weight: 600;
   color: var(--color-text-primary);
+  line-height: 1.2;
 }
 .stage-card__desc {
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -445,8 +450,8 @@ main     { flex: 1; padding: var(--pad); }
   font-family: var(--font-display);
   font-size: var(--text-display);
   font-weight: 600;
-  letter-spacing: -.5px;
-  line-height: 1.1;
+  letter-spacing: -.8px;
+  line-height: 1.05;
   margin: 0 0 var(--space-3);
 }
 .home__stage {
@@ -479,12 +484,13 @@ main     { flex: 1; padding: var(--pad); }
 }
 .home-next__text {
   font-family: var(--font-display);
-  font-size: var(--text-2xl);
+  font-size: 2.25rem;
   font-weight: 600;
   color: var(--color-text-primary);
-  line-height: 1.35;
+  line-height: 1.2;
+  letter-spacing: -.4px;
   margin: 0 0 var(--space-6);
-  max-width: 36ch;
+  max-width: 32ch;
 }
 .home-next__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
 
@@ -746,8 +752,8 @@ main     { flex: 1; padding: var(--pad); }
   font-family: var(--font-display);
   font-size: var(--text-display);
   font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -.5px;
+  line-height: 1.05;
+  letter-spacing: -.8px;
   color: var(--fo-accent, var(--color-text-primary));
   margin: 0 0 var(--space-3);
 }
@@ -875,15 +881,17 @@ main     { flex: 1; padding: var(--pad); }
   .shortlist-link { margin-left: 0; }
   /* Workspace home — tighter but still generous on mobile */
   .home { padding: var(--space-6) 0 var(--space-10); }
-  .home__welcome { font-size: var(--text-2xl); }
+  .home__welcome { font-size: 2rem; }
   .home__header { margin-bottom: var(--space-10); }
   .home-next { padding: var(--space-6); margin-bottom: var(--space-10); }
+  .home-next__text { font-size: 1.5rem; }
   .home-cards { grid-template-columns: 1fr; gap: var(--space-4); margin-bottom: var(--space-10); }
   .home-card { padding: var(--space-5); }
   .field-cards { grid-template-columns: 1fr; }
   .fo-subjects { grid-template-columns: 1fr; }
-  .fo__title { font-size: var(--text-2xl); }
+  .fo__title { font-size: 2rem; }
   .fo-back { margin-left: 0; }
+  .stage-select__heading { font-size: 1.75rem; }
 }
 
 

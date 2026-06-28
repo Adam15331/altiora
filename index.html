@@ -39,9 +39,9 @@ nav {
 }
 .nav-logo {
   font-family: var(--font-sans);
-  font-size: 1rem; font-weight: 700;
+  font-size: 1.125rem; font-weight: 800;
   color: var(--color-text-primary);
-  letter-spacing: -.3px;
+  letter-spacing: -.5px;
 }
 .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
 .nav-links a {
@@ -71,7 +71,7 @@ nav {
 .hero {
   text-align: center;
   padding: var(--space-20) var(--pad) var(--space-16);
-  max-width: 680px; margin: 0 auto;
+  max-width: 860px; margin: 0 auto;
 }
 .hero-eyebrow {
   display: inline-flex; align-items: center;
@@ -85,18 +85,18 @@ nav {
 }
 .hero-heading {
   font-family: var(--font-display);
-  font-size: var(--text-display);
+  font-size: clamp(3rem, 8vw, 5.5rem);
   font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -.02em;
+  line-height: 1.05;
+  letter-spacing: -.04em;
   color: var(--color-text-primary);
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-5);
 }
 .hero-sub {
-  font-size: var(--text-lg);
+  font-size: clamp(1.125rem, 2.5vw, 1.375rem);
   color: var(--color-text-secondary);
   line-height: 1.65;
-  max-width: 520px; margin: 0 auto var(--space-8);
+  max-width: 580px; margin: 0 auto var(--space-8);
 }
 .hero-cta {
   display: inline-flex; align-items: center; gap: 6px;
@@ -160,10 +160,10 @@ nav {
 }
 .proof-stat { text-align: center; }
 .proof-num {
-  font-family: var(--font-sans);
-  font-size: var(--text-2xl); font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 2.5rem; font-weight: 600;
   color: var(--color-text-primary); line-height: 1; margin-bottom: 4px;
-  letter-spacing: -.03em;
+  letter-spacing: -.04em;
 }
 .proof-label { font-size: var(--text-xs); color: var(--color-text-tertiary); }
 .proof-divider { width: 1px; height: 36px; background: var(--color-border); }
@@ -179,10 +179,10 @@ nav {
 }
 .section-title {
   font-family: var(--font-display);
-  font-size: 2rem; font-weight: 600;
+  font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 600;
   color: var(--color-text-primary);
-  line-height: 1.25; letter-spacing: -.02em;
-  margin-bottom: var(--space-3); max-width: 520px;
+  line-height: 1.15; letter-spacing: -.04em;
+  margin-bottom: var(--space-3); max-width: 560px;
 }
 .section-sub {
   font-size: var(--text-base);
@@ -297,9 +297,9 @@ nav {
 .cta-inner { max-width: 560px; margin: 0 auto; }
 .cta-heading {
   font-family: var(--font-display);
-  font-size: 2.25rem; font-weight: 600;
+  font-size: clamp(2.25rem, 5vw, 3.25rem); font-weight: 600;
   color: var(--color-text-primary);
-  line-height: 1.2; letter-spacing: -.02em;
+  line-height: 1.1; letter-spacing: -.04em;
   margin-bottom: var(--space-4);
 }
 .cta-sub {

@@ -11,8 +11,8 @@
   --color-surface:        #FFFFFF;
   --color-border:         #E8E7E3;
   --color-text-primary:   #1A1916;
-  --color-text-secondary: #6B6860;
-  --color-text-tertiary:  #9B9A97;
+  --color-text-secondary: #55534F;
+  --color-text-tertiary:  #8F8D8A;
 
   /* ── Category accent colours ───────────────────────── */
   --color-cat-medicine:        #E03E3E;
@@ -51,13 +51,14 @@
   --font-sans:    'Plus Jakarta Sans', system-ui, sans-serif;
   --font-mono:    'JetBrains Mono', ui-monospace, monospace;
 
-  --text-xs:      0.75rem;
-  --text-sm:      0.875rem;
-  --text-base:    1rem;
-  --text-lg:      1.125rem;
-  --text-xl:      1.25rem;
-  --text-2xl:     1.5rem;
-  --text-display: 2.5rem;
+  --text-xs:         0.75rem;
+  --text-sm:         0.875rem;
+  --text-base:       1rem;
+  --text-lg:         1.125rem;
+  --text-xl:         1.375rem;
+  --text-2xl:        1.875rem;
+  --text-display:    3.5rem;
+  --text-display-xl: 5.5rem;
 
   /* ── Spacing ─────────────────────────────────────────── */
   --space-1:  4px;
@@ -83,7 +84,7 @@
   --t-base: 150ms ease;
 
   /* ── Layout ──────────────────────────────────────────── */
-  --max-w: 980px;
+  --max-w: 1040px;
   --pad:   32px;
 
   /* ── Legacy aliases (keeps main.js inline styles working) ── */
