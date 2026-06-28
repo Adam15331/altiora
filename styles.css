@@ -905,11 +905,11 @@ main     { flex: 1; padding: var(--pad); }
  * ═══════════════════════════════════════════════════════════════ */
 .panel { animation: panelIn .15s ease both; }
 .panel-intro {
-  font-size: var(--text-sm);
+  font-size: var(--text-lg);
   color: var(--color-text-secondary);
   margin-bottom: var(--space-6);
-  max-width: 560px;
-  line-height: 1.7;
+  max-width: 620px;
+  line-height: 1.6;
 }
 
 @keyframes panelIn {
