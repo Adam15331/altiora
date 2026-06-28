@@ -2617,12 +2617,15 @@ footer p {
 #panel-check .results-search__icon { opacity: .45; }
 
 /* ── Section headings: "Strong matches (N)" ────────────────────── */
+/* Section heading — confident but a secondary label: smaller than the
+ * course names so the eye lands on the content (names) first, the group
+ * label second. */
 #panel-check .results-group__header {
   font-family: var(--ce-font-display);
-  font-size: 2.125rem;
+  font-size: 1.6rem;
   font-weight: 800;
-  letter-spacing: -.03em;
-  line-height: 1.02;
+  letter-spacing: -.02em;
+  line-height: 1.05;
   text-transform: none;
   padding: var(--space-3) 0 var(--space-3);
   border-bottom: var(--ce-hairline);
@@ -2683,36 +2686,43 @@ footer p {
 #panel-check .card-status--grey  { color: var(--ce-status-grade); }
 #panel-check .card-status--none  { color: var(--ce-ink-60); font-weight: 400; }
 
-/* Course name — Bricolage 800, big and confident; dominates the card */
+/* Course name — Bricolage 800, the clear focal point of each card */
 #panel-check .card-name {
   font-family: var(--ce-font-display);
-  font-size: 1.75rem;
+  font-size: 1.9rem;
   font-weight: 800;
-  line-height: 1.02;
-  letter-spacing: -.025em;
+  line-height: 1.0;
+  letter-spacing: -.03em;
   color: var(--ce-ink);
 }
-/* University + location — body font, muted */
+/* University — second tier: clear presence below the big name, above the
+ * quieter ranking/metadata. Body font, near-ink, slightly larger. */
 #panel-check .card-uni {
   font-family: var(--ce-font-body);
-  font-size: .95rem;
-  color: var(--ce-ink-60);
-  margin-top: 4px;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: rgba(31, 26, 23, 0.82);
+  margin-top: var(--space-2);
 }
+/* "World Top N" ranking — third tier, quiet */
 #panel-check .card-tier {
   font-family: var(--ce-font-mono);
   font-size: 11px;
   color: var(--ce-ink-60);
+  margin-top: 5px;
 }
 
-/* Metadata row — the mono functional layer */
+/* Status label (STRONG MATCH) sits at the top — give it room before the name */
+#panel-check .card-status { margin-bottom: var(--space-3); }
+
+/* Metadata row — the mono functional layer; clear gap above it */
 #panel-check .card-meta {
   font-family: var(--ce-font-mono);
   font-size: 11px;
   letter-spacing: .04em;
   text-transform: uppercase;
   color: var(--ce-ink-60);
-  margin-top: var(--space-3);
+  margin-top: var(--space-4);
 }
 #panel-check .card-meta-sep { color: var(--ce-ink-30); }
 #panel-check .card-cat-badge {
@@ -2722,7 +2732,7 @@ footer p {
   font-weight: 700;
 }
 
-/* Grade chip — hairline pill, mono */
+/* Grade chip — hairline pill, mono; separated from the metadata row */
 #panel-check .card-grades {
   font-family: var(--ce-font-mono);
   font-size: 12px;
@@ -2731,8 +2741,10 @@ footer p {
   border: var(--ce-hairline);
   border-radius: var(--ce-radius-pill);
   padding: 4px 12px;
-  margin-top: var(--space-3);
+  margin-top: var(--space-4);
 }
+/* Holistic / admitted-range box (US) — its own tier, clearly separated */
+#panel-check .card-us-admit { margin-top: var(--space-4); }
 
 /* Admission-test tags — hairline pill, mono */
 #panel-check .admission-test-tag {
@@ -2784,6 +2796,6 @@ footer p {
 
 /* Mobile: keep the language but tighten the card type a touch */
 @media (max-width: 480px) {
-  #panel-check .card-name { font-size: 1.45rem; }
-  #panel-check .results-group__header { font-size: 1.6rem; }
+  #panel-check .card-name { font-size: 1.6rem; }
+  #panel-check .results-group__header { font-size: 1.35rem; }
 }
