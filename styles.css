@@ -168,11 +168,12 @@ main     { flex: 1; padding: var(--pad); }
   margin-bottom: var(--space-2);
 }
 .stage-card__title {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 600;
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  letter-spacing: -.2px;
   color: var(--color-text-primary);
-  line-height: 1.2;
+  line-height: 1.25;
 }
 .stage-card__desc {
   font-size: var(--text-sm);
@@ -361,9 +362,10 @@ main     { flex: 1; padding: var(--pad); }
   margin-bottom: var(--space-8);
 }
 .shortlist-insights__title {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: var(--text-base);
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -.1px;
   margin: 0 0 var(--space-3);
   color: var(--color-text-primary);
 }
@@ -529,9 +531,10 @@ main     { flex: 1; padding: var(--pad); }
   background: var(--color-surface);
 }
 .home-card__title {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: var(--text-lg);
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -.2px;
   margin: 0 0 var(--space-6);
   color: var(--color-text-primary);
 }
@@ -607,9 +610,10 @@ main     { flex: 1; padding: var(--pad); }
   border-radius: var(--radius-lg);
 }
 .field-card__name {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: var(--text-lg);
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -.2px;
   color: var(--field-accent, var(--color-text-primary));
   margin: 0 0 var(--space-3);
 }
@@ -773,9 +777,10 @@ main     { flex: 1; padding: var(--pad); }
 
 .fo-section { margin-bottom: var(--space-8); }
 .fo-section__head {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: var(--text-lg);
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -.2px;
   color: var(--color-text-primary);
   margin: 0 0 var(--space-4);
 }
@@ -2479,18 +2484,20 @@ footer p {
 .applying { max-width: 760px; margin: 0 auto; }
 .applying__header { margin-bottom: var(--space-5); }
 .applying__title {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: var(--text-xl);
   font-weight: 700;
+  letter-spacing: -.3px;
   color: var(--color-text-primary);
   margin: 0 0 var(--space-2);
 }
 .applying__sub { font-size: var(--text-sm); color: var(--color-text-secondary); margin: 0; line-height: 1.5; }
 .applying-section { margin-bottom: var(--space-8); }
 .applying-section__head {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: var(--text-base);
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -.1px;
   color: var(--color-text-primary);
   margin: 0 0 var(--space-3);
 }
