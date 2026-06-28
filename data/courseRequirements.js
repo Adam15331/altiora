@@ -11,7 +11,7 @@
  *
  * SCHEMA v2 — added fields:
  *   grades.aLevels / .ib / .ap / .sgALevels / .hkDse
- *   admissionTests  – standardised test codes (MAT, PAT, LNAT, UCAT, STEP, MCAT, TSA, HAT …)
+ *   admissionTests  – standardised test codes (TMUA, ESAT, PAT, LNAT, UCAT, STEP, TSA, HAT …)
  *   universityContext.tier / .intlFriendly / .notes
  */
 
