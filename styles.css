@@ -11,7 +11,7 @@ body  {
   font-size: var(--text-base);
   line-height: 1.6;
   color: var(--color-text-primary);
-  background: var(--color-bg);
+  background: var(--ce-bg);   /* single warm off-white canvas for the whole app */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -38,7 +38,7 @@ a:hover { opacity: .8; }
  * ═══════════════════════════════════════════════════════════════ */
 .nav {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(246,247,249,0.94);
+  background: rgba(245,244,239,0.94);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
@@ -2553,11 +2553,10 @@ footer p {
  * come from the --ce-* tokens (tokens.css) for easy reuse later.
  * ═══════════════════════════════════════════════════════════════ */
 
-/* Warm editorial canvas for the results screen */
-#panel-check {
-  background: var(--ce-bg);
-  color: var(--ce-ink);
-}
+/* The whole app now sits on the warm --ce-bg canvas (set on <body>), so the
+ * results screen needs no separate fill — that previously produced a warm band
+ * down the centred content column. Just set the ink colour here. */
+#panel-check { color: var(--ce-ink); }
 
 /* ── Country filter pills + result-summary badges ──────────────── */
 #panel-check .filter-btn {
@@ -2641,36 +2640,23 @@ footer p {
 }
 
 /* ── The course card ───────────────────────────────────────────── */
+/* Clean hairline rectangle, sharp corners, no coloured left edge. */
 #panel-check .course-card {
   background: var(--ce-surface);
   border: var(--ce-hairline);
-  border-left: 3px solid var(--ce-ink-30);
   border-radius: var(--ce-radius);
-  border-style: solid;
   padding: var(--space-6);
   transition: border-color var(--t-fast), background var(--t-fast);
 }
 #panel-check .course-card:hover {
   background: var(--ce-surface);
-  border-color: var(--ce-hairline-color);
+  border-color: var(--ce-ink-30);
 }
-/* keep a calm hairline on hover but let the category left-border stay vivid */
+/* normalise the dashed grey-status border to the same calm hairline */
 #panel-check .course-card--grey {
   border-style: solid;
   border-color: var(--ce-hairline-color);
 }
-
-/* Category accent — thin coloured left border (the only category colour) */
-#panel-check .course-card[data-category="engineering"]  { border-left-color: var(--ce-cat-engineering); }
-#panel-check .course-card[data-category="mathematics"]  { border-left-color: var(--ce-cat-mathematics); }
-#panel-check .course-card[data-category="architecture"] { border-left-color: var(--ce-cat-architecture); }
-#panel-check .course-card[data-category="cs"]           { border-left-color: var(--ce-cat-cs); }
-#panel-check .course-card[data-category="sciences"]     { border-left-color: var(--ce-cat-sciences); }
-#panel-check .course-card[data-category="medicine"]     { border-left-color: var(--ce-cat-medicine); }
-#panel-check .course-card[data-category="psychology"]   { border-left-color: var(--ce-cat-psychology); }
-#panel-check .course-card[data-category="economics"]    { border-left-color: var(--ce-cat-economics); }
-#panel-check .course-card[data-category="business"]     { border-left-color: var(--ce-cat-business); }
-#panel-check .course-card[data-category="law"]          { border-left-color: var(--ce-cat-law); }
 
 /* Match-status label (STRONG MATCH) — mono, calm colour */
 #panel-check .card-status {
