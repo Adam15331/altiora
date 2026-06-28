@@ -5,9 +5,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap');
 
-/* Confident Editorial type — Clash Display (Fontshare), Space Mono + Hanken Grotesk (Google Fonts) */
-@import url('https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+/* Confident Editorial type (Bricolage Grotesque + Space Mono + Hanken Grotesk)
+ * is loaded via <link> in the HTML <head> — a <link> is more reliable than an
+ * @import buried in CSS. Clash Display was dropped: Fontshare is not reliably
+ * reachable, whereas Google Fonts (Bricolage Grotesque) is. */
 
 :root {
   /* ── Base palette ──────────────────────────────────── */
@@ -98,9 +99,9 @@
    * ═══════════════════════════════════════════════════════════ */
 
   /* Type roles */
-  --ce-font-display: 'Clash Display', 'Hanken Grotesk', system-ui, sans-serif; /* headings, course names */
-  --ce-font-mono:    'Space Mono', ui-monospace, monospace;                    /* labels, metadata, badges, buttons */
-  --ce-font-body:    'Hanken Grotesk', system-ui, sans-serif;                  /* descriptions, paragraphs */
+  --ce-font-display: 'Bricolage Grotesque', 'Hanken Grotesk', system-ui, sans-serif; /* headings, course names */
+  --ce-font-mono:    'Space Mono', ui-monospace, monospace;                          /* labels, metadata, badges, buttons */
+  --ce-font-body:    'Hanken Grotesk', system-ui, sans-serif;                        /* descriptions, paragraphs */
 
   /* Palette */
   --ce-bg:        #F5F4EF;             /* warm off-white canvas */
