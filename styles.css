@@ -2576,10 +2576,10 @@ footer p {
   background: transparent;
 }
 #panel-check .filter-btn.active {
-  background: var(--ce-ink);
+  background: var(--ce-accent);
   border-color: var(--ce-ink);
-  color: var(--ce-bg);
-  font-weight: 400;
+  color: var(--ce-ink);
+  font-weight: 700;
 }
 
 /* Result summary counts (✓ 43 · ◑ 46 · …) — calm mono pills, not loud */
@@ -2619,11 +2619,12 @@ footer p {
 /* ── Section headings: "Strong matches (N)" ────────────────────── */
 #panel-check .results-group__header {
   font-family: var(--ce-font-display);
-  font-size: 1.5rem;
-  font-weight: 600;
-  letter-spacing: 0;
+  font-size: 2.125rem;
+  font-weight: 800;
+  letter-spacing: -.03em;
+  line-height: 1.02;
   text-transform: none;
-  padding: var(--space-2) 0 var(--space-3);
+  padding: var(--space-3) 0 var(--space-3);
   border-bottom: var(--ce-hairline);
   color: var(--ce-ink);
   background: var(--ce-bg);
@@ -2632,11 +2633,21 @@ footer p {
 #panel-check .results-group__header--amber { color: var(--ce-status-possible); }
 #panel-check .results-group__header--red   { color: var(--ce-status-reach); }
 #panel-check .results-group__header--grey  { color: var(--ce-status-grade); }
-/* the "(N)" count → mono */
+/* the "(N)" count → mono, quiet, beside the big heading */
 #panel-check .results-group__header span {
   font-family: var(--ce-font-mono);
-  font-size: .85rem;
-  opacity: .7 !important;
+  font-size: 1rem;
+  font-weight: 400;
+  opacity: .65 !important;
+}
+/* Singular butter-yellow highlighter move — only on the primary "Strong
+ * matches" count, so the page feels alive without spraying yellow around. */
+#panel-check .results-group__header--green span {
+  background: var(--ce-accent);
+  color: var(--ce-ink);
+  opacity: 1 !important;
+  padding: 1px 9px;
+  border-radius: 2px;
 }
 
 /* ── The course card ───────────────────────────────────────────── */
@@ -2672,13 +2683,13 @@ footer p {
 #panel-check .card-status--grey  { color: var(--ce-status-grade); }
 #panel-check .card-status--none  { color: var(--ce-ink-60); font-weight: 400; }
 
-/* Course name — Clash Display, confident */
+/* Course name — Bricolage 800, big and confident; dominates the card */
 #panel-check .card-name {
   font-family: var(--ce-font-display);
-  font-size: 1.4rem;
-  font-weight: 600;
-  line-height: 1.12;
-  letter-spacing: -.01em;
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -.025em;
   color: var(--ce-ink);
 }
 /* University + location — body font, muted */
@@ -2773,6 +2784,6 @@ footer p {
 
 /* Mobile: keep the language but tighten the card type a touch */
 @media (max-width: 480px) {
-  #panel-check .card-name { font-size: 1.2rem; }
-  #panel-check .results-group__header { font-size: 1.25rem; }
+  #panel-check .card-name { font-size: 1.45rem; }
+  #panel-check .results-group__header { font-size: 1.6rem; }
 }
