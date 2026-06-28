@@ -5,6 +5,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap');
 
+/* Confident Editorial type — Clash Display (Fontshare), Space Mono + Hanken Grotesk (Google Fonts) */
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
 :root {
   /* ── Base palette ──────────────────────────────────── */
   --color-bg:             #F6F7F9;
@@ -86,6 +90,49 @@
   /* ── Layout ──────────────────────────────────────────── */
   --max-w: 1040px;
   --pad:   32px;
+
+  /* ═══════════════════════════════════════════════════════════
+   * CONFIDENT EDITORIAL — new design language (v3).
+   * Anchored on the Check Combination course card; reuse these
+   * tokens to propagate the language to other screens later.
+   * ═══════════════════════════════════════════════════════════ */
+
+  /* Type roles */
+  --ce-font-display: 'Clash Display', 'Hanken Grotesk', system-ui, sans-serif; /* headings, course names */
+  --ce-font-mono:    'Space Mono', ui-monospace, monospace;                    /* labels, metadata, badges, buttons */
+  --ce-font-body:    'Hanken Grotesk', system-ui, sans-serif;                  /* descriptions, paragraphs */
+
+  /* Palette */
+  --ce-bg:        #F5F4EF;             /* warm off-white canvas */
+  --ce-surface:   #FBFAF6;             /* card fill, a touch lighter than bg */
+  --ce-ink:       #1F1A17;             /* warm near-black */
+  --ce-accent:    #F2D64B;             /* butter yellow — primary action / highlight */
+  --ce-ink-60:    rgba(31,26,23,0.60); /* muted text */
+  --ce-ink-30:    rgba(31,26,23,0.30); /* faint text / default accent */
+  --ce-hairline-color: rgba(31,26,23,0.12);
+  --ce-hairline: 1px solid var(--ce-hairline-color);
+
+  /* Category accents (muted — small accents only) */
+  --ce-cat-engineering:  #E89B7D;  /* coral — engineering / STEM */
+  --ce-cat-mathematics:  #E89B7D;
+  --ce-cat-architecture: #E89B7D;
+  --ce-cat-cs:           #B9A3D9;  /* lavender — CS / tech */
+  --ce-cat-sciences:     #86C99A;  /* sage — sciences / med */
+  --ce-cat-medicine:     #86C99A;
+  --ce-cat-psychology:   #86C99A;
+  --ce-cat-economics:    var(--ce-ink-30);  /* economics / business / law — ink, no colour */
+  --ce-cat-business:     var(--ce-ink-30);
+  --ce-cat-law:          var(--ce-ink-30);
+
+  /* Match status — calm and legible on the warm bg (not traffic-light) */
+  --ce-status-strong:   #2F7048;  /* sage green ink */
+  --ce-status-possible: #8A6A1A;  /* muted ochre */
+  --ce-status-reach:    #A8503D;  /* muted brick */
+  --ce-status-grade:    #6B5E54;  /* muted ink */
+
+  /* Radius — sharp editorial corners; pills for controls */
+  --ce-radius:      0px;
+  --ce-radius-pill: 999px;
 
   /* ── Legacy aliases (keeps main.js inline styles working) ── */
   --bg:           var(--color-bg);
