@@ -1143,6 +1143,17 @@ function showWorkspaceHome() {
   logEvent('workspace_home', { stage });
 }
 
+// The "Altiora" wordmark is the single home control (replacing the old house
+// icon + "← Home" link). Safe from any state, including onboarding where the
+// workspace isn't built yet.
+function goHome() {
+  const onboarded = AltioraState.getState().meta.hasOnboarded;
+  const hasSystem = !!AltioraState.getProfile().qualificationSystem;
+  if (onboarded && hasSystem)      showWorkspaceHome();   // → workspace dashboard
+  else if (onboarded)              showSystemSelect();    // old save, no system yet
+  else                             showStageSelect();     // still onboarding
+}
+
 // Persist the chosen stage, then route there. Entering ANY stage requires a
 // qualification system; if none is set yet (new user, or the homepage CTA),
 // divert to the system step first and resume once it's chosen.
@@ -3821,8 +3832,8 @@ function init() {
   AltioraState.subscribe(updateShortlistCount);
   updateShortlistCount();
 
-  // Workspace home: persistent link + delegated actions on the home panel.
-  $('homeLink')?.addEventListener('click', () => switchMode('home'));
+  // Workspace home: the wordmark is the home control; delegated actions on the home panel.
+  $('navHome')?.addEventListener('click', goHome);
   $('panel-home')?.addEventListener('click', e => {
     const toolBtn = e.target.closest('[data-go-tool]');
     if (toolBtn) { switchMode(toolBtn.dataset.goTool); return; }

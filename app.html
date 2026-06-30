@@ -10,7 +10,7 @@
   <!-- Confident Editorial type — loaded via <link> (reliable) not @import -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
   <link rel="stylesheet" href="tokens.css?v=7" />
-  <link rel="stylesheet" href="styles.css?v=28" />
+  <link rel="stylesheet" href="styles.css?v=29" />
   <script defer data-domain="altiora.app" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
@@ -18,13 +18,10 @@
   <!-- ── Navigation ─────────────────────────────────────────── -->
   <nav class="nav" aria-label="Main navigation">
     <div class="nav__inner">
-      <a href="index.html" class="nav__brand" aria-label="Altiora home">
+      <button type="button" id="navHome" class="nav__brand" aria-label="Altiora home" title="Go home">
         <span class="nav__logo">Altiora</span>
         <span class="nav__tagline">Your journey, guided.</span>
-      </a>
-      <div class="nav__actions">
-        <a href="index.html" class="nav__back">← Home</a>
-      </div>
+      </button>
     </div>
   </nav>
 
@@ -122,9 +119,6 @@
       <div id="workspace" class="hidden">
 
         <div class="stage-bar">
-          <button id="homeLink" class="home-link" type="button" aria-label="Workspace home" title="Workspace home">
-            <span aria-hidden="true">🏠</span>
-          </button>
           <div class="stage-bar__indicator">
             <button id="stageIndicatorBtn" class="stage-indicator" aria-haspopup="true" aria-expanded="false" aria-controls="stageMenu">
               <span class="stage-indicator__label">Stage: <strong id="stageIndicatorName">…</strong></span>
@@ -426,7 +420,7 @@
   <script src="data/university-profiles.js?v=1"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
   <script src="state.js?v=5"></script>
-  <script src="main.js?v=39"></script>
+  <script src="main.js?v=40"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);
