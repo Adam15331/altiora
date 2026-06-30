@@ -1,7 +1,58 @@
 /* ═══════════════════════════════════════════════════════════════
- * Altiora styles — Notion-inspired design system v2
+ * Altiora styles — Confident Editorial design language
  * Tokens are in tokens.css (loaded first).
  * ═══════════════════════════════════════════════════════════════ */
+
+/* ───────────────────────────────────────────────────────────────
+ * CONFIDENT EDITORIAL PROPAGATION (app-wide)
+ * Repoint the base palette + type tokens to the --ce-* language so
+ * every component in the app adopts it from one place. Only app.html
+ * loads styles.css, so the marketing page (index.html) is unaffected.
+ * ─────────────────────────────────────────────────────────────── */
+:root {
+  /* Palette → warm Confident Editorial */
+  --color-bg:             var(--ce-bg);
+  --color-surface:        var(--ce-surface);
+  --color-border:         var(--ce-hairline-color);
+  --color-text-primary:   var(--ce-ink);
+  --color-text-secondary: #57524C;        /* warm muted ink, AA on warm bg */
+  --color-text-tertiary:  #877F76;        /* warm faint ink */
+
+  /* Type roles → Bricolage (display) / Hanken (body) / Space Mono (functional) */
+  --font-display: var(--ce-font-display);
+  --font-sans:    var(--ce-font-body);
+  --font-mono:    var(--ce-font-mono);
+  --font:         var(--ce-font-body);
+
+  /* Sharp editorial corners for cards/containers (pills keep --radius-full) */
+  --radius-sm: 2px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+
+  /* Match colours → cleaned Confident Editorial status colours (drives the
+     summary bar, progress segments, and any match-coloured text app-wide). */
+  --color-match-strong:   var(--ce-status-strong);
+  --color-match-possible: var(--ce-status-possible);
+  --color-match-reach:    var(--ce-status-reach);
+  --color-match-grade:    var(--ce-status-grade);
+
+  /* Candy category accents are retired from the app UI — fold every category
+     colour into ink, and every category tint into transparent, so all the
+     per-category rules (cat badges, planner cards, interest chips, active
+     states) resolve to a single neutral ink/yellow language with no stray
+     coral/lavender/sage/blue. (Deliberate category accents can return later
+     via the dedicated --ce-cat-* tokens.) */
+  --color-cat-medicine: var(--ce-ink);     --color-cat-medicine-bg: transparent;
+  --color-cat-cs: var(--ce-ink);           --color-cat-cs-bg: transparent;
+  --color-cat-engineering: var(--ce-ink);  --color-cat-engineering-bg: transparent;
+  --color-cat-economics: var(--ce-ink);    --color-cat-economics-bg: transparent;
+  --color-cat-law: var(--ce-ink);          --color-cat-law-bg: transparent;
+  --color-cat-business: var(--ce-ink);     --color-cat-business-bg: transparent;
+  --color-cat-sciences: var(--ce-ink);     --color-cat-sciences-bg: transparent;
+  --color-cat-mathematics: var(--ce-ink);  --color-cat-mathematics-bg: transparent;
+  --color-cat-psychology: var(--ce-ink);   --color-cat-psychology-bg: transparent;
+  --color-cat-architecture: var(--ce-ink); --color-cat-architecture-bg: transparent;
+}
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -19,10 +70,10 @@ body  {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3 { color: var(--color-text-primary); line-height: 1.2; }
-h1 { font-size: 2.5rem; font-weight: 700; letter-spacing: -.7px; }
-h2 { font-size: 1.75rem; font-weight: 600; letter-spacing: -.4px; }
-h3 { font-size: var(--text-xl); font-weight: 600; }
+h1, h2, h3 { color: var(--color-text-primary); line-height: 1.1; font-family: var(--font-display); }
+h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -.03em; }
+h2 { font-size: 1.75rem; font-weight: 700; letter-spacing: -.02em; }
+h3 { font-size: var(--text-xl); font-weight: 700; letter-spacing: -.01em; }
 p  { color: var(--color-text-secondary); }
 strong { color: var(--color-text-primary); }
 
@@ -2548,7 +2599,7 @@ footer p {
 #panel-check { color: var(--ce-ink); }
 
 /* ── Country filter pills + result-summary badges ──────────────── */
-#panel-check .filter-btn {
+.filter-btn {
   font-family: var(--ce-font-mono);
   font-size: 12px;
   font-weight: 400;
@@ -2559,12 +2610,12 @@ footer p {
   background: transparent;
   color: var(--ce-ink);
 }
-#panel-check .filter-btn:hover {
+.filter-btn:hover {
   border-color: var(--ce-ink);
   color: var(--ce-ink);
   background: transparent;
 }
-#panel-check .filter-btn.active {
+.filter-btn.active {
   background: var(--ce-accent);
   border-color: var(--ce-ink);
   color: var(--ce-ink);
@@ -2572,21 +2623,21 @@ footer p {
 }
 
 /* Result summary counts (✓ 43 · ◑ 46 · …) — calm mono pills, not loud */
-#panel-check .result-summary .badge {
+.result-summary .badge {
   font-family: var(--ce-font-mono);
   font-weight: 700;
   border: var(--ce-hairline);
   border-radius: var(--ce-radius-pill);
   background: transparent;
 }
-#panel-check .result-summary .badge--success { color: var(--ce-status-strong); }
-#panel-check .result-summary .badge--warning { color: var(--ce-status-possible); }
-#panel-check .result-summary .badge--error   { color: var(--ce-status-reach); }
-#panel-check .result-summary .badge--grey    { color: var(--ce-status-grade); }
-#panel-check .result-summary .badge--neutral { color: var(--ce-ink-60); }
+.result-summary .badge--success { color: var(--ce-status-strong); }
+.result-summary .badge--warning { color: var(--ce-status-possible); }
+.result-summary .badge--error   { color: var(--ce-status-reach); }
+.result-summary .badge--grey    { color: var(--ce-status-grade); }
+.result-summary .badge--neutral { color: var(--ce-ink-60); }
 
 /* ── In-results search box ─────────────────────────────────────── */
-#panel-check .results-search__input {
+.results-search__input {
   font-family: var(--ce-font-mono);
   font-size: 13px;
   border: var(--ce-hairline);
@@ -2594,22 +2645,22 @@ footer p {
   background: var(--ce-surface);
   color: var(--ce-ink);
 }
-#panel-check .results-search__input::placeholder {
+.results-search__input::placeholder {
   font-family: var(--ce-font-mono);
   color: var(--ce-ink-30);
 }
-#panel-check .results-search__input:focus {
+.results-search__input:focus {
   outline: none;
   border-color: var(--ce-ink);
   box-shadow: none;
 }
-#panel-check .results-search__icon { opacity: .45; }
+.results-search__icon { opacity: .45; }
 
 /* ── Section headings: "Strong matches (N)" ────────────────────── */
 /* Section heading — confident but a secondary label: smaller than the
  * course names so the eye lands on the content (names) first, the group
  * label second. */
-#panel-check .results-group__header {
+.results-group__header {
   font-family: var(--ce-font-display);
   font-size: 1.6rem;
   font-weight: 800;
@@ -2621,12 +2672,12 @@ footer p {
   color: var(--ce-ink);
   background: var(--ce-bg);
 }
-#panel-check .results-group__header--green { color: var(--ce-status-strong); }
-#panel-check .results-group__header--amber { color: var(--ce-status-possible); }
-#panel-check .results-group__header--red   { color: var(--ce-status-reach); }
-#panel-check .results-group__header--grey  { color: var(--ce-status-grade); }
+.results-group__header--green { color: var(--ce-status-strong); }
+.results-group__header--amber { color: var(--ce-status-possible); }
+.results-group__header--red   { color: var(--ce-status-reach); }
+.results-group__header--grey  { color: var(--ce-status-grade); }
 /* the "(N)" count → mono, quiet, beside the big heading */
-#panel-check .results-group__header span {
+.results-group__header span {
   font-family: var(--ce-font-mono);
   font-size: 1rem;
   font-weight: 400;
@@ -2634,7 +2685,7 @@ footer p {
 }
 /* Singular butter-yellow highlighter move — only on the primary "Strong
  * matches" count, so the page feels alive without spraying yellow around. */
-#panel-check .results-group__header--green span {
+.results-group__header--green span {
   background: var(--ce-accent);
   color: var(--ce-ink);
   opacity: 1 !important;
@@ -2644,39 +2695,39 @@ footer p {
 
 /* ── The course card ───────────────────────────────────────────── */
 /* Clean hairline rectangle, sharp corners, no coloured left edge. */
-#panel-check .course-card {
+.course-card {
   background: var(--ce-surface);
   border: var(--ce-hairline);
   border-radius: var(--ce-radius);
   padding: var(--space-6);
   transition: border-color var(--t-fast), background var(--t-fast);
 }
-#panel-check .course-card:hover {
+.course-card:hover {
   background: var(--ce-surface);
   border-color: var(--ce-ink-30);
 }
 /* normalise the dashed grey-status border to the same calm hairline */
-#panel-check .course-card--grey {
+.course-card--grey {
   border-style: solid;
   border-color: var(--ce-hairline-color);
 }
 
 /* Match-status label (STRONG MATCH) — mono, calm colour */
-#panel-check .card-status {
+.card-status {
   font-family: var(--ce-font-mono);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
 }
-#panel-check .card-status--green { color: var(--ce-status-strong); }
-#panel-check .card-status--amber { color: var(--ce-status-possible); }
-#panel-check .card-status--red   { color: var(--ce-status-reach); }
-#panel-check .card-status--grey  { color: var(--ce-status-grade); }
-#panel-check .card-status--none  { color: var(--ce-ink-60); font-weight: 400; }
+.card-status--green { color: var(--ce-status-strong); }
+.card-status--amber { color: var(--ce-status-possible); }
+.card-status--red   { color: var(--ce-status-reach); }
+.card-status--grey  { color: var(--ce-status-grade); }
+.card-status--none  { color: var(--ce-ink-60); font-weight: 400; }
 
 /* Course name — Bricolage 800, the clear focal point of each card */
-#panel-check .card-name {
+.card-name {
   font-family: var(--ce-font-display);
   font-size: 1.9rem;
   font-weight: 800;
@@ -2686,7 +2737,7 @@ footer p {
 }
 /* University — second tier: clear presence below the big name, above the
  * quieter ranking/metadata. Body font, near-ink, slightly larger. */
-#panel-check .card-uni {
+.card-uni {
   font-family: var(--ce-font-body);
   font-size: 1.0625rem;
   font-weight: 600;
@@ -2694,7 +2745,7 @@ footer p {
   margin-top: var(--space-2);
 }
 /* "World Top N" ranking — third tier, quiet */
-#panel-check .card-tier {
+.card-tier {
   font-family: var(--ce-font-mono);
   font-size: 11px;
   color: var(--ce-ink-60);
@@ -2702,10 +2753,10 @@ footer p {
 }
 
 /* Status label (STRONG MATCH) sits at the top — give it room before the name */
-#panel-check .card-status { margin-bottom: var(--space-3); }
+.card-status { margin-bottom: var(--space-3); }
 
 /* Metadata row — the mono functional layer; clear gap above it */
-#panel-check .card-meta {
+.card-meta {
   font-family: var(--ce-font-mono);
   font-size: 11px;
   letter-spacing: .04em;
@@ -2713,8 +2764,8 @@ footer p {
   color: var(--ce-ink-60);
   margin-top: var(--space-4);
 }
-#panel-check .card-meta-sep { color: var(--ce-ink-30); }
-#panel-check .card-cat-badge {
+.card-meta-sep { color: var(--ce-ink-30); }
+.card-cat-badge {
   background: transparent;
   color: var(--ce-ink-60);
   padding: 0;
@@ -2722,7 +2773,7 @@ footer p {
 }
 
 /* Grade chip — hairline pill, mono; separated from the metadata row */
-#panel-check .card-grades {
+.card-grades {
   font-family: var(--ce-font-mono);
   font-size: 12px;
   color: var(--ce-ink);
@@ -2733,10 +2784,10 @@ footer p {
   margin-top: var(--space-4);
 }
 /* Holistic / admitted-range box (US) — its own tier, clearly separated */
-#panel-check .card-us-admit { margin-top: var(--space-4); }
+.card-us-admit { margin-top: var(--space-4); }
 
 /* Admission-test tags — hairline pill, mono */
-#panel-check .admission-test-tag {
+.admission-test-tag {
   font-family: var(--ce-font-mono);
   font-size: 11px;
   color: var(--ce-ink-60);
@@ -2747,7 +2798,7 @@ footer p {
 }
 
 /* Save button — pill, ink outline, butter-yellow on hover/active */
-#panel-check .save-btn {
+.save-btn {
   font-family: var(--ce-font-mono);
   font-size: 11px;
   font-weight: 700;
@@ -2758,33 +2809,261 @@ footer p {
   background: transparent;
   color: var(--ce-ink);
 }
-#panel-check .save-btn:hover {
+.save-btn:hover {
   background: var(--ce-accent);
   border-color: var(--ce-ink);
   color: var(--ce-ink);
 }
-#panel-check .save-btn--saved {
+.save-btn--saved {
   background: var(--ce-accent);
   border-color: var(--ce-ink);
   color: var(--ce-ink);
 }
 
 /* Body-font for the card's descriptive lines */
-#panel-check .card-grade-gap,
-#panel-check .card-field-core,
-#panel-check .card-us-admit__range,
-#panel-check .card-unverified,
-#panel-check .card-uni-note,
-#panel-check .card-uni-info__notes { font-family: var(--ce-font-body); }
-#panel-check .card-us-admit__policy { font-family: var(--ce-font-mono); }
+.card-grade-gap,
+.card-field-core,
+.card-us-admit__range,
+.card-unverified,
+.card-uni-note,
+.card-uni-info__notes { font-family: var(--ce-font-body); }
+.card-us-admit__policy { font-family: var(--ce-font-mono); }
 
 /* Disclaimer + summary prose use the body font on this screen */
-#panel-check .disclaimer-banner,
-#panel-check .results-new-summary,
-#panel-check .summary-text { font-family: var(--ce-font-body); }
+.disclaimer-banner,
+.results-new-summary,
+.summary-text { font-family: var(--ce-font-body); }
 
 /* Mobile: keep the language but tighten the card type a touch */
 @media (max-width: 480px) {
-  #panel-check .card-name { font-size: 1.6rem; }
-  #panel-check .results-group__header { font-size: 1.35rem; }
+  .card-name { font-size: 1.6rem; }
+  .results-group__header { font-size: 1.35rem; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+ * CONFIDENT EDITORIAL — app-wide propagation of the locked language
+ * to every screen/component. Visual only. Reuses --ce-* tokens.
+ * ═══════════════════════════════════════════════════════════════ */
+
+/* ── Brand wordmark → Bricolage for character ──────────────────── */
+.nav__logo { font-family: var(--ce-font-display); font-weight: 700; }
+
+/* ── Display headings → Bricolage, confident weights ───────────── *
+ * Several titles were set to the body sans in earlier passes; bring
+ * them back to the display face now that it's the locked language. */
+.home__welcome,
+.fo__title,
+.stage-select__heading { font-weight: 700; }
+.home-next__text,
+.home-card__title,
+.field-card__name,
+.fo-section__head,
+.plan-section-head,
+.applying__title,
+.applying-section__head,
+.shortlist-insights__title,
+.stage-card__title,
+.empty-state h2,
+.empty-state h3 {
+  font-family: var(--ce-font-display);
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+
+/* ── Functional layer → Space Mono (labels, eyebrows, metadata) ── */
+.control-label,
+.count-badge,
+.category-chip,
+.fo-eyebrow,
+.fo-label,
+.fo-chip,
+.fo-combo__count,
+.home-next__eyebrow,
+.home-quick__label,
+.home-card__dl dt,
+.plan-subject-chip__count,
+.plan-combo-tag,
+.plan-subject-chip__hl,
+.subject-chip,
+.shortlist-insight-tag {
+  font-family: var(--ce-font-mono);
+}
+
+/* ── Pills & chips → hairline mono pills, ink/yellow active ─────── */
+.stage-indicator,
+.shortlist-link,
+.category-chip,
+.fo-chip,
+.subject-chip,
+.count-badge {
+  font-family: var(--ce-font-mono);
+  border-radius: var(--radius-full);
+}
+/* Active filter/interest chip → ink fill (matches the reference toolbar) */
+.category-chip.active {
+  background: var(--ce-ink) !important;
+  border-color: var(--ce-ink) !important;
+  color: var(--ce-bg) !important;
+}
+.subject-chip.selected {
+  background: var(--ce-ink);
+  border-color: var(--ce-ink);
+  color: var(--ce-bg);
+}
+
+/* ── Nav tool tabs → reference filter-pill treatment ───────────── */
+.stage-tool {
+  font-family: var(--ce-font-mono);
+  border: var(--ce-hairline);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+}
+.stage-tool:hover { border-color: var(--ce-ink); color: var(--ce-ink); }
+/* Active tool → butter-yellow fill, ink text — the reference active pill */
+.stage-tool--active,
+.stage-tool--active:hover {
+  background: var(--ce-accent);
+  border-color: var(--ce-ink);
+  color: var(--ce-ink);
+}
+.stage-indicator,
+.shortlist-link { border: var(--ce-hairline); }
+.shortlist-link--active {
+  background: var(--ce-accent);
+  border-color: var(--ce-ink);
+  color: var(--ce-ink);
+}
+
+/* ── Buttons → pill shape, ink-outline resting / yellow on hover ─ */
+.home-next__btn,
+.home-quick__btn,
+.fo-btn,
+.export-csv-btn,
+.remove-btn,
+.clear-subjects-btn,
+.data-error-banner__retry,
+.explore-context__clear,
+.explore-context__about,
+.field-card__btn {
+  font-family: var(--ce-font-mono);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--ce-ink);
+  background: transparent;
+  color: var(--ce-ink);
+  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.home-next__btn:hover,
+.home-quick__btn:hover,
+.fo-btn:hover,
+.export-csv-btn:hover,
+.remove-btn:hover,
+.clear-subjects-btn:hover,
+.data-error-banner__retry:hover,
+.explore-context__clear:hover,
+.explore-context__about:hover,
+.field-card__btn:hover {
+  background: var(--ce-accent);
+  border-color: var(--ce-ink);
+  color: var(--ce-ink);
+  opacity: 1;
+}
+/* Primary CTAs → butter-yellow fill at rest (the confident action) */
+.home-next__btn--primary,
+.fo-btn--primary {
+  background: var(--ce-accent);
+  border-color: var(--ce-ink);
+  color: var(--ce-ink);
+}
+.home-next__btn--primary:hover,
+.fo-btn--primary:hover { background: var(--ce-accent); opacity: .9; }
+
+/* ── Badges (counts everywhere) → mono hairline pills, status text ─ */
+.badge {
+  font-family: var(--ce-font-mono);
+  border: var(--ce-hairline);
+  border-radius: var(--radius-full);
+  background: transparent;
+}
+.badge--success { color: var(--ce-status-strong); background: transparent; }
+.badge--warning { color: var(--ce-status-possible); background: transparent; }
+.badge--error   { color: var(--ce-status-reach); background: transparent; }
+.badge--grey,
+.badge--neutral { color: var(--ce-ink-60); background: transparent; }
+
+/* ── Inputs / search boxes → hairline, mono ────────────────────── */
+.search-input,
+.subject-filter-input,
+.courseSearchInput,
+.select-wrap select {
+  font-family: var(--ce-font-mono);
+}
+.search-input { border: var(--ce-hairline); }
+
+/* ── Onboarding stage/system cards → flat hairline, selected state ─ */
+.stage-card { background: var(--ce-surface); }
+.stage-card:hover { border-color: var(--ce-ink); }
+.stage-card__icon { background: var(--ce-bg); color: var(--ce-ink); }
+
+/* ── Course Finder card → same hairline container as .course-card ─ */
+.reverse-card {
+  background: var(--ce-surface);
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius);
+  padding: var(--space-6);
+}
+.subject-tag {
+  font-family: var(--ce-font-mono);
+  border: var(--ce-hairline);
+  border-radius: var(--radius-full);
+}
+.req-label { font-family: var(--ce-font-mono); }
+
+/* ── Field Overview / Planner combination rows → reference styling ─ */
+.fo-combo,
+.plan-combo-row {
+  background: var(--ce-surface);
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius);
+}
+.fo-combo__count { color: var(--ce-ink-60); }
+
+/* ── Home next-step block → warm surface card, not a blue tint ───── */
+.home-next {
+  background: var(--ce-surface);
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius);
+}
+.home-next__eyebrow { color: var(--ce-ink-60); }
+
+/* ── Cross-tier cards → flat hairline, sharp ───────────────────── */
+.home-card,
+.shortlist-insights,
+.field-card,
+.fo__header,
+.card-us-admit,
+.card-uni-info__body {
+  border-radius: var(--ce-radius);
+}
+
+/* ── Disclaimer / hint prose → body font ───────────────────────── */
+.panel-intro,
+.search-hint,
+.picker-hint,
+.plan-section-sub,
+.fo-desc,
+.fo-expect { font-family: var(--ce-font-body); }
+
+/* ── Neutralise leftover per-category colouring that out-specifies the
+ *    global rules (cat badge must stay muted ink even on the reference). ── */
+.card-cat-badge {
+  color: var(--ce-ink-60) !important;
+  background: transparent !important;
+  font-weight: 700;
+}
+/* Planner selected card → clean ink ring (tokens already resolve to ink) */
+.plan-cat-card.active { background: var(--ce-bg); }
+.plan-cat-card.active .plan-cat-card__label,
+.plan-cat-card.active .plan-cat-card__icon { color: var(--ce-ink); }
+/* Field/strength card names → Bricolage; their descriptions stay body (Hanken) */
+.plan-cat-card__label { font-family: var(--ce-font-display); font-weight: 700; letter-spacing: -.01em; }
+.plan-cat-card .picker-hint-inline { font-family: var(--ce-font-body); }
