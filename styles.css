@@ -3437,6 +3437,12 @@ button.plan-combo-tag--drop:focus-visible {
   line-height: 1.6;
 }
 .shortlist-reg-windows { font-family: var(--ce-font-mono); font-size: 12px; color: var(--ce-ink-60); }
+.shortlist-legend {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  color: var(--ce-ink-60);
+  letter-spacing: .01em;
+}
 
 /* Test timing on shortlist cards — one quiet mono line per test */
 .card-test-timing {
