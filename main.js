@@ -1035,6 +1035,11 @@ function switchMode(mode) {
   if (mode === 'strengths' && $('strengthsGrid').children.length === 0) {
     renderStrengthsGrid();
   }
+  if (mode === 'plan') {
+    // Candidate fields pinned in Stage 1 arrive pre-selected: render on entry
+    // (renderPlanResults syncs the grid and no-ops when nothing is selected).
+    renderPlanResults();
+  }
   if (mode === 'applying') {
     renderApplyingPanel();
   }
@@ -1221,7 +1226,7 @@ function applyProfileSystem(sys) {
 function rerenderCurrentView() {
   switch (state.mode) {
     case 'check':   renderCheckEmptyState(); if (state.selectedSubjects.length) renderCheckResults(); break;
-    case 'plan':    if (state.planCategory) renderPlanResults(); break;
+    case 'plan':    renderPlanResults(); break;   // guards internally on selected fields
     case 'reverse': if (state.searchQuery) renderReverseResults(); break;
     case 'field-overview': if (state.exploreField?.fieldId) renderFieldOverview(state.exploreField.fieldId); break;
     case 'home':     renderWorkspaceHome(); break;
@@ -1788,6 +1793,7 @@ function renderWorkspaceHome() {
     : null;
   const subjects = Array.isArray(profile.subjects) ? profile.subjects : [];
   const grades   = profile.predictedGrades || null;
+  const candidateLabels = plannerFields().map(id => CATEGORY_LABEL_MAP[id] ?? id);
 
   // Next-step buttons (first = primary)
   const actionBtns = next.actions.map((a, i) =>
@@ -1832,10 +1838,12 @@ function renderWorkspaceHome() {
           <h2 class="home-card__title">Your profile</h2>
           <dl class="home-card__dl">
             <div><dt>Qualification</dt><dd>${sysLabel ? esc(sysLabel) : muted('Not set yet')}</dd></div>
+            <div><dt>Your fields</dt><dd>${candidateLabels.length ? esc(candidateLabels.join(' · ')) : muted('None kept yet')}</dd></div>
             <div><dt>Subjects</dt><dd>${subjects.length ? esc(subjects.join(', ')) : muted('None selected yet')}</dd></div>
             <div><dt>Predicted grades</dt><dd>${grades ? esc(grades) : muted('Not set yet')}</dd></div>
           </dl>
           <button class="home-card__link" data-go-tool="check">Update profile →</button>
+          <button class="home-card__link" data-go-tool="plan">Manage your fields →</button>
         </section>
 
         <section class="home-card">
@@ -2928,6 +2936,58 @@ const CATEGORY_ICONS = {
   architecture: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h14M5 17V9l5-5 5 5v8"/><path d="M9 17v-4h2v4"/></svg>`,
 };
 
+/* ═══════════════════════════════════════════════════════════════
+ * CANDIDATE FIELDS — the durable output of the exploring stage.
+ * profile.candidateFields (max 3 category ids) is the single source
+ * of truth: pinned from Strengths / Field Overview, selected directly
+ * in the Subject Planner, and shown on the workspace home.
+ * ═══════════════════════════════════════════════════════════════ */
+
+// Short field names for badges and per-field counts on combination rows.
+const PLAN_FIELD_SHORT = {
+  medicine: 'Medicine', cs: 'CS', engineering: 'Engineering',
+  economics: 'Economics', law: 'Law', business: 'Business',
+  sciences: 'Sciences', psychology: 'Psychology',
+  architecture: 'Architecture', mathematics: 'Maths',
+};
+const planFieldShort = id => PLAN_FIELD_SHORT[id] ?? CATEGORY_LABEL_MAP[id] ?? id;
+
+// The planner's selected fields — always read fresh from the profile.
+function plannerFields() {
+  if (typeof AltioraState === 'undefined') return [];
+  return AltioraState.getCandidateFields().filter(id => CATEGORY_LABEL_MAP[id]).slice(0, 3);
+}
+
+// Toggle a field pin from anywhere (strengths card, field overview,
+// planner grid). Returns true if the set changed.
+function togglePinnedField(catId, { silent = false } = {}) {
+  const label = CATEGORY_LABEL_MAP[catId] ?? catId;
+  const pinned = AltioraState.getCandidateFields().includes(catId);
+  if (pinned) {
+    AltioraState.removeCandidateField(catId);
+    if (!silent) showToast(`${label} removed from your fields.`);
+    logEvent('candidate_field_remove', { field: catId });
+    return true;
+  }
+  if (!AltioraState.addCandidateField(catId)) {
+    showToast(`You can keep up to ${AltioraState.MAX_CANDIDATE_FIELDS} fields — remove one to add ${label}.`);
+    return false;
+  }
+  if (!silent) showToast(`${label} added to your fields (${AltioraState.getCandidateFields().length}/${AltioraState.MAX_CANDIDATE_FIELDS}).`);
+  logEvent('candidate_field_add', { field: catId });
+  return true;
+}
+
+// Reflect the pinned set on the planner's field grid.
+function syncPlanGridSelection() {
+  const set = new Set(plannerFields());
+  $$('#planCategoryGrid .plan-cat-card').forEach(c => {
+    const on = set.has(c.dataset.category);
+    c.classList.toggle('active', on);
+    c.setAttribute('aria-pressed', String(on));
+  });
+}
+
 function buildPlanCategoryGrid() {
   const grid = $('planCategoryGrid');
   CATEGORIES.forEach(cat => {
@@ -2935,14 +2995,14 @@ function buildPlanCategoryGrid() {
     btn.type = 'button';
     btn.className = 'plan-cat-card';
     btn.dataset.category = cat.id;
+    btn.setAttribute('aria-pressed', 'false');
     btn.innerHTML = `
       <span class="plan-cat-card__icon" aria-hidden="true">${CATEGORY_ICONS[cat.id] ?? cat.icon}</span>
       <span class="plan-cat-card__label">${esc(cat.label)}</span>
     `;
     btn.addEventListener('click', () => {
-      $$('#planCategoryGrid .plan-cat-card').forEach(c => c.classList.remove('active'));
-      btn.classList.add('active');
-      state.planCategory = cat.id;
+      // Multi-select: the grid toggles membership of profile.candidateFields.
+      if (!togglePinnedField(cat.id, { silent: true })) return;   // cap hit — toast shown
       $('planResults').classList.add('hidden');
       renderPlanResults();
     });
@@ -3039,14 +3099,185 @@ function combosForDisplay(category, system, isQuant, limit) {
   return out;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+ * MULTI-FIELD COMBINATION RANKING — "The Gate".
+ * Rank subject combinations by how many doors they keep open ACROSS
+ * ALL the student's candidate fields, not within one. A combination's
+ * value = fields covered first (a set that zeroes one of your fields
+ * is worse than one that keeps all alive), then the sum of per-field
+ * coverage FRACTIONS (so a small field like Architecture isn't drowned
+ * out by a big one), then fewer subjects. Combinations may use up to 4
+ * subjects — keeping several fields open sometimes genuinely needs 4,
+ * and the UI says so honestly rather than pretending 3 always works.
+ * ═══════════════════════════════════════════════════════════════ */
+
+// Per-field opened-course counts for a tag set (green/amber via classify —
+// the same "subject requirements satisfied" metric used everywhere).
+function perFieldOpened(perField, tagSet) {
+  return perField.map(f => {
+    let opened = 0;
+    f.courses.forEach(c => {
+      const s = classify(c, tagSet).status;
+      if (s === 'green' || s === 'amber') opened++;
+    });
+    return { cat: f.cat, opened, total: f.courses.length };
+  });
+}
+
+function rankMultiFieldCombinations(cats, limit = 16) {
+  const perField = cats.map(cat => ({
+    cat,
+    courses: courses.filter(c => c.category === cat),
+    pool: fieldSubjectTags(cat).poolTags.slice(0, 6),
+  }));
+
+  // Pooled candidate tags: subjects serving MORE of the fields first,
+  // then by how highly each field ranks them. Cap the pool so the
+  // combination space stays tractable.
+  const tagStat = new Map();
+  perField.forEach(f => f.pool.forEach((t, i) => {
+    const s = tagStat.get(t) || { fields: 0, rank: 0 };
+    s.fields++; s.rank += i;
+    tagStat.set(t, s);
+  }));
+  const pool = [...tagStat.keys()]
+    .sort((a, b) => tagStat.get(b).fields - tagStat.get(a).fields
+                 || tagStat.get(a).rank - tagStat.get(b).rank)
+    .slice(0, 10);
+  if (!pool.length) return { combos: [], allCovered3: false, allCovered4: false };
+
+  // Candidate combos of 2–4 subjects (normalised: Further Maths implies
+  // Maths), deduped by tag set.
+  const byKey = new Map();
+  for (let size = 2; size <= 4; size++) {
+    for (const raw of getCombinations(pool, size)) {
+      const tags = normaliseComboTags(raw);
+      if (tags.length > 4) continue;
+      const key = [...tags].sort().join('|');
+      if (!byKey.has(key)) byKey.set(key, tags);
+    }
+  }
+
+  const nFields = cats.length;
+  const scored = [...byKey.values()].map(tags => {
+    const per = perFieldOpened(perField, new Set(tags));
+    const covered = per.filter(p => p.opened > 0).length;
+    const frac = per.reduce((s, p) => s + (p.total ? p.opened / p.total : 0), 0);
+    return { tags, per, covered, frac };
+  }).filter(s => s.covered > 0);
+
+  // A field only counts as genuinely KEPT OPEN when the combo achieves at
+  // least half of the best per-field coverage any combination in the pool
+  // reaches — "≥1 course ambers through" is not a kept door. This is what
+  // makes the low-overlap conflict message computed rather than manufactured.
+  const bestSolo = {};
+  cats.forEach(cat => { bestSolo[cat] = 0; });
+  scored.forEach(s => s.per.forEach(p => { if (p.opened > bestSolo[p.cat]) bestSolo[p.cat] = p.opened; }));
+  const wellKeptCount = s => s.per.filter(p => bestSolo[p.cat] === 0 || (p.opened > 0 && p.opened >= bestSolo[p.cat] / 2)).length;
+  scored.forEach(s => { s.wellKept = wellKeptCount(s); });
+
+  const allKept3 = scored.some(s => s.wellKept === nFields && s.tags.length <= 3);
+  const allKept4 = scored.some(s => s.wellKept === nFields && s.tags.length <= 4);
+
+  // Prune supersets that add nothing over a strictly smaller combo.
+  const kept = scored.filter(b =>
+    !scored.some(a =>
+      a !== b && a.tags.length < b.tags.length &&
+      a.tags.every(t => b.tags.includes(t)) &&
+      a.wellKept >= b.wellKept && a.covered >= b.covered && a.frac >= b.frac - 1e-9
+    )
+  );
+
+  const order = t => t === MATHS_STD ? 0 : t === MATHS_ADV ? 1 : 2;
+  const combos = kept
+    .sort((a, b) => b.wellKept - a.wellKept || b.covered - a.covered || b.frac - a.frac || a.tags.length - b.tags.length)
+    .map(({ tags, per, covered, wellKept }) => ({ combo: [...tags].sort((x, y) => order(x) - order(y)), per, covered, wellKept }))
+    .slice(0, limit);
+
+  return { combos, allCovered3: allKept3, allCovered4: allKept4, perField };
+}
+
+// System-display dedupe for multi-field combos (mirrors combosForDisplay).
+function multiCombosForDisplay(cats, system, isQuant, limit) {
+  const ranked = rankMultiFieldCombinations(cats, 24);
+  const seen = new Set();
+  const out = [];
+  for (const c of ranked.combos) {
+    if (!c.combo.every(t => tagExistsInSystem(t, system))) continue;
+    const key = comboLabels(c.combo, system, isQuant).join(' + ');
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    out.push(c);
+    if (out.length >= limit) break;
+  }
+  return { combos: out, allCovered3: ranked.allCovered3, allCovered4: ranked.allCovered4, perField: ranked.perField };
+}
+
+// Display parts for a combo where each part knows which TAGS disappear if
+// the student drops that subject (dropping Maths also drops Further Maths;
+// dropping Further Maths keeps Maths). Labels resolve via the same shared
+// helpers as comboLabels so the two never disagree on naming.
+function comboLabelParts(combo, system, isQuant) {
+  const inSys = combo.filter(t => tagExistsInSystem(t, system));
+  const hasStd = inSys.includes(MATHS_STD), hasAdv = inSys.includes(MATHS_ADV);
+  const mathsTags = inSys.filter(t => t === MATHS_STD || t === MATHS_ADV);
+  const parts = [];
+  const seen = new Set();
+  let mathsDone = false;
+  for (const t of inSys) {
+    if (t === MATHS_STD || t === MATHS_ADV) {
+      if (mathsDone) continue;
+      mathsDone = true;
+      if (hasStd && hasAdv && mathsAdvancedIsSeparate(system)) {
+        parts.push({ label: mathsSubjectName(MATHS_STD, system, isQuant), dropTags: [MATHS_STD, MATHS_ADV] });
+        parts.push({ label: mathsSubjectName(MATHS_ADV, system, isQuant), dropTags: [MATHS_ADV] });
+      } else {
+        parts.push({ label: mathsSubjectName(hasAdv ? MATHS_ADV : MATHS_STD, system, isQuant), dropTags: mathsTags });
+      }
+      continue;
+    }
+    const label = subjectTagLabel(t, system, isQuant);
+    if (label && !seen.has(label)) { seen.add(label); parts.push({ label, dropTags: [t] }); }
+  }
+  return parts;
+}
+
+// Subjects that must be taken TOGETHER for most of a field's courses.
+const PLAN_PAIR_RULES = {
+  medicine:     [['Chemistry', 'Biology']],
+  engineering:  [['Mathematics_Advanced', 'Physics']],
+  cs:           [],
+  economics:    [['Mathematics_Standard', 'Economics']],
+  sciences:     [['Chemistry', 'Biology'], ['Chemistry', 'Mathematics_Advanced']],
+  mathematics:  [],
+  law:          [],
+  psychology:   [['Psychology', 'Biology']],
+  architecture: [['Art_Design', 'Mathematics_Standard']],
+  business:     [['Mathematics_Standard', 'Economics']],
+};
+
+// Dispatcher: the planner optimises across the student's candidate fields.
+// One field → the established single-field view (unchanged behaviour).
+// Two or three → cross-field optimisation with door-closing warnings.
 function renderPlanResults() {
   if (dataLoadError) return;
   // System is a single global property — read it from the profile rather than
-  // any in-body selector (those were removed; the nav control is the only one).
+  // any in-body selector (the nav control is the only selector).
   if (!state.planSystem) state.planSystem = AltioraState.getProfile().qualificationSystem;
-  if (!state.planCategory || !state.planSystem) return;
+  syncPlanGridSelection();
+  if (!state.planSystem) return;
 
-  const catCourses = courses.filter(c => c.category === state.planCategory);
+  const fields = plannerFields();
+  if (fields.length === 0) {
+    $('planResults').classList.add('hidden');
+    return;
+  }
+  if (fields.length === 1) renderSingleFieldPlan(fields[0]);
+  else renderMultiFieldPlan(fields);
+}
+
+function renderSingleFieldPlan(category) {
+  const catCourses = courses.filter(c => c.category === category);
   if (!catCourses.length) {
     $('planEssentials').innerHTML   = '<p class="search-hint">No courses found for this area.</p>';
     $('planCombinations').innerHTML = '';
@@ -3054,7 +3285,7 @@ function renderPlanResults() {
     return;
   }
 
-  const catLabel = CATEGORY_LABEL_MAP[state.planCategory] ?? state.planCategory;
+  const catLabel = CATEGORY_LABEL_MAP[category] ?? category;
 
   /* ── Section A: essential subject tags, sorted by frequency ── */
   const tagFreq = {};
@@ -3073,8 +3304,8 @@ function renderPlanResults() {
 
   // Field-level requirements: what a MAJORITY of courses need (maths
   // collapsed across levels), with system + quant-aware labels.
-  const isQuant = isQuantitativeCategory(state.planCategory);
-  const ft = fieldSubjectTags(state.planCategory);
+  const isQuant = isQuantitativeCategory(category);
+  const ft = fieldSubjectTags(category);
   const essCount = {};
   catCourses.forEach(c => new Set(c.requirements.essential ?? []).forEach(t => { essCount[t] = (essCount[t] ?? 0) + 1; }));
   const mathsEssN = catCourses.filter(c => (c.requirements.essential ?? []).some(t => t === MATHS_STD || t === MATHS_ADV)).length;
@@ -3116,25 +3347,13 @@ function renderPlanResults() {
   }
 
   /* ── Section 1.5: Critical pairs ── */
-  const pairRules = {
-    medicine:     [['Chemistry', 'Biology']],
-    engineering:  [['Mathematics_Advanced', 'Physics']],
-    cs:           [],
-    economics:    [['Mathematics_Standard', 'Economics']],
-    sciences:     [['Chemistry', 'Biology'], ['Chemistry', 'Mathematics_Advanced']],
-    mathematics:  [],
-    law:          [],
-    psychology:   [['Psychology', 'Biology']],
-    architecture: [['Art_Design', 'Mathematics_Standard']],
-    business:     [['Mathematics_Standard', 'Economics']],
-  };
   const tagPresence = new Set(sortedTags.map(([t]) => t));
-  const validPairs = (pairRules[state.planCategory] ?? [])
+  const validPairs = (PLAN_PAIR_RULES[category] ?? [])
     .filter(pair => pair.every(t => tagPresence.has(t)));
 
   if (validPairs.length > 0) {
     const pairsHtml = validPairs.map(pair =>
-      `<div class="plan-subject-chip" style="background: var(--color-cat-cs-bg); border-color: var(--color-cat-cs);">
+      `<div class="plan-subject-chip">
          <span class="plan-subject-chip__name">${esc(comboLabels(pair, state.planSystem, isQuant).join(' + '))}</span>
          <span class="plan-subject-chip__count">required together for most courses</span>
        </div>`
@@ -3155,14 +3374,14 @@ function renderPlanResults() {
     $('planCombinations').innerHTML = `
       <h3 class="plan-section-head">Building a strong AP profile for ${esc(catLabel)}</h3>
       <p class="plan-section-sub">AP admission isn't about a fixed set of subjects — it's about taking enough rigorous, field-aligned APs.</p>
-      ${apGuidancePanelHtml(state.planCategory)}`;
+      ${apGuidancePanelHtml(category)}`;
     $('planResults').classList.remove('hidden');
     requestAnimationFrame(() =>
       $('planResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
     return;
   }
 
-  const top5 = combosForDisplay(state.planCategory, state.planSystem, isQuant, 5);
+  const top5 = combosForDisplay(category, state.planSystem, isQuant, 5);
 
   if (top5.length === 0) {
     $('planCombinations').innerHTML = '';
@@ -3205,6 +3424,235 @@ function renderPlanResults() {
   );
 }
 
+/* ═══════════════════════════════════════════════════════════════
+ * MULTI-FIELD PLAN — the Gate view.
+ * "I'm torn between these fields: what combination keeps them ALL
+ * open, and what do I lose if I drop X?"
+ * ═══════════════════════════════════════════════════════════════ */
+
+// The consequence of dropping one subject from a combination, per field.
+// Factual and calm: the numbers, then the consequence.
+function dropAnalysisHtml(comboTags, dropTags, label, cats) {
+  const perField = cats.map(cat => ({ cat, courses: courses.filter(c => c.category === cat) }));
+  const before = perFieldOpened(perField, new Set(comboTags));
+  const after  = perFieldOpened(perField, new Set(comboTags.filter(t => !dropTags.includes(t))));
+  const bits = before.map((b, i) => {
+    const a = after[i];
+    const zeroed = b.opened > 0 && a.opened === 0;
+    return `<span class="plan-drop-field${zeroed ? ' plan-combo-field--zero' : ''}">${esc(planFieldShort(b.cat))} ${b.opened} → ${a.opened}</span>`;
+  }).join('<span class="plan-combo-fieldsep" aria-hidden="true">·</span>');
+  const closed = before.filter((b, i) => b.opened > 0 && after[i].opened === 0).length;
+  const closure = closed > 0
+    ? ` <strong class="plan-drop-closure">— effectively closes ${closed} of your ${cats.length} fields.</strong>`
+    : '.';
+  return `<span class="plan-drop-lead">Without ${esc(label)}:</span> ${bits}${closure}`;
+}
+
+function renderMultiFieldPlan(cats) {
+  const sys = state.planSystem;
+  const isQuant = cats.some(isQuantitativeCategory);
+  const nFields = cats.length;
+  const allPhrase = nFields === 2 ? 'both' : `all ${nFields}`;
+  const fieldNames = cats.map(c => CATEGORY_LABEL_MAP[c] ?? c);
+  const allCourses = cats.flatMap(cat => courses.filter(c => c.category === cat));
+  const totalCourses = allCourses.length;
+
+  /* ── Essential subjects: per-field cores, intersection-aware ── */
+  // One entry per subject (maths collapsed across levels), knowing which
+  // of the selected fields treat it as core.
+  const entryMap = new Map();
+  cats.forEach(cat => {
+    const ft = fieldSubjectTags(cat);
+    ft.core.forEach(t => {
+      const isMaths = (t === MATHS_STD || t === MATHS_ADV);
+      const key = isMaths ? 'MATHS' : t;
+      let e = entryMap.get(key);
+      if (!e) { e = { key, isMaths, coreMathsTags: new Set(), fields: new Set() }; entryMap.set(key, e); }
+      e.fields.add(cat);
+      if (isMaths) e.coreMathsTags.add(t);
+    });
+  });
+
+  // IB HL badge pool across the selected fields' courses.
+  const hlTags = new Set();
+  if (sys === 'IB') {
+    allCourses.forEach(c => { if (c.country !== 'US') (c.grades?.ibHL ?? []).forEach(t => hlTags.add(t)); });
+  }
+
+  const requiredBy = e => allCourses.filter(c => {
+    const ess = c.requirements?.essential ?? [];
+    return e.isMaths ? (ess.includes(MATHS_STD) || ess.includes(MATHS_ADV)) : ess.includes(e.key);
+  }).length;
+
+  const entries = [...entryMap.values()]
+    .map(e => ({ ...e, count: requiredBy(e) }))
+    .sort((a, b) => b.fields.size - a.fields.size || b.count - a.count);
+
+  if (entries.length === 0) {
+    $('planEssentials').innerHTML = `
+      <h3 class="plan-section-head">Essential subjects across your fields</h3>
+      <p class="plan-section-sub">No specific subject requirements — ${esc(fieldNames.join(', '))} courses are broadly open.</p>`;
+  } else {
+    const chipsHtml = entries.map(e => {
+      const label = e.isMaths
+        ? requirementLabels([...e.coreMathsTags], sys, isQuant)[0]
+        : subjectTagLabel(e.key, sys, isQuant);
+      const hlBadge = (e.isMaths ? (hlTags.has(MATHS_ADV) || hlTags.has(MATHS_STD)) : hlTags.has(e.key))
+        ? `<span class="plan-subject-chip__hl">HL</span>` : '';
+      const coversAll = e.fields.size === nFields;
+      const coverText = coversAll
+        ? (nFields === 2 ? 'covers both of your fields' : `covers all ${nFields} of your fields`)
+        : [...e.fields].map(planFieldShort).join(' + ');
+      // Door-closing line: only where the closure is real and computed.
+      const closure = totalCourses && (e.count / totalCourses) >= 0.5
+        ? ` — <span class="plan-chip-closure">dropping it closes most doors</span>`
+        : '';
+      return `
+      <div class="plan-subject-chip plan-subject-chip--multi">
+        <span class="plan-subject-chip__name">${esc(label)}${hlBadge}</span>
+        <span class="plan-chip-covers${coversAll ? ' plan-chip-covers--all' : ''}">${esc(coverText)}</span>
+        <span class="plan-subject-chip__count">required by ${e.count} of ${totalCourses} courses across your fields${closure}</span>
+      </div>`;
+    }).join('');
+    $('planEssentials').innerHTML = `
+      <h3 class="plan-section-head">Essential subjects across your fields</h3>
+      <p class="plan-section-sub">What a majority of courses in each field require — subjects serving several of your fields are your anchor choices.</p>
+      <div class="plan-essentials-grid">${chipsHtml}</div>`;
+  }
+
+  /* ── Critical pairs, badged per field ── */
+  const pairsHtml = cats.flatMap(cat => {
+    const present = new Set();
+    courses.filter(c => c.category === cat)
+      .forEach(c => (c.requirements?.essential ?? []).forEach(t => present.add(t)));
+    return (PLAN_PAIR_RULES[cat] ?? [])
+      .filter(pair => pair.every(t => present.has(t)))
+      .map(pair => `
+        <div class="plan-subject-chip">
+          <span class="plan-subject-chip__name">${esc(comboLabels(pair, sys, isQuant).join(' + '))}</span>
+          <span class="plan-field-badge">${esc(planFieldShort(cat))}</span>
+          <span class="plan-subject-chip__count">required together for most courses</span>
+        </div>`);
+  }).join('');
+  $('planCriticalPairs').innerHTML = pairsHtml ? `
+    <h3 class="plan-section-head" style="margin-top: var(--space-8);">Critical pairs</h3>
+    <p class="plan-section-sub">These subjects are needed together, not just one of them.</p>
+    <div class="plan-essentials-grid">${pairsHtml}</div>` : '';
+
+  /* ── AP: multi-field profile guidance (no "pick 3" model) ── */
+  if (sys === 'US_AP') {
+    const guidances = cats.map(cat => ({ cat, g: apFieldGuidance(cat) }));
+    const withG = guidances.filter(x => x.g && x.g.subjects.length);
+    let sharedHtml = '';
+    if (withG.length === cats.length && nFields > 1) {
+      const shared = withG.map(x => new Set(x.g.subjects))
+        .reduce((acc, s) => new Set([...acc].filter(v => s.has(v))));
+      if (shared.size) {
+        sharedHtml = `
+          <p class="ap-guidance__line"><span class="plan-chip-covers plan-chip-covers--all">APs that serve ${nFields === 2 ? 'both' : 'all'} of your fields</span></p>
+          <div class="ap-guidance__chips">${[...shared].map(s => `<span class="ap-guidance__chip">${esc(s)}</span>`).join('')}</div>`;
+      }
+    }
+    $('planCombinations').innerHTML = `
+      <h3 class="plan-section-head">Building a strong AP profile for your fields</h3>
+      <p class="plan-section-sub">AP admission isn't about a fixed set of subjects — build enough rigorous APs aligned with the fields you're considering.</p>
+      ${sharedHtml}
+      ${cats.map(cat => `
+        <div class="plan-ap-field">
+          <span class="plan-field-badge">${esc(CATEGORY_LABEL_MAP[cat] ?? cat)}</span>
+          ${apGuidancePanelHtml(cat)}
+        </div>`).join('')}`;
+    $('planResults').classList.remove('hidden');
+    requestAnimationFrame(() =>
+      $('planResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+    return;
+  }
+
+  /* ── Combinations ranked by cross-field coverage ── */
+  const { combos, allCovered3, allCovered4 } = multiCombosForDisplay(cats, sys, isQuant, 5);
+
+  // Honest conflict messaging — computed, never manufactured.
+  let conflictHtml = '';
+  if (combos.length && !allCovered4) {
+    conflictHtml = `
+      <div class="plan-conflict">
+        <strong>These fields share few subjects.</strong> No combination of up to 4 subjects keeps
+        ${allPhrase} open — keeping them all alive means a hard choice. Here's the best compromise:
+      </div>`;
+  } else if (combos.length && !allCovered3) {
+    conflictHtml = `
+      <div class="plan-conflict">
+        <strong>These fields share few subjects</strong> — keeping ${allPhrase} open needs
+        4 subjects, or a hard choice. Here's the best compromise:
+      </div>`;
+  }
+
+  if (!combos.length) {
+    $('planCombinations').innerHTML = `
+      <h3 class="plan-section-head">Combinations that keep your fields open</h3>
+      <p class="plan-section-sub">No standout combinations — these fields are flexible on subjects.</p>`;
+  } else {
+    const rowsHtml = combos.map(({ combo, per }) => {
+      const parts = comboLabelParts(combo, sys, isQuant);
+      const tagsHtml = parts.map(p => `
+        <button type="button" class="plan-combo-tag plan-combo-tag--drop"
+                data-drop="${esc(JSON.stringify(p.dropTags))}" data-droplabel="${esc(p.label)}"
+                title="What if I drop ${esc(p.label)}?"
+                aria-label="What changes without ${esc(p.label)}?">${esc(p.label)}</button>`).join('');
+      const fieldsHtml = per.map((p, i) =>
+        `<span class="plan-combo-field${p.opened === 0 ? ' plan-combo-field--zero' : ''}">${esc(planFieldShort(p.cat))}: ${p.opened}${i === 0 ? ' courses' : ''}</span>`
+      ).join('<span class="plan-combo-fieldsep" aria-hidden="true">·</span>');
+      return `
+        <div class="plan-combo-row plan-combo-row--multi" tabindex="0" role="button"
+             aria-label="Apply this subject combination in Check Combination mode. Or activate a subject to see what dropping it would cost."
+             data-tags="${esc(JSON.stringify(combo))}">
+          <div class="plan-combo-main">
+            ${tagsHtml}
+            <span class="plan-combo-arrow" aria-hidden="true">→</span>
+            <div class="plan-combo-results plan-combo-fields">${fieldsHtml}</div>
+          </div>
+          <div class="plan-combo-drop hidden" aria-live="polite"></div>
+        </div>`;
+    }).join('');
+
+    $('planCombinations').innerHTML = `
+      <h3 class="plan-section-head">Combinations that keep your fields open</h3>
+      <p class="plan-section-sub">Ranked by how many courses stay open across ${esc(fieldNames.join(', '))}.
+      Click a row to try it in Check Combination — or click a subject to see what dropping it would cost.</p>
+      ${conflictHtml}
+      <div class="plan-combo-list">${rowsHtml}</div>`;
+
+    $$('#planCombinations .plan-combo-row').forEach(row => {
+      const go = () => switchToPlanCombo(JSON.parse(row.dataset.tags), sys);
+      row.addEventListener('click', go);
+      row.addEventListener('keydown', e => {
+        if ((e.key === 'Enter' || e.key === ' ') && e.target === row) { e.preventDefault(); go(); }
+      });
+      const panel = row.querySelector('.plan-combo-drop');
+      row.querySelectorAll('.plan-combo-tag--drop').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();   // a drop-inspection must never navigate away
+          const label = btn.dataset.droplabel;
+          if (panel.dataset.for === label && !panel.classList.contains('hidden')) {
+            panel.classList.add('hidden');
+            panel.dataset.for = '';
+            return;
+          }
+          panel.dataset.for = label;
+          panel.innerHTML = dropAnalysisHtml(
+            JSON.parse(row.dataset.tags), JSON.parse(btn.dataset.drop), label, cats);
+          panel.classList.remove('hidden');
+        });
+      });
+    });
+  }
+
+  $('planResults').classList.remove('hidden');
+  requestAnimationFrame(() =>
+    $('planResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  );
+}
+
 function switchToPlanCombo(tags, systemKey) {
   switchMode('check');
   state.checkSystem      = systemKey;
@@ -3223,7 +3671,8 @@ function switchToPlanCombo(tags, systemKey) {
   // the combo shown and resolves maths correctly per system: one rigorous maths
   // for level-based systems (e.g. IB AA HL, not SL+HL or the applied variant;
   // SG H2, not H1+H2), and Maths + Further Maths only where genuinely separate.
-  const isQuant = isQuantitativeCategory(state.planCategory);
+  const planFields = plannerFields();
+  const isQuant = planFields.some(isQuantitativeCategory);
   const targetNames = new Set(comboLabels(tags, systemKey, isQuant));
   $$('#subjectPicker input[type="checkbox"]').forEach(cb => {
     if (targetNames.has(cb.value)) cb.checked = true;
@@ -3231,11 +3680,11 @@ function switchToPlanCombo(tags, systemKey) {
 
   onSubjectToggle();
 
-  if (state.planCategory) {
-    state.selectedCategories.clear();
-    state.selectedCategories.add(state.planCategory);
+  if (planFields.length) {
+    // Filter Check Combination to ALL the student's candidate fields.
+    state.selectedCategories = new Set(planFields);
     $$('#categoryPicker .category-chip').forEach(btn => {
-      const active = btn.dataset.category === state.planCategory;
+      const active = planFields.includes(btn.dataset.category);
       btn.classList.toggle('active', active);
       btn.setAttribute('aria-pressed', String(active));
     });
@@ -3428,11 +3877,19 @@ function renderStrengthsResults() {
       openFieldOverview(btn.dataset.exploreField, { from: 'strengths', strengths: [..._selectedStrengths] })
     );
   });
+  resultsDiv.querySelectorAll('[data-pin-category]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      togglePinnedField(btn.dataset.pinCategory);
+      renderStrengthsResults();   // refresh every card's pin state
+    });
+  });
 }
 
 function buildFieldCardHtml(fieldId) {
   const f = STRENGTH_FIELDS[fieldId];
   if (!f) return '';
+  const pinned = (typeof AltioraState !== 'undefined')
+    && AltioraState.getCandidateFields().includes(f.category);
   return `
     <article class="field-card" data-category="${esc(f.category)}"
       style="--field-accent: var(--color-cat-${f.category}); --field-accent-bg: var(--color-cat-${f.category}-bg);">
@@ -3440,7 +3897,11 @@ function buildFieldCardHtml(fieldId) {
       <p class="field-card__what">${esc(f.what)}</p>
       <p class="field-card__line"><span class="field-card__label">Where it leads</span>${esc(f.leads)}</p>
       <p class="field-card__line"><span class="field-card__label">Typically needs</span>${esc(f.needs)}</p>
-      <button class="field-card__btn" type="button" data-explore-field="${esc(fieldId)}">Explore ${esc(f.name)} courses →</button>
+      <div class="field-card__actions">
+        <button class="field-card__btn" type="button" data-explore-field="${esc(fieldId)}">Explore ${esc(f.name)} courses →</button>
+        <button class="pin-btn${pinned ? ' pin-btn--on' : ''}" type="button"
+                data-pin-category="${esc(f.category)}" aria-pressed="${pinned}">${pinned ? '✓ Kept' : 'Keep this field'}</button>
+      </div>
     </article>`;
 }
 
@@ -3582,6 +4043,9 @@ function renderFieldOverview(fieldId) {
                   : _overviewFrom === 'plan'  ? '← Back to Subject Planner'
                   : '← Back to fields';
 
+  const foPinned = (typeof AltioraState !== 'undefined')
+    && AltioraState.getCandidateFields().includes(cat);
+
   panel.innerHTML = `
     <div class="fo" style="${accent}">
       <header class="fo__header">
@@ -3589,6 +4053,8 @@ function renderFieldOverview(fieldId) {
         <h1 class="fo__title">${esc(f.name)}</h1>
         <p class="fo__desc">${esc(f.what)}</p>
         ${alignHtml}
+        <button type="button" id="foPinField" class="pin-btn${foPinned ? ' pin-btn--on' : ''}"
+                aria-pressed="${foPinned}">${foPinned ? '✓ Kept as one of your fields' : 'Keep this field'}</button>
       </header>
 
       <section class="fo-section">
@@ -3636,6 +4102,10 @@ function renderFieldOverview(fieldId) {
 
   $('foSeeCourses')?.addEventListener('click', proceedToCheckFromField);
   $('foPlanSubjects')?.addEventListener('click', planForField);
+  $('foPinField')?.addEventListener('click', () => {
+    togglePinnedField(cat);
+    renderFieldOverview(fieldId);   // refresh the pin state
+  });
   $('foBack')?.addEventListener('click', () => {
     if (_overviewFrom === 'check') switchMode('check');
     else if (_overviewFrom === 'plan') switchMode('plan');
@@ -3667,16 +4137,19 @@ function proceedToCheckFromField() {
   );
 }
 
-// Action fork → Subject Planner, pre-selected to this field's category.
+// Action fork → Subject Planner, with this field pinned as a candidate.
 function planForField() {
   const cat = state.exploreField?.category;
   if (!cat) return;
   logEvent('field_overview_to_plan', { field: state.exploreField.fieldId });
+  // Pin the field (no-op if already pinned). If the student already keeps 3
+  // other fields, say so gently and let them manage the set in the planner.
+  if (!AltioraState.getCandidateFields().includes(cat)
+      && !AltioraState.addCandidateField(cat)) {
+    showToast(`You can keep up to ${AltioraState.MAX_CANDIDATE_FIELDS} fields — remove one to add ${CATEGORY_LABEL_MAP[cat] ?? cat}.`);
+  }
   enterStage('choosing');   // choosing stage's primary tool is the planner
-  state.planCategory = cat;
-  $$('#planCategoryGrid .plan-cat-card').forEach(c =>
-    c.classList.toggle('active', c.dataset.category === cat));
-  renderPlanResults();
+  renderPlanResults();      // syncs the grid selection internally
   requestAnimationFrame(() =>
     $('panel-plan')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   );

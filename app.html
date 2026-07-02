@@ -10,7 +10,7 @@
   <!-- Confident Editorial type — loaded via <link> (reliable) not @import -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
   <link rel="stylesheet" href="tokens.css?v=7" />
-  <link rel="stylesheet" href="styles.css?v=30" />
+  <link rel="stylesheet" href="styles.css?v=31" />
   <script defer data-domain="altiora.app" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
@@ -329,18 +329,19 @@
       <div id="panel-plan" class="panel hidden" role="tabpanel">
 
         <p class="panel-intro">
-          Choose what you want to study and see which subjects to pick — so you keep
-          your university options open before committing to A-levels or equivalent.
+          Torn between fields? Pick up to 3 you're considering — we'll find the subject
+          combinations that keep them all open, and show what dropping a subject would cost.
         </p>
 
-        <!-- Subject area — results render immediately using the global system -->
+        <!-- Candidate fields — multi-select, synced with profile.candidateFields -->
         <div class="plan-step">
-          <span class="control-label">What do you want to study?</span>
+          <span class="control-label">Which fields are you considering?</span>
+          <span class="picker-hint-inline">Pick up to 3 — one is fine too.</span>
           <div
             id="planCategoryGrid"
             class="plan-category-grid"
             role="group"
-            aria-label="Select a subject area"
+            aria-label="Select up to three fields you are considering"
           >
             <!-- cards inserted by JS -->
           </div>
@@ -419,8 +420,8 @@
   <script src="data/courseRequirements.js?v=15"></script>
   <script src="data/university-profiles.js?v=1"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
-  <script src="state.js?v=5"></script>
-  <script src="main.js?v=40"></script>
+  <script src="state.js?v=6"></script>
+  <script src="main.js?v=41"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);
