@@ -1917,54 +1917,179 @@ function syncProfileFromCheck() {
 // The single guiding action for the current stage + state. Returns a
 // sentence plus an ordered list of { tool, label } actions (first is
 // primary). This is the heart of the workspace home.
-function computeNextStep(stage, profile, shortlistCount) {
-  const hasSubjects  = (profile.subjects?.length  || 0) > 0;
-  const hasInterests = (profile.interests?.length || 0) > 0;
+/* ═══════════════════════════════════════════════════════════════
+ * STAGE GRADUATION — done-criteria, forward nudges, journey strip.
+ * The stage model stops being a filter: each stage has computable
+ * completion criteria derived from real state, the workspace home
+ * says what's left, and a finished stage earns a polite invitation
+ * forward. Never auto-advances — the student decides.
+ * ═══════════════════════════════════════════════════════════════ */
 
-  let base;
-  switch (stage) {
-    case 'exploring':
-      base = {
-        text: (hasInterests || hasSubjects)
-          ? 'Keep exploring the degree paths that fit you.'
-          : 'Discover what fits you.',
-        actions: [{ tool: 'strengths', label: 'Start with Strengths' }],
-      };
-      break;
-    case 'choosing':
-      base = {
-        text: hasSubjects
-          ? 'Refine the subjects that keep your options open.'
-          : 'Plan your subjects.',
-        actions: [{ tool: 'plan', label: 'Subject Planner' }],
-      };
-      break;
-    case 'building':
-      base = !shortlistCount
-        ? { text: 'Find courses you qualify for.', actions: [{ tool: 'check', label: 'Check Combination' }] }
-        : {
-            text: `You have ${shortlistCount} saved course${shortlistCount === 1 ? '' : 's'}. Review your list or find more.`,
-            actions: [
-              { tool: 'shortlist', label: 'Review your shortlist' },
-              { tool: 'check',     label: 'Find more courses' },
-            ],
-          };
-      break;
-    case 'applying':
-      base = {
-        text: shortlistCount
-          ? `Work on applications for your ${shortlistCount} saved course${shortlistCount === 1 ? '' : 's'}.`
-          : 'Save the courses you want to apply to, then work on your applications.',
-        actions: shortlistCount
-          ? [{ tool: 'applying', label: 'Open application tools' }, { tool: 'shortlist', label: 'View shortlist' }]
-          : [{ tool: 'check', label: 'Find courses to apply to' }],
-      };
-      break;
-    default:
-      base = { text: 'Pick up where you left off.', actions: [] };
+const STAGE_ORDER = ['exploring', 'choosing', 'building', 'applying'];
+const NEXT_STAGE  = { exploring: 'choosing', choosing: 'building', building: 'applying' };
+const GRAD_INVITE = {
+  choosing: 'start choosing your subjects',
+  building: 'start building your university list',
+  applying: 'start on your applications',
+};
+
+// "Not yet" dismissals — session-only by design: a returning student whose
+// stage is done is exactly who should be quietly invited forward again.
+const _gradDismissed = new Set();
+
+// AP model: the competitive AP count for the pinned fields, data-driven via
+// apFieldGuidance (minimum competitive APs per field); generic floor of 5
+// when no pinned field has AP guidance.
+function apTargetCount(cats) {
+  const mins = cats.map(c => apFieldGuidance(c)?.minLow).filter(n => typeof n === 'number');
+  return mins.length ? Math.max(...mins) : 5;
+}
+
+// Do the student's OWN subjects keep each pinned field genuinely open?
+// Same semantics as the Gate: "kept open" = at least half the best
+// per-field coverage reachable within that field-pool's combinations
+// (derived from the same ranked output — no parallel definition).
+function fieldsCoverage(cats, tagSet) {
+  const perField = cats.map(cat => ({ cat, courses: courses.filter(c => c.category === cat) }));
+  const student  = perFieldOpened(perField, tagSet);
+  const ranked   = rankMultiFieldCombinations(cats, 24);
+  const bestSolo = {};
+  cats.forEach(c => { bestSolo[c] = 0; });
+  ranked.combos.forEach(s => s.per.forEach(p => { if (p.opened > bestSolo[p.cat]) bestSolo[p.cat] = p.opened; }));
+  return student.map(p => ({
+    cat: p.cat,
+    opened: p.opened,
+    kept: bestSolo[p.cat] === 0 || (p.opened > 0 && p.opened >= bestSolo[p.cat] / 2),
+  }));
+}
+
+// Short human list of subjects for the graduation card.
+function subjectsSummary(subjects) {
+  if (subjects.length <= 4) return subjects.join(', ');
+  return `${subjects.slice(0, 3).join(', ')} +${subjects.length - 3} more`;
+}
+
+// Per-stage completion: { done, missing[], achieved? } in plain student
+// language. Safe to call for any stage regardless of the current one.
+function stageProgress(stage) {
+  const profile  = AltioraState.getProfile();
+  const saved    = AltioraState.getShortlist();
+  const fields   = plannerFields();
+  const fieldNames = fields.map(planFieldShort);
+  const subjects = Array.isArray(profile.subjects) ? profile.subjects : [];
+  const isAP     = profile.qualificationSystem === 'US_AP';
+
+  if (stage === 'exploring') {
+    if (fields.length) {
+      return { done: true, missing: [], achieved: `you're keeping ${fieldNames.join(' and ')} in mind` };
+    }
+    return { done: false, missing: ['Explore fields and keep 1–3 that interest you.'] };
   }
 
-  return base;
+  if (stage === 'choosing') {
+    if (isAP) {
+      const target = apTargetCount(fields);
+      if (subjects.length >= target) {
+        return { done: true, missing: [], achieved: `you've built ${subjects.length} APs${fieldNames.length ? ` aligned with ${fieldNames.join(' and ')}` : ''}` };
+      }
+      return { done: false, missing: [subjects.length
+        ? `You have ${subjects.length} AP${subjects.length === 1 ? '' : 's'} — competitive applicants${fieldNames.length ? ` for ${fieldNames.join(' and ')}` : ''} typically take ${target}+.`
+        : `Build your AP list — aim for ${target}+ APs aligned with your field${fields.length === 1 ? '' : 's'}.`] };
+    }
+    if (subjects.length < 3) {
+      return { done: false, missing: [fields.length
+        ? `Pick at least 3 subjects and check they keep ${fieldNames.join(' and ')} open.`
+        : 'Pick at least 3 subjects — keeping 1–3 fields in the planner first helps.'] };
+    }
+    if (fields.length) {
+      const notKept = fieldsCoverage(fields, tagsFromProfile())
+        .filter(c => !c.kept).map(c => planFieldShort(c.cat));
+      if (notKept.length) {
+        return { done: false, missing: [`Your subjects don't yet keep ${notKept.join(' or ')} open — check the planner.`] };
+      }
+      return { done: true, missing: [], achieved: `you're keeping ${fieldNames.join(' and ')} open with ${subjectsSummary(subjects)}` };
+    }
+    return { done: true, missing: [], achieved: `you've settled on ${subjectsSummary(subjects)}` };
+  }
+
+  if (stage === 'building') {
+    if (saved.length < 3) {
+      return { done: false, missing: [saved.length
+        ? 'Add a few more courses — aim for a balanced list of 3+.'
+        : 'Find courses you qualify for and save the ones you like.'] };
+    }
+    const savedCourses = saved.map(id => courses.find(c => c.id === id)).filter(Boolean);
+    const { counts, hasGrades } = shortlistVerdicts(savedCourses);
+    const classified = counts.reach + counts.match + counts.safety;
+    // Pathological shape: everything competitive, nothing safe. Only gate on
+    // this when grades are set — optional data never blocks graduation.
+    if (hasGrades && classified > 0 && counts.safety === 0 && counts.reach > 0) {
+      return { done: false, missing: ['Your list has no safer choices — add 1–2 before moving on.'] };
+    }
+    const balanced = hasGrades && classified > 0 && counts.safety > 0 && counts.reach > 0;
+    return { done: true, missing: [], achieved: `you've saved ${saved.length} courses${balanced ? ' with a balanced spread' : ''}` };
+  }
+
+  // Applying is the last stage — there's no "done" to graduate into.
+  return { done: false, missing: [] };
+}
+
+// The original per-stage routing text — used once a stage is done (the
+// graduation card carries the invitation; this stays calm routing).
+function baseNextStep(stage, profile, shortlistCount) {
+  switch (stage) {
+    case 'exploring':
+      return { text: 'Keep exploring the degree paths that fit you.',
+               actions: [{ tool: 'strengths', label: 'Start with Strengths' }] };
+    case 'choosing':
+      return { text: 'Refine the subjects that keep your options open.',
+               actions: [{ tool: 'plan', label: 'Subject Planner' }] };
+    case 'building':
+      return {
+        text: `You have ${shortlistCount} saved course${shortlistCount === 1 ? '' : 's'}. Review your list or find more.`,
+        actions: [
+          { tool: 'shortlist', label: 'Review your shortlist' },
+          { tool: 'check',     label: 'Find more courses' },
+        ],
+      };
+    case 'applying':
+      return {
+        text: `Work on applications for your ${shortlistCount} saved course${shortlistCount === 1 ? '' : 's'}.`,
+        actions: [{ tool: 'applying', label: 'Open application tools' }, { tool: 'shortlist', label: 'View shortlist' }],
+      };
+    default:
+      return { text: 'Pick up where you left off.', actions: [] };
+  }
+}
+
+// Orientation, not routing: what's genuinely left in this stage (specific
+// and singular), gentle backward pointing when the student is ahead of
+// their data, and calm routing once the stage is done.
+function computeNextStep(stage, profile, shortlistCount, progress) {
+  const prog = progress ?? stageProgress(stage);
+
+  // Backward orientation — manually ahead of the data. No shame.
+  if (stage === 'applying' && !shortlistCount) {
+    return {
+      text: 'Your shortlist is empty — the building stage is where you find and save courses.',
+      actions: [
+        { stage: 'building', label: 'Go to Building my list' },
+        { tool: 'check', label: 'Find courses' },
+      ],
+    };
+  }
+
+  if (!prog.done && prog.missing.length) {
+    const STAGE_ACTIONS = {
+      exploring: [{ tool: 'strengths', label: 'Start with Strengths' }],
+      choosing:  [{ tool: 'plan', label: 'Subject Planner' }, { tool: 'check', label: 'Check Combination' }],
+      building:  [{ tool: 'check', label: 'Check Combination' }, { tool: 'shortlist', label: 'Review your shortlist' }],
+      applying:  [{ tool: 'applying', label: 'Open application tools' }],
+    };
+    return { text: prog.missing[0], actions: STAGE_ACTIONS[stage] ?? [] };
+  }
+
+  return baseNextStep(stage, profile, shortlistCount);
 }
 
 function renderWorkspaceHome() {
@@ -1975,7 +2100,12 @@ function renderWorkspaceHome() {
   const stage   = profile.stage || DEFAULT_STAGE;
   const cfg     = STAGES[stage] || STAGES[DEFAULT_STAGE];
   const saved   = AltioraState.getShortlist();
-  const next    = computeNextStep(stage, profile, saved.length);
+
+  // One progress pass for every stage — feeds the strip, the next-step
+  // guidance, and the graduation card.
+  const progressByStage = Object.fromEntries(STAGE_ORDER.map(s => [s, stageProgress(s)]));
+  const prog = progressByStage[stage];
+  const next = computeNextStep(stage, profile, saved.length, prog);
 
   const sysLabel = profile.qualificationSystem
     ? (qualificationMappings[profile.qualificationSystem]?.systemLabel ?? profile.qualificationSystem)
@@ -1984,10 +2114,41 @@ function renderWorkspaceHome() {
   const grades   = profile.predictedGrades || null;
   const candidateLabels = plannerFields().map(id => CATEGORY_LABEL_MAP[id] ?? id);
 
-  // Next-step buttons (first = primary)
-  const actionBtns = next.actions.map((a, i) =>
-    `<button class="home-next__btn${i === 0 ? ' home-next__btn--primary' : ''}" data-go-tool="${esc(a.tool)}">${esc(a.label)} →</button>`
-  ).join('');
+  // ── Journey strip: you are here. Earlier stages the student never did
+  // show as quietly skipped (dimmed), never as failures.
+  const curIdx = STAGE_ORDER.indexOf(stage);
+  const STRIP_LABELS = { exploring: 'Exploring', choosing: 'Choosing', building: 'Building', applying: 'Applying' };
+  const stripHtml = STAGE_ORDER.map((s, i) => {
+    let cls, mark;
+    if (i === curIdx)                      { cls = 'current'; mark = ' ●'; }
+    else if (progressByStage[s].done)      { cls = 'done';    mark = ' ✓'; }
+    else if (i < curIdx)                   { cls = 'skipped'; mark = '';   }
+    else                                   { cls = 'todo';    mark = '';   }
+    return `<span class="journey-strip__stage journey-strip__stage--${cls}">${esc(STRIP_LABELS[s])}${mark}</span>`;
+  }).join('<span class="journey-strip__sep" aria-hidden="true">→</span>');
+
+  // ── Graduation card: stage done → a positive, dismissible invitation
+  // forward. Session-dismissed via "Not yet"; never auto-advances.
+  const nextStage = NEXT_STAGE[stage];
+  const showGrad = prog.done && nextStage && !_gradDismissed.has(stage);
+  const gradHtml = showGrad ? `
+    <section class="home-next home-grad" aria-label="Stage complete — ready to move on">
+      <span class="home-grad__eyebrow">Stage complete ✓</span>
+      <p class="home-next__text">You've got what you need from this stage — ${esc(prog.achieved ?? 'nice work')}. Ready to ${esc(GRAD_INVITE[nextStage] ?? 'move on')}?</p>
+      <div class="home-next__actions">
+        <button class="home-next__btn home-next__btn--primary" data-grad-accept="${esc(nextStage)}">Move to ${esc(STAGES[nextStage].name)} →</button>
+        <button class="home-next__btn" data-grad-later>Not yet</button>
+      </div>
+    </section>` : '';
+
+  // Next-step buttons (first = primary); actions may route to a tool or —
+  // for backward orientation — to a stage.
+  const actionBtns = next.actions.map((a, i) => {
+    const cls = `home-next__btn${i === 0 ? ' home-next__btn--primary' : ''}`;
+    return a.tool
+      ? `<button class="${cls}" data-go-tool="${esc(a.tool)}">${esc(a.label)} →</button>`
+      : `<button class="${cls}" data-go-stage="${esc(a.stage)}">${esc(a.label)} →</button>`;
+  }).join('');
 
   // Quick-access stage tools (primary first, then secondary)
   const toolBtns = [cfg.primary, ...cfg.secondary].map((mode, i) =>
@@ -2014,13 +2175,15 @@ function renderWorkspaceHome() {
       <header class="home__header">
         <h1 class="home__welcome">${_isReturningUser ? 'Welcome back.' : "You're all set."}</h1>
         <p class="home__stage">You're in the <strong>${esc(cfg.name)}</strong> stage — ${_isReturningUser ? esc(STAGE_SUMMARY[stage] ?? '') : "here's your next step."}</p>
+        <p class="journey-strip" aria-label="Your journey progress">${stripHtml}</p>
       </header>
 
+      ${gradHtml || `
       <section class="home-next" aria-label="Your next step">
         <span class="home-next__eyebrow">Your next step</span>
         <p class="home-next__text">${esc(next.text)}</p>
         <div class="home-next__actions">${actionBtns}</div>
-      </section>
+      </section>`}
 
       <div class="home-cards">
         <section class="home-card">
@@ -4499,6 +4662,23 @@ function init() {
   $('panel-home')?.addEventListener('click', e => {
     const toolBtn = e.target.closest('[data-go-tool]');
     if (toolBtn) { switchMode(toolBtn.dataset.goTool); return; }
+    // Graduation: accept moves the stage forward (student's choice, never
+    // automatic); "Not yet" dismisses for this session only.
+    const gradBtn = e.target.closest('[data-grad-accept]');
+    if (gradBtn) {
+      logEvent('stage_graduate', { to: gradBtn.dataset.gradAccept });
+      enterStage(gradBtn.dataset.gradAccept);
+      return;
+    }
+    if (e.target.closest('[data-grad-later]')) {
+      _gradDismissed.add(AltioraState.getProfile().stage || DEFAULT_STAGE);
+      logEvent('stage_graduate_later', {});
+      renderWorkspaceHome();
+      return;
+    }
+    // Backward orientation: a next-step action can point at a stage.
+    const stageBtn = e.target.closest('[data-go-stage]');
+    if (stageBtn) { enterStage(stageBtn.dataset.goStage); return; }
     if (e.target.closest('[data-change-stage]')) showStageSelect();
   });
 

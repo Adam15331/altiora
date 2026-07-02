@@ -3244,6 +3244,46 @@ button.plan-combo-tag--drop:focus-visible {
  * labels could read as a contradiction; muted so the status still leads. */
 .card-axis { color: var(--ce-ink-60); }
 
+/* ═══════════════════════════════════════════════════════════════
+ * MOVE 3 — stage graduation: journey strip + graduation card.
+ * Orientation, not gamification: one quiet mono line, one warm card.
+ * ═══════════════════════════════════════════════════════════════ */
+
+.journey-strip {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: var(--space-4) 0 0;
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+.journey-strip__stage--current { color: var(--ce-ink); }
+.journey-strip__stage--done    { color: var(--ce-status-strong); }
+.journey-strip__stage--skipped { color: var(--ce-ink-30); }
+.journey-strip__stage--todo    { color: var(--ce-ink-30); }
+.journey-strip__sep            { color: var(--ce-ink-30); font-weight: 400; }
+
+/* Graduation card — reuses the next-step card shape; the butter-yellow
+ * eyebrow block is the celebratory (but calm) differentiator. */
+.home-grad { border-left: 3px solid var(--ce-accent); }
+.home-grad__eyebrow {
+  display: inline-block;
+  font-family: var(--ce-font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  background: var(--ce-accent);
+  color: var(--ce-ink);
+  padding: 2px 10px;
+  border-radius: 2px;
+  margin-bottom: var(--space-3);
+}
+
 /* Balance verdict at the top of the insights card */
 .shortlist-balance {
   margin: 0 0 var(--space-4);
