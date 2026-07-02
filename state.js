@@ -38,6 +38,7 @@ const AltioraState = (() => {
         subjects:            [],      // subject tag strings
         predictedGrades:     null,    // grade string or IB number
         interests:           [],      // category strings
+        candidateFields:     [],      // category ids the student is considering (max 3, order = priority)
       },
       shortlist: [],                  // course id strings
       progress:  {},                  // keyed by course id or milestone
@@ -167,11 +168,47 @@ const AltioraState = (() => {
   // a stray field can't pollute the shape.
   function setProfile(partial) {
     if (!partial || typeof partial !== 'object') return;
-    const allowed = ['stage', 'qualificationSystem', 'subjects', 'predictedGrades', 'interests'];
+    const allowed = ['stage', 'qualificationSystem', 'subjects', 'predictedGrades', 'interests', 'candidateFields'];
     allowed.forEach(key => {
       if (key in partial) _state.profile[key] = partial[key];
     });
     _commit();
+  }
+
+  /* ─── Candidate fields ────────────────────────────────────────
+   * The durable output of the exploring stage: up to MAX_CANDIDATE_FIELDS
+   * course-category ids the student is considering, in priority order.
+   * The Subject Planner optimises subject combinations across this set.
+   * ───────────────────────────────────────────────────────────── */
+  const MAX_CANDIDATE_FIELDS = 3;
+
+  function getCandidateFields() {
+    const cf = _state.profile.candidateFields;
+    return Array.isArray(cf) ? cf.slice() : [];
+  }
+
+  // Returns true when the field is in the set after the call (added now or
+  // already present); false when the cap prevented adding — callers use the
+  // false case to show a gentle "up to 3" message.
+  function addCandidateField(categoryId) {
+    if (typeof categoryId !== 'string' || !categoryId) return false;
+    if (!Array.isArray(_state.profile.candidateFields)) _state.profile.candidateFields = [];
+    const cf = _state.profile.candidateFields;
+    if (cf.includes(categoryId)) return true;
+    if (cf.length >= MAX_CANDIDATE_FIELDS) return false;
+    cf.push(categoryId);
+    _commit();
+    return true;
+  }
+
+  function removeCandidateField(categoryId) {
+    if (!Array.isArray(_state.profile.candidateFields)) return;
+    const cf = _state.profile.candidateFields;
+    const i = cf.indexOf(categoryId);
+    if (i !== -1) {
+      cf.splice(i, 1);
+      _commit();
+    }
   }
 
   function addToShortlist(courseId) {
@@ -236,6 +273,10 @@ const AltioraState = (() => {
     getProgress,
     setStage,
     setProfile,
+    getCandidateFields,
+    addCandidateField,
+    removeCandidateField,
+    MAX_CANDIDATE_FIELDS,
     addToShortlist,
     removeFromShortlist,
     isInShortlist,

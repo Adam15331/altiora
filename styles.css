@@ -3053,6 +3053,163 @@ footer p {
 .fo-desc,
 .fo-expect { font-family: var(--ce-font-body); }
 
+/* ═══════════════════════════════════════════════════════════════
+ * THE GATE — multi-field planner, candidate-field pins, and
+ * door-closing warnings. All in the Confident Editorial language:
+ * mono functional layer, butter-yellow for the pinned/active states,
+ * terracotta (status-reach) for computed closure warnings.
+ * ═══════════════════════════════════════════════════════════════ */
+
+/* Pin ("Keep this field") — mono pill, yellow when kept */
+.pin-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 13px;
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  border: 1px solid var(--ce-ink);
+  border-radius: var(--ce-radius-pill);
+  background: transparent;
+  color: var(--ce-ink);
+  cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.pin-btn:hover { background: var(--ce-accent); }
+.pin-btn--on   { background: var(--ce-accent); }
+.fo__header .pin-btn { margin-top: var(--space-4); }
+.field-card__actions {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+.field-card__actions .field-card__btn { margin-top: 0; }
+
+/* Small mono field badge (critical pairs, AP sections, chips) */
+.plan-field-badge {
+  display: inline-block;
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  padding: 2px 9px;
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius-pill);
+  color: var(--ce-ink-60);
+  background: transparent;
+}
+
+/* "Covers all N of your fields" — the anchor-subject signal */
+.plan-chip-covers {
+  display: inline-block;
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ce-ink-60);
+  margin: 3px 0 2px;
+}
+.plan-chip-covers--all {
+  background: var(--ce-accent);
+  color: var(--ce-ink);
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+
+/* Computed closure warning — calm terracotta, no scare styling */
+.plan-chip-closure { color: var(--ce-status-reach); font-weight: 700; }
+
+.plan-subject-chip--multi {
+  align-items: flex-start;
+  max-width: 100%;
+  border-radius: var(--ce-radius);   /* long content → rectangle, not a pill */
+}
+/* The cross-field count is a full sentence — let it wrap on small screens
+   (the base chip count is nowrap for short single-field counts). */
+.plan-subject-chip--multi .plan-subject-chip__count { white-space: normal; line-height: 1.6; }
+
+/* Multi-field combination rows: main line + expandable drop panel */
+.plan-combo-row--multi { display: block; }
+.plan-combo-main {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.plan-combo-fields {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  color: var(--ce-ink-60);
+  /* Override .plan-combo-results { flex-shrink: 0 } so the counts wrap
+     instead of overflowing on narrow screens. */
+  flex-shrink: 1;
+  min-width: 0;
+  justify-content: flex-end;
+}
+.plan-combo-field { white-space: nowrap; }
+.plan-combo-field--zero { color: var(--ce-status-reach); font-weight: 700; }
+.plan-combo-fieldsep { color: var(--ce-ink-30); }
+@media (max-width: 640px) {
+  /* Counts drop to their own full-width line under the subject tags. */
+  .plan-combo-fields { margin-left: 0; width: 100%; justify-content: flex-start; }
+}
+
+/* Subject tags inside multi rows are inspectable buttons */
+button.plan-combo-tag--drop {
+  cursor: pointer;
+  font: inherit;
+  transition: background var(--t-fast), border-color var(--t-fast);
+}
+button.plan-combo-tag--drop:hover,
+button.plan-combo-tag--drop:focus-visible {
+  background: var(--ce-accent);
+  border-color: var(--ce-ink);
+}
+
+/* The "what if I drop this?" consequence panel */
+.plan-combo-drop {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: var(--ce-hairline);
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  color: var(--ce-ink);
+  line-height: 1.7;
+}
+.plan-drop-lead { font-weight: 700; }
+.plan-drop-closure { color: var(--ce-status-reach); }
+.plan-combo-drop .plan-combo-fieldsep { margin: 0 7px; }
+
+/* Honest low-overlap conflict note */
+.plan-conflict {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border: var(--ce-hairline);
+  border-left: 3px solid var(--ce-status-reach);
+  background: var(--ce-surface);
+  font-family: var(--ce-font-body);
+  font-size: var(--text-sm);
+  color: var(--ce-ink);
+  line-height: 1.65;
+  max-width: 640px;
+}
+
+/* Per-field AP guidance blocks in multi mode */
+.plan-ap-field { margin-top: var(--space-5); }
+.plan-ap-field .plan-field-badge { margin-bottom: var(--space-2); }
+
 /* ── Neutralise leftover per-category colouring that out-specifies the
  *    global rules (cat badge must stay muted ink even on the reference). ── */
 .card-cat-badge {
