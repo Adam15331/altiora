@@ -3210,6 +3210,104 @@ button.plan-combo-tag--drop:focus-visible {
 .plan-ap-field { margin-top: var(--space-5); }
 .plan-ap-field .plan-field-badge { margin-bottom: var(--space-2); }
 
+/* ═══════════════════════════════════════════════════════════════
+ * MOVE 2 — shortlist verdicts (reach/match/safety) + test timing.
+ * ═══════════════════════════════════════════════════════════════ */
+
+/* Status + verdict share the card's top row */
+.card-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+.card-status-row .card-status { margin-bottom: 0; }
+
+/* Reach / Match / Safety — quiet mono pill in the status colours */
+.shortlist-verdict {
+  flex-shrink: 0;
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius-pill);
+}
+.shortlist-verdict--reach  { color: var(--ce-status-reach);    border-color: var(--ce-status-reach); }
+.shortlist-verdict--match  { color: var(--ce-status-possible); border-color: var(--ce-status-possible); }
+.shortlist-verdict--safety { color: var(--ce-status-strong);   border-color: var(--ce-status-strong); }
+
+/* Balance verdict at the top of the insights card */
+.shortlist-balance {
+  margin: 0 0 var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: var(--ce-hairline);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.shortlist-balance__counts {
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  color: var(--ce-ink);
+}
+.shortlist-balance__advice {
+  font-family: var(--ce-font-body);
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.6;
+}
+.shortlist-reg-windows { font-family: var(--ce-font-mono); font-size: 12px; color: var(--ce-ink-60); }
+
+/* Test timing on shortlist cards — one quiet mono line per test */
+.card-test-timing {
+  margin: 4px 0 0;
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--ce-ink-60);
+}
+.card-test-timing a { color: var(--ce-ink); text-decoration: underline; text-underline-offset: 2px; }
+
+/* Applying view: per-test registration checklist */
+.applying-test-list {
+  list-style: none;
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.applying-test-list li {
+  font-family: var(--ce-font-body);
+  font-size: var(--text-sm);
+  line-height: 1.65;
+  padding: var(--space-3) var(--space-4);
+  border: var(--ce-hairline);
+  background: var(--ce-surface);
+}
+.applying-test-list li strong { font-family: var(--ce-font-mono); }
+.applying-test-full { color: var(--ce-ink-60); }
+.applying-test-link {
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  color: var(--ce-ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+}
+.applying-test-note {
+  display: block;
+  margin-top: 3px;
+  font-size: var(--text-xs);
+  color: var(--ce-ink-60);
+}
+
 /* ── Neutralise leftover per-category colouring that out-specifies the
  *    global rules (cat badge must stay muted ink even on the reference). ── */
 .card-cat-badge {

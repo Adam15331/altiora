@@ -1302,11 +1302,29 @@ function renderApplyingPanel() {
     return;
   }
 
-  // Admission tests required across the saved courses (deduped).
-  const tests = [...new Set(savedCourses.flatMap(c => Array.isArray(c.admissionTests) ? c.admissionTests : []))].sort();
-  const testsLine = tests.length
-    ? `<strong>Tests you'll need:</strong> ${tests.map(esc).join(', ')}`
-    : `<strong>No admission tests</strong> required across your saved courses.`;
+  // Admission tests required across the saved courses (deduped), ordered by
+  // when registration typically opens — the order the student must act in.
+  const tests = [...new Set(savedCourses.flatMap(c => Array.isArray(c.admissionTests) ? c.admissionTests : []))];
+  const testInfoFor = t => (typeof admissionTestInfo !== 'undefined') ? admissionTestInfo[t] : null;
+  tests.sort((a, b) => (testInfoFor(a)?.regOpensMonth ?? 98) - (testInfoFor(b)?.regOpensMonth ?? 98) || a.localeCompare(b));
+
+  const testItems = tests.map(t => {
+    const info = testInfoFor(t);
+    if (!info) {
+      return `<li><strong>${esc(t)}</strong> — check the official site for registration and test dates.</li>`;
+    }
+    return `<li>
+      <strong>${esc(info.name)}</strong> <span class="applying-test-full">(${esc(info.fullName)})</span> —
+      registration ${esc(info.typicalRegistrationWindow)}; test ${esc(info.typicalTestWindow)}.
+      <a class="applying-test-link" href="${esc(info.officialUrl)}" target="_blank" rel="noopener noreferrer">Official site →</a>
+      ${info.notes ? `<span class="applying-test-note">${esc(info.notes)}</span>` : ''}
+    </li>`;
+  }).join('');
+
+  const testsSection = tests.length
+    ? `<li><strong>Register for your admission tests</strong> — in the order registration opens:
+         <ul class="applying-test-list">${testItems}</ul></li>`
+    : `<li><strong>No admission tests</strong> required across your saved courses.</li>`;
 
   panel.innerHTML = `
     <div class="applying">
@@ -1318,7 +1336,7 @@ function renderApplyingPanel() {
       <section class="applying-section">
         <h2 class="applying-section__head">What's next</h2>
         <ul class="applying-checklist">
-          <li>${testsLine}</li>
+          ${testsSection}
           <li>Check <strong>UCAS</strong> and the universities' own deadlines for each of your courses.</li>
           <li>Make sure your personal statement reflects these courses.</li>
         </ul>
@@ -1548,6 +1566,41 @@ function renderShortlist() {
   });
 }
 
+// Balance verdict: the shape of the list plus one line of counselor
+// advice. Factual and kind — about the LIST's shape, never the student.
+function buildBalanceVerdictHtml(saved) {
+  const { counts, hasGrades } = shortlistVerdicts(saved);
+  const classified = counts.reach + counts.match + counts.safety;
+  const countsBits = [
+    `${counts.reach} ${counts.reach === 1 ? 'reach' : 'reaches'}`,
+    `${counts.match} ${counts.match === 1 ? 'match' : 'matches'}`,
+    `${counts.safety} ${counts.safety === 1 ? 'safety' : 'safeties'}`,
+  ];
+  if (counts.unknown > 0 && classified > 0) countsBits.push(`${counts.unknown} unclassified`);
+
+  let advice;
+  if (classified === 0) {
+    advice = hasGrades
+      ? 'These courses can’t be classified against your grades — check each course’s requirements directly.'
+      : 'Add predicted grades in Check Combination to see whether your list is balanced.';
+  } else if (counts.safety === 0 && counts.reach > 0) {
+    advice = 'Every course here is competitive — add 1–2 safer choices so you’re covered.';
+  } else if (counts.reach === 0) {
+    advice = 'Nothing ambitious here — you have room to aim higher.';
+  } else {
+    advice = 'Good spread — ambitious choices anchored by safer ones.';
+  }
+
+  const countsLine = classified > 0
+    ? `<span class="shortlist-balance__counts">Your list: ${countsBits.join(' · ')}</span>`
+    : `<span class="shortlist-balance__counts">Your list: ${saved.length} course${saved.length === 1 ? '' : 's'}, unclassified</span>`;
+  return `
+    <p class="shortlist-balance">
+      ${countsLine}
+      <span class="shortlist-balance__advice">${advice}</span>
+    </p>`;
+}
+
 // Live, factual insights computed from the saved courses.
 function buildShortlistInsightsHtml(saved) {
   const unis      = new Set(saved.map(c => c.university));
@@ -1566,6 +1619,15 @@ function buildShortlistInsightsHtml(saved) {
         `<span class="shortlist-insight-tag">${esc(t)} (${n} course${n === 1 ? '' : 's'})</span>`).join(' ')
     : `<span class="text-secondary">None across your saved courses</span>`;
 
+  // Registration windows for the tests on the list (static verified data).
+  const regBits = testEntries
+    .map(([t]) => (typeof admissionTestInfo !== 'undefined') ? admissionTestInfo[t] : null)
+    .filter(Boolean)
+    .map(i => `${esc(i.name)} ${esc(i.regShort)}`);
+  const regLine = regBits.length
+    ? `<li><span class="shortlist-insight-label">Registration windows:</span> <span class="shortlist-reg-windows">${regBits.join(' · ')}</span></li>`
+    : '';
+
   // Grade ranges computed per qualification system (mixed systems → one row each).
   const gradeRows = shortlistGradeRange(saved);
   let gradeHtml = '';
@@ -1582,11 +1644,13 @@ function buildShortlistInsightsHtml(saved) {
   return `
     <div class="shortlist-insights">
       <h2 class="shortlist-insights__title">Your shortlist at a glance</h2>
+      ${buildBalanceVerdictHtml(saved)}
       <ul class="shortlist-insights__list">
         <li><strong>${plural(saved.length, 'course', 'courses')}</strong> saved across
             <strong>${plural(unis.size, 'university', 'universities')}</strong> in
             <strong>${plural(countries.size, 'country', 'countries')}</strong></li>
         <li><span class="shortlist-insight-label">Admission tests you'll need:</span> ${testsHtml}</li>
+        ${regLine}
         ${gradeHtml}
       </ul>
     </div>`;
@@ -1636,6 +1700,110 @@ function aLevelOfferStrength(str) {
     .reduce((sum, g) => sum + (A_LEVEL_RANK[g] ?? 0), 0);
 }
 
+/* ═══════════════════════════════════════════════════════════════
+ * REACH / MATCH / SAFETY — shortlist verdicts.
+ * Classifies a saved course against the student's predicted grades in
+ * their own system, reusing the same machinery as Check Combination
+ * (isGradeAboveStudent, the grade parsers, apContext). UNKNOWN is the
+ * honest answer whenever the signal is thin — never force a bucket.
+ * ═══════════════════════════════════════════════════════════════ */
+
+const VERDICT_META = {
+  reach:  { label: 'Reach',  cls: 'reach'  },
+  match:  { label: 'Match',  cls: 'match'  },
+  safety: { label: 'Safety', cls: 'safety' },
+};
+
+function shortlistVerdict(course, system, predictedGrade, profile) {
+  // Elite-tier holistic US courses are reaches for everyone — honest.
+  if (course.country === 'US' && course.universityContext?.tier === 'world-top-10') return 'reach';
+
+  if (system === 'US_AP') {
+    if (course.country === 'US') {
+      // Holistic: competitiveness leans on AP count vs the course's bar
+      // (the existing apContext model). Never a "safety" — holistic
+      // admission is never comfortably safe.
+      const apCount = profile?.subjects?.length || 0;
+      const ctx = course.apContext;
+      if (!ctx || !apCount || typeof ctx.minCompetitiveAPs !== 'number') return 'unknown';
+      return apCount < ctx.minCompetitiveAPs ? 'reach' : 'match';
+    }
+    if (!predictedGrade) return 'unknown';
+    const apStr = course.grades?.ap;
+    if (!apStr) return 'unknown';
+    if (isGradeAboveStudent(course, system, predictedGrade)) return 'reach';
+    const digits = apStr.match(/[1-5]/g);
+    if (!digits?.length) return 'unknown';
+    const needLetter = AP_TO_LETTER[String(Math.max(...digits.map(Number)))];
+    return (A_LEVEL_RANK[predictedGrade] ?? 0) > (A_LEVEL_RANK[needLetter] ?? 0) ? 'safety' : 'match';
+  }
+
+  if (!predictedGrade) return 'unknown';
+
+  if (system === 'UK_A_Level' || system === 'SG_A_Level') {
+    const gradeStr = course.grades?.[SYSTEM_GRADE_KEY[system]];
+    if (!gradeStr) return 'unknown';
+    if (isGradeAboveStudent(course, system, predictedGrade)) return 'reach';
+    const top3 = parseALevelGrades(gradeStr).slice(0, 3);
+    if (!top3.length) return 'unknown';
+    const maxNeed = Math.max(...top3.map(g => A_LEVEL_RANK[g] ?? 0));
+    // A full grade above the offer's TOP grade = comfortably below your level.
+    return (A_LEVEL_RANK[predictedGrade] ?? 0) > maxNeed ? 'safety' : 'match';
+  }
+
+  if (system === 'IB') {
+    const ibVal = course.grades?.ib;
+    const need = typeof ibVal === 'number' ? ibVal : parseInt(String(ibVal ?? '').match(/\d+/)?.[0], 10);
+    if (isNaN(need)) return 'unknown';
+    const pts = parseInt(predictedGrade, 10);
+    if (isNaN(pts)) return 'unknown';
+    if (pts < need) return 'reach';
+    // Respect the HL logic where we have live HL selections (the same
+    // signal Check Combination uses): a required HL the student isn't
+    // taking makes the course a reach regardless of points.
+    const reqHL = course.grades?.ibHL ?? [];
+    if (reqHL.length && typeof selectedSubjectsWithLevel !== 'undefined' && selectedSubjectsWithLevel.size) {
+      const haveHL = new Set([...selectedSubjectsWithLevel.values()].filter(x => x.isHL).map(x => x.tag));
+      if (reqHL.some(t => !haveHL.has(t))) return 'reach';
+    }
+    return pts >= need + 3 ? 'safety' : 'match';
+  }
+
+  if (system === 'HK_DSE') {
+    const dseStr = course.grades?.hkDse;
+    if (!dseStr) return 'unknown';
+    if (isGradeAboveStudent(course, system, predictedGrade)) return 'reach';
+    const grades = parseDseGrades(dseStr);
+    if (!grades.length) return 'unknown';
+    const maxNeed = Math.max(...grades.map(g => DSE_RANK[g] ?? 0));
+    return (DSE_RANK[predictedGrade] ?? 0) > maxNeed ? 'safety' : 'match';
+  }
+
+  return 'unknown';
+}
+
+// Verdicts for the whole saved list, from the persisted profile.
+function shortlistVerdicts(saved) {
+  const profile = (typeof AltioraState !== 'undefined') ? AltioraState.getProfile() : {};
+  const system  = profile.qualificationSystem;
+  const grade   = profile.predictedGrades || null;
+  const byId = new Map();
+  const counts = { reach: 0, match: 0, safety: 0, unknown: 0 };
+  saved.forEach(c => {
+    const v = system ? shortlistVerdict(c, system, grade, profile) : 'unknown';
+    byId.set(c.id, v);
+    counts[v]++;
+  });
+  return { byId, counts, hasGrades: !!grade, system };
+}
+
+// One-line timing fragment for an admission test (static verified data).
+function testTimingLineHtml(testId) {
+  const info = (typeof admissionTestInfo !== 'undefined') ? admissionTestInfo[testId] : null;
+  if (!info) return '';
+  return `<p class="card-test-timing">${esc(info.name)} — registration ${esc(info.typicalRegistrationWindow)}; test ${esc(info.typicalTestWindow)} → <a href="${esc(info.officialUrl)}" target="_blank" rel="noopener noreferrer">official site</a></p>`;
+}
+
 // A saved-course card: same visual system and info as a result card, plus a
 // GREEN/AMBER/RED match badge (target / possible / stretch) and a Remove
 // action. The badge needs the student's subjects; when none are known it
@@ -1656,12 +1824,23 @@ function buildShortlistCard(course, studentTags, hasSubjects) {
     badgeHtml = `<div class="card-status card-status--none">Pick your subjects to see your match</div>`;
   }
 
+  // Reach/match/safety against the student's predicted grades. UNKNOWN
+  // renders nothing — an honest absence, never a forced bucket.
+  const profile = (typeof AltioraState !== 'undefined') ? AltioraState.getProfile() : {};
+  const verdict = profile.qualificationSystem
+    ? shortlistVerdict(course, profile.qualificationSystem, profile.predictedGrades || null, profile)
+    : 'unknown';
+  const vMeta = VERDICT_META[verdict];
+  const verdictHtml = vMeta
+    ? `<span class="shortlist-verdict shortlist-verdict--${vMeta.cls}">${esc(vMeta.label)}</span>`
+    : '';
+
   const card = document.createElement('div');
   card.className = 'course-card course-card--saved';
   card.setAttribute('role', 'listitem');
   card.dataset.category = course.category ?? '';
   card.innerHTML = `
-    ${badgeHtml}
+    <div class="card-status-row">${badgeHtml}${verdictHtml}</div>
     <div class="card-header">
       <div class="card-title-group">
         <span class="card-flag" aria-hidden="true">${flag}</span>
@@ -1684,7 +1863,8 @@ function buildShortlistCard(course, studentTags, hasSubjects) {
     ${tests.length ? `
       <div class="card-admission-tests">
         ${tests.map(t => `<span class="admission-test-tag">${esc(t)} required</span>`).join('')}
-      </div>` : ''}
+      </div>
+      ${tests.map(testTimingLineHtml).join('')}` : ''}
     ${(course.verification?.status ?? 'unverified') !== 'verified'
       ? `<p class="card-unverified">⚠ Requirements not yet verified — confirm with the university.</p>`
       : ''}
