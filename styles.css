@@ -3240,6 +3240,10 @@ button.plan-combo-tag--drop:focus-visible {
 .shortlist-verdict--match  { color: var(--ce-status-possible); border-color: var(--ce-status-possible); }
 .shortlist-verdict--safety { color: var(--ce-status-strong);   border-color: var(--ce-status-strong); }
 
+/* Axis qualifier ("Subjects:" / "Grades:") — shown only when the two
+ * labels could read as a contradiction; muted so the status still leads. */
+.card-axis { color: var(--ce-ink-60); }
+
 /* Balance verdict at the top of the insights card */
 .shortlist-balance {
   margin: 0 0 var(--space-4);

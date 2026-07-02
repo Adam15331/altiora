@@ -1815,15 +1815,6 @@ function buildShortlistCard(course, studentTags, hasSubjects) {
   const tierLabel = course.universityContext?.tier ? (TIER_LABELS[course.universityContext.tier] ?? null) : null;
   const tests     = Array.isArray(course.admissionTests) ? course.admissionTests : [];
 
-  let badgeHtml;
-  if (hasSubjects) {
-    const { status } = classify(course, studentTags);
-    const cfg = STATUS[status];
-    badgeHtml = `<div class="card-status card-status--${status}">${cfg.icon} ${esc(cfg.label)}</div>`;
-  } else {
-    badgeHtml = `<div class="card-status card-status--none">Pick your subjects to see your match</div>`;
-  }
-
   // Reach/match/safety against the student's predicted grades. UNKNOWN
   // renders nothing — an honest absence, never a forced bucket.
   const profile = (typeof AltioraState !== 'undefined') ? AltioraState.getProfile() : {};
@@ -1831,8 +1822,26 @@ function buildShortlistCard(course, studentTags, hasSubjects) {
     ? shortlistVerdict(course, profile.qualificationSystem, profile.predictedGrades || null, profile)
     : 'unknown';
   const vMeta = VERDICT_META[verdict];
+
+  // The two labels sit on different axes (subject match vs grade level) and
+  // can legitimately point opposite ways — e.g. a subject mismatch on a
+  // course whose grades are comfortably below yours. When both are present
+  // AND pull in different directions, qualify each with its axis; when they
+  // agree (or only one shows), skip the qualifier — no noise.
+  const status = hasSubjects ? classify(course, studentTags).status : null;
+  const POLARITY = { green: 'pos', amber: 'mid', grey: 'mid', red: 'neg', safety: 'pos', match: 'mid', reach: 'neg' };
+  const qualify = !!(status && vMeta && POLARITY[status] !== POLARITY[verdict]);
+  const axis = label => `<span class="card-axis">${label}:</span> `;
+
+  let badgeHtml;
+  if (status) {
+    const cfg = STATUS[status];
+    badgeHtml = `<div class="card-status card-status--${status}">${cfg.icon} ${qualify ? axis('Subjects') : ''}${esc(cfg.label)}</div>`;
+  } else {
+    badgeHtml = `<div class="card-status card-status--none">Pick your subjects to see your match</div>`;
+  }
   const verdictHtml = vMeta
-    ? `<span class="shortlist-verdict shortlist-verdict--${vMeta.cls}">${esc(vMeta.label)}</span>`
+    ? `<span class="shortlist-verdict shortlist-verdict--${vMeta.cls}">${qualify ? axis('Grades') : ''}${esc(vMeta.label)}</span>`
     : '';
 
   const card = document.createElement('div');
