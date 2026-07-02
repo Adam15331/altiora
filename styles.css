@@ -3267,6 +3267,136 @@ button.plan-combo-tag--drop:focus-visible {
 .journey-strip__stage--todo    { color: var(--ce-ink-30); }
 .journey-strip__sep            { color: var(--ce-ink-30); font-weight: 400; }
 
+/* ═══════════════════════════════════════════════════════════════
+ * STAGE 1 DEPTH — the Field Overview as a genuine reading surface,
+ * plus the reflective pin interstitial. Editorial page, not a wall
+ * of text: Bricolage section heads, Hanken prose at a comfortable
+ * measure, hairline structure.
+ * ═══════════════════════════════════════════════════════════════ */
+
+.fo-prose {
+  font-family: var(--ce-font-body);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--ce-ink);
+  max-width: 66ch;
+  margin: 0 0 var(--space-4);
+}
+.fo-branch {
+  font-family: var(--ce-font-body);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ce-ink);
+  max-width: 66ch;
+  margin: 0 0 var(--space-3);
+}
+.fo-branch strong { font-family: var(--ce-font-display); font-weight: 700; letter-spacing: -.01em; }
+
+/* Misconceptions: "People think / Actually" pairs */
+.fo-myth {
+  max-width: 66ch;
+  margin: 0 0 var(--space-4);
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--ce-hairline-color);
+}
+.fo-myth p {
+  font-family: var(--ce-font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  margin: 0 0 4px;
+}
+.fo-myth__myth   { color: var(--ce-ink-60); }
+.fo-myth__reality{ color: var(--ce-ink); }
+.fo-myth__label {
+  display: inline-block;
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  margin-right: 8px;
+  color: var(--ce-ink-60);
+}
+.fo-myth__reality .fo-myth__label { color: var(--ce-status-strong); }
+
+/* Comparison cards — tappable, navigate to the other field's profile */
+.fo-compares { display: flex; flex-direction: column; gap: var(--space-3); max-width: 66ch; }
+.fo-compare {
+  display: block;
+  text-align: left;
+  padding: var(--space-4) var(--space-5);
+  background: var(--ce-surface);
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius);
+  cursor: pointer;
+  font-family: var(--ce-font-body);
+  transition: border-color var(--t-fast);
+}
+.fo-compare:hover { border-color: var(--ce-ink); }
+.fo-compare__title {
+  display: block;
+  font-family: var(--ce-font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -.01em;
+  color: var(--ce-ink);
+  margin-bottom: 6px;
+}
+.fo-compare__body { display: block; font-size: var(--text-sm); line-height: 1.65; color: var(--ce-ink-60); margin-bottom: 8px; }
+.fo-compare__go {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--ce-ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.fo-profile-end { margin: var(--space-6) 0 0; }
+
+/* The break between discovery and admissions */
+.fo-gate-break {
+  font-family: var(--ce-font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  color: var(--ce-ink);
+  margin: var(--space-12) 0 var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 2px solid var(--ce-ink);
+}
+
+/* Reflective pin interstitial — a quiet fixed strip, never a modal */
+.pin-confirm {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 300;
+  width: calc(100% - 32px);
+  max-width: 620px;
+  padding: var(--space-4) var(--space-5);
+  background: var(--ce-surface);
+  border: var(--ce-hairline);
+  border-left: 3px solid var(--ce-accent);
+  box-shadow: 0 4px 18px rgba(31,26,23,.10);
+}
+.pin-confirm__text {
+  font-family: var(--ce-font-body);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ce-ink);
+  margin: 0 0 var(--space-3);
+}
+.pin-confirm__actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+
+@media (max-width: 480px) {
+  .fo-prose { font-size: 1rem; }
+  .fo-gate-break { font-size: 1.35rem; }
+}
+
 /* Graduation card — reuses the next-step card shape; the butter-yellow
  * eyebrow block is the celebratory (but calm) differentiator. */
 .home-grad { border-left: 3px solid var(--ce-accent); }
