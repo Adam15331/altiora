@@ -1009,6 +1009,7 @@ function hideLoadingSpinner() {
 
 function switchMode(mode) {
   state.mode = mode;
+  if (typeof removePinConfirm === 'function') removePinConfirm();   // never linger across screens
   logEvent('mode_switch', { mode });
 
   // Highlight the active tool in the stage sub-nav
@@ -1981,7 +1982,11 @@ function stageProgress(stage) {
 
   if (stage === 'exploring') {
     if (fields.length) {
-      return { done: true, missing: [], achieved: `you're keeping ${fieldNames.join(' and ')} in mind` };
+      // Acknowledge the deliberation when we saw it happen this session.
+      const achieved = (_fieldsVisited.size > fields.length)
+        ? `you've explored ${_fieldsVisited.size} fields and kept ${fieldNames.join(' and ')}`
+        : `you're keeping ${fieldNames.join(' and ')} in mind`;
+      return { done: true, missing: [], achieved };
     }
     return { done: false, missing: ['Explore fields and keep 1–3 that interest you.'] };
   }
@@ -2038,9 +2043,24 @@ function stageProgress(stage) {
 // graduation card carries the invitation; this stays calm routing).
 function baseNextStep(stage, profile, shortlistCount) {
   switch (stage) {
-    case 'exploring':
+    case 'exploring': {
+      // Content-aware: a student with a pinned field gets pointed at the
+      // profile's genuine comparison read rather than generic routing.
+      const pins = plannerFields();
+      const fp0 = (pins.length && typeof fieldProfiles !== 'undefined') ? fieldProfiles[pins[0]] : null;
+      const cmp = fp0?.oftenComparedWith?.[0];
+      if (cmp) {
+        return {
+          text: `Torn between ${planFieldShort(pins[0])} and ${planFieldShort(cmp.fieldId)}? Read how to think about it.`,
+          actions: [
+            { field: pins[0], label: 'Read the comparison' },
+            { tool: 'strengths', label: 'Keep exploring' },
+          ],
+        };
+      }
       return { text: 'Keep exploring the degree paths that fit you.',
                actions: [{ tool: 'strengths', label: 'Start with Strengths' }] };
+    }
     case 'choosing':
       return { text: 'Refine the subjects that keep your options open.',
                actions: [{ tool: 'plan', label: 'Subject Planner' }] };
@@ -2145,9 +2165,9 @@ function renderWorkspaceHome() {
   // for backward orientation — to a stage.
   const actionBtns = next.actions.map((a, i) => {
     const cls = `home-next__btn${i === 0 ? ' home-next__btn--primary' : ''}`;
-    return a.tool
-      ? `<button class="${cls}" data-go-tool="${esc(a.tool)}">${esc(a.label)} →</button>`
-      : `<button class="${cls}" data-go-stage="${esc(a.stage)}">${esc(a.label)} →</button>`;
+    if (a.tool)  return `<button class="${cls}" data-go-tool="${esc(a.tool)}">${esc(a.label)} →</button>`;
+    if (a.field) return `<button class="${cls}" data-go-field="${esc(a.field)}">${esc(a.label)} →</button>`;
+    return `<button class="${cls}" data-go-stage="${esc(a.stage)}">${esc(a.label)} →</button>`;
   }).join('');
 
   // Quick-access stage tools (primary first, then secondary)
@@ -3330,6 +3350,50 @@ function togglePinnedField(catId, { silent = false } = {}) {
   return true;
 }
 
+// Pin with a reflective pause: students who haven't read a field's profile
+// get one gentle interstitial with a line worth knowing, and the choice to
+// read first. Readers (tracked per session) are never nagged. Unpinning
+// always proceeds directly. Returns true when the pin state changed now.
+function requestPinField(catId) {
+  const already = AltioraState.getCandidateFields().includes(catId);
+  const fp = (typeof fieldProfiles !== 'undefined') ? fieldProfiles[catId] : null;
+  if (already || !fp || _fieldReadDepth.has(catId)) {
+    return togglePinnedField(catId);
+  }
+  showPinConfirm(catId, fp);
+  return false;
+}
+
+function removePinConfirm() {
+  document.getElementById('pinConfirm')?.remove();
+}
+
+function showPinConfirm(catId, fp) {
+  removePinConfirm();
+  const label = CATEGORY_LABEL_MAP[catId] ?? catId;
+  const el = document.createElement('div');
+  el.id = 'pinConfirm';
+  el.className = 'pin-confirm';
+  el.setAttribute('role', 'region');
+  el.setAttribute('aria-label', `Keeping ${label} — a moment to reflect`);
+  el.innerHTML = `
+    <p class="pin-confirm__text">Keeping <strong>${esc(label)}</strong> — worth knowing: ${esc(fp.reflect)}</p>
+    <div class="pin-confirm__actions">
+      <button type="button" class="pin-btn pin-btn--on" data-pc-keep>Keep it</button>
+      <button type="button" class="pin-btn" data-pc-read>Read the profile first</button>
+    </div>`;
+  document.body.appendChild(el);
+  el.querySelector('[data-pc-keep]').addEventListener('click', () => {
+    removePinConfirm();
+    togglePinnedField(catId);
+    if (state.mode === 'strengths') renderStrengthsResults();
+  });
+  el.querySelector('[data-pc-read]').addEventListener('click', () => {
+    removePinConfirm();
+    openFieldOverview(catId, { from: 'strengths', strengths: [...(_selectedStrengths || [])] });
+  });
+}
+
 // Reflect the pinned set on the planner's field grid.
 function syncPlanGridSelection() {
   const set = new Set(plannerFields());
@@ -4231,8 +4295,8 @@ function renderStrengthsResults() {
   });
   resultsDiv.querySelectorAll('[data-pin-category]').forEach(btn => {
     btn.addEventListener('click', () => {
-      togglePinnedField(btn.dataset.pinCategory);
-      renderStrengthsResults();   // refresh every card's pin state
+      // Non-readers get the reflective interstitial; readers pin directly.
+      if (requestPinField(btn.dataset.pinCategory)) renderStrengthsResults();
     });
   });
 }
@@ -4271,6 +4335,44 @@ function resolveFieldId(key) {
   return CATEGORY_TO_FIELD[key] ?? null;
 }
 
+// Session reading memory: which field profiles the student has genuinely
+// scrolled through, and which overviews they've opened at all. Powers the
+// pin interstitial (readers aren't nagged) and the graduation line.
+const _fieldReadDepth = new Set();
+const _fieldsVisited  = new Set();
+
+// The long-form profile body — the discovery read that now LEADS the
+// Field Overview, with admissions material following under its own break.
+function fieldProfileHtml(fp) {
+  const paras = txt => String(txt).split('\n\n').map(p => `<p class="fo-prose">${esc(p)}</p>`).join('');
+  const branches = fp.branches.map(b =>
+    `<div class="fo-branch"><strong>${esc(b.name)}.</strong> ${esc(b.blurb)}</div>`).join('');
+  const myths = fp.misconceptions.map(m => `
+    <div class="fo-myth">
+      <p class="fo-myth__myth"><span class="fo-myth__label">People think</span>${esc(m.myth)}</p>
+      <p class="fo-myth__reality"><span class="fo-myth__label">Actually</span>${esc(m.reality)}</p>
+    </div>`).join('');
+  const paths = `<div class="fo-chips">${fp.careers.paths.map(p => `<span class="fo-chip">${esc(p)}</span>`).join('')}</div>`;
+  const compares = (fp.oftenComparedWith ?? []).map(c => {
+    const other = CATEGORY_LABEL_MAP[c.fieldId] ?? c.fieldId;
+    return `
+      <button type="button" class="fo-compare" data-compare-field="${esc(c.fieldId)}">
+        <span class="fo-compare__title">${esc(fp.name)} vs ${esc(other)}</span>
+        <span class="fo-compare__body">${esc(c.howToThinkAboutIt)}</span>
+        <span class="fo-compare__go">Read about ${esc(other)} →</span>
+      </button>`;
+  }).join('');
+  return `
+    <section class="fo-section"><h2 class="fo-section__head">What it actually is</h2>${paras(fp.whatItIs)}</section>
+    <section class="fo-section"><h2 class="fo-section__head">Where it branches</h2>${branches}</section>
+    <section class="fo-section"><h2 class="fo-section__head">A day in the life</h2>${paras(fp.dayInTheLife)}</section>
+    <section class="fo-section"><h2 class="fo-section__head">The degree vs the school subject</h2>${paras(fp.degreeVsSchool)}</section>
+    <section class="fo-section"><h2 class="fo-section__head">Who thrives — and who doesn't</h2>${paras(fp.whoThrives)}</section>
+    <section class="fo-section"><h2 class="fo-section__head">Misconceptions</h2>${myths}</section>
+    <section class="fo-section"><h2 class="fo-section__head">Where it leads</h2>${paths}${paras(fp.careers.honestNote)}</section>
+    ${compares ? `<section class="fo-section"><h2 class="fo-section__head">Often compared with</h2><div class="fo-compares">${compares}</div></section>` : ''}`;
+}
+
 // Open the overview for a field/category. opts: { from, strengths }.
 function openFieldOverview(key, opts = {}) {
   const fieldId = resolveFieldId(key);
@@ -4282,6 +4384,7 @@ function openFieldOverview(key, opts = {}) {
   applyStageChrome(stage);
 
   state.exploreField = { category: f.category, name: f.name, fieldId };
+  _fieldsVisited.add(f.category);
   _overviewFrom = opts.from || 'strengths';
   _overviewStrengths = opts.strengths || [...(_selectedStrengths || [])];
 
@@ -4397,17 +4500,26 @@ function renderFieldOverview(fieldId) {
 
   const foPinned = (typeof AltioraState !== 'undefined')
     && AltioraState.getCandidateFields().includes(cat);
+  const pinBtn = id => `<button type="button" id="${id}" class="pin-btn${foPinned ? ' pin-btn--on' : ''}"
+                aria-pressed="${foPinned}">${foPinned ? '✓ Kept as one of your fields' : 'Keep this field'}</button>`;
+
+  // Deep profile (authored discovery content). When present it LEADS the
+  // page; the admissions material follows under "What it takes to get in".
+  const fp = (typeof fieldProfiles !== 'undefined') ? fieldProfiles[cat] : null;
 
   panel.innerHTML = `
     <div class="fo" style="${accent}">
       <header class="fo__header">
-        <span class="fo__eyebrow">What this field needs</span>
+        <span class="fo__eyebrow">${fp ? 'Field guide' : 'What this field needs'}</span>
         <h1 class="fo__title">${esc(f.name)}</h1>
         <p class="fo__desc">${esc(f.what)}</p>
         ${alignHtml}
-        <button type="button" id="foPinField" class="pin-btn${foPinned ? ' pin-btn--on' : ''}"
-                aria-pressed="${foPinned}">${foPinned ? '✓ Kept as one of your fields' : 'Keep this field'}</button>
+        ${pinBtn('foPinField')}
       </header>
+
+      ${fp ? fieldProfileHtml(fp) : ''}
+      ${fp ? `<div class="fo-profile-end">${pinBtn('foPinFieldEnd')}</div>
+      <h2 class="fo-gate-break" id="foGateBreak">What it takes to get in</h2>` : ''}
 
       <section class="fo-section">
         <h2 class="fo-section__head">Subjects this field needs</h2>
@@ -4440,10 +4552,11 @@ function renderFieldOverview(fieldId) {
         ${holisticLine ? `<p class="fo-expect fo-expect--muted">${holisticLine}</p>` : ''}
       </section>
 
+      ${fp ? '' : `
       <section class="fo-section">
         <h2 class="fo-section__head">Where it leads</h2>
         <p class="fo-expect">${esc(f.leads)}</p>
-      </section>
+      </section>`}
 
       <div class="fo-fork">
         <button type="button" class="fo-btn fo-btn--primary" id="foSeeCourses">See courses I qualify for →</button>
@@ -4454,10 +4567,29 @@ function renderFieldOverview(fieldId) {
 
   $('foSeeCourses')?.addEventListener('click', proceedToCheckFromField);
   $('foPlanSubjects')?.addEventListener('click', planForField);
-  $('foPinField')?.addEventListener('click', () => {
+  const pinHere = () => {
+    // Pinning ON the profile page never shows the interstitial — the
+    // profile is right there. Reaching the end pin also counts as read.
     togglePinnedField(cat);
     renderFieldOverview(fieldId);   // refresh the pin state
-  });
+  };
+  $('foPinField')?.addEventListener('click', pinHere);
+  $('foPinFieldEnd')?.addEventListener('click', () => { _fieldReadDepth.add(cat); pinHere(); });
+
+  // Comparison links navigate between profiles.
+  panel.querySelectorAll('[data-compare-field]').forEach(btn =>
+    btn.addEventListener('click', () =>
+      openFieldOverview(btn.dataset.compareField, { from: _overviewFrom, strengths: _overviewStrengths })));
+
+  // Reading detection: scrolling to the admissions break means the student
+  // has been through the whole profile — future pins skip the interstitial.
+  const gateEl = $('foGateBreak');
+  if (gateEl && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      if (entries.some(en => en.isIntersecting)) { _fieldReadDepth.add(cat); io.disconnect(); }
+    });
+    io.observe(gateEl);
+  }
   $('foBack')?.addEventListener('click', () => {
     if (_overviewFrom === 'check') switchMode('check');
     else if (_overviewFrom === 'plan') switchMode('plan');
@@ -4679,6 +4811,9 @@ function init() {
     // Backward orientation: a next-step action can point at a stage.
     const stageBtn = e.target.closest('[data-go-stage]');
     if (stageBtn) { enterStage(stageBtn.dataset.goStage); return; }
+    // Content-aware nudge: open a field's profile (the comparison read).
+    const fieldBtn = e.target.closest('[data-go-field]');
+    if (fieldBtn) { openFieldOverview(fieldBtn.dataset.goField, { from: 'strengths' }); return; }
     if (e.target.closest('[data-change-stage]')) showStageSelect();
   });
 
