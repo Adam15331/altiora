@@ -1595,10 +1595,15 @@ function buildBalanceVerdictHtml(saved) {
   const countsLine = classified > 0
     ? `<span class="shortlist-balance__counts">Your list: ${countsBits.join(' · ')}</span>`
     : `<span class="shortlist-balance__counts">Your list: ${saved.length} course${saved.length === 1 ? '' : 's'}, unclassified</span>`;
+  // Vocabulary legend — only when verdicts are actually on display.
+  const legend = classified > 0
+    ? `<span class="shortlist-legend">Reach = above your predicted grades · Match = at your level · Safety = comfortably below</span>`
+    : '';
   return `
     <p class="shortlist-balance">
       ${countsLine}
       <span class="shortlist-balance__advice">${advice}</span>
+      ${legend}
     </p>`;
 }
 
@@ -1715,21 +1720,42 @@ const VERDICT_META = {
   safety: { label: 'Safety', cls: 'safety' },
 };
 
+// A grade only counts as "set" when it is present AND valid in the
+// student's CURRENT system — a stale value left over from a previous
+// system (e.g. IB points after switching to A-Level) must never feed a
+// cross-system verdict.
+function hasValidGrade(system, grade) {
+  if (!grade) return false;
+  if (system === 'UK_A_Level' || system === 'SG_A_Level' || system === 'US_AP') {
+    return Object.prototype.hasOwnProperty.call(A_LEVEL_RANK, grade);
+  }
+  if (system === 'IB') {
+    const n = parseInt(grade, 10);
+    return !isNaN(n) && n >= 24 && n <= 45;
+  }
+  if (system === 'HK_DSE') {
+    return Object.prototype.hasOwnProperty.call(DSE_RANK, grade);
+  }
+  return false;
+}
+
 function shortlistVerdict(course, system, predictedGrade, profile) {
-  // Elite-tier holistic US courses are reaches for everyone — honest.
-  if (course.country === 'US' && course.universityContext?.tier === 'world-top-10') return 'reach';
+  const gradeSet = hasValidGrade(system, predictedGrade);
 
   if (system === 'US_AP') {
     if (course.country === 'US') {
-      // Holistic: competitiveness leans on AP count vs the course's bar
-      // (the existing apContext model). Never a "safety" — holistic
-      // admission is never comfortably safe.
+      // Holistic: the AP model's signal is AP COUNT, not a grade. With no
+      // APs entered there is no signal → no verdict, elite or not.
       const apCount = profile?.subjects?.length || 0;
       const ctx = course.apContext;
-      if (!ctx || !apCount || typeof ctx.minCompetitiveAPs !== 'number') return 'unknown';
+      if (!apCount) return 'unknown';
+      // Signal present → elite-tier holistic courses are reaches for
+      // everyone; that honesty only applies once we know something.
+      if (course.universityContext?.tier === 'world-top-10') return 'reach';
+      if (!ctx || typeof ctx.minCompetitiveAPs !== 'number') return 'unknown';
       return apCount < ctx.minCompetitiveAPs ? 'reach' : 'match';
     }
-    if (!predictedGrade) return 'unknown';
+    if (!gradeSet) return 'unknown';
     const apStr = course.grades?.ap;
     if (!apStr) return 'unknown';
     if (isGradeAboveStudent(course, system, predictedGrade)) return 'reach';
@@ -1739,7 +1765,13 @@ function shortlistVerdict(course, system, predictedGrade, profile) {
     return (A_LEVEL_RANK[predictedGrade] ?? 0) > (A_LEVEL_RANK[needLetter] ?? 0) ? 'safety' : 'match';
   }
 
-  if (!predictedGrade) return 'unknown';
+  // No valid grade in the current system → no verdicts anywhere. The
+  // world-top-10 rule is deliberately BELOW this gate: with no grades,
+  // even elite courses show nothing — one consistent mental model.
+  if (!gradeSet) return 'unknown';
+
+  // Elite-tier holistic US courses are reaches for everyone with grades set.
+  if (course.country === 'US' && course.universityContext?.tier === 'world-top-10') return 'reach';
 
   if (system === 'UK_A_Level' || system === 'SG_A_Level') {
     const gradeStr = course.grades?.[SYSTEM_GRADE_KEY[system]];
@@ -1795,7 +1827,9 @@ function shortlistVerdicts(saved) {
     byId.set(c.id, v);
     counts[v]++;
   });
-  return { byId, counts, hasGrades: !!grade, system };
+  // "Grades set" means valid in the CURRENT system — a stale cross-system
+  // value counts as not set, so every surface shows the nudge consistently.
+  return { byId, counts, hasGrades: !!system && hasValidGrade(system, grade), system };
 }
 
 // One-line timing fragment for an admission test (static verified data).
