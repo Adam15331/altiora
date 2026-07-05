@@ -928,7 +928,7 @@ main     { flex: 1; padding: var(--pad); }
   font-weight: 600;
   letter-spacing: .05em;
   text-transform: uppercase;
-  color: var(--color-text-tertiary);
+  color: var(--ce-ink-60);
   margin-bottom: var(--space-3);
 }
 .fo-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
@@ -947,7 +947,7 @@ main     { flex: 1; padding: var(--pad); }
   color: var(--fo-accent, var(--color-cat-cs));
   font-weight: 600;
 }
-.fo-muted { font-size: var(--text-sm); color: var(--color-text-tertiary); font-style: italic; margin: var(--space-2) 0 0; }
+.fo-muted { font-size: var(--text-sm); color: var(--ce-ink-60); font-style: italic; margin: var(--space-2) 0 0; }
 .fo-muted--hint { margin-top: var(--space-4); }
 
 .fo-combos { display: flex; flex-direction: column; gap: var(--space-3); }
@@ -963,6 +963,7 @@ main     { flex: 1; padding: var(--pad); }
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface);
+  color: var(--ce-ink);
   font-family: inherit;
 }
 /* Clickable combination row → Check Combination with these subjects */
@@ -981,7 +982,7 @@ main     { flex: 1; padding: var(--pad); }
   margin: 0 0 var(--space-3);
   max-width: 64ch;
 }
-.fo-expect--muted { color: var(--color-text-secondary); font-size: var(--text-sm); }
+.fo-expect--muted { color: var(--ce-ink-60); font-size: var(--text-sm); }
 
 .fo-fork {
   display: flex;
@@ -1044,7 +1045,7 @@ main     { flex: 1; padding: var(--pad); }
   border: none;
   background: none;
   padding: var(--space-2);
-  color: var(--color-text-secondary);
+  color: var(--ce-ink-60);
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   cursor: pointer;
@@ -3480,8 +3481,8 @@ button.plan-combo-tag--drop:focus-visible {
 .fo-branch strong { font-family: var(--ce-font-display); font-weight: 700; letter-spacing: -.01em; }
 
 /* Section heads — confident Bricolage 800 with the Teak highlighter move:
-   a solid accent band swiped under the text. The accent cycles per section
-   (yellow → coral → sage → lavender) so the long read has colour + rhythm. */
+   a solid butter-yellow band swiped under the text — the SAME accent on
+   every section heading (the one heading-accent colour in the system). */
 .fo-section__head {
   display: inline-block;
   width: fit-content;
@@ -3495,17 +3496,10 @@ button.plan-combo-tag--drop:focus-visible {
   margin: 0 0 var(--space-4);
   padding: 1px 6px 2px;
   background-image: linear-gradient(to top,
-    var(--sec-accent, var(--ce-accent)) 0,
-    var(--sec-accent, var(--ce-accent)) 34%, transparent 34%);
+    var(--ce-accent) 0, var(--ce-accent) 34%, transparent 34%);
   background-repeat: no-repeat;
 }
 .fo-section__head::before { content: none; }   /* retire the timid tick */
-
-/* Colour rhythm across the profile's sections. */
-#panel-field-overview .fo-section:nth-of-type(4n+1) { --sec-accent: var(--ce-accent); }
-#panel-field-overview .fo-section:nth-of-type(4n+2) { --sec-accent: var(--ce-coral); }
-#panel-field-overview .fo-section:nth-of-type(4n+3) { --sec-accent: var(--ce-sage); }
-#panel-field-overview .fo-section:nth-of-type(4n+4) { --sec-accent: var(--ce-lavender); }
 
 /* Field title — Teak-scale, heavy Bricolage 800 with a butter-yellow
    highlighter swipe: the confident hero of the page. */
@@ -3538,29 +3532,29 @@ button.plan-combo-tag--drop:focus-visible {
   background: var(--ce-accent);
 }
 
-/* Misconceptions: "People think / Actually" pairs — the correction reads
-   visually, coral (myth) giving way to sage (the reality). Subtle tints. */
+/* Misconceptions: "People think / Actually" pairs — editorial, on the plain
+   canvas. No tinted bands, no left borders. The myth reads quiet (muted mono
+   label + lighter ink); the correction reads authoritative (system-green mono
+   label + full-strength ink). A hairline divides one pair from the next. */
 .fo-myth {
   max-width: 66ch;
   margin: 0 0 var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--ce-hairline-color);
 }
+.fo-myth:first-of-type { padding-top: 0; border-top: none; }
 .fo-myth p {
   font-family: var(--ce-font-body);
   font-size: 1rem;
   line-height: 1.6;
   margin: 0;
-  padding: 12px var(--space-4);
 }
-/* Full soft-tinted blocks — coral (myth) giving way to sage (reality).
-   No left border (left borders are banned): the whole block carries the colour. */
 .fo-myth p.fo-myth__myth {
-  color: var(--ce-ink-60);
-  background: var(--ce-coral-tint);
-  margin-bottom: 3px;
+  color: var(--ce-ink-60);       /* quieter — the misconception */
+  margin-bottom: 8px;
 }
 .fo-myth p.fo-myth__reality {
-  color: var(--ce-ink);
-  background: var(--ce-sage-tint);
+  color: var(--ce-ink);          /* full-strength — the authoritative answer */
 }
 .fo-myth__label {
   display: inline-block;
@@ -3570,10 +3564,9 @@ button.plan-combo-tag--drop:focus-visible {
   letter-spacing: .07em;
   text-transform: uppercase;
   margin-right: 8px;
-  color: var(--ce-ink-60);
+  color: var(--ce-ink-60);       /* muted grey mono (the myth's label) */
 }
-.fo-myth__myth    .fo-myth__label { color: var(--ce-status-reach); }
-.fo-myth__reality .fo-myth__label { color: var(--ce-status-strong); }
+.fo-myth__reality .fo-myth__label { color: var(--ce-status-strong); }  /* the system's confident status-green */
 
 /* "Where it leads" — descriptive career context, NOT tappable. Quiet
    middot-separated flowing text, deliberately un-pilled. */
@@ -3601,6 +3594,7 @@ button.plan-combo-tag--drop:focus-visible {
   border: var(--ce-hairline);
   border-radius: var(--ce-radius);
   cursor: pointer;
+  color: var(--ce-ink);
   font-family: var(--ce-font-body);
   transition: border-color var(--t-fast), background var(--t-fast), transform var(--t-fast);
 }
