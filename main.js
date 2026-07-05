@@ -1007,6 +1007,80 @@ function hideLoadingSpinner() {
  * MODE TOGGLE
  * ═══════════════════════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════
+ * ROUTER — app-wide back navigation via browser history.
+ *
+ * Each user-facing screen change records a lightweight route descriptor
+ * into history.pushState; the browser Back/Forward buttons (and the
+ * mobile back gesture) fire popstate, which re-renders the stored route
+ * WITHOUT mutating persisted state — Back restores a view, never wipes
+ * progress. A single in-app "← Back" control mirrors the browser Back.
+ *
+ * Route shapes:
+ *   { v: 'stage'  }                          – onboarding stage select
+ *   { v: 'system' }                          – onboarding system select
+ *   { v: 'ws', mode, stage }                 – a workspace tool/panel
+ *   { v: 'field', fieldId, from }            – a field profile
+ * ═══════════════════════════════════════════════════════════════ */
+
+let _restoringRoute = false;   // true while applying a popstate route — suppresses pushes
+let _curIdx = 0;               // depth of the current entry in the app's linear history
+
+function sameRoute(a, b) {
+  return !!a && !!b && a.v === b.v && a.mode === b.mode
+      && a.stage === b.stage && a.fieldId === b.fieldId;
+}
+
+// Record the current screen into history. Replaces the entry when this is the
+// first app route (no leading blank entry) or when asked; otherwise pushes a
+// new entry. Duplicate routes are skipped so a redirect can't create a loop.
+function markRoute(route, { replace = false } = {}) {
+  if (_restoringRoute) return;                        // popstate is driving — don't touch history
+  const top = history.state && history.state.altiora;
+  if (!replace && sameRoute(top, route)) return;      // dedupe / loop guard
+  if (replace || !top) {
+    _curIdx = (history.state && typeof history.state.idx === 'number') ? history.state.idx : 0;
+    history.replaceState({ altiora: route, idx: _curIdx }, '');
+  } else {
+    _curIdx += 1;
+    history.pushState({ altiora: route, idx: _curIdx }, '');
+  }
+  updateBackControl();
+}
+
+// Re-render a stored route (from popstate). _restoringRoute is set by the
+// caller so the show/switch calls below don't push new history entries.
+function renderRoute(route) {
+  switch (route.v) {
+    case 'stage':  showStageSelect();  break;
+    case 'system': showSystemSelect(); break;
+    case 'field':
+      if (route.fieldId && resolveFieldId(route.fieldId))
+        openFieldOverview(route.fieldId, { from: route.from || 'strengths' });
+      else showWorkspaceHome();
+      break;
+    case 'ws':
+    default:
+      applyStageChrome(route.stage || AltioraState.getProfile().stage || DEFAULT_STAGE);
+      switchMode(route.mode || 'home');
+      break;
+  }
+}
+
+// Show/hide the in-app back control based on whether there's an app entry
+// to go back to (depth > 0). Keeps browser Back and the nav "← Back" in step.
+function updateBackControl() {
+  $('navBack')?.classList.toggle('hidden', _curIdx <= 0);
+}
+
+// One step back through the app's history. Falls back to Home only when
+// there's no prior in-app entry (e.g. a deep link straight into a profile),
+// so Back never drops the user out of the app into a broken state.
+function appBack() {
+  if (_curIdx > 0) history.back();
+  else goHome();
+}
+
 function switchMode(mode) {
   state.mode = mode;
   if (typeof removePinConfirm === 'function') removePinConfirm();   // never linger across screens
@@ -1049,6 +1123,12 @@ function switchMode(mode) {
   }
   if (mode === 'home') {
     renderWorkspaceHome();
+  }
+
+  // Record the workspace view in history (the field profile records itself,
+  // with its fieldId, from openFieldOverview).
+  if (mode !== 'field-overview') {
+    markRoute({ v: 'ws', mode, stage: AltioraState.getProfile().stage || DEFAULT_STAGE });
   }
 }
 
@@ -1096,6 +1176,7 @@ function showStageSelect() {
   $('workspace').classList.add('hidden');
   $('systemSelect').classList.add('hidden');
   $('stageSelect').classList.remove('hidden');
+  markRoute({ v: 'stage' });
 }
 
 // Show the full-screen qualification-system selection screen (onboarding /
@@ -1105,6 +1186,7 @@ function showSystemSelect() {
   $('workspace').classList.add('hidden');
   $('stageSelect').classList.add('hidden');
   $('systemSelect').classList.remove('hidden');
+  markRoute({ v: 'system' });
 }
 
 // Reveal the workspace and set up the stage chrome (indicator + sub-nav)
@@ -4525,6 +4607,7 @@ function openFieldOverview(key, opts = {}) {
   logEvent('field_overview_open', { field: fieldId, from: _overviewFrom });
   switchMode('field-overview');
   renderFieldOverview(fieldId);
+  markRoute({ v: 'field', fieldId, from: _overviewFrom });
   requestAnimationFrame(() =>
     $('panel-field-overview')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   );
@@ -4738,11 +4821,9 @@ function renderFieldOverview(fieldId) {
     });
     io.observe(gateEl);
   }
-  $('foBack')?.addEventListener('click', () => {
-    if (_overviewFrom === 'check') switchMode('check');
-    else if (_overviewFrom === 'plan') switchMode('plan');
-    else switchMode('strengths');
-  });
+  // Unified back: one step through app history (same as the nav "← Back" and
+  // the browser Back button). The label stays contextual; the mechanism is one.
+  $('foBack')?.addEventListener('click', appBack);
 }
 
 // Action fork → Check Combination, with the field filter active and no
@@ -4963,6 +5044,18 @@ function init() {
 
   // Workspace home: the wordmark is the home control; delegated actions on the home panel.
   $('navHome')?.addEventListener('click', goHome);
+
+  // App-wide back: the nav "← Back" control and the browser Back/Forward
+  // buttons (and the mobile back gesture) all resolve through the router.
+  $('navBack')?.addEventListener('click', appBack);
+  window.addEventListener('popstate', e => {
+    const route = e.state && e.state.altiora;
+    if (!route) return;                       // not one of our entries — ignore
+    _curIdx = (typeof e.state.idx === 'number') ? e.state.idx : 0;
+    _restoringRoute = true;
+    try { renderRoute(route); } finally { _restoringRoute = false; }
+    updateBackControl();
+  });
   $('panel-home')?.addEventListener('click', e => {
     const toolBtn = e.target.closest('[data-go-tool]');
     if (toolBtn) { switchMode(toolBtn.dataset.goTool); return; }
@@ -4996,6 +5089,11 @@ function init() {
   // their last stage's primary tool. The "Find my path" CTA from the
   // homepage (?mode=strengths) drops the student straight into the
   // exploring stage.
+  // Clear any history state carried across a reload so the first screen below
+  // becomes the base app entry (idx 0) — no stale back-stack into pre-reload
+  // views, and the first markRoute replaces rather than pushes.
+  history.replaceState({}, '');
+
   const _profile = AltioraState.getProfile();
   const _savedSystem = _profile.qualificationSystem;
   // Apply the saved system globally up front so every screen renders in it.

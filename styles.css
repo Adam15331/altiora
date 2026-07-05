@@ -102,6 +102,29 @@ a:hover { opacity: .8; }
   display: flex;
   align-items: center;
 }
+/* In-app back control — mirrors the browser Back button, shown only when
+   there's an app entry to return to. CE mono, hairline, quiet. */
+.nav__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: var(--space-4);
+  padding: 6px 12px;
+  border: var(--ce-hairline, 1px solid var(--color-border));
+  border-radius: var(--ce-radius-pill, 999px);
+  background: transparent;
+  color: var(--ce-ink, var(--color-text-primary));
+  font-family: var(--ce-font-mono, inherit);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--t-fast), border-color var(--t-fast);
+}
+.nav__back:hover { background: var(--ce-accent, var(--color-cat-cs-bg)); border-color: var(--ce-ink, var(--color-text-primary)); }
+.nav__back:focus-visible { outline: 2px solid var(--ce-ink, var(--color-text-primary)); outline-offset: 2px; }
+.nav__back.hidden { display: none; }
+
 /* The wordmark is the home control — a reset <button>, modest nav scale. */
 .nav__brand   {
   display: flex; flex-direction: column; align-items: flex-start;
@@ -2601,6 +2624,8 @@ footer p {
 
   .card-header  { flex-wrap: wrap; gap: var(--space-2); }
   .nav__tagline { display: none; }
+  .nav__back-label { display: none; }        /* keep just the ← arrow on small screens */
+  .nav__back { padding: 8px 12px; min-height: 36px; }
 
   /* Grade input: full width */
   .grade-input-body   { flex-direction: column; align-items: stretch; }
