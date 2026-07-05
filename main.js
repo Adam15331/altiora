@@ -4322,9 +4322,16 @@ function renderStrengthsResults() {
   resultsDiv.innerHTML = `<div class="field-cards">${fieldIds.map(buildFieldCardHtml).join('')}</div>`;
   section.classList.remove('hidden');
 
-  resultsDiv.querySelectorAll('[data-explore-field]').forEach(btn => {
+  // "Learn more" → the deep field profile (understand the field).
+  resultsDiv.querySelectorAll('[data-learn-field]').forEach(btn => {
     btn.addEventListener('click', () =>
-      openFieldOverview(btn.dataset.exploreField, { from: 'strengths', strengths: [..._selectedStrengths] })
+      openFieldOverview(btn.dataset.learnField, { from: 'strengths', strengths: [..._selectedStrengths] })
+    );
+  });
+  // "Explore courses" → straight to the field's course list (skip the read).
+  resultsDiv.querySelectorAll('[data-courses-field]').forEach(btn => {
+    btn.addEventListener('click', () =>
+      goToFieldCourses(btn.dataset.coursesField, { from: 'strengths', strengths: [..._selectedStrengths] })
     );
   });
   resultsDiv.querySelectorAll('[data-pin-category]').forEach(btn => {
@@ -4343,14 +4350,22 @@ function buildFieldCardHtml(fieldId) {
   return `
     <article class="field-card" data-category="${esc(f.category)}"
       style="--field-accent: var(--color-cat-${f.category}); --field-accent-bg: var(--color-cat-${f.category}-bg);">
+      <button class="field-card__pin${pinned ? ' field-card__pin--on' : ''}" type="button"
+              data-pin-category="${esc(f.category)}" aria-pressed="${pinned}"
+              aria-label="${pinned ? 'Kept' : 'Keep'} ${esc(f.name)}"
+              title="${pinned ? 'Kept — one of your fields' : `Keep ${esc(f.name)}`}">
+        <svg class="field-card__pin-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 2.75h12a1.25 1.25 0 0 1 1.25 1.25v17.4L12 17.55 4.75 21.4V4A1.25 1.25 0 0 1 6 2.75z"/>
+        </svg>
+        <span class="field-card__pin-text">${pinned ? 'Kept' : 'Keep'}</span>
+      </button>
       <h3 class="field-card__name">${esc(f.name)}</h3>
       <p class="field-card__what">${esc(f.what)}</p>
       <p class="field-card__line"><span class="field-card__label">Where it leads</span>${esc(f.leads)}</p>
       <p class="field-card__line"><span class="field-card__label">Typically needs</span>${esc(f.needs)}</p>
       <div class="field-card__actions">
-        <button class="field-card__btn" type="button" data-explore-field="${esc(fieldId)}">Explore ${esc(f.name)} courses →</button>
-        <button class="pin-btn${pinned ? ' pin-btn--on' : ''}" type="button"
-                data-pin-category="${esc(f.category)}" aria-pressed="${pinned}">${pinned ? '✓ Kept' : 'Keep this field'}</button>
+        <button class="field-card__btn" type="button" data-learn-field="${esc(fieldId)}">Learn more →</button>
+        <button class="field-card__btn" type="button" data-courses-field="${esc(fieldId)}">Explore courses →</button>
       </div>
     </article>`;
 }
@@ -4405,6 +4420,26 @@ function fieldProfileHtml(fp) {
     <section class="fo-section"><h2 class="fo-section__head">Misconceptions</h2>${myths}</section>
     <section class="fo-section"><h2 class="fo-section__head">Where it leads</h2>${paths}${paras(fp.careers.honestNote)}</section>
     ${compares ? `<section class="fo-section"><h2 class="fo-section__head">Often compared with</h2><div class="fo-compares">${compares}</div></section>` : ''}`;
+}
+
+// Jump straight from a field card to that field's course list, skipping the
+// profile read. Sets the same exploreField context openFieldOverview would,
+// then hands off to the shared Check Combination entry point.
+function goToFieldCourses(key, opts = {}) {
+  const fieldId = resolveFieldId(key);
+  const f = fieldId && STRENGTH_FIELDS[fieldId];
+  if (!f) return;
+
+  const stage = (typeof AltioraState !== 'undefined' && AltioraState.getProfile().stage) || DEFAULT_STAGE;
+  applyStageChrome(stage);
+
+  state.exploreField = { category: f.category, name: f.name, fieldId };
+  _fieldsVisited.add(f.category);
+  _overviewFrom = opts.from || 'strengths';
+  _overviewStrengths = opts.strengths || [...(_selectedStrengths || [])];
+
+  logEvent('field_card_to_courses', { field: fieldId });
+  proceedToCheckFromField();
 }
 
 // Open the overview for a field/category. opts: { from, strengths }.
@@ -4546,7 +4581,7 @@ function renderFieldOverview(fieldId) {
       <header class="fo__header">
         <span class="fo__eyebrow">${fp ? 'Field guide' : 'What this field needs'}</span>
         <h1 class="fo__title">${esc(f.name)}</h1>
-        <p class="fo__desc">${esc(f.what)}</p>
+        ${fp ? '' : `<p class="fo__desc">${esc(f.what)}</p>`}
         ${alignHtml}
         ${pinBtn('foPinField')}
       </header>

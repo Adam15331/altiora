@@ -3090,6 +3090,57 @@ footer p {
 }
 .field-card__actions .field-card__btn { margin-top: 0; }
 
+/* Corner keep-pin — icon + tiny label, two clear states.
+   Not kept: outline bookmark on the page background.
+   Kept:     butter-yellow (accent) pill with a filled ink bookmark. */
+.field-card { position: relative; }
+.field-card__name { padding-right: 84px; }   /* clear space for the corner pin */
+.field-card__pin {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 30px;
+  padding: 5px 11px;
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  border: 1px solid var(--ce-ink);
+  border-radius: var(--ce-radius-pill);
+  background: var(--ce-bg);
+  color: var(--ce-ink);
+  cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.field-card__pin-icon {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linejoin: round;
+}
+.field-card__pin:hover { background: var(--ce-accent); }
+.field-card__pin:focus-visible {
+  outline: 2px solid var(--ce-ink);
+  outline-offset: 2px;
+}
+.field-card__pin--on {
+  background: var(--ce-accent);
+  border-color: var(--ce-ink);
+}
+.field-card__pin--on .field-card__pin-icon {
+  fill: var(--ce-ink);
+  stroke: var(--ce-ink);
+}
+@media (max-width: 640px) {
+  .field-card__pin { min-height: 34px; padding: 7px 12px; }
+}
+
 /* Small mono field badge (critical pairs, AP sections, chips) */
 .plan-field-badge {
   display: inline-block;
