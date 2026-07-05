@@ -1547,6 +1547,23 @@ function toggleFieldsMenu() {
   $('fieldsLink')?.setAttribute('aria-expanded', String(willOpen));
 }
 
+// Keep the field-profile "Keep this field" buttons in sync with the CURRENT
+// candidateFields. Removing a field anywhere (nav dropdown, another surface,
+// the button itself) reverts these live — the kept-state must never go stale.
+function syncFieldOverviewPins() {
+  if (state.mode !== 'field-overview') return;
+  const cat = state.exploreField?.category;
+  if (!cat || typeof AltioraState === 'undefined') return;
+  const on = AltioraState.getCandidateFields().includes(cat);
+  ['foPinField', 'foPinFieldEnd'].forEach(id => {
+    const btn = $(id);
+    if (!btn) return;
+    btn.classList.toggle('pin-btn--on', on);
+    btn.setAttribute('aria-pressed', String(on));
+    btn.textContent = on ? '✓ Kept as one of your fields' : 'Keep this field';
+  });
+}
+
 function updateFieldsIndicator() {
   const countEl = $('fieldsCount');
   const menu = $('fieldsMenu');
@@ -4799,10 +4816,10 @@ function renderFieldOverview(fieldId) {
     row.addEventListener('click', () =>
       checkFieldCombo(cat, JSON.parse(row.dataset.comboTags), sys || AltioraState.getProfile().qualificationSystem)));
   const pinHere = () => {
-    // Pinning ON the profile page never shows the interstitial — the
-    // profile is right there. Reaching the end pin also counts as read.
+    // Pinning ON the profile page never shows the interstitial — the profile
+    // is right there. The candidateFields subscription (syncFieldOverviewPins)
+    // re-syncs the pin buttons here AND the nav count, so no re-render needed.
     togglePinnedField(cat);
-    renderFieldOverview(fieldId);   // refresh the pin state
   };
   $('foPinField')?.addEventListener('click', pinHere);
   $('foPinFieldEnd')?.addEventListener('click', () => { _fieldReadDepth.add(cat); pinHere(); });
@@ -5041,6 +5058,8 @@ function init() {
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFieldsMenu(); });
   AltioraState.subscribe(updateFieldsIndicator);
   updateFieldsIndicator();
+  // The field-profile pin buttons track candidateFields too (no stale kept-state).
+  AltioraState.subscribe(syncFieldOverviewPins);
 
   // Workspace home: the wordmark is the home control; delegated actions on the home panel.
   $('navHome')?.addEventListener('click', goHome);

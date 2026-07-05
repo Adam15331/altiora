@@ -1017,6 +1017,9 @@ main     { flex: 1; padding: var(--pad); }
   font-size: var(--text-sm);
   line-height: 1.5;
   color: var(--ce-ink-60);
+  /* Indent to the button's own horizontal padding so the sublabel sits
+     directly under the button's label, not under its outer (pill) edge. */
+  padding-left: var(--space-6);
 }
 .fo-btn {
   padding: var(--space-3) var(--space-6);
@@ -3582,8 +3585,10 @@ button.plan-combo-tag--drop:focus-visible {
   line-height: 1.9;
   color: var(--ce-ink);
 }
-.fo-lead { white-space: nowrap; }        /* keep each phrase intact… */
-.fo-lead-sep { color: var(--ce-coral); font-weight: 700; }   /* …break here (warm coral middot) */
+/* Keep short phrases on one line where they fit, but allow a phrase longer
+   than the line to wrap (no overflow on narrow screens). */
+.fo-lead { white-space: normal; overflow-wrap: break-word; }
+.fo-lead-sep { color: var(--ce-coral); font-weight: 700; white-space: nowrap; }  /* warm coral middot, never orphaned */
 
 /* Comparison cards — inviting, tappable. Soft lavender-tinted panels (NO
    left border), Bricolage title, a lift on hover so they read as cards. */
