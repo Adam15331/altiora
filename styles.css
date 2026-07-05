@@ -102,6 +102,29 @@ a:hover { opacity: .8; }
   display: flex;
   align-items: center;
 }
+/* In-app back control — mirrors the browser Back button, shown only when
+   there's an app entry to return to. CE mono, hairline, quiet. */
+.nav__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: var(--space-4);
+  padding: 6px 12px;
+  border: var(--ce-hairline, 1px solid var(--color-border));
+  border-radius: var(--ce-radius-pill, 999px);
+  background: transparent;
+  color: var(--ce-ink, var(--color-text-primary));
+  font-family: var(--ce-font-mono, inherit);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--t-fast), border-color var(--t-fast);
+}
+.nav__back:hover { background: var(--ce-accent, var(--color-cat-cs-bg)); border-color: var(--ce-ink, var(--color-text-primary)); }
+.nav__back:focus-visible { outline: 2px solid var(--ce-ink, var(--color-text-primary)); outline-offset: 2px; }
+.nav__back.hidden { display: none; }
+
 /* The wordmark is the home control — a reset <button>, modest nav scale. */
 .nav__brand   {
   display: flex; flex-direction: column; align-items: flex-start;
@@ -775,7 +798,6 @@ main     { flex: 1; padding: var(--pad); }
   padding: var(--space-4) var(--space-5);
   background: var(--color-cat-cs-bg);
   border: 1px solid var(--color-border);
-  border-left: 3px solid var(--color-cat-cs);
   border-radius: var(--radius-md);
 }
 .explore-context__body {
@@ -830,7 +852,6 @@ main     { flex: 1; padding: var(--pad); }
   padding: var(--space-4) var(--space-5);
   background: var(--color-match-possible-bg);
   border: 1px solid var(--color-match-possible);
-  border-left: 3px solid var(--color-match-possible);
   border-radius: var(--radius-md);
 }
 .system-prompt__icon {
@@ -996,6 +1017,9 @@ main     { flex: 1; padding: var(--pad); }
   font-size: var(--text-sm);
   line-height: 1.5;
   color: var(--ce-ink-60);
+  /* Indent to the button's own horizontal padding so the sublabel sits
+     directly under the button's label, not under its outer (pill) edge. */
+  padding-left: var(--space-6);
 }
 .fo-btn {
   padding: var(--space-3) var(--space-6);
@@ -1311,7 +1335,6 @@ main     { flex: 1; padding: var(--pad); }
   padding: 24px 28px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-left: 4px solid var(--color-match-reach, #8B3A2F);
   border-radius: var(--radius-md);
   text-align: center;
 }
@@ -2601,6 +2624,8 @@ footer p {
 
   .card-header  { flex-wrap: wrap; gap: var(--space-2); }
   .nav__tagline { display: none; }
+  .nav__back-label { display: none; }        /* keep just the ← arrow on small screens */
+  .nav__back { padding: 8px 12px; min-height: 36px; }
 
   /* Grade input: full width */
   .grade-input-body   { flex-direction: column; align-items: stretch; }
@@ -3360,8 +3385,7 @@ button.plan-combo-tag--drop:focus-visible {
   margin: 0 0 var(--space-4);
   padding: var(--space-4) var(--space-5);
   border: var(--ce-hairline);
-  border-left: 3px solid var(--ce-status-reach);
-  background: var(--ce-surface);
+  background: var(--ce-reach-tint);
   font-family: var(--ce-font-body);
   font-size: var(--text-sm);
   color: var(--ce-ink);
@@ -3455,18 +3479,62 @@ button.plan-combo-tag--drop:focus-visible {
 }
 .fo-branch strong { font-family: var(--ce-font-display); font-weight: 700; letter-spacing: -.01em; }
 
-/* Section heads get a small butter-yellow anchor tick — one consistent
-   structural accent, so the long read has visual landmarks. */
+/* Section heads — confident Bricolage 800 with the Teak highlighter move:
+   a solid accent band swiped under the text. The accent cycles per section
+   (yellow → coral → sage → lavender) so the long read has colour + rhythm. */
 .fo-section__head {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
+  font-family: var(--ce-font-display);
+  font-weight: 800;
+  font-size: 1.55rem;
+  line-height: 1.22;
+  letter-spacing: -.025em;
+  color: var(--ce-ink);
+  margin: 0 0 var(--space-4);
+  padding: 1px 6px 2px;
+  background-image: linear-gradient(to top,
+    var(--sec-accent, var(--ce-accent)) 0,
+    var(--sec-accent, var(--ce-accent)) 34%, transparent 34%);
+  background-repeat: no-repeat;
 }
-.fo-section__head::before {
+.fo-section__head::before { content: none; }   /* retire the timid tick */
+
+/* Colour rhythm across the profile's sections. */
+#panel-field-overview .fo-section:nth-of-type(4n+1) { --sec-accent: var(--ce-accent); }
+#panel-field-overview .fo-section:nth-of-type(4n+2) { --sec-accent: var(--ce-coral); }
+#panel-field-overview .fo-section:nth-of-type(4n+3) { --sec-accent: var(--ce-sage); }
+#panel-field-overview .fo-section:nth-of-type(4n+4) { --sec-accent: var(--ce-lavender); }
+
+/* Field title — Teak-scale, heavy Bricolage 800 with a butter-yellow
+   highlighter swipe: the confident hero of the page. */
+.fo__title {
+  font-family: var(--ce-font-display);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 6vw, 3.4rem);
+  line-height: 1.02;
+  letter-spacing: -.03em;
+  color: var(--ce-ink);
+  width: fit-content;
+  max-width: 100%;
+  padding: 2px 8px 4px;
+  margin: 0 0 var(--space-3);
+  background-image: linear-gradient(to top,
+    var(--ce-accent) 0, var(--ce-accent) 26%, transparent 26%);
+  background-repeat: no-repeat;
+}
+/* Eyebrow — a touch more presence, butter-yellow marker before it. */
+.fo__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ce-ink);
+}
+.fo__eyebrow::before {
   content: "";
-  flex: none;
-  width: 18px;
-  height: 3px;
+  width: 22px;
+  height: 4px;
   background: var(--ce-accent);
 }
 
@@ -3479,21 +3547,20 @@ button.plan-combo-tag--drop:focus-visible {
 .fo-myth p {
   font-family: var(--ce-font-body);
   font-size: 1rem;
-  line-height: 1.65;
+  line-height: 1.6;
   margin: 0;
-  padding: 10px var(--space-4);
-  border-left: 2px solid transparent;
+  padding: 12px var(--space-4);
 }
+/* Full soft-tinted blocks — coral (myth) giving way to sage (reality).
+   No left border (left borders are banned): the whole block carries the colour. */
 .fo-myth p.fo-myth__myth {
   color: var(--ce-ink-60);
   background: var(--ce-coral-tint);
-  border-left-color: var(--ce-coral);
-  margin-bottom: 2px;
+  margin-bottom: 3px;
 }
 .fo-myth p.fo-myth__reality {
   color: var(--ce-ink);
   background: var(--ce-sage-tint);
-  border-left-color: var(--ce-sage);
 }
 .fo-myth__label {
   display: inline-block;
@@ -3518,33 +3585,35 @@ button.plan-combo-tag--drop:focus-visible {
   line-height: 1.9;
   color: var(--ce-ink);
 }
-.fo-lead { white-space: nowrap; }        /* keep each phrase intact… */
-.fo-lead-sep { color: var(--ce-ink-30); font-weight: 700; }  /* …break here */
+/* Keep short phrases on one line where they fit, but allow a phrase longer
+   than the line to wrap (no overflow on narrow screens). */
+.fo-lead { white-space: normal; overflow-wrap: break-word; }
+.fo-lead-sep { color: var(--ce-coral); font-weight: 700; white-space: nowrap; }  /* warm coral middot, never orphaned */
 
-/* Comparison cards — tappable, navigate to the other field's profile */
+/* Comparison cards — inviting, tappable. Soft lavender-tinted panels (NO
+   left border), Bricolage title, a lift on hover so they read as cards. */
 .fo-compares { display: flex; flex-direction: column; gap: var(--space-3); max-width: 66ch; }
 .fo-compare {
   display: block;
   text-align: left;
   padding: var(--space-4) var(--space-5);
-  background: var(--ce-surface);
+  background: var(--ce-lavender-tint);
   border: var(--ce-hairline);
-  border-left: 3px solid var(--fo-accent, var(--ce-ink-30));
   border-radius: var(--ce-radius);
   cursor: pointer;
   font-family: var(--ce-font-body);
-  transition: border-color var(--t-fast), background var(--t-fast);
+  transition: border-color var(--t-fast), background var(--t-fast), transform var(--t-fast);
 }
 .fo-compare:hover {
   border-color: var(--ce-ink);
-  border-left-color: var(--fo-accent, var(--ce-ink));
+  transform: translateY(-2px);
 }
 .fo-compare__title {
   display: block;
   font-family: var(--ce-font-display);
-  font-weight: 700;
-  font-size: 1.05rem;
-  letter-spacing: -.01em;
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -.02em;
   color: var(--ce-ink);
   margin-bottom: 6px;
 }
@@ -3584,9 +3653,8 @@ button.plan-combo-tag--drop:focus-visible {
   width: calc(100% - 32px);
   max-width: 620px;
   padding: var(--space-4) var(--space-5);
-  background: var(--ce-surface);
+  background: var(--ce-accent-tint);
   border: var(--ce-hairline);
-  border-left: 3px solid var(--ce-accent);
   box-shadow: 0 4px 18px rgba(31,26,23,.10);
 }
 .pin-confirm__text {
@@ -3605,7 +3673,7 @@ button.plan-combo-tag--drop:focus-visible {
 
 /* Graduation card — reuses the next-step card shape; the butter-yellow
  * eyebrow block is the celebratory (but calm) differentiator. */
-.home-grad { border-left: 3px solid var(--ce-accent); }
+.home-grad { border-top: 3px solid var(--ce-accent); }
 .home-grad__eyebrow {
   display: inline-block;
   font-family: var(--ce-font-mono);
