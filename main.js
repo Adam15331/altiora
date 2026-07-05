@@ -4401,7 +4401,13 @@ function fieldProfileHtml(fp) {
       <p class="fo-myth__myth"><span class="fo-myth__label">People think</span>${esc(m.myth)}</p>
       <p class="fo-myth__reality"><span class="fo-myth__label">Actually</span>${esc(m.reality)}</p>
     </div>`).join('');
-  const paths = `<div class="fo-chips">${fp.careers.paths.map(p => `<span class="fo-chip">${esc(p)}</span>`).join('')}</div>`;
+  // Career destinations are descriptive context, not actions — render as a
+  // quiet flowing list (middot-separated), never as tappable-looking pills.
+  // The separator carries a leading nbsp (keeps the middot with its phrase)
+  // and a trailing normal space (the line-break opportunity).
+  const paths = `<p class="fo-leads">${fp.careers.paths
+    .map(p => `<span class="fo-lead">${esc(p)}</span>`)
+    .join('<span class="fo-lead-sep"> · </span>')}</p>`;
   const compares = (fp.oftenComparedWith ?? []).map(c => {
     const other = CATEGORY_LABEL_MAP[c.fieldId] ?? c.fieldId;
     return `
@@ -4628,8 +4634,17 @@ function renderFieldOverview(fieldId) {
       </section>`}
 
       <div class="fo-fork">
-        <button type="button" class="fo-btn fo-btn--primary" id="foSeeCourses">See courses I qualify for →</button>
-        <button type="button" class="fo-btn" id="foPlanSubjects">Help me plan my subjects →</button>
+        <p class="fo-fork__lead">What would you like to do next?</p>
+        <div class="fo-fork__choices">
+          <div class="fo-choice">
+            <button type="button" class="fo-btn fo-btn--primary" id="foSeeCourses">See courses I qualify for →</button>
+            <span class="fo-choice__hint">If you've already chosen your subjects</span>
+          </div>
+          <div class="fo-choice">
+            <button type="button" class="fo-btn" id="foPlanSubjects">Help me plan my subjects →</button>
+            <span class="fo-choice__hint">If you're still deciding what to take</span>
+          </div>
+        </div>
         <button type="button" class="fo-back" id="foBack">${esc(backLabel)}</button>
       </div>
     </div>`;

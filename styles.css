@@ -880,11 +880,38 @@ main     { flex: 1; padding: var(--pad); }
 
 .fo-fork {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
   padding-top: var(--space-6);
   border-top: 1px solid var(--color-border);
+}
+.fo-fork__lead {
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--ce-ink-60);
+  margin: 0;
+}
+.fo-fork__choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+}
+.fo-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  max-width: 264px;
+}
+.fo-choice__hint {
+  font-family: var(--ce-font-body);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ce-ink-60);
 }
 .fo-btn {
   padding: var(--space-3) var(--space-6);
@@ -906,7 +933,6 @@ main     { flex: 1; padding: var(--pad); }
 }
 .fo-btn--primary:hover { opacity: .9; border-color: var(--fo-accent, var(--color-text-primary)); }
 .fo-back {
-  margin-left: auto;
   border: none;
   background: none;
   padding: var(--space-2);
@@ -3343,21 +3369,46 @@ button.plan-combo-tag--drop:focus-visible {
 }
 .fo-branch strong { font-family: var(--ce-font-display); font-weight: 700; letter-spacing: -.01em; }
 
-/* Misconceptions: "People think / Actually" pairs */
+/* Section heads get a small butter-yellow anchor tick — one consistent
+   structural accent, so the long read has visual landmarks. */
+.fo-section__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.fo-section__head::before {
+  content: "";
+  flex: none;
+  width: 18px;
+  height: 3px;
+  background: var(--ce-accent);
+}
+
+/* Misconceptions: "People think / Actually" pairs — the correction reads
+   visually, coral (myth) giving way to sage (the reality). Subtle tints. */
 .fo-myth {
   max-width: 66ch;
-  margin: 0 0 var(--space-4);
-  padding-left: var(--space-4);
-  border-left: 2px solid var(--ce-hairline-color);
+  margin: 0 0 var(--space-5);
 }
 .fo-myth p {
   font-family: var(--ce-font-body);
   font-size: 1rem;
   line-height: 1.65;
-  margin: 0 0 4px;
+  margin: 0;
+  padding: 10px var(--space-4);
+  border-left: 2px solid transparent;
 }
-.fo-myth__myth   { color: var(--ce-ink-60); }
-.fo-myth__reality{ color: var(--ce-ink); }
+.fo-myth p.fo-myth__myth {
+  color: var(--ce-ink-60);
+  background: var(--ce-coral-tint);
+  border-left-color: var(--ce-coral);
+  margin-bottom: 2px;
+}
+.fo-myth p.fo-myth__reality {
+  color: var(--ce-ink);
+  background: var(--ce-sage-tint);
+  border-left-color: var(--ce-sage);
+}
 .fo-myth__label {
   display: inline-block;
   font-family: var(--ce-font-mono);
@@ -3368,7 +3419,21 @@ button.plan-combo-tag--drop:focus-visible {
   margin-right: 8px;
   color: var(--ce-ink-60);
 }
+.fo-myth__myth    .fo-myth__label { color: var(--ce-status-reach); }
 .fo-myth__reality .fo-myth__label { color: var(--ce-status-strong); }
+
+/* "Where it leads" — descriptive career context, NOT tappable. Quiet
+   middot-separated flowing text, deliberately un-pilled. */
+.fo-leads {
+  max-width: 66ch;
+  margin: 0 0 var(--space-4);
+  font-family: var(--ce-font-body);
+  font-size: 1rem;
+  line-height: 1.9;
+  color: var(--ce-ink);
+}
+.fo-lead { white-space: nowrap; }        /* keep each phrase intact… */
+.fo-lead-sep { color: var(--ce-ink-30); font-weight: 700; }  /* …break here */
 
 /* Comparison cards — tappable, navigate to the other field's profile */
 .fo-compares { display: flex; flex-direction: column; gap: var(--space-3); max-width: 66ch; }
@@ -3378,12 +3443,16 @@ button.plan-combo-tag--drop:focus-visible {
   padding: var(--space-4) var(--space-5);
   background: var(--ce-surface);
   border: var(--ce-hairline);
+  border-left: 3px solid var(--fo-accent, var(--ce-ink-30));
   border-radius: var(--ce-radius);
   cursor: pointer;
   font-family: var(--ce-font-body);
-  transition: border-color var(--t-fast);
+  transition: border-color var(--t-fast), background var(--t-fast);
 }
-.fo-compare:hover { border-color: var(--ce-ink); }
+.fo-compare:hover {
+  border-color: var(--ce-ink);
+  border-left-color: var(--fo-accent, var(--ce-ink));
+}
 .fo-compare__title {
   display: block;
   font-family: var(--ce-font-display);
