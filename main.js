@@ -4594,13 +4594,11 @@ function fieldProfileHtml(fp) {
       <p class="fo-myth__myth"><span class="fo-myth__label">People think</span>${esc(m.myth)}</p>
       <p class="fo-myth__reality"><span class="fo-myth__label">Actually</span>${esc(m.reality)}</p>
     </div>`).join('');
-  // Career destinations are descriptive context, not actions — render as a
-  // quiet flowing list (middot-separated), never as tappable-looking pills.
-  // The separator carries a leading nbsp (keeps the middot with its phrase)
-  // and a trailing normal space (the line-break opportunity).
-  const paths = `<p class="fo-leads">${fp.careers.paths
-    .map(p => `<span class="fo-lead">${esc(p)}</span>`)
-    .join('<span class="fo-lead-sep"> · </span>')}</p>`;
+  // Career destinations are descriptive context, not actions — a clean,
+  // scannable list (each on its own line with a small static marker), never
+  // tappable-looking pills and never an unreadable middot run-on.
+  const paths = `<ul class="fo-leads">${fp.careers.paths
+    .map(p => `<li class="fo-lead">${esc(p)}</li>`).join('')}</ul>`;
   const compares = (fp.oftenComparedWith ?? []).map(c => {
     const other = CATEGORY_LABEL_MAP[c.fieldId] ?? c.fieldId;
     return `
