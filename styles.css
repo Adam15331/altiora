@@ -359,6 +359,81 @@ main     { flex: 1; padding: var(--pad); }
 }
 .shortlist-link__icon { font-size: 13px; }
 
+/* "My fields (n)" — persistent kept-fields indicator + popover */
+.fields-nav { position: relative; margin-left: auto; }
+.fields-nav .shortlist-link { margin-left: 0; }
+/* The fields-nav's auto margin pushes the pair right; the shortlist then sits
+   directly beside it (drop its own auto so the space isn't split between them). */
+.fields-nav + .shortlist-link { margin-left: 0; }
+.fields-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 200;
+  width: 264px;
+  max-width: calc(100vw - 2 * var(--space-4));
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.10), 0 1px 4px rgba(0,0,0,.06);
+}
+.fields-menu__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--ce-ink-60);
+  margin: 2px 4px var(--space-2);
+}
+.fields-menu__cap { color: var(--ce-ink-30); }
+.fields-menu__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.fields-menu__item { display: flex; align-items: center; gap: var(--space-2); }
+.fields-menu__name {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--t-fast);
+}
+.fields-menu__name:hover { background: var(--ce-accent-tint, var(--color-cat-cs-bg)); }
+.fields-menu__remove {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ce-ink-60);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.fields-menu__remove:hover { background: var(--ce-coral-tint); color: var(--ce-status-reach); }
+.fields-menu__empty {
+  margin: 0;
+  padding: 4px 4px 6px;
+  font-family: var(--ce-font-body);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ce-ink-60);
+}
+
 /* ═══════════════════════════════════════════════════════════════
  * Save / bookmark button on course cards
  * ═══════════════════════════════════════════════════════════════ */
@@ -861,13 +936,22 @@ main     { flex: 1; padding: var(--pad); }
   justify-content: space-between;
   gap: var(--space-4);
   flex-wrap: wrap;
+  width: 100%;
+  text-align: left;
   padding: var(--space-3) var(--space-4);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface);
+  font-family: inherit;
 }
+/* Clickable combination row → Check Combination with these subjects */
+.fo-combo--action { cursor: pointer; transition: border-color var(--t-fast), background var(--t-fast); }
+.fo-combo--action:hover { border-color: var(--ce-ink, var(--color-text-primary)); background: var(--ce-accent-tint, var(--color-cat-cs-bg)); }
+.fo-combo--action:focus-visible { outline: 2px solid var(--ce-ink, var(--color-text-primary)); outline-offset: 2px; }
 .fo-combo__subjects { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-.fo-combo__count { font-size: var(--text-sm); color: var(--color-text-secondary); white-space: nowrap; }
+.fo-combo__count { display: inline-flex; align-items: center; gap: 8px; font-size: var(--text-sm); color: var(--color-text-secondary); white-space: nowrap; }
+.fo-combo__go { font-family: var(--ce-font-mono); font-weight: 700; color: var(--ce-ink-60); transition: transform var(--t-fast); }
+.fo-combo--action:hover .fo-combo__go { transform: translateX(2px); color: var(--ce-ink); }
 
 .fo-expect {
   font-size: var(--text-base);
@@ -950,6 +1034,8 @@ main     { flex: 1; padding: var(--pad); }
   .stage-bar { flex-direction: column; align-items: flex-start; }
   .stage-tool-nav { width: 100%; overflow-x: auto; }
   .shortlist-link { margin-left: 0; }
+  .fields-nav { margin-left: 0; }
+  .fields-menu { left: 0; right: auto; }   /* button is left-aligned on mobile */
   /* Workspace home — tighter but still generous on mobile */
   .home { padding: var(--space-6) 0 var(--space-10); }
   .home__welcome { font-size: 2rem; }

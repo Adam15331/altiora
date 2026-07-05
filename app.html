@@ -10,7 +10,7 @@
   <!-- Confident Editorial type — loaded via <link> (reliable) not @import -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
   <link rel="stylesheet" href="tokens.css?v=8" />
-  <link rel="stylesheet" href="styles.css?v=38" />
+  <link rel="stylesheet" href="styles.css?v=39" />
   <script defer data-domain="altiora.app" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
@@ -147,6 +147,18 @@
           <nav id="stageToolNav" class="stage-tool-nav" aria-label="Tools for this stage">
             <!-- rendered by JS for the active stage -->
           </nav>
+          <div class="fields-nav">
+            <button id="fieldsLink" class="shortlist-link" type="button"
+                    aria-haspopup="true" aria-expanded="false" aria-controls="fieldsMenu"
+                    aria-label="Your kept fields">
+              <span class="shortlist-link__icon" aria-hidden="true">📌</span>
+              <span class="shortlist-link__text">My fields (<span id="fieldsCount">0</span>)</span>
+              <span class="stage-indicator__caret" aria-hidden="true">▾</span>
+            </button>
+            <div id="fieldsMenu" class="fields-menu hidden" role="region" aria-label="Your kept fields">
+              <!-- rendered by JS (updateFieldsIndicator) -->
+            </div>
+          </div>
           <button id="shortlistLink" class="shortlist-link" type="button" aria-label="View your saved shortlist">
             <span class="shortlist-link__icon" aria-hidden="true">🔖</span>
             <span class="shortlist-link__text">My Shortlist (<span id="shortlistCount">0</span>)</span>
@@ -423,7 +435,7 @@
   <script src="data/fieldProfiles.js?v=1"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
   <script src="state.js?v=6"></script>
-  <script src="main.js?v=48"></script>
+  <script src="main.js?v=49"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);
