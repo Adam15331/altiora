@@ -113,6 +113,16 @@
   --ce-hairline-color: rgba(31,26,23,0.12);
   --ce-hairline: 1px solid var(--ce-hairline-color);
 
+  /* Named accent palette (structural colour on reading surfaces) */
+  --ce-coral:      #E89B7D;
+  --ce-sage:       #86C99A;
+  --ce-lavender:   #B9A3D9;
+  /* Soft tints — gentle backgrounds for long-form reading, never saturated */
+  --ce-accent-tint:   rgba(242,214,75,0.18);
+  --ce-coral-tint:    rgba(232,155,125,0.12);
+  --ce-sage-tint:     rgba(134,201,154,0.14);
+  --ce-lavender-tint: rgba(185,163,217,0.12);
+
   /* Category accents (muted — small accents only) */
   --ce-cat-engineering:  #E89B7D;  /* coral — engineering / STEM */
   --ce-cat-mathematics:  #E89B7D;
