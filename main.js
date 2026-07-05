@@ -1446,6 +1446,51 @@ function updateShortlistCount() {
   if (el) el.textContent = String(AltioraState.getShortlist().length);
 }
 
+/* ─── "My fields" indicator (kept candidate fields) ─────────────
+ * The always-visible home for profile.candidateFields — the SAME set
+ * the Gate and graduation read. Reflects the 0–3 cap, lists each kept
+ * field (link to its profile + remove), and updates reactively via the
+ * state subscription so keeping/removing anywhere is mirrored here. */
+function closeFieldsMenu() {
+  $('fieldsMenu')?.classList.add('hidden');
+  $('fieldsLink')?.setAttribute('aria-expanded', 'false');
+}
+function toggleFieldsMenu() {
+  const menu = $('fieldsMenu');
+  if (!menu) return;
+  const willOpen = menu.classList.contains('hidden');
+  // Close the sibling menus so only one popover is open at a time.
+  closeStageMenu(); closeSystemMenu();
+  menu.classList.toggle('hidden', !willOpen);
+  $('fieldsLink')?.setAttribute('aria-expanded', String(willOpen));
+}
+
+function updateFieldsIndicator() {
+  const countEl = $('fieldsCount');
+  const menu = $('fieldsMenu');
+  if (!countEl || !menu) return;
+  const cap = (typeof AltioraState !== 'undefined') ? AltioraState.MAX_CANDIDATE_FIELDS : 3;
+  const fields = (typeof AltioraState !== 'undefined') ? AltioraState.getCandidateFields() : [];
+  countEl.textContent = String(fields.length);
+  $('fieldsLink')?.classList.toggle('shortlist-link--active', fields.length > 0);
+
+  if (!fields.length) {
+    menu.innerHTML = `<p class="fields-menu__empty">Keep fields you're considering as you explore — up to ${cap}. They guide your subject planning and shortlist.</p>`;
+    return;
+  }
+  const items = fields.map(cat => {
+    const label = CATEGORY_LABEL_MAP[cat] ?? cat;
+    return `
+      <li class="fields-menu__item">
+        <button type="button" class="fields-menu__name" data-open-field="${esc(cat)}">${esc(label)}</button>
+        <button type="button" class="fields-menu__remove" data-remove-field="${esc(cat)}" aria-label="Remove ${esc(label)} from your fields">✕</button>
+      </li>`;
+  }).join('');
+  menu.innerHTML = `
+    <div class="fields-menu__head">Your fields <span class="fields-menu__cap">${fields.length}/${cap}</span></div>
+    <ul class="fields-menu__list">${items}</ul>`;
+}
+
 /* ─── Shortlist view ──────────────────────────────────────────── */
 
 // Download the saved courses as a CSV file (client-side, no backend).
@@ -4103,7 +4148,15 @@ function renderMultiFieldPlan(cats) {
   );
 }
 
-function switchToPlanCombo(tags, systemKey) {
+// Route a subject combination through to Check Combination with those exact
+// subjects ticked and the results filtered to the relevant field(s). Shared by
+// the Subject Planner (fields = all candidate fields) and the Field Overview's
+// "typical strong combinations" (opts.fields = [the single field]). opts:
+//   fields        – category ids to filter by + drive maths resolution
+//                   (defaults to the planner's candidate fields)
+//   resetCountry  – reset the country filter to All (the Field Overview's
+//                   "opens N" count is all-countries, so this keeps it agreeing)
+function switchToPlanCombo(tags, systemKey, opts = {}) {
   switchMode('check');
   state.checkSystem      = systemKey;
   state.selectedSubjects = [];
@@ -4114,15 +4167,21 @@ function switchToPlanCombo(tags, systemKey) {
   // + "Exploring X" banner) and a later system change would snap the filter
   // back to it instead of the planned category.
   state.exploreField = null;
+
+  if (opts.resetCountry) {
+    state.countryFilter = 'All';
+    $$('#countryFilterBar .filter-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.country === 'All'));
+  }
   buildSubjectPicker(systemKey);
 
-  // Tick the exact subjects the planner DISPLAYED, via the shared comboLabels
+  // Tick the exact subjects the source DISPLAYED, via the shared comboLabels
   // logic — never one tag at a time. This keeps the selection consistent with
   // the combo shown and resolves maths correctly per system: one rigorous maths
   // for level-based systems (e.g. IB AA HL, not SL+HL or the applied variant;
   // SG H2, not H1+H2), and Maths + Further Maths only where genuinely separate.
-  const planFields = plannerFields();
-  const isQuant = planFields.some(isQuantitativeCategory);
+  const fields = opts.fields || plannerFields();
+  const isQuant = fields.some(isQuantitativeCategory);
   const targetNames = new Set(comboLabels(tags, systemKey, isQuant));
   $$('#subjectPicker input[type="checkbox"]').forEach(cb => {
     if (targetNames.has(cb.value)) cb.checked = true;
@@ -4130,11 +4189,11 @@ function switchToPlanCombo(tags, systemKey) {
 
   onSubjectToggle();
 
-  if (planFields.length) {
-    // Filter Check Combination to ALL the student's candidate fields.
-    state.selectedCategories = new Set(planFields);
+  if (fields.length) {
+    // Filter Check Combination to the relevant field(s).
+    state.selectedCategories = new Set(fields);
     $$('#categoryPicker .category-chip').forEach(btn => {
-      const active = planFields.includes(btn.dataset.category);
+      const active = fields.includes(btn.dataset.category);
       btn.classList.toggle('active', active);
       btn.setAttribute('aria-pressed', String(active));
     });
@@ -4498,10 +4557,10 @@ function renderFieldOverview(fieldId) {
   const combos = combosForDisplay(cat, sys, isQuant, 3);
   const combosHtml = combos.length
     ? combos.map(({ combo, green, amber }) => `
-        <div class="fo-combo">
+        <button type="button" class="fo-combo fo-combo--action" data-combo-tags="${esc(JSON.stringify(combo))}">
           <span class="fo-combo__subjects">${comboLabels(combo, sys, isQuant).map(l => `<span class="fo-chip fo-chip--accent">${esc(l)}</span>`).join('')}</span>
-          <span class="fo-combo__count">opens ${green + amber} course${green + amber === 1 ? '' : 's'}</span>
-        </div>`).join('')
+          <span class="fo-combo__count">opens ${green + amber} course${green + amber === 1 ? '' : 's'}<span class="fo-combo__go" aria-hidden="true">→</span></span>
+        </button>`).join('')
     : `<p class="fo-muted">No standout combinations — most courses here are flexible on subjects.</p>`;
 
   // Alignment highlight from carried strengths.
@@ -4651,6 +4710,11 @@ function renderFieldOverview(fieldId) {
 
   $('foSeeCourses')?.addEventListener('click', proceedToCheckFromField);
   $('foPlanSubjects')?.addEventListener('click', planForField);
+
+  // Typical strong combinations → Check Combination with those exact subjects.
+  panel.querySelectorAll('[data-combo-tags]').forEach(row =>
+    row.addEventListener('click', () =>
+      checkFieldCombo(cat, JSON.parse(row.dataset.comboTags), sys || AltioraState.getProfile().qualificationSystem)));
   const pinHere = () => {
     // Pinning ON the profile page never shows the interstitial — the
     // profile is right there. Reaching the end pin also counts as read.
@@ -4687,6 +4751,16 @@ function renderFieldOverview(fieldId) {
 // dependent UI. Shared by the system dropdown and by flows that auto-select a
 // system (e.g. arriving from Field Overview). buildSubjectPicker re-applies any
 // active field filter, so the exploration context is preserved.
+// Field Overview: a "typical strong combination" row → Check Combination with
+// those exact subjects, filtered to this field. Reuses the planner's routing
+// (switchToPlanCombo), scoped to the single field so the "opens N" count and
+// the Check results describe the same set.
+function checkFieldCombo(cat, tags, systemKey) {
+  logEvent('fo_combo_to_check', { field: cat, subjects: tags });
+  enterStage('building');   // the same graduation the "See courses" button uses
+  switchToPlanCombo(tags, systemKey, { fields: [cat], resetCountry: true });
+}
+
 function proceedToCheckFromField() {
   if (!state.exploreField) return;
   logEvent('field_overview_to_check', { field: state.exploreField.fieldId });
@@ -4872,6 +4946,20 @@ function init() {
   $('shortlistLink')?.addEventListener('click', () => switchMode('shortlist'));
   AltioraState.subscribe(updateShortlistCount);
   updateShortlistCount();
+
+  // "My fields" indicator — persistent access to the kept candidate fields.
+  $('fieldsLink')?.addEventListener('click', e => { e.stopPropagation(); toggleFieldsMenu(); });
+  $('fieldsMenu')?.addEventListener('click', e => {
+    e.stopPropagation();   // clicks inside the popover shouldn't close it via the document listener
+    const openBtn = e.target.closest('[data-open-field]');
+    if (openBtn) { closeFieldsMenu(); openFieldOverview(openBtn.dataset.openField, { from: 'strengths' }); return; }
+    const rmBtn = e.target.closest('[data-remove-field]');
+    if (rmBtn) { togglePinnedField(rmBtn.dataset.removeField); /* subscription re-renders, popover stays open */ }
+  });
+  document.addEventListener('click', closeFieldsMenu);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFieldsMenu(); });
+  AltioraState.subscribe(updateFieldsIndicator);
+  updateFieldsIndicator();
 
   // Workspace home: the wordmark is the home control; delegated actions on the home panel.
   $('navHome')?.addEventListener('click', goHome);
