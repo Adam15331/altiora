@@ -1107,8 +1107,12 @@ function switchMode(mode) {
   $('shortlistLink')?.classList.toggle('shortlist-link--active', mode === 'shortlist');
   $('homeLink')?.classList.toggle('home-link--active', mode === 'home');
 
-  if (mode === 'strengths' && $('strengthsGrid').children.length === 0) {
-    renderStrengthsGrid();
+  if (mode === 'strengths') {
+    if ($('strengthsGrid').children.length === 0) renderStrengthsGrid();
+    // Re-render the field-card results on (re)entry so their KEEP buttons
+    // reflect the CURRENT candidateFields (e.g. a field kept from the profile
+    // while away). No-ops when no strengths are selected.
+    renderStrengthsResults();
   }
   if (mode === 'plan') {
     // Candidate fields pinned in Stage 1 arrive pre-selected: render on entry
@@ -1588,6 +1592,29 @@ function updateFieldsIndicator() {
   menu.innerHTML = `
     <div class="fields-menu__head">Your fields <span class="fields-menu__cap">${fields.length}/${cap}</span></div>
     <ul class="fields-menu__list">${items}</ul>`;
+}
+
+/* ─── Reactive candidateFields fan-out ────────────────────────────
+ * ONE subscription that keeps EVERY surface showing candidateFields in
+ * sync — the nav "My fields (N)" count + dropdown, the field-profile keep
+ * buttons, the Strengths grid KEEP buttons, the Subject Planner field grid,
+ * and the workspace-home "Your fields"/graduation summary. Adding or removing
+ * a field ANYWHERE re-renders whichever of these is currently on screen, so
+ * no surface can show a stale kept-state. The always-cheap indicators run on
+ * every state change; the heavier active-view re-render only fires when the
+ * candidateFields set actually changed. */
+let _lastCandidateSig = null;
+function syncCandidateFieldSurfaces() {
+  updateFieldsIndicator();     // nav count + dropdown (cheap, every change)
+  syncFieldOverviewPins();     // field-profile keep buttons (mode-guarded)
+
+  const sig = (typeof AltioraState !== 'undefined' ? AltioraState.getCandidateFields() : []).join('|');
+  if (sig === _lastCandidateSig) return;   // only re-render the active view when the SET changed
+  _lastCandidateSig = sig;
+
+  if (state.mode === 'strengths')      renderStrengthsResults();   // Strengths grid KEEP buttons
+  else if (state.mode === 'plan')      renderPlanResults();        // planner field grid + combos
+  else if (state.mode === 'home')      renderWorkspaceHome();      // "Your fields" + graduation
 }
 
 /* ─── Shortlist view ──────────────────────────────────────────── */
@@ -3549,27 +3576,33 @@ function removePinConfirm() {
 function showPinConfirm(catId, fp) {
   removePinConfirm();
   const label = CATEGORY_LABEL_MAP[catId] ?? catId;
+  // A contained, centred modal: full-screen backdrop dims the page; a solid
+  // surface card holds the prompt so nothing bleeds through or collides.
   const el = document.createElement('div');
   el.id = 'pinConfirm';
   el.className = 'pin-confirm';
-  el.setAttribute('role', 'region');
-  el.setAttribute('aria-label', `Keeping ${label} — a moment to reflect`);
   el.innerHTML = `
-    <p class="pin-confirm__text">Keeping <strong>${esc(label)}</strong> — worth knowing: ${esc(fp.reflect)}</p>
-    <div class="pin-confirm__actions">
-      <button type="button" class="pin-btn pin-btn--on" data-pc-keep>Keep it</button>
-      <button type="button" class="pin-btn" data-pc-read>Read the profile first</button>
+    <div class="pin-confirm__box" role="dialog" aria-modal="true" aria-label="Keeping ${esc(label)} — a moment to reflect">
+      <span class="pin-confirm__eyebrow">Worth knowing</span>
+      <p class="pin-confirm__text">Keeping <strong>${esc(label)}</strong> — ${esc(fp.reflect)}</p>
+      <div class="pin-confirm__actions">
+        <button type="button" class="pin-btn pin-btn--on" data-pc-keep>Keep it</button>
+        <button type="button" class="pin-btn" data-pc-read>Read the profile first</button>
+      </div>
     </div>`;
   document.body.appendChild(el);
   el.querySelector('[data-pc-keep]').addEventListener('click', () => {
     removePinConfirm();
-    togglePinnedField(catId);
-    if (state.mode === 'strengths') renderStrengthsResults();
+    togglePinnedField(catId);   // subscription re-renders every candidateFields surface
   });
   el.querySelector('[data-pc-read]').addEventListener('click', () => {
     removePinConfirm();
     openFieldOverview(catId, { from: 'strengths', strengths: [...(_selectedStrengths || [])] });
   });
+  // Dismiss (cancel — no pin) on backdrop click or Escape.
+  el.addEventListener('click', e => { if (e.target === el) removePinConfirm(); });
+  const onEsc = e => { if (e.key === 'Escape') { removePinConfirm(); document.removeEventListener('keydown', onEsc); } };
+  document.addEventListener('keydown', onEsc);
 }
 
 // Reflect the pinned set on the planner's field grid.
@@ -3596,9 +3629,9 @@ function buildPlanCategoryGrid() {
     `;
     btn.addEventListener('click', () => {
       // Multi-select: the grid toggles membership of profile.candidateFields.
-      if (!togglePinnedField(cat.id, { silent: true })) return;   // cap hit — toast shown
-      $('planResults').classList.add('hidden');
-      renderPlanResults();
+      // On success the candidateFields subscription re-renders the planner (grid
+      // + combos) and every other surface; a cap hit just shows a toast.
+      togglePinnedField(cat.id, { silent: true });
     });
     grid.appendChild(btn);
   });
@@ -4495,7 +4528,9 @@ function renderStrengthsResults() {
   resultsDiv.querySelectorAll('[data-pin-category]').forEach(btn => {
     btn.addEventListener('click', () => {
       // Non-readers get the reflective interstitial; readers pin directly.
-      if (requestPinField(btn.dataset.pinCategory)) renderStrengthsResults();
+      // On a successful toggle the candidateFields subscription re-renders
+      // these cards (and every other surface), so no manual re-render here.
+      requestPinField(btn.dataset.pinCategory);
     });
   });
 }
@@ -5056,10 +5091,12 @@ function init() {
   });
   document.addEventListener('click', closeFieldsMenu);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFieldsMenu(); });
-  AltioraState.subscribe(updateFieldsIndicator);
+  // One reactive fan-out keeps EVERY candidateFields surface in sync (nav
+  // count/dropdown, field-profile pins, Strengths KEEP buttons, planner grid,
+  // home summary) — no per-surface desync possible.
+  _lastCandidateSig = (AltioraState.getCandidateFields() || []).join('|');   // seed so init doesn't double-render
+  AltioraState.subscribe(syncCandidateFieldSurfaces);
   updateFieldsIndicator();
-  // The field-profile pin buttons track candidateFields too (no stale kept-state).
-  AltioraState.subscribe(syncFieldOverviewPins);
 
   // Workspace home: the wordmark is the home control; delegated actions on the home panel.
   $('navHome')?.addEventListener('click', goHome);
