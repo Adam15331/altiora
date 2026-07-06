@@ -4652,16 +4652,29 @@ function fieldProfileHtml(fp) {
         <span class="fo-compare__go">Read about ${esc(other)} →</span>
       </button>`;
   }).join('');
-  return `
-    <section class="fo-section"><h2 class="fo-section__head">What it actually is</h2>${paras(fp.whatItIs)}</section>
-    <section class="fo-section"><h2 class="fo-section__head">Where it branches</h2>${branches}</section>
-    <section class="fo-section"><h2 class="fo-section__head">A day in the life</h2>${paras(fp.dayInTheLife)}</section>
-    <section class="fo-section"><h2 class="fo-section__head">The degree vs the school subject</h2>${paras(fp.degreeVsSchool)}</section>
-    <section class="fo-section"><h2 class="fo-section__head">Who thrives — and who doesn't</h2>${paras(fp.whoThrives)}</section>
-    <section class="fo-section"><h2 class="fo-section__head">Misconceptions</h2>${myths}</section>
-    <section class="fo-section"><h2 class="fo-section__head">Where it leads</h2>${paths}${paras(fp.careers.honestNote)}</section>
-    ${compares ? `<section class="fo-section"><h2 class="fo-section__head">Often compared with</h2><div class="fo-compares">${compares}</div></section>` : ''}`;
+  // Section list in reading order. The heading accent colour rotates through
+  // the four system palette tokens (yellow → coral → sage → lavender) by
+  // source index, so adjacent sections always differ — the Teak "candy
+  // accents rotating down the page" rhythm, not one flat yellow.
+  const sections = [
+    { head: 'What it actually is',              body: paras(fp.whatItIs) },
+    { head: 'Where it branches',                body: branches },
+    { head: 'A day in the life',                body: paras(fp.dayInTheLife) },
+    { head: 'The degree vs the school subject', body: paras(fp.degreeVsSchool) },
+    { head: "Who thrives — and who doesn't",    body: paras(fp.whoThrives) },
+    { head: 'Misconceptions',                   body: myths },
+    { head: 'Where it leads',                   body: `${paths}${paras(fp.careers.honestNote)}` },
+  ];
+  if (compares) sections.push({ head: 'Often compared with', body: `<div class="fo-compares">${compares}</div>` });
+
+  return sections.map((s, i) =>
+    `<section class="fo-section"><h2 class="fo-section__head ${FO_HEAD_ACCENTS[i % FO_HEAD_ACCENTS.length]}">${s.head}</h2>${s.body}</section>`
+  ).join('');
 }
+
+// Rotating heading-accent classes (see .fo-accent-* in styles.css). Cycled by
+// source order so consecutive section headings never share a colour.
+const FO_HEAD_ACCENTS = ['fo-accent-yellow', 'fo-accent-coral', 'fo-accent-sage', 'fo-accent-lavender'];
 
 // Jump straight from a field card to that field's course list, skipping the
 // profile read. Sets the same exploreField context openFieldOverview would,
@@ -4833,7 +4846,7 @@ function renderFieldOverview(fieldId) {
       <h2 class="fo-gate-break" id="foGateBreak">What it takes to get in</h2>` : ''}
 
       <section class="fo-section">
-        <h2 class="fo-section__head">Subjects this field needs</h2>
+        <h2 class="fo-section__head fo-accent-yellow">Subjects this field needs</h2>
         <div class="fo-subjects">
           <div>
             <span class="fo-label">Usually required</span>
@@ -4850,14 +4863,14 @@ function renderFieldOverview(fieldId) {
 
       <section class="fo-section">
         ${sys === 'US_AP'
-          ? `<h2 class="fo-section__head">Building a strong AP profile</h2>${apGuidancePanelHtml(cat)}`
-          : `<h2 class="fo-section__head">Typical strong combinations</h2>
+          ? `<h2 class="fo-section__head fo-accent-coral">Building a strong AP profile</h2>${apGuidancePanelHtml(cat)}`
+          : `<h2 class="fo-section__head fo-accent-coral">Typical strong combinations</h2>
         <div class="fo-combos">${combosHtml}</div>
         ${sys ? '' : `<p class="fo-muted fo-muted--hint">Example combinations shown in general terms — pick your qualification system in Check Combination to see them in your own subjects.</p>`}`}
       </section>
 
       <section class="fo-section">
-        <h2 class="fo-section__head">What to expect</h2>
+        <h2 class="fo-section__head fo-accent-sage">What to expect</h2>
         <p class="fo-expect">${testsLine}</p>
         ${gradeLine ? `<p class="fo-expect">${gradeLine}</p>` : ''}
         ${holisticLine ? `<p class="fo-expect fo-expect--muted">${holisticLine}</p>` : ''}
@@ -4865,7 +4878,7 @@ function renderFieldOverview(fieldId) {
 
       ${fp ? '' : `
       <section class="fo-section">
-        <h2 class="fo-section__head">Where it leads</h2>
+        <h2 class="fo-section__head fo-accent-lavender">Where it leads</h2>
         <p class="fo-expect">${esc(f.leads)}</p>
       </section>`}
 
