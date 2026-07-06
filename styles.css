@@ -3659,46 +3659,6 @@ button.plan-combo-tag--drop:focus-visible {
   border-top: 2px solid var(--ce-ink);
 }
 
-/* Reflective pin interstitial — a contained centred modal with a dimming
-   backdrop, so it never bleeds through or collides with the page behind it. */
-.pin-confirm {
-  position: fixed;
-  inset: 0;
-  z-index: 400;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-5);
-  background: rgba(31, 26, 23, 0.38);   /* ink backdrop dims the page */
-}
-.pin-confirm__box {
-  width: 100%;
-  max-width: 440px;
-  padding: var(--space-5) var(--space-6) var(--space-6);
-  background: var(--ce-surface);        /* SOLID warm surface — nothing shows through */
-  border: var(--ce-hairline);
-  border-top: 3px solid var(--ce-accent);   /* butter-yellow accent (top, not a left bar) */
-  box-shadow: 0 16px 44px rgba(31, 26, 23, 0.24);
-}
-.pin-confirm__eyebrow {
-  display: inline-block;
-  font-family: var(--ce-font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .09em;
-  text-transform: uppercase;
-  color: var(--ce-ink-60);
-  margin-bottom: var(--space-2);
-}
-.pin-confirm__text {
-  font-family: var(--ce-font-body);
-  font-size: var(--text-base);
-  line-height: 1.6;
-  color: var(--ce-ink);
-  margin: 0 0 var(--space-4);
-}
-.pin-confirm__actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
-
 @media (max-width: 480px) {
   .fo-prose { font-size: 1rem; }
   .fo-gate-break { font-size: 1.35rem; }

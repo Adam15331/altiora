@@ -1083,7 +1083,6 @@ function appBack() {
 
 function switchMode(mode) {
   state.mode = mode;
-  if (typeof removePinConfirm === 'function') removePinConfirm();   // never linger across screens
   logEvent('mode_switch', { mode });
 
   // Highlight the active tool in the stage sub-nav
@@ -1551,20 +1550,45 @@ function toggleFieldsMenu() {
   $('fieldsLink')?.setAttribute('aria-expanded', String(willOpen));
 }
 
-// Keep the field-profile "Keep this field" buttons in sync with the CURRENT
-// candidateFields. Removing a field anywhere (nav dropdown, another surface,
-// the button itself) reverts these live — the kept-state must never go stale.
-function syncFieldOverviewPins() {
-  if (state.mode !== 'field-overview') return;
-  const cat = state.exploreField?.category;
-  if (!cat || typeof AltioraState === 'undefined') return;
-  const on = AltioraState.getCandidateFields().includes(cat);
-  ['foPinField', 'foPinFieldEnd'].forEach(id => {
-    const btn = $(id);
-    if (!btn) return;
-    btn.classList.toggle('pin-btn--on', on);
+// ROOT of kept-state reactivity: every keep/kept button's VISUAL state is a
+// direct projection of the single source of truth (candidateFields). This runs
+// on EVERY state change via cheap DOM toggles on whatever keep-buttons are in
+// the DOM — so a button can NEVER show a stale kept-state, independent of
+// whether any heavier full re-render fires. Covers all three surfaces:
+//   • Strengths-grid field cards (.field-card__pin)
+//   • Field-profile pins (#foPinField / #foPinFieldEnd)
+//   • Subject-Planner field grid (.plan-cat-card)
+function syncKeepButtons() {
+  if (typeof AltioraState === 'undefined') return;
+  const kept = new Set(AltioraState.getCandidateFields());
+
+  document.querySelectorAll('.field-card__pin[data-pin-category]').forEach(btn => {
+    const on = kept.has(btn.dataset.pinCategory);
+    btn.classList.toggle('field-card__pin--on', on);
     btn.setAttribute('aria-pressed', String(on));
-    btn.textContent = on ? '✓ Kept as one of your fields' : 'Keep this field';
+    const txt = btn.querySelector('.field-card__pin-text');
+    if (txt) txt.textContent = on ? 'Kept' : 'Keep';
+    const name = btn.closest('.field-card')?.querySelector('.field-card__name')?.textContent?.trim() || '';
+    btn.setAttribute('aria-label', `${on ? 'Kept' : 'Keep'} ${name}`.trim());
+    btn.setAttribute('title', on ? 'Kept — one of your fields' : `Keep ${name}`.trim());
+  });
+
+  const foCat = state.exploreField?.category;
+  if (foCat) {
+    const on = kept.has(foCat);
+    ['foPinField', 'foPinFieldEnd'].forEach(id => {
+      const btn = $(id);
+      if (!btn) return;
+      btn.classList.toggle('pin-btn--on', on);
+      btn.setAttribute('aria-pressed', String(on));
+      btn.textContent = on ? '✓ Kept as one of your fields' : 'Keep this field';
+    });
+  }
+
+  document.querySelectorAll('#planCategoryGrid .plan-cat-card[data-category]').forEach(c => {
+    const on = kept.has(c.dataset.category);
+    c.classList.toggle('active', on);
+    c.setAttribute('aria-pressed', String(on));
   });
 }
 
@@ -1595,26 +1619,28 @@ function updateFieldsIndicator() {
 }
 
 /* ─── Reactive candidateFields fan-out ────────────────────────────
- * ONE subscription that keeps EVERY surface showing candidateFields in
- * sync — the nav "My fields (N)" count + dropdown, the field-profile keep
- * buttons, the Strengths grid KEEP buttons, the Subject Planner field grid,
- * and the workspace-home "Your fields"/graduation summary. Adding or removing
- * a field ANYWHERE re-renders whichever of these is currently on screen, so
- * no surface can show a stale kept-state. The always-cheap indicators run on
- * every state change; the heavier active-view re-render only fires when the
- * candidateFields set actually changed. */
+ * ONE subscription keeps EVERY surface in sync. Two layers, both driven off
+ * the single source of truth (AltioraState.candidateFields):
+ *   1. syncKeepButtons() + updateFieldsIndicator() run UNCONDITIONALLY on
+ *      every change — cheap DOM toggles that directly project the kept-state
+ *      onto every keep-button and the nav count/dropdown. This is what makes
+ *      a stale KEPT card impossible: the button visual is re-derived from the
+ *      source every time, never relying on a full re-render firing.
+ *   2. A content re-render of the active view (new cards / combos / summary)
+ *      fires only when the SET actually changed — an optimisation layered on
+ *      top of (1), never a substitute for it. */
 let _lastCandidateSig = null;
 function syncCandidateFieldSurfaces() {
-  updateFieldsIndicator();     // nav count + dropdown (cheap, every change)
-  syncFieldOverviewPins();     // field-profile keep buttons (mode-guarded)
+  syncKeepButtons();           // ← every keep-button's state, directly from the source (always)
+  updateFieldsIndicator();     // nav count + dropdown (always)
 
   const sig = (typeof AltioraState !== 'undefined' ? AltioraState.getCandidateFields() : []).join('|');
-  if (sig === _lastCandidateSig) return;   // only re-render the active view when the SET changed
+  if (sig === _lastCandidateSig) return;   // content re-render only when the SET changed
   _lastCandidateSig = sig;
 
-  if (state.mode === 'strengths')      renderStrengthsResults();   // Strengths grid KEEP buttons
-  else if (state.mode === 'plan')      renderPlanResults();        // planner field grid + combos
-  else if (state.mode === 'home')      renderWorkspaceHome();      // "Your fields" + graduation
+  if (state.mode === 'strengths')      renderStrengthsResults();
+  else if (state.mode === 'plan')      renderPlanResults();
+  else if (state.mode === 'home')      renderWorkspaceHome();
 }
 
 /* ─── Shortlist view ──────────────────────────────────────────── */
@@ -3555,56 +3581,6 @@ function togglePinnedField(catId, { silent = false } = {}) {
   return true;
 }
 
-// Pin with a reflective pause: students who haven't read a field's profile
-// get one gentle interstitial with a line worth knowing, and the choice to
-// read first. Readers (tracked per session) are never nagged. Unpinning
-// always proceeds directly. Returns true when the pin state changed now.
-function requestPinField(catId) {
-  const already = AltioraState.getCandidateFields().includes(catId);
-  const fp = (typeof fieldProfiles !== 'undefined') ? fieldProfiles[catId] : null;
-  if (already || !fp || _fieldReadDepth.has(catId)) {
-    return togglePinnedField(catId);
-  }
-  showPinConfirm(catId, fp);
-  return false;
-}
-
-function removePinConfirm() {
-  document.getElementById('pinConfirm')?.remove();
-}
-
-function showPinConfirm(catId, fp) {
-  removePinConfirm();
-  const label = CATEGORY_LABEL_MAP[catId] ?? catId;
-  // A contained, centred modal: full-screen backdrop dims the page; a solid
-  // surface card holds the prompt so nothing bleeds through or collides.
-  const el = document.createElement('div');
-  el.id = 'pinConfirm';
-  el.className = 'pin-confirm';
-  el.innerHTML = `
-    <div class="pin-confirm__box" role="dialog" aria-modal="true" aria-label="Keeping ${esc(label)} — a moment to reflect">
-      <span class="pin-confirm__eyebrow">Worth knowing</span>
-      <p class="pin-confirm__text">Keeping <strong>${esc(label)}</strong> — ${esc(fp.reflect)}</p>
-      <div class="pin-confirm__actions">
-        <button type="button" class="pin-btn pin-btn--on" data-pc-keep>Keep it</button>
-        <button type="button" class="pin-btn" data-pc-read>Read the profile first</button>
-      </div>
-    </div>`;
-  document.body.appendChild(el);
-  el.querySelector('[data-pc-keep]').addEventListener('click', () => {
-    removePinConfirm();
-    togglePinnedField(catId);   // subscription re-renders every candidateFields surface
-  });
-  el.querySelector('[data-pc-read]').addEventListener('click', () => {
-    removePinConfirm();
-    openFieldOverview(catId, { from: 'strengths', strengths: [...(_selectedStrengths || [])] });
-  });
-  // Dismiss (cancel — no pin) on backdrop click or Escape.
-  el.addEventListener('click', e => { if (e.target === el) removePinConfirm(); });
-  const onEsc = e => { if (e.key === 'Escape') { removePinConfirm(); document.removeEventListener('keydown', onEsc); } };
-  document.addEventListener('keydown', onEsc);
-}
-
 // Reflect the pinned set on the planner's field grid.
 function syncPlanGridSelection() {
   const set = new Set(plannerFields());
@@ -4527,10 +4503,10 @@ function renderStrengthsResults() {
   });
   resultsDiv.querySelectorAll('[data-pin-category]').forEach(btn => {
     btn.addEventListener('click', () => {
-      // Non-readers get the reflective interstitial; readers pin directly.
-      // On a successful toggle the candidateFields subscription re-renders
-      // these cards (and every other surface), so no manual re-render here.
-      requestPinField(btn.dataset.pinCategory);
+      // Keeping is instant — one click toggles the field. The candidateFields
+      // subscription re-renders these cards and every other surface (nav count,
+      // etc.), so no manual re-render and no interstitial.
+      togglePinnedField(btn.dataset.pinCategory);
     });
   });
 }
@@ -4577,10 +4553,8 @@ function resolveFieldId(key) {
   return CATEGORY_TO_FIELD[key] ?? null;
 }
 
-// Session reading memory: which field profiles the student has genuinely
-// scrolled through, and which overviews they've opened at all. Powers the
-// pin interstitial (readers aren't nagged) and the graduation line.
-const _fieldReadDepth = new Set();
+// Session memory: which field overviews the student has opened. Powers the
+// graduation line ("you've explored N fields").
 const _fieldsVisited  = new Set();
 
 // The long-form profile body — the discovery read that now LEADS the
@@ -4848,29 +4822,16 @@ function renderFieldOverview(fieldId) {
   panel.querySelectorAll('[data-combo-tags]').forEach(row =>
     row.addEventListener('click', () =>
       checkFieldCombo(cat, JSON.parse(row.dataset.comboTags), sys || AltioraState.getProfile().qualificationSystem)));
-  const pinHere = () => {
-    // Pinning ON the profile page never shows the interstitial — the profile
-    // is right there. The candidateFields subscription (syncFieldOverviewPins)
-    // re-syncs the pin buttons here AND the nav count, so no re-render needed.
-    togglePinnedField(cat);
-  };
+  // Keeping from the profile is instant — the candidateFields subscription
+  // re-syncs the pin buttons here AND the nav count, so no re-render needed.
+  const pinHere = () => togglePinnedField(cat);
   $('foPinField')?.addEventListener('click', pinHere);
-  $('foPinFieldEnd')?.addEventListener('click', () => { _fieldReadDepth.add(cat); pinHere(); });
+  $('foPinFieldEnd')?.addEventListener('click', pinHere);
 
   // Comparison links navigate between profiles.
   panel.querySelectorAll('[data-compare-field]').forEach(btn =>
     btn.addEventListener('click', () =>
       openFieldOverview(btn.dataset.compareField, { from: _overviewFrom, strengths: _overviewStrengths })));
-
-  // Reading detection: scrolling to the admissions break means the student
-  // has been through the whole profile — future pins skip the interstitial.
-  const gateEl = $('foGateBreak');
-  if (gateEl && 'IntersectionObserver' in window) {
-    const io = new IntersectionObserver(entries => {
-      if (entries.some(en => en.isIntersecting)) { _fieldReadDepth.add(cat); io.disconnect(); }
-    });
-    io.observe(gateEl);
-  }
   // Unified back: one step through app history (same as the nav "← Back" and
   // the browser Back button). The label stays contextual; the mechanism is one.
   $('foBack')?.addEventListener('click', appBack);
