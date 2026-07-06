@@ -3532,56 +3532,78 @@ button.plan-combo-tag--drop:focus-visible {
   background: var(--ce-accent);
 }
 
-/* Misconceptions: "People think / Actually" pairs — editorial, on the plain
-   canvas. No tinted bands, no left borders. The myth reads quiet (muted mono
-   label + lighter ink); the correction reads authoritative (system-green mono
-   label + full-strength ink). A hairline divides one pair from the next. */
+/* Misconceptions — three myth→correction PAIRS on the plain canvas (no bands,
+   no borders on the lines). Each mono label sits on its OWN line above the
+   text it introduces, so it reads as a tag, not the sentence's first words.
+   Spacing groups each pair: tight myth→correction, generous pair→pair with a
+   hairline between. Myth quiet (muted label + lighter ink); correction
+   authoritative (system-green label + full-strength ink). */
 .fo-myth {
   max-width: 66ch;
-  margin: 0 0 var(--space-5);
-  padding-top: var(--space-5);
-  border-top: 1px solid var(--ce-hairline-color);
+  margin: 0 0 var(--space-6);              /* generous space BETWEEN pairs */
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--ce-hairline-color);   /* divider between pairs only */
 }
 .fo-myth:first-of-type { padding-top: 0; border-top: none; }
 .fo-myth p {
   font-family: var(--ce-font-body);
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.55;
   margin: 0;
 }
 .fo-myth p.fo-myth__myth {
-  color: var(--ce-ink-60);       /* quieter — the misconception */
-  margin-bottom: 8px;
+  color: var(--ce-ink-60);                 /* quieter — the misconception */
+  margin-bottom: 12px;                     /* tight WITHIN the pair: myth → correction */
 }
 .fo-myth p.fo-myth__reality {
-  color: var(--ce-ink);          /* full-strength — the authoritative answer */
+  color: var(--ce-ink);                    /* full-strength — the authoritative answer */
 }
 .fo-myth__label {
-  display: inline-block;
+  display: block;                          /* label on its OWN line, above its text */
   font-family: var(--ce-font-mono);
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: .07em;
+  letter-spacing: .13em;                   /* spaced out so it reads clearly as a tag */
   text-transform: uppercase;
-  margin-right: 8px;
-  color: var(--ce-ink-60);       /* muted grey mono (the myth's label) */
+  margin-bottom: 4px;
+  color: var(--ce-ink-60);                 /* muted grey mono (the myth's label) */
 }
 .fo-myth__reality .fo-myth__label { color: var(--ce-status-strong); }  /* the system's confident status-green */
 
-/* "Where it leads" — descriptive career context, NOT tappable. Quiet
-   middot-separated flowing text, deliberately un-pilled. */
+/* "Where it leads" — descriptive career context, NOT tappable. A clean,
+   scannable list: each destination on its own line with a small static
+   marker. No pills, no borders, no hover — obviously non-interactive.
+   Two columns on wide screens for compactness, one on mobile. */
 .fo-leads {
   max-width: 66ch;
   margin: 0 0 var(--space-4);
+  padding: 0;
+  list-style: none;
   font-family: var(--ce-font-body);
   font-size: 1rem;
-  line-height: 1.9;
   color: var(--ce-ink);
+  columns: 2;
+  column-gap: var(--space-8);
 }
-/* Keep short phrases on one line where they fit, but allow a phrase longer
-   than the line to wrap (no overflow on narrow screens). */
-.fo-lead { white-space: normal; overflow-wrap: break-word; }
-.fo-lead-sep { color: var(--ce-coral); font-weight: 700; white-space: nowrap; }  /* warm coral middot, never orphaned */
+.fo-lead {
+  position: relative;
+  break-inside: avoid;
+  padding: 5px 0 5px 20px;
+  line-height: 1.45;
+  overflow-wrap: break-word;
+}
+.fo-lead::before {                 /* small butter-yellow square marker (a bullet, not a control) */
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.66em;
+  width: 7px;
+  height: 7px;
+  background: var(--ce-accent);
+}
+@media (max-width: 640px) {
+  .fo-leads { columns: 1; }
+}
 
 /* Comparison cards — inviting, tappable. Soft lavender-tinted panels (NO
    left border), Bricolage title, a lift on hover so they read as cards. */
@@ -3637,26 +3659,43 @@ button.plan-combo-tag--drop:focus-visible {
   border-top: 2px solid var(--ce-ink);
 }
 
-/* Reflective pin interstitial — a quiet fixed strip, never a modal */
+/* Reflective pin interstitial — a contained centred modal with a dimming
+   backdrop, so it never bleeds through or collides with the page behind it. */
 .pin-confirm {
   position: fixed;
-  left: 50%;
-  bottom: 18px;
-  transform: translateX(-50%);
-  z-index: 300;
-  width: calc(100% - 32px);
-  max-width: 620px;
-  padding: var(--space-4) var(--space-5);
-  background: var(--ce-accent-tint);
+  inset: 0;
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5);
+  background: rgba(31, 26, 23, 0.38);   /* ink backdrop dims the page */
+}
+.pin-confirm__box {
+  width: 100%;
+  max-width: 440px;
+  padding: var(--space-5) var(--space-6) var(--space-6);
+  background: var(--ce-surface);        /* SOLID warm surface — nothing shows through */
   border: var(--ce-hairline);
-  box-shadow: 0 4px 18px rgba(31,26,23,.10);
+  border-top: 3px solid var(--ce-accent);   /* butter-yellow accent (top, not a left bar) */
+  box-shadow: 0 16px 44px rgba(31, 26, 23, 0.24);
+}
+.pin-confirm__eyebrow {
+  display: inline-block;
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--ce-ink-60);
+  margin-bottom: var(--space-2);
 }
 .pin-confirm__text {
   font-family: var(--ce-font-body);
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
   line-height: 1.6;
   color: var(--ce-ink);
-  margin: 0 0 var(--space-3);
+  margin: 0 0 var(--space-4);
 }
 .pin-confirm__actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
 
