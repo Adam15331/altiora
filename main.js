@@ -72,9 +72,13 @@ const STATUS = {
   green: { label:'Strong match', badgeCls:'badge--success', icon:'✓', cardCls:'course-card--green' },
   amber: { label:'Possible',     badgeCls:'badge--warning', icon:'◑', cardCls:'course-card--amber' },
   red:   { label:'Out of reach',         badgeCls:'badge--error',   icon:'✗', cardCls:'course-card--red'   },
-  grey:  { label:'Grade threshold high', badgeCls:'badge--grey',    icon:'◯', cardCls:'course-card--grey'  },
+  grey:  { label:'Grades a stretch',     badgeCls:'badge--grey',    icon:'◯', cardCls:'course-card--grey'  },
+  // Fail-safe bucket: subjects fit, but the course's grade requirement could
+  // not be compared against the student (missing / partial / unreadable grade
+  // data). Never a confident yes — unknown fails to caution, not confidence.
+  unconfirmed: { label:'Grades not confirmed', badgeCls:'badge--grey', icon:'◔', cardCls:'course-card--unconfirmed' },
 };
-const STATUS_SORT = { green:0, amber:1, grey:2, red:3 };
+const STATUS_SORT = { green:0, amber:1, grey:2, unconfirmed:3, red:4 };
 
 const TIER_LABELS = {
   'world-top-10':     'World Top 10',
@@ -679,59 +683,79 @@ function parseDseGrades(str) {
   return (str ?? '').match(/5\*\*|5\*|[1-5]/g) ?? [];
 }
 
-function isGradeAboveStudent(course, system, studentGrade) {
-  if (!studentGrade) return false;
+// Tri-state grade comparison in the student's own qualification system.
+// Returns one of:
+//   'above'   — the course's typical grade requirement is ABOVE the student
+//   'met'     — the student's grade meets (or exceeds) the requirement
+//   'unknown' — the requirement CANNOT be compared (missing / partial /
+//               unreadable grade data for this system). This is the honest
+//               fail-safe answer: callers must NOT treat it as a pass.
+// Crucially, absence of data returns 'unknown', never 'met' — a course whose
+// grades we can't read must never fall through to a strong match.
+function compareGradeToStudent(course, system, studentGrade) {
+  if (!studentGrade) return 'unknown';
   if (system === 'UK_A_Level') {
     const gradeStr = course.grades?.aLevels;
-    if (!gradeStr) return false;
+    if (!gradeStr) return 'unknown';
     const grades = parseALevelGrades(gradeStr);
     const top3 = grades.slice(0, 3);
-    if (studentGrade === 'A*') return false;
-    if (studentGrade === 'A')  return top3.some(g => g === 'A*');
-    if (studentGrade === 'B')  return top3.every(g => A_LEVEL_RANK[g] >= A_LEVEL_RANK['A']);
-    if (studentGrade === 'C')  return top3.some(g => A_LEVEL_RANK[g] >= A_LEVEL_RANK['A']);
-    if (studentGrade === 'D')  return top3.some(g => A_LEVEL_RANK[g] >= A_LEVEL_RANK['B']);
-    return false;
+    if (!top3.length) return 'unknown';
+    if (studentGrade === 'A*') return 'met';
+    if (studentGrade === 'A')  return top3.some(g => g === 'A*') ? 'above' : 'met';
+    if (studentGrade === 'B')  return top3.every(g => A_LEVEL_RANK[g] >= A_LEVEL_RANK['A']) ? 'above' : 'met';
+    if (studentGrade === 'C')  return top3.some(g => A_LEVEL_RANK[g] >= A_LEVEL_RANK['A']) ? 'above' : 'met';
+    if (studentGrade === 'D')  return top3.some(g => A_LEVEL_RANK[g] >= A_LEVEL_RANK['B']) ? 'above' : 'met';
+    return 'unknown';
   }
   if (system === 'IB') {
     // grades.ib is an integer points total (e.g. 39); US/holistic courses
-    // and others without a published total have ib === null → not above.
+    // and others without a published total have ib === null → unknown.
     const ibVal = course.grades?.ib;
-    if (ibVal == null) return false;
+    if (ibVal == null) return 'unknown';
     const studentPts = parseInt(studentGrade, 10);
-    if (isNaN(studentPts)) return false;
+    if (isNaN(studentPts)) return 'unknown';
     const need = typeof ibVal === 'number'
       ? ibVal
       : parseInt(String(ibVal).match(/\d+/)?.[0], 10);
-    if (isNaN(need)) return false;
-    return studentPts < need;
+    if (isNaN(need)) return 'unknown';
+    return studentPts < need ? 'above' : 'met';
   }
   if (system === 'US_AP') {
     const apStr = course.grades?.ap;
-    if (!apStr) return false;
+    if (!apStr) return 'unknown';
     const digits = apStr.match(/[1-5]/g);
-    if (!digits?.length) return false;
+    if (!digits?.length) return 'unknown';
     const minScore = Math.min(...digits.map(Number));
     const courseMinLetter = AP_TO_LETTER[String(minScore)];
-    return A_LEVEL_RANK[studentGrade] < A_LEVEL_RANK[courseMinLetter];
+    if (A_LEVEL_RANK[studentGrade] == null || A_LEVEL_RANK[courseMinLetter] == null) return 'unknown';
+    return A_LEVEL_RANK[studentGrade] < A_LEVEL_RANK[courseMinLetter] ? 'above' : 'met';
   }
   if (system === 'SG_A_Level') {
     const sgStr = course.grades?.sgALevels;
-    if (!sgStr) return false;
+    if (!sgStr) return 'unknown';
     const grades = parseALevelGrades(sgStr);
-    if (!grades.length) return false;
+    if (!grades.length) return 'unknown';
+    if (A_LEVEL_RANK[studentGrade] == null) return 'unknown';
     const minRank = Math.min(...grades.map(g => A_LEVEL_RANK[g] ?? 0));
-    return A_LEVEL_RANK[studentGrade] < minRank;
+    return A_LEVEL_RANK[studentGrade] < minRank ? 'above' : 'met';
   }
   if (system === 'HK_DSE') {
     const dseStr = course.grades?.hkDse;
-    if (!dseStr) return false;
+    if (!dseStr) return 'unknown';
     const grades = parseDseGrades(dseStr);
-    if (!grades.length) return false;
+    if (!grades.length) return 'unknown';
+    if (DSE_RANK[studentGrade] == null) return 'unknown';
     const minRank = Math.min(...grades.map(g => DSE_RANK[g] ?? 0));
-    return (DSE_RANK[studentGrade] ?? 0) < minRank;
+    return (DSE_RANK[studentGrade] ?? 0) < minRank ? 'above' : 'met';
   }
-  return false;
+  return 'unknown';
+}
+
+// Back-compat boolean wrapper: "is the course's typical offer above the
+// student?" Only true on a genuine, comparable 'above' result — an
+// uncomparable ('unknown') requirement is NOT "above".
+function isGradeAboveStudent(course, system, studentGrade) {
+  return compareGradeToStudent(course, system, studentGrade) === 'above';
 }
 
 // For a grey course (predicted grade below the typical offer), describe the
@@ -2762,10 +2786,15 @@ function renderSummaryBar(subjectCount, counts, total) {
   const gPct  = total ? (counts.green / total * 100) : 0;
   const aPct  = total ? (counts.amber / total * 100) : 0;
   const grPct = total ? (counts.grey  / total * 100) : 0;
+  const uPct  = total ? ((counts.unconfirmed ?? 0) / total * 100) : 0;
   const rPct  = total ? (counts.red   / total * 100) : 0;
 
   const greySummary = counts.grey
-    ? `<span class="summary-dot">·</span><a href="#results-group-grey" class="summary-link summary-link--grey">${counts.grey} grade threshold high</a>`
+    ? `<span class="summary-dot">·</span><a href="#results-group-grey" class="summary-link summary-link--grey">${counts.grey} grades a stretch</a>`
+    : '';
+
+  const unconfirmedSummary = counts.unconfirmed
+    ? `<span class="summary-dot">·</span><a href="#results-group-unconfirmed" class="summary-link summary-link--unconfirmed">${counts.unconfirmed} grades not confirmed</a>`
     : '';
 
   bar.innerHTML = `
@@ -2775,13 +2804,15 @@ function renderSummaryBar(subjectCount, counts, total) {
       <span class="summary-dot">·</span>
       <a href="#results-group-amber" class="summary-link summary-link--amber">${counts.amber} possible</a>
       ${greySummary}
+      ${unconfirmedSummary}
       <span class="summary-dot">·</span>
       <a href="#results-group-red" class="summary-link summary-link--red">${counts.red} out of reach</a>
     </div>
-    <div class="summary-progress" role="img" aria-label="Course eligibility: ${counts.green} strong matches, ${counts.amber} possible, ${counts.grey} grade threshold high, ${counts.red} out of reach">
+    <div class="summary-progress" role="img" aria-label="Course eligibility: ${counts.green} strong matches, ${counts.amber} possible, ${counts.grey} grades a stretch, ${counts.unconfirmed ?? 0} grades not confirmed, ${counts.red} out of reach">
       <div class="summary-seg summary-seg--green" style="width:${gPct.toFixed(2)}%"></div>
       <div class="summary-seg summary-seg--amber" style="width:${aPct.toFixed(2)}%"></div>
       <div class="summary-seg summary-seg--grey"  style="width:${grPct.toFixed(2)}%"></div>
+      <div class="summary-seg summary-seg--unconfirmed" style="width:${uPct.toFixed(2)}%"></div>
       <div class="summary-seg summary-seg--red"   style="width:${rPct.toFixed(2)}%"></div>
     </div>
   `;
@@ -2893,7 +2924,7 @@ function renderCheckResults() {
     .filter(c => state.selectedCategories.size === 0 || state.selectedCategories.has(c.category));
 
   const apCount = state.selectedSubjects.length;
-  const byStatus = { green: [], amber: [], grey: [], red: [] };
+  const byStatus = { green: [], amber: [], grey: [], unconfirmed: [], red: [] };
   pool.forEach(course => {
     const result = classify(course, state.selectedTags);
     if (tooFew && result.status === 'green') result.status = 'amber';
@@ -2906,10 +2937,26 @@ function renderCheckResults() {
       result.status = 'amber';
       result.apCountShort = { have: apCount, need: course.apContext.minCompetitiveAPs };
     }
+    // Grade gate. A subject-strong course only KEEPS a green/amber verdict when
+    // its grade requirement can actually be compared against the student and
+    // is met. Three outcomes:
+    //   'above'   → grades are a stretch (grey)
+    //   'met'     → keep the subject verdict (green/amber)
+    //   'unknown' → requirement can't be read → fail safe to 'unconfirmed',
+    //               NEVER a strong/possible match built on absent data.
+    // The one carve-out is the explicit US_AP holistic path: for US courses
+    // under the AP system there is deliberately no grade cutoff (competitiveness
+    // is judged by AP count above), so an 'unknown' there is expected, not a
+    // data gap, and must not be demoted to 'unconfirmed'.
     if (state.predictedGrade && (result.status === 'green' || result.status === 'amber')) {
-      if (isGradeAboveStudent(course, state.checkSystem, state.predictedGrade)) {
+      const holisticApPath = state.checkSystem === 'US_AP'
+        && course.country === 'US' && !!course.apContext;
+      const cmp = compareGradeToStudent(course, state.checkSystem, state.predictedGrade);
+      if (cmp === 'above') {
         result.status = 'grey';
         result.gradeGap = gradeGapInfo(course, state.checkSystem, state.predictedGrade);
+      } else if (cmp === 'unknown' && !holisticApPath) {
+        result.status = 'unconfirmed';
       }
     }
     if (state.checkSystem === 'IB' && (result.status === 'green' || result.status === 'amber')) {
@@ -2940,20 +2987,28 @@ function renderCheckResults() {
   });
 
   // Sort each group by university name
-  ['green', 'amber', 'grey', 'red'].forEach(s =>
+  ['green', 'amber', 'grey', 'unconfirmed', 'red'].forEach(s =>
     byStatus[s].sort((a, b) => a.course.university.localeCompare(b.course.university))
   );
 
-  const counts = { green: byStatus.green.length, amber: byStatus.amber.length, grey: byStatus.grey.length, red: byStatus.red.length };
-  const total  = counts.green + counts.amber + counts.grey + counts.red;
+  const counts = {
+    green: byStatus.green.length,
+    amber: byStatus.amber.length,
+    grey: byStatus.grey.length,
+    unconfirmed: byStatus.unconfirmed.length,
+    red: byStatus.red.length,
+  };
+  const total  = counts.green + counts.amber + counts.grey + counts.unconfirmed + counts.red;
 
   renderSummaryBar(state.selectedSubjects.length, counts, total);
 
   const greyBadge = counts.grey ? `<span class="badge badge--grey">◯&thinsp;${counts.grey}</span>` : '';
+  const unconfirmedBadge = counts.unconfirmed ? `<span class="badge badge--grey">◔&thinsp;${counts.unconfirmed}</span>` : '';
   $('resultSummaryBadges').innerHTML = `
     <span class="badge badge--success">✓&thinsp;${counts.green}</span>
     <span class="badge badge--warning">◑&thinsp;${counts.amber}</span>
     ${greyBadge}
+    ${unconfirmedBadge}
     <span class="badge badge--error">✗&thinsp;${counts.red}</span>
     <span class="badge badge--neutral">${total} shown</span>
   `;
@@ -2973,8 +3028,15 @@ function renderCheckResults() {
   if (byStatus.grey.length) {
     // Visible by default (no collapse) — subject matches where the predicted
     // grade is below the typical offer. Each card shows the grade gap.
-    container.appendChild(buildGroup('grey', 'Subject match, but grade threshold is high', byStatus.grey, cardIndex));
+    container.appendChild(buildGroup('grey', 'Right subjects — but the grades are a stretch', byStatus.grey, cardIndex));
     cardIndex += byStatus.grey.length;
+  }
+  if (byStatus.unconfirmed.length) {
+    // Fail-safe bucket: subjects fit, but we could not compare the course's
+    // grade requirement against the student (missing / partial / unreadable
+    // grade data). Never presented as a confident match.
+    container.appendChild(buildGroup('unconfirmed', 'Grades not confirmed', byStatus.unconfirmed, cardIndex));
+    cardIndex += byStatus.unconfirmed.length;
   }
   if (byStatus.red.length) {
     container.appendChild(buildGroup('red', 'Out of reach', byStatus.red, cardIndex, true));
@@ -3019,10 +3081,16 @@ function buildGroup(status, headerText, items, startIndex, collapsed = false) {
     green: `<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M7 10l2 2 4-4"/></svg>`,
     amber: `<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3a7 7 0 0 1 0 14V3z"/><circle cx="10" cy="10" r="7"/></svg>`,
     red:   `<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M8 8l4 4M12 8l-4 4"/></svg>`,
+    // grey (grades a stretch) — warning triangle, matching the card status icon.
+    grey:  `<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.5L18.5 17H1.5L10 2.5z"/><path d="M10 8v4M10 14.5v.5"/></svg>`,
+    // unconfirmed (grades not confirmed) — half-filled circle, "we don't know".
+    unconfirmed: `<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M10 3a7 7 0 0 0 0 14V3z" fill="currentColor" stroke="none"/></svg>`,
   };
   const header = document.createElement('h2');
   header.className   = `results-group__header results-group__header--${status}`;
-  header.innerHTML   = `${groupIcons[status]} ${headerText} <span style="font-weight:400;opacity:.65">(${items.length})</span>`;
+  // `?? ''` guards against any status without a mapped icon — a missing key
+  // must render nothing, never the literal string "undefined".
+  header.innerHTML   = `${groupIcons[status] ?? ''} ${headerText} <span style="font-weight:400;opacity:.65">(${items.length})</span>`;
   section.appendChild(header);
 
   const cardsDiv = document.createElement('div');
@@ -3214,6 +3282,7 @@ function buildCheckCard(course, result) {
     amber: `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3a7 7 0 0 1 0 14V3z"/><circle cx="10" cy="10" r="7"/></svg>`,
     red:   `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M8 8l4 4M12 8l-4 4"/></svg>`,
     grey:  `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.5L18.5 17H1.5L10 2.5z"/><path d="M10 8v4M10 14.5v.5"/></svg>`,
+    unconfirmed: `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M8 8a2 2 0 1 1 2.6 1.9c-.4.15-.6.4-.6.8v.8"/><path d="M10 14.5v.2"/></svg>`,
   };
   const graduationIcon = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l7-4 7 4-7 4-7-4z"/><path d="M7 10v3.5c0 1.5 1.3 2 3 2s3-.5 3-2V10"/><path d="M17 8v4"/></svg>`;
   const chevronIcon    = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg>`;
@@ -3241,7 +3310,7 @@ function buildCheckCard(course, result) {
   }
 
   card.innerHTML = `
-    <div class="card-status card-status--${status}">${statusIcons[status]} ${cfg.label}</div>
+    <div class="card-status card-status--${status}">${statusIcons[status] ?? ''} ${cfg.label}</div>
     <div class="card-header">
       <div class="card-title-group">
         <span class="card-flag" aria-hidden="true">${flag}</span>
@@ -3262,6 +3331,7 @@ function buildCheckCard(course, result) {
     </div>
     ${gradeStr ? `<div class="card-grades">${esc(sys === 'IB' ? `${gradeStr} IB points` : gradeStr)}</div>` : ''}
     ${(status === 'grey' && result.gradeGap) ? `<p class="card-grade-gap">⚠️ You have ${esc(result.gradeGap.have)}, course asks for ${esc(result.gradeGap.need)}</p>` : ''}
+    ${status === 'unconfirmed' ? `<p class="card-grade-unconfirmed">◔ Your subjects fit, but this course doesn't publish a grade requirement we can compare with your predicted grade — so we can't confirm it's a match. Check the university's official page.</p>` : ''}
     ${fieldCoreHtml}
     ${usAdmitHtml}
     ${ibHlHtml}
