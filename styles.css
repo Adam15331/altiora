@@ -3502,8 +3502,12 @@ button.plan-combo-tag--drop:focus-visible {
 .fo-branch strong { font-family: var(--ce-font-display); font-weight: 700; letter-spacing: -.01em; }
 
 /* Section heads — confident Bricolage 800 with the Teak highlighter move:
-   a solid butter-yellow band swiped under the text — the SAME accent on
-   every section heading (the one heading-accent colour in the system). */
+   a solid flat band swiped under the text. The band COLOUR rotates across
+   the system palette from section to section (butter yellow → coral → sage
+   → lavender), so adjacent headings differ and the page has candy-accent
+   rhythm rather than a flat monochrome yellow. Same shape and weight on
+   every heading; only --fo-accent varies, set by the rotating classes below.
+   Defaults to butter yellow when no rotation class is present. */
 .fo-section__head {
   display: inline-block;
   width: fit-content;
@@ -3517,10 +3521,21 @@ button.plan-combo-tag--drop:focus-visible {
   margin: 0 0 var(--space-4);
   padding: 1px 6px 2px;
   background-image: linear-gradient(to top,
-    var(--ce-accent) 0, var(--ce-accent) 34%, transparent 34%);
+    var(--fo-head-accent, var(--ce-accent)) 0,
+    var(--fo-head-accent, var(--ce-accent)) 34%, transparent 34%);
   background-repeat: no-repeat;
 }
 .fo-section__head::before { content: none; }   /* retire the timid tick */
+
+/* Rotating heading-accent palette — flat, on-system tokens only, no
+   gradients, no new colours. Applied in source order so consecutive
+   sections always land on different colours. A dedicated variable
+   (--fo-head-accent, not the inherited category --fo-accent) keeps this
+   scoped to the heading band and independent of the field's category colour. */
+.fo-accent-yellow   { --fo-head-accent: var(--ce-accent);   }
+.fo-accent-coral    { --fo-head-accent: var(--ce-coral);    }
+.fo-accent-sage     { --fo-head-accent: var(--ce-sage);     }
+.fo-accent-lavender { --fo-head-accent: var(--ce-lavender); }
 
 /* Field title — Teak-scale, heavy Bricolage 800 with a butter-yellow
    highlighter swipe: the confident hero of the page. */
