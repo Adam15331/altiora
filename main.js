@@ -1083,7 +1083,6 @@ function appBack() {
 
 function switchMode(mode) {
   state.mode = mode;
-  if (typeof removePinConfirm === 'function') removePinConfirm();   // never linger across screens
   logEvent('mode_switch', { mode });
 
   // Highlight the active tool in the stage sub-nav
@@ -3555,56 +3554,6 @@ function togglePinnedField(catId, { silent = false } = {}) {
   return true;
 }
 
-// Pin with a reflective pause: students who haven't read a field's profile
-// get one gentle interstitial with a line worth knowing, and the choice to
-// read first. Readers (tracked per session) are never nagged. Unpinning
-// always proceeds directly. Returns true when the pin state changed now.
-function requestPinField(catId) {
-  const already = AltioraState.getCandidateFields().includes(catId);
-  const fp = (typeof fieldProfiles !== 'undefined') ? fieldProfiles[catId] : null;
-  if (already || !fp || _fieldReadDepth.has(catId)) {
-    return togglePinnedField(catId);
-  }
-  showPinConfirm(catId, fp);
-  return false;
-}
-
-function removePinConfirm() {
-  document.getElementById('pinConfirm')?.remove();
-}
-
-function showPinConfirm(catId, fp) {
-  removePinConfirm();
-  const label = CATEGORY_LABEL_MAP[catId] ?? catId;
-  // A contained, centred modal: full-screen backdrop dims the page; a solid
-  // surface card holds the prompt so nothing bleeds through or collides.
-  const el = document.createElement('div');
-  el.id = 'pinConfirm';
-  el.className = 'pin-confirm';
-  el.innerHTML = `
-    <div class="pin-confirm__box" role="dialog" aria-modal="true" aria-label="Keeping ${esc(label)} — a moment to reflect">
-      <span class="pin-confirm__eyebrow">Worth knowing</span>
-      <p class="pin-confirm__text">Keeping <strong>${esc(label)}</strong> — ${esc(fp.reflect)}</p>
-      <div class="pin-confirm__actions">
-        <button type="button" class="pin-btn pin-btn--on" data-pc-keep>Keep it</button>
-        <button type="button" class="pin-btn" data-pc-read>Read the profile first</button>
-      </div>
-    </div>`;
-  document.body.appendChild(el);
-  el.querySelector('[data-pc-keep]').addEventListener('click', () => {
-    removePinConfirm();
-    togglePinnedField(catId);   // subscription re-renders every candidateFields surface
-  });
-  el.querySelector('[data-pc-read]').addEventListener('click', () => {
-    removePinConfirm();
-    openFieldOverview(catId, { from: 'strengths', strengths: [...(_selectedStrengths || [])] });
-  });
-  // Dismiss (cancel — no pin) on backdrop click or Escape.
-  el.addEventListener('click', e => { if (e.target === el) removePinConfirm(); });
-  const onEsc = e => { if (e.key === 'Escape') { removePinConfirm(); document.removeEventListener('keydown', onEsc); } };
-  document.addEventListener('keydown', onEsc);
-}
-
 // Reflect the pinned set on the planner's field grid.
 function syncPlanGridSelection() {
   const set = new Set(plannerFields());
@@ -4527,10 +4476,10 @@ function renderStrengthsResults() {
   });
   resultsDiv.querySelectorAll('[data-pin-category]').forEach(btn => {
     btn.addEventListener('click', () => {
-      // Non-readers get the reflective interstitial; readers pin directly.
-      // On a successful toggle the candidateFields subscription re-renders
-      // these cards (and every other surface), so no manual re-render here.
-      requestPinField(btn.dataset.pinCategory);
+      // Keeping is instant — one click toggles the field. The candidateFields
+      // subscription re-renders these cards and every other surface (nav count,
+      // etc.), so no manual re-render and no interstitial.
+      togglePinnedField(btn.dataset.pinCategory);
     });
   });
 }
@@ -4577,10 +4526,8 @@ function resolveFieldId(key) {
   return CATEGORY_TO_FIELD[key] ?? null;
 }
 
-// Session reading memory: which field profiles the student has genuinely
-// scrolled through, and which overviews they've opened at all. Powers the
-// pin interstitial (readers aren't nagged) and the graduation line.
-const _fieldReadDepth = new Set();
+// Session memory: which field overviews the student has opened. Powers the
+// graduation line ("you've explored N fields").
 const _fieldsVisited  = new Set();
 
 // The long-form profile body — the discovery read that now LEADS the
@@ -4848,29 +4795,16 @@ function renderFieldOverview(fieldId) {
   panel.querySelectorAll('[data-combo-tags]').forEach(row =>
     row.addEventListener('click', () =>
       checkFieldCombo(cat, JSON.parse(row.dataset.comboTags), sys || AltioraState.getProfile().qualificationSystem)));
-  const pinHere = () => {
-    // Pinning ON the profile page never shows the interstitial — the profile
-    // is right there. The candidateFields subscription (syncFieldOverviewPins)
-    // re-syncs the pin buttons here AND the nav count, so no re-render needed.
-    togglePinnedField(cat);
-  };
+  // Keeping from the profile is instant — the candidateFields subscription
+  // re-syncs the pin buttons here AND the nav count, so no re-render needed.
+  const pinHere = () => togglePinnedField(cat);
   $('foPinField')?.addEventListener('click', pinHere);
-  $('foPinFieldEnd')?.addEventListener('click', () => { _fieldReadDepth.add(cat); pinHere(); });
+  $('foPinFieldEnd')?.addEventListener('click', pinHere);
 
   // Comparison links navigate between profiles.
   panel.querySelectorAll('[data-compare-field]').forEach(btn =>
     btn.addEventListener('click', () =>
       openFieldOverview(btn.dataset.compareField, { from: _overviewFrom, strengths: _overviewStrengths })));
-
-  // Reading detection: scrolling to the admissions break means the student
-  // has been through the whole profile — future pins skip the interstitial.
-  const gateEl = $('foGateBreak');
-  if (gateEl && 'IntersectionObserver' in window) {
-    const io = new IntersectionObserver(entries => {
-      if (entries.some(en => en.isIntersecting)) { _fieldReadDepth.add(cat); io.disconnect(); }
-    });
-    io.observe(gateEl);
-  }
   // Unified back: one step through app history (same as the nav "← Back" and
   // the browser Back button). The label stays contextual; the mechanism is one.
   $('foBack')?.addEventListener('click', appBack);
