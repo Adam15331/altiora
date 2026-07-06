@@ -1480,6 +1480,7 @@ main     { flex: 1; padding: var(--pad); }
 .summary-seg--green { background: var(--color-match-strong); }
 .summary-seg--amber { background: var(--color-match-possible); }
 .summary-seg--grey  { background: var(--color-text-tertiary); }
+.summary-seg--unconfirmed { background: var(--ce-ink-30); }
 .summary-seg--red   { background: var(--color-match-reach); }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1514,6 +1515,7 @@ main     { flex: 1; padding: var(--pad); }
 .summary-link--green { color: var(--color-match-strong); }
 .summary-link--amber { color: var(--color-match-possible); }
 .summary-link--grey  { color: var(--color-text-secondary); }
+.summary-link--unconfirmed { color: var(--color-text-secondary); }
 .summary-link--red   { color: var(--color-match-reach); }
 
 /* ── Country filter bar ── */
@@ -1607,6 +1609,7 @@ main     { flex: 1; padding: var(--pad); }
 .results-group__header--amber { color: var(--color-match-possible); }
 .results-group__header--red   { color: var(--color-match-reach); }
 .results-group__header--grey  { color: var(--color-text-tertiary); }
+.results-group__header--unconfirmed { color: var(--color-text-tertiary); }
 
 .results-group__grid {
   display: grid;
@@ -1686,11 +1689,25 @@ main     { flex: 1; padding: var(--pad); }
   border-color: var(--color-match-possible);
   border-left-color: var(--color-match-possible);
 }
+/* Unconfirmed = subjects fit but the grade requirement can't be compared.
+   Neutral (not a warning colour) — an honest "we don't know", not "you fail". */
+.course-card--unconfirmed {
+  border-style: dashed;
+  border-color: var(--color-border);
+  border-left-color: var(--color-border);
+}
 .card-grade-gap {
   margin: var(--space-2) 0 0;
   font-size: var(--text-sm);
   font-weight: 500;
   color: var(--color-match-possible);
+  line-height: 1.5;
+}
+.card-grade-unconfirmed {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-secondary);
   line-height: 1.5;
 }
 
@@ -1738,6 +1755,7 @@ main     { flex: 1; padding: var(--pad); }
 .card-status--amber { color: var(--color-match-possible); }
 .card-status--red   { color: var(--color-match-reach); }
 .card-status--grey  { color: var(--color-match-possible); }
+.card-status--unconfirmed { color: var(--color-text-secondary); }
 .card-status--none  { color: var(--color-text-tertiary); text-transform: none; letter-spacing: 0; font-weight: 500; }
 
 .card-header {
@@ -2814,6 +2832,7 @@ footer p {
 .results-group__header--amber { color: var(--ce-status-possible); }
 .results-group__header--red   { color: var(--ce-status-reach); }
 .results-group__header--grey  { color: var(--ce-status-grade); }
+.results-group__header--unconfirmed { color: var(--ce-ink-60); }
 /* the "(N)" count → mono, quiet, beside the big heading */
 .results-group__header span {
   font-family: var(--ce-font-mono);
@@ -2845,7 +2864,8 @@ footer p {
   border-color: var(--ce-ink-30);
 }
 /* normalise the dashed grey-status border to the same calm hairline */
-.course-card--grey {
+.course-card--grey,
+.course-card--unconfirmed {
   border-style: solid;
   border-color: var(--ce-hairline-color);
 }
@@ -2862,6 +2882,7 @@ footer p {
 .card-status--amber { color: var(--ce-status-possible); }
 .card-status--red   { color: var(--ce-status-reach); }
 .card-status--grey  { color: var(--ce-status-grade); }
+.card-status--unconfirmed { color: var(--ce-ink-60); }
 .card-status--none  { color: var(--ce-ink-60); font-weight: 400; }
 
 /* Course name — Bricolage 800, the clear focal point of each card */
