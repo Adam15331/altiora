@@ -1550,20 +1550,45 @@ function toggleFieldsMenu() {
   $('fieldsLink')?.setAttribute('aria-expanded', String(willOpen));
 }
 
-// Keep the field-profile "Keep this field" buttons in sync with the CURRENT
-// candidateFields. Removing a field anywhere (nav dropdown, another surface,
-// the button itself) reverts these live — the kept-state must never go stale.
-function syncFieldOverviewPins() {
-  if (state.mode !== 'field-overview') return;
-  const cat = state.exploreField?.category;
-  if (!cat || typeof AltioraState === 'undefined') return;
-  const on = AltioraState.getCandidateFields().includes(cat);
-  ['foPinField', 'foPinFieldEnd'].forEach(id => {
-    const btn = $(id);
-    if (!btn) return;
-    btn.classList.toggle('pin-btn--on', on);
+// ROOT of kept-state reactivity: every keep/kept button's VISUAL state is a
+// direct projection of the single source of truth (candidateFields). This runs
+// on EVERY state change via cheap DOM toggles on whatever keep-buttons are in
+// the DOM — so a button can NEVER show a stale kept-state, independent of
+// whether any heavier full re-render fires. Covers all three surfaces:
+//   • Strengths-grid field cards (.field-card__pin)
+//   • Field-profile pins (#foPinField / #foPinFieldEnd)
+//   • Subject-Planner field grid (.plan-cat-card)
+function syncKeepButtons() {
+  if (typeof AltioraState === 'undefined') return;
+  const kept = new Set(AltioraState.getCandidateFields());
+
+  document.querySelectorAll('.field-card__pin[data-pin-category]').forEach(btn => {
+    const on = kept.has(btn.dataset.pinCategory);
+    btn.classList.toggle('field-card__pin--on', on);
     btn.setAttribute('aria-pressed', String(on));
-    btn.textContent = on ? '✓ Kept as one of your fields' : 'Keep this field';
+    const txt = btn.querySelector('.field-card__pin-text');
+    if (txt) txt.textContent = on ? 'Kept' : 'Keep';
+    const name = btn.closest('.field-card')?.querySelector('.field-card__name')?.textContent?.trim() || '';
+    btn.setAttribute('aria-label', `${on ? 'Kept' : 'Keep'} ${name}`.trim());
+    btn.setAttribute('title', on ? 'Kept — one of your fields' : `Keep ${name}`.trim());
+  });
+
+  const foCat = state.exploreField?.category;
+  if (foCat) {
+    const on = kept.has(foCat);
+    ['foPinField', 'foPinFieldEnd'].forEach(id => {
+      const btn = $(id);
+      if (!btn) return;
+      btn.classList.toggle('pin-btn--on', on);
+      btn.setAttribute('aria-pressed', String(on));
+      btn.textContent = on ? '✓ Kept as one of your fields' : 'Keep this field';
+    });
+  }
+
+  document.querySelectorAll('#planCategoryGrid .plan-cat-card[data-category]').forEach(c => {
+    const on = kept.has(c.dataset.category);
+    c.classList.toggle('active', on);
+    c.setAttribute('aria-pressed', String(on));
   });
 }
 
@@ -1594,26 +1619,28 @@ function updateFieldsIndicator() {
 }
 
 /* ─── Reactive candidateFields fan-out ────────────────────────────
- * ONE subscription that keeps EVERY surface showing candidateFields in
- * sync — the nav "My fields (N)" count + dropdown, the field-profile keep
- * buttons, the Strengths grid KEEP buttons, the Subject Planner field grid,
- * and the workspace-home "Your fields"/graduation summary. Adding or removing
- * a field ANYWHERE re-renders whichever of these is currently on screen, so
- * no surface can show a stale kept-state. The always-cheap indicators run on
- * every state change; the heavier active-view re-render only fires when the
- * candidateFields set actually changed. */
+ * ONE subscription keeps EVERY surface in sync. Two layers, both driven off
+ * the single source of truth (AltioraState.candidateFields):
+ *   1. syncKeepButtons() + updateFieldsIndicator() run UNCONDITIONALLY on
+ *      every change — cheap DOM toggles that directly project the kept-state
+ *      onto every keep-button and the nav count/dropdown. This is what makes
+ *      a stale KEPT card impossible: the button visual is re-derived from the
+ *      source every time, never relying on a full re-render firing.
+ *   2. A content re-render of the active view (new cards / combos / summary)
+ *      fires only when the SET actually changed — an optimisation layered on
+ *      top of (1), never a substitute for it. */
 let _lastCandidateSig = null;
 function syncCandidateFieldSurfaces() {
-  updateFieldsIndicator();     // nav count + dropdown (cheap, every change)
-  syncFieldOverviewPins();     // field-profile keep buttons (mode-guarded)
+  syncKeepButtons();           // ← every keep-button's state, directly from the source (always)
+  updateFieldsIndicator();     // nav count + dropdown (always)
 
   const sig = (typeof AltioraState !== 'undefined' ? AltioraState.getCandidateFields() : []).join('|');
-  if (sig === _lastCandidateSig) return;   // only re-render the active view when the SET changed
+  if (sig === _lastCandidateSig) return;   // content re-render only when the SET changed
   _lastCandidateSig = sig;
 
-  if (state.mode === 'strengths')      renderStrengthsResults();   // Strengths grid KEEP buttons
-  else if (state.mode === 'plan')      renderPlanResults();        // planner field grid + combos
-  else if (state.mode === 'home')      renderWorkspaceHome();      // "Your fields" + graduation
+  if (state.mode === 'strengths')      renderStrengthsResults();
+  else if (state.mode === 'plan')      renderPlanResults();
+  else if (state.mode === 'home')      renderWorkspaceHome();
 }
 
 /* ─── Shortlist view ──────────────────────────────────────────── */
