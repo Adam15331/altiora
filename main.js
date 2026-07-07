@@ -81,15 +81,20 @@ const STATUS = {
 const STATUS_SORT = { green:0, amber:1, grey:2, unconfirmed:3, red:4 };
 
 const TIER_LABELS = {
+  'world-top-5':      'World Top 5',
   'world-top-10':     'World Top 10',
+  'world-top-25':     'World Top 25',
   'world-top-50':     'World Top 50',
   'world-top-100':    'World Top 100',
   'national-top-10':  'National Top 10',
   'national-top-25':  'National Top 25',
   'national-top-50':  'National Top 50',
-  'national-leading': 'National University',
+  'national-leading': 'Leading National University',
   'regional':         'Regional University',
 };
+// Ultra-selective holistic tiers (QS world top 25) — used to mark elite
+// US holistic courses as reaches for everyone in the shortlist verdicts.
+const ELITE_HOLISTIC_TIERS = new Set(['world-top-5', 'world-top-10', 'world-top-25']);
 
 const SYSTEM_GRADE_KEY = {
   UK_A_Level: 'aLevels',
@@ -1972,7 +1977,7 @@ function shortlistVerdict(course, system, predictedGrade, profile) {
       if (!apCount) return 'unknown';
       // Signal present → elite-tier holistic courses are reaches for
       // everyone; that honesty only applies once we know something.
-      if (course.universityContext?.tier === 'world-top-10') return 'reach';
+      if (ELITE_HOLISTIC_TIERS.has(course.universityContext?.tier)) return 'reach';
       if (!ctx || typeof ctx.minCompetitiveAPs !== 'number') return 'unknown';
       return apCount < ctx.minCompetitiveAPs ? 'reach' : 'match';
     }
@@ -1987,12 +1992,12 @@ function shortlistVerdict(course, system, predictedGrade, profile) {
   }
 
   // No valid grade in the current system → no verdicts anywhere. The
-  // world-top-10 rule is deliberately BELOW this gate: with no grades,
+  // elite-tier rule is deliberately BELOW this gate: with no grades,
   // even elite courses show nothing — one consistent mental model.
   if (!gradeSet) return 'unknown';
 
   // Elite-tier holistic US courses are reaches for everyone with grades set.
-  if (course.country === 'US' && course.universityContext?.tier === 'world-top-10') return 'reach';
+  if (course.country === 'US' && ELITE_HOLISTIC_TIERS.has(course.universityContext?.tier)) return 'reach';
 
   if (system === 'UK_A_Level' || system === 'SG_A_Level') {
     const gradeStr = course.grades?.[SYSTEM_GRADE_KEY[system]];

@@ -27,7 +27,7 @@ const courses = [
     grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "766 at HL" },
     admissionTests: ["UCAT"],
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Requires a separate college application; all courses include a rigorous interview.",
     },
@@ -40,7 +40,7 @@ const courses = [
     grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "766 at HL" },
     admissionTests: ["TMUA"],
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Requires a separate college application; all courses include a rigorous interview.",
     },
@@ -53,7 +53,7 @@ const courses = [
     grades: { aLevels: "A*A*A", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "766 at HL" },
     admissionTests: ["TMUA"],
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Requires a separate college application; all courses include a rigorous interview.",
     },
@@ -66,7 +66,7 @@ const courses = [
     grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Chemistry"], ibHLNote: "766 at HL" },
     admissionTests: ["ESAT"],
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Requires a separate college application; all courses include a rigorous interview.",
     },
@@ -79,7 +79,7 @@ const courses = [
     grades: { aLevels: "AAA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "666 at HL" },
     admissionTests: ["TARA"],
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Requires a separate college application; all courses include a rigorous interview.",
     },
@@ -92,7 +92,7 @@ const courses = [
     grades: { aLevels: "A*A*A", ib: 40, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "776 at HL" },
     admissionTests: ["ESAT"],
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Requires a separate college application; all courses include a rigorous interview.",
     },
@@ -105,7 +105,7 @@ const courses = [
     grades: { aLevels: "AAA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "666 at HL" },
     admissionTests: ["LNAT"],
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Requires a separate college application; all courses include a rigorous interview.",
     },
@@ -118,7 +118,7 @@ const courses = [
     grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Chemistry"], ibHLNote: "766 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Requires a separate college application; all courses include a rigorous interview.",
     },
@@ -131,7 +131,7 @@ const courses = [
     grades: { aLevels: "A*AA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "666 at HL" },
     admissionTests: ["TARA"],
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Requires a separate college application; all courses include a rigorous interview.",
     },
@@ -144,7 +144,7 @@ const courses = [
     grades: { aLevels: "AAA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Requires a separate college application; all courses include a rigorous interview.",
     },
@@ -248,7 +248,7 @@ const courses = [
     grades: { aLevels: "AAA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "666 at HL"},
     admissionTests: ["UCAT"],
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Predominantly science and engineering; strong industry links in London.",
     },
@@ -261,7 +261,7 @@ const courses = [
     grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "776 at HL" },
     admissionTests: ["TMUA"],
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Predominantly science and engineering; strong industry links in London.",
     },
@@ -274,7 +274,7 @@ const courses = [
     grades: { aLevels: "A*A*A", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "776 at HL" },
     admissionTests: ["ESAT"],
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Predominantly science and engineering; strong industry links in London.",
     },
@@ -287,7 +287,7 @@ const courses = [
     grades: { aLevels: "A*A*A", ib: 40, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "776 at HL" },
     admissionTests: ["ESAT"],
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Predominantly science and engineering; strong industry links in London.",
     },
@@ -300,7 +300,7 @@ const courses = [
     grades: { aLevels: "A*A*A", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Chemistry"], ibHLNote: "776 at HL" },
     admissionTests: ["ESAT"],
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Predominantly science and engineering; strong industry links in London.",
     },
@@ -313,7 +313,7 @@ const courses = [
     grades: { aLevels: "A*A*A", ib: 40, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "776 at HL" },
     admissionTests: ["ESAT"],
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Predominantly science and engineering; strong industry links in London.",
     },
@@ -326,7 +326,7 @@ const courses = [
     grades: { aLevels: "A*A*A", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "776 at HL" },
     admissionTests: ["TMUA"],
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Predominantly science and engineering; strong industry links in London.",
     },
@@ -339,7 +339,7 @@ const courses = [
     grades: { aLevels: "AAA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "HL6 Mathematics + HL6 Physics or Chemistry; 39 typical" },
     admissionTests: ["ESAT"],
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Predominantly science and engineering; strong industry links in London.",
     },
@@ -352,7 +352,7 @@ const courses = [
     grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL" },
     admissionTests: ["TMUA"],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "The world's leading social science university; London location gives excellent finance and policy internship access.",
     },
@@ -365,7 +365,7 @@ const courses = [
     grades: { aLevels: "A*AA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "The world's leading social science university; London location gives excellent finance and policy internship access.",
     },
@@ -378,7 +378,7 @@ const courses = [
     grades: { aLevels: "AAA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "The world's leading social science university; London location gives excellent finance and policy internship access.",
     },
@@ -391,7 +391,7 @@ const courses = [
     grades: { aLevels: "A*AA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "766 at HL" },
     admissionTests: ["LNAT"],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "The world's leading social science university; London location gives excellent finance and policy internship access.",
     },
@@ -404,7 +404,7 @@ const courses = [
     grades: { aLevels: "AAA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "The world's leading social science university; London location gives excellent finance and policy internship access.",
     },
@@ -417,7 +417,7 @@ const courses = [
     grades: { aLevels: "AAA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "The world's leading social science university; London location gives excellent finance and policy internship access.",
     },
@@ -430,7 +430,7 @@ const courses = [
     grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "766 at HL" },
     admissionTests: ["UCAT"],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-10",
       intlFriendly: true,
       notes: "Large research university in central London with broad faculty coverage.",
     },
@@ -443,7 +443,7 @@ const courses = [
     grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "776 at HL"},
     admissionTests: ["TARA"],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-10",
       intlFriendly: true,
       notes: "Large research university in central London with broad faculty coverage.",
     },
@@ -456,7 +456,7 @@ const courses = [
     grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "19 points across 3 HL incl 7,6 in Maths & Physics; no HL below 5"},
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-10",
       intlFriendly: true,
       notes: "Large research university in central London with broad faculty coverage.",
     },
@@ -469,7 +469,7 @@ const courses = [
     grades: { aLevels: "A*AA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL" },
     admissionTests: ["TMUA"],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-10",
       intlFriendly: true,
       notes: "Large research university in central London with broad faculty coverage.",
     },
@@ -482,7 +482,7 @@ const courses = [
     grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "766 at HL" },
     admissionTests: ["LNAT"],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-10",
       intlFriendly: true,
       notes: "Large research university in central London with broad faculty coverage.",
     },
@@ -495,7 +495,7 @@ const courses = [
     grades: { aLevels: "AAB", ib: 36, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null , ibHLNote: "17 points across three HL subjects; no specific subject required" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-10",
       intlFriendly: true,
       notes: "Large research university in central London with broad faculty coverage.",
     },
@@ -508,7 +508,7 @@ const courses = [
     grades: { aLevels: "AAB", ib: 36, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "666 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-10",
       intlFriendly: true,
       notes: "Large research university in central London with broad faculty coverage.",
     },
@@ -521,7 +521,7 @@ const courses = [
     grades: { aLevels: "A*AA", ib: 39, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "766 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-10",
       intlFriendly: true,
       notes: "Large research university in central London with broad faculty coverage.",
     },
@@ -534,7 +534,7 @@ const courses = [
     grades: { aLevels: "AAB", ib: 36, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "665 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-10",
       intlFriendly: true,
       notes: "Large research university in central London with broad faculty coverage.",
     },
@@ -547,7 +547,7 @@ const courses = [
     grades: { aLevels: "A*A*A", ib: 40, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "776 at HL" },
     admissionTests: ["STEP"],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-10",
       intlFriendly: true,
       notes: "Large research university in central London with broad faculty coverage.",
     },
@@ -1028,7 +1028,7 @@ const courses = [
     grades: { aLevels: "A*A*A", ib: 36, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "766 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Consistently top-ranked for student satisfaction; strong placement-year culture in business and engineering.",
     },
@@ -1041,7 +1041,7 @@ const courses = [
     grades: { aLevels: "A*AA", ib: 36, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Consistently top-ranked for student satisfaction; strong placement-year culture in business and engineering.",
     },
@@ -1054,7 +1054,7 @@ const courses = [
     grades: { aLevels: "A*A*A", ib: 36, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "666 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Consistently top-ranked for student satisfaction; strong placement-year culture in business and engineering.",
     },
@@ -1067,7 +1067,7 @@ const courses = [
     grades: { aLevels: "AAB", ib: 35, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "665 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Consistently top-ranked for student satisfaction; strong placement-year culture in business and engineering.",
     },
@@ -1080,7 +1080,7 @@ const courses = [
     grades: { aLevels: "A*AA", ib: 36, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Consistently top-ranked for student satisfaction; strong placement-year culture in business and engineering.",
     },
@@ -1158,7 +1158,7 @@ const courses = [
     grades: { aLevels: "AAA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "666 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Scotland's oldest university; an exceptionally high proportion of students are international.",
     },
@@ -1171,7 +1171,7 @@ const courses = [
     grades: { aLevels: "AAA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: null },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Scotland's oldest university; an exceptionally high proportion of students are international.",
     },
@@ -1184,7 +1184,7 @@ const courses = [
     grades: { aLevels: "AAA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "666 at HL incl Chemistry + one of Biology/Maths/Physics" },
     admissionTests: ["UCAT"],
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Scotland's oldest university; an exceptionally high proportion of students are international.",
     },
@@ -1197,7 +1197,7 @@ const courses = [
     grades: { aLevels: "AAA", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "666 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Scotland's oldest university; an exceptionally high proportion of students are international.",
     },
@@ -1466,7 +1466,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Holistic admissions via the Common App; no fixed grade threshold — research, projects, and curiosity matter.",
     },
@@ -1484,7 +1484,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Holistic admissions via the Common App; no fixed grade threshold — research, projects, and curiosity matter.",
     },
@@ -1502,7 +1502,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Holistic admissions via the Common App; no fixed grade threshold — research, projects, and curiosity matter.",
     },
@@ -1520,7 +1520,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Holistic admissions via the Common App; no fixed grade threshold — research, projects, and curiosity matter.",
     },
@@ -1538,7 +1538,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Holistic admissions via the Common App; no fixed grade threshold — research, projects, and curiosity matter.",
     },
@@ -1556,7 +1556,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Holistic admissions via the Common App; no fixed grade threshold — research, projects, and curiosity matter.",
     },
@@ -1574,7 +1574,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Holistic admissions; international students apply via the Common App alongside domestic applicants.",
     },
@@ -1592,7 +1592,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Holistic admissions; international students apply via the Common App alongside domestic applicants.",
     },
@@ -1610,7 +1610,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Holistic admissions; international students apply via the Common App alongside domestic applicants.",
     },
@@ -1628,7 +1628,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Need-aware for most international applicants; substantial financial aid available; Common App required.",
     },
@@ -1646,7 +1646,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Need-aware for most international applicants; substantial financial aid available; Common App required.",
     },
@@ -1664,7 +1664,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Need-aware for most international applicants; substantial financial aid available; Common App required.",
     },
@@ -1682,7 +1682,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Need-aware for most international applicants; substantial financial aid available; Common App required.",
     },
@@ -1700,7 +1700,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-5",
       intlFriendly: true,
       notes: "Need-aware for most international applicants; substantial financial aid available; Common App required.",
     },
@@ -1718,7 +1718,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-50",
       intlFriendly: true,
       notes: "One of the few universities that is need-blind even for international students; generous financial aid.",
     },
@@ -1736,7 +1736,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-50",
       intlFriendly: true,
       notes: "One of the few universities that is need-blind even for international students; generous financial aid.",
     },
@@ -1754,7 +1754,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-50",
       intlFriendly: true,
       notes: "One of the few universities that is need-blind even for international students; generous financial aid.",
     },
@@ -1772,7 +1772,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-50",
       intlFriendly: true,
       notes: "One of the few universities that is need-blind even for international students; generous financial aid.",
     },
@@ -1790,7 +1790,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Need-aware for international students; residential college system has similarities to Oxbridge.",
     },
@@ -1808,7 +1808,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Need-aware for international students; residential college system has similarities to Oxbridge.",
     },
@@ -1826,7 +1826,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Need-aware for international students; residential college system has similarities to Oxbridge.",
     },
@@ -1844,7 +1844,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-10",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Need-aware for international students; residential college system has similarities to Oxbridge.",
     },
@@ -1916,7 +1916,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Ivy League in Philadelphia; Wharton is one of the world's most prestigious undergraduate business schools.",
     },
@@ -1934,7 +1934,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Ivy League in Philadelphia; Wharton is one of the world's most prestigious undergraduate business schools.",
     },
@@ -1952,7 +1952,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Ivy League in Philadelphia; Wharton is one of the world's most prestigious undergraduate business schools.",
     },
@@ -2024,7 +2024,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "Top-ranked for computer science and robotics; strong tech industry recruitment.",
     },
@@ -2042,7 +2042,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "Top-ranked for computer science and robotics; strong tech industry recruitment.",
     },
@@ -2060,7 +2060,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "Top-ranked for computer science and robotics; strong tech industry recruitment.",
     },
@@ -2078,7 +2078,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Top public university; international students pay non-resident tuition (~$44k/yr) and face a separate, competitive admissions pool.",
     },
@@ -2096,7 +2096,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Top public university; international students pay non-resident tuition (~$44k/yr) and face a separate, competitive admissions pool.",
     },
@@ -2114,7 +2114,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Top public university; international students pay non-resident tuition (~$44k/yr) and face a separate, competitive admissions pool.",
     },
@@ -2132,7 +2132,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Top public university; international students pay non-resident tuition (~$44k/yr) and face a separate, competitive admissions pool.",
     },
@@ -2258,7 +2258,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Jesuit university in Washington DC; strong in international affairs, law, and government.",
     },
@@ -2276,7 +2276,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Jesuit university in Washington DC; strong in international affairs, law, and government.",
     },
@@ -2294,7 +2294,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "Top private research university in North Carolina; strong medical and policy research.",
     },
@@ -2312,7 +2312,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "Top private research university in North Carolina; strong medical and policy research.",
     },
@@ -2330,7 +2330,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "America's first research university; dominant in biomedical sciences and global public health.",
     },
@@ -2348,7 +2348,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "America's first research university; dominant in biomedical sciences and global public health.",
     },
@@ -2369,7 +2369,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: "AAA/A", hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "Prerequisite: pass in HL Mathematics (AA), Physics or Computer Science (mirrors the H2 requirement). NUS does not publish an indicative IB score profile." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-10",
       intlFriendly: true,
       notes: "Singapore's flagship university; actively recruits international students with competitive scholarship schemes.",
     },
@@ -2382,7 +2382,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "Prerequisite: pass in HL Mathematics (AA); Physics recommended but not compulsory for Electrical Engineering. No indicative IB score profile published." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-10",
       intlFriendly: true,
       notes: "Singapore's flagship university; actively recruits international students with competitive scholarship schemes.",
     },
@@ -2395,7 +2395,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: "AAA/A", hkDse: null, ibHL: ["Chemistry","Biology"], ibHLNote: "Prerequisite: HL Chemistry plus HL Biology or Physics. No indicative IB score profile published." },
     admissionTests: ["UCAT (international/IB-forecast applicants only)"],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-10",
       intlFriendly: true,
       notes: "Singapore's flagship university; actively recruits international students with competitive scholarship schemes.",
     },
@@ -2408,7 +2408,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: "AAA/A", hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: ["NUS Law written test + interview (shortlisted applicants)"],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-10",
       intlFriendly: true,
       notes: "Singapore's flagship university; actively recruits international students with competitive scholarship schemes.",
     },
@@ -2421,7 +2421,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "Very good H2 Mathematics pass (or SL/HL Maths equivalent) needed for the Economics major. No indicative IB score profile published." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-10",
       intlFriendly: true,
       notes: "Singapore's flagship university; actively recruits international students with competitive scholarship schemes.",
     },
@@ -2434,7 +2434,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: "AAA/C", hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "Mathematics prerequisite is modest: SL Mathematics pass suffices (A-Level equivalent is H1 Maths or O-Level Additional Maths). No indicative IB score profile published." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-10",
       intlFriendly: true,
       notes: "Singapore's flagship university; actively recruits international students with competitive scholarship schemes.",
     },
@@ -2447,7 +2447,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry"], ibHLNote: "HL Chemistry (or Physics for the Physics major) expected for the intended major; bridging courses available if lacking. No indicative IB score profile published." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-10",
       intlFriendly: true,
       notes: "Singapore's flagship university; actively recruits international students with competitive scholarship schemes.",
     },
@@ -2460,7 +2460,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry","Biology"], ibHLNote: "Very good HL Chemistry required, plus HL Biology, Physics or Mathematics - Biology itself is not compulsory. No indicative IB score profile published." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-10",
       intlFriendly: true,
       notes: "Singapore's flagship university; actively recruits international students with competitive scholarship schemes.",
     },
@@ -2473,7 +2473,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: "AAB/C (IGP 10th percentile, AY2025-26)", hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "Pass in HL Mathematics (AA or AI) plus a pass in one HL science/Computer Science; NTU publishes no IB total — admission is competitive well above minimums" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Technology-focused university that has risen rapidly in global rankings; the NTU-Imperial Medicine degree is jointly taught.",
     },
@@ -2486,7 +2486,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: "CCC/D (IGP 10th percentile, AY2025-26)", hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "Pass in HL Mathematics plus a pass in one HL of Physics/Chemistry/Biology/Computer Science (Physics also needed at least at SL/O-Level standard); NTU publishes no IB total" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Technology-focused university that has risen rapidly in global rankings; the NTU-Imperial Medicine degree is jointly taught.",
     },
@@ -2499,7 +2499,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: "AAA/A (indicative — IGP 10th percentile of A-Level applicants offered places, AY2025-26; 90th percentile BBC/B)", hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "NTU publishes no IB total; NBS subject prerequisite is minimal (Mathematics at H1/SL standard for NBS programmes) but admission is highly competitive" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Technology-focused university that has risen rapidly in global rankings; the NTU-Imperial Medicine degree is jointly taught.",
     },
@@ -2512,7 +2512,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "655 at HL" },
     admissionTests: ["UCAT"], // verify
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Technology-focused university that has risen rapidly in global rankings; the NTU-Imperial Medicine degree is jointly taught.",
     },
@@ -2525,7 +2525,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "NTU publishes no IB total; no HL subject prerequisite confirmed for Economics as of 2026-07-03" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Technology-focused university that has risen rapidly in global rankings; the NTU-Imperial Medicine degree is jointly taught.",
     },
@@ -2538,7 +2538,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "No HL subject prerequisite; admission is by composite score combining creative submissions with academic results" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Technology-focused university that has risen rapidly in global rankings; the NTU-Imperial Medicine degree is jointly taught.",
     },
@@ -2633,7 +2633,7 @@ const courses = [
     grades: { aLevels: null, ib: 43, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry"], ibHLNote: "HL Chemistry required (official minimum grade 4; admitted students typically far higher). HL Biology not formally required." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Hong Kong's flagship university; consistently ranked among Asia's top 3; all teaching is in English.",
     },
@@ -2646,7 +2646,7 @@ const courses = [
     grades: { aLevels: "AAA", ib: 36, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "Strong HL Mathematics expected; IB 36 is HKU's published expected lower boundary (indicative, excludes bonus points), competitive intake is higher." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Hong Kong's flagship university; consistently ranked among Asia's top 3; all teaching is in English.",
     },
@@ -2659,7 +2659,7 @@ const courses = [
     grades: { aLevels: "AAA", ib: 34, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced","Physics"], ibHLNote: "HL Mathematics plus a science expected; IB 34 is HKU's published expected lower boundary for standard BEng streams (Elite Programme: IB 40 / A*A*A*)." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Hong Kong's flagship university; consistently ranked among Asia's top 3; all teaching is in English.",
     },
@@ -2672,7 +2672,7 @@ const courses = [
     grades: { aLevels: "A*A*A*", ib: 41, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "No prescribed HL subjects; IB English A (SL or HL) noticeably strengthens an application. IB 41 is HKU's published expected lower boundary (indicative)." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Hong Kong's flagship university; consistently ranked among Asia's top 3; all teaching is in English.",
     },
@@ -2685,7 +2685,7 @@ const courses = [
     grades: { aLevels: "AAA", ib: 36, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "HL Mathematics (grade 5+) expected by HKU Business School; IB 36 is the published expected lower boundary (indicative)." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Hong Kong's flagship university; consistently ranked among Asia's top 3; all teaching is in English.",
     },
@@ -2698,7 +2698,7 @@ const courses = [
     grades: { aLevels: "AAA", ib: 36, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "HL Mathematics (grade 5+) required by HKU Business School; IB 36 is the published expected lower boundary (indicative)." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Hong Kong's flagship university; consistently ranked among Asia's top 3; all teaching is in English.",
     },
@@ -2711,7 +2711,7 @@ const courses = [
     grades: { aLevels: null, ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "No fixed HL subjects; IB 38 is HKU's published expected lower boundary (indicative). Portfolio quality is decisive." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Hong Kong's flagship university; consistently ranked among Asia's top 3; all teaching is in English.",
     },
@@ -2724,7 +2724,7 @@ const courses = [
     grades: { aLevels: "A*A*A", ib: 37, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry"], ibHLNote: "HL Chemistry compulsory; IB 37 is HKU's published expected lower boundary (indicative). HL Biology helpful but not formally required." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Hong Kong's flagship university; consistently ranked among Asia's top 3; all teaching is in English.",
     },
@@ -2737,7 +2737,7 @@ const courses = [
     grades: { aLevels: "AAB", ib: 34, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "No prescribed HL subjects; IB 34 is the published expected lower boundary for BPsych (indicative)." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Hong Kong's flagship university; consistently ranked among Asia's top 3; all teaching is in English.",
     },
@@ -2750,7 +2750,7 @@ const courses = [
     grades: { aLevels: null, ib: 42, ap: null, sgALevels: null, hkDse: "Indicative ~34+ total on JS4501 scale (5**=7; 3 cores + 2-3 electives); GPS stream (JS4502): >=40 total with 5** in 4 subjects", ibHL: ["Chemistry","Biology"], ibHLNote: "677 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Bilingual Chinese-English university; broad-based entry system; strong China-related research.",
     },
@@ -2763,7 +2763,7 @@ const courses = [
     grades: { aLevels: null, ib: 30, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Bilingual Chinese-English university; broad-based entry system; strong China-related research.",
     },
@@ -2776,7 +2776,7 @@ const courses = [
     grades: { aLevels: "General minimum: 3 AL passes (avg ~C) in one 12-month sitting; competitive admits higher", ib: 30, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced","Physics"], ibHLNote: "655 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Bilingual Chinese-English university; broad-based entry system; strong China-related research.",
     },
@@ -2789,7 +2789,7 @@ const courses = [
     grades: { aLevels: null, ib: 30, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: null },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Bilingual Chinese-English university; broad-based entry system; strong China-related research.",
     },
@@ -2802,7 +2802,7 @@ const courses = [
     grades: { aLevels: null, ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "English A (SL/HL) or English B HL; grade 4 minimum in each remaining subject" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Bilingual Chinese-English university; broad-based entry system; strong China-related research.",
     },
@@ -2815,7 +2815,7 @@ const courses = [
     grades: { aLevels: null, ib: 33, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: null },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Bilingual Chinese-English university; broad-based entry system; strong China-related research.",
     },
@@ -2828,7 +2828,7 @@ const courses = [
     grades: { aLevels: null, ib: 30, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Bilingual Chinese-English university; broad-based entry system; strong China-related research.",
     },
@@ -2841,7 +2841,7 @@ const courses = [
     grades: { aLevels: null, ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "No published HL subject requirement; IB 38 is an indicative competitive/scholarship benchmark, formal general minimum is 30/45" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Bilingual Chinese-English university; broad-based entry system; strong China-related research.",
     },
@@ -2945,7 +2945,7 @@ const courses = [
     grades: { aLevels: "BBB", ib: 32, ap: null, sgALevels: null, hkDse: "332A33", ibHL: [], ibHLNote: "No specific HL subjects required; minimum grade 4 in any 2 HL subjects. IB 32 is the indicative typical admitted score (official minimum 24)." },
     admissionTests: [],
     universityContext: {
-      tier: "national-leading",
+      tier: "world-top-50",
       intlFriendly: true,
       notes: "Applied, professional-focused university with strong design, engineering, and hospitality programmes; English-medium.",
     },
@@ -2958,7 +2958,7 @@ const courses = [
     grades: { aLevels: "BBB", ib: 36, ap: null, sgALevels: null, hkDse: "332A33", ibHL: [], ibHLNote: "No specific HL subjects formally required (grade 4 in any 2 HL minimum); Biology/science weighted in selection. IB 36 is the indicative typical admitted level for PolyU health sciences programmes." },
     admissionTests: [],
     universityContext: {
-      tier: "national-leading",
+      tier: "world-top-50",
       intlFriendly: true,
       notes: "Applied, professional-focused university with strong design, engineering, and hospitality programmes; English-medium.",
     },
@@ -2971,7 +2971,7 @@ const courses = [
     grades: { aLevels: "BBB", ib: 32, ap: null, sgALevels: null, hkDse: "332A33", ibHL: [], ibHLNote: "No HL subject requirement published; minimum grade 4 in any 2 HL subjects. IB 32 is the indicative typical admitted score." },
     admissionTests: [],
     universityContext: {
-      tier: "national-leading",
+      tier: "world-top-50",
       intlFriendly: true,
       notes: "Applied, professional-focused university with strong design, engineering, and hospitality programmes; English-medium.",
     },
@@ -2984,7 +2984,7 @@ const courses = [
     grades: { aLevels: "BBB", ib: 32, ap: null, sgALevels: null, hkDse: "332A33", ibHL: [], ibHLNote: "No HL subject requirement published; minimum grade 4 in any 2 HL subjects. IB 32 is the indicative typical PolyU admitted score." },
     admissionTests: [],
     universityContext: {
-      tier: "national-leading",
+      tier: "world-top-50",
       intlFriendly: true,
       notes: "Applied, professional-focused university with strong design, engineering, and hospitality programmes; English-medium.",
     },
@@ -2997,7 +2997,7 @@ const courses = [
     grades: { aLevels: "BBB", ib: 32, ap: null, sgALevels: null, hkDse: "332A33", ibHL: [], ibHLNote: "No HL subject requirement published (grade 4 in any 2 HL minimum); HL Maths not formally required though Maths is heavily weighted. IB 32 is the indicative typical admitted score." },
     admissionTests: [],
     universityContext: {
-      tier: "national-leading",
+      tier: "world-top-50",
       intlFriendly: true,
       notes: "Applied, professional-focused university with strong design, engineering, and hospitality programmes; English-medium.",
     },
@@ -3010,7 +3010,7 @@ const courses = [
     grades: { aLevels: "EEE (published minimum: Grade E in three GCE A-Level/IAL subjects; actual admission competitive)", ib: null, ap: null, sgALevels: null, hkDse: "332A core + electives (general entrance); 2025 JUPAS median 20.5 Best 5 (indicative)", ibHL: [], ibHLNote: null },
     admissionTests: [],
     universityContext: {
-      tier: "national-leading",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "Urban applied-science university; City Law School is internationally recognised; English-medium instruction.",
     },
@@ -3023,7 +3023,7 @@ const courses = [
     grades: { aLevels: "EEE (published minimum: Grade E in three GCE A-Level/IAL subjects; actual admission competitive)", ib: null, ap: null, sgALevels: null, hkDse: "332A core + electives (general entrance); 2025 weighted medians e.g. JS1205: 39, JS1207: 34.5 (indicative, weighted formulas)", ibHL: [], ibHLNote: null },
     admissionTests: [],
     universityContext: {
-      tier: "national-leading",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "Urban applied-science university; City Law School is internationally recognised; English-medium instruction.",
     },
@@ -3036,7 +3036,7 @@ const courses = [
     grades: { aLevels: "EEE (published minimum: Grade E in three GCE A-Level/IAL subjects; admission highly competitive)", ib: null, ap: null, sgALevels: null, hkDse: "English Level 5 + 332A core + electives; 2026 JUPAS median 23 (indicative)", ibHL: [], ibHLNote: "Grade 6 in IB English (SL or HL) required; no overall IB total published" },
     admissionTests: [],
     universityContext: {
-      tier: "national-leading",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "Urban applied-science university; City Law School is internationally recognised; English-medium instruction.",
     },
@@ -3049,7 +3049,7 @@ const courses = [
     grades: { aLevels: "EEE (published minimum: Grade E in three GCE A-Level/IAL subjects; actual admission competitive)", ib: null, ap: null, sgALevels: null, hkDse: "332A core + electives; 2026 weighted medians range ~22 (BBA Management) to 29.5 (BBA Global Business) (indicative)", ibHL: [], ibHLNote: null },
     admissionTests: [],
     universityContext: {
-      tier: "national-leading",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "Urban applied-science university; City Law School is internationally recognised; English-medium instruction.",
     },
@@ -3062,7 +3062,7 @@ const courses = [
     grades: { aLevels: "EEE (published minimum: Grade E in three GCE A-Level/IAL subjects; actual admission competitive)", ib: null, ap: null, sgALevels: null, hkDse: "332A core + electives; 2025 JUPAS median 21.5, Best 5 including Mathematics (indicative)", ibHL: [], ibHLNote: null },
     admissionTests: [],
     universityContext: {
-      tier: "national-leading",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "Urban applied-science university; City Law School is internationally recognised; English-medium instruction.",
     },
@@ -3138,7 +3138,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Smallest Ivy League college with a strong emphasis on undergraduate teaching in rural New Hampshire.",
     },
@@ -3156,7 +3156,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Smallest Ivy League college with a strong emphasis on undergraduate teaching in rural New Hampshire.",
     },
@@ -3210,7 +3210,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Ivy League land-grant university; largest Ivy by enrolment with several specialised professional colleges.",
     },
@@ -3228,7 +3228,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Ivy League land-grant university; largest Ivy by enrolment with several specialised professional colleges.",
     },
@@ -3246,7 +3246,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Ivy League land-grant university; largest Ivy by enrolment with several specialised professional colleges.",
     },
@@ -3264,7 +3264,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-25",
       intlFriendly: true,
       notes: "Ivy League land-grant university; largest Ivy by enrolment with several specialised professional colleges.",
     },
@@ -3282,7 +3282,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Small private university in Houston with a residential college system and very high research funding per student.",
     },
@@ -3300,7 +3300,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Small private university in Houston with a residential college system and very high research funding per student.",
     },
@@ -3318,7 +3318,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Private research university in Nashville; merit scholarships can make it affordable for international students.",
     },
@@ -3336,7 +3336,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Private research university in Nashville; merit scholarships can make it affordable for international students.",
     },
@@ -3354,7 +3354,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Catholic research university in Indiana with a strong alumni network and generous financial aid.",
     },
@@ -3372,7 +3372,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Catholic research university in Indiana with a strong alumni network and generous financial aid.",
     },
@@ -3390,7 +3390,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Highly selective private university in St. Louis; significant merit and need-based aid available.",
     },
@@ -3408,7 +3408,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Highly selective private university in St. Louis; significant merit and need-based aid available.",
     },
@@ -3426,7 +3426,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Private research university in Atlanta with strong pre-med culture and connections to the CDC.",
     },
@@ -3444,7 +3444,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Private research university in Atlanta with strong pre-med culture and connections to the CDC.",
     },
@@ -3462,7 +3462,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "Top public university in Los Angeles; international admissions is highly competitive and fees are high.",
     },
@@ -3480,7 +3480,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "Top public university in Los Angeles; international admissions is highly competitive and fees are high.",
     },
@@ -3498,7 +3498,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-50",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "Top public university in Los Angeles; international admissions is highly competitive and fees are high.",
     },
@@ -3516,7 +3516,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Private university in Los Angeles with one of the largest international student populations of any US university.",
     },
@@ -3534,7 +3534,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Private university in Los Angeles with one of the largest international student populations of any US university.",
     },
@@ -3552,7 +3552,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Top public STEM university in Atlanta; strong co-op and industry placement programme.",
     },
@@ -3570,7 +3570,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Top public STEM university in Atlanta; strong co-op and industry placement programme.",
     },
@@ -3588,7 +3588,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Top public university; McIntire (Commerce) and the Law School are consistently ranked nationally elite.",
     },
@@ -3606,7 +3606,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Top public university; McIntire (Commerce) and the Law School are consistently ranked nationally elite.",
     },
@@ -3624,7 +3624,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Top public university; McIntire (Commerce) and the Law School are consistently ranked nationally elite.",
     },
@@ -3714,7 +3714,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Flagship public university of North Carolina; out-of-state and international admissions are more competitive than in-state.",
     },
@@ -3732,7 +3732,7 @@ const courses = [
       note: "US admissions is holistic — no hard subject requirements.",
     },
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Flagship public university of North Carolina; out-of-state and international admissions are more competitive than in-state.",
     },
@@ -3814,7 +3814,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "655 at HL" },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "world-top-50",
       intlFriendly: true,
       notes: "Known as 'the Harvard of Canada'; English-speaking campus in French-speaking Montreal with strong medicine and law.",
     },
@@ -3827,7 +3827,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "No HL subjects strictly required: the maths prerequisite may be met with Maths AA at HL or SL, or Maths AI at HL only. Minimum expectation is 5+ in every HL/SL subject; admission is competitive and successful applicants typically exceed this." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "world-top-50",
       intlFriendly: true,
       notes: "Known as 'the Harvard of Canada'; English-speaking campus in French-speaking Montreal with strong medicine and law.",
     },
@@ -3840,7 +3840,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "No HL subjects strictly mandated: maths (AA HL/SL or AI HL), physics and chemistry are the prerequisite subjects, accepted at HL or SL. Minimum expectation is 5+ in every subject; engineering admission is competitive well above this." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "world-top-50",
       intlFriendly: true,
       notes: "Known as 'the Harvard of Canada'; English-speaking campus in French-speaking Montreal with strong medicine and law.",
     },
@@ -3853,7 +3853,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "No HL subject requirements. Faculty of Arts has no maths admission prerequisite (SL Maths AI is accepted); minimum expectation is 5+ in every HL/SL subject, competitive entry typically higher." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "world-top-50",
       intlFriendly: true,
       notes: "Known as 'the Harvard of Canada'; English-speaking campus in French-speaking Montreal with strong medicine and law.",
     },
@@ -3866,7 +3866,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "world-top-50",
       intlFriendly: true,
       notes: "Known as 'the Harvard of Canada'; English-speaking campus in French-speaking Montreal with strong medicine and law.",
     },
@@ -3931,7 +3931,7 @@ const courses = [
     grades: { aLevels: null, ib: 32, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "HL Maths (Analysis & Approaches) min 6; HL or SL English A. IB 32 is the published minimum (excl. bonus points) — admitted students' averages sit in the low-to-mid 90s." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Home to the world's largest post-secondary co-op programme; a major employer pipeline into Silicon Valley and Bay Street.",
     },
@@ -3944,7 +3944,7 @@ const courses = [
     grades: { aLevels: null, ib: 31, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced","Physics"], ibHLNote: "Maths (Analysis & Approaches) and Physics required, HL recommended, min 4 each; Chemistry and English A min 4. IB 31 is the published minimum — 6s and 7s recommended, and competitive programs admit in the low-to-mid 90s (percentage-average terms)." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Home to the world's largest post-secondary co-op programme; a major employer pipeline into Silicon Valley and Bay Street.",
     },
@@ -3957,7 +3957,7 @@ const courses = [
     grades: { aLevels: null, ib: 30, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "HL Maths (Analysis & Approaches) min 6; HL or SL English A. IB 30 is the published minimum (excl. bonus points) — admitted averages are typically high-80s equivalent." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Home to the world's largest post-secondary co-op programme; a major employer pipeline into Silicon Valley and Bay Street.",
     },
@@ -3970,7 +3970,7 @@ const courses = [
     grades: { aLevels: null, ib: 28, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "Maths (Analysis & Approaches) HL recommended or SL min 4; English A HL/SL min 4. IB 28 is the published minimum — admitted averages are mid-80s (individual selection)." },
     admissionTests: [],
     universityContext: {
-      tier: "world-top-100",
+      tier: "national-leading",
       intlFriendly: true,
       notes: "Home to the world's largest post-secondary co-op programme; a major employer pipeline into Silicon Valley and Bay Street.",
     },
@@ -4100,7 +4100,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced","Physics"], ibHLNote: "No HL-specific grades published. IB applicants present six subjects (five matching the required subjects: Maths incl. calculus content, Physics, Chemistry, English), no grade below 4, and a competitive diploma score (historically 30-37 across U of A programs)." },
     admissionTests: [],
     universityContext: {
-      tier: "national-leading",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "Major research university in Edmonton; strong in energy, engineering, and AI research.",
     },
@@ -4113,7 +4113,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "No HL-specific grades published. IB applicants present six subjects (five matching required subjects, incl. Maths), no grade below 4, and a competitive diploma score (historically 30-37 across U of A programs)." },
     admissionTests: [],
     universityContext: {
-      tier: "national-leading",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "Major research university in Edmonton; strong in energy, engineering, and AI research.",
     },
@@ -4126,7 +4126,7 @@ const courses = [
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: null },
     admissionTests: [],
     universityContext: {
-      tier: "national-leading",
+      tier: "world-top-100",
       intlFriendly: true,
       notes: "Major research university in Edmonton; strong in energy, engineering, and AI research.",
     },
