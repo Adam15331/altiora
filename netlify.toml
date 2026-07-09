@@ -1,0 +1,21 @@
+# Altiora — Netlify configuration.
+#
+# The site itself is plain static files served from the repo root (no build
+# step). The AI relay runs as an EDGE function, not a regular function, on
+# purpose: regular Netlify Functions cap a streamed response at ~10s of
+# execution, while edge functions only need to return headers within 40s and
+# can then stream indefinitely (the 50ms CPU limit excludes time spent
+# waiting on the upstream API) — exactly the shape of an LLM relay.
+#
+# Required environment variables (Site configuration → Environment variables):
+#   ANTHROPIC_API_KEY       (required, secret) — server-side only, never in client code
+#   ALTIORA_AI_MODEL        (optional) — defaults to claude-opus-4-8
+#   ALTIORA_ALLOWED_ORIGIN  (optional) — extra allowed CORS origin, e.g. the
+#                           GitHub Pages origin if the static site stays there
+
+[build]
+  publish = "."
+
+[[edge_functions]]
+  path = "/api/ask"
+  function = "ask"

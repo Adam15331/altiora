@@ -1411,6 +1411,7 @@ function renderApplyingPanel() {
           <p>Your shortlist is empty. Save the courses you're applying to, and they'll show up here with a checklist of what's next.</p>
           <button class="home-next__btn home-next__btn--primary" data-go-applying>Find courses to apply to →</button>
         </div>
+        ${typeof askAltioraHtml === 'function' ? askAltioraHtml() : ''}
         ${roadmap}
       </div>`;
     panel.querySelector('[data-go-applying]')?.addEventListener('click', () => switchMode('check'));
@@ -1462,6 +1463,8 @@ function renderApplyingPanel() {
         <div id="applyingShortlistGrid" class="results-group__grid"></div>
         <button class="home-card__link" data-go-shortlist>View full shortlist →</button>
       </section>
+
+      ${typeof askAltioraHtml === 'function' ? askAltioraHtml() : ''}
 
       ${roadmap}
     </div>`;
