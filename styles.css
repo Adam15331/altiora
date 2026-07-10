@@ -3879,3 +3879,146 @@ button.plan-combo-tag--drop:focus-visible {
   .ask-altiora__box { flex-direction: column; }
   .ask-altiora__send { align-self: stretch; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+ * ACHIEVEMENTS & ACTIVITIES LOG — calm tracker on the Applying view.
+ * CE language: hairline cards, Bricolage titles, mono group labels,
+ * butter-yellow only on the primary add/save action. No left borders.
+ * ═══════════════════════════════════════════════════════════════ */
+.achv__count {
+  font-family: var(--ce-font-mono);
+  font-size: .95rem;
+  font-weight: 400;
+  color: var(--ce-ink-60);
+}
+.achv__note {
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.6;
+  margin: 0 0 var(--space-4);
+  max-width: 62ch;
+}
+.achv__empty {
+  background: var(--ce-surface);
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius);
+  padding: var(--space-5);
+}
+.achv__empty p {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.65;
+}
+.achv-group { margin-bottom: var(--space-5); }
+.achv-group__label {
+  display: block;
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ce-ink-60);
+  margin: 0 0 var(--space-2);
+}
+.achv-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-4);
+  background: var(--ce-surface);
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius);
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-2);
+}
+.achv-card__title {
+  font-family: var(--ce-font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -.01em;
+  color: var(--ce-ink);
+  line-height: 1.25;
+}
+.achv-card__meta {
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  color: var(--ce-ink-60);
+  margin-top: 2px;
+}
+.achv-card__desc {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.achv-card__actions { display: flex; gap: var(--space-2); flex-shrink: 0; }
+.achv-card__btn {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  letter-spacing: .04em;
+  color: var(--ce-ink-60);
+  background: transparent;
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius-pill);
+  padding: 3px 12px;
+  cursor: pointer;
+}
+.achv-card__btn:hover { color: var(--ce-ink); border-color: var(--ce-ink-30); }
+.achv-card__btn--del[data-armed] { color: var(--ce-status-reach); border-color: var(--ce-status-reach); }
+.achv__addbtn { margin-top: var(--space-2); }
+.achv__form {
+  margin-top: var(--space-4);
+  background: var(--ce-surface);
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.achv__form-row { display: flex; gap: var(--space-4); flex-wrap: wrap; }
+.achv__label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+  min-width: 140px;
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ce-ink-60);
+}
+.achv__label--grow { flex: 2; }
+.achv__req { color: var(--ce-status-possible); margin-left: 2px; }
+.achv__input, .achv__select {
+  font-family: var(--ce-font-body);
+  font-size: var(--text-base);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ce-ink);
+  background: var(--ce-bg);
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius);
+  padding: var(--space-2) var(--space-3);
+  width: 100%;
+}
+.achv__input::placeholder { color: var(--ce-ink-30); }
+.achv__input:focus, .achv__select:focus { outline: none; border-color: var(--ce-ink); }
+.achv__textarea { resize: vertical; }
+.achv__error {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ce-status-reach);
+}
+.achv__form-actions { display: flex; gap: var(--space-3); }
+@media (max-width: 480px) {
+  .achv-card { flex-direction: column; }
+  .achv-card__actions { align-self: flex-end; }
+  .achv__form-row { flex-direction: column; }
+  .achv__form-actions { flex-direction: column; }
+}

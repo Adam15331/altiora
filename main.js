@@ -1411,10 +1411,12 @@ function renderApplyingPanel() {
           <p>Your shortlist is empty. Save the courses you're applying to, and they'll show up here with a checklist of what's next.</p>
           <button class="home-next__btn home-next__btn--primary" data-go-applying>Find courses to apply to →</button>
         </div>
+        ${achievementsSectionHtml()}
         ${typeof askAltioraHtml === 'function' ? askAltioraHtml() : ''}
         ${roadmap}
       </div>`;
     panel.querySelector('[data-go-applying]')?.addEventListener('click', () => switchMode('check'));
+    renderAchievementsList();
     return;
   }
 
@@ -1464,6 +1466,8 @@ function renderApplyingPanel() {
         <button class="home-card__link" data-go-shortlist>View full shortlist →</button>
       </section>
 
+      ${achievementsSectionHtml()}
+
       ${typeof askAltioraHtml === 'function' ? askAltioraHtml() : ''}
 
       ${roadmap}
@@ -1474,6 +1478,212 @@ function renderApplyingPanel() {
   const grid = panel.querySelector('#applyingShortlistGrid');
   savedCourses.forEach(c => grid.appendChild(buildShortlistCard(c, studentTags, hasSubjects)));
   panel.querySelector('[data-go-shortlist]')?.addEventListener('click', () => switchMode('shortlist'));
+  renderAchievementsList();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * ACHIEVEMENTS & ACTIVITIES LOG — a tracker, nothing more.
+ * The student's own record of awards, certificates, roles,
+ * volunteering, work experience, and activities, kept for personal
+ * statements, applications, and interviews. Deliberately NO
+ * university-matching or scoring on top of this: universities don't
+ * publish verifiable extracurricular weightings, so any "matching"
+ * would mean fabricating data.
+ *
+ * Reactivity: renderAchievementsList() is a direct projection of
+ * AltioraState.getAchievements(), run on EVERY state change via the
+ * subscription registered in init (same pattern as candidateFields /
+ * shortlist surfaces) — no surface reads once and goes stale.
+ * ═══════════════════════════════════════════════════════════════ */
+
+function achievementTypeLabel(id) {
+  const t = (AltioraState.ACHIEVEMENT_TYPES || []).find(t => t.id === id);
+  return t ? t.label : id;
+}
+
+function achievementsSectionHtml() {
+  const typeOptions = (AltioraState.ACHIEVEMENT_TYPES || [])
+    .map(t => `<option value="${esc(t.id)}">${esc(t.label)}</option>`).join('');
+  return `
+    <section class="applying-section achv" aria-label="Your achievements and activities">
+      <h2 class="applying-section__head">Your achievements &amp; activities<span id="achvCount" class="achv__count"></span></h2>
+      <p class="achv__note">Keep track of your achievements, activities, and certificates here — you'll use
+        these for personal statements, applications, and interviews. How much each one matters varies by
+        university and course; most weigh grades and admission tests most heavily.</p>
+      <div id="achvList" class="achv__list"></div>
+      <button type="button" id="achvAddBtn" class="fo-btn fo-btn--primary achv__addbtn">+ Add an entry</button>
+      <form id="achvForm" class="achv__form hidden" novalidate>
+        <div class="achv__form-row">
+          <label class="achv__label" for="achvType"><span>Type<span class="achv__req">*</span></span>
+            <div class="select-wrap"><select id="achvType" class="achv__select">${typeOptions}</select></div>
+          </label>
+          <label class="achv__label achv__label--grow" for="achvTitle"><span>Title<span class="achv__req">*</span></span>
+            <input id="achvTitle" class="achv__input" type="text" maxlength="120"
+              placeholder="e.g. Duke of Edinburgh Gold, Grade 8 Piano, Head Prefect">
+          </label>
+        </div>
+        <div class="achv__form-row">
+          <label class="achv__label" for="achvOrg">Organisation
+            <input id="achvOrg" class="achv__input" type="text" maxlength="80" placeholder="e.g. ABRSM, your school">
+          </label>
+          <label class="achv__label" for="achvLevel">Level / result
+            <input id="achvLevel" class="achv__input" type="text" maxlength="60" placeholder="e.g. Gold, Grade 8, 200 hours">
+          </label>
+          <label class="achv__label" for="achvDate">When
+            <input id="achvDate" class="achv__input" type="text" maxlength="30" placeholder="e.g. 2025 or June 2025">
+          </label>
+        </div>
+        <label class="achv__label" for="achvDesc">Description
+          <textarea id="achvDesc" class="achv__input achv__textarea" rows="2" maxlength="500"
+            placeholder="Optional — a sentence or two of detail"></textarea>
+        </label>
+        <p id="achvFormError" class="achv__error hidden">Please pick a type and give it a title.</p>
+        <div class="achv__form-actions">
+          <button type="submit" class="fo-btn fo-btn--primary" id="achvSaveBtn">Save entry</button>
+          <button type="button" class="fo-btn" id="achvCancelBtn">Cancel</button>
+        </div>
+      </form>
+    </section>`;
+}
+
+// Direct projection of state → DOM. Cheap no-op when the section isn't on
+// screen; safe to run unconditionally on every state change.
+function renderAchievementsList() {
+  const list = $('achvList');
+  if (!list) return;
+
+  const items = AltioraState.getAchievements();
+
+  const count = $('achvCount');
+  if (count) count.textContent = items.length ? ` (${items.length})` : '';
+
+  if (!items.length) {
+    list.innerHTML = `
+      <div class="achv__empty">
+        <p>Nothing logged yet. Add your awards, certificates, roles, volunteering, work experience,
+        and activities as they happen — future-you, writing a personal statement the night before a
+        deadline, will be grateful.</p>
+      </div>`;
+    return;
+  }
+
+  // Group in the fixed type order; only render groups that have entries.
+  const groups = (AltioraState.ACHIEVEMENT_TYPES || [])
+    .map(t => ({ type: t, entries: items.filter(a => a.type === t.id) }))
+    .filter(g => g.entries.length);
+
+  list.innerHTML = groups.map(g => `
+    <div class="achv-group">
+      <span class="achv-group__label">${esc(g.type.label)}</span>
+      ${g.entries.map(a => {
+        const meta = [a.organisation, a.level, a.date].filter(Boolean).map(esc).join(' · ');
+        return `
+        <div class="achv-card" data-achv-id="${esc(a.id)}">
+          <div class="achv-card__main">
+            <div class="achv-card__title">${esc(a.title)}</div>
+            ${meta ? `<div class="achv-card__meta">${meta}</div>` : ''}
+            ${a.description ? `<p class="achv-card__desc">${esc(a.description)}</p>` : ''}
+          </div>
+          <div class="achv-card__actions">
+            <button type="button" class="achv-card__btn" data-achv-edit="${esc(a.id)}">Edit</button>
+            <button type="button" class="achv-card__btn achv-card__btn--del" data-achv-del="${esc(a.id)}">Delete</button>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`).join('');
+}
+
+function openAchievementForm(entry) {
+  const form = $('achvForm');
+  if (!form) return;
+  form.classList.remove('hidden');
+  $('achvFormError')?.classList.add('hidden');
+  form.dataset.editing = entry?.id || '';
+  $('achvType').value  = entry?.type || (AltioraState.ACHIEVEMENT_TYPES[0]?.id ?? 'award');
+  $('achvTitle').value = entry?.title || '';
+  $('achvOrg').value   = entry?.organisation || '';
+  $('achvLevel').value = entry?.level || '';
+  $('achvDate').value  = entry?.date || '';
+  $('achvDesc').value  = entry?.description || '';
+  $('achvSaveBtn').textContent = entry ? 'Save changes' : 'Save entry';
+  $('achvAddBtn')?.classList.add('hidden');
+  form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  $('achvTitle').focus();
+}
+
+function closeAchievementForm() {
+  const form = $('achvForm');
+  if (!form) return;
+  form.classList.add('hidden');
+  form.dataset.editing = '';
+  $('achvAddBtn')?.classList.remove('hidden');
+}
+
+function submitAchievementForm() {
+  const form = $('achvForm');
+  if (!form) return;
+  const fields = {
+    type:         $('achvType').value,
+    title:        $('achvTitle').value,
+    organisation: $('achvOrg').value,
+    level:        $('achvLevel').value,
+    date:         $('achvDate').value,
+    description:  $('achvDesc').value,
+  };
+  const editingId = form.dataset.editing;
+  const ok = editingId
+    ? AltioraState.updateAchievement(editingId, fields)
+    : AltioraState.addAchievement(fields) !== null;
+  if (!ok) {
+    $('achvFormError')?.classList.remove('hidden');
+    $('achvTitle').focus();
+    return;
+  }
+  closeAchievementForm();   // list re-renders via the state subscription
+}
+
+// Two-step delete: first click arms the button ("Sure?"), second click
+// within 3s deletes. No blocking confirm dialog, no accidental loss.
+let _achvDeleteArmTimer = null;
+function handleAchievementDelete(btn) {
+  if (btn.dataset.armed === '1') {
+    clearTimeout(_achvDeleteArmTimer);
+    AltioraState.removeAchievement(btn.dataset.achvDel);
+    return;
+  }
+  document.querySelectorAll('[data-achv-del][data-armed]').forEach(b => {
+    delete b.dataset.armed; b.textContent = 'Delete';
+  });
+  btn.dataset.armed = '1';
+  btn.textContent = 'Sure?';
+  clearTimeout(_achvDeleteArmTimer);
+  _achvDeleteArmTimer = setTimeout(() => {
+    if (btn.isConnected) { delete btn.dataset.armed; btn.textContent = 'Delete'; }
+  }, 3000);
+}
+
+// Delegated wiring — survives every innerHTML re-render of the panel.
+function wireAchievementsEvents() {
+  document.addEventListener('click', (e) => {
+    const t = e.target;
+    if (!t.closest) return;
+    if (t.closest('#achvAddBtn'))    { openAchievementForm(null); return; }
+    if (t.closest('#achvCancelBtn')) { closeAchievementForm(); return; }
+    const editBtn = t.closest('[data-achv-edit]');
+    if (editBtn) {
+      const entry = AltioraState.getAchievements().find(a => a.id === editBtn.dataset.achvEdit);
+      if (entry) openAchievementForm(entry);
+      return;
+    }
+    const delBtn = t.closest('[data-achv-del]');
+    if (delBtn) handleAchievementDelete(delBtn);
+  });
+  document.addEventListener('submit', (e) => {
+    if (e.target?.id === 'achvForm') {
+      e.preventDefault();
+      submitAchievementForm();
+    }
+  });
 }
 
 /* ─── Stage indicator dropdown (switch stage anytime) ──────────── */
@@ -5147,6 +5357,11 @@ function init() {
   _lastCandidateSig = (AltioraState.getCandidateFields() || []).join('|');   // seed so init doesn't double-render
   AltioraState.subscribe(syncCandidateFieldSurfaces);
   updateFieldsIndicator();
+
+  // Achievements log: the list is a direct projection of state, re-rendered
+  // on every change (same anti-desync pattern as the fan-outs above).
+  AltioraState.subscribe(renderAchievementsList);
+  wireAchievementsEvents();
 
   // Workspace home: the wordmark is the home control; delegated actions on the home panel.
   $('navHome')?.addEventListener('click', goHome);

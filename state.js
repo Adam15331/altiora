@@ -39,6 +39,7 @@ const AltioraState = (() => {
         predictedGrades:     null,    // grade string or IB number
         interests:           [],      // category strings
         candidateFields:     [],      // category ids the student is considering (max 3, order = priority)
+        achievements:        [],      // student's own log of activities/awards/certificates — see addAchievement()
       },
       shortlist: [],                  // course id strings
       progress:  {},                  // keyed by course id or milestone
@@ -81,8 +82,12 @@ const AltioraState = (() => {
       return base;            // corrupt JSON → start clean
     }
     if (!parsed || typeof parsed !== 'object') return base;
+    const profile = { ...base.profile, ...(parsed.profile || {}) };
+    // Old saves have no achievements key (or, defensively, a corrupt one) —
+    // normalise to a clean array so every caller can rely on the shape.
+    if (!Array.isArray(profile.achievements)) profile.achievements = [];
     return {
-      profile:   { ...base.profile,  ...(parsed.profile  || {}) },
+      profile,
       shortlist: Array.isArray(parsed.shortlist) ? parsed.shortlist.slice() : base.shortlist,
       progress:  (parsed.progress && typeof parsed.progress === 'object') ? { ...parsed.progress } : base.progress,
       // Note: any unknown top-level keys in old saves (from removed/experimental
@@ -211,6 +216,81 @@ const AltioraState = (() => {
     }
   }
 
+  /* ─── Achievements & activities log ───────────────────────────
+   * A tracker only: the student's own record of awards, certificates,
+   * roles, volunteering, work experience, and activities — for use in
+   * personal statements, applications, and interviews. Deliberately NO
+   * university-matching or scoring on top of this: universities don't
+   * publish verifiable extracurricular weightings, so any matching
+   * would mean fabricating data.
+   * ───────────────────────────────────────────────────────────── */
+  const ACHIEVEMENT_TYPES = [
+    { id: 'award',        label: 'Award / Prize' },
+    { id: 'certificate',  label: 'Certificate / Qualification' },
+    { id: 'competition',  label: 'Competition' },
+    { id: 'leadership',   label: 'Leadership / Role' },
+    { id: 'volunteering', label: 'Volunteering / Community' },
+    { id: 'work',         label: 'Work Experience / Internship' },
+    { id: 'activity',     label: 'Extracurricular Activity' },
+    { id: 'other',        label: 'Other' },
+  ];
+  const _ACHIEVEMENT_TYPE_IDS = new Set(ACHIEVEMENT_TYPES.map(t => t.id));
+  const _ACHIEVEMENT_FIELDS   = ['type', 'title', 'organisation', 'level', 'date', 'description'];
+
+  function _achievementsRef() {
+    if (!Array.isArray(_state.profile.achievements)) _state.profile.achievements = [];
+    return _state.profile.achievements;
+  }
+
+  // Copy only known fields, as trimmed strings; unknown keys can't pollute
+  // the shape, and optional fields normalise to '' rather than undefined.
+  function _sanitizeAchievementFields(source, target) {
+    _ACHIEVEMENT_FIELDS.forEach(key => {
+      if (key in source) target[key] = (source[key] == null) ? '' : String(source[key]).trim();
+    });
+    return target;
+  }
+
+  function getAchievements() {
+    return _clone(_achievementsRef());
+  }
+
+  // Returns the new entry's id, or null when the entry is invalid
+  // (type must be from ACHIEVEMENT_TYPES; title must be non-empty).
+  function addAchievement(entry) {
+    if (!entry || typeof entry !== 'object') return null;
+    const clean = _sanitizeAchievementFields(entry, {
+      type: '', title: '', organisation: '', level: '', date: '', description: '',
+    });
+    if (!_ACHIEVEMENT_TYPE_IDS.has(clean.type) || !clean.title) return null;
+    clean.id = 'ach_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    _achievementsRef().push(clean);
+    _commit();
+    return clean.id;
+  }
+
+  // Merge a partial update into an existing entry. Returns true on success;
+  // false when the entry doesn't exist or the update would break validity.
+  function updateAchievement(id, partial) {
+    if (!partial || typeof partial !== 'object') return false;
+    const entry = _achievementsRef().find(a => a.id === id);
+    if (!entry) return false;
+    const merged = _sanitizeAchievementFields(partial, { ...entry });
+    if (!_ACHIEVEMENT_TYPE_IDS.has(merged.type) || !merged.title) return false;
+    Object.assign(entry, merged);
+    _commit();
+    return true;
+  }
+
+  function removeAchievement(id) {
+    const list = _achievementsRef();
+    const i = list.findIndex(a => a.id === id);
+    if (i !== -1) {
+      list.splice(i, 1);
+      _commit();
+    }
+  }
+
   function addToShortlist(courseId) {
     if (courseId == null) return;
     if (!_state.shortlist.includes(courseId)) {
@@ -277,6 +357,11 @@ const AltioraState = (() => {
     addCandidateField,
     removeCandidateField,
     MAX_CANDIDATE_FIELDS,
+    getAchievements,
+    addAchievement,
+    updateAchievement,
+    removeAchievement,
+    ACHIEVEMENT_TYPES,
     addToShortlist,
     removeFromShortlist,
     isInShortlist,
