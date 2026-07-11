@@ -2802,11 +2802,13 @@ function buildShortlistCard(course, studentTags, hasSubjects) {
     ${(course.verification?.status ?? 'unverified') !== 'verified'
       ? `<p class="card-unverified">⚠ Requirements not yet verified — confirm with the university.</p>`
       : ''}
+    ${cardMoreHtml(course)}
   `;
   card.querySelector('.remove-btn').addEventListener('click', e => {
     e.stopPropagation();
     toggleShortlist(course.id);   // course is saved → this removes it
   });
+  wireCardMore(card);
   return card;
 }
 
@@ -3936,6 +3938,126 @@ function buildGroup(status, headerText, items, startIndex, collapsed = false) {
   return section;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+ * SHARED CARD DETAIL — "More about this course" expander + compact
+ * US test line. Used by every surface that renders course cards
+ * (Check, shortlist, Course Finder), so all inherit both.
+ * ═══════════════════════════════════════════════════════════════ */
+
+const CARD_CHEVRON_ICON  = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg>`;
+const CARD_EXTERNAL_ICON = `<svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4h5v5M15 4l-7 7M9 5H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-4"/></svg>`;
+
+// Compact per-card US test line — carries ONLY what varies by card: the
+// policy variant and the indicative range when published. The generic
+// holistic explainer lives once in the expander below, not boxed on every
+// card. Honest absences render honestly ("no published range").
+const US_TEST_SHORT = {
+  required:    'SAT/ACT required',
+  optional:    'Test-optional',
+  flexible:    'Test-flexible',
+  recommended: 'SAT/ACT recommended',
+  varies:      'SAT/ACT required for some schools',
+  blind:       'Test-blind',
+};
+function usTestLineHtml(course) {
+  if (course.country !== 'US' || !course.usAdmissions) return '';
+  const a = course.usAdmissions;
+  const parts = [US_TEST_SHORT[a.test] ?? a.test];
+  if (a.test === 'blind') {
+    parts.push('scores not used');
+  } else {
+    const range = [];
+    if (a.sat) range.push(`SAT ${a.sat}`);
+    if (a.act) range.push(`ACT ${a.act}`);
+    if (range.length) parts.push(...range, 'indicative');
+    else parts.push('no published range');
+  }
+  return `<div class="card-us-test">🇺🇸 ${parts.map(esc).join(' · ')}</div>`;
+}
+
+// The expandable detail state: "learn more" built ONLY from content we
+// already hold — the authored field guide, the course's own structural
+// notes, the generic US-holistic explainer (moved here from the per-card
+// box), the university profile (formerly its own expander), and the stored
+// official source URL. Nothing is authored per-course; verification.notes
+// stay internal (they are source bookkeeping, not student guidance); empty
+// fields render nothing. Returns '' when no section has content.
+function cardMoreHtml(course) {
+  const sections = [];
+
+  // 1. Field guide — the discovery read we already authored for this field.
+  const fieldId = resolveFieldId(course.category);
+  const fp = (fieldId && typeof fieldProfiles !== 'undefined') ? fieldProfiles[course.category] : null;
+  if (fp) {
+    const catLabel = CATEGORY_LABEL_MAP[course.category] ?? course.category;
+    sections.push(`
+      <p class="card-more__guide">What's a ${esc(catLabel)} degree actually like?
+        <button type="button" class="card-more__guide-link" data-field-guide="${esc(course.category)}">Read the field guide →</button>
+      </p>`);
+  }
+
+  // 2. Structural facts we already hold about THIS course (course.notes is
+  // the curated student-facing field — co-op structure, college applications,
+  // supplementary forms). Rendered only when present; never padded.
+  if (course.notes) sections.push(`<p class="card-more__notes">${esc(course.notes)}</p>`);
+
+  // 3. The generic US explainer — stated once here for those who want it.
+  if (course.country === 'US' && course.usAdmissions) {
+    sections.push(`<p class="card-more__us">🇺🇸 US admissions is holistic — there is no fixed grade cutoff. Published SAT/ACT figures are the middle 50% of admitted students: indicative, never a cutoff.</p>`);
+  }
+
+  // 4. University info (unified here from the old "About this university").
+  const uniProfile = (typeof universityProfiles !== 'undefined') ? (universityProfiles[course.university] ?? null) : null;
+  if (uniProfile) {
+    const cityPart = uniProfile.city ? ` · ${esc(uniProfile.city)}` : '';
+    const tagLine  = uniProfile.tagline           ? `<p class="card-uni-tagline">${esc(uniProfile.tagline)}</p>` : '';
+    const noteLine = uniProfile.internationalNote ? `<p class="card-uni-note">${esc(uniProfile.internationalNote)}</p>` : '';
+    const webLink  = uniProfile.websiteUrl
+      ? `<a class="card-uni-link" href="${esc(uniProfile.websiteUrl)}" target="_blank" rel="noopener noreferrer">${CARD_EXTERNAL_ICON} Visit website</a>`
+      : '';
+    if (tagLine || noteLine || webLink) {
+      sections.push(`
+        <div class="card-more__uni">
+          <span class="card-more__head">About ${esc(course.university)}${cityPart}</span>
+          ${tagLine}${noteLine}${webLink}
+        </div>`);
+    }
+  } else if (course.universityContext?.notes) {
+    sections.push(`
+      <div class="card-more__uni">
+        <span class="card-more__head">About ${esc(course.university)}</span>
+        <p class="card-uni-note">${esc(course.universityContext.notes)}</p>
+      </div>`);
+  }
+
+  // 5. Official course page — the university's own page beats anything we
+  // could author. Only when the stored source is a real URL (skip 'UCAS'
+  // and other non-URL bookkeeping strings).
+  const src = course.verification?.source;
+  if (typeof src === 'string' && /^https?:\/\//i.test(src)) {
+    sections.push(`<a class="card-uni-link card-more__official" href="${esc(src)}" target="_blank" rel="noopener noreferrer">${CARD_EXTERNAL_ICON} Official course page</a>`);
+  }
+
+  if (!sections.length) return '';
+  // Wears .card-uni-info too: same expander interaction/styling as the old
+  // "About this university" details, now unified into one detail area.
+  return `
+    <details class="card-uni-info card-more">
+      <summary>More about this course ${CARD_CHEVRON_ICON}</summary>
+      <div class="card-uni-info__body card-more__body">${sections.join('')}</div>
+    </details>`;
+}
+
+// Wire the field-guide link (normal navigation — back-able via the router).
+function wireCardMore(card) {
+  card.querySelectorAll('[data-field-guide]').forEach(btn =>
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      logEvent('card_field_guide', { field: btn.dataset.fieldGuide, mode: state.mode });
+      openFieldOverview(btn.dataset.fieldGuide, { from: state.mode === 'check' ? 'check' : 'card' });
+    }));
+}
+
 function buildCheckCard(course, result) {
   const { status, missingEssential, missingPreferred } = result;
   const cfg     = STATUS[status];
@@ -4009,35 +4131,9 @@ function buildCheckCard(course, result) {
     }
   }
 
-  // ── US admissions context (holistic; indicative SAT/ACT range) ────
-  // US degrees have no published grade/IB cutoff, so instead of a grade
-  // line we show the current test policy plus an INDICATIVE admitted
-  // middle-50% range, clearly labelled as a guide rather than a cutoff.
-  let usAdmitHtml = '';
-  if (course.country === 'US' && course.usAdmissions) {
-    const a = course.usAdmissions;
-    const policyLabel = {
-      required:    'SAT/ACT required',
-      optional:    'Test-optional',
-      flexible:    'Test-flexible (SAT/ACT/AP/IB)',
-      recommended: 'SAT/ACT recommended',
-      varies:      'SAT/ACT required for some schools',
-      blind:       'Test-blind — scores not used',
-    }[a.test] ?? a.test;
-    const rangeParts = [];
-    if (a.sat) rangeParts.push(`SAT ${a.sat}`);
-    if (a.act) rangeParts.push(`ACT ${a.act}`);
-    const rangeHtml = rangeParts.length
-      ? `<div class="card-us-admit__range">Typical admitted range (indicative, not a cutoff): ${rangeParts.map(esc).join(' · ')}</div>`
-      : (a.test === 'blind'
-          ? `<div class="card-us-admit__range">SAT/ACT are not considered in admission.</div>`
-          : '');
-    usAdmitHtml = `
-      <div class="card-us-admit">
-        <span class="card-us-admit__policy">🇺🇸 Holistic admissions — no fixed cutoff · ${esc(policyLabel)}</span>
-        ${rangeHtml}
-      </div>`;
-  }
+  // ── US admissions: one compact per-card line (usTestLineHtml). The old
+  // repeated "Holistic admissions" box carried no per-card information; the
+  // generic explainer now lives once in the card's expanded detail state.
 
   // ── IB HL chips ───────────────────────────────────────────────
   let ibHlHtml = '';
@@ -4066,7 +4162,6 @@ function buildCheckCard(course, result) {
     }
   }
 
-  const profile = (typeof universityProfiles !== 'undefined') ? (universityProfiles[course.university] ?? null) : null;
 
   // ── Requirement-data verification caveat ──────────────────────
   // If these grades/tests haven't been checked against a published
@@ -4094,29 +4189,10 @@ function buildCheckCard(course, result) {
     unconfirmed: `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M8 8a2 2 0 1 1 2.6 1.9c-.4.15-.6.4-.6.8v.8"/><path d="M10 14.5v.2"/></svg>`,
   };
   const graduationIcon = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l7-4 7 4-7 4-7-4z"/><path d="M7 10v3.5c0 1.5 1.3 2 3 2s3-.5 3-2V10"/><path d="M17 8v4"/></svg>`;
-  const chevronIcon    = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg>`;
-  const externalIcon   = `<svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4h5v5M15 4l-7 7M9 5H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-4"/></svg>`;
 
-  let uniInfoHtml = '';
-  if (profile) {
-    const tagLine  = profile.tagline         ? `<p class="card-uni-tagline">${esc(profile.tagline)}</p>` : '';
-    const noteLine = profile.internationalNote? `<p class="card-uni-note">${esc(profile.internationalNote)}</p>` : '';
-    const webLink  = profile.websiteUrl
-      ? `<a class="card-uni-link" href="${esc(profile.websiteUrl)}" target="_blank" rel="noopener noreferrer">${externalIcon} Visit website</a>`
-      : '';
-    const cityPart = profile.city ? ` · ${esc(profile.city)}` : '';
-    uniInfoHtml = `
-      <details class="card-uni-info">
-        <summary>About this university${cityPart} ${chevronIcon}</summary>
-        <div class="card-uni-info__body">${tagLine}${noteLine}${webLink}</div>
-      </details>`;
-  } else if (course.universityContext?.notes) {
-    uniInfoHtml = `
-      <details class="card-uni-info">
-        <summary>About this university ${chevronIcon}</summary>
-        <div class="card-uni-info__body"><p class="card-uni-info__notes">${esc(course.universityContext.notes)}</p></div>
-      </details>`;
-  }
+  // University info now lives inside the unified "More about this course"
+  // expander (cardMoreHtml) together with the field guide, structural notes
+  // and the official course page — one detail area instead of two.
 
   card.innerHTML = `
     <div class="card-status card-status--${status}">${statusIcons[status] ?? ''} ${esc(statusLabel(status))}</div>
@@ -4142,7 +4218,7 @@ function buildCheckCard(course, result) {
     ${(status === 'grey' && result.gradeGap) ? `<p class="card-grade-gap">⚠️ You have ${esc(result.gradeGap.have)}, course asks for ${esc(result.gradeGap.need)}</p>` : ''}
     ${status === 'unconfirmed' ? `<p class="card-grade-unconfirmed">◔ Your subjects fit, but this course doesn't publish a grade requirement we can compare with your predicted grade — so we can't confirm it's a match. Check the university's official page.</p>` : ''}
     ${fieldCoreHtml}
-    ${usAdmitHtml}
+    ${usTestLineHtml(course)}
     ${ibHlHtml}
     ${apWarningHtml}
     ${tests.length ? `
@@ -4153,9 +4229,10 @@ function buildCheckCard(course, result) {
     ${apRecsHtml}
     ${unverifiedHtml}
     ${footerHtml}
-    ${uniInfoHtml}
+    ${cardMoreHtml(course)}
   `;
   wireSaveButton(card);
+  wireCardMore(card);
   return card;
 }
 
@@ -4271,7 +4348,7 @@ function buildReverseCard(course) {
         </div>`).join('')}
     </div>
     ${reverseCompareHtml(course)}
-    ${course.notes ? `<p class="reverse-notes">${esc(course.notes)}</p>` : ''}
+    ${cardMoreHtml(course)}
     <div class="reverse-card-footer">
       ${saveButtonHtml(course.id)}
       <button class="copy-btn" type="button" aria-label="Copy requirements for ${esc(course.name)} to clipboard">
@@ -4281,6 +4358,7 @@ function buildReverseCard(course) {
   `;
 
   wireSaveButton(card);
+  wireCardMore(card);
 
   // Copy-to-clipboard handler — timerId is scoped per card instance.
   let copyTimerId = null;
