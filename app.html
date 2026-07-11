@@ -10,7 +10,7 @@
   <!-- Confident Editorial type — loaded via <link> (reliable) not @import -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
   <link rel="stylesheet" href="tokens.css?v=9" />
-  <link rel="stylesheet" href="styles.css?v=54" />
+  <link rel="stylesheet" href="styles.css?v=55" />
   <script defer data-domain="altiora.app" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
@@ -258,10 +258,16 @@
 
         <!-- Subject picker — hidden until a system is chosen -->
         <div id="subjectPickerSection" class="subject-picker-section hidden" aria-live="polite">
+          <!-- Compact summary — shown instead of the full picker when saved
+               subjects are pre-loaded; Edit expands the picker below. -->
+          <div id="subjectSummaryRow" class="subject-summary hidden">
+            <!-- rendered by JS (syncPickerCollapse) -->
+          </div>
           <div class="subject-picker-header">
             <span class="control-label">Your subjects</span>
             <span id="subjectCountBadge" class="count-badge">none selected</span>
             <button type="button" id="clearSubjectsBtn" class="clear-subjects-btn hidden" aria-label="Clear all selected subjects">Clear all</button>
+            <button type="button" id="collapsePickerBtn" class="clear-subjects-btn hidden" aria-label="Collapse the subject picker">Done</button>
           </div>
           <div class="subject-search-bar">
             <input
@@ -293,7 +299,8 @@
         <div id="categoryPickerSection" class="category-picker-section hidden" aria-live="polite">
           <div class="subject-picker-header">
             <span class="control-label">What are you interested in studying?</span>
-            <span class="picker-hint-inline">Optional — leave blank to see all courses</span>
+            <span id="categoryHintDefault" class="picker-hint-inline">Optional — leave blank to see all courses</span>
+            <span id="categoryDefaultNote" class="picker-hint-inline category-default-note hidden">Showing your kept fields — clear to see everything.</span>
           </div>
           <div
             id="categoryPicker"
@@ -492,7 +499,7 @@
   <script src="data/fieldProfiles.js?v=1"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
   <script src="state.js?v=8"></script>
-  <script src="main.js?v=64"></script>
+  <script src="main.js?v=65"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);

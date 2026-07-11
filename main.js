@@ -39,6 +39,7 @@ const state = {
   resultSearch:       '',   // free-text filter on Check results (uni / course name)
   predictedGrade:     null,
   exploreField:       null,   // { category, name } when arriving from Start with Strengths
+  pickerCollapsed:    false,  // Check picker view: compact summary row vs full picker (session-only)
 };
 
 /* ─── Constants ─────────────────────────────────────────────────── */
@@ -79,6 +80,23 @@ const STATUS = {
   unconfirmed: { label:'Grades not confirmed', badgeCls:'badge--grey', icon:'◔', cardCls:'course-card--unconfirmed' },
 };
 const STATUS_SORT = { green:0, amber:1, grey:2, unconfirmed:3, red:4 };
+
+// Honest labels for SUBJECT-ONLY mode (no predicted grade set): on subjects
+// alone we can only say the subjects fit — "Strong match" implies likely
+// admission, which cannot be claimed without grades. Once a grade IS set the
+// established Strong/Possible/Out-of-reach labels return. Language only:
+// status keys, colours, sort order and counts are identical in both modes.
+// grey/unconfirmed exist only in grade mode (see the grade gate), so they
+// keep their grade-language labels.
+const STATUS_SUBJECT_ONLY = {
+  green: 'Subjects fit',
+  amber: 'Partly fit',
+  red:   'Subjects don’t fit',
+};
+function gradesInformMatch() { return !!state.predictedGrade; }
+function statusLabel(status) {
+  return (!gradesInformMatch() && STATUS_SUBJECT_ONLY[status]) || STATUS[status]?.label || '';
+}
 
 const TIER_LABELS = {
   'world-top-5':      'World Top 5',
@@ -1193,6 +1211,10 @@ function switchMode(mode) {
     // Year-aware framing + empty-state variant (cheap: cached by builtFor).
     updateCheckFraming();
     renderCheckEmptyState();
+    // The My Fields lens may have changed while away (pins edited elsewhere) —
+    // re-apply the default and refresh results only if the lens differs.
+    applyMyFieldsToCategoryFilter();
+    if (state.selectedSubjects.length && categoryFilterSig() !== _resultsCatSig) renderCheckResults();
   }
   if (mode === 'reverse') {
     updateReverseIntro();
@@ -1445,6 +1467,7 @@ function showSubjectOnboard(stage) {
   if (pickerSection && slot && pickerSection.parentElement !== slot) slot.appendChild(pickerSection);
   pickerSection?.classList.remove('hidden');
   $('subjectPickerHint')?.classList.add('hidden');
+  syncPickerCollapse();   // the onboarding placement always shows the full picker
   $('workspace').classList.add('hidden');
   $('stageSelect').classList.add('hidden');
   $('systemSelect').classList.add('hidden');
@@ -1459,6 +1482,9 @@ function finishSubjectOnboard(skipped) {
   // workspace opens against the committed profile.
   if (!skipped) syncProfileFromCheck();
   logEvent('onboard_subjects', { skipped: !!skipped, count: state.selectedSubjects.length });
+  // Subjects just entered → land on Check with the compact summary so the
+  // computed results are the star, not the picker they've just used.
+  if (state.selectedSubjects.length) state.pickerCollapsed = true;
   const stage = _subjectOnboardStage || AltioraState.getProfile().stage || DEFAULT_STAGE;
   _subjectOnboardStage = null;
   routeToStage(stage);   // applyStageChrome restores the picker into Check
@@ -1473,6 +1499,7 @@ function restoreSubjectPickerHome() {
     anchor.parentElement.insertBefore(pickerSection, anchor);
   }
   updateCheckFraming();
+  syncPickerCollapse();   // back home: the compact-summary rule applies again
 }
 
 /* ─── Year indicator (global control, same pattern as system) ──── */
@@ -1721,6 +1748,9 @@ function preloadCheckFromProfile() {
   $$('#subjectPicker input[type="checkbox"]').forEach(cb => {
     if (saved.includes(cb.value)) { cb.checked = true; any = true; }
   });
+  // Pre-loaded subjects rarely change — default to the compact summary view
+  // so the results lead the page. Edit/Done override for the session.
+  if (any) state.pickerCollapsed = true;
   if (any) onSubjectToggle();   // the standard path: tags, FM lock, count, results
 }
 
@@ -2276,6 +2306,12 @@ function syncCandidateFieldSurfaces() {
   if (state.mode === 'strengths')      renderStrengthsResults();
   else if (state.mode === 'plan')      renderPlanResults();
   else if (state.mode === 'home')      renderWorkspaceHome();
+
+  // Pins drive the Check interest-filter default (a lens, never the truth):
+  // re-apply on every pin change and refresh visible results if the lens moved.
+  applyMyFieldsToCategoryFilter();
+  if (state.mode === 'check' && state.selectedSubjects.length
+      && categoryFilterSig() !== _resultsCatSig) renderCheckResults();
 }
 
 // Reactive fan-out for profile.subjects (+ grades): every surface that
@@ -2725,7 +2761,7 @@ function buildShortlistCard(course, studentTags, hasSubjects) {
   let badgeHtml;
   if (status) {
     const cfg = STATUS[status];
-    badgeHtml = `<div class="card-status card-status--${status}">${cfg.icon} ${qualify ? axis('Subjects') : ''}${esc(cfg.label)}</div>`;
+    badgeHtml = `<div class="card-status card-status--${status}">${cfg.icon} ${qualify ? axis('Subjects') : ''}${esc(statusLabel(status))}</div>`;
   } else {
     badgeHtml = `<div class="card-status card-status--none">Pick your subjects to see your match</div>`;
   }
@@ -3226,6 +3262,9 @@ function buildSubjectPicker(systemKey) {
   // the context banner so its "pick a system" prompt updates.
   applyExploreFieldFilter();
   renderExploreContextBanner();
+  // No explicit field context → the My Fields default applies (no-op when
+  // the student has touched the filter manually this session).
+  applyMyFieldsToCategoryFilter();
 
   buildGradeInput(systemKey);
   // buildGradeInput starts blank — restore the saved grade so the check
@@ -3233,6 +3272,7 @@ function buildSubjectPicker(systemKey) {
   // empty state (matters now that saved subjects pre-load and render at load).
   restoreGradeFromProfile(systemKey);
   syncSubjectCount();
+  syncPickerCollapse();
   renderCheckEmptyState();
 }
 
@@ -3264,6 +3304,36 @@ function restoreGradeFromProfile(systemKey) {
  * CATEGORY PICKER  (course interest filter)
  * ═══════════════════════════════════════════════════════════════ */
 
+// The interest filter is a LENS; My Fields is the truth. Until the student
+// touches the filter manually this session, their pinned candidate fields
+// pre-select it (with a note saying so), and pin changes re-apply reactively.
+// Manual changes override the default for the session and never un-pin
+// anything. Field-exploration context (exploreField) keeps priority — it is
+// an explicit "show me this field" intent.
+let _categoryTouched = false;
+
+function applyMyFieldsToCategoryFilter() {
+  const setNote = on => {
+    $('categoryDefaultNote')?.classList.toggle('hidden', !on);
+    $('categoryHintDefault')?.classList.toggle('hidden', on);
+  };
+  if (_categoryTouched || state.exploreField) { setNote(false); return; }
+  const pins = (typeof AltioraState !== 'undefined' ? AltioraState.getCandidateFields() : [])
+    .filter(id => CATEGORIES.some(c => c.id === id));
+  state.selectedCategories = new Set(pins);
+  $$('#categoryPicker .category-chip').forEach(btn => {
+    const active = state.selectedCategories.has(btn.dataset.category);
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', String(active));
+  });
+  setNote(pins.length > 0);
+}
+
+// Signature of the category lens the results were last BUILT with — lets
+// re-entry into Check refresh only when the lens actually changed.
+let _resultsCatSig = null;
+function categoryFilterSig() { return [...state.selectedCategories].sort().join('|'); }
+
 function buildCategoryPicker() {
   const picker = $('categoryPicker');
   const frag = document.createDocumentFragment();
@@ -3274,6 +3344,10 @@ function buildCategoryPicker() {
     btn.dataset.category = cat.id;
     btn.innerHTML = `<span class="category-chip__icon" aria-hidden="true">${cat.icon}</span>${esc(cat.label)}`;
     btn.addEventListener('click', () => {
+      // Manual touch: the student now owns the lens for this session.
+      _categoryTouched = true;
+      $('categoryDefaultNote')?.classList.add('hidden');
+      $('categoryHintDefault')?.classList.remove('hidden');
       if (state.selectedCategories.has(cat.id)) {
         state.selectedCategories.delete(cat.id);
         btn.classList.remove('active');
@@ -3411,6 +3485,7 @@ function onSubjectToggle(e = null) {
   else hideMathsWarningBanner();
 
   syncSubjectCount();
+  syncPickerCollapse();
   $('categoryPickerSection').classList.toggle('hidden', state.selectedSubjects.length === 0);
   renderCheckEmptyState();
   clearTimeout(_subjectDebounce);
@@ -3422,6 +3497,27 @@ function syncSubjectCount() {
   const n = state.selectedSubjects.length;
   $('subjectCountBadge').textContent = n === 0 ? 'none selected' : `${n} selected`;
   $('clearSubjectsBtn')?.classList.toggle('hidden', n === 0);
+}
+
+// Compact picker view: students with subjects already selected see a one-line
+// summary ("Your subjects: … [Edit]") instead of the full picker, moving the
+// results meaningfully up the page. Edit expands the real picker (unchanged
+// behaviour: filter, Clear all, FM lock); Done collapses it again. Never
+// collapses with an empty selection, and never inside the onboarding
+// placement (that step exists to enter subjects).
+function syncPickerCollapse() {
+  const section = $('subjectPickerSection');
+  const row = $('subjectSummaryRow');
+  if (!section || !row) return;
+  const inOnboard = section.parentElement?.id === 'subjectOnboardSlot';
+  const collapsed = !!state.pickerCollapsed && state.selectedSubjects.length > 0 && !inOnboard;
+  section.classList.toggle('subject-picker-section--collapsed', collapsed);
+  row.classList.toggle('hidden', !collapsed);
+  row.innerHTML = collapsed ? `
+    <span class="subject-summary__label">Your subjects:</span>
+    <span class="subject-summary__list">${state.selectedSubjects.map(esc).join(' <span class="subject-summary__dot">·</span> ')}</span>
+    <button type="button" id="subjectSummaryEdit" class="subject-summary__edit" aria-label="Edit your subjects">Edit</button>` : '';
+  $('collapsePickerBtn')?.classList.toggle('hidden', collapsed || state.selectedSubjects.length === 0 || inOnboard);
 }
 
 // Uncheck every subject and reset to the empty state — a one-click "start over".
@@ -3485,18 +3581,36 @@ function renderSummaryBar(subjectCount, counts, total) {
     ? `<span class="summary-dot">·</span><a href="#results-group-unconfirmed" class="summary-link summary-link--unconfirmed">${counts.unconfirmed} grades not confirmed</a>`
     : '';
 
-  bar.innerHTML = `
-    <div class="results-new-summary">
-      Your subjects match <strong>${total}</strong> course${total !== 1 ? 's' : ''} —
+  // Two language modes over identical counts/colours: subject-only mode may
+  // only speak about subject FIT; grade mode keeps the match language.
+  const summaryLine = gradesInformMatch()
+    ? `Your subjects match <strong>${total}</strong> course${total !== 1 ? 's' : ''} —
       <a href="#results-group-green" class="summary-link summary-link--green">${counts.green} strong match${counts.green !== 1 ? 'es' : ''}</a>
       <span class="summary-dot">·</span>
       <a href="#results-group-amber" class="summary-link summary-link--amber">${counts.amber} possible</a>
       ${greySummary}
       ${unconfirmedSummary}
       <span class="summary-dot">·</span>
-      <a href="#results-group-red" class="summary-link summary-link--red">${counts.red} out of reach</a>
+      <a href="#results-group-red" class="summary-link summary-link--red">${counts.red} out of reach</a>`
+    : `Your subjects fit
+      <a href="#results-group-green" class="summary-link summary-link--green"><strong>${counts.green}</strong> course${counts.green !== 1 ? 's' : ''}</a>
+      of ${total}
+      <span class="summary-dot">·</span>
+      <a href="#results-group-amber" class="summary-link summary-link--amber">${counts.amber} partly fit</a>
+      ${greySummary}
+      ${unconfirmedSummary}
+      <span class="summary-dot">·</span>
+      <a href="#results-group-red" class="summary-link summary-link--red">${counts.red} don’t fit</a>`;
+
+  const ariaLabel = gradesInformMatch()
+    ? `Course eligibility: ${counts.green} strong matches, ${counts.amber} possible, ${counts.grey} grades a stretch, ${counts.unconfirmed ?? 0} grades not confirmed, ${counts.red} out of reach`
+    : `Subject fit: ${counts.green} fit, ${counts.amber} partly fit, ${counts.red} don’t fit`;
+
+  bar.innerHTML = `
+    <div class="results-new-summary">
+      ${summaryLine}
     </div>
-    <div class="summary-progress" role="img" aria-label="Course eligibility: ${counts.green} strong matches, ${counts.amber} possible, ${counts.grey} grades a stretch, ${counts.unconfirmed ?? 0} grades not confirmed, ${counts.red} out of reach">
+    <div class="summary-progress" role="img" aria-label="${ariaLabel}">
       <div class="summary-seg summary-seg--green" style="width:${gPct.toFixed(2)}%"></div>
       <div class="summary-seg summary-seg--amber" style="width:${aPct.toFixed(2)}%"></div>
       <div class="summary-seg summary-seg--grey"  style="width:${grPct.toFixed(2)}%"></div>
@@ -3576,6 +3690,7 @@ function renderCheckResults() {
   }
   const firstAppearance = !_checkResultsSeen;
   _checkResultsSeen = true;
+  _resultsCatSig = categoryFilterSig();   // the lens these results are built with
   section.classList.remove('hidden');
   showLoadingSpinner('courseGrid');
 
@@ -3690,14 +3805,15 @@ function renderCheckResults() {
 
   renderSummaryBar(state.selectedSubjects.length, counts, total);
 
-  const greyBadge = counts.grey ? `<span class="badge badge--grey">◯&thinsp;${counts.grey}</span>` : '';
-  const unconfirmedBadge = counts.unconfirmed ? `<span class="badge badge--grey">◔&thinsp;${counts.unconfirmed}</span>` : '';
+  // Pills are icon+count; their tooltips/labels follow the same language rule.
+  const greyBadge = counts.grey ? `<span class="badge badge--grey" title="${esc(statusLabel('grey'))}">◯&thinsp;${counts.grey}</span>` : '';
+  const unconfirmedBadge = counts.unconfirmed ? `<span class="badge badge--grey" title="${esc(statusLabel('unconfirmed'))}">◔&thinsp;${counts.unconfirmed}</span>` : '';
   $('resultSummaryBadges').innerHTML = `
-    <span class="badge badge--success">✓&thinsp;${counts.green}</span>
-    <span class="badge badge--warning">◑&thinsp;${counts.amber}</span>
+    <span class="badge badge--success" title="${esc(statusLabel('green'))}">✓&thinsp;${counts.green}</span>
+    <span class="badge badge--warning" title="${esc(statusLabel('amber'))}">◑&thinsp;${counts.amber}</span>
     ${greyBadge}
     ${unconfirmedBadge}
-    <span class="badge badge--error">✗&thinsp;${counts.red}</span>
+    <span class="badge badge--error" title="${esc(statusLabel('red'))}">✗&thinsp;${counts.red}</span>
     <span class="badge badge--neutral">${total} shown</span>
   `;
 
@@ -3705,12 +3821,15 @@ function renderCheckResults() {
   container.innerHTML = '';
   let cardIndex = 0;
 
+  // Section headings follow the same subject-only / grade-mode language rule
+  // as every other label (statusLabel) — colours and grouping identical.
+  const gradeMode = gradesInformMatch();
   if (byStatus.green.length) {
-    container.appendChild(buildGroup('green', 'Strong matches', byStatus.green, cardIndex));
+    container.appendChild(buildGroup('green', gradeMode ? 'Strong matches' : 'Subjects fit', byStatus.green, cardIndex));
     cardIndex += byStatus.green.length;
   }
   if (byStatus.amber.length) {
-    container.appendChild(buildGroup('amber', 'Possible', byStatus.amber, cardIndex));
+    container.appendChild(buildGroup('amber', gradeMode ? 'Possible' : 'Partly fit', byStatus.amber, cardIndex));
     cardIndex += byStatus.amber.length;
   }
   if (byStatus.grey.length) {
@@ -3727,7 +3846,7 @@ function renderCheckResults() {
     cardIndex += byStatus.unconfirmed.length;
   }
   if (byStatus.red.length) {
-    container.appendChild(buildGroup('red', 'Out of reach', byStatus.red, cardIndex, true));
+    container.appendChild(buildGroup('red', gradeMode ? 'Out of reach' : 'Subjects don’t fit', byStatus.red, cardIndex, true));
   }
 
   // Re-apply the in-results search filter (the grid was just rebuilt, e.g.
@@ -3797,14 +3916,16 @@ function buildGroup(status, headerText, items, startIndex, collapsed = false) {
     toggle.className = 'results-group__toggle';
     const chevSvg = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg>`;
     toggle.setAttribute('aria-expanded', 'false');
-    toggle.innerHTML = `${chevSvg} Show ${items.length} out-of-reach courses`;
+    // Same subject-only / grade-mode language rule as the headings.
+    const noun = gradesInformMatch() ? 'out-of-reach courses' : 'courses your subjects don’t fit';
+    toggle.innerHTML = `${chevSvg} Show ${items.length} ${noun}`;
     toggle.addEventListener('click', () => {
       const nowOpen = cardsDiv.hidden;
       cardsDiv.hidden = !nowOpen;
       toggle.setAttribute('aria-expanded', String(nowOpen));
       toggle.innerHTML = nowOpen
-        ? `${chevSvg} Hide out-of-reach courses`
-        : `${chevSvg} Show ${items.length} out-of-reach courses`;
+        ? `${chevSvg} Hide ${noun}`
+        : `${chevSvg} Show ${items.length} ${noun}`;
     });
     section.appendChild(toggle);
     section.appendChild(cardsDiv);
@@ -3998,7 +4119,7 @@ function buildCheckCard(course, result) {
   }
 
   card.innerHTML = `
-    <div class="card-status card-status--${status}">${statusIcons[status] ?? ''} ${cfg.label}</div>
+    <div class="card-status card-status--${status}">${statusIcons[status] ?? ''} ${esc(statusLabel(status))}</div>
     <div class="card-header">
       <div class="card-title-group">
         <span class="card-flag" aria-hidden="true">${flag}</span>
@@ -5177,7 +5298,9 @@ function switchToPlanCombo(tags, systemKey, opts = {}) {
   onSubjectToggle();
 
   if (fields.length) {
-    // Filter Check Combination to the relevant field(s).
+    // Filter Check Combination to the relevant field(s) — an explicit lens
+    // choice, so it overrides the My Fields default for the session.
+    _categoryTouched = true;
     state.selectedCategories = new Set(fields);
     $$('#categoryPicker .category-chip').forEach(btn => {
       const active = fields.includes(btn.dataset.category);
@@ -5834,6 +5957,9 @@ function renderExploreContextBanner() {
 // Remove the field context and its category filter; show all courses again.
 function clearExploreField() {
   state.exploreField = null;
+  // "Clear field filter" = show everything: respect that for the session
+  // rather than snapping to the My Fields default.
+  _categoryTouched = true;
   state.selectedCategories.clear();
   $$('#categoryPicker .category-chip').forEach(b => {
     b.classList.remove('active');
@@ -5954,6 +6080,13 @@ function init() {
   // selection; "I'll do this later" never gates onboarding.
   $('subjectOnboardContinue')?.addEventListener('click', () => finishSubjectOnboard(false));
   $('subjectOnboardSkip')?.addEventListener('click', () => finishSubjectOnboard(true));
+
+  // Compact picker view: Edit expands (delegated — the summary row re-renders),
+  // Done collapses. Session preference only, never persisted.
+  $('subjectSummaryRow')?.addEventListener('click', e => {
+    if (e.target.closest('#subjectSummaryEdit')) { state.pickerCollapsed = false; syncPickerCollapse(); }
+  });
+  $('collapsePickerBtn')?.addEventListener('click', () => { state.pickerCollapsed = true; syncPickerCollapse(); });
 
   // profile.subjects fan-out: every subject-projecting surface re-renders
   // when the saved subjects change (seeded so init doesn't double-render).
