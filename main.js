@@ -1081,8 +1081,10 @@ function markRoute(route, { replace = false } = {}) {
 // caller so the show/switch calls below don't push new history entries.
 function renderRoute(route) {
   switch (route.v) {
-    case 'stage':  showStageSelect();  break;
-    case 'system': showSystemSelect(); break;
+    case 'stage':    showStageSelect();    break;
+    case 'system':   showSystemSelect();   break;
+    case 'year':     showYearSelect();     break;
+    case 'proposal': showStageProposal();  break;
     case 'field':
       if (route.fieldId && resolveFieldId(route.fieldId))
         openFieldOverview(route.fieldId, { from: route.from || 'strengths' });
@@ -1199,24 +1201,216 @@ const SYSTEM_SHORT_LABELS = {
   HK_DSE:     'Hong Kong DSE',
 };
 
+/* ═══════════════════════════════════════════════════════════════
+ * YEAR GROUP — the counselor's first question.
+ * Asked right after the qualification system (labels depend on it),
+ * normalised to ONE scale that drives all logic:
+ *   yearsUntilApplication — 3 (three or more years out) | 2 | 1 | 0
+ *   where 0 = the application year.
+ * The raw label (profile.yearGroup) exists ONLY for display; nothing
+ * outside this labelling layer may branch on it.
+ * ═══════════════════════════════════════════════════════════════ */
+
+const YEAR_OPTIONS = {
+  UK_A_Level: [
+    { label: 'Year 9',  years: 3 },
+    { label: 'Year 10', years: 3 },
+    { label: 'Year 11', years: 2 },
+    { label: 'Year 12', years: 1 },
+    { label: 'Year 13', years: 0 },
+  ],
+  IB: [
+    { label: 'Pre-IB — Year 10 / Grade 9',  years: 3 },
+    { label: 'Pre-IB — Year 11 / Grade 10', years: 2 },
+    { label: 'IB DP Year 1', years: 1 },
+    { label: 'IB DP Year 2', years: 0 },
+  ],
+  US_AP: [
+    { label: 'Grade 8',  years: 3 },
+    { label: 'Grade 9',  years: 3 },
+    { label: 'Grade 10', years: 2 },
+    { label: 'Grade 11', years: 1 },
+    { label: 'Grade 12', years: 0 },
+  ],
+  SG_A_Level: [
+    { label: 'Secondary 3', years: 3 },
+    { label: 'Secondary 4', years: 2 },
+    { label: 'JC1', years: 1 },
+    { label: 'JC2', years: 0 },
+  ],
+  HK_DSE: [
+    { label: 'Form 3', years: 3 },
+    { label: 'Form 4', years: 2 },
+    { label: 'Form 5', years: 1 },
+    { label: 'Form 6', years: 0 },
+  ],
+};
+
+// The year → stage proposal. Proposed, never imposed.
+const YEAR_IMPLIED_STAGE = { 3: 'exploring', 2: 'choosing', 1: 'building', 0: 'applying' };
+
+function yearImpliedStage(years) {
+  return YEAR_IMPLIED_STAGE[years] ?? null;
+}
+
+// The student's normalised distance from applying, or null when unset.
+function studentYears() {
+  const y = AltioraState.getProfile().yearsUntilApplication;
+  return (typeof y === 'number' && y >= 0 && y <= 3) ? y : null;
+}
+
+// Why we propose that stage — visible reasoning, in the student's own terms.
+function stageProposalReason(yearLabel, stage) {
+  const REASONS = {
+    exploring: `You're in ${yearLabel}, so we'll start you at <strong>Exploring</strong> — there's real time before any big decisions, so this is the moment to discover what actually fits you.`,
+    choosing:  `You're in ${yearLabel}, so we'll start you at <strong>Choosing your subjects</strong> — your subject choices are the live decision right now, and they shape which doors stay open later.`,
+    building:  `You're in ${yearLabel}, so we'll start you at <strong>Building your university list</strong> — your subjects are set, and now it's about where they can take you.`,
+    applying:  `You're in ${yearLabel}, so we'll start you at <strong>Applying</strong> — this is your application year, so deadlines, admission tests, and applications are the focus.`,
+  };
+  return REASONS[stage] ?? '';
+}
+
+// Show the full-screen year-selection screen for the CURRENT system
+// (onboarding step 2, and the one-time prompt for old saves missing a year).
+function showYearSelect() {
+  closeStageMenu();
+  const sys = AltioraState.getProfile().qualificationSystem;
+  const options = YEAR_OPTIONS[sys] || YEAR_OPTIONS.UK_A_Level;
+  $('yearCards').innerHTML = options.map(o => `
+    <button class="stage-card stage-card--year" data-year-label="${esc(o.label)}" data-years="${o.years}" role="listitem">
+      <span class="stage-card__title">${esc(o.label)}</span>
+    </button>`).join('');
+  $$('#yearCards .stage-card').forEach(card =>
+    card.addEventListener('click', () => chooseYear(card.dataset.yearLabel, parseInt(card.dataset.years, 10))));
+  $('workspace').classList.add('hidden');
+  $('stageSelect').classList.add('hidden');
+  $('systemSelect').classList.add('hidden');
+  $('stageProposal').classList.add('hidden');
+  $('yearSelect').classList.remove('hidden');
+  markRoute({ v: 'year' });
+}
+
+// Persist the chosen year, then continue the journey: new users get the
+// year-informed stage proposal; returning users (backfill or change) go
+// back to the workspace — the home nudge handles any stage mismatch.
+function chooseYear(label, years) {
+  if (!Number.isInteger(years) || years < 0 || years > 3) return;
+  AltioraState.setProfile({
+    yearGroup: label,
+    yearsUntilApplication: years,
+    yearSetAt: new Date().toISOString(),
+  });
+  updateYearIndicator();
+  logEvent('year_select', { label, years });
+  // Legacy divert path (a stage was explicitly picked before the system step):
+  // honor that choice — the student told us where they want to be.
+  if (_pendingStage) { const s = _pendingStage; _pendingStage = null; routeToStage(s); return; }
+  const hasStage = !!AltioraState.getProfile().stage;
+  if (!hasStage) { showStageProposal(); return; }   // onboarding → proposal
+  // Returning user (backfill / re-pick): back to the workspace home, where
+  // the year-aware next-step nudges forward if the year implies a later stage.
+  _isReturningUser = true;
+  applyStageChrome(AltioraState.getProfile().stage);
+  switchMode('home');
+}
+
+// The year-informed stage proposal — replaces the blind self-select for new
+// users. Accepting routes in; "somewhere else" opens the manual stage cards.
+function showStageProposal() {
+  const p = AltioraState.getProfile();
+  const stage = yearImpliedStage(p.yearsUntilApplication) || DEFAULT_STAGE;
+  $('stageProposalReason').innerHTML = stageProposalReason(p.yearGroup || 'your year', stage);
+  const accept = $('stageProposalAccept');
+  accept.dataset.stage = stage;
+  $('workspace').classList.add('hidden');
+  $('yearSelect').classList.add('hidden');
+  $('stageSelect').classList.add('hidden');
+  $('systemSelect').classList.add('hidden');
+  $('stageProposal').classList.remove('hidden');
+  markRoute({ v: 'proposal' });
+}
+
+/* ─── Year indicator (global control, same pattern as system) ──── */
+function openYearMenu()  { $('yearMenu')?.classList.remove('hidden'); $('yearIndicatorBtn')?.setAttribute('aria-expanded', 'true'); }
+function closeYearMenu() { $('yearMenu')?.classList.add('hidden');    $('yearIndicatorBtn')?.setAttribute('aria-expanded', 'false'); }
+function toggleYearMenu(){ $('yearMenu')?.classList.contains('hidden') ? openYearMenu() : closeYearMenu(); }
+
+// Reflect the profile year in the global indicator and rebuild the menu for
+// the ACTIVE system (year labels are system-specific). Subscribed to state,
+// so every year/system change propagates here without manual calls.
+function updateYearIndicator() {
+  const p = AltioraState.getProfile();
+  const el = $('yearIndicatorName');
+  if (el) el.textContent = p.yearGroup ?? '—';
+  const menu = $('yearMenu');
+  if (!menu) return;
+  const options = YEAR_OPTIONS[p.qualificationSystem] || [];
+  menu.innerHTML = options.map(o => `
+    <button class="stage-menu__item${o.label === p.yearGroup ? ' stage-menu__item--current' : ''}"
+            data-year-label="${esc(o.label)}" data-years="${o.years}" role="menuitem">${esc(o.label)}</button>`).join('');
+  menu.querySelectorAll('.stage-menu__item').forEach(item =>
+    item.addEventListener('click', () => changeYear(item.dataset.yearLabel, parseInt(item.dataset.years, 10))));
+}
+
+// The single global control: change the year everywhere. If the new year
+// implies a different stage than the current one, gently re-propose by
+// returning home where the year-aware nudge carries the reasoning — the
+// stage is NEVER changed automatically.
+function changeYear(label, years) {
+  closeYearMenu();
+  const p = AltioraState.getProfile();
+  if (label === p.yearGroup) return;
+  AltioraState.setProfile({
+    yearGroup: label,
+    yearsUntilApplication: years,
+    yearSetAt: new Date().toISOString(),
+  });
+  logEvent('year_change', { label, years });
+  showToast(`Year updated to ${label}`);
+  const implied = yearImpliedStage(years);
+  if (implied && implied !== p.stage) {
+    applyStageChrome(p.stage || DEFAULT_STAGE);
+    switchMode('home');            // the home next-step shows the gentle re-proposal
+  } else {
+    rerenderCurrentView();         // framing (planner copy etc.) follows the year
+  }
+}
+
+// Keep the raw label meaningful when the SYSTEM changes: the normalised
+// years value is system-agnostic, so re-express it in the new system's terms
+// (e.g. UK "Year 12" → US "Grade 11", both years=1).
+function remapYearLabelForSystem(sys) {
+  const p = AltioraState.getProfile();
+  if (p.yearsUntilApplication == null) return;
+  const options = YEAR_OPTIONS[sys] || [];
+  if (options.some(o => o.label === p.yearGroup)) return;   // already valid
+  const match = options.find(o => o.years === p.yearsUntilApplication);
+  if (match) AltioraState.setProfile({ yearGroup: match.label });
+}
+
 // Stage chosen during onboarding, held until the system step completes.
 let _pendingStage = null;
 
-// Show the full-screen stage-selection screen (onboarding / re-pick).
+// Show the full-screen stage-selection screen (manual choice — reached via
+// "No, start me somewhere else" on the proposal, or legacy entry points).
 function showStageSelect() {
   closeStageMenu();
   $('workspace').classList.add('hidden');
   $('systemSelect').classList.add('hidden');
+  $('yearSelect').classList.add('hidden');
+  $('stageProposal').classList.add('hidden');
   $('stageSelect').classList.remove('hidden');
   markRoute({ v: 'stage' });
 }
 
-// Show the full-screen qualification-system selection screen (onboarding /
-// the one-time prompt for old saves missing a system).
+// Show the full-screen qualification-system selection screen (first
+// onboarding step / the one-time prompt for old saves missing a system).
 function showSystemSelect() {
   closeStageMenu();
   $('workspace').classList.add('hidden');
   $('stageSelect').classList.add('hidden');
+  $('yearSelect').classList.add('hidden');
+  $('stageProposal').classList.add('hidden');
   $('systemSelect').classList.remove('hidden');
   markRoute({ v: 'system' });
 }
@@ -1227,14 +1421,18 @@ function applyStageChrome(stage) {
   if (!STAGES[stage]) stage = DEFAULT_STAGE;
   $('stageSelect').classList.add('hidden');
   $('systemSelect').classList.add('hidden');
+  $('yearSelect').classList.add('hidden');
+  $('stageProposal').classList.add('hidden');
   $('workspace').classList.remove('hidden');
   closeStageMenu();
   closeSystemMenu();
+  closeYearMenu();
   $('stageIndicatorName').textContent = STAGES[stage].name;
   $$('#stageMenu .stage-menu__item').forEach(item =>
     item.classList.toggle('stage-menu__item--current', item.dataset.stage === stage)
   );
   updateSystemIndicator(AltioraState.getProfile().qualificationSystem);
+  updateYearIndicator();
   renderStageToolNav(stage);
 }
 
@@ -1268,10 +1466,13 @@ function showWorkspaceHome() {
 // workspace isn't built yet.
 function goHome() {
   const onboarded = AltioraState.getState().meta.hasOnboarded;
-  const hasSystem = !!AltioraState.getProfile().qualificationSystem;
-  if (onboarded && hasSystem)      showWorkspaceHome();   // → workspace dashboard
-  else if (onboarded)              showSystemSelect();    // old save, no system yet
-  else                             showStageSelect();     // still onboarding
+  const p = AltioraState.getProfile();
+  if (onboarded && p.qualificationSystem && p.yearsUntilApplication == null && !p.stage) {
+    showYearSelect();                                      // mid-onboarding: system chosen, year pending
+  }
+  else if (onboarded && p.qualificationSystem) showWorkspaceHome();   // → workspace dashboard
+  else if (onboarded)                          showSystemSelect();    // old save, no system yet
+  else                                         showSystemSelect();    // onboarding starts at the system
 }
 
 // Persist the chosen stage, then route there. Entering ANY stage requires a
@@ -1295,7 +1496,11 @@ function chooseSystem(sys) {
   applyProfileSystem(sys);
   AltioraState.setOnboarded(true);
   updateSystemIndicator(sys);
+  remapYearLabelForSystem(sys);
   logEvent('system_select', { system: sys });
+  // Year comes right after the system (its labels depend on it). This covers
+  // both fresh onboarding and old saves that predate year capture.
+  if (AltioraState.getProfile().yearsUntilApplication == null) { showYearSelect(); return; }
   const stage = _pendingStage || AltioraState.getProfile().stage || DEFAULT_STAGE;
   if (_pendingStage) { _pendingStage = null; routeToStage(stage); }
   else { _isReturningUser = true; applyStageChrome(stage); switchMode('home'); } // returning user who lacked a system
@@ -1311,6 +1516,8 @@ function changeSystem(sys) {
   AltioraState.setProfile({ qualificationSystem: sys });
   applyProfileSystem(sys);
   updateSystemIndicator(sys);
+  remapYearLabelForSystem(sys);   // re-express the year in the new system's terms (same normalised value)
+  updateYearIndicator();
   closeSystemMenu();
   logEvent('system_change', { system: sys });
   rerenderCurrentView();
@@ -1439,8 +1646,17 @@ function renderApplyingPanel() {
     </li>`;
   }).join('');
 
+  // Year-relevant timing: connect the typical windows to THEIR timeline.
+  // Honest and typical-windows-based — no invented dates.
+  const _yrs = studentYears();
+  const _yrLabel = AltioraState.getProfile().yearGroup;
+  const timelineNote =
+    _yrs === 0 ? `<p class="applying-timeline-note">You're in ${esc(_yrLabel)} — your application year, so these windows apply to you <strong>now</strong>. Registration deadlines come before the tests themselves; check those first.</p>` :
+    _yrs === 1 ? `<p class="applying-timeline-note">You apply next year — most admission tests are sat early in your final year, so note when registration opens for your cycle (often the spring/summer before).</p>` : '';
+
   const testsSection = tests.length
     ? `<li><strong>Register for your admission tests</strong> — in the order registration opens:
+         ${timelineNote}
          <ul class="applying-test-list">${testItems}</ul></li>`
     : `<li><strong>No admission tests</strong> required across your saved courses.</li>`;
 
@@ -2560,6 +2776,30 @@ function baseNextStep(stage, profile, shortlistCount) {
 // their data, and calm routing once the stage is done.
 function computeNextStep(stage, profile, shortlistCount, progress) {
   const prog = progress ?? stageProgress(stage);
+  const years   = studentYears();
+  const implied = years != null ? yearImpliedStage(years) : null;
+
+  // Forward orientation — the year implies a LATER stage than the current
+  // one (e.g. an application-year student sitting in Exploring). A gentle
+  // nudge with visible reasoning; the stage is NEVER changed automatically.
+  if (implied && STAGE_ORDER.indexOf(implied) > STAGE_ORDER.indexOf(stage)) {
+    const why = years === 0
+      ? `${profile.yearGroup} is the application year, so deadlines and applications are usually the focus now`
+      : `students in ${profile.yearGroup} are usually at ${STAGES[implied].name}`;
+    return {
+      text: `You're in ${profile.yearGroup} — ${why}. Nothing here is wasted, and there's no pressure — but when you're ready, that's where your time counts most.`,
+      actions: [
+        { stage: implied, label: `Move to ${STAGES[implied].name}` },
+        { tool: STAGES[stage].primary, label: `Stay in ${STAGES[stage].name}` },
+      ],
+    };
+  }
+
+  // Year-aware urgency where the timing is real (never invented deadlines —
+  // this is about which school year the decision typically happens in).
+  const urgency =
+    (stage === 'choosing' && years === 2) ? ' Subject choices usually lock in this school year — worth settling them soon.' :
+    (stage === 'building' && years === 1) ? ' Your application year is next — a settled list now makes that year much calmer.' : '';
 
   // Backward orientation — manually ahead of the data. No shame.
   if (stage === 'applying' && !shortlistCount) {
@@ -2579,10 +2819,12 @@ function computeNextStep(stage, profile, shortlistCount, progress) {
       building:  [{ tool: 'check', label: 'Check Combination' }, { tool: 'shortlist', label: 'Review your shortlist' }],
       applying:  [{ tool: 'applying', label: 'Open application tools' }],
     };
-    return { text: prog.missing[0], actions: STAGE_ACTIONS[stage] ?? [] };
+    return { text: prog.missing[0] + urgency, actions: STAGE_ACTIONS[stage] ?? [] };
   }
 
-  return baseNextStep(stage, profile, shortlistCount);
+  const base = baseNextStep(stage, profile, shortlistCount);
+  if (urgency) base.text += urgency;
+  return base;
 }
 
 function renderWorkspaceHome() {
@@ -2683,6 +2925,7 @@ function renderWorkspaceHome() {
           <h2 class="home-card__title">Your profile</h2>
           <dl class="home-card__dl">
             <div><dt>Qualification</dt><dd>${sysLabel ? esc(sysLabel) : muted('Not set yet')}</dd></div>
+            <div><dt>Year</dt><dd>${profile.yearGroup ? esc(profile.yearGroup) : muted('Not set yet')}</dd></div>
             <div><dt>Your fields</dt><dd>${candidateLabels.length ? esc(candidateLabels.join(' · ')) : muted('None kept yet')}</dd></div>
             <div><dt>Subjects</dt><dd>${subjects.length ? esc(subjects.join(', ')) : muted('None selected yet')}</dd></div>
             <div><dt>Predicted grades</dt><dd>${grades ? esc(grades) : muted('Not set yet')}</dd></div>
@@ -4150,11 +4393,29 @@ const PLAN_PAIR_RULES = {
 // Dispatcher: the planner optimises across the student's candidate fields.
 // One field → the established single-field view (unchanged behaviour).
 // Two or three → cross-field optimisation with door-closing warnings.
+// Year-aware framing: once subjects are effectively chosen (application year
+// or the year before), the planner reads RETROSPECTIVELY — "what your
+// subjects open" — rather than as a live planning decision. Same engine,
+// same data, same capability; only the default framing changes.
+function planIsRetro() {
+  const y = studentYears();
+  return y != null && y <= 1;
+}
+
 function renderPlanResults() {
   if (dataLoadError) return;
   // System is a single global property — read it from the profile rather than
   // any in-body selector (the nav control is the only selector).
   if (!state.planSystem) state.planSystem = AltioraState.getProfile().qualificationSystem;
+
+  // Year-aware intro: planning counsel vs retrospective read.
+  const intro = $('planIntro');
+  if (intro) {
+    intro.textContent = planIsRetro()
+      ? 'Your subjects are set — so this reads the other way: pick up to 3 fields you\'re considering and see how combinations (including yours) cover them. You can still explore alternatives any time.'
+      : 'Torn between fields? Pick up to 3 you\'re considering — we\'ll find the subject combinations that keep them all open, and show what dropping a subject would cost.';
+  }
+
   syncPlanGridSelection();
   if (!state.planSystem) return;
 
@@ -4296,9 +4557,15 @@ function renderSingleFieldPlan(category) {
         </div>`;
     }).join('');
 
+    const comboHead = planIsRetro()
+      ? `What different combinations open in ${esc(catLabel)}`
+      : 'Subject combinations that open the most doors';
+    const comboSub = planIsRetro()
+      ? `Since your subjects are already chosen, use this as a reference — click any row to check how a combination (like your own) performs in Check Combination.`
+      : `Combinations ranked by how many ${esc(catLabel)} courses become accessible. Click any row to try it in Check Combination.`;
     $('planCombinations').innerHTML = `
-      <h3 class="plan-section-head">Subject combinations that open the most doors</h3>
-      <p class="plan-section-sub">Combinations ranked by how many ${esc(catLabel)} courses become accessible. Click any row to try it in Check Combination.</p>
+      <h3 class="plan-section-head">${comboHead}</h3>
+      <p class="plan-section-sub">${comboSub}</p>
       <div class="plan-combo-list">${rowsHtml}</div>
     `;
 
@@ -4334,7 +4601,9 @@ function dropAnalysisHtml(comboTags, dropTags, label, cats) {
   }).join('<span class="plan-combo-fieldsep" aria-hidden="true">·</span>');
   const closed = before.filter((b, i) => b.opened > 0 && after[i].opened === 0).length;
   const closure = closed > 0
-    ? ` <strong class="plan-drop-closure">— effectively closes ${closed} of your ${cats.length} fields.</strong>`
+    ? (planIsRetro()
+        ? ` <span class="plan-drop-closure plan-drop-closure--info">— for reference: a combination without it closes ${closed} of your ${cats.length} fields.</span>`
+        : ` <strong class="plan-drop-closure">— effectively closes ${closed} of your ${cats.length} fields. Decide carefully.</strong>`)
     : '.';
   return `<span class="plan-drop-lead">Without ${esc(label)}:</span> ${bits}${closure}`;
 }
@@ -4395,8 +4664,12 @@ function renderMultiFieldPlan(cats) {
         ? (nFields === 2 ? 'covers both of your fields' : `covers all ${nFields} of your fields`)
         : [...e.fields].map(planFieldShort).join(' + ');
       // Door-closing line: only where the closure is real and computed.
+      // Planning years → urgent counsel (the decision is live). Retro years →
+      // informational (the decision is made; no lectures about closed doors).
       const closure = totalCourses && (e.count / totalCourses) >= 0.5
-        ? ` — <span class="plan-chip-closure">dropping it closes most doors</span>`
+        ? (planIsRetro()
+            ? ` — <span class="plan-chip-closure plan-chip-closure--info">most courses across your fields need it</span>`
+            : ` — <span class="plan-chip-closure">dropping it closes most doors</span>`)
         : '';
       return `
       <div class="plan-subject-chip plan-subject-chip--multi">
@@ -5330,6 +5603,30 @@ function init() {
   document.addEventListener('click', closeSystemMenu);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSystemMenu(); });
 
+  // Year indicator dropdown — the single global control for the year group.
+  // Menu items are (re)built by updateYearIndicator, which subscribes to
+  // state so every year/system change propagates to this surface.
+  $('yearIndicatorBtn')?.addEventListener('click', e => {
+    e.stopPropagation();
+    toggleYearMenu();
+  });
+  $('yearMenu')?.addEventListener('click', e => e.stopPropagation());
+  document.addEventListener('click', closeYearMenu);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeYearMenu(); });
+  AltioraState.subscribe(updateYearIndicator);
+
+  // Stage proposal (year-informed onboarding): accept routes into the
+  // proposed stage; "somewhere else" opens the manual stage cards.
+  $('stageProposalAccept')?.addEventListener('click', () => {
+    const stage = $('stageProposalAccept').dataset.stage || DEFAULT_STAGE;
+    logEvent('stage_proposal_accept', { stage });
+    enterStage(stage);
+  });
+  $('stageProposalManual')?.addEventListener('click', () => {
+    logEvent('stage_proposal_manual', {});
+    showStageSelect();
+  });
+
   // Click-away and Escape close the stage menu
   document.addEventListener('click', closeStageMenu);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeStageMenu(); });
@@ -5427,13 +5724,19 @@ function init() {
     if (!_savedSystem) {
       // Old save from before systems were first-class — prompt once, then continue.
       showSystemSelect();
+    } else if (_profile.yearsUntilApplication == null) {
+      // Old save from before year capture — prompt once (same pattern as the
+      // system backfill), then continue as normal.
+      showYearSelect();
     } else {
-      // Already onboarded with a system → genuinely returning.
+      // Already onboarded with a system and year → genuinely returning.
       _isReturningUser = true;
       showWorkspaceHome();
     }
   } else {
-    showStageSelect();
+    // Onboarding starts at the qualification system — year labels and the
+    // stage proposal both depend on it.
+    showSystemSelect();
   }
 
   // Deep link: ?field=cs (or a category) opens that Field Overview directly.

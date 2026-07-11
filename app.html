@@ -10,7 +10,7 @@
   <!-- Confident Editorial type — loaded via <link> (reliable) not @import -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
   <link rel="stylesheet" href="tokens.css?v=9" />
-  <link rel="stylesheet" href="styles.css?v=50" />
+  <link rel="stylesheet" href="styles.css?v=51" />
   <script defer data-domain="altiora.app" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
@@ -116,6 +116,31 @@
       </section>
 
       <!-- ═══════════════════════════════════════════════════════
+           Year-group selection — asked right after the system (the
+           labels depend on it). Cards rendered by JS per system.
+           ═══════════════════════════════════════════════════════ -->
+      <section id="yearSelect" class="stage-select hidden" aria-labelledby="yearSelectHeading">
+        <h1 id="yearSelectHeading" class="stage-select__heading">What year are you in?</h1>
+        <p class="stage-select__sub">This helps us point you at the right step. You can change it anytime.</p>
+        <div id="yearCards" class="stage-cards stage-cards--years" role="list">
+          <!-- rendered by JS for the chosen system (showYearSelect) -->
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           Year-informed stage proposal — proposed, never imposed.
+           Content rendered by JS (showStageProposal).
+           ═══════════════════════════════════════════════════════ -->
+      <section id="stageProposal" class="stage-select hidden" aria-labelledby="stageProposalHeading">
+        <h1 id="stageProposalHeading" class="stage-select__heading">Here's where we'd start you</h1>
+        <p id="stageProposalReason" class="stage-proposal__reason"><!-- rendered by JS --></p>
+        <div class="stage-proposal__actions">
+          <button id="stageProposalAccept" class="fo-btn fo-btn--primary" type="button">Sounds right →</button>
+          <button id="stageProposalManual" class="fo-btn" type="button">No, start me somewhere else</button>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
            Workspace — shown once a stage is chosen.
            The stage bar (indicator + tool sub-nav) replaces the old
            horizontal tab bar.
@@ -146,6 +171,15 @@
               <button class="stage-menu__item" data-system="US_AP"      role="menuitem">US APs</button>
               <button class="stage-menu__item" data-system="SG_A_Level" role="menuitem">Singapore A-Levels</button>
               <button class="stage-menu__item" data-system="HK_DSE"     role="menuitem">Hong Kong DSE</button>
+            </div>
+          </div>
+          <div class="stage-bar__indicator">
+            <button id="yearIndicatorBtn" class="stage-indicator" aria-haspopup="true" aria-expanded="false" aria-controls="yearMenu">
+              <span class="stage-indicator__label">Year: <strong id="yearIndicatorName">—</strong></span>
+              <span class="stage-indicator__caret" aria-hidden="true">▾</span>
+            </button>
+            <div id="yearMenu" class="stage-menu hidden" role="menu" aria-label="Change your year group">
+              <!-- items rendered by JS for the active system (updateYearIndicator) -->
             </div>
           </div>
           <nav id="stageToolNav" class="stage-tool-nav" aria-label="Tools for this stage">
@@ -344,7 +378,7 @@
            ═══════════════════════════════════════════════════════ -->
       <div id="panel-plan" class="panel hidden" role="tabpanel">
 
-        <p class="panel-intro">
+        <p class="panel-intro" id="planIntro">
           Torn between fields? Pick up to 3 you're considering — we'll find the subject
           combinations that keep them all open, and show what dropping a subject would cost.
         </p>
@@ -438,9 +472,9 @@
   <script src="data/admissionTestInfo.js?v=1"></script>
   <script src="data/fieldProfiles.js?v=1"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
-  <script src="state.js?v=7"></script>
+  <script src="state.js?v=8"></script>
   <script src="assistant.js?v=1"></script>
-  <script src="main.js?v=60"></script>
+  <script src="main.js?v=61"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);
