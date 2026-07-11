@@ -502,3 +502,9 @@ const universityProfiles = {
     websiteUrl: "https://www.uvic.ca",
   },
 };
+
+// Node export for tooling (scripts/check-links.mjs sweeps websiteUrl).
+// Inert in the browser — same guarded pattern as courseRequirements.js.
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = { universityProfiles: universityProfiles };
+}

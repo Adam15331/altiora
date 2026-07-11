@@ -4190,3 +4190,16 @@ button.plan-combo-tag--drop:focus-visible {
   line-height: 1.6;
   margin-top: var(--space-3);
 }
+
+/* Sentence-length grade requirement text (HK/SG/CA): a plain mono line,
+ * not a text-stuffed pill. Short grade tokens keep the pill above. */
+.card-grades--long {
+  display: block;
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  font-size: var(--text-xs);
+  color: var(--ce-ink-60);
+  line-height: 1.6;
+}

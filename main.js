@@ -3959,6 +3959,18 @@ const US_TEST_SHORT = {
   varies:      'SAT/ACT required for some schools',
   blind:       'Test-blind',
 };
+// Grade requirement line: a pill only when the string reads like a grade
+// token ("A*AA", "39"); sentence-length requirement text (HK/SG/CA "IGP
+// 10th percentile…" / "General minimum: 3 AL passes…") renders as a plain
+// mono line instead of a text-stuffed oval. Same content, presentation only.
+// (The dataset has a clean cliff: every grade string is <= 6 chars or >= 38,
+// so the 10-char threshold is unambiguous.)
+function gradeLineHtml(gradeStr, sys) {
+  const text = sys === 'IB' ? `${gradeStr} IB points` : String(gradeStr);
+  const isShort = String(gradeStr).length <= 10;
+  return `<div class="card-grades${isShort ? '' : ' card-grades--long'}">${esc(text)}</div>`;
+}
+
 function usTestLineHtml(course) {
   if (course.country !== 'US' || !course.usAdmissions) return '';
   const a = course.usAdmissions;
@@ -4008,13 +4020,16 @@ function cardMoreHtml(course) {
 
   // 4. University info (unified here from the old "About this university").
   const uniProfile = (typeof universityProfiles !== 'undefined') ? (universityProfiles[course.university] ?? null) : null;
+  const uniWebsite = uniProfile?.websiteUrl ?? null;
+  let uniLinkShown = false;
   if (uniProfile) {
     const cityPart = uniProfile.city ? ` · ${esc(uniProfile.city)}` : '';
     const tagLine  = uniProfile.tagline           ? `<p class="card-uni-tagline">${esc(uniProfile.tagline)}</p>` : '';
     const noteLine = uniProfile.internationalNote ? `<p class="card-uni-note">${esc(uniProfile.internationalNote)}</p>` : '';
-    const webLink  = uniProfile.websiteUrl
-      ? `<a class="card-uni-link" href="${esc(uniProfile.websiteUrl)}" target="_blank" rel="noopener noreferrer">${CARD_EXTERNAL_ICON} Visit website</a>`
+    const webLink  = uniWebsite
+      ? `<a class="card-uni-link" href="${esc(uniWebsite)}" target="_blank" rel="noopener noreferrer">${CARD_EXTERNAL_ICON} Visit website</a>`
       : '';
+    uniLinkShown = !!webLink;
     if (tagLine || noteLine || webLink) {
       sections.push(`
         <div class="card-more__uni">
@@ -4032,10 +4047,18 @@ function cardMoreHtml(course) {
 
   // 5. Official course page — the university's own page beats anything we
   // could author. Only when the stored source is a real URL (skip 'UCAS'
-  // and other non-URL bookkeeping strings).
+  // and other non-URL bookkeeping strings). Link-rot protection: when the
+  // health sweep (scripts/check-links.mjs) has flagged the source as dead
+  // or redirected-to-homepage, a student must never hit the broken deep
+  // link from inside Altiora — fall back to the university's own website
+  // (unless the section above already links it). Unswept = 'ok'.
   const src = course.verification?.source;
-  if (typeof src === 'string' && /^https?:\/\//i.test(src)) {
+  const srcIsUrl = typeof src === 'string' && /^https?:\/\//i.test(src);
+  const srcOk = (course.verification?.sourceStatus ?? 'ok') === 'ok';
+  if (srcIsUrl && srcOk) {
     sections.push(`<a class="card-uni-link card-more__official" href="${esc(src)}" target="_blank" rel="noopener noreferrer">${CARD_EXTERNAL_ICON} Official course page</a>`);
+  } else if (srcIsUrl && !srcOk && uniWebsite && !uniLinkShown) {
+    sections.push(`<a class="card-uni-link card-more__official" href="${esc(uniWebsite)}" target="_blank" rel="noopener noreferrer">${CARD_EXTERNAL_ICON} University website</a>`);
   }
 
   if (!sections.length) return '';
@@ -4214,7 +4237,7 @@ function buildCheckCard(course, result) {
       <span class="card-meta-sep">·</span>
       <span class="card-cat-badge">${esc(catLabel)}</span>
     </div>
-    ${gradeStr ? `<div class="card-grades">${esc(sys === 'IB' ? `${gradeStr} IB points` : gradeStr)}</div>` : ''}
+    ${gradeStr ? gradeLineHtml(gradeStr, sys) : ''}
     ${(status === 'grey' && result.gradeGap) ? `<p class="card-grade-gap">⚠️ You have ${esc(result.gradeGap.have)}, course asks for ${esc(result.gradeGap.need)}</p>` : ''}
     ${status === 'unconfirmed' ? `<p class="card-grade-unconfirmed">◔ Your subjects fit, but this course doesn't publish a grade requirement we can compare with your predicted grade — so we can't confirm it's a match. Check the university's official page.</p>` : ''}
     ${fieldCoreHtml}
