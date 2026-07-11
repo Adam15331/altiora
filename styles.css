@@ -4123,3 +4123,70 @@ button.plan-combo-tag--drop:focus-visible {
 
 /* Interest filter: note shown while the My Fields default drives the lens */
 .category-default-note { color: var(--ce-ink); }
+
+/* ═══════════════════════════════════════════════════════════════
+ * CARD "MORE ABOUT THIS COURSE" — unified expandable detail state
+ * (field guide + structural notes + US explainer + university info
+ * + official page). Inherits the .card-uni-info expander styling;
+ * only the new section styles live here. CE: hairlines, mono
+ * labels, no left borders.
+ * ═══════════════════════════════════════════════════════════════ */
+.card-more__guide {
+  font-size: var(--text-sm);
+  color: var(--ce-ink);
+  line-height: 1.6;
+  margin: 0 0 var(--space-3);
+}
+.card-more__guide-link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ce-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.card-more__guide-link:hover { opacity: .75; }
+.card-more__notes {
+  font-family: var(--ce-font-body);
+  font-size: var(--text-xs);
+  color: var(--ce-ink-60);
+  line-height: 1.65;
+  margin: 0 0 var(--space-3);
+}
+.card-more__us {
+  font-family: var(--ce-font-body);
+  font-size: var(--text-xs);
+  color: var(--ce-ink-60);
+  line-height: 1.65;
+  margin: 0 0 var(--space-3);
+}
+.card-more__uni {
+  border-top: 1px solid var(--ce-hairline-color);
+  padding-top: var(--space-3);
+  margin: 0 0 var(--space-2);
+}
+.card-more__head {
+  display: block;
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--ce-ink-60);
+  margin-bottom: var(--space-2);
+}
+.card-more__official { display: inline-flex; margin-top: var(--space-1); }
+
+/* Compact per-card US test line — replaces the repeated holistic box.
+ * Mono metadata layer, consistent with the card's other meta lines. */
+.card-us-test {
+  font-family: var(--ce-font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: .01em;
+  color: var(--ce-ink-60);
+  line-height: 1.6;
+  margin-top: var(--space-3);
+}
