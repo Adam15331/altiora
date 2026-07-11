@@ -612,6 +612,38 @@ function apGuidancePanelHtml(category) {
     </div>`;
 }
 
+// Year-aware framing for Check Combination — copy only, matching untouched.
+// For a student whose subjects are set (normalised year <= 1) the tool READS
+// ("what your subjects open"); for a student still choosing it's a sandbox.
+function updateCheckFraming() {
+  const retro = planIsRetro();   // the same normalised-year rule as the planner
+  const intro = $('checkIntro');
+  if (intro) {
+    intro.textContent = retro
+      ? 'Here’s what your subjects open. Add your predicted grades to see which courses are strong matches.'
+      : 'Pick your subjects and instantly see which courses are open, possible, or out of reach. Your qualification system is set from your profile — change it anytime from the bar above.';
+  }
+  // "Select 3–5 subjects" is choosing language — it only shows when the
+  // picker is genuinely being used to choose (2+ years out, or nothing saved
+  // yet so the picker is still a sandbox).
+  const hint = $('subjectPickerHint');
+  if (hint) {
+    const savedCount = (typeof AltioraState !== 'undefined' && Array.isArray(AltioraState.getProfile().subjects))
+      ? AltioraState.getProfile().subjects.length : 0;
+    hint.classList.toggle('hidden', retro && savedCount > 0);
+  }
+}
+
+// Year-aware intro for Course Finder: "which subjects you need" is choosing
+// language — a student whose subjects are set compares instead.
+function updateReverseIntro() {
+  const el = $('reverseIntro');
+  if (!el) return;
+  el.textContent = planIsRetro()
+    ? 'Search for a degree and see how its requirements compare with your subjects.'
+    : 'Search for a degree and see exactly which subjects you need, translated into your own qualification system.';
+}
+
 function renderCheckEmptyState() {
   const el = $('checkEmptyState');
   if (!el) return;
@@ -620,26 +652,43 @@ function renderCheckEmptyState() {
   if (!show) return;
 
   const ef = state.exploreField;
+  // Subjects set (<= 1 year out): a student can't "try" combinations — no
+  // suggestion buttons, and the ask is to enter what they're taking.
+  const retro = planIsRetro();
 
   // AP doesn't have a fixed subject count, so don't present "3-subject
   // combinations" as a complete answer. Show count + field-aligned guidance.
   if (state.checkSystem === 'US_AP') {
     const apCat = ef ? ef.category : null;
-    const builtKey = `US_AP|${apCat ?? ''}`;
+    const builtKey = `US_AP|${apCat ?? ''}|${retro ? 'r' : 'p'}`;
     if (el.dataset.builtFor === builtKey) return;
     el.dataset.builtFor = builtKey;
     el.innerHTML = `
       <div class="check-empty-state__inner">
         <div class="check-empty-state__icon" aria-hidden="true">🎯</div>
-        <p class="check-empty-state__heading">Select your APs above to see matching courses</p>
+        <p class="check-empty-state__heading">${retro
+          ? 'Enter the APs you’re taking to see what they open'
+          : 'Select your APs above to see matching courses'}</p>
         ${apGuidancePanelHtml(apCat)}
+      </div>`;
+    return;
+  }
+
+  if (retro) {
+    const builtKey = `${state.checkSystem}|retro`;
+    if (el.dataset.builtFor === builtKey) return;
+    el.dataset.builtFor = builtKey;
+    el.innerHTML = `
+      <div class="check-empty-state__inner">
+        <div class="check-empty-state__icon" aria-hidden="true">🎯</div>
+        <p class="check-empty-state__heading">Enter the subjects you’re taking to see what they open</p>
       </div>`;
     return;
   }
 
   const fieldSugg = ef ? fieldEmptySuggestions(ef.category, state.checkSystem) : null;
   // Rebuild when the system OR the active field changes.
-  const builtKey = `${state.checkSystem}|${fieldSugg ? ef.category : ''}`;
+  const builtKey = `${state.checkSystem}|${fieldSugg ? ef.category : ''}|p`;
   if (el.dataset.builtFor === builtKey) return;
   el.dataset.builtFor = builtKey;
 
@@ -1085,6 +1134,9 @@ function renderRoute(route) {
     case 'system':   showSystemSelect();   break;
     case 'year':     showYearSelect();     break;
     case 'proposal': showStageProposal();  break;
+    case 'osubjects':
+      showSubjectOnboard(_subjectOnboardStage || AltioraState.getProfile().stage || DEFAULT_STAGE);
+      break;
     case 'field':
       if (route.fieldId && resolveFieldId(route.fieldId))
         openFieldOverview(route.fieldId, { from: route.from || 'strengths' });
@@ -1137,6 +1189,17 @@ function switchMode(mode) {
   $('shortlistLink')?.classList.toggle('shortlist-link--active', mode === 'shortlist');
   $('homeLink')?.classList.toggle('home-link--active', mode === 'home');
 
+  if (mode === 'check') {
+    // Year-aware framing + empty-state variant (cheap: cached by builtFor).
+    updateCheckFraming();
+    renderCheckEmptyState();
+  }
+  if (mode === 'reverse') {
+    updateReverseIntro();
+    // Re-render an existing search so the have/missing comparison always
+    // reflects the CURRENT saved subjects (they may have changed in Check).
+    if (state.searchQuery) renderReverseResults();
+  }
   if (mode === 'strengths') {
     if ($('strengthsGrid').children.length === 0) renderStrengthsGrid();
     // Re-render the field-card results on (re)entry so their KEEP buttons
@@ -1286,6 +1349,7 @@ function showYearSelect() {
   $('stageSelect').classList.add('hidden');
   $('systemSelect').classList.add('hidden');
   $('stageProposal').classList.add('hidden');
+  $('subjectOnboard')?.classList.add('hidden');
   $('yearSelect').classList.remove('hidden');
   markRoute({ v: 'year' });
 }
@@ -1304,7 +1368,13 @@ function chooseYear(label, years) {
   logEvent('year_select', { label, years });
   // Legacy divert path (a stage was explicitly picked before the system step):
   // honor that choice — the student told us where they want to be.
-  if (_pendingStage) { const s = _pendingStage; _pendingStage = null; routeToStage(s); return; }
+  if (_pendingStage) {
+    const s = _pendingStage; _pendingStage = null;
+    // Still onboarding (fresh user via a legacy entry point): a late-year
+    // student gets the subject question here too.
+    if (!maybeOfferOnboardSubjects(s)) routeToStage(s);
+    return;
+  }
   const hasStage = !!AltioraState.getProfile().stage;
   if (!hasStage) { showStageProposal(); return; }   // onboarding → proposal
   // Returning user (backfill / re-pick): back to the workspace home, where
@@ -1322,12 +1392,87 @@ function showStageProposal() {
   $('stageProposalReason').innerHTML = stageProposalReason(p.yearGroup || 'your year', stage);
   const accept = $('stageProposalAccept');
   accept.dataset.stage = stage;
+  // The proposal only ever shows during onboarding — arm the follow-up
+  // subject question for late-year students. It survives "No, start me
+  // somewhere else" (the manual cards are still onboarding) and is consumed
+  // by enterStage, so stage changes made later from the workspace never
+  // re-trigger it.
+  _onboardSubjectsPending = true;
   $('workspace').classList.add('hidden');
   $('yearSelect').classList.add('hidden');
   $('stageSelect').classList.add('hidden');
   $('systemSelect').classList.add('hidden');
+  $('subjectOnboard')?.classList.add('hidden');
   $('stageProposal').classList.remove('hidden');
   markRoute({ v: 'proposal' });
+}
+
+/* ─── Onboarding subject capture (late years only) ──────────────
+ * A Year 12/13 (or equivalent) student's subjects are already SET — so the
+ * counselor's natural follow-up to "here's where we'd start you" is "which
+ * subjects are you taking?". Students 2+ years out never see this: their
+ * subject moment is the Gate, as a decision, later.
+ *
+ * This step is a PLACEMENT of the existing Check Combination picker, not a
+ * new component: the live #subjectPickerSection node (same chips, same
+ * Further-Maths-implies-Maths and IB-exclusion logic, same write-through
+ * persistence to profile.subjects) is moved into the onboarding screen and
+ * moved back when the step finishes. Grades are deliberately NOT asked here
+ * — they stay optional and in-tool.
+ * ─────────────────────────────────────────────────────────────── */
+
+let _onboardSubjectsPending = false;   // armed by the stage proposal, consumed by enterStage
+let _subjectOnboardStage    = null;    // where to route once the step finishes
+
+// Offer the onboarding subject question if it applies (normalised year says
+// subjects are set, and none are saved yet). Returns true when it took over
+// the flow — the caller must NOT also route to the stage.
+function maybeOfferOnboardSubjects(stage) {
+  const years = studentYears();
+  const has = (AltioraState.getProfile().subjects || []).length > 0;
+  if (years == null || years > 1 || has) return false;
+  showSubjectOnboard(stage);
+  return true;
+}
+
+function showSubjectOnboard(stage) {
+  _subjectOnboardStage = stage;
+  // Move the REAL picker in (placement, not a copy). Selection persists live
+  // through the existing check write-through; the "3–5 for best results"
+  // hint is choosing language and promises instant results, so it hides here.
+  const pickerSection = $('subjectPickerSection');
+  const slot = $('subjectOnboardSlot');
+  if (pickerSection && slot && pickerSection.parentElement !== slot) slot.appendChild(pickerSection);
+  pickerSection?.classList.remove('hidden');
+  $('subjectPickerHint')?.classList.add('hidden');
+  $('workspace').classList.add('hidden');
+  $('stageSelect').classList.add('hidden');
+  $('systemSelect').classList.add('hidden');
+  $('yearSelect').classList.add('hidden');
+  $('stageProposal').classList.add('hidden');
+  $('subjectOnboard').classList.remove('hidden');
+  markRoute({ v: 'osubjects' });
+}
+
+function finishSubjectOnboard(skipped) {
+  // The write-through is debounced — persist the final selection now so the
+  // workspace opens against the committed profile.
+  if (!skipped) syncProfileFromCheck();
+  logEvent('onboard_subjects', { skipped: !!skipped, count: state.selectedSubjects.length });
+  const stage = _subjectOnboardStage || AltioraState.getProfile().stage || DEFAULT_STAGE;
+  _subjectOnboardStage = null;
+  routeToStage(stage);   // applyStageChrome restores the picker into Check
+}
+
+// Return the picker to its home inside panel-check (no-op when it never
+// moved) and re-apply the year-aware hint rule the onboarding step overrode.
+function restoreSubjectPickerHome() {
+  const pickerSection = $('subjectPickerSection');
+  const anchor = $('checkEmptyState');
+  if (pickerSection && anchor && pickerSection.parentElement?.id === 'subjectOnboardSlot') {
+    anchor.parentElement.insertBefore(pickerSection, anchor);
+  }
+  updateCheckFraming();
 }
 
 /* ─── Year indicator (global control, same pattern as system) ──── */
@@ -1399,6 +1544,7 @@ function showStageSelect() {
   $('systemSelect').classList.add('hidden');
   $('yearSelect').classList.add('hidden');
   $('stageProposal').classList.add('hidden');
+  $('subjectOnboard')?.classList.add('hidden');
   $('stageSelect').classList.remove('hidden');
   markRoute({ v: 'stage' });
 }
@@ -1411,6 +1557,7 @@ function showSystemSelect() {
   $('stageSelect').classList.add('hidden');
   $('yearSelect').classList.add('hidden');
   $('stageProposal').classList.add('hidden');
+  $('subjectOnboard')?.classList.add('hidden');
   $('systemSelect').classList.remove('hidden');
   markRoute({ v: 'system' });
 }
@@ -1419,10 +1566,15 @@ function showSystemSelect() {
 // for a stage, without choosing which view to show.
 function applyStageChrome(stage) {
   if (!STAGES[stage]) stage = DEFAULT_STAGE;
+  // If the onboarding subject step's picker placement is still active (e.g.
+  // goHome mid-step), return the picker to panel-check before the workspace
+  // shows — Check Combination must never render without its picker.
+  restoreSubjectPickerHome();
   $('stageSelect').classList.add('hidden');
   $('systemSelect').classList.add('hidden');
   $('yearSelect').classList.add('hidden');
   $('stageProposal').classList.add('hidden');
+  $('subjectOnboard')?.classList.add('hidden');
   $('workspace').classList.remove('hidden');
   closeStageMenu();
   closeSystemMenu();
@@ -1485,6 +1637,13 @@ function enterStage(stage) {
   const sys = AltioraState.getProfile().qualificationSystem;
   if (!sys) { _pendingStage = stage; showSystemSelect(); return; }
   AltioraState.setOnboarded(true);
+  // Onboarding only (armed by the stage proposal): late-year students are
+  // asked their subjects before landing — whether they accepted the proposal
+  // or manually picked a stage. The flag is consumed either way.
+  if (_onboardSubjectsPending) {
+    _onboardSubjectsPending = false;
+    if (maybeOfferOnboardSubjects(stage)) return;
+  }
   routeToStage(stage);
 }
 
@@ -1542,14 +1701,35 @@ function applyProfileSystem(sys) {
   $('checkResultsSection')?.classList.add('hidden');
   const emptyEl = $('checkEmptyState');
   if (emptyEl) delete emptyEl.dataset.builtFor;
+  // Saved subjects arrive pre-selected with results computed — a student who
+  // has told us their subjects never faces an empty picker. (Unhides the
+  // results section again via the normal toggle path when anything matched.)
+  preloadCheckFromProfile();
+  updateCheckFraming();
+}
+
+// Pre-load the student's saved profile.subjects into the Check Combination
+// picker. The picker stays fully editable — it IS the one place to edit your
+// subjects, and the existing write-through (syncProfileFromCheck) persists
+// every change straight back. Subject names that don't exist in the active
+// system (e.g. right after a system change) simply don't tick.
+function preloadCheckFromProfile() {
+  if (typeof AltioraState === 'undefined') return;
+  const saved = AltioraState.getProfile().subjects;
+  if (!Array.isArray(saved) || !saved.length) return;
+  let any = false;
+  $$('#subjectPicker input[type="checkbox"]').forEach(cb => {
+    if (saved.includes(cb.value)) { cb.checked = true; any = true; }
+  });
+  if (any) onSubjectToggle();   // the standard path: tags, FM lock, count, results
 }
 
 // Re-render whatever view is currently active (after a system change).
 function rerenderCurrentView() {
   switch (state.mode) {
-    case 'check':   renderCheckEmptyState(); if (state.selectedSubjects.length) renderCheckResults(); break;
+    case 'check':   updateCheckFraming(); renderCheckEmptyState(); if (state.selectedSubjects.length) renderCheckResults(); break;
     case 'plan':    renderPlanResults(); break;   // guards internally on selected fields
-    case 'reverse': if (state.searchQuery) renderReverseResults(); break;
+    case 'reverse': updateReverseIntro(); if (state.searchQuery) renderReverseResults(); break;
     case 'field-overview': if (state.exploreField?.fieldId) renderFieldOverview(state.exploreField.fieldId); break;
     case 'home':     renderWorkspaceHome(); break;
     case 'applying': renderApplyingPanel(); break;
@@ -2096,6 +2276,28 @@ function syncCandidateFieldSurfaces() {
   if (state.mode === 'strengths')      renderStrengthsResults();
   else if (state.mode === 'plan')      renderPlanResults();
   else if (state.mode === 'home')      renderWorkspaceHome();
+}
+
+// Reactive fan-out for profile.subjects (+ grades): every surface that
+// projects the student's subjects re-renders when they change — the same
+// anti-desync pattern as candidate fields. Check Combination itself is the
+// editor (its live state IS the source), so it's deliberately not re-rendered
+// here; everything else follows the profile.
+let _lastSubjectsSig = '';
+function subjectsSig() {
+  if (typeof AltioraState === 'undefined') return '';
+  const p = AltioraState.getProfile();
+  return (Array.isArray(p.subjects) ? p.subjects : []).join('|') + '::' + (p.predictedGrades ?? '');
+}
+function syncSubjectSurfaces() {
+  const sig = subjectsSig();
+  if (sig === _lastSubjectsSig) return;
+  _lastSubjectsSig = sig;
+  if (state.mode === 'home')           renderWorkspaceHome();
+  else if (state.mode === 'plan')      renderPlanResults();
+  else if (state.mode === 'reverse')   { if (state.searchQuery) renderReverseResults(); }
+  else if (state.mode === 'shortlist') renderShortlist();
+  else if (state.mode === 'applying')  renderApplyingPanel();
 }
 
 /* ─── Shortlist view ──────────────────────────────────────────── */
@@ -3026,8 +3228,36 @@ function buildSubjectPicker(systemKey) {
   renderExploreContextBanner();
 
   buildGradeInput(systemKey);
+  // buildGradeInput starts blank — restore the saved grade so the check
+  // write-through never clobbers a persisted grade with the input's initial
+  // empty state (matters now that saved subjects pre-load and render at load).
+  restoreGradeFromProfile(systemKey);
   syncSubjectCount();
   renderCheckEmptyState();
+}
+
+// Reflect profile.predictedGrades back into the (just-rebuilt) grade input.
+// Only restores values valid for the active system's control — a grade saved
+// under another system's format stays out rather than guessing.
+function restoreGradeFromProfile(systemKey) {
+  if (typeof AltioraState === 'undefined') return;
+  const g = AltioraState.getProfile().predictedGrades;
+  if (!g) return;
+  const GRADE_INPUT_IDS = {
+    UK_A_Level: 'gradeSelectALevel', IB: 'gradeInputIB', US_AP: 'gradeSelectAP',
+    SG_A_Level: 'gradeSelectSG',     HK_DSE: 'gradeSelectDSE',
+  };
+  const el = $(GRADE_INPUT_IDS[systemKey] ?? '');
+  if (!el) return;
+  if (el.tagName === 'SELECT') {
+    if (![...el.options].some(o => o.value === g)) return;
+    el.value = g;
+  } else {
+    const v = parseInt(g, 10);
+    if (isNaN(v) || v < 24 || v > 45) return;   // IB points range
+    el.value = String(v);
+  }
+  state.predictedGrade = g;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -3855,6 +4085,29 @@ function renderReverseResults() {
   section.appendChild(frag);
 }
 
+// One honest sentence comparing a course's required subjects with the
+// student's own ("you have Maths and Physics — this also wants Chemistry").
+// Reuses the existing tag matching (same semantics as classify) and the
+// shared requirementLabels display logic — no new engine. Empty string when
+// the student has no subjects saved or the course lists no requirements.
+function reverseCompareHtml(course) {
+  const tags = (state.selectedTags && state.selectedTags.size) ? state.selectedTags : tagsFromProfile();
+  if (!tags.size) return '';
+  const sys = state.reverseSystem;
+  const essential = (course.requirements?.essential ?? []).filter(t => tagExistsInSystem(t, sys));
+  if (!essential.length) return '';
+  const isQuant = isQuantitativeCategory(course.category);
+  const haveL = requirementLabels(essential.filter(t => tags.has(t)),  sys, isQuant);
+  const missL = requirementLabels(essential.filter(t => !tags.has(t)), sys, isQuant);
+  if (!missL.length) {
+    return `<p class="reverse-compare reverse-compare--met">✓ You have the required subjects: ${esc(haveL.join(', '))}.</p>`;
+  }
+  if (!haveL.length) {
+    return `<p class="reverse-compare">Requires ${esc(missL.join(', '))} — not in your current subjects.</p>`;
+  }
+  return `<p class="reverse-compare">You have ${esc(haveL.join(', '))} — this also wants ${esc(missL.join(', '))}.</p>`;
+}
+
 function buildReverseCard(course) {
   const sys     = state.reverseSystem;
   const flag    = COUNTRY_FLAGS[course.country] ?? '';
@@ -3896,6 +4149,7 @@ function buildReverseCard(course) {
           <div class="req-tags">${tagPills(row.tags)}</div>
         </div>`).join('')}
     </div>
+    ${reverseCompareHtml(course)}
     ${course.notes ? `<p class="reverse-notes">${esc(course.notes)}</p>` : ''}
     <div class="reverse-card-footer">
       ${saveButtonHtml(course.id)}
@@ -5695,6 +5949,16 @@ function init() {
     logEvent('stage_proposal_manual', {});
     showStageSelect();
   });
+
+  // Onboarding subject capture (late years): continue commits the picker
+  // selection; "I'll do this later" never gates onboarding.
+  $('subjectOnboardContinue')?.addEventListener('click', () => finishSubjectOnboard(false));
+  $('subjectOnboardSkip')?.addEventListener('click', () => finishSubjectOnboard(true));
+
+  // profile.subjects fan-out: every subject-projecting surface re-renders
+  // when the saved subjects change (seeded so init doesn't double-render).
+  _lastSubjectsSig = subjectsSig();
+  AltioraState.subscribe(syncSubjectSurfaces);
 
   // Click-away and Escape close the stage menu
   document.addEventListener('click', closeStageMenu);

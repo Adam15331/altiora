@@ -2627,8 +2627,12 @@ footer p {
   /* Card text minimum 14px */
   .card-name { font-size: var(--text-sm); }
 
-  /* Country filter: horizontal scroll */
+  /* Country filter: horizontal scroll. max-width matters: the toolbar is a
+   * column flex with align-items:flex-start, so without it the bar sizes to
+   * its content (~545px) and pushes the whole page wide instead of scrolling
+   * within itself. */
   .filter-bar {
+    max-width: 100%;
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -4023,4 +4027,56 @@ button.plan-combo-tag--drop:focus-visible {
   color: var(--ce-ink-60);
   line-height: 1.6;
   max-width: 68ch;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * ONBOARDING SUBJECT CAPTURE — the live Check picker, placed in a
+ * full-screen onboarding step for late-year students. CE language:
+ * the picker brings its own surface/hairlines; butter yellow stays
+ * on the single primary action ("These are my subjects").
+ * ═══════════════════════════════════════════════════════════════ */
+.subject-onboard__slot {
+  max-width: 760px;
+  margin: var(--space-6) auto 0;
+  text-align: left;
+}
+/* The picker section normally sits inside a panel — give it the same
+ * breathing room the panel would when placed in the onboarding step. */
+.subject-onboard__slot .subject-picker-section {
+  background: var(--ce-surface);
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius);
+  padding: var(--space-5);
+}
+.subject-onboard__actions {
+  margin-top: var(--space-6);
+  align-items: center;
+}
+.subject-onboard__skip {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--ce-font-mono);
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: var(--space-2) var(--space-3);
+}
+.subject-onboard__skip:hover { color: var(--ce-ink); }
+
+/* ═══════════════════════════════════════════════════════════════
+ * COURSE FINDER — have/missing comparison against the student's
+ * saved subjects. One honest sentence; the full-match variant may
+ * use the status green, the gap variant stays neutral ink.
+ * ═══════════════════════════════════════════════════════════════ */
+.reverse-compare {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.6;
+}
+.reverse-compare--met {
+  color: var(--ce-status-strong);
+  font-weight: 500;
 }
