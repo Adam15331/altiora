@@ -1802,6 +1802,34 @@ function renderStageToolNav(stage) {
 
 // Minimal, honest Applying view: the saved shortlist + a what's-next
 // checklist derived from it + an intentional roadmap note. No dead end.
+// Application-year orientation for an EMPTY shortlist. A student with
+// yearsUntilApplication === 0 needs the timing truths NOW, before they've
+// saved a single course: this is their cycle, and admission-test
+// registrations typically close well before application deadlines. Built
+// from the same admissionTestInfo typical windows already in the data (no
+// invented dates) with official links; once courses are saved, the existing
+// per-course test checklist takes over and this block disappears.
+function applicationYearOrientationHtml() {
+  if (studentYears() !== 0) return '';
+  const infos = (typeof admissionTestInfo !== 'undefined')
+    ? Object.values(admissionTestInfo).slice().sort((a, b) => (a.regOpensMonth ?? 98) - (b.regOpensMonth ?? 98))
+    : [];
+  if (!infos.length) return '';
+  const rows = infos.map(i => `
+    <li><strong>${esc(i.name)}</strong> — registration ${esc(i.regShort ?? i.typicalRegistrationWindow)}
+      <a class="applying-test-link" href="${esc(i.officialUrl)}" target="_blank" rel="noopener noreferrer">Official site →</a></li>`).join('');
+  const yearLabel = (typeof AltioraState !== 'undefined' && AltioraState.getProfile().yearGroup) || 'your final year';
+  return `
+    <section class="applying-section applying-orientation" aria-label="Your application year">
+      <h2 class="applying-section__head">This is your application cycle</h2>
+      <p class="applying-orientation__lead">You're in ${esc(yearLabel)} — applications happen this school year,
+        and admission-test registrations typically close well before application deadlines.
+        Typical registration windows (always confirm on the official site):</p>
+      <ul class="applying-test-list applying-orientation__list">${rows}</ul>
+      <p class="applying-orientation__foot">Each university sets its own deadlines — check the official pages for every course you're considering.</p>
+    </section>`;
+}
+
 function renderApplyingPanel() {
   const panel = $('panel-applying');
   if (!panel) return;
@@ -1810,24 +1838,39 @@ function renderApplyingPanel() {
     .map(id => (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null)
     .filter(Boolean);
 
+  // One honest line — no feature promises (the "What's coming" callout
+  // promised deferred tools to the most time-pressed users in the product).
+  // (applicationYearOrientationHtml defined below renderApplyingPanel.)
   const roadmap = `
-    <div class="applying-note" role="note">
-      <p><strong>What's coming.</strong> More application tools — personal statement help,
-      interview prep, and deadline tracking — are on the way. For now, use your shortlist to
-      keep your applications organised.</p>
-    </div>`;
+    <p class="applying-footnote" role="note">Keep your applications organised here — your shortlist,
+    achievements, and what each course needs all live on this page.</p>`;
 
   if (!savedCourses.length) {
+    // Subjects-aware landing: a student who just told onboarding their
+    // subjects shouldn't be greeted by a cold empty state. The count is the
+    // LIVE subjects-fit number (checkStatusFor — the exact Check pipeline,
+    // unfiltered), not a parallel calculation.
+    const fitCount = subjectsFitCount();
+    const emptyHtml = fitCount > 0
+      ? `
+        <div class="applying-empty">
+          <p><strong>Your subjects open ${fitCount} course${fitCount === 1 ? '' : 's'}</strong> — let's build your application list.
+          Save the ones you're applying to, and they'll show up here with a checklist of what's next.</p>
+          <button class="home-next__btn home-next__btn--primary" data-go-applying>See the ${fitCount} courses your subjects fit →</button>
+        </div>`
+      : `
+        <div class="applying-empty">
+          <p>Your shortlist is empty. Save the courses you're applying to, and they'll show up here with a checklist of what's next.</p>
+          <button class="home-next__btn home-next__btn--primary" data-go-applying>Find courses to apply to →</button>
+        </div>`;
     panel.innerHTML = `
       <div class="applying">
         <header class="applying__header">
           <h1 class="applying__title">Applying</h1>
           <p class="applying__sub">Save courses you're applying to, and we'll help you keep them organised here.</p>
         </header>
-        <div class="applying-empty">
-          <p>Your shortlist is empty. Save the courses you're applying to, and they'll show up here with a checklist of what's next.</p>
-          <button class="home-next__btn home-next__btn--primary" data-go-applying>Find courses to apply to →</button>
-        </div>
+        ${emptyHtml}
+        ${applicationYearOrientationHtml()}
         ${achievementsSectionHtml()}
         ${roadmap}
       </div>`;
@@ -3676,6 +3719,85 @@ function applyResultSearch(rawQuery) {
   }
 }
 
+// The FULL per-course Check status pipeline — classify plus every demotion
+// (too-few-subjects, AP-count holdback, grade gate, IB HL), reading the same
+// live state the Check render reads. EXTRACTED (verbatim, from the render
+// loop) so other surfaces can reuse the exact live number — never a parallel
+// approximation that could disagree with what Check shows.
+function checkStatusFor(course) {
+  const minNeeded = MIN_SUBJECTS[state.checkSystem] ?? 3;
+  const tooFew    = state.selectedSubjects.length < minNeeded;
+  const apCount   = state.selectedSubjects.length;
+
+  const result = classify(course, state.selectedTags);
+  if (tooFew && result.status === 'green') result.status = 'amber';
+  // AP: a strong subject match alone doesn't make a few-AP profile a STRONG
+  // match for selective US schools — competitiveness depends on AP count.
+  // Hold back GREEN to POSSIBLE when below the course's competitive AP bar.
+  if (state.checkSystem === 'US_AP' && course.country === 'US' && course.apContext
+      && result.status === 'green'
+      && apCount < course.apContext.minCompetitiveAPs) {
+    result.status = 'amber';
+    result.apCountShort = { have: apCount, need: course.apContext.minCompetitiveAPs };
+  }
+  // Grade gate. A subject-strong course only KEEPS a green/amber verdict when
+  // its grade requirement can actually be compared against the student and
+  // is met. Three outcomes:
+  //   'above'   → grades are a stretch (grey)
+  //   'met'     → keep the subject verdict (green/amber)
+  //   'unknown' → requirement can't be read → fail safe to 'unconfirmed',
+  //               NEVER a strong/possible match built on absent data.
+  // The one carve-out is the explicit US_AP holistic path: for US courses
+  // under the AP system there is deliberately no grade cutoff (competitiveness
+  // is judged by AP count above), so an 'unknown' there is expected, not a
+  // data gap, and must not be demoted to 'unconfirmed'.
+  if (state.predictedGrade && (result.status === 'green' || result.status === 'amber')) {
+    const holisticApPath = state.checkSystem === 'US_AP'
+      && course.country === 'US' && !!course.apContext;
+    const cmp = compareGradeToStudent(course, state.checkSystem, state.predictedGrade);
+    if (cmp === 'above') {
+      result.status = 'grey';
+      result.gradeGap = gradeGapInfo(course, state.checkSystem, state.predictedGrade);
+    } else if (cmp === 'unknown' && !holisticApPath) {
+      result.status = 'unconfirmed';
+    }
+  }
+  if (state.checkSystem === 'IB' && (result.status === 'green' || result.status === 'amber')) {
+    const requiredHLTags = course.grades?.ibHL ?? [];
+    if (requiredHLTags.length > 0) {
+      // Get student's HL subjects as tags
+      const studentHLTags = Array.from(selectedSubjectsWithLevel.values())
+        .filter(item => item.isHL === true)
+        .map(item => item.tag);
+
+      // Find which required HL tags are missing
+      const missingHL = requiredHLTags.filter(tag => !studentHLTags.includes(tag));
+
+      // Only downgrade and warn for ACTUAL missing HL subjects this course
+      // lists. Courses with no ibHL requirements get no HL warning at all —
+      // no blanket "expect 3 HLs" message and no GREEN→AMBER demotion.
+      if (missingHL.length > 0) {
+        if (result.status === 'green') result.status = 'amber';
+        result.ibHLWarning = missingHL;
+      } else {
+        result.ibHLWarning = null;
+      }
+    } else {
+      result.ibHLWarning = null;
+    }
+  }
+  return result;
+}
+
+// Live "subjects fit" count over the WHOLE dataset (no country/category
+// lens) — the same pipeline Check renders with, so the number the Applying
+// landing quotes is the number Check shows on an unfiltered view.
+function subjectsFitCount() {
+  if (typeof courses === 'undefined') return 0;
+  if (!state.selectedTags || !state.selectedTags.size) return 0;
+  return courses.reduce((n, c) => n + (checkStatusFor(c).status === 'green' ? 1 : 0), 0);
+}
+
 function renderCheckResults() {
   if (dataLoadError) return;
   const section = $('checkResultsSection');
@@ -3728,66 +3850,9 @@ function renderCheckResults() {
     .filter(c => state.countryFilter === 'All' || c.country === state.countryFilter)
     .filter(c => state.selectedCategories.size === 0 || state.selectedCategories.has(c.category));
 
-  const apCount = state.selectedSubjects.length;
   const byStatus = { green: [], amber: [], grey: [], unconfirmed: [], red: [] };
   pool.forEach(course => {
-    const result = classify(course, state.selectedTags);
-    if (tooFew && result.status === 'green') result.status = 'amber';
-    // AP: a strong subject match alone doesn't make a few-AP profile a STRONG
-    // match for selective US schools — competitiveness depends on AP count.
-    // Hold back GREEN to POSSIBLE when below the course's competitive AP bar.
-    if (state.checkSystem === 'US_AP' && course.country === 'US' && course.apContext
-        && result.status === 'green'
-        && apCount < course.apContext.minCompetitiveAPs) {
-      result.status = 'amber';
-      result.apCountShort = { have: apCount, need: course.apContext.minCompetitiveAPs };
-    }
-    // Grade gate. A subject-strong course only KEEPS a green/amber verdict when
-    // its grade requirement can actually be compared against the student and
-    // is met. Three outcomes:
-    //   'above'   → grades are a stretch (grey)
-    //   'met'     → keep the subject verdict (green/amber)
-    //   'unknown' → requirement can't be read → fail safe to 'unconfirmed',
-    //               NEVER a strong/possible match built on absent data.
-    // The one carve-out is the explicit US_AP holistic path: for US courses
-    // under the AP system there is deliberately no grade cutoff (competitiveness
-    // is judged by AP count above), so an 'unknown' there is expected, not a
-    // data gap, and must not be demoted to 'unconfirmed'.
-    if (state.predictedGrade && (result.status === 'green' || result.status === 'amber')) {
-      const holisticApPath = state.checkSystem === 'US_AP'
-        && course.country === 'US' && !!course.apContext;
-      const cmp = compareGradeToStudent(course, state.checkSystem, state.predictedGrade);
-      if (cmp === 'above') {
-        result.status = 'grey';
-        result.gradeGap = gradeGapInfo(course, state.checkSystem, state.predictedGrade);
-      } else if (cmp === 'unknown' && !holisticApPath) {
-        result.status = 'unconfirmed';
-      }
-    }
-    if (state.checkSystem === 'IB' && (result.status === 'green' || result.status === 'amber')) {
-      const requiredHLTags = course.grades?.ibHL ?? [];
-      if (requiredHLTags.length > 0) {
-        // Get student's HL subjects as tags
-        const studentHLTags = Array.from(selectedSubjectsWithLevel.values())
-          .filter(item => item.isHL === true)
-          .map(item => item.tag);
-
-        // Find which required HL tags are missing
-        const missingHL = requiredHLTags.filter(tag => !studentHLTags.includes(tag));
-
-        // Only downgrade and warn for ACTUAL missing HL subjects this course
-        // lists. Courses with no ibHL requirements get no HL warning at all —
-        // no blanket "expect 3 HLs" message and no GREEN→AMBER demotion.
-        if (missingHL.length > 0) {
-          if (result.status === 'green') result.status = 'amber';
-          result.ibHLWarning = missingHL;
-        } else {
-          result.ibHLWarning = null;
-        }
-      } else {
-        result.ibHLWarning = null;
-      }
-    }
+    const result = checkStatusFor(course);
     byStatus[result.status].push({ course, result });
   });
 
@@ -3959,6 +4024,18 @@ const US_TEST_SHORT = {
   varies:      'SAT/ACT required for some schools',
   blind:       'Test-blind',
 };
+// Grade requirement line: a pill only when the string reads like a grade
+// token ("A*AA", "39"); sentence-length requirement text (HK/SG/CA "IGP
+// 10th percentile…" / "General minimum: 3 AL passes…") renders as a plain
+// mono line instead of a text-stuffed oval. Same content, presentation only.
+// (The dataset has a clean cliff: every grade string is <= 6 chars or >= 38,
+// so the 10-char threshold is unambiguous.)
+function gradeLineHtml(gradeStr, sys) {
+  const text = sys === 'IB' ? `${gradeStr} IB points` : String(gradeStr);
+  const isShort = String(gradeStr).length <= 10;
+  return `<div class="card-grades${isShort ? '' : ' card-grades--long'}">${esc(text)}</div>`;
+}
+
 function usTestLineHtml(course) {
   if (course.country !== 'US' || !course.usAdmissions) return '';
   const a = course.usAdmissions;
@@ -4008,13 +4085,16 @@ function cardMoreHtml(course) {
 
   // 4. University info (unified here from the old "About this university").
   const uniProfile = (typeof universityProfiles !== 'undefined') ? (universityProfiles[course.university] ?? null) : null;
+  const uniWebsite = uniProfile?.websiteUrl ?? null;
+  let uniLinkShown = false;
   if (uniProfile) {
     const cityPart = uniProfile.city ? ` · ${esc(uniProfile.city)}` : '';
     const tagLine  = uniProfile.tagline           ? `<p class="card-uni-tagline">${esc(uniProfile.tagline)}</p>` : '';
     const noteLine = uniProfile.internationalNote ? `<p class="card-uni-note">${esc(uniProfile.internationalNote)}</p>` : '';
-    const webLink  = uniProfile.websiteUrl
-      ? `<a class="card-uni-link" href="${esc(uniProfile.websiteUrl)}" target="_blank" rel="noopener noreferrer">${CARD_EXTERNAL_ICON} Visit website</a>`
+    const webLink  = uniWebsite
+      ? `<a class="card-uni-link" href="${esc(uniWebsite)}" target="_blank" rel="noopener noreferrer">${CARD_EXTERNAL_ICON} Visit website</a>`
       : '';
+    uniLinkShown = !!webLink;
     if (tagLine || noteLine || webLink) {
       sections.push(`
         <div class="card-more__uni">
@@ -4032,10 +4112,18 @@ function cardMoreHtml(course) {
 
   // 5. Official course page — the university's own page beats anything we
   // could author. Only when the stored source is a real URL (skip 'UCAS'
-  // and other non-URL bookkeeping strings).
+  // and other non-URL bookkeeping strings). Link-rot protection: when the
+  // health sweep (scripts/check-links.mjs) has flagged the source as dead
+  // or redirected-to-homepage, a student must never hit the broken deep
+  // link from inside Altiora — fall back to the university's own website
+  // (unless the section above already links it). Unswept = 'ok'.
   const src = course.verification?.source;
-  if (typeof src === 'string' && /^https?:\/\//i.test(src)) {
+  const srcIsUrl = typeof src === 'string' && /^https?:\/\//i.test(src);
+  const srcOk = (course.verification?.sourceStatus ?? 'ok') === 'ok';
+  if (srcIsUrl && srcOk) {
     sections.push(`<a class="card-uni-link card-more__official" href="${esc(src)}" target="_blank" rel="noopener noreferrer">${CARD_EXTERNAL_ICON} Official course page</a>`);
+  } else if (srcIsUrl && !srcOk && uniWebsite && !uniLinkShown) {
+    sections.push(`<a class="card-uni-link card-more__official" href="${esc(uniWebsite)}" target="_blank" rel="noopener noreferrer">${CARD_EXTERNAL_ICON} University website</a>`);
   }
 
   if (!sections.length) return '';
@@ -4214,7 +4302,7 @@ function buildCheckCard(course, result) {
       <span class="card-meta-sep">·</span>
       <span class="card-cat-badge">${esc(catLabel)}</span>
     </div>
-    ${gradeStr ? `<div class="card-grades">${esc(sys === 'IB' ? `${gradeStr} IB points` : gradeStr)}</div>` : ''}
+    ${gradeStr ? gradeLineHtml(gradeStr, sys) : ''}
     ${(status === 'grey' && result.gradeGap) ? `<p class="card-grade-gap">⚠️ You have ${esc(result.gradeGap.have)}, course asks for ${esc(result.gradeGap.need)}</p>` : ''}
     ${status === 'unconfirmed' ? `<p class="card-grade-unconfirmed">◔ Your subjects fit, but this course doesn't publish a grade requirement we can compare with your predicted grade — so we can't confirm it's a match. Check the university's official page.</p>` : ''}
     ${fieldCoreHtml}

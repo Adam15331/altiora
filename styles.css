@@ -2731,15 +2731,14 @@ footer p {
   margin-bottom: var(--space-6);
 }
 .applying-empty p { margin: 0 0 var(--space-4); color: var(--color-text-secondary); line-height: 1.6; }
-.applying-note {
-  padding: var(--space-4) var(--space-5);
-  border: 1px solid var(--color-border);
-  border-left: 3px solid var(--color-text-tertiary);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
+/* One quiet closing line — replaces the old bordered "What's coming" callout
+ * (which promised deferred features and carried a banned left border). */
+.applying-footnote {
+  margin: var(--space-4) 0 0;
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.6;
 }
-.applying-note p { margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; }
-.applying-note strong { color: var(--color-text-primary); }
 
 /* Footer "Report an issue" link */
 .footer-meta { margin-top: var(--space-2); }
@@ -4190,3 +4189,42 @@ button.plan-combo-tag--drop:focus-visible {
   line-height: 1.6;
   margin-top: var(--space-3);
 }
+
+/* Sentence-length grade requirement text (HK/SG/CA): a plain mono line,
+ * not a text-stuffed pill. Short grade tokens keep the pill above. */
+.card-grades--long {
+  display: block;
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  font-size: var(--text-xs);
+  color: var(--ce-ink-60);
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * APPLICATION-YEAR ORIENTATION — compact timing block on the empty
+ * Applying view for yearsUntilApplication === 0. Same honest
+ * typical-windows framing as the per-course checklist that replaces
+ * it once courses are saved. CE: hairlines only, no left borders.
+ * ═══════════════════════════════════════════════════════════════ */
+.applying-orientation__lead,
+.applying-orientation__foot {
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.65;
+  margin: 0 0 var(--space-3);
+}
+.applying-orientation__lead strong,
+.applying-orientation__foot strong { color: var(--ce-ink); }
+.applying-orientation__list {
+  margin: 0 0 var(--space-3);
+  padding-left: 1.2em;
+}
+.applying-orientation__list li {
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.7;
+}
+.applying-orientation__list strong { color: var(--ce-ink); }
