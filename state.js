@@ -40,6 +40,9 @@ const AltioraState = (() => {
         interests:           [],      // category strings
         candidateFields:     [],      // category ids the student is considering (max 3, order = priority)
         achievements:        [],      // student's own log of activities/awards/certificates — see addAchievement()
+        yearGroup:            null,   // raw year label in the student's own system, e.g. "Year 12", "Grade 11", "Form 5"
+        yearsUntilApplication: null,  // normalised scale driving ALL logic: 3 (3+ years out) | 2 | 1 | 0 (application year)
+        yearSetAt:            null,   // ISO date the year was last set — for future academic-year rollover detection
       },
       shortlist: [],                  // course id strings
       progress:  {},                  // keyed by course id or milestone
@@ -173,7 +176,8 @@ const AltioraState = (() => {
   // a stray field can't pollute the shape.
   function setProfile(partial) {
     if (!partial || typeof partial !== 'object') return;
-    const allowed = ['stage', 'qualificationSystem', 'subjects', 'predictedGrades', 'interests', 'candidateFields'];
+    const allowed = ['stage', 'qualificationSystem', 'subjects', 'predictedGrades', 'interests', 'candidateFields',
+                     'yearGroup', 'yearsUntilApplication', 'yearSetAt'];
     allowed.forEach(key => {
       if (key in partial) _state.profile[key] = partial[key];
     });

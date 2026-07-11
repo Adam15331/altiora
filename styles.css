@@ -4022,3 +4022,55 @@ button.plan-combo-tag--drop:focus-visible {
   .achv__form-row { flex-direction: column; }
   .achv__form-actions { flex-direction: column; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+ * YEAR-AWARE JOURNEY — year select, stage proposal, framing tones.
+ * ═══════════════════════════════════════════════════════════════ */
+/* Year cards: compact single-line buttons in the stage-select layout */
+.stage-cards--years { max-width: 520px; }
+.stage-card--year { padding: var(--space-4) var(--space-5); }
+.stage-card--year .stage-card__title { font-size: 1.15rem; }
+
+/* Stage proposal — the reasoning is the hero */
+.stage-proposal__reason {
+  max-width: 560px;
+  margin: var(--space-5) auto var(--space-6);
+  font-family: var(--ce-font-body);
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: var(--ce-ink);
+  text-align: center;
+}
+.stage-proposal__reason strong {
+  background: var(--ce-accent);
+  padding: 0 6px 1px;
+  border-radius: 2px;
+  font-weight: 700;
+}
+.stage-proposal__actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Retro (informational) tone for door-closing copy — the decision is made,
+ * so the same fact reads as reference, not as a warning. */
+.plan-chip-closure--info,
+.plan-drop-closure--info {
+  color: var(--ce-ink-60);
+  font-weight: 400;
+}
+
+/* Year-relevant test-timing note on the Applying checklist */
+.applying-timeline-note {
+  margin: var(--space-2) 0;
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.6;
+}
+.applying-timeline-note strong { color: var(--ce-ink); }
+
+@media (max-width: 480px) {
+  .stage-proposal__actions { flex-direction: column; align-items: stretch; }
+}
