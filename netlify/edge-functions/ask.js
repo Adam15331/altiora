@@ -1,6 +1,11 @@
 /**
  * Ask Altiora — secure streaming AI relay (Netlify Edge Function).
  *
+ * CURRENTLY UNUSED BY THE CLIENT. The user-facing "Ask Altiora" UI was removed
+ * while AI features are deferred; no client code calls /api/ask anymore. This
+ * relay is retained intentionally — it is inert with no callers, costs nothing
+ * to keep, and is ready to be wired back up when AI features return.
+ *
  * The browser POSTs { question, context } to /api/ask. This function adds the
  * Anthropic API key (which lives ONLY in a Netlify environment variable —
  * never in client code), calls the Anthropic Messages API with streaming on,

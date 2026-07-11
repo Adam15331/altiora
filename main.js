@@ -1619,7 +1619,6 @@ function renderApplyingPanel() {
           <button class="home-next__btn home-next__btn--primary" data-go-applying>Find courses to apply to →</button>
         </div>
         ${achievementsSectionHtml()}
-        ${typeof askAltioraHtml === 'function' ? askAltioraHtml() : ''}
         ${roadmap}
       </div>`;
     panel.querySelector('[data-go-applying]')?.addEventListener('click', () => switchMode('check'));
@@ -1683,8 +1682,6 @@ function renderApplyingPanel() {
       </section>
 
       ${achievementsSectionHtml()}
-
-      ${typeof askAltioraHtml === 'function' ? askAltioraHtml() : ''}
 
       ${roadmap}
     </div>`;
