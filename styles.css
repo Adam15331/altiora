@@ -4074,3 +4074,27 @@ button.plan-combo-tag--drop:focus-visible {
 @media (max-width: 480px) {
   .stage-proposal__actions { flex-direction: column; align-items: stretch; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+ * FREE-CHOICE SLOT — an incomplete subject combination shows a dashed
+ * placeholder chip ("+ one more of your choice") so it never reads as a
+ * complete application set. Distinct from a real subject chip: dashed,
+ * muted, no hover-fill. Plus the general honest-framing note.
+ * ═══════════════════════════════════════════════════════════════ */
+.plan-combo-tag--free,
+.fo-chip--free {
+  border-style: dashed !important;
+  border-color: var(--ce-ink-30) !important;
+  background: transparent !important;
+  color: var(--ce-ink-60) !important;
+  font-style: italic;
+  white-space: nowrap;
+}
+.plan-combo-row:hover .plan-combo-tag--free { background: transparent; }
+.plan-combo-note {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.6;
+  max-width: 68ch;
+}

@@ -4215,6 +4215,65 @@ function rankCategoryCombinations(category, limit = 5) {
     .slice(0, limit);
 }
 
+/* ─── Honest combination sizing ──────────────────────────────────
+ * A university offer is made on a FULL set of subjects — typically at
+ * least three A-Levels / IB HLs / H2s. A ranked combination that shows
+ * fewer named subjects is a CORE, not a complete application set, so
+ * every such row carries a visible "+ N more of your choice" slot and
+ * the count is framed as "how many courses stay open whatever your
+ * remaining choices are" (a course counted here is satisfied by the
+ * named subjects alone, so it stays open regardless of the rest).
+ *
+ * US_AP is deliberately absent: it uses the holistic AP-volume model on
+ * its own panel and never reaches these combo rows.
+ * ─────────────────────────────────────────────────────────────── */
+const SYSTEM_FULL_SET = { UK_A_Level: 3, IB: 3, SG_A_Level: 3, HK_DSE: 3 };
+function systemFullSet(system) { return SYSTEM_FULL_SET[system] ?? 3; }
+
+// How many free-choice slots a combo needs to reach a realistic full set,
+// measured in DISPLAYED subjects (maths may collapse to one label in some
+// systems, so this is comboLabels-based, not raw tag count).
+function comboFreeSlots(combo, system, isQuant) {
+  const shown = comboLabels(combo, system, isQuant).length;
+  return Math.max(0, systemFullSet(system) - shown);
+}
+
+const _FREE_SLOT_WORDS = ['zero', 'one', 'two', 'three'];
+// The label for the remaining free-choice subjects, e.g. "+ one more of
+// your choice". Shared by the planner and Field Overview chips.
+function freeSlotText(n) {
+  const word = _FREE_SLOT_WORDS[n] || String(n);
+  return `+ ${word} more of your choice`;
+}
+// A visible placeholder chip standing in for the subjects still to choose,
+// so an incomplete combination never reads as a complete application set.
+function freeChoiceChipHtml(n) {
+  if (n <= 0) return '';
+  return `<span class="plan-combo-tag plan-combo-tag--free"
+      aria-label="plus ${_FREE_SLOT_WORDS[n] || n} more subject${n === 1 ? '' : 's'} of your choice">${freeSlotText(n)}</span>`;
+}
+
+// Does this combo DISPLAY the Maths + Further Maths pairing as two subjects?
+// (Only where the system treats them separately — UK.)
+function comboShowsMathsPair(combo, system, isQuant) {
+  const labels = comboLabels(combo, system, isQuant);
+  return labels.includes(mathsSubjectName(MATHS_STD, system, isQuant))
+      && labels.includes(mathsSubjectName(MATHS_ADV, system, isQuant));
+}
+
+// The honest framing note under a set of combination rows: explains the
+// free-choice slots when any row is a partial set, and adds the general
+// Maths + Further Maths breadth caveat when that pairing appears. Both are
+// system-general — no invented per-university claims.
+function planComboNoteHtml(combos, system, isQuant) {
+  const anyFree      = combos.some(c => comboFreeSlots(c.combo, system, isQuant) > 0);
+  const anyMathsPair = combos.some(c => comboShowsMathsPair(c.combo, system, isQuant));
+  const bits = [];
+  if (anyFree) bits.push('Universities admit on a full set of subjects — typically at least three. A “+ … more of your choice” slot means any subject can fill it; the count is how many courses stay open whatever those remaining choices are.');
+  if (anyMathsPair) bits.push('Some courses expect breadth beyond Maths + Further Maths — check individual course requirements.');
+  return bits.length ? `<p class="plan-combo-note">${bits.map(esc).join(' ')}</p>` : '';
+}
+
 // Dedupe ranked combos by how they DISPLAY in a given system — e.g. in
 // AP/SG the standard and advanced maths resolve to the same subject, so
 // two tag-combos can render identically; keep the strongest of each.
@@ -4545,11 +4604,14 @@ function renderSingleFieldPlan(category) {
     const rowsHtml = top5.map(({ combo, green, amber }) => {
       const opens = green + amber;
       const tags = comboLabels(combo, state.planSystem, isQuant).map(l => `<span class="plan-combo-tag">${esc(l)}</span>`).join('');
+      // Incomplete sets get a visible free-choice slot so no row reads as a
+      // complete application on fewer subjects than universities require.
+      const free = freeChoiceChipHtml(comboFreeSlots(combo, state.planSystem, isQuant));
       return `
         <div class="plan-combo-row" tabindex="0" role="button"
              aria-label="Apply this subject combination in Check Combination mode"
              data-tags="${esc(JSON.stringify(combo))}">
-          ${tags}
+          ${tags}${free}
           <span class="plan-combo-arrow" aria-hidden="true">→</span>
           <div class="plan-combo-results">
             <span class="badge badge--neutral">opens ${opens} course${opens !== 1 ? 's' : ''}</span>
@@ -4566,6 +4628,7 @@ function renderSingleFieldPlan(category) {
     $('planCombinations').innerHTML = `
       <h3 class="plan-section-head">${comboHead}</h3>
       <p class="plan-section-sub">${comboSub}</p>
+      ${planComboNoteHtml(top5, state.planSystem, isQuant)}
       <div class="plan-combo-list">${rowsHtml}</div>
     `;
 
@@ -4763,6 +4826,9 @@ function renderMultiFieldPlan(cats) {
                 data-drop="${esc(JSON.stringify(p.dropTags))}" data-droplabel="${esc(p.label)}"
                 title="What if I drop ${esc(p.label)}?"
                 aria-label="What changes without ${esc(p.label)}?">${esc(p.label)}</button>`).join('');
+      // Free-choice slot for partial sets — a subject you'd still choose, so
+      // the row never implies fewer subjects than a real application needs.
+      const free = freeChoiceChipHtml(comboFreeSlots(combo, sys, isQuant));
       const fieldsHtml = per.map((p, i) =>
         `<span class="plan-combo-field${p.opened === 0 ? ' plan-combo-field--zero' : ''}">${esc(planFieldShort(p.cat))}: ${p.opened}${i === 0 ? ' courses' : ''}</span>`
       ).join('<span class="plan-combo-fieldsep" aria-hidden="true">·</span>');
@@ -4771,7 +4837,7 @@ function renderMultiFieldPlan(cats) {
              aria-label="Apply this subject combination in Check Combination mode. Or activate a subject to see what dropping it would cost."
              data-tags="${esc(JSON.stringify(combo))}">
           <div class="plan-combo-main">
-            ${tagsHtml}
+            ${tagsHtml}${free}
             <span class="plan-combo-arrow" aria-hidden="true">→</span>
             <div class="plan-combo-results plan-combo-fields">${fieldsHtml}</div>
           </div>
@@ -4784,6 +4850,7 @@ function renderMultiFieldPlan(cats) {
       <p class="plan-section-sub">Ranked by how many courses stay open across ${esc(fieldNames.join(', '))}.
       Click a row to try it in Check Combination — or click a subject to see what dropping it would cost.</p>
       ${conflictHtml}
+      ${planComboNoteHtml(combos, sys, isQuant)}
       <div class="plan-combo-list">${rowsHtml}</div>`;
 
     $$('#planCombinations .plan-combo-row').forEach(row => {
@@ -5237,11 +5304,16 @@ function renderFieldOverview(fieldId) {
   // ── Strong combinations (reused planner ranking) ────────────────
   const combos = combosForDisplay(cat, sys, isQuant, 3);
   const combosHtml = combos.length
-    ? combos.map(({ combo, green, amber }) => `
+    ? combos.map(({ combo, green, amber }) => {
+        // Same honest sizing as the planner: a partial set shows a visible
+        // free-choice slot so it never reads as a complete application.
+        const free = freeChoiceChipHtml(comboFreeSlots(combo, sys, isQuant));
+        return `
         <button type="button" class="fo-combo fo-combo--action" data-combo-tags="${esc(JSON.stringify(combo))}">
-          <span class="fo-combo__subjects">${comboLabels(combo, sys, isQuant).map(l => `<span class="fo-chip fo-chip--accent">${esc(l)}</span>`).join('')}</span>
+          <span class="fo-combo__subjects">${comboLabels(combo, sys, isQuant).map(l => `<span class="fo-chip fo-chip--accent">${esc(l)}</span>`).join('')}${free ? `<span class="fo-chip fo-chip--free">${esc(freeSlotText(comboFreeSlots(combo, sys, isQuant)))}</span>` : ''}</span>
           <span class="fo-combo__count">opens ${green + amber} course${green + amber === 1 ? '' : 's'}<span class="fo-combo__go" aria-hidden="true">→</span></span>
-        </button>`).join('')
+        </button>`;
+      }).join('') + planComboNoteHtml(combos, sys, isQuant)
     : `<p class="fo-muted">No standout combinations — most courses here are flexible on subjects.</p>`;
 
   // Alignment highlight from carried strengths.
