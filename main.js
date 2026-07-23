@@ -1201,6 +1201,7 @@ function switchMode(mode) {
   $('panel-shortlist')         .classList.toggle('hidden', mode !== 'shortlist');
   $('panel-home')              .classList.toggle('hidden', mode !== 'home');
   $('panel-field-overview')    .classList.toggle('hidden', mode !== 'field-overview');
+  $('panel-story')             ?.classList.toggle('hidden', mode !== 'story');
 
   // The shortlist and home are cross-stage views, not stage tools —
   // highlight their own controls rather than a stage-tool button.
@@ -1243,6 +1244,9 @@ function switchMode(mode) {
   }
   if (mode === 'home') {
     renderWorkspaceHome();
+  }
+  if (mode === 'story') {
+    renderStoryPanel();
   }
 
   // Record the workspace view in history (the field profile records itself,
@@ -1764,6 +1768,7 @@ function rerenderCurrentView() {
     case 'field-overview': if (state.exploreField?.fieldId) renderFieldOverview(state.exploreField.fieldId); break;
     case 'home':     renderWorkspaceHome(); break;
     case 'applying': renderApplyingPanel(); break;
+    case 'story':    renderStoryPanel(); break;
     // strengths: the grid is system-agnostic, but the intro copy and the
     // per-field subject-coverage line are year/subject/system-aware.
     case 'strengths': renderStrengthsIntro(); renderStrengthsResults(); break;
@@ -1881,11 +1886,10 @@ function renderApplyingPanel() {
         </header>
         ${emptyHtml}
         ${applicationYearOrientationHtml()}
-        ${achievementsSectionHtml()}
+        ${storyApplyingCardHtml()}
         ${roadmap}
       </div>`;
     panel.querySelector('[data-go-applying]')?.addEventListener('click', () => switchMode('check'));
-    renderAchievementsList();
     return;
   }
 
@@ -1944,7 +1948,7 @@ function renderApplyingPanel() {
         <button class="home-card__link" data-go-shortlist>View full shortlist →</button>
       </section>
 
-      ${achievementsSectionHtml()}
+      ${storyApplyingCardHtml()}
 
       ${roadmap}
     </div>`;
@@ -1954,22 +1958,25 @@ function renderApplyingPanel() {
   const grid = panel.querySelector('#applyingShortlistGrid');
   savedCourses.forEach(c => grid.appendChild(buildShortlistCard(c, studentTags, hasSubjects)));
   panel.querySelector('[data-go-shortlist]')?.addEventListener('click', () => switchMode('shortlist'));
-  renderAchievementsList();
 }
 
 /* ═══════════════════════════════════════════════════════════════
- * ACHIEVEMENTS & ACTIVITIES LOG — a tracker, nothing more.
- * The student's own record of awards, certificates, roles,
- * volunteering, work experience, and activities, kept for personal
- * statements, applications, and interviews. Deliberately NO
- * university-matching or scoring on top of this: universities don't
- * publish verifiable extracurricular weightings, so any "matching"
- * would mean fabricating data.
+ * STORY BANK — not a record, a narrative.
+ * A counselor doesn't inventory a student's activities; they mine
+ * them for story: what you did, what it taught you, why it mattered.
+ * Each entry pairs the basic facts with those three reflections and
+ * can be tagged to the student's pinned candidate fields, so a student
+ * can see "my Engineering story" and get calm, year-aware counsel on
+ * where it's thin. Deliberately NO scoring, points, or "boost"
+ * language, and NO implication that a university matches or requires
+ * activities — universities publish no verifiable weightings. It's
+ * about having a story to tell, which is honestly true.
  *
- * Reactivity: renderAchievementsList() is a direct projection of
- * AltioraState.getAchievements(), run on EVERY state change via the
- * subscription registered in init (same pattern as candidateFields /
- * shortlist surfaces) — no surface reads once and goes stale.
+ * Reactivity: renderAchievementsList() (the story view) and
+ * renderStoryHomeCard() are direct projections of
+ * AltioraState.getAchievements() + getCandidateFields(), run on EVERY
+ * state change via subscriptions registered in init — no surface
+ * reads once and goes stale.
  * ═══════════════════════════════════════════════════════════════ */
 
 function achievementTypeLabel(id) {
@@ -1977,17 +1984,32 @@ function achievementTypeLabel(id) {
   return t ? t.label : id;
 }
 
+// The pinned candidate fields that resolve to a known category — the single
+// source of truth for the story tag picker and the per-field story views.
+function activeCandidateFields() {
+  if (typeof AltioraState === 'undefined') return [];
+  return AltioraState.getCandidateFields().filter(id => CATEGORY_LABEL_MAP[id]);
+}
+
+// An entry counts toward a "story" only once it carries a reflection — the
+// facts alone are a record; the reflection is what a personal statement uses.
+function entryHasReflection(a) {
+  return !!(a && (a.whatIDid || a.whatItTaught || a.whyItMattered));
+}
+
 function achievementsSectionHtml() {
   const typeOptions = (AltioraState.ACHIEVEMENT_TYPES || [])
     .map(t => `<option value="${esc(t.id)}">${esc(t.label)}</option>`).join('');
   return `
-    <section class="applying-section achv" aria-label="Your achievements and activities">
-      <h2 class="applying-section__head">Your achievements &amp; activities<span id="achvCount" class="achv__count"></span></h2>
-      <p class="achv__note">Keep track of your achievements, activities, and certificates here — you'll use
-        these for personal statements, applications, and interviews. How much each one matters varies by
-        university and course; most weigh grades and admission tests most heavily.</p>
+    <section class="applying-section story" aria-label="Your story bank">
+      <h2 class="applying-section__head">Your story<span id="achvCount" class="achv__count"></span></h2>
+      <p class="achv__note">This is your story bank — not a checklist. Note the things you've done and, in a line each,
+        what they taught you. These reflections are the raw material for personal statements, applications, and
+        interviews. There's no scoring here, and no university "requires" any of it — it's about having a story you
+        can tell, which is honestly the point.</p>
+      <div id="achvSummary" class="story__summary"></div>
       <div id="achvList" class="achv__list"></div>
-      <button type="button" id="achvAddBtn" class="fo-btn fo-btn--primary achv__addbtn">+ Add an entry</button>
+      <button type="button" id="achvAddBtn" class="fo-btn fo-btn--primary achv__addbtn">+ Add to your story</button>
       <form id="achvForm" class="achv__form hidden" novalidate>
         <div class="achv__form-row">
           <label class="achv__label" for="achvType"><span>Type<span class="achv__req">*</span></span>
@@ -2009,64 +2031,219 @@ function achievementsSectionHtml() {
             <input id="achvDate" class="achv__input" type="text" maxlength="30" placeholder="e.g. 2025 or June 2025">
           </label>
         </div>
-        <label class="achv__label" for="achvDesc">Description
+        <label class="achv__label achv__label--prompt" for="achvDesc">Short description <span class="achv__opt">(optional)</span>
           <textarea id="achvDesc" class="achv__input achv__textarea" rows="2" maxlength="500"
-            placeholder="Optional — a sentence or two of detail"></textarea>
+            placeholder="A sentence or two, if it helps"></textarea>
         </label>
+        <div class="story__prompts">
+          <p class="story__prompts-lead">Now the part that actually helps later — one line each is plenty, skip any that don't fit.</p>
+          <label class="achv__label achv__label--prompt" for="achvWhatIDid">What did you actually do?
+            <textarea id="achvWhatIDid" class="achv__input achv__textarea" rows="2" maxlength="400"
+              placeholder="Concrete — one or two lines"></textarea>
+          </label>
+          <label class="achv__label achv__label--prompt" for="achvWhatItTaught">What did it teach you, or show about you?
+            <textarea id="achvWhatItTaught" class="achv__input achv__textarea" rows="2" maxlength="400"
+              placeholder="A skill, a trait, a lesson"></textarea>
+          </label>
+          <label class="achv__label achv__label--prompt" for="achvWhyItMattered">Why did it matter to you? <span class="achv__opt">(optional)</span>
+            <textarea id="achvWhyItMattered" class="achv__input achv__textarea" rows="2" maxlength="400"
+              placeholder="What made it worth doing"></textarea>
+          </label>
+        </div>
+        <div id="achvFields" class="story__tagpicker"></div>
         <p id="achvFormError" class="achv__error hidden">Please pick a type and give it a title.</p>
         <div class="achv__form-actions">
-          <button type="submit" class="fo-btn fo-btn--primary" id="achvSaveBtn">Save entry</button>
+          <button type="submit" class="fo-btn fo-btn--primary" id="achvSaveBtn">Save to your story</button>
           <button type="button" class="fo-btn" id="achvCancelBtn">Cancel</button>
         </div>
       </form>
     </section>`;
 }
 
-// Direct projection of state → DOM. Cheap no-op when the section isn't on
-// screen; safe to run unconditionally on every state change.
+// Compact "Your story" card for the Applying view — the full bank lives in
+// its own cross-stage panel (reachable here and from the workspace home).
+function storyApplyingCardHtml() {
+  const n = (typeof AltioraState !== 'undefined') ? AltioraState.getAchievements().length : 0;
+  return `
+    <section class="applying-section">
+      <h2 class="applying-section__head">Your story</h2>
+      <p class="achv__note">Your activities and reflections — raw material for personal statements and interviews.${
+        n ? ` You have <strong>${n}</strong> ${n === 1 ? 'entry' : 'entries'} so far.` : ''}</p>
+      <button type="button" class="fo-btn fo-btn--primary" data-open-story>Open your story →</button>
+    </section>`;
+}
+
+// One entry card, with its reflections shown as the substance of the story.
+function storyCardHtml(a) {
+  const meta = [a.organisation, a.level, a.date].filter(Boolean).map(esc).join(' · ');
+  const typeLabel = achievementTypeLabel(a.type);
+  const reflections = [
+    ['What I did',        a.whatIDid],
+    ['What it taught me', a.whatItTaught],
+    ['Why it mattered',   a.whyItMattered],
+  ].filter(([, v]) => v);
+  const refHtml = reflections.length ? `<div class="story-card__reflections">${
+    reflections.map(([label, val]) =>
+      `<p class="story-card__reflection"><span class="story-card__rlabel">${label}</span>${esc(val)}</p>`).join('')
+  }</div>` : '';
+  return `
+    <div class="achv-card" data-achv-id="${esc(a.id)}">
+      <div class="achv-card__main">
+        <div class="achv-card__title">${esc(a.title)}</div>
+        <div class="achv-card__meta">${esc(typeLabel)}${meta ? ` · ${meta}` : ''}</div>
+        ${a.description ? `<p class="achv-card__desc">${esc(a.description)}</p>` : ''}
+        ${refHtml}
+      </div>
+      <div class="achv-card__actions">
+        <button type="button" class="achv-card__btn" data-achv-edit="${esc(a.id)}">Edit</button>
+        <button type="button" class="achv-card__btn achv-card__btn--del" data-achv-del="${esc(a.id)}">Delete</button>
+      </div>
+    </div>`;
+}
+
+// One calm, honest counsel line per pinned field, driven ONLY by the
+// student's own data: how many reflective entries the field has × how far
+// they are from applying. No fabricated university claims, no scoring.
+function storyCounselHtml(label, entries, yrs) {
+  const reflective = entries.filter(entryHasReflection).length;
+  const strong = reflective >= 3;
+  let text, tone;
+  if (strong) {
+    text = `A solid ${label} story — the reflections here are personal-statement raw material.`;
+    tone = 'strong';
+  } else {
+    tone = 'thin';
+    const none = entries.length === 0;
+    if (yrs == null) {
+      text = `Building a ${label} story takes time — a project, a competition, or documented work all count as real evidence.`;
+    } else if (yrs >= 2) {
+      text = none
+        ? `Nothing in your ${label} story yet — you have time. A project, a competition, or even documented tinkering builds real evidence.`
+        : `Your ${label} story is still light — you have time. A project, a competition, or even documented tinkering builds real evidence.`;
+    } else if (yrs === 1) {
+      text = `Your ${label} story is thin and time is short — one focused project or role this term is worth more than many small additions.`;
+    } else { // yrs === 0 — the application year
+      text = `Focus on telling the strongest version of what you already have; your reflections above are the raw material.`;
+    }
+  }
+  return `<p class="story-counsel story-counsel--${tone}">${esc(text)}</p>`;
+}
+
+// One field's story: header + count + (for pinned fields) year-aware counsel,
+// then the tagged entries.
+function storyGroupHtml(bucket, showCounsel) {
+  const yrs = studentYears();
+  const counsel = showCounsel ? storyCounselHtml(bucket.label, bucket.entries, yrs) : '';
+  const cards   = bucket.entries.map(storyCardHtml).join('');
+  const n = bucket.entries.length;
+  const countLabel = n ? `${n} ${n === 1 ? 'piece' : 'pieces'}` : 'none yet';
+  const inactiveTag = bucket.inactive
+    ? `<span class="story-group__inactive">field no longer pinned</span>` : '';
+  return `
+    <section class="story-group${bucket.inactive ? ' story-group--inactive' : ''}">
+      <div class="story-group__head">
+        <span class="story-group__label">${esc(bucket.label)}</span>
+        <span class="story-group__count">${esc(countLabel)}</span>
+        ${inactiveTag}
+      </div>
+      ${counsel}
+      ${cards}
+    </section>`;
+}
+
+// The one-line per-field summary: "Engineering: 4 pieces of your story ·
+// Economics: none yet". Only meaningful once fields are pinned.
+function storySummaryHtml(items, pinned) {
+  if (!pinned.length) {
+    return items.length
+      ? `<p class="story__summary-line">${items.length} ${items.length === 1 ? 'entry' : 'entries'} in your story · pin fields in the planner to organise them by field.</p>`
+      : '';
+  }
+  const parts = pinned.map(f => {
+    const n = items.filter(a => (a.fields || []).includes(f)).length;
+    return `${CATEGORY_LABEL_MAP[f]}: ${n ? `${n} ${n === 1 ? 'piece' : 'pieces'} of your story` : 'none yet'}`;
+  });
+  return `<p class="story__summary-line">${esc(parts.join(' · '))}</p>`;
+}
+
+// Direct projection of state → DOM: the story bank, grouped by field. Cheap
+// no-op when the section isn't on screen; safe on every state change.
 function renderAchievementsList() {
   const list = $('achvList');
   if (!list) return;
 
-  const items = AltioraState.getAchievements();
+  const items  = AltioraState.getAchievements();
+  const pinned = activeCandidateFields();
 
   const count = $('achvCount');
   if (count) count.textContent = items.length ? ` (${items.length})` : '';
+  const summaryEl = $('achvSummary');
+  if (summaryEl) summaryEl.innerHTML = storySummaryHtml(items, pinned);
 
-  if (!items.length) {
+  if (!items.length && !pinned.length) {
     list.innerHTML = `
       <div class="achv__empty">
-        <p>Nothing logged yet. Add your awards, certificates, roles, volunteering, work experience,
-        and activities as they happen — future-you, writing a personal statement the night before a
-        deadline, will be grateful.</p>
+        <p>Your story bank is empty. As you do things — a project, a role, a competition, some volunteering —
+        note them here with a line on what they taught you. Future-you, writing a personal statement, will be
+        grateful. Pin a field or two in the planner and you can build each field's story separately.</p>
       </div>`;
     return;
   }
 
-  // Group in the fixed type order; only render groups that have entries.
-  const groups = (AltioraState.ACHIEVEMENT_TYPES || [])
-    .map(t => ({ type: t, entries: items.filter(a => a.type === t.id) }))
-    .filter(g => g.entries.length);
+  // Field buckets in priority order: pinned fields first (with counsel, even
+  // when empty — that's the whole point for early years), then any field that
+  // is tagged but no longer pinned (shown greyed, tag preserved), then the
+  // untagged "General" bucket last.
+  const buckets = pinned.map(f => ({
+    key: f, label: CATEGORY_LABEL_MAP[f], inactive: false,
+    entries: items.filter(a => (a.fields || []).includes(f)),
+  }));
 
-  list.innerHTML = groups.map(g => `
-    <div class="achv-group">
-      <span class="achv-group__label">${esc(g.type.label)}</span>
-      ${g.entries.map(a => {
-        const meta = [a.organisation, a.level, a.date].filter(Boolean).map(esc).join(' · ');
-        return `
-        <div class="achv-card" data-achv-id="${esc(a.id)}">
-          <div class="achv-card__main">
-            <div class="achv-card__title">${esc(a.title)}</div>
-            ${meta ? `<div class="achv-card__meta">${meta}</div>` : ''}
-            ${a.description ? `<p class="achv-card__desc">${esc(a.description)}</p>` : ''}
-          </div>
-          <div class="achv-card__actions">
-            <button type="button" class="achv-card__btn" data-achv-edit="${esc(a.id)}">Edit</button>
-            <button type="button" class="achv-card__btn achv-card__btn--del" data-achv-del="${esc(a.id)}">Delete</button>
-          </div>
-        </div>`;
-      }).join('')}
-    </div>`).join('');
+  const taggedIds = new Set(items.flatMap(a => a.fields || []));
+  [...taggedIds]
+    .filter(f => !pinned.includes(f) && CATEGORY_LABEL_MAP[f])
+    .sort((a, b) => CATEGORY_LABEL_MAP[a].localeCompare(CATEGORY_LABEL_MAP[b]))
+    .forEach(f => buckets.push({
+      key: f, label: CATEGORY_LABEL_MAP[f], inactive: true,
+      entries: items.filter(a => (a.fields || []).includes(f)),
+    }));
+
+  const general = items.filter(a => !(a.fields || []).length);
+
+  const groupsHtml =
+    buckets.map(b => storyGroupHtml(b, !b.inactive)).join('') +
+    (general.length
+      ? storyGroupHtml({ key: '__general', label: 'General', inactive: false, entries: general }, false)
+      : '');
+
+  list.innerHTML = groupsHtml;
+}
+
+// Build the field tag picker for the form. Options = the pinned fields, plus
+// any field already on the entry that is no longer pinned (marked inactive)
+// so an edit can see and keep it. Selecting none = a General entry.
+function renderAchievementFieldPicker(selected) {
+  const wrap = $('achvFields');
+  if (!wrap) return;
+  const sel = Array.isArray(selected) ? selected : [];
+  const pinned = activeCandidateFields();
+  const extra = sel.filter(f => !pinned.includes(f) && CATEGORY_LABEL_MAP[f]);
+  const opts = [...pinned, ...extra];
+  if (!opts.length) {
+    wrap.innerHTML = `<span class="story__tag-hint">No fields pinned yet — this saves as a general story entry.
+      Pin a field in the planner to start tagging your story.</span>`;
+    return;
+  }
+  const chips = opts.map(f => {
+    const on = sel.includes(f);
+    const inactive = !pinned.includes(f);
+    return `<button type="button" class="story-tag${on ? ' story-tag--on' : ''}${inactive ? ' story-tag--inactive' : ''}"
+        data-achv-field="${esc(f)}" aria-pressed="${on}">${esc(CATEGORY_LABEL_MAP[f])}${inactive ? ' · inactive' : ''}</button>`;
+  }).join('');
+  wrap.innerHTML = `
+    <span class="story__tag-label">Part of which story?</span>
+    <div class="story__tags">${chips}</div>
+    <span class="story__tag-hint">Optional — tap any that apply, or leave all off for a general entry.</span>`;
 }
 
 function openAchievementForm(entry) {
@@ -2081,7 +2258,11 @@ function openAchievementForm(entry) {
   $('achvLevel').value = entry?.level || '';
   $('achvDate').value  = entry?.date || '';
   $('achvDesc').value  = entry?.description || '';
-  $('achvSaveBtn').textContent = entry ? 'Save changes' : 'Save entry';
+  $('achvWhatIDid').value      = entry?.whatIDid || '';
+  $('achvWhatItTaught').value  = entry?.whatItTaught || '';
+  $('achvWhyItMattered').value = entry?.whyItMattered || '';
+  renderAchievementFieldPicker(entry?.fields || []);
+  $('achvSaveBtn').textContent = entry ? 'Save changes' : 'Save to your story';
   $('achvAddBtn')?.classList.add('hidden');
   form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   $('achvTitle').focus();
@@ -2099,12 +2280,16 @@ function submitAchievementForm() {
   const form = $('achvForm');
   if (!form) return;
   const fields = {
-    type:         $('achvType').value,
-    title:        $('achvTitle').value,
-    organisation: $('achvOrg').value,
-    level:        $('achvLevel').value,
-    date:         $('achvDate').value,
-    description:  $('achvDesc').value,
+    type:          $('achvType').value,
+    title:         $('achvTitle').value,
+    organisation:  $('achvOrg').value,
+    level:         $('achvLevel').value,
+    date:          $('achvDate').value,
+    description:   $('achvDesc').value,
+    whatIDid:      $('achvWhatIDid').value,
+    whatItTaught:  $('achvWhatItTaught').value,
+    whyItMattered: $('achvWhyItMattered').value,
+    fields: [...document.querySelectorAll('#achvFields .story-tag--on')].map(b => b.dataset.achvField),
   };
   const editingId = form.dataset.editing;
   const ok = editingId
@@ -2143,8 +2328,18 @@ function wireAchievementsEvents() {
   document.addEventListener('click', (e) => {
     const t = e.target;
     if (!t.closest) return;
+    // "Open your story" from anywhere (Applying card, home card, quick access).
+    if (t.closest('[data-open-story]')) { switchMode('story'); return; }
     if (t.closest('#achvAddBtn'))    { openAchievementForm(null); return; }
     if (t.closest('#achvCancelBtn')) { closeAchievementForm(); return; }
+    // Field tag chips in the form toggle in place (no form submit).
+    const chip = t.closest('[data-achv-field]');
+    if (chip) {
+      const on = chip.getAttribute('aria-pressed') !== 'true';
+      chip.classList.toggle('story-tag--on', on);
+      chip.setAttribute('aria-pressed', String(on));
+      return;
+    }
     const editBtn = t.closest('[data-achv-edit]');
     if (editBtn) {
       const entry = AltioraState.getAchievements().find(a => a.id === editBtn.dataset.achvEdit);
@@ -2160,6 +2355,55 @@ function wireAchievementsEvents() {
       submitAchievementForm();
     }
   });
+}
+
+/* ─── Story bank surfacing: dedicated panel + workspace-home card ─── */
+
+// The cross-stage Story Bank panel — the single host of the story form/list
+// (reachable from the Applying view and the workspace home).
+function renderStoryPanel() {
+  const panel = $('panel-story');
+  if (!panel) return;
+  panel.innerHTML = `
+    <div class="story-view">
+      <header class="story-view__header">
+        <h1 class="story-view__title">Your story</h1>
+        <p class="story-view__sub">The things you've done and what they taught you — raw material for your
+          applications, and a way to see where each field's story stands.</p>
+      </header>
+      ${achievementsSectionHtml()}
+    </div>`;
+  renderAchievementsList();
+}
+
+// The compact home summary: "5 entries · Engineering strong · Economics none
+// yet". Shown when there's something to summarise (entries OR pinned fields).
+function storyHomeCardHtml() {
+  const items  = AltioraState.getAchievements();
+  const pinned = activeCandidateFields();
+  if (!items.length && !pinned.length) return '';
+  const lead = `${items.length} ${items.length === 1 ? 'entry' : 'entries'}`;
+  const bits = pinned.map(f => {
+    const tagged     = items.filter(a => (a.fields || []).includes(f));
+    const reflective = tagged.filter(entryHasReflection).length;
+    const state = reflective >= 3 ? 'strong' : (tagged.length ? 'building' : 'none yet');
+    return `${planFieldShort(f)} ${state}`;
+  });
+  const summary = [lead, ...bits].join(' · ');
+  return `
+    <section class="home-card">
+      <h2 class="home-card__title">Your story</h2>
+      <p>${esc(summary)}</p>
+      <button class="home-card__link" data-open-story>Open your story →</button>
+    </section>`;
+}
+
+// Reactive: re-project the home story card on every state change (the slot is
+// always present in the home panel; the card appears/updates/vanishes here).
+function renderStoryHomeCard() {
+  const slot = $('homeStorySlot');
+  if (!slot) return;
+  slot.innerHTML = storyHomeCardHtml();
 }
 
 /* ─── Stage indicator dropdown (switch stage anytime) ──────────── */
@@ -3229,6 +3473,8 @@ function renderWorkspaceHome() {
           ${shortlistHtml}
           <button class="home-card__link" data-go-tool="shortlist">View shortlist →</button>
         </section>
+
+        <div id="homeStorySlot" class="home-story-slot"></div>
       </div>
 
       <section class="home-quick" aria-label="Quick access">
@@ -3236,11 +3482,15 @@ function renderWorkspaceHome() {
         <div class="home-quick__row">
           ${toolBtns}
           <button class="home-quick__btn" data-go-tool="shortlist">🔖 My Shortlist (${saved.length})</button>
+          <button class="home-quick__btn" data-open-story>📖 Your story</button>
           <button class="home-quick__btn" data-change-stage>Change stage</button>
         </div>
       </section>
     </div>
   `;
+
+  // Project the story summary card into its slot (reactive on its own too).
+  renderStoryHomeCard();
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -6372,6 +6622,7 @@ function init() {
   // Achievements log: the list is a direct projection of state, re-rendered
   // on every change (same anti-desync pattern as the fan-outs above).
   AltioraState.subscribe(renderAchievementsList);
+  AltioraState.subscribe(renderStoryHomeCard);
   wireAchievementsEvents();
 
   // Workspace home: the wordmark is the home control; delegated actions on the home panel.

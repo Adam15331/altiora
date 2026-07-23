@@ -3961,6 +3961,152 @@ button.plan-combo-tag--drop:focus-visible {
   color: var(--ce-status-reach);
 }
 .achv__form-actions { display: flex; gap: var(--space-3); }
+
+/* ─── Story bank: reflections, field tags, per-field views, counsel ─── */
+.achv__opt { color: var(--ce-ink-30); font-weight: 400; text-transform: none; letter-spacing: 0; }
+
+.story-view__header { margin-bottom: var(--space-5); }
+.story-view__title {
+  font-family: var(--ce-font-display);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  letter-spacing: -.02em;
+  color: var(--ce-ink);
+  margin: 0 0 var(--space-2);
+}
+.story-view__sub { font-size: var(--text-sm); color: var(--ce-ink-60); line-height: 1.6; margin: 0; max-width: 62ch; }
+
+/* Per-field summary line + gap counsel */
+.story__summary { margin: 0 0 var(--space-4); }
+.story__summary-line {
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--ce-ink-60);
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.story-group { margin-bottom: var(--space-5); }
+.story-group__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin: 0 0 var(--space-2);
+}
+.story-group__label {
+  font-family: var(--ce-font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -.01em;
+  color: var(--ce-ink);
+}
+.story-group__count {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ce-ink-30);
+}
+.story-group__inactive {
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ce-ink-30);
+}
+.story-group--inactive .story-group__label { color: var(--ce-ink-60); }
+.story-group--inactive .achv-card { opacity: .72; }
+
+.story-counsel {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  margin: 0 0 var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--ce-radius);
+  background: var(--ce-bg);
+  color: var(--ce-ink-60);
+}
+.story-counsel--strong {
+  background: var(--ce-sage-tint);
+  color: var(--ce-ink);
+}
+
+/* Reflections inside a card — the substance of the story */
+.story-card__reflections {
+  margin-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.story-card__reflection {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ce-ink);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.story-card__rlabel {
+  display: block;
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--ce-ink-30);
+  margin-bottom: 1px;
+}
+
+/* Reflection prompts in the form */
+.story__prompts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--ce-bg);
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius);
+}
+.story__prompts-lead {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.5;
+}
+.achv__label--prompt { text-transform: none; letter-spacing: 0; font-size: var(--text-sm); font-weight: 700; }
+
+/* Field tag picker */
+.story__tagpicker { display: flex; flex-direction: column; gap: var(--space-2); }
+.story__tag-label {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ce-ink-60);
+}
+.story__tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.story-tag {
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  letter-spacing: .02em;
+  color: var(--ce-ink-60);
+  background: transparent;
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius-pill);
+  padding: 4px 14px;
+  cursor: pointer;
+}
+.story-tag:hover { border-color: var(--ce-ink-30); color: var(--ce-ink); }
+.story-tag--on {
+  color: var(--ce-ink);
+  background: var(--ce-accent-tint);
+  border-color: var(--ce-ink);
+}
+.story-tag--inactive { font-style: italic; opacity: .7; }
+.story__tag-hint { font-size: 12px; color: var(--ce-ink-30); line-height: 1.4; }
+
+.home-story-slot { display: contents; }
 @media (max-width: 480px) {
   .achv-card { flex-direction: column; }
   .achv-card__actions { align-self: flex-end; }
