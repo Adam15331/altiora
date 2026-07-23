@@ -2643,8 +2643,12 @@ footer p {
   /* Card text minimum 14px */
   .card-name { font-size: var(--text-sm); }
 
-  /* Country filter: horizontal scroll */
+  /* Country filter: horizontal scroll. max-width matters: the toolbar is a
+   * column flex with align-items:flex-start, so without it the bar sizes to
+   * its content (~545px) and pushes the whole page wide instead of scrolling
+   * within itself. */
   .filter-bar {
+    max-width: 100%;
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -2743,15 +2747,14 @@ footer p {
   margin-bottom: var(--space-6);
 }
 .applying-empty p { margin: 0 0 var(--space-4); color: var(--color-text-secondary); line-height: 1.6; }
-.applying-note {
-  padding: var(--space-4) var(--space-5);
-  border: 1px solid var(--color-border);
-  border-left: 3px solid var(--color-text-tertiary);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
+/* One quiet closing line — replaces the old bordered "What's coming" callout
+ * (which promised deferred features and carried a banned left border). */
+.applying-footnote {
+  margin: var(--space-4) 0 0;
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.6;
 }
-.applying-note p { margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; }
-.applying-note strong { color: var(--color-text-primary); }
 
 /* Footer "Report an issue" link */
 .footer-meta { margin-top: var(--space-2); }
@@ -3823,80 +3826,6 @@ button.plan-combo-tag--drop:focus-visible {
 .plan-cat-card .picker-hint-inline { font-family: var(--ce-font-body); }
 
 /* ═══════════════════════════════════════════════════════════════
- * ASK ALTIORA — grounded AI question box (Applying view).
- * CE language: surface card, hairlines, mono labels, butter accent
- * only on the action. No new colours, no left borders.
- * ═══════════════════════════════════════════════════════════════ */
-.ask-altiora__sub {
-  font-size: var(--text-sm);
-  color: var(--ce-ink-60);
-  margin: 0 0 var(--space-4);
-  line-height: 1.6;
-}
-.ask-altiora__box {
-  display: flex;
-  gap: var(--space-3);
-  align-items: stretch;
-}
-.ask-altiora__input {
-  flex: 1;
-  font-family: var(--ce-font-body);
-  font-size: var(--text-base);
-  color: var(--ce-ink);
-  background: var(--ce-surface);
-  border: var(--ce-hairline);
-  border-radius: var(--ce-radius);
-  padding: var(--space-3) var(--space-4);
-  resize: vertical;
-  min-height: 56px;
-  line-height: 1.5;
-}
-.ask-altiora__input::placeholder { color: var(--ce-ink-30); }
-.ask-altiora__input:focus { outline: none; border-color: var(--ce-ink); }
-.ask-altiora__send {
-  align-self: flex-end;
-  white-space: nowrap;
-}
-.ask-altiora__send:disabled { opacity: .55; cursor: default; }
-.ask-altiora__answer {
-  margin-top: var(--space-4);
-  padding: var(--space-4) var(--space-5);
-  background: var(--ce-surface);
-  border: var(--ce-hairline);
-  border-radius: var(--ce-radius);
-  font-family: var(--ce-font-body);
-  font-size: var(--text-base);
-  color: var(--ce-ink);
-  line-height: 1.65;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-/* Streaming cursor — a quiet butter block that blinks while tokens arrive */
-.ask-altiora__answer--streaming::after {
-  content: '';
-  display: inline-block;
-  width: 8px;
-  height: 1em;
-  margin-left: 2px;
-  vertical-align: text-bottom;
-  background: var(--ce-accent);
-  animation: askBlink 1s steps(2, start) infinite;
-}
-@keyframes askBlink { to { visibility: hidden; } }
-.ask-altiora__disclaimer {
-  margin: var(--space-3) 0 0;
-  font-family: var(--ce-font-mono);
-  font-size: 11px;
-  letter-spacing: .02em;
-  color: var(--ce-ink-60);
-  line-height: 1.6;
-}
-@media (max-width: 480px) {
-  .ask-altiora__box { flex-direction: column; }
-  .ask-altiora__send { align-self: stretch; }
-}
-
-/* ═══════════════════════════════════════════════════════════════
  * ACHIEVEMENTS & ACTIVITIES LOG — calm tracker on the Applying view.
  * CE language: hairline cards, Bricolage titles, mono group labels,
  * butter-yellow only on the primary add/save action. No left borders.
@@ -4114,3 +4043,204 @@ button.plan-combo-tag--drop:focus-visible {
   line-height: 1.6;
   max-width: 68ch;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+ * ONBOARDING SUBJECT CAPTURE — the live Check picker, placed in a
+ * full-screen onboarding step for late-year students. CE language:
+ * the picker brings its own surface/hairlines; butter yellow stays
+ * on the single primary action ("These are my subjects").
+ * ═══════════════════════════════════════════════════════════════ */
+.subject-onboard__slot {
+  max-width: 760px;
+  margin: var(--space-6) auto 0;
+  text-align: left;
+}
+/* The picker section normally sits inside a panel — give it the same
+ * breathing room the panel would when placed in the onboarding step. */
+.subject-onboard__slot .subject-picker-section {
+  background: var(--ce-surface);
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius);
+  padding: var(--space-5);
+}
+.subject-onboard__actions {
+  margin-top: var(--space-6);
+  align-items: center;
+}
+.subject-onboard__skip {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--ce-font-mono);
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: var(--space-2) var(--space-3);
+}
+.subject-onboard__skip:hover { color: var(--ce-ink); }
+
+/* ═══════════════════════════════════════════════════════════════
+ * COURSE FINDER — have/missing comparison against the student's
+ * saved subjects. One honest sentence; the full-match variant may
+ * use the status green, the gap variant stays neutral ink.
+ * ═══════════════════════════════════════════════════════════════ */
+.reverse-compare {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.6;
+}
+.reverse-compare--met {
+  color: var(--ce-status-strong);
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * COMPACT SUBJECT SUMMARY — collapsed picker view for students
+ * whose subjects are pre-loaded. One quiet line; Edit re-opens the
+ * full picker. CE language: mono label, ink list, hairline only.
+ * ═══════════════════════════════════════════════════════════════ */
+.subject-picker-section--collapsed > :not(.subject-summary) { display: none; }
+.subject-summary {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+}
+.subject-summary__label {
+  font-family: var(--ce-font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--ce-ink-60);
+  white-space: nowrap;
+}
+.subject-summary__list {
+  font-family: var(--ce-font-body);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--ce-ink);
+  line-height: 1.5;
+}
+.subject-summary__dot { color: var(--ce-ink-30); font-weight: 400; }
+.subject-summary__edit {
+  background: none;
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius);
+  cursor: pointer;
+  font-family: var(--ce-font-mono);
+  font-size: var(--text-xs);
+  color: var(--ce-ink);
+  padding: 2px 10px;
+}
+.subject-summary__edit:hover { border-color: var(--ce-ink); }
+
+/* Interest filter: note shown while the My Fields default drives the lens */
+.category-default-note { color: var(--ce-ink); }
+
+/* ═══════════════════════════════════════════════════════════════
+ * CARD "MORE ABOUT THIS COURSE" — unified expandable detail state
+ * (field guide + structural notes + US explainer + university info
+ * + official page). Inherits the .card-uni-info expander styling;
+ * only the new section styles live here. CE: hairlines, mono
+ * labels, no left borders.
+ * ═══════════════════════════════════════════════════════════════ */
+.card-more__guide {
+  font-size: var(--text-sm);
+  color: var(--ce-ink);
+  line-height: 1.6;
+  margin: 0 0 var(--space-3);
+}
+.card-more__guide-link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ce-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.card-more__guide-link:hover { opacity: .75; }
+.card-more__notes {
+  font-family: var(--ce-font-body);
+  font-size: var(--text-xs);
+  color: var(--ce-ink-60);
+  line-height: 1.65;
+  margin: 0 0 var(--space-3);
+}
+.card-more__us {
+  font-family: var(--ce-font-body);
+  font-size: var(--text-xs);
+  color: var(--ce-ink-60);
+  line-height: 1.65;
+  margin: 0 0 var(--space-3);
+}
+.card-more__uni {
+  border-top: 1px solid var(--ce-hairline-color);
+  padding-top: var(--space-3);
+  margin: 0 0 var(--space-2);
+}
+.card-more__head {
+  display: block;
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--ce-ink-60);
+  margin-bottom: var(--space-2);
+}
+.card-more__official { display: inline-flex; margin-top: var(--space-1); }
+
+/* Compact per-card US test line — replaces the repeated holistic box.
+ * Mono metadata layer, consistent with the card's other meta lines. */
+.card-us-test {
+  font-family: var(--ce-font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: .01em;
+  color: var(--ce-ink-60);
+  line-height: 1.6;
+  margin-top: var(--space-3);
+}
+
+/* Sentence-length grade requirement text (HK/SG/CA): a plain mono line,
+ * not a text-stuffed pill. Short grade tokens keep the pill above. */
+.card-grades--long {
+  display: block;
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  font-size: var(--text-xs);
+  color: var(--ce-ink-60);
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * APPLICATION-YEAR ORIENTATION — compact timing block on the empty
+ * Applying view for yearsUntilApplication === 0. Same honest
+ * typical-windows framing as the per-course checklist that replaces
+ * it once courses are saved. CE: hairlines only, no left borders.
+ * ═══════════════════════════════════════════════════════════════ */
+.applying-orientation__lead,
+.applying-orientation__foot {
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.65;
+  margin: 0 0 var(--space-3);
+}
+.applying-orientation__lead strong,
+.applying-orientation__foot strong { color: var(--ce-ink); }
+.applying-orientation__list {
+  margin: 0 0 var(--space-3);
+  padding-left: 1.2em;
+}
+.applying-orientation__list li {
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.7;
+}
+.applying-orientation__list strong { color: var(--ce-ink); }

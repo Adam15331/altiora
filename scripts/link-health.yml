@@ -1,0 +1,29 @@
+# Monthly link-health sweep — READY TO ENABLE, not enabled.
+#
+# To turn on: move this file to .github/workflows/link-health.yml
+# (it does nothing while it lives in scripts/).
+#
+# Runs scripts/check-links.mjs on the 1st of each month. The script exits
+# non-zero when any DEAD link is found, which fails the run and surfaces in
+# the repo's Actions tab / notifications. It does NOT auto-commit: review
+# the report, then run locally with --write to record sourceStatus flags
+# (and bump the courseRequirements version in app.html).
+
+name: Link health sweep
+
+on:
+  schedule:
+    - cron: '0 6 1 * *'   # 06:00 UTC, 1st of the month
+  workflow_dispatch: {}    # allow manual runs from the Actions tab
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Sweep verification sources and university sites
+        run: node scripts/check-links.mjs

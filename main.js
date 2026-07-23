@@ -39,6 +39,7 @@ const state = {
   resultSearch:       '',   // free-text filter on Check results (uni / course name)
   predictedGrade:     null,
   exploreField:       null,   // { category, name } when arriving from Start with Strengths
+  pickerCollapsed:    false,  // Check picker view: compact summary row vs full picker (session-only)
 };
 
 /* ─── Constants ─────────────────────────────────────────────────── */
@@ -79,6 +80,23 @@ const STATUS = {
   unconfirmed: { label:'Grades not confirmed', badgeCls:'badge--grey', icon:'◔', cardCls:'course-card--unconfirmed' },
 };
 const STATUS_SORT = { green:0, amber:1, grey:2, unconfirmed:3, red:4 };
+
+// Honest labels for SUBJECT-ONLY mode (no predicted grade set): on subjects
+// alone we can only say the subjects fit — "Strong match" implies likely
+// admission, which cannot be claimed without grades. Once a grade IS set the
+// established Strong/Possible/Out-of-reach labels return. Language only:
+// status keys, colours, sort order and counts are identical in both modes.
+// grey/unconfirmed exist only in grade mode (see the grade gate), so they
+// keep their grade-language labels.
+const STATUS_SUBJECT_ONLY = {
+  green: 'Subjects fit',
+  amber: 'Partly fit',
+  red:   'Subjects don’t fit',
+};
+function gradesInformMatch() { return !!state.predictedGrade; }
+function statusLabel(status) {
+  return (!gradesInformMatch() && STATUS_SUBJECT_ONLY[status]) || STATUS[status]?.label || '';
+}
 
 const TIER_LABELS = {
   'world-top-5':      'World Top 5',
@@ -612,6 +630,38 @@ function apGuidancePanelHtml(category) {
     </div>`;
 }
 
+// Year-aware framing for Check Combination — copy only, matching untouched.
+// For a student whose subjects are set (normalised year <= 1) the tool READS
+// ("what your subjects open"); for a student still choosing it's a sandbox.
+function updateCheckFraming() {
+  const retro = planIsRetro();   // the same normalised-year rule as the planner
+  const intro = $('checkIntro');
+  if (intro) {
+    intro.textContent = retro
+      ? 'Here’s what your subjects open. Add your predicted grades to see which courses are strong matches.'
+      : 'Pick your subjects and instantly see which courses are open, possible, or out of reach. Your qualification system is set from your profile — change it anytime from the bar above.';
+  }
+  // "Select 3–5 subjects" is choosing language — it only shows when the
+  // picker is genuinely being used to choose (2+ years out, or nothing saved
+  // yet so the picker is still a sandbox).
+  const hint = $('subjectPickerHint');
+  if (hint) {
+    const savedCount = (typeof AltioraState !== 'undefined' && Array.isArray(AltioraState.getProfile().subjects))
+      ? AltioraState.getProfile().subjects.length : 0;
+    hint.classList.toggle('hidden', retro && savedCount > 0);
+  }
+}
+
+// Year-aware intro for Course Finder: "which subjects you need" is choosing
+// language — a student whose subjects are set compares instead.
+function updateReverseIntro() {
+  const el = $('reverseIntro');
+  if (!el) return;
+  el.textContent = planIsRetro()
+    ? 'Search for a degree and see how its requirements compare with your subjects.'
+    : 'Search for a degree and see exactly which subjects you need, translated into your own qualification system.';
+}
+
 function renderCheckEmptyState() {
   const el = $('checkEmptyState');
   if (!el) return;
@@ -620,26 +670,43 @@ function renderCheckEmptyState() {
   if (!show) return;
 
   const ef = state.exploreField;
+  // Subjects set (<= 1 year out): a student can't "try" combinations — no
+  // suggestion buttons, and the ask is to enter what they're taking.
+  const retro = planIsRetro();
 
   // AP doesn't have a fixed subject count, so don't present "3-subject
   // combinations" as a complete answer. Show count + field-aligned guidance.
   if (state.checkSystem === 'US_AP') {
     const apCat = ef ? ef.category : null;
-    const builtKey = `US_AP|${apCat ?? ''}`;
+    const builtKey = `US_AP|${apCat ?? ''}|${retro ? 'r' : 'p'}`;
     if (el.dataset.builtFor === builtKey) return;
     el.dataset.builtFor = builtKey;
     el.innerHTML = `
       <div class="check-empty-state__inner">
         <div class="check-empty-state__icon" aria-hidden="true">🎯</div>
-        <p class="check-empty-state__heading">Select your APs above to see matching courses</p>
+        <p class="check-empty-state__heading">${retro
+          ? 'Enter the APs you’re taking to see what they open'
+          : 'Select your APs above to see matching courses'}</p>
         ${apGuidancePanelHtml(apCat)}
+      </div>`;
+    return;
+  }
+
+  if (retro) {
+    const builtKey = `${state.checkSystem}|retro`;
+    if (el.dataset.builtFor === builtKey) return;
+    el.dataset.builtFor = builtKey;
+    el.innerHTML = `
+      <div class="check-empty-state__inner">
+        <div class="check-empty-state__icon" aria-hidden="true">🎯</div>
+        <p class="check-empty-state__heading">Enter the subjects you’re taking to see what they open</p>
       </div>`;
     return;
   }
 
   const fieldSugg = ef ? fieldEmptySuggestions(ef.category, state.checkSystem) : null;
   // Rebuild when the system OR the active field changes.
-  const builtKey = `${state.checkSystem}|${fieldSugg ? ef.category : ''}`;
+  const builtKey = `${state.checkSystem}|${fieldSugg ? ef.category : ''}|p`;
   if (el.dataset.builtFor === builtKey) return;
   el.dataset.builtFor = builtKey;
 
@@ -1085,6 +1152,9 @@ function renderRoute(route) {
     case 'system':   showSystemSelect();   break;
     case 'year':     showYearSelect();     break;
     case 'proposal': showStageProposal();  break;
+    case 'osubjects':
+      showSubjectOnboard(_subjectOnboardStage || AltioraState.getProfile().stage || DEFAULT_STAGE);
+      break;
     case 'field':
       if (route.fieldId && resolveFieldId(route.fieldId))
         openFieldOverview(route.fieldId, { from: route.from || 'strengths' });
@@ -1137,6 +1207,21 @@ function switchMode(mode) {
   $('shortlistLink')?.classList.toggle('shortlist-link--active', mode === 'shortlist');
   $('homeLink')?.classList.toggle('home-link--active', mode === 'home');
 
+  if (mode === 'check') {
+    // Year-aware framing + empty-state variant (cheap: cached by builtFor).
+    updateCheckFraming();
+    renderCheckEmptyState();
+    // The My Fields lens may have changed while away (pins edited elsewhere) —
+    // re-apply the default and refresh results only if the lens differs.
+    applyMyFieldsToCategoryFilter();
+    if (state.selectedSubjects.length && categoryFilterSig() !== _resultsCatSig) renderCheckResults();
+  }
+  if (mode === 'reverse') {
+    updateReverseIntro();
+    // Re-render an existing search so the have/missing comparison always
+    // reflects the CURRENT saved subjects (they may have changed in Check).
+    if (state.searchQuery) renderReverseResults();
+  }
   if (mode === 'strengths') {
     renderStrengthsIntro();
     if ($('strengthsGrid').children.length === 0) renderStrengthsGrid();
@@ -1287,6 +1372,7 @@ function showYearSelect() {
   $('stageSelect').classList.add('hidden');
   $('systemSelect').classList.add('hidden');
   $('stageProposal').classList.add('hidden');
+  $('subjectOnboard')?.classList.add('hidden');
   $('yearSelect').classList.remove('hidden');
   markRoute({ v: 'year' });
 }
@@ -1305,7 +1391,13 @@ function chooseYear(label, years) {
   logEvent('year_select', { label, years });
   // Legacy divert path (a stage was explicitly picked before the system step):
   // honor that choice — the student told us where they want to be.
-  if (_pendingStage) { const s = _pendingStage; _pendingStage = null; routeToStage(s); return; }
+  if (_pendingStage) {
+    const s = _pendingStage; _pendingStage = null;
+    // Still onboarding (fresh user via a legacy entry point): a late-year
+    // student gets the subject question here too.
+    if (!maybeOfferOnboardSubjects(s)) routeToStage(s);
+    return;
+  }
   const hasStage = !!AltioraState.getProfile().stage;
   if (!hasStage) { showStageProposal(); return; }   // onboarding → proposal
   // Returning user (backfill / re-pick): back to the workspace home, where
@@ -1323,12 +1415,92 @@ function showStageProposal() {
   $('stageProposalReason').innerHTML = stageProposalReason(p.yearGroup || 'your year', stage);
   const accept = $('stageProposalAccept');
   accept.dataset.stage = stage;
+  // The proposal only ever shows during onboarding — arm the follow-up
+  // subject question for late-year students. It survives "No, start me
+  // somewhere else" (the manual cards are still onboarding) and is consumed
+  // by enterStage, so stage changes made later from the workspace never
+  // re-trigger it.
+  _onboardSubjectsPending = true;
   $('workspace').classList.add('hidden');
   $('yearSelect').classList.add('hidden');
   $('stageSelect').classList.add('hidden');
   $('systemSelect').classList.add('hidden');
+  $('subjectOnboard')?.classList.add('hidden');
   $('stageProposal').classList.remove('hidden');
   markRoute({ v: 'proposal' });
+}
+
+/* ─── Onboarding subject capture (late years only) ──────────────
+ * A Year 12/13 (or equivalent) student's subjects are already SET — so the
+ * counselor's natural follow-up to "here's where we'd start you" is "which
+ * subjects are you taking?". Students 2+ years out never see this: their
+ * subject moment is the Gate, as a decision, later.
+ *
+ * This step is a PLACEMENT of the existing Check Combination picker, not a
+ * new component: the live #subjectPickerSection node (same chips, same
+ * Further-Maths-implies-Maths and IB-exclusion logic, same write-through
+ * persistence to profile.subjects) is moved into the onboarding screen and
+ * moved back when the step finishes. Grades are deliberately NOT asked here
+ * — they stay optional and in-tool.
+ * ─────────────────────────────────────────────────────────────── */
+
+let _onboardSubjectsPending = false;   // armed by the stage proposal, consumed by enterStage
+let _subjectOnboardStage    = null;    // where to route once the step finishes
+
+// Offer the onboarding subject question if it applies (normalised year says
+// subjects are set, and none are saved yet). Returns true when it took over
+// the flow — the caller must NOT also route to the stage.
+function maybeOfferOnboardSubjects(stage) {
+  const years = studentYears();
+  const has = (AltioraState.getProfile().subjects || []).length > 0;
+  if (years == null || years > 1 || has) return false;
+  showSubjectOnboard(stage);
+  return true;
+}
+
+function showSubjectOnboard(stage) {
+  _subjectOnboardStage = stage;
+  // Move the REAL picker in (placement, not a copy). Selection persists live
+  // through the existing check write-through; the "3–5 for best results"
+  // hint is choosing language and promises instant results, so it hides here.
+  const pickerSection = $('subjectPickerSection');
+  const slot = $('subjectOnboardSlot');
+  if (pickerSection && slot && pickerSection.parentElement !== slot) slot.appendChild(pickerSection);
+  pickerSection?.classList.remove('hidden');
+  $('subjectPickerHint')?.classList.add('hidden');
+  syncPickerCollapse();   // the onboarding placement always shows the full picker
+  $('workspace').classList.add('hidden');
+  $('stageSelect').classList.add('hidden');
+  $('systemSelect').classList.add('hidden');
+  $('yearSelect').classList.add('hidden');
+  $('stageProposal').classList.add('hidden');
+  $('subjectOnboard').classList.remove('hidden');
+  markRoute({ v: 'osubjects' });
+}
+
+function finishSubjectOnboard(skipped) {
+  // The write-through is debounced — persist the final selection now so the
+  // workspace opens against the committed profile.
+  if (!skipped) syncProfileFromCheck();
+  logEvent('onboard_subjects', { skipped: !!skipped, count: state.selectedSubjects.length });
+  // Subjects just entered → land on Check with the compact summary so the
+  // computed results are the star, not the picker they've just used.
+  if (state.selectedSubjects.length) state.pickerCollapsed = true;
+  const stage = _subjectOnboardStage || AltioraState.getProfile().stage || DEFAULT_STAGE;
+  _subjectOnboardStage = null;
+  routeToStage(stage);   // applyStageChrome restores the picker into Check
+}
+
+// Return the picker to its home inside panel-check (no-op when it never
+// moved) and re-apply the year-aware hint rule the onboarding step overrode.
+function restoreSubjectPickerHome() {
+  const pickerSection = $('subjectPickerSection');
+  const anchor = $('checkEmptyState');
+  if (pickerSection && anchor && pickerSection.parentElement?.id === 'subjectOnboardSlot') {
+    anchor.parentElement.insertBefore(pickerSection, anchor);
+  }
+  updateCheckFraming();
+  syncPickerCollapse();   // back home: the compact-summary rule applies again
 }
 
 /* ─── Year indicator (global control, same pattern as system) ──── */
@@ -1400,6 +1572,7 @@ function showStageSelect() {
   $('systemSelect').classList.add('hidden');
   $('yearSelect').classList.add('hidden');
   $('stageProposal').classList.add('hidden');
+  $('subjectOnboard')?.classList.add('hidden');
   $('stageSelect').classList.remove('hidden');
   markRoute({ v: 'stage' });
 }
@@ -1412,6 +1585,7 @@ function showSystemSelect() {
   $('stageSelect').classList.add('hidden');
   $('yearSelect').classList.add('hidden');
   $('stageProposal').classList.add('hidden');
+  $('subjectOnboard')?.classList.add('hidden');
   $('systemSelect').classList.remove('hidden');
   markRoute({ v: 'system' });
 }
@@ -1420,10 +1594,15 @@ function showSystemSelect() {
 // for a stage, without choosing which view to show.
 function applyStageChrome(stage) {
   if (!STAGES[stage]) stage = DEFAULT_STAGE;
+  // If the onboarding subject step's picker placement is still active (e.g.
+  // goHome mid-step), return the picker to panel-check before the workspace
+  // shows — Check Combination must never render without its picker.
+  restoreSubjectPickerHome();
   $('stageSelect').classList.add('hidden');
   $('systemSelect').classList.add('hidden');
   $('yearSelect').classList.add('hidden');
   $('stageProposal').classList.add('hidden');
+  $('subjectOnboard')?.classList.add('hidden');
   $('workspace').classList.remove('hidden');
   closeStageMenu();
   closeSystemMenu();
@@ -1486,6 +1665,13 @@ function enterStage(stage) {
   const sys = AltioraState.getProfile().qualificationSystem;
   if (!sys) { _pendingStage = stage; showSystemSelect(); return; }
   AltioraState.setOnboarded(true);
+  // Onboarding only (armed by the stage proposal): late-year students are
+  // asked their subjects before landing — whether they accepted the proposal
+  // or manually picked a stage. The flag is consumed either way.
+  if (_onboardSubjectsPending) {
+    _onboardSubjectsPending = false;
+    if (maybeOfferOnboardSubjects(stage)) return;
+  }
   routeToStage(stage);
 }
 
@@ -1543,14 +1729,38 @@ function applyProfileSystem(sys) {
   $('checkResultsSection')?.classList.add('hidden');
   const emptyEl = $('checkEmptyState');
   if (emptyEl) delete emptyEl.dataset.builtFor;
+  // Saved subjects arrive pre-selected with results computed — a student who
+  // has told us their subjects never faces an empty picker. (Unhides the
+  // results section again via the normal toggle path when anything matched.)
+  preloadCheckFromProfile();
+  updateCheckFraming();
+}
+
+// Pre-load the student's saved profile.subjects into the Check Combination
+// picker. The picker stays fully editable — it IS the one place to edit your
+// subjects, and the existing write-through (syncProfileFromCheck) persists
+// every change straight back. Subject names that don't exist in the active
+// system (e.g. right after a system change) simply don't tick.
+function preloadCheckFromProfile() {
+  if (typeof AltioraState === 'undefined') return;
+  const saved = AltioraState.getProfile().subjects;
+  if (!Array.isArray(saved) || !saved.length) return;
+  let any = false;
+  $$('#subjectPicker input[type="checkbox"]').forEach(cb => {
+    if (saved.includes(cb.value)) { cb.checked = true; any = true; }
+  });
+  // Pre-loaded subjects rarely change — default to the compact summary view
+  // so the results lead the page. Edit/Done override for the session.
+  if (any) state.pickerCollapsed = true;
+  if (any) onSubjectToggle();   // the standard path: tags, FM lock, count, results
 }
 
 // Re-render whatever view is currently active (after a system change).
 function rerenderCurrentView() {
   switch (state.mode) {
-    case 'check':   renderCheckEmptyState(); if (state.selectedSubjects.length) renderCheckResults(); break;
+    case 'check':   updateCheckFraming(); renderCheckEmptyState(); if (state.selectedSubjects.length) renderCheckResults(); break;
     case 'plan':    renderPlanResults(); break;   // guards internally on selected fields
-    case 'reverse': if (state.searchQuery) renderReverseResults(); break;
+    case 'reverse': updateReverseIntro(); if (state.searchQuery) renderReverseResults(); break;
     case 'field-overview': if (state.exploreField?.fieldId) renderFieldOverview(state.exploreField.fieldId); break;
     case 'home':     renderWorkspaceHome(); break;
     case 'applying': renderApplyingPanel(); break;
@@ -1602,6 +1812,34 @@ function renderStageToolNav(stage) {
 
 // Minimal, honest Applying view: the saved shortlist + a what's-next
 // checklist derived from it + an intentional roadmap note. No dead end.
+// Application-year orientation for an EMPTY shortlist. A student with
+// yearsUntilApplication === 0 needs the timing truths NOW, before they've
+// saved a single course: this is their cycle, and admission-test
+// registrations typically close well before application deadlines. Built
+// from the same admissionTestInfo typical windows already in the data (no
+// invented dates) with official links; once courses are saved, the existing
+// per-course test checklist takes over and this block disappears.
+function applicationYearOrientationHtml() {
+  if (studentYears() !== 0) return '';
+  const infos = (typeof admissionTestInfo !== 'undefined')
+    ? Object.values(admissionTestInfo).slice().sort((a, b) => (a.regOpensMonth ?? 98) - (b.regOpensMonth ?? 98))
+    : [];
+  if (!infos.length) return '';
+  const rows = infos.map(i => `
+    <li><strong>${esc(i.name)}</strong> — registration ${esc(i.regShort ?? i.typicalRegistrationWindow)}
+      <a class="applying-test-link" href="${esc(i.officialUrl)}" target="_blank" rel="noopener noreferrer">Official site →</a></li>`).join('');
+  const yearLabel = (typeof AltioraState !== 'undefined' && AltioraState.getProfile().yearGroup) || 'your final year';
+  return `
+    <section class="applying-section applying-orientation" aria-label="Your application year">
+      <h2 class="applying-section__head">This is your application cycle</h2>
+      <p class="applying-orientation__lead">You're in ${esc(yearLabel)} — applications happen this school year,
+        and admission-test registrations typically close well before application deadlines.
+        Typical registration windows (always confirm on the official site):</p>
+      <ul class="applying-test-list applying-orientation__list">${rows}</ul>
+      <p class="applying-orientation__foot">Each university sets its own deadlines — check the official pages for every course you're considering.</p>
+    </section>`;
+}
+
 function renderApplyingPanel() {
   const panel = $('panel-applying');
   if (!panel) return;
@@ -1610,26 +1848,40 @@ function renderApplyingPanel() {
     .map(id => (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null)
     .filter(Boolean);
 
+  // One honest line — no feature promises (the "What's coming" callout
+  // promised deferred tools to the most time-pressed users in the product).
+  // (applicationYearOrientationHtml defined below renderApplyingPanel.)
   const roadmap = `
-    <div class="applying-note" role="note">
-      <p><strong>What's coming.</strong> More application tools — personal statement help,
-      interview prep, and deadline tracking — are on the way. For now, use your shortlist to
-      keep your applications organised.</p>
-    </div>`;
+    <p class="applying-footnote" role="note">Keep your applications organised here — your shortlist,
+    achievements, and what each course needs all live on this page.</p>`;
 
   if (!savedCourses.length) {
+    // Subjects-aware landing: a student who just told onboarding their
+    // subjects shouldn't be greeted by a cold empty state. The count is the
+    // LIVE subjects-fit number (checkStatusFor — the exact Check pipeline,
+    // unfiltered), not a parallel calculation.
+    const fitCount = subjectsFitCount();
+    const emptyHtml = fitCount > 0
+      ? `
+        <div class="applying-empty">
+          <p><strong>Your subjects open ${fitCount} course${fitCount === 1 ? '' : 's'}</strong> — let's build your application list.
+          Save the ones you're applying to, and they'll show up here with a checklist of what's next.</p>
+          <button class="home-next__btn home-next__btn--primary" data-go-applying>See the ${fitCount} courses your subjects fit →</button>
+        </div>`
+      : `
+        <div class="applying-empty">
+          <p>Your shortlist is empty. Save the courses you're applying to, and they'll show up here with a checklist of what's next.</p>
+          <button class="home-next__btn home-next__btn--primary" data-go-applying>Find courses to apply to →</button>
+        </div>`;
     panel.innerHTML = `
       <div class="applying">
         <header class="applying__header">
           <h1 class="applying__title">Applying</h1>
           <p class="applying__sub">Save courses you're applying to, and we'll help you keep them organised here.</p>
         </header>
-        <div class="applying-empty">
-          <p>Your shortlist is empty. Save the courses you're applying to, and they'll show up here with a checklist of what's next.</p>
-          <button class="home-next__btn home-next__btn--primary" data-go-applying>Find courses to apply to →</button>
-        </div>
+        ${emptyHtml}
+        ${applicationYearOrientationHtml()}
         ${achievementsSectionHtml()}
-        ${typeof askAltioraHtml === 'function' ? askAltioraHtml() : ''}
         ${roadmap}
       </div>`;
     panel.querySelector('[data-go-applying]')?.addEventListener('click', () => switchMode('check'));
@@ -1693,8 +1945,6 @@ function renderApplyingPanel() {
       </section>
 
       ${achievementsSectionHtml()}
-
-      ${typeof askAltioraHtml === 'function' ? askAltioraHtml() : ''}
 
       ${roadmap}
     </div>`;
@@ -2109,6 +2359,34 @@ function syncCandidateFieldSurfaces() {
   if (state.mode === 'strengths')      renderStrengthsResults();
   else if (state.mode === 'plan')      renderPlanResults();
   else if (state.mode === 'home')      renderWorkspaceHome();
+
+  // Pins drive the Check interest-filter default (a lens, never the truth):
+  // re-apply on every pin change and refresh visible results if the lens moved.
+  applyMyFieldsToCategoryFilter();
+  if (state.mode === 'check' && state.selectedSubjects.length
+      && categoryFilterSig() !== _resultsCatSig) renderCheckResults();
+}
+
+// Reactive fan-out for profile.subjects (+ grades): every surface that
+// projects the student's subjects re-renders when they change — the same
+// anti-desync pattern as candidate fields. Check Combination itself is the
+// editor (its live state IS the source), so it's deliberately not re-rendered
+// here; everything else follows the profile.
+let _lastSubjectsSig = '';
+function subjectsSig() {
+  if (typeof AltioraState === 'undefined') return '';
+  const p = AltioraState.getProfile();
+  return (Array.isArray(p.subjects) ? p.subjects : []).join('|') + '::' + (p.predictedGrades ?? '');
+}
+function syncSubjectSurfaces() {
+  const sig = subjectsSig();
+  if (sig === _lastSubjectsSig) return;
+  _lastSubjectsSig = sig;
+  if (state.mode === 'home')           renderWorkspaceHome();
+  else if (state.mode === 'plan')      renderPlanResults();
+  else if (state.mode === 'reverse')   { if (state.searchQuery) renderReverseResults(); }
+  else if (state.mode === 'shortlist') renderShortlist();
+  else if (state.mode === 'applying')  renderApplyingPanel();
 }
 
 /* ─── Shortlist view ──────────────────────────────────────────── */
@@ -2536,7 +2814,7 @@ function buildShortlistCard(course, studentTags, hasSubjects) {
   let badgeHtml;
   if (status) {
     const cfg = STATUS[status];
-    badgeHtml = `<div class="card-status card-status--${status}">${cfg.icon} ${qualify ? axis('Subjects') : ''}${esc(cfg.label)}</div>`;
+    badgeHtml = `<div class="card-status card-status--${status}">${cfg.icon} ${qualify ? axis('Subjects') : ''}${esc(statusLabel(status))}</div>`;
   } else {
     badgeHtml = `<div class="card-status card-status--none">Pick your subjects to see your match</div>`;
   }
@@ -2577,11 +2855,13 @@ function buildShortlistCard(course, studentTags, hasSubjects) {
     ${(course.verification?.status ?? 'unverified') !== 'verified'
       ? `<p class="card-unverified">⚠ Requirements not yet verified — confirm with the university.</p>`
       : ''}
+    ${cardMoreHtml(course)}
   `;
   card.querySelector('.remove-btn').addEventListener('click', e => {
     e.stopPropagation();
     toggleShortlist(course.id);   // course is saved → this removes it
   });
+  wireCardMore(card);
   return card;
 }
 
@@ -3037,15 +3317,77 @@ function buildSubjectPicker(systemKey) {
   // the context banner so its "pick a system" prompt updates.
   applyExploreFieldFilter();
   renderExploreContextBanner();
+  // No explicit field context → the My Fields default applies (no-op when
+  // the student has touched the filter manually this session).
+  applyMyFieldsToCategoryFilter();
 
   buildGradeInput(systemKey);
+  // buildGradeInput starts blank — restore the saved grade so the check
+  // write-through never clobbers a persisted grade with the input's initial
+  // empty state (matters now that saved subjects pre-load and render at load).
+  restoreGradeFromProfile(systemKey);
   syncSubjectCount();
+  syncPickerCollapse();
   renderCheckEmptyState();
+}
+
+// Reflect profile.predictedGrades back into the (just-rebuilt) grade input.
+// Only restores values valid for the active system's control — a grade saved
+// under another system's format stays out rather than guessing.
+function restoreGradeFromProfile(systemKey) {
+  if (typeof AltioraState === 'undefined') return;
+  const g = AltioraState.getProfile().predictedGrades;
+  if (!g) return;
+  const GRADE_INPUT_IDS = {
+    UK_A_Level: 'gradeSelectALevel', IB: 'gradeInputIB', US_AP: 'gradeSelectAP',
+    SG_A_Level: 'gradeSelectSG',     HK_DSE: 'gradeSelectDSE',
+  };
+  const el = $(GRADE_INPUT_IDS[systemKey] ?? '');
+  if (!el) return;
+  if (el.tagName === 'SELECT') {
+    if (![...el.options].some(o => o.value === g)) return;
+    el.value = g;
+  } else {
+    const v = parseInt(g, 10);
+    if (isNaN(v) || v < 24 || v > 45) return;   // IB points range
+    el.value = String(v);
+  }
+  state.predictedGrade = g;
 }
 
 /* ═══════════════════════════════════════════════════════════════
  * CATEGORY PICKER  (course interest filter)
  * ═══════════════════════════════════════════════════════════════ */
+
+// The interest filter is a LENS; My Fields is the truth. Until the student
+// touches the filter manually this session, their pinned candidate fields
+// pre-select it (with a note saying so), and pin changes re-apply reactively.
+// Manual changes override the default for the session and never un-pin
+// anything. Field-exploration context (exploreField) keeps priority — it is
+// an explicit "show me this field" intent.
+let _categoryTouched = false;
+
+function applyMyFieldsToCategoryFilter() {
+  const setNote = on => {
+    $('categoryDefaultNote')?.classList.toggle('hidden', !on);
+    $('categoryHintDefault')?.classList.toggle('hidden', on);
+  };
+  if (_categoryTouched || state.exploreField) { setNote(false); return; }
+  const pins = (typeof AltioraState !== 'undefined' ? AltioraState.getCandidateFields() : [])
+    .filter(id => CATEGORIES.some(c => c.id === id));
+  state.selectedCategories = new Set(pins);
+  $$('#categoryPicker .category-chip').forEach(btn => {
+    const active = state.selectedCategories.has(btn.dataset.category);
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', String(active));
+  });
+  setNote(pins.length > 0);
+}
+
+// Signature of the category lens the results were last BUILT with — lets
+// re-entry into Check refresh only when the lens actually changed.
+let _resultsCatSig = null;
+function categoryFilterSig() { return [...state.selectedCategories].sort().join('|'); }
 
 function buildCategoryPicker() {
   const picker = $('categoryPicker');
@@ -3057,6 +3399,10 @@ function buildCategoryPicker() {
     btn.dataset.category = cat.id;
     btn.innerHTML = `<span class="category-chip__icon" aria-hidden="true">${cat.icon}</span>${esc(cat.label)}`;
     btn.addEventListener('click', () => {
+      // Manual touch: the student now owns the lens for this session.
+      _categoryTouched = true;
+      $('categoryDefaultNote')?.classList.add('hidden');
+      $('categoryHintDefault')?.classList.remove('hidden');
       if (state.selectedCategories.has(cat.id)) {
         state.selectedCategories.delete(cat.id);
         btn.classList.remove('active');
@@ -3194,6 +3540,7 @@ function onSubjectToggle(e = null) {
   else hideMathsWarningBanner();
 
   syncSubjectCount();
+  syncPickerCollapse();
   $('categoryPickerSection').classList.toggle('hidden', state.selectedSubjects.length === 0);
   renderCheckEmptyState();
   clearTimeout(_subjectDebounce);
@@ -3205,6 +3552,27 @@ function syncSubjectCount() {
   const n = state.selectedSubjects.length;
   $('subjectCountBadge').textContent = n === 0 ? 'none selected' : `${n} selected`;
   $('clearSubjectsBtn')?.classList.toggle('hidden', n === 0);
+}
+
+// Compact picker view: students with subjects already selected see a one-line
+// summary ("Your subjects: … [Edit]") instead of the full picker, moving the
+// results meaningfully up the page. Edit expands the real picker (unchanged
+// behaviour: filter, Clear all, FM lock); Done collapses it again. Never
+// collapses with an empty selection, and never inside the onboarding
+// placement (that step exists to enter subjects).
+function syncPickerCollapse() {
+  const section = $('subjectPickerSection');
+  const row = $('subjectSummaryRow');
+  if (!section || !row) return;
+  const inOnboard = section.parentElement?.id === 'subjectOnboardSlot';
+  const collapsed = !!state.pickerCollapsed && state.selectedSubjects.length > 0 && !inOnboard;
+  section.classList.toggle('subject-picker-section--collapsed', collapsed);
+  row.classList.toggle('hidden', !collapsed);
+  row.innerHTML = collapsed ? `
+    <span class="subject-summary__label">Your subjects:</span>
+    <span class="subject-summary__list">${state.selectedSubjects.map(esc).join(' <span class="subject-summary__dot">·</span> ')}</span>
+    <button type="button" id="subjectSummaryEdit" class="subject-summary__edit" aria-label="Edit your subjects">Edit</button>` : '';
+  $('collapsePickerBtn')?.classList.toggle('hidden', collapsed || state.selectedSubjects.length === 0 || inOnboard);
 }
 
 // Uncheck every subject and reset to the empty state — a one-click "start over".
@@ -3268,18 +3636,36 @@ function renderSummaryBar(subjectCount, counts, total) {
     ? `<span class="summary-dot">·</span><a href="#results-group-unconfirmed" class="summary-link summary-link--unconfirmed">${counts.unconfirmed} grades not confirmed</a>`
     : '';
 
-  bar.innerHTML = `
-    <div class="results-new-summary">
-      Your subjects match <strong>${total}</strong> course${total !== 1 ? 's' : ''} —
+  // Two language modes over identical counts/colours: subject-only mode may
+  // only speak about subject FIT; grade mode keeps the match language.
+  const summaryLine = gradesInformMatch()
+    ? `Your subjects match <strong>${total}</strong> course${total !== 1 ? 's' : ''} —
       <a href="#results-group-green" class="summary-link summary-link--green">${counts.green} strong match${counts.green !== 1 ? 'es' : ''}</a>
       <span class="summary-dot">·</span>
       <a href="#results-group-amber" class="summary-link summary-link--amber">${counts.amber} possible</a>
       ${greySummary}
       ${unconfirmedSummary}
       <span class="summary-dot">·</span>
-      <a href="#results-group-red" class="summary-link summary-link--red">${counts.red} out of reach</a>
+      <a href="#results-group-red" class="summary-link summary-link--red">${counts.red} out of reach</a>`
+    : `Your subjects fit
+      <a href="#results-group-green" class="summary-link summary-link--green"><strong>${counts.green}</strong> course${counts.green !== 1 ? 's' : ''}</a>
+      of ${total}
+      <span class="summary-dot">·</span>
+      <a href="#results-group-amber" class="summary-link summary-link--amber">${counts.amber} partly fit</a>
+      ${greySummary}
+      ${unconfirmedSummary}
+      <span class="summary-dot">·</span>
+      <a href="#results-group-red" class="summary-link summary-link--red">${counts.red} don’t fit</a>`;
+
+  const ariaLabel = gradesInformMatch()
+    ? `Course eligibility: ${counts.green} strong matches, ${counts.amber} possible, ${counts.grey} grades a stretch, ${counts.unconfirmed ?? 0} grades not confirmed, ${counts.red} out of reach`
+    : `Subject fit: ${counts.green} fit, ${counts.amber} partly fit, ${counts.red} don’t fit`;
+
+  bar.innerHTML = `
+    <div class="results-new-summary">
+      ${summaryLine}
     </div>
-    <div class="summary-progress" role="img" aria-label="Course eligibility: ${counts.green} strong matches, ${counts.amber} possible, ${counts.grey} grades a stretch, ${counts.unconfirmed ?? 0} grades not confirmed, ${counts.red} out of reach">
+    <div class="summary-progress" role="img" aria-label="${ariaLabel}">
       <div class="summary-seg summary-seg--green" style="width:${gPct.toFixed(2)}%"></div>
       <div class="summary-seg summary-seg--amber" style="width:${aPct.toFixed(2)}%"></div>
       <div class="summary-seg summary-seg--grey"  style="width:${grPct.toFixed(2)}%"></div>
@@ -3343,6 +3729,85 @@ function applyResultSearch(rawQuery) {
   }
 }
 
+// The FULL per-course Check status pipeline — classify plus every demotion
+// (too-few-subjects, AP-count holdback, grade gate, IB HL), reading the same
+// live state the Check render reads. EXTRACTED (verbatim, from the render
+// loop) so other surfaces can reuse the exact live number — never a parallel
+// approximation that could disagree with what Check shows.
+function checkStatusFor(course) {
+  const minNeeded = MIN_SUBJECTS[state.checkSystem] ?? 3;
+  const tooFew    = state.selectedSubjects.length < minNeeded;
+  const apCount   = state.selectedSubjects.length;
+
+  const result = classify(course, state.selectedTags);
+  if (tooFew && result.status === 'green') result.status = 'amber';
+  // AP: a strong subject match alone doesn't make a few-AP profile a STRONG
+  // match for selective US schools — competitiveness depends on AP count.
+  // Hold back GREEN to POSSIBLE when below the course's competitive AP bar.
+  if (state.checkSystem === 'US_AP' && course.country === 'US' && course.apContext
+      && result.status === 'green'
+      && apCount < course.apContext.minCompetitiveAPs) {
+    result.status = 'amber';
+    result.apCountShort = { have: apCount, need: course.apContext.minCompetitiveAPs };
+  }
+  // Grade gate. A subject-strong course only KEEPS a green/amber verdict when
+  // its grade requirement can actually be compared against the student and
+  // is met. Three outcomes:
+  //   'above'   → grades are a stretch (grey)
+  //   'met'     → keep the subject verdict (green/amber)
+  //   'unknown' → requirement can't be read → fail safe to 'unconfirmed',
+  //               NEVER a strong/possible match built on absent data.
+  // The one carve-out is the explicit US_AP holistic path: for US courses
+  // under the AP system there is deliberately no grade cutoff (competitiveness
+  // is judged by AP count above), so an 'unknown' there is expected, not a
+  // data gap, and must not be demoted to 'unconfirmed'.
+  if (state.predictedGrade && (result.status === 'green' || result.status === 'amber')) {
+    const holisticApPath = state.checkSystem === 'US_AP'
+      && course.country === 'US' && !!course.apContext;
+    const cmp = compareGradeToStudent(course, state.checkSystem, state.predictedGrade);
+    if (cmp === 'above') {
+      result.status = 'grey';
+      result.gradeGap = gradeGapInfo(course, state.checkSystem, state.predictedGrade);
+    } else if (cmp === 'unknown' && !holisticApPath) {
+      result.status = 'unconfirmed';
+    }
+  }
+  if (state.checkSystem === 'IB' && (result.status === 'green' || result.status === 'amber')) {
+    const requiredHLTags = course.grades?.ibHL ?? [];
+    if (requiredHLTags.length > 0) {
+      // Get student's HL subjects as tags
+      const studentHLTags = Array.from(selectedSubjectsWithLevel.values())
+        .filter(item => item.isHL === true)
+        .map(item => item.tag);
+
+      // Find which required HL tags are missing
+      const missingHL = requiredHLTags.filter(tag => !studentHLTags.includes(tag));
+
+      // Only downgrade and warn for ACTUAL missing HL subjects this course
+      // lists. Courses with no ibHL requirements get no HL warning at all —
+      // no blanket "expect 3 HLs" message and no GREEN→AMBER demotion.
+      if (missingHL.length > 0) {
+        if (result.status === 'green') result.status = 'amber';
+        result.ibHLWarning = missingHL;
+      } else {
+        result.ibHLWarning = null;
+      }
+    } else {
+      result.ibHLWarning = null;
+    }
+  }
+  return result;
+}
+
+// Live "subjects fit" count over the WHOLE dataset (no country/category
+// lens) — the same pipeline Check renders with, so the number the Applying
+// landing quotes is the number Check shows on an unfiltered view.
+function subjectsFitCount() {
+  if (typeof courses === 'undefined') return 0;
+  if (!state.selectedTags || !state.selectedTags.size) return 0;
+  return courses.reduce((n, c) => n + (checkStatusFor(c).status === 'green' ? 1 : 0), 0);
+}
+
 function renderCheckResults() {
   if (dataLoadError) return;
   const section = $('checkResultsSection');
@@ -3359,6 +3824,7 @@ function renderCheckResults() {
   }
   const firstAppearance = !_checkResultsSeen;
   _checkResultsSeen = true;
+  _resultsCatSig = categoryFilterSig();   // the lens these results are built with
   section.classList.remove('hidden');
   showLoadingSpinner('courseGrid');
 
@@ -3394,66 +3860,9 @@ function renderCheckResults() {
     .filter(c => state.countryFilter === 'All' || c.country === state.countryFilter)
     .filter(c => state.selectedCategories.size === 0 || state.selectedCategories.has(c.category));
 
-  const apCount = state.selectedSubjects.length;
   const byStatus = { green: [], amber: [], grey: [], unconfirmed: [], red: [] };
   pool.forEach(course => {
-    const result = classify(course, state.selectedTags);
-    if (tooFew && result.status === 'green') result.status = 'amber';
-    // AP: a strong subject match alone doesn't make a few-AP profile a STRONG
-    // match for selective US schools — competitiveness depends on AP count.
-    // Hold back GREEN to POSSIBLE when below the course's competitive AP bar.
-    if (state.checkSystem === 'US_AP' && course.country === 'US' && course.apContext
-        && result.status === 'green'
-        && apCount < course.apContext.minCompetitiveAPs) {
-      result.status = 'amber';
-      result.apCountShort = { have: apCount, need: course.apContext.minCompetitiveAPs };
-    }
-    // Grade gate. A subject-strong course only KEEPS a green/amber verdict when
-    // its grade requirement can actually be compared against the student and
-    // is met. Three outcomes:
-    //   'above'   → grades are a stretch (grey)
-    //   'met'     → keep the subject verdict (green/amber)
-    //   'unknown' → requirement can't be read → fail safe to 'unconfirmed',
-    //               NEVER a strong/possible match built on absent data.
-    // The one carve-out is the explicit US_AP holistic path: for US courses
-    // under the AP system there is deliberately no grade cutoff (competitiveness
-    // is judged by AP count above), so an 'unknown' there is expected, not a
-    // data gap, and must not be demoted to 'unconfirmed'.
-    if (state.predictedGrade && (result.status === 'green' || result.status === 'amber')) {
-      const holisticApPath = state.checkSystem === 'US_AP'
-        && course.country === 'US' && !!course.apContext;
-      const cmp = compareGradeToStudent(course, state.checkSystem, state.predictedGrade);
-      if (cmp === 'above') {
-        result.status = 'grey';
-        result.gradeGap = gradeGapInfo(course, state.checkSystem, state.predictedGrade);
-      } else if (cmp === 'unknown' && !holisticApPath) {
-        result.status = 'unconfirmed';
-      }
-    }
-    if (state.checkSystem === 'IB' && (result.status === 'green' || result.status === 'amber')) {
-      const requiredHLTags = course.grades?.ibHL ?? [];
-      if (requiredHLTags.length > 0) {
-        // Get student's HL subjects as tags
-        const studentHLTags = Array.from(selectedSubjectsWithLevel.values())
-          .filter(item => item.isHL === true)
-          .map(item => item.tag);
-
-        // Find which required HL tags are missing
-        const missingHL = requiredHLTags.filter(tag => !studentHLTags.includes(tag));
-
-        // Only downgrade and warn for ACTUAL missing HL subjects this course
-        // lists. Courses with no ibHL requirements get no HL warning at all —
-        // no blanket "expect 3 HLs" message and no GREEN→AMBER demotion.
-        if (missingHL.length > 0) {
-          if (result.status === 'green') result.status = 'amber';
-          result.ibHLWarning = missingHL;
-        } else {
-          result.ibHLWarning = null;
-        }
-      } else {
-        result.ibHLWarning = null;
-      }
-    }
+    const result = checkStatusFor(course);
     byStatus[result.status].push({ course, result });
   });
 
@@ -3473,14 +3882,15 @@ function renderCheckResults() {
 
   renderSummaryBar(state.selectedSubjects.length, counts, total);
 
-  const greyBadge = counts.grey ? `<span class="badge badge--grey">◯&thinsp;${counts.grey}</span>` : '';
-  const unconfirmedBadge = counts.unconfirmed ? `<span class="badge badge--grey">◔&thinsp;${counts.unconfirmed}</span>` : '';
+  // Pills are icon+count; their tooltips/labels follow the same language rule.
+  const greyBadge = counts.grey ? `<span class="badge badge--grey" title="${esc(statusLabel('grey'))}">◯&thinsp;${counts.grey}</span>` : '';
+  const unconfirmedBadge = counts.unconfirmed ? `<span class="badge badge--grey" title="${esc(statusLabel('unconfirmed'))}">◔&thinsp;${counts.unconfirmed}</span>` : '';
   $('resultSummaryBadges').innerHTML = `
-    <span class="badge badge--success">✓&thinsp;${counts.green}</span>
-    <span class="badge badge--warning">◑&thinsp;${counts.amber}</span>
+    <span class="badge badge--success" title="${esc(statusLabel('green'))}">✓&thinsp;${counts.green}</span>
+    <span class="badge badge--warning" title="${esc(statusLabel('amber'))}">◑&thinsp;${counts.amber}</span>
     ${greyBadge}
     ${unconfirmedBadge}
-    <span class="badge badge--error">✗&thinsp;${counts.red}</span>
+    <span class="badge badge--error" title="${esc(statusLabel('red'))}">✗&thinsp;${counts.red}</span>
     <span class="badge badge--neutral">${total} shown</span>
   `;
 
@@ -3488,12 +3898,15 @@ function renderCheckResults() {
   container.innerHTML = '';
   let cardIndex = 0;
 
+  // Section headings follow the same subject-only / grade-mode language rule
+  // as every other label (statusLabel) — colours and grouping identical.
+  const gradeMode = gradesInformMatch();
   if (byStatus.green.length) {
-    container.appendChild(buildGroup('green', 'Strong matches', byStatus.green, cardIndex));
+    container.appendChild(buildGroup('green', gradeMode ? 'Strong matches' : 'Subjects fit', byStatus.green, cardIndex));
     cardIndex += byStatus.green.length;
   }
   if (byStatus.amber.length) {
-    container.appendChild(buildGroup('amber', 'Possible', byStatus.amber, cardIndex));
+    container.appendChild(buildGroup('amber', gradeMode ? 'Possible' : 'Partly fit', byStatus.amber, cardIndex));
     cardIndex += byStatus.amber.length;
   }
   if (byStatus.grey.length) {
@@ -3510,7 +3923,7 @@ function renderCheckResults() {
     cardIndex += byStatus.unconfirmed.length;
   }
   if (byStatus.red.length) {
-    container.appendChild(buildGroup('red', 'Out of reach', byStatus.red, cardIndex, true));
+    container.appendChild(buildGroup('red', gradeMode ? 'Out of reach' : 'Subjects don’t fit', byStatus.red, cardIndex, true));
   }
 
   // Re-apply the in-results search filter (the grid was just rebuilt, e.g.
@@ -3580,14 +3993,16 @@ function buildGroup(status, headerText, items, startIndex, collapsed = false) {
     toggle.className = 'results-group__toggle';
     const chevSvg = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg>`;
     toggle.setAttribute('aria-expanded', 'false');
-    toggle.innerHTML = `${chevSvg} Show ${items.length} out-of-reach courses`;
+    // Same subject-only / grade-mode language rule as the headings.
+    const noun = gradesInformMatch() ? 'out-of-reach courses' : 'courses your subjects don’t fit';
+    toggle.innerHTML = `${chevSvg} Show ${items.length} ${noun}`;
     toggle.addEventListener('click', () => {
       const nowOpen = cardsDiv.hidden;
       cardsDiv.hidden = !nowOpen;
       toggle.setAttribute('aria-expanded', String(nowOpen));
       toggle.innerHTML = nowOpen
-        ? `${chevSvg} Hide out-of-reach courses`
-        : `${chevSvg} Show ${items.length} out-of-reach courses`;
+        ? `${chevSvg} Hide ${noun}`
+        : `${chevSvg} Show ${items.length} ${noun}`;
     });
     section.appendChild(toggle);
     section.appendChild(cardsDiv);
@@ -3596,6 +4011,149 @@ function buildGroup(status, headerText, items, startIndex, collapsed = false) {
   }
 
   return section;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * SHARED CARD DETAIL — "More about this course" expander + compact
+ * US test line. Used by every surface that renders course cards
+ * (Check, shortlist, Course Finder), so all inherit both.
+ * ═══════════════════════════════════════════════════════════════ */
+
+const CARD_CHEVRON_ICON  = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg>`;
+const CARD_EXTERNAL_ICON = `<svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4h5v5M15 4l-7 7M9 5H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-4"/></svg>`;
+
+// Compact per-card US test line — carries ONLY what varies by card: the
+// policy variant and the indicative range when published. The generic
+// holistic explainer lives once in the expander below, not boxed on every
+// card. Honest absences render honestly ("no published range").
+const US_TEST_SHORT = {
+  required:    'SAT/ACT required',
+  optional:    'Test-optional',
+  flexible:    'Test-flexible',
+  recommended: 'SAT/ACT recommended',
+  varies:      'SAT/ACT required for some schools',
+  blind:       'Test-blind',
+};
+// Grade requirement line: a pill only when the string reads like a grade
+// token ("A*AA", "39"); sentence-length requirement text (HK/SG/CA "IGP
+// 10th percentile…" / "General minimum: 3 AL passes…") renders as a plain
+// mono line instead of a text-stuffed oval. Same content, presentation only.
+// (The dataset has a clean cliff: every grade string is <= 6 chars or >= 38,
+// so the 10-char threshold is unambiguous.)
+function gradeLineHtml(gradeStr, sys) {
+  const text = sys === 'IB' ? `${gradeStr} IB points` : String(gradeStr);
+  const isShort = String(gradeStr).length <= 10;
+  return `<div class="card-grades${isShort ? '' : ' card-grades--long'}">${esc(text)}</div>`;
+}
+
+function usTestLineHtml(course) {
+  if (course.country !== 'US' || !course.usAdmissions) return '';
+  const a = course.usAdmissions;
+  const parts = [US_TEST_SHORT[a.test] ?? a.test];
+  if (a.test === 'blind') {
+    parts.push('scores not used');
+  } else {
+    const range = [];
+    if (a.sat) range.push(`SAT ${a.sat}`);
+    if (a.act) range.push(`ACT ${a.act}`);
+    if (range.length) parts.push(...range, 'indicative');
+    else parts.push('no published range');
+  }
+  return `<div class="card-us-test">🇺🇸 ${parts.map(esc).join(' · ')}</div>`;
+}
+
+// The expandable detail state: "learn more" built ONLY from content we
+// already hold — the authored field guide, the course's own structural
+// notes, the generic US-holistic explainer (moved here from the per-card
+// box), the university profile (formerly its own expander), and the stored
+// official source URL. Nothing is authored per-course; verification.notes
+// stay internal (they are source bookkeeping, not student guidance); empty
+// fields render nothing. Returns '' when no section has content.
+function cardMoreHtml(course) {
+  const sections = [];
+
+  // 1. Field guide — the discovery read we already authored for this field.
+  const fieldId = resolveFieldId(course.category);
+  const fp = (fieldId && typeof fieldProfiles !== 'undefined') ? fieldProfiles[course.category] : null;
+  if (fp) {
+    const catLabel = CATEGORY_LABEL_MAP[course.category] ?? course.category;
+    sections.push(`
+      <p class="card-more__guide">What's a ${esc(catLabel)} degree actually like?
+        <button type="button" class="card-more__guide-link" data-field-guide="${esc(course.category)}">Read the field guide →</button>
+      </p>`);
+  }
+
+  // 2. Structural facts we already hold about THIS course (course.notes is
+  // the curated student-facing field — co-op structure, college applications,
+  // supplementary forms). Rendered only when present; never padded.
+  if (course.notes) sections.push(`<p class="card-more__notes">${esc(course.notes)}</p>`);
+
+  // 3. The generic US explainer — stated once here for those who want it.
+  if (course.country === 'US' && course.usAdmissions) {
+    sections.push(`<p class="card-more__us">🇺🇸 US admissions is holistic — there is no fixed grade cutoff. Published SAT/ACT figures are the middle 50% of admitted students: indicative, never a cutoff.</p>`);
+  }
+
+  // 4. University info (unified here from the old "About this university").
+  const uniProfile = (typeof universityProfiles !== 'undefined') ? (universityProfiles[course.university] ?? null) : null;
+  const uniWebsite = uniProfile?.websiteUrl ?? null;
+  let uniLinkShown = false;
+  if (uniProfile) {
+    const cityPart = uniProfile.city ? ` · ${esc(uniProfile.city)}` : '';
+    const tagLine  = uniProfile.tagline           ? `<p class="card-uni-tagline">${esc(uniProfile.tagline)}</p>` : '';
+    const noteLine = uniProfile.internationalNote ? `<p class="card-uni-note">${esc(uniProfile.internationalNote)}</p>` : '';
+    const webLink  = uniWebsite
+      ? `<a class="card-uni-link" href="${esc(uniWebsite)}" target="_blank" rel="noopener noreferrer">${CARD_EXTERNAL_ICON} Visit website</a>`
+      : '';
+    uniLinkShown = !!webLink;
+    if (tagLine || noteLine || webLink) {
+      sections.push(`
+        <div class="card-more__uni">
+          <span class="card-more__head">About ${esc(course.university)}${cityPart}</span>
+          ${tagLine}${noteLine}${webLink}
+        </div>`);
+    }
+  } else if (course.universityContext?.notes) {
+    sections.push(`
+      <div class="card-more__uni">
+        <span class="card-more__head">About ${esc(course.university)}</span>
+        <p class="card-uni-note">${esc(course.universityContext.notes)}</p>
+      </div>`);
+  }
+
+  // 5. Official course page — the university's own page beats anything we
+  // could author. Only when the stored source is a real URL (skip 'UCAS'
+  // and other non-URL bookkeeping strings). Link-rot protection: when the
+  // health sweep (scripts/check-links.mjs) has flagged the source as dead
+  // or redirected-to-homepage, a student must never hit the broken deep
+  // link from inside Altiora — fall back to the university's own website
+  // (unless the section above already links it). Unswept = 'ok'.
+  const src = course.verification?.source;
+  const srcIsUrl = typeof src === 'string' && /^https?:\/\//i.test(src);
+  const srcOk = (course.verification?.sourceStatus ?? 'ok') === 'ok';
+  if (srcIsUrl && srcOk) {
+    sections.push(`<a class="card-uni-link card-more__official" href="${esc(src)}" target="_blank" rel="noopener noreferrer">${CARD_EXTERNAL_ICON} Official course page</a>`);
+  } else if (srcIsUrl && !srcOk && uniWebsite && !uniLinkShown) {
+    sections.push(`<a class="card-uni-link card-more__official" href="${esc(uniWebsite)}" target="_blank" rel="noopener noreferrer">${CARD_EXTERNAL_ICON} University website</a>`);
+  }
+
+  if (!sections.length) return '';
+  // Wears .card-uni-info too: same expander interaction/styling as the old
+  // "About this university" details, now unified into one detail area.
+  return `
+    <details class="card-uni-info card-more">
+      <summary>More about this course ${CARD_CHEVRON_ICON}</summary>
+      <div class="card-uni-info__body card-more__body">${sections.join('')}</div>
+    </details>`;
+}
+
+// Wire the field-guide link (normal navigation — back-able via the router).
+function wireCardMore(card) {
+  card.querySelectorAll('[data-field-guide]').forEach(btn =>
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      logEvent('card_field_guide', { field: btn.dataset.fieldGuide, mode: state.mode });
+      openFieldOverview(btn.dataset.fieldGuide, { from: state.mode === 'check' ? 'check' : 'card' });
+    }));
 }
 
 function buildCheckCard(course, result) {
@@ -3671,35 +4229,9 @@ function buildCheckCard(course, result) {
     }
   }
 
-  // ── US admissions context (holistic; indicative SAT/ACT range) ────
-  // US degrees have no published grade/IB cutoff, so instead of a grade
-  // line we show the current test policy plus an INDICATIVE admitted
-  // middle-50% range, clearly labelled as a guide rather than a cutoff.
-  let usAdmitHtml = '';
-  if (course.country === 'US' && course.usAdmissions) {
-    const a = course.usAdmissions;
-    const policyLabel = {
-      required:    'SAT/ACT required',
-      optional:    'Test-optional',
-      flexible:    'Test-flexible (SAT/ACT/AP/IB)',
-      recommended: 'SAT/ACT recommended',
-      varies:      'SAT/ACT required for some schools',
-      blind:       'Test-blind — scores not used',
-    }[a.test] ?? a.test;
-    const rangeParts = [];
-    if (a.sat) rangeParts.push(`SAT ${a.sat}`);
-    if (a.act) rangeParts.push(`ACT ${a.act}`);
-    const rangeHtml = rangeParts.length
-      ? `<div class="card-us-admit__range">Typical admitted range (indicative, not a cutoff): ${rangeParts.map(esc).join(' · ')}</div>`
-      : (a.test === 'blind'
-          ? `<div class="card-us-admit__range">SAT/ACT are not considered in admission.</div>`
-          : '');
-    usAdmitHtml = `
-      <div class="card-us-admit">
-        <span class="card-us-admit__policy">🇺🇸 Holistic admissions — no fixed cutoff · ${esc(policyLabel)}</span>
-        ${rangeHtml}
-      </div>`;
-  }
+  // ── US admissions: one compact per-card line (usTestLineHtml). The old
+  // repeated "Holistic admissions" box carried no per-card information; the
+  // generic explainer now lives once in the card's expanded detail state.
 
   // ── IB HL chips ───────────────────────────────────────────────
   let ibHlHtml = '';
@@ -3728,7 +4260,6 @@ function buildCheckCard(course, result) {
     }
   }
 
-  const profile = (typeof universityProfiles !== 'undefined') ? (universityProfiles[course.university] ?? null) : null;
 
   // ── Requirement-data verification caveat ──────────────────────
   // If these grades/tests haven't been checked against a published
@@ -3756,32 +4287,13 @@ function buildCheckCard(course, result) {
     unconfirmed: `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M8 8a2 2 0 1 1 2.6 1.9c-.4.15-.6.4-.6.8v.8"/><path d="M10 14.5v.2"/></svg>`,
   };
   const graduationIcon = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l7-4 7 4-7 4-7-4z"/><path d="M7 10v3.5c0 1.5 1.3 2 3 2s3-.5 3-2V10"/><path d="M17 8v4"/></svg>`;
-  const chevronIcon    = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg>`;
-  const externalIcon   = `<svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4h5v5M15 4l-7 7M9 5H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-4"/></svg>`;
 
-  let uniInfoHtml = '';
-  if (profile) {
-    const tagLine  = profile.tagline         ? `<p class="card-uni-tagline">${esc(profile.tagline)}</p>` : '';
-    const noteLine = profile.internationalNote? `<p class="card-uni-note">${esc(profile.internationalNote)}</p>` : '';
-    const webLink  = profile.websiteUrl
-      ? `<a class="card-uni-link" href="${esc(profile.websiteUrl)}" target="_blank" rel="noopener noreferrer">${externalIcon} Visit website</a>`
-      : '';
-    const cityPart = profile.city ? ` · ${esc(profile.city)}` : '';
-    uniInfoHtml = `
-      <details class="card-uni-info">
-        <summary>About this university${cityPart} ${chevronIcon}</summary>
-        <div class="card-uni-info__body">${tagLine}${noteLine}${webLink}</div>
-      </details>`;
-  } else if (course.universityContext?.notes) {
-    uniInfoHtml = `
-      <details class="card-uni-info">
-        <summary>About this university ${chevronIcon}</summary>
-        <div class="card-uni-info__body"><p class="card-uni-info__notes">${esc(course.universityContext.notes)}</p></div>
-      </details>`;
-  }
+  // University info now lives inside the unified "More about this course"
+  // expander (cardMoreHtml) together with the field guide, structural notes
+  // and the official course page — one detail area instead of two.
 
   card.innerHTML = `
-    <div class="card-status card-status--${status}">${statusIcons[status] ?? ''} ${cfg.label}</div>
+    <div class="card-status card-status--${status}">${statusIcons[status] ?? ''} ${esc(statusLabel(status))}</div>
     <div class="card-header">
       <div class="card-title-group">
         <span class="card-flag" aria-hidden="true">${flag}</span>
@@ -3800,11 +4312,11 @@ function buildCheckCard(course, result) {
       <span class="card-meta-sep">·</span>
       <span class="card-cat-badge">${esc(catLabel)}</span>
     </div>
-    ${gradeStr ? `<div class="card-grades">${esc(sys === 'IB' ? `${gradeStr} IB points` : gradeStr)}</div>` : ''}
+    ${gradeStr ? gradeLineHtml(gradeStr, sys) : ''}
     ${(status === 'grey' && result.gradeGap) ? `<p class="card-grade-gap">⚠️ You have ${esc(result.gradeGap.have)}, course asks for ${esc(result.gradeGap.need)}</p>` : ''}
     ${status === 'unconfirmed' ? `<p class="card-grade-unconfirmed">◔ Your subjects fit, but this course doesn't publish a grade requirement we can compare with your predicted grade — so we can't confirm it's a match. Check the university's official page.</p>` : ''}
     ${fieldCoreHtml}
-    ${usAdmitHtml}
+    ${usTestLineHtml(course)}
     ${ibHlHtml}
     ${apWarningHtml}
     ${tests.length ? `
@@ -3815,9 +4327,10 @@ function buildCheckCard(course, result) {
     ${apRecsHtml}
     ${unverifiedHtml}
     ${footerHtml}
-    ${uniInfoHtml}
+    ${cardMoreHtml(course)}
   `;
   wireSaveButton(card);
+  wireCardMore(card);
   return card;
 }
 
@@ -3868,6 +4381,29 @@ function renderReverseResults() {
   section.appendChild(frag);
 }
 
+// One honest sentence comparing a course's required subjects with the
+// student's own ("you have Maths and Physics — this also wants Chemistry").
+// Reuses the existing tag matching (same semantics as classify) and the
+// shared requirementLabels display logic — no new engine. Empty string when
+// the student has no subjects saved or the course lists no requirements.
+function reverseCompareHtml(course) {
+  const tags = (state.selectedTags && state.selectedTags.size) ? state.selectedTags : tagsFromProfile();
+  if (!tags.size) return '';
+  const sys = state.reverseSystem;
+  const essential = (course.requirements?.essential ?? []).filter(t => tagExistsInSystem(t, sys));
+  if (!essential.length) return '';
+  const isQuant = isQuantitativeCategory(course.category);
+  const haveL = requirementLabels(essential.filter(t => tags.has(t)),  sys, isQuant);
+  const missL = requirementLabels(essential.filter(t => !tags.has(t)), sys, isQuant);
+  if (!missL.length) {
+    return `<p class="reverse-compare reverse-compare--met">✓ You have the required subjects: ${esc(haveL.join(', '))}.</p>`;
+  }
+  if (!haveL.length) {
+    return `<p class="reverse-compare">Requires ${esc(missL.join(', '))} — not in your current subjects.</p>`;
+  }
+  return `<p class="reverse-compare">You have ${esc(haveL.join(', '))} — this also wants ${esc(missL.join(', '))}.</p>`;
+}
+
 function buildReverseCard(course) {
   const sys     = state.reverseSystem;
   const flag    = COUNTRY_FLAGS[course.country] ?? '';
@@ -3909,7 +4445,8 @@ function buildReverseCard(course) {
           <div class="req-tags">${tagPills(row.tags)}</div>
         </div>`).join('')}
     </div>
-    ${course.notes ? `<p class="reverse-notes">${esc(course.notes)}</p>` : ''}
+    ${reverseCompareHtml(course)}
+    ${cardMoreHtml(course)}
     <div class="reverse-card-footer">
       ${saveButtonHtml(course.id)}
       <button class="copy-btn" type="button" aria-label="Copy requirements for ${esc(course.name)} to clipboard">
@@ -3919,6 +4456,7 @@ function buildReverseCard(course) {
   `;
 
   wireSaveButton(card);
+  wireCardMore(card);
 
   // Copy-to-clipboard handler — timerId is scoped per card instance.
   let copyTimerId = null;
@@ -4936,7 +5474,9 @@ function switchToPlanCombo(tags, systemKey, opts = {}) {
   onSubjectToggle();
 
   if (fields.length) {
-    // Filter Check Combination to the relevant field(s).
+    // Filter Check Combination to the relevant field(s) — an explicit lens
+    // choice, so it overrides the My Fields default for the session.
+    _categoryTouched = true;
     state.selectedCategories = new Set(fields);
     $$('#categoryPicker .category-chip').forEach(btn => {
       const active = fields.includes(btn.dataset.category);
@@ -5665,6 +6205,9 @@ function renderExploreContextBanner() {
 // Remove the field context and its category filter; show all courses again.
 function clearExploreField() {
   state.exploreField = null;
+  // "Clear field filter" = show everything: respect that for the session
+  // rather than snapping to the My Fields default.
+  _categoryTouched = true;
   state.selectedCategories.clear();
   $$('#categoryPicker .category-chip').forEach(b => {
     b.classList.remove('active');
@@ -5780,6 +6323,23 @@ function init() {
     logEvent('stage_proposal_manual', {});
     showStageSelect();
   });
+
+  // Onboarding subject capture (late years): continue commits the picker
+  // selection; "I'll do this later" never gates onboarding.
+  $('subjectOnboardContinue')?.addEventListener('click', () => finishSubjectOnboard(false));
+  $('subjectOnboardSkip')?.addEventListener('click', () => finishSubjectOnboard(true));
+
+  // Compact picker view: Edit expands (delegated — the summary row re-renders),
+  // Done collapses. Session preference only, never persisted.
+  $('subjectSummaryRow')?.addEventListener('click', e => {
+    if (e.target.closest('#subjectSummaryEdit')) { state.pickerCollapsed = false; syncPickerCollapse(); }
+  });
+  $('collapsePickerBtn')?.addEventListener('click', () => { state.pickerCollapsed = true; syncPickerCollapse(); });
+
+  // profile.subjects fan-out: every subject-projecting surface re-renders
+  // when the saved subjects change (seeded so init doesn't double-render).
+  _lastSubjectsSig = subjectsSig();
+  AltioraState.subscribe(syncSubjectSurfaces);
 
   // Click-away and Escape close the stage menu
   document.addEventListener('click', closeStageMenu);

@@ -10,7 +10,7 @@
   <!-- Confident Editorial type — loaded via <link> (reliable) not @import -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
   <link rel="stylesheet" href="tokens.css?v=9" />
-  <link rel="stylesheet" href="styles.css?v=53" />
+<link rel="stylesheet" href="styles.css?v=59" />
   <script defer data-domain="altiora.app" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
@@ -141,6 +141,25 @@
       </section>
 
       <!-- ═══════════════════════════════════════════════════════
+           Onboarding subject capture — late years only (subjects
+           are set). The LIVE Check Combination picker is moved into
+           #subjectOnboardSlot for this step and moved back after —
+           a placement of the existing component, not a copy.
+           Grades are deliberately NOT asked here.
+           ═══════════════════════════════════════════════════════ -->
+      <section id="subjectOnboard" class="stage-select hidden" aria-labelledby="subjectOnboardHeading">
+        <h1 id="subjectOnboardHeading" class="stage-select__heading">Which subjects are you taking?</h1>
+        <p class="stage-select__sub">Your subjects are set — tell us what you're taking and every tool will already know.</p>
+        <div id="subjectOnboardSlot" class="subject-onboard__slot">
+          <!-- #subjectPickerSection moves here (showSubjectOnboard) -->
+        </div>
+        <div class="stage-proposal__actions subject-onboard__actions">
+          <button id="subjectOnboardContinue" class="fo-btn fo-btn--primary" type="button">These are my subjects →</button>
+          <button id="subjectOnboardSkip" class="subject-onboard__skip" type="button">I'll do this later</button>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
            Workspace — shown once a stage is chosen.
            The stage bar (indicator + tool sub-nav) replaces the old
            horizontal tab bar.
@@ -227,7 +246,7 @@
           <!-- populated by JS (renderExploreContextBanner) -->
         </div>
 
-        <p class="panel-intro">
+        <p id="checkIntro" class="panel-intro">
           Pick your subjects and instantly see which courses are open, possible, or out of reach.
           Your qualification system is set from your profile — change it anytime from the bar above.
         </p>
@@ -239,10 +258,16 @@
 
         <!-- Subject picker — hidden until a system is chosen -->
         <div id="subjectPickerSection" class="subject-picker-section hidden" aria-live="polite">
+          <!-- Compact summary — shown instead of the full picker when saved
+               subjects are pre-loaded; Edit expands the picker below. -->
+          <div id="subjectSummaryRow" class="subject-summary hidden">
+            <!-- rendered by JS (syncPickerCollapse) -->
+          </div>
           <div class="subject-picker-header">
             <span class="control-label">Your subjects</span>
             <span id="subjectCountBadge" class="count-badge">none selected</span>
             <button type="button" id="clearSubjectsBtn" class="clear-subjects-btn hidden" aria-label="Clear all selected subjects">Clear all</button>
+            <button type="button" id="collapsePickerBtn" class="clear-subjects-btn hidden" aria-label="Collapse the subject picker">Done</button>
           </div>
           <div class="subject-search-bar">
             <input
@@ -262,7 +287,7 @@
           >
             <!-- chip labels inserted by JS -->
           </div>
-          <p class="picker-hint">Select 3–5 subjects for best results. Results update instantly.</p>
+          <p id="subjectPickerHint" class="picker-hint">Select 3–5 subjects for best results. Results update instantly.</p>
         </div>
 
         <!-- Empty state — shown when system is chosen but no subjects selected yet -->
@@ -274,7 +299,8 @@
         <div id="categoryPickerSection" class="category-picker-section hidden" aria-live="polite">
           <div class="subject-picker-header">
             <span class="control-label">What are you interested in studying?</span>
-            <span class="picker-hint-inline">Optional — leave blank to see all courses</span>
+            <span id="categoryHintDefault" class="picker-hint-inline">Optional — leave blank to see all courses</span>
+            <span id="categoryDefaultNote" class="picker-hint-inline category-default-note hidden">Showing your kept fields — clear to see everything.</span>
           </div>
           <div
             id="categoryPicker"
@@ -340,7 +366,7 @@
            ═══════════════════════════════════════════════════════ -->
       <div id="panel-reverse" class="panel hidden" role="tabpanel">
 
-        <p class="panel-intro">
+        <p id="reverseIntro" class="panel-intro">
           Search for a degree and see exactly which subjects you need, translated
           into your own qualification system.
         </p>
@@ -468,13 +494,12 @@
   <!-- Data layer must be loaded before main.js -->
   <script src="data/qualificationMappings.js?v=3"></script>
   <script src="data/courseRequirements.js?v=18"></script>
-  <script src="data/university-profiles.js?v=1"></script>
+  <script src="data/university-profiles.js?v=2"></script>
   <script src="data/admissionTestInfo.js?v=1"></script>
   <script src="data/fieldProfiles.js?v=1"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
   <script src="state.js?v=8"></script>
-  <script src="assistant.js?v=1"></script>
-  <script src="main.js?v=63"></script>
+<script src="main.js?v=69"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);
