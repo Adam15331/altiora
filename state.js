@@ -39,7 +39,7 @@ const AltioraState = (() => {
         predictedGrades:     null,    // grade string or IB number
         interests:           [],      // category strings
         candidateFields:     [],      // category ids the student is considering (max 3, order = priority)
-        achievements:        [],      // student's own log of activities/awards/certificates — see addAchievement()
+        achievements:        [],      // the student's STORY BANK: entries with reflections + optional field tags — see addAchievement()
         yearGroup:            null,   // raw year label in the student's own system, e.g. "Year 12", "Grade 11", "Form 5"
         yearsUntilApplication: null,  // normalised scale driving ALL logic: 3 (3+ years out) | 2 | 1 | 0 (application year)
         yearSetAt:            null,   // ISO date the year was last set — for future academic-year rollover detection
@@ -89,6 +89,17 @@ const AltioraState = (() => {
     // Old saves have no achievements key (or, defensively, a corrupt one) —
     // normalise to a clean array so every caller can rely on the shape.
     if (!Array.isArray(profile.achievements)) profile.achievements = [];
+    // Additive story-bank fields: entries saved before the story rebuild have
+    // no reflection prompts and no field tags. Backfill them so every entry
+    // has the full shape (empty reflections, untagged = General). Pre-existing
+    // data is preserved untouched.
+    profile.achievements = profile.achievements
+      .filter(a => a && typeof a === 'object')
+      .map(a => ({
+        whatIDid: '', whatItTaught: '', whyItMattered: '',
+        ...a,
+        fields: Array.isArray(a.fields) ? a.fields.filter(f => typeof f === 'string') : [],
+      }));
     return {
       profile,
       shortlist: Array.isArray(parsed.shortlist) ? parsed.shortlist.slice() : base.shortlist,
@@ -239,7 +250,11 @@ const AltioraState = (() => {
     { id: 'other',        label: 'Other' },
   ];
   const _ACHIEVEMENT_TYPE_IDS = new Set(ACHIEVEMENT_TYPES.map(t => t.id));
-  const _ACHIEVEMENT_FIELDS   = ['type', 'title', 'organisation', 'level', 'date', 'description'];
+  // Scalar (string) fields. Basic metadata first, then the three counsel-style
+  // reflection prompts that turn a record into a story. `fields` (the field
+  // tags) is an array and handled separately below.
+  const _ACHIEVEMENT_FIELDS   = ['type', 'title', 'organisation', 'level', 'date', 'description',
+                                 'whatIDid', 'whatItTaught', 'whyItMattered'];
 
   function _achievementsRef() {
     if (!Array.isArray(_state.profile.achievements)) _state.profile.achievements = [];
@@ -255,6 +270,19 @@ const AltioraState = (() => {
     return target;
   }
 
+  // Field tags: an array of candidate-field category ids. Deduped, coerced to
+  // non-empty strings. Kept even when a field is later unpinned — the caller
+  // decides how to display an inactive tag; the data is never silently dropped.
+  function _sanitizeAchievementFieldTags(source) {
+    if (!Array.isArray(source)) return [];
+    const out = [];
+    source.forEach(f => {
+      const s = (f == null) ? '' : String(f).trim();
+      if (s && !out.includes(s)) out.push(s);
+    });
+    return out;
+  }
+
   function getAchievements() {
     return _clone(_achievementsRef());
   }
@@ -265,8 +293,10 @@ const AltioraState = (() => {
     if (!entry || typeof entry !== 'object') return null;
     const clean = _sanitizeAchievementFields(entry, {
       type: '', title: '', organisation: '', level: '', date: '', description: '',
+      whatIDid: '', whatItTaught: '', whyItMattered: '',
     });
     if (!_ACHIEVEMENT_TYPE_IDS.has(clean.type) || !clean.title) return null;
+    clean.fields = _sanitizeAchievementFieldTags(entry.fields);
     clean.id = 'ach_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
     _achievementsRef().push(clean);
     _commit();
@@ -281,6 +311,7 @@ const AltioraState = (() => {
     if (!entry) return false;
     const merged = _sanitizeAchievementFields(partial, { ...entry });
     if (!_ACHIEVEMENT_TYPE_IDS.has(merged.type) || !merged.title) return false;
+    if ('fields' in partial) merged.fields = _sanitizeAchievementFieldTags(partial.fields);
     Object.assign(entry, merged);
     _commit();
     return true;

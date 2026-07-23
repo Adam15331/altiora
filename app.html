@@ -10,7 +10,7 @@
   <!-- Confident Editorial type — loaded via <link> (reliable) not @import -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
   <link rel="stylesheet" href="tokens.css?v=9" />
-<link rel="stylesheet" href="styles.css?v=59" />
+  <link rel="stylesheet" href="styles.css?v=60" />
   <script defer data-domain="altiora.app" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
@@ -475,6 +475,13 @@
         <!-- rendered by JS (renderApplyingPanel) -->
       </div><!-- /panel-applying -->
 
+      <!-- ═══════════════════════════════════════════════════════
+           Panel — Your story (the story bank; reachable cross-stage)
+           ═══════════════════════════════════════════════════════ -->
+      <div id="panel-story" class="panel hidden" role="tabpanel" aria-label="Your story">
+        <!-- rendered by JS (renderStoryPanel) -->
+      </div><!-- /panel-story -->
+
       </div><!-- /workspace -->
 
     </div><!-- /content -->
@@ -498,8 +505,8 @@
   <script src="data/admissionTestInfo.js?v=1"></script>
   <script src="data/fieldProfiles.js?v=1"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
-  <script src="state.js?v=8"></script>
-<script src="main.js?v=69"></script>
+  <script src="state.js?v=10"></script>
+  <script src="main.js?v=70"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);
