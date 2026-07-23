@@ -776,6 +776,22 @@ main     { flex: 1; padding: var(--pad); }
   color: var(--color-text-tertiary);
   margin-bottom: var(--space-1);
 }
+/* Late-year explorers: how many courses the student's existing subjects open
+   in this field. A quiet, honest signal — accented when the fit is real, and
+   deliberately muted (never alarming) when coverage is thin. */
+.field-card__coverage {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--field-accent-bg, var(--color-bg));
+}
+.field-card__coverage--thin {
+  background: var(--color-bg);
+  color: var(--color-text-secondary);
+}
 .field-card__btn {
   margin-top: auto;
   align-self: flex-start;

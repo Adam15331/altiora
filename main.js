@@ -1223,6 +1223,7 @@ function switchMode(mode) {
     if (state.searchQuery) renderReverseResults();
   }
   if (mode === 'strengths') {
+    renderStrengthsIntro();
     if ($('strengthsGrid').children.length === 0) renderStrengthsGrid();
     // Re-render the field-card results on (re)entry so their KEEP buttons
     // reflect the CURRENT candidateFields (e.g. a field kept from the profile
@@ -1259,7 +1260,7 @@ function switchMode(mode) {
  * ═══════════════════════════════════════════════════════════════ */
 
 const STAGES = {
-  exploring: { name: 'Exploring options',          primary: 'strengths', secondary: ['plan'] },
+  exploring: { name: 'Exploring fields',            primary: 'strengths', secondary: ['plan'] },
   choosing:  { name: 'Choosing my subjects',       primary: 'plan',      secondary: ['check'] },
   building:  { name: 'Building my university list', primary: 'check',     secondary: ['reverse'] },
   applying:  { name: 'Applying',                    primary: 'applying',  secondary: [] },
@@ -1347,7 +1348,7 @@ function studentYears() {
 // Why we propose that stage — visible reasoning, in the student's own terms.
 function stageProposalReason(yearLabel, stage) {
   const REASONS = {
-    exploring: `You're in ${yearLabel}, so we'll start you at <strong>Exploring</strong> — there's real time before any big decisions, so this is the moment to discover what actually fits you.`,
+    exploring: `You're in ${yearLabel}, so we'll start you at <strong>Exploring fields</strong> — there's real time before any big decisions, so this is the moment to discover which fields and degrees actually fit you.`,
     choosing:  `You're in ${yearLabel}, so we'll start you at <strong>Choosing your subjects</strong> — your subject choices are the live decision right now, and they shape which doors stay open later.`,
     building:  `You're in ${yearLabel}, so we'll start you at <strong>Building your university list</strong> — your subjects are set, and now it's about where they can take you.`,
     applying:  `You're in ${yearLabel}, so we'll start you at <strong>Applying</strong> — this is your application year, so deadlines, admission tests, and applications are the focus.`,
@@ -1763,7 +1764,9 @@ function rerenderCurrentView() {
     case 'field-overview': if (state.exploreField?.fieldId) renderFieldOverview(state.exploreField.fieldId); break;
     case 'home':     renderWorkspaceHome(); break;
     case 'applying': renderApplyingPanel(); break;
-    // strengths: system-agnostic grid — nothing to re-render
+    // strengths: the grid is system-agnostic, but the intro copy and the
+    // per-field subject-coverage line are year/subject/system-aware.
+    case 'strengths': renderStrengthsIntro(); renderStrengthsResults(); break;
   }
 }
 
@@ -1789,7 +1792,14 @@ function renderStageToolNav(stage) {
   const nav = $('stageToolNav');
   if (!nav) return;
 
-  const tools = [cfg.primary, ...cfg.secondary];
+  let tools = [cfg.primary, ...cfg.secondary];
+  // Late-year explorers (application year or the one before) already have
+  // their subjects set — inviting them to "plan subjects" from discovery is
+  // misleading. Drop the Subject Planner from the Exploring nav for them; the
+  // stage still proposes, never imprisons, so the tool remains reachable from
+  // other stages and the home nudge.
+  const _yrs = studentYears();
+  if (stage === 'exploring' && _yrs != null && _yrs <= 1) tools = tools.filter(t => t !== 'plan');
   nav.innerHTML = tools.map((mode, i) => {
     const cls = `stage-tool${i === 0 ? ' stage-tool--primary' : ''}`;
     return `<button class="${cls}" data-mode="${mode}">${esc(MODE_LABELS[mode] || mode)}</button>`;
@@ -3132,7 +3142,7 @@ function renderWorkspaceHome() {
   // ── Journey strip: you are here. Earlier stages the student never did
   // show as quietly skipped (dimmed), never as failures.
   const curIdx = STAGE_ORDER.indexOf(stage);
-  const STRIP_LABELS = { exploring: 'Exploring', choosing: 'Choosing', building: 'Building', applying: 'Applying' };
+  const STRIP_LABELS = { exploring: 'Exploring fields', choosing: 'Choosing', building: 'Building', applying: 'Applying' };
   const stripHtml = STAGE_ORDER.map((s, i) => {
     let cls, mark;
     if (i === curIdx)                      { cls = 'current'; mark = ' ●'; }
@@ -5604,6 +5614,19 @@ const _selectedStrengths = new Set();
 let _overviewFrom = 'strengths';
 let _overviewStrengths = [];
 
+// The Strengths panel intro adapts to the year. For students two or more
+// years out it's open-ended discovery; for late-year students (subjects
+// already set) it's decision-oriented — the open question is the field, and
+// we lead with connecting fields to the subjects they already have.
+function renderStrengthsIntro() {
+  const intro = document.querySelector('#panel-strengths .panel-intro');
+  if (!intro) return;
+  const yrs = studentYears();
+  intro.textContent = (yrs != null && yrs <= 1)
+    ? "Still deciding what to apply for? Your subjects are set — tell us what you're good at, and we'll show you the fields that fit and how many courses your subjects already open in each."
+    : "Tell us what you're good at — we'll show you fields of study that match your natural abilities.";
+}
+
 function renderStrengthsGrid() {
   const grid = $('strengthsGrid');
   if (!grid) return;
@@ -5654,7 +5677,18 @@ function renderStrengthsResults() {
 
   logEvent('strengths_fields', { strengths: [..._selectedStrengths], field_count: fieldIds.length });
 
-  resultsDiv.innerHTML = `<div class="field-cards">${fieldIds.map(buildFieldCardHtml).join('')}</div>`;
+  // Late-year framing: a student one year out or in their application year has
+  // their subjects set — the open question is the FIELD, not the subjects. On
+  // each card, connect the field to their EXISTING subjects (how many courses
+  // those subjects already open), reusing the Check-Combination classifier.
+  const _yrs = studentYears();
+  const lateYear = _yrs != null && _yrs <= 1;
+  const studentTags = tagsFromProfile();
+  const showCoverage = lateYear && studentTags.size > 0;
+
+  resultsDiv.innerHTML = `<div class="field-cards">${
+    fieldIds.map(id => buildFieldCardHtml(id, { showCoverage, studentTags })).join('')
+  }</div>`;
   section.classList.remove('hidden');
 
   // "Learn more" → the deep field profile (understand the field).
@@ -5679,11 +5713,58 @@ function renderStrengthsResults() {
   });
 }
 
-function buildFieldCardHtml(fieldId) {
+// How many courses in a field the student's SAVED subjects already open —
+// reusing the Check-Combination classifier, no new engine. A course "opens"
+// when the subjects clear its match (green/amber); grades are deliberately
+// out of scope here (this answers "do my subjects fit the field?"). When
+// coverage is thin, name the subject most of the remaining courses require,
+// so a poor fit is stated honestly rather than hidden.
+function fieldSubjectCoverage(category, studentTags, systemKey) {
+  const pool = (typeof courses !== 'undefined' ? courses : []).filter(c => c.category === category);
+  if (!pool.length) return null;
+  let open = 0;
+  const missCount = new Map();
+  pool.forEach(course => {
+    const r = classify(course, studentTags);
+    if (r.status === 'green' || r.status === 'amber') { open++; return; }
+    (course.requirements?.essential ?? [])
+      .filter(t => !studentTags.has(t))
+      .forEach(t => missCount.set(t, (missCount.get(t) || 0) + 1));
+  });
+  let topMissing = null;
+  if (missCount.size) {
+    const [tag] = [...missCount.entries()].sort((a, b) => b[1] - a[1])[0];
+    topMissing = tagToLocal(tag, systemKey);
+  }
+  return { open, total: pool.length, topMissing };
+}
+
+// The honest one-liner shown under a field card for late-year explorers.
+function fieldCoverageLineHtml(cov) {
+  if (!cov) return '';
+  const { open, total, topMissing } = cov;
+  const frac = total ? open / total : 0;
+  const gap  = topMissing ? ` — most need ${esc(topMissing)}` : '';
+  let text, mod;
+  if (open === 0) {
+    text = `Your subjects open few courses here${gap}`; mod = ' field-card__coverage--thin';
+  } else if (open <= 2 || frac < 0.2) {
+    text = `Your subjects open ${open} course${open === 1 ? '' : 's'} here — few${topMissing ? `, and most others need ${esc(topMissing)}` : ''}`;
+    mod = ' field-card__coverage--thin';
+  } else {
+    text = `Your subjects open ${open} course${open === 1 ? '' : 's'} in this field`; mod = '';
+  }
+  return `<p class="field-card__coverage${mod}"><span class="field-card__label">From your subjects</span>${text}.</p>`;
+}
+
+function buildFieldCardHtml(fieldId, opts = {}) {
   const f = STRENGTH_FIELDS[fieldId];
   if (!f) return '';
   const pinned = (typeof AltioraState !== 'undefined')
     && AltioraState.getCandidateFields().includes(f.category);
+  const coverageHtml = opts.showCoverage
+    ? fieldCoverageLineHtml(fieldSubjectCoverage(f.category, opts.studentTags, AltioraState.getProfile().qualificationSystem))
+    : '';
   return `
     <article class="field-card" data-category="${esc(f.category)}"
       style="--field-accent: var(--color-cat-${f.category}); --field-accent-bg: var(--color-cat-${f.category}-bg);">
@@ -5700,6 +5781,7 @@ function buildFieldCardHtml(fieldId) {
       <p class="field-card__what">${esc(f.what)}</p>
       <p class="field-card__line"><span class="field-card__label">Where it leads</span>${esc(f.leads)}</p>
       <p class="field-card__line"><span class="field-card__label">Typically needs</span>${esc(f.needs)}</p>
+      ${coverageHtml}
       <div class="field-card__actions">
         <button class="field-card__btn" type="button" data-learn-field="${esc(fieldId)}">Learn more →</button>
         <button class="field-card__btn" type="button" data-courses-field="${esc(fieldId)}">Explore courses →</button>
