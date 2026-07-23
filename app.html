@@ -10,7 +10,7 @@
   <!-- Confident Editorial type — loaded via <link> (reliable) not @import -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
   <link rel="stylesheet" href="tokens.css?v=9" />
-  <link rel="stylesheet" href="styles.css?v=52" />
+  <link rel="stylesheet" href="styles.css?v=53" />
   <script defer data-domain="altiora.app" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
@@ -47,8 +47,8 @@
                 <circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>
               </svg>
             </span>
-            <span class="stage-card__title">I'm exploring</span>
-            <span class="stage-card__desc">I don't know what I want to study yet. Help me discover what fits me.</span>
+            <span class="stage-card__title">I'm exploring fields</span>
+            <span class="stage-card__desc">I'm not sure which field or degree to apply for yet. Help me discover what fits me.</span>
           </button>
 
           <button class="stage-card" data-stage="choosing" role="listitem">
@@ -154,7 +154,7 @@
               <span class="stage-indicator__caret" aria-hidden="true">▾</span>
             </button>
             <div id="stageMenu" class="stage-menu hidden" role="menu" aria-label="Switch stage">
-              <button class="stage-menu__item" data-stage="exploring"  role="menuitem">Exploring options</button>
+              <button class="stage-menu__item" data-stage="exploring"  role="menuitem">Exploring fields</button>
               <button class="stage-menu__item" data-stage="choosing"  role="menuitem">Choosing my subjects</button>
               <button class="stage-menu__item" data-stage="building"  role="menuitem">Building my university list</button>
               <button class="stage-menu__item" data-stage="applying"  role="menuitem">Applying</button>
@@ -474,7 +474,7 @@
   <!-- State layer — single source of truth for the journey/stage flow -->
   <script src="state.js?v=8"></script>
   <script src="assistant.js?v=1"></script>
-  <script src="main.js?v=62"></script>
+  <script src="main.js?v=63"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);
