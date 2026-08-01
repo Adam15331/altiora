@@ -637,9 +637,17 @@ function updateCheckFraming() {
   const retro = planIsRetro();   // the same normalised-year rule as the planner
   const intro = $('checkIntro');
   if (intro) {
-    intro.textContent = retro
-      ? 'Here’s what your subjects open. Add your predicted grades to see which courses are strong matches.'
-      : 'Pick your subjects and instantly see which courses are open, possible, or out of reach. Your qualification system is set from your profile — change it anytime from the bar above.';
+    // Grades already set → stop asking for them; report what they bought,
+    // using the SAME live pipeline count Check renders with (subjectsFitCount).
+    const gradesSet = !!state.predictedGrade && state.selectedSubjects.length > 0;
+    if (gradesSet) {
+      const n = subjectsFitCount();
+      intro.textContent = `Here’s what your subjects open — ${n} strong match${n === 1 ? '' : 'es'} at your predicted grades.`;
+    } else {
+      intro.textContent = retro
+        ? 'Here’s what your subjects open. Add your predicted grades to see which courses are strong matches.'
+        : 'Pick your subjects and instantly see which courses are open, possible, or out of reach. Your qualification system is set from your profile — change it anytime from the bar above.';
+    }
   }
   // "Select 3–5 subjects" is choosing language — it only shows when the
   // picker is genuinely being used to choose (2+ years out, or nothing saved
@@ -964,12 +972,12 @@ function syncGradeRows() {
     rows.innerHTML = `<p class="grade-rows__empty">Pick your subjects above — each gets its own predicted grade.</p>`;
   } else {
     rows.innerHTML = state.selectedSubjects.map(s => `
-      <label class="grade-row">
-        <span class="grade-row__subject">${esc(s)}</span>
-        <span class="select-wrap"><select class="grade-select grade-select--compact" data-grade-subject="${esc(s)}">
+      <label class="grade-pair">
+        <span class="grade-pair__subject">${esc(s)}</span>
+        <select class="grade-inline-select" data-grade-subject="${esc(s)}" aria-label="Predicted grade for ${esc(s)}">
           <option value="">—</option>
           ${scale.map(g => `<option value="${esc(g)}"${_gradeMap[s] === g ? ' selected' : ''}>${esc(g)}</option>`).join('')}
-        </select></span>
+        </select>
       </label>`).join('');
   }
   commitGradeMap({ render: false });
@@ -992,11 +1000,27 @@ function buildGradeInput(systemKey) {
     ? `<p class="grade-conversion-hint">${esc(GRADE_CONVERSION_HINTS[systemKey])}</p>`
     : '';
 
+  // ONE merged section: the grade rows already name every subject, so this
+  // header owns both concepts and carries the Edit affordance (opening the
+  // same picker as before) — no separate "Your subjects" row repeating them.
+  const isLetter = LETTER_GRADE_SYSTEMS.has(systemKey);
+  const setAllHtml = isLetter ? `
+        <label class="grade-setall">
+          <span class="grade-setall__label">Set all</span>
+          <select id="gradeSetAll" class="grade-inline-select">
+            <option value="">—</option>
+            ${GRADE_SCALES[systemKey].map(g => `<option value="${esc(g)}">${esc(g)}</option>`).join('')}
+          </select>
+        </label>` : '';
   const header = `
       <div class="grade-input-header">
-        <span class="control-label">Your predicted grades</span>
+        <span class="control-label">${isLetter ? 'Your subjects &amp; predicted grades' : 'Your predicted grades'}</span>
         <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
-        <span class="picker-hint-inline">${hint}</span>
+        <span class="picker-hint-inline grade-input-hint">${hint}</span>
+        <span class="grade-input-header__actions">
+          ${setAllHtml}
+          <button type="button" id="gradeEditSubjects" class="subject-summary__edit" aria-label="Edit your subjects">Edit subjects</button>
+        </span>
       </div>`;
   // Leaving the input blank is itself "skip" → subject-only matching.
   const footer = `
@@ -1011,26 +1035,7 @@ function buildGradeInput(systemKey) {
     // Per-subject predictions: offers in these systems are grade PROFILES
     // ("A*AA"), so each selected subject gets its own compact select. The
     // "Set all to" quick action keeps the uniform case one click.
-    const rowLabel = {
-      UK_A_Level: 'Predicted grade for each of your A-Level subjects',
-      SG_A_Level: 'Predicted grade for each of your subjects',
-      HK_DSE:     'Predicted level for each of your subjects',
-    }[systemKey];
-    const scale = GRADE_SCALES[systemKey];
-    bodyHtml = `
-      <div class="grade-input-body">
-        <div class="grade-rows-head">
-          <span class="grade-option-label">${esc(rowLabel)}</span>
-          <label class="grade-setall">
-            <span class="grade-setall__label">Set all to</span>
-            <span class="select-wrap"><select id="gradeSetAll" class="grade-select grade-select--compact">
-              <option value="">—</option>
-              ${scale.map(g => `<option value="${esc(g)}">${esc(g)}</option>`).join('')}
-            </select></span>
-          </label>
-        </div>
-        <div id="gradeRows" class="grade-rows"></div>
-      </div>`;
+    bodyHtml = `<div id="gradeRows" class="grade-rows"></div>`;
     wire = () => {
       $('gradeSetAll').addEventListener('change', e => {
         const g = e.target.value;
@@ -2144,6 +2149,47 @@ function achievementTypeLabel(id) {
   return t ? t.label : id;
 }
 
+// Concrete micro-examples for the three story steps, per entry type — a
+// blank "what did it teach you?" box causes form paralysis; a relatable
+// example under each input kills it. s = situation, d = what you did,
+// t = what it showed.
+const STORY_STEP_EXAMPLES = {
+  award:        { s: 'Entered the UK Physics Challenge after my teacher suggested it',
+                  d: 'Worked through past papers every Friday lunchtime for a term',
+                  t: 'I enjoy problems that look impossible at first' },
+  certificate:  { s: 'Wanted a structured goal for piano after Grade 5 started feeling easy',
+                  d: 'Practised 40 minutes a day and picked pieces outside my comfort zone',
+                  t: 'I can stick with slow, unglamorous progress' },
+  competition:  { s: "Our robotics team's sensor kept misreading distance in bright light",
+                  d: 'Rewrote the calibration code and tested it in different rooms over two weekends',
+                  t: "I like debugging more than building from scratch — and I don't stop until I find the cause" },
+  leadership:   { s: 'Our student council had ideas but meetings kept going in circles',
+                  d: 'Started writing a one-page agenda and chasing actions between meetings',
+                  t: "I'd rather organise quietly than talk loudly — and it works" },
+  volunteering: { s: 'The care home near school needed weekend visitors',
+                  d: 'Visited every Saturday and ran a music afternoon once a month',
+                  t: 'Showing up consistently counts for more than grand gestures' },
+  work:         { s: 'A local startup needed help cleaning up their customer data',
+                  d: 'Built a small spreadsheet tool that cut a weekly job from hours to minutes',
+                  t: 'I like finding the boring bottleneck nobody else wants to touch' },
+  activity:     { s: 'Signed up for DofE Silver with two friends',
+                  d: "Planned the expedition route and carried the group's navigation",
+                  t: 'I stay calm when plans fall apart in the rain' },
+  other:        { s: 'Taught myself video editing for a family project',
+                  d: 'Cut a 20-minute film from six hours of footage over a holiday',
+                  t: "I lose track of time when I'm making something" },
+};
+
+// Reflect the selected TYPE's examples under the three step inputs, so a
+// DofE student, a club captain, and a coder each see a relatable line.
+function updateStoryStepExamples() {
+  const type = $('achvType')?.value;
+  const ex = STORY_STEP_EXAMPLES[type] ?? STORY_STEP_EXAMPLES.other;
+  document.querySelectorAll('[data-step-eg]').forEach(el => {
+    el.textContent = `e.g. “${ex[el.dataset.stepEg]}”`;
+  });
+}
+
 // The pinned candidate fields that resolve to a known category — the single
 // source of truth for the story tag picker and the per-field story views.
 function activeCandidateFields() {
@@ -2196,18 +2242,21 @@ function achievementsSectionHtml() {
             placeholder="A sentence or two, if it helps"></textarea>
         </label>
         <div class="story__prompts">
-          <p class="story__prompts-lead">Now the part that actually helps later — one line each is plenty, skip any that don't fit.</p>
-          <label class="achv__label achv__label--prompt" for="achvWhatIDid">What did you actually do?
-            <textarea id="achvWhatIDid" class="achv__input achv__textarea" rows="2" maxlength="400"
-              placeholder="Concrete — one or two lines"></textarea>
+          <p class="story__prompts-lead">Three tiny steps — one line each is plenty, and every step is optional.</p>
+          <label class="achv__label achv__label--prompt" for="achvSituation">
+            <span class="story-step__head"><span class="story-step__num">1 · The situation</span>What challenge, project, or question did you take on?</span>
+            <input id="achvSituation" class="achv__input" type="text" maxlength="400" placeholder="One line is plenty">
+            <span class="story-step__eg" data-step-eg="s"></span>
           </label>
-          <label class="achv__label achv__label--prompt" for="achvWhatItTaught">What did it teach you, or show about you?
-            <textarea id="achvWhatItTaught" class="achv__input achv__textarea" rows="2" maxlength="400"
-              placeholder="A skill, a trait, a lesson"></textarea>
+          <label class="achv__label achv__label--prompt" for="achvWhatIDid">
+            <span class="story-step__head"><span class="story-step__num">2 · What you did</span>What did you personally do about it?</span>
+            <input id="achvWhatIDid" class="achv__input" type="text" maxlength="400" placeholder="One line is plenty">
+            <span class="story-step__eg" data-step-eg="d"></span>
           </label>
-          <label class="achv__label achv__label--prompt" for="achvWhyItMattered">Why did it matter to you? <span class="achv__opt">(optional)</span>
-            <textarea id="achvWhyItMattered" class="achv__input achv__textarea" rows="2" maxlength="400"
-              placeholder="What made it worth doing"></textarea>
+          <label class="achv__label achv__label--prompt" for="achvWhatItTaught">
+            <span class="story-step__head"><span class="story-step__num">3 · What it showed</span>What did it teach you, or show about you?</span>
+            <input id="achvWhatItTaught" class="achv__input" type="text" maxlength="400" placeholder="One line is plenty">
+            <span class="story-step__eg" data-step-eg="t"></span>
           </label>
         </div>
         <div id="achvFields" class="story__tagpicker"></div>
@@ -2233,32 +2282,40 @@ function storyApplyingCardHtml() {
     </section>`;
 }
 
-// One entry card, with its reflections shown as the substance of the story.
+// Compose the three steps (plus any legacy "why it mattered" text) into ONE
+// readable synthesis block — the personal-statement raw material, not a
+// labelled form dump. Sentences flow: situation → what you did → what it
+// showed.
+function storySynthesis(a) {
+  const dot = t => (/[.!?…”"]$/.test(t.trim()) ? t.trim() : t.trim() + '.');
+  return [a.situation, a.whatIDid, a.whatItTaught, a.whyItMattered]
+    .filter(v => v && v.trim())
+    .map(dot)
+    .join(' ');
+}
+
+// One entry: a collapsible card. Open by default so the synthesis is
+// visible at a glance; the summary row collapses it to just the title.
 function storyCardHtml(a) {
   const meta = [a.organisation, a.level, a.date].filter(Boolean).map(esc).join(' · ');
   const typeLabel = achievementTypeLabel(a.type);
-  const reflections = [
-    ['What I did',        a.whatIDid],
-    ['What it taught me', a.whatItTaught],
-    ['Why it mattered',   a.whyItMattered],
-  ].filter(([, v]) => v);
-  const refHtml = reflections.length ? `<div class="story-card__reflections">${
-    reflections.map(([label, val]) =>
-      `<p class="story-card__reflection"><span class="story-card__rlabel">${label}</span>${esc(val)}</p>`).join('')
-  }</div>` : '';
+  const synthesis = storySynthesis(a);
   return `
-    <div class="achv-card" data-achv-id="${esc(a.id)}">
-      <div class="achv-card__main">
-        <div class="achv-card__title">${esc(a.title)}</div>
-        <div class="achv-card__meta">${esc(typeLabel)}${meta ? ` · ${meta}` : ''}</div>
+    <details class="achv-card story-card" data-achv-id="${esc(a.id)}" open>
+      <summary class="story-card__summary">
+        <span class="achv-card__title">${esc(a.title)}</span>
+        <span class="achv-card__meta">${esc(typeLabel)}${meta ? ` · ${meta}` : ''}</span>
+        <span class="story-card__caret" aria-hidden="true">▾</span>
+      </summary>
+      <div class="story-card__body">
+        ${synthesis ? `<p class="story-card__synthesis">${esc(synthesis)}</p>` : ''}
         ${a.description ? `<p class="achv-card__desc">${esc(a.description)}</p>` : ''}
-        ${refHtml}
+        <div class="achv-card__actions">
+          <button type="button" class="achv-card__btn" data-achv-edit="${esc(a.id)}">Edit</button>
+          <button type="button" class="achv-card__btn achv-card__btn--del" data-achv-del="${esc(a.id)}">Delete</button>
+        </div>
       </div>
-      <div class="achv-card__actions">
-        <button type="button" class="achv-card__btn" data-achv-edit="${esc(a.id)}">Edit</button>
-        <button type="button" class="achv-card__btn achv-card__btn--del" data-achv-del="${esc(a.id)}">Delete</button>
-      </div>
-    </div>`;
+    </details>`;
 }
 
 // One calm, honest counsel line per pinned field, driven ONLY by the
@@ -2418,9 +2475,10 @@ function openAchievementForm(entry) {
   $('achvLevel').value = entry?.level || '';
   $('achvDate').value  = entry?.date || '';
   $('achvDesc').value  = entry?.description || '';
-  $('achvWhatIDid').value      = entry?.whatIDid || '';
-  $('achvWhatItTaught').value  = entry?.whatItTaught || '';
-  $('achvWhyItMattered').value = entry?.whyItMattered || '';
+  $('achvSituation').value    = entry?.situation || '';
+  $('achvWhatIDid').value     = entry?.whatIDid || '';
+  $('achvWhatItTaught').value = entry?.whatItTaught || '';
+  updateStoryStepExamples();
   renderAchievementFieldPicker(entry?.fields || []);
   $('achvSaveBtn').textContent = entry ? 'Save changes' : 'Save to your story';
   $('achvAddBtn')?.classList.add('hidden');
@@ -2446,9 +2504,12 @@ function submitAchievementForm() {
     level:         $('achvLevel').value,
     date:          $('achvDate').value,
     description:   $('achvDesc').value,
+    situation:     $('achvSituation').value,
     whatIDid:      $('achvWhatIDid').value,
     whatItTaught:  $('achvWhatItTaught').value,
-    whyItMattered: $('achvWhyItMattered').value,
+    // whyItMattered is deliberately NOT sent: legacy text on an entry
+    // survives an edit untouched (partial merge), and new entries default
+    // it to '' in state.js — nothing destroyed, no fourth box to fill.
     fields: [...document.querySelectorAll('#achvFields .story-tag--on')].map(b => b.dataset.achvField),
   };
   const editingId = form.dataset.editing;
@@ -2514,6 +2575,11 @@ function wireAchievementsEvents() {
       e.preventDefault();
       submitAchievementForm();
     }
+  });
+  // The step examples follow the chosen entry type (rotating relatable
+  // placeholders); delegated so form re-renders can't orphan it.
+  document.addEventListener('change', (e) => {
+    if (e.target?.id === 'achvType') updateStoryStepExamples();
   });
 }
 
@@ -4091,8 +4157,14 @@ function syncPickerCollapse() {
   const inOnboard = section.parentElement?.id === 'subjectOnboardSlot';
   const collapsed = !!state.pickerCollapsed && state.selectedSubjects.length > 0 && !inOnboard;
   section.classList.toggle('subject-picker-section--collapsed', collapsed);
-  row.classList.toggle('hidden', !collapsed);
-  row.innerHTML = collapsed ? `
+  // The merged "Your subjects & predicted grades" section above already names
+  // every subject and owns the Edit affordance, so the old standalone summary
+  // row would just repeat it. It stays in the DOM (empty) purely as the
+  // collapse anchor — for IB/AP, whose grade control lists no subjects, it
+  // still carries the list.
+  const listsSubjects = !LETTER_GRADE_SYSTEMS.has(state.checkSystem);
+  row.classList.toggle('hidden', !collapsed || !listsSubjects);
+  row.innerHTML = (collapsed && listsSubjects) ? `
     <span class="subject-summary__label">Your subjects:</span>
     <span class="subject-summary__list">${state.selectedSubjects.map(esc).join(' <span class="subject-summary__dot">·</span> ')}</span>
     <button type="button" id="subjectSummaryEdit" class="subject-summary__edit" aria-label="Edit your subjects">Edit</button>` : '';
@@ -4340,6 +4412,7 @@ function renderCheckResults() {
   // workspace home reflects them (runs before the early return so it
   // also captures grade-only and cleared-subject changes).
   syncProfileFromCheck();
+  updateCheckFraming();   // intro reflects the CURRENT grade state + live count
 
   if (state.selectedSubjects.length === 0) {
     section.classList.add('hidden');
@@ -6859,6 +6932,15 @@ function init() {
 
   // Compact picker view: Edit expands (delegated — the summary row re-renders),
   // Done collapses. Session preference only, never persisted.
+  // Edit lives in the merged grade-section header (and, for IB/AP, still in
+  // the summary row). Delegated on document so both survive re-renders.
+  document.addEventListener('click', e => {
+    if (e.target.closest?.('#gradeEditSubjects')) {
+      state.pickerCollapsed = false;
+      syncPickerCollapse();
+      $('subjectPickerSection')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  });
   $('subjectSummaryRow')?.addEventListener('click', e => {
     if (e.target.closest('#subjectSummaryEdit')) { state.pickerCollapsed = false; syncPickerCollapse(); }
   });

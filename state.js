@@ -107,7 +107,7 @@ const AltioraState = (() => {
     profile.achievements = profile.achievements
       .filter(a => a && typeof a === 'object')
       .map(a => ({
-        whatIDid: '', whatItTaught: '', whyItMattered: '',
+        situation: '', whatIDid: '', whatItTaught: '', whyItMattered: '',
         ...a,
         fields: Array.isArray(a.fields) ? a.fields.filter(f => typeof f === 'string') : [],
       }));
@@ -265,7 +265,7 @@ const AltioraState = (() => {
   // reflection prompts that turn a record into a story. `fields` (the field
   // tags) is an array and handled separately below.
   const _ACHIEVEMENT_FIELDS   = ['type', 'title', 'organisation', 'level', 'date', 'description',
-                                 'whatIDid', 'whatItTaught', 'whyItMattered'];
+                                 'situation', 'whatIDid', 'whatItTaught', 'whyItMattered'];
 
   function _achievementsRef() {
     if (!Array.isArray(_state.profile.achievements)) _state.profile.achievements = [];
@@ -304,7 +304,7 @@ const AltioraState = (() => {
     if (!entry || typeof entry !== 'object') return null;
     const clean = _sanitizeAchievementFields(entry, {
       type: '', title: '', organisation: '', level: '', date: '', description: '',
-      whatIDid: '', whatItTaught: '', whyItMattered: '',
+      situation: '', whatIDid: '', whatItTaught: '', whyItMattered: '',
     });
     if (!_ACHIEVEMENT_TYPE_IDS.has(clean.type) || !clean.title) return null;
     clean.fields = _sanitizeAchievementFieldTags(entry.fields);

@@ -2579,27 +2579,21 @@ footer p {
   outline: none;
   border-color: var(--color-text-secondary);
 }
-/* Per-subject grade rows (letter-profile systems) */
-.grade-select--compact { min-width: 84px; padding-right: 26px; }
-.grade-rows-head {
-  display: flex;
+/* ── Per-subject grades (letter systems): ONE container, no chrome-in-chrome.
+   Each subject is a mono label + a borderless select that only shows a
+   hairline underline; nothing is wrapped in its own pill. ─────────────── */
+.grade-input-header__actions {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--space-4);
+  margin-left: auto;
   flex-wrap: wrap;
-  width: 100%;
-}
-/* The row-mode label must be allowed to shrink/wrap (the shared
-   .grade-option-label is flex-shrink:0 for the old single-select layout). */
-.grade-rows-head .grade-option-label {
-  flex: 1 1 auto;
-  flex-shrink: 1;
-  min-width: 0;
 }
 .grade-setall {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
+  white-space: nowrap;
 }
 .grade-setall__label {
   font-family: var(--ce-font-mono);
@@ -2609,34 +2603,60 @@ footer p {
   text-transform: uppercase;
   color: var(--ce-ink-60);
 }
+/* The one select style used by both the set-all control and every pair:
+   no box, a subtle chevron, and a hairline that only firms up on focus. */
+.grade-inline-select {
+  font-family: var(--ce-font-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ce-ink);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--ce-hairline-color);
+  border-radius: 0;
+  padding: 2px 18px 2px 2px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231F1A17' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 2px center;
+  min-width: 52px;
+}
+.grade-inline-select:hover  { border-bottom-color: var(--ce-ink-30); }
+.grade-inline-select:focus  { outline: none; border-bottom-color: var(--ce-ink); }
+
 .grade-rows {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2) var(--space-4);
+  gap: var(--space-3) var(--space-6);
   width: 100%;
 }
-.grade-row {
+.grade-pair {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: var(--space-2);
-  padding: 4px 6px 4px 12px;
-  border: var(--ce-hairline);
-  border-radius: var(--ce-radius-pill);
-  background: var(--ce-surface);
+  min-width: 0;
 }
-.grade-row__subject {
-  font-size: var(--text-sm);
-  color: var(--color-text-primary);
-  white-space: nowrap;
+.grade-pair__subject {
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  letter-spacing: .02em;
+  color: var(--ce-ink-60);
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .grade-rows__empty {
   margin: 0;
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
 }
-@media (max-width: 480px) {
+@media (max-width: 560px) {
+  .grade-input-header__actions { margin-left: 0; width: 100%; justify-content: space-between; }
+  .grade-input-hint { display: none; }
   .grade-rows { gap: var(--space-2); }
-  .grade-row { width: 100%; justify-content: space-between; }
+  /* Full-width pairs: subject left, grade right — nothing can clip. */
+  .grade-pair { width: 100%; justify-content: space-between; align-items: center; }
 }
 .grade-number-input {
   font-family: var(--font-sans);
@@ -4184,6 +4204,56 @@ button.plan-combo-tag--drop:focus-visible {
   text-transform: uppercase;
   color: var(--ce-ink-30);
   margin-bottom: 1px;
+}
+
+/* Collapsible story cards + the synthesis block */
+.story-card { display: block; }
+.story-card__summary {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  cursor: pointer;
+  list-style: none;
+}
+.story-card__summary::-webkit-details-marker { display: none; }
+.story-card__caret {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--ce-ink-30);
+  transition: transform var(--t-fast);
+}
+.story-card[open] .story-card__caret { transform: rotate(180deg); }
+.story-card__body { margin-top: var(--space-2); }
+.story-card__synthesis {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ce-ink);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.story-card .achv-card__actions { margin-top: var(--space-2); justify-content: flex-end; }
+
+/* Scaffolded 3-step micro-prompts */
+.story-step__head { display: block; margin-bottom: var(--space-1); }
+.story-step__num {
+  display: block;
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--ce-ink-30);
+  margin-bottom: 1px;
+}
+.story-step__eg {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: 12px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ce-ink-60);
+  line-height: 1.5;
 }
 
 /* Reflection prompts in the form */
