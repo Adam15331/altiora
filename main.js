@@ -1508,9 +1508,15 @@ function restoreSubjectPickerHome() {
 }
 
 /* ─── Year indicator (global control, same pattern as system) ──── */
-function openYearMenu()  { $('yearMenu')?.classList.remove('hidden'); $('yearIndicatorBtn')?.setAttribute('aria-expanded', 'true'); }
-function closeYearMenu() { $('yearMenu')?.classList.add('hidden');    $('yearIndicatorBtn')?.setAttribute('aria-expanded', 'false'); }
-function toggleYearMenu(){ $('yearMenu')?.classList.contains('hidden') ? openYearMenu() : closeYearMenu(); }
+// The system and year controls live together in ONE profile popover
+// ("A-Levels · Year 12 ▾"). The historical open/close names are kept as
+// aliases so every existing call site keeps working unchanged.
+function openProfileMenu()  { $('profileMenu')?.classList.remove('hidden'); $('profileIndicatorBtn')?.setAttribute('aria-expanded', 'true'); }
+function closeProfileMenu() { $('profileMenu')?.classList.add('hidden');    $('profileIndicatorBtn')?.setAttribute('aria-expanded', 'false'); }
+function toggleProfileMenu(){ $('profileMenu')?.classList.contains('hidden') ? openProfileMenu() : closeProfileMenu(); }
+function openYearMenu()  { openProfileMenu(); }
+function closeYearMenu() { closeProfileMenu(); }
+function toggleYearMenu(){ toggleProfileMenu(); }
 
 // Reflect the profile year in the global indicator and rebuild the menu for
 // the ACTIVE system (year labels are system-specific). Subscribed to state,
@@ -1608,16 +1614,56 @@ function applyStageChrome(stage) {
   $('stageProposal').classList.add('hidden');
   $('subjectOnboard')?.classList.add('hidden');
   $('workspace').classList.remove('hidden');
-  closeStageMenu();
-  closeSystemMenu();
-  closeYearMenu();
-  $('stageIndicatorName').textContent = STAGES[stage].name;
-  $$('#stageMenu .stage-menu__item').forEach(item =>
-    item.classList.toggle('stage-menu__item--current', item.dataset.stage === stage)
-  );
+  closeProfileMenu();
+  renderJourneyBar(stage);
   updateSystemIndicator(AltioraState.getProfile().qualificationSystem);
   updateYearIndicator();
   renderStageToolNav(stage);
+}
+
+/* ─── Journey bar — the four stages, live, on every screen ────────
+ * Replaces the old "Stage:" dropdown. Pure projection of existing
+ * machinery: per-step state from stageProgress (the home strip's
+ * logic), clicks run enterStage exactly as the dropdown did, and the
+ * "Next →" chip runs the existing graduation acceptance. Subscribed
+ * to state, so completing a stage's criteria lights the chip live. */
+
+const JOURNEY_LABELS = {
+  exploring: 'Exploring fields',
+  choosing:  'Choosing subjects',
+  building:  'Building list',
+  applying:  'Applying',
+};
+
+function renderJourneyBar(stageOverride) {
+  const bar = $('journeyBar');
+  if (!bar) return;
+  const stage  = STAGES[stageOverride] ? stageOverride
+               : (AltioraState.getProfile().stage || DEFAULT_STAGE);
+  const curIdx = STAGE_ORDER.indexOf(stage);
+  const progress = Object.fromEntries(STAGE_ORDER.map(s => [s, stageProgress(s)]));
+  // Graduation surfacing: current stage done → the NEXT step carries a
+  // subtle chip on every screen. The richer card on home stays.
+  const next     = NEXT_STAGE[stage];
+  const showNext = !!next && progress[stage].done;
+
+  bar.innerHTML = STAGE_ORDER.map((s, i) => {
+    // Same skip semantics as the old home strip: earlier stages a
+    // late-joiner never did show quietly dimmed, never as failures.
+    let cls, mark = '';
+    if (i === curIdx)               { cls = 'current'; }
+    else if (progress[s].done)      { cls = 'done'; mark = '✓ '; }
+    else if (i < curIdx)            { cls = 'skipped'; }
+    else                            { cls = 'todo'; }
+    const nextChip = (showNext && s === next)
+      ? `<button type="button" class="journey-bar__next" data-journey-next="${s}">Next →</button>` : '';
+    return `<span class="journey-bar__slot">
+      <button type="button" class="journey-bar__step journey-bar__step--${cls}"
+              data-journey-stage="${s}"${i === curIdx ? ' aria-current="step"' : ''}
+              title="${esc(STAGES[s].name)}">
+        <span class="journey-bar__num" aria-hidden="true">${i + 1}</span><span class="journey-bar__label">${mark}${esc(JOURNEY_LABELS[s])}</span>
+      </button>${nextChip}</span>`;
+  }).join('<span class="journey-bar__sep" aria-hidden="true">→</span>');
 }
 
 // Reflect the active system in the global indicator + menu.
@@ -1777,19 +1823,10 @@ function rerenderCurrentView() {
   }
 }
 
-/* ─── System indicator dropdown (global system control) ────────── */
-function openSystemMenu() {
-  $('systemMenu')?.classList.remove('hidden');
-  $('systemIndicatorBtn')?.setAttribute('aria-expanded', 'true');
-}
-function closeSystemMenu() {
-  $('systemMenu')?.classList.add('hidden');
-  $('systemIndicatorBtn')?.setAttribute('aria-expanded', 'false');
-}
-function toggleSystemMenu() {
-  if ($('systemMenu')?.classList.contains('hidden')) openSystemMenu();
-  else closeSystemMenu();
-}
+/* ─── System control — lives inside the profile popover ────────── */
+function openSystemMenu()   { openProfileMenu(); }
+function closeSystemMenu()  { closeProfileMenu(); }
+function toggleSystemMenu() { toggleProfileMenu(); }
 
 // Build the per-stage tool sub-nav: primary tool front and centre,
 // secondary tools as lighter links. Every tool is free.
@@ -3490,16 +3527,8 @@ function renderWorkspaceHome() {
 
   // ── Journey strip: you are here. Earlier stages the student never did
   // show as quietly skipped (dimmed), never as failures.
-  const curIdx = STAGE_ORDER.indexOf(stage);
-  const STRIP_LABELS = { exploring: 'Exploring fields', choosing: 'Choosing', building: 'Building', applying: 'Applying' };
-  const stripHtml = STAGE_ORDER.map((s, i) => {
-    let cls, mark;
-    if (i === curIdx)                      { cls = 'current'; mark = ' ●'; }
-    else if (progressByStage[s].done)      { cls = 'done';    mark = ' ✓'; }
-    else if (i < curIdx)                   { cls = 'skipped'; mark = '';   }
-    else                                   { cls = 'todo';    mark = '';   }
-    return `<span class="journey-strip__stage journey-strip__stage--${cls}">${esc(STRIP_LABELS[s])}${mark}</span>`;
-  }).join('<span class="journey-strip__sep" aria-hidden="true">→</span>');
+  // (The old home journey strip is gone — the persistent journey bar in the
+  // nav is the single progress display, so home doesn't duplicate it.)
 
   // ── Graduation card: stage done → a positive, dismissible invitation
   // forward. Session-dismissed via "Not yet"; never auto-advances.
@@ -3549,7 +3578,6 @@ function renderWorkspaceHome() {
       <header class="home__header">
         <h1 class="home__welcome">${_isReturningUser ? 'Welcome back.' : "You're all set."}</h1>
         <p class="home__stage">You're in the <strong>${esc(cfg.name)}</strong> stage — ${_isReturningUser ? esc(STAGE_SUMMARY[stage] ?? '') : "here's your next step."}</p>
-        <p class="journey-strip" aria-label="Your journey progress">${stripHtml}</p>
       </header>
 
       ${gradHtml || `
@@ -6635,36 +6663,40 @@ function init() {
     card.addEventListener('click', () => chooseSystem(card.dataset.system))
   );
 
-  // Stage indicator dropdown (switch stage anytime)
-  $('stageIndicatorBtn')?.addEventListener('click', e => {
-    e.stopPropagation();
-    toggleStageMenu();
+  // Journey bar — clicking a step switches stage exactly as the old
+  // dropdown did (enterStage; proposes-never-imprisons untouched). The
+  // "Next →" chip runs the existing graduation acceptance. Delegated on
+  // the bar container, which persists across innerHTML re-renders.
+  $('journeyBar')?.addEventListener('click', e => {
+    const nextBtn = e.target.closest('[data-journey-next]');
+    if (nextBtn) {
+      logEvent('stage_graduate', { to: nextBtn.dataset.journeyNext, via: 'journey_bar' });
+      enterStage(nextBtn.dataset.journeyNext);
+      return;
+    }
+    const step = e.target.closest('[data-journey-stage]');
+    if (step) enterStage(step.dataset.journeyStage);
   });
-  $$('#stageMenu .stage-menu__item').forEach(item =>
-    item.addEventListener('click', () => enterStage(item.dataset.stage))
-  );
+  // Reactive: any state change that flips a stage's done-criteria (saving a
+  // 3rd course, keeping a field…) re-projects the bar on every screen.
+  AltioraState.subscribe(() => renderJourneyBar());
 
-  // System indicator dropdown — the single global control for the system.
-  $('systemIndicatorBtn')?.addEventListener('click', e => {
+  // Profile pill ("A-Levels · Year 12 ▾") — ONE popover holding the system
+  // and year controls; same single-source behaviour and propagation as the
+  // two pills it replaces.
+  $('profileIndicatorBtn')?.addEventListener('click', e => {
     e.stopPropagation();
-    toggleSystemMenu();
+    toggleProfileMenu();
   });
   $$('#systemMenu .stage-menu__item').forEach(item =>
     item.addEventListener('click', () => changeSystem(item.dataset.system))
   );
-  document.addEventListener('click', closeSystemMenu);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSystemMenu(); });
-
-  // Year indicator dropdown — the single global control for the year group.
-  // Menu items are (re)built by updateYearIndicator, which subscribes to
-  // state so every year/system change propagates to this surface.
-  $('yearIndicatorBtn')?.addEventListener('click', e => {
-    e.stopPropagation();
-    toggleYearMenu();
-  });
-  $('yearMenu')?.addEventListener('click', e => e.stopPropagation());
-  document.addEventListener('click', closeYearMenu);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeYearMenu(); });
+  document.addEventListener('click', closeProfileMenu);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeProfileMenu(); });
+  // Year items are (re)built inside the popover by updateYearIndicator, which
+  // subscribes to state so every year/system change propagates here. Clicks
+  // inside the popover must not bubble to the document-close handler.
+  $('profileMenu')?.addEventListener('click', e => e.stopPropagation());
   AltioraState.subscribe(updateYearIndicator);
 
   // Stage proposal (year-informed onboarding): accept routes into the
