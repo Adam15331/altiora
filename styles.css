@@ -4956,3 +4956,19 @@ button.plan-combo-tag--drop:focus-visible {
   .cs-doc__foot { border-top: 0.5pt solid #000; margin-top: 12pt; }
   .cs-doc__foot p { font-size: 7.5pt; color: #333; }
 }
+
+/* US holistic honesty: a US course is capped at MATCH — never a safety. */
+.card-us-nosafety {
+  margin: var(--space-1) 0 0;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--ce-ink-60);
+  line-height: 1.5;
+}
+.applying-summary__note {
+  margin: 0 0 var(--space-3);
+  font-size: 12px;
+  font-style: italic;
+  color: var(--ce-ink-60);
+  line-height: 1.5;
+}

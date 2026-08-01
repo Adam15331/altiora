@@ -2024,7 +2024,7 @@ function applyingTasks(savedCourses) {
     const info = testInfoFor(t);
     tasks.push({
       id: `test-reg:${t}`,
-      group: 'Admission tests',
+      group: '1 · Register for tests',
       label: `Register for ${info?.name ?? t}`,
       // Avoid stacked parentheses when the window string already carries one.
       detail: info
@@ -2038,7 +2038,7 @@ function applyingTasks(savedCourses) {
     const info = testInfoFor(t);
     tasks.push({
       id: `test-sit:${t}`,
-      group: 'Admission tests',
+      group: '2 · Sit the tests',
       label: `Sit ${info?.name ?? t}`,
       detail: info
         ? `Test ${info.typicalTestWindow}. Typical window — registration closes before it.`
@@ -2050,14 +2050,14 @@ function applyingTasks(savedCourses) {
   // 3. The application itself.
   tasks.push({
     id: 'app:grades',
-    group: 'Your application',
+    group: '3 · Your application',
     label: 'Confirm your predicted grades with your school',
     detail: 'What your school submits is what universities see — check it matches what you entered here.',
     link: null,
   });
   tasks.push({
     id: 'app:statement',
-    group: 'Your application',
+    group: '3 · Your application',
     label: 'Draft your personal statement',
     detail: 'Your story bank is the raw material — the reflections you have already written.',
     link: null,
@@ -2065,7 +2065,7 @@ function applyingTasks(savedCourses) {
   });
   tasks.push({
     id: 'app:references',
-    group: 'Your application',
+    group: '3 · Your application',
     label: 'Ask for your reference',
     detail: 'Referees need notice. Ask early rather than in the week the form closes.',
     link: null,
@@ -2073,17 +2073,31 @@ function applyingTasks(savedCourses) {
 
   // 4. Deadlines, per country actually on the list. Universities and
   //    application services publish these; we point rather than guess.
+  // Typical deadline SHAPES per country. These describe the pattern of a
+  // cycle at month granularity — the honest, stable thing we can say — and
+  // every one ends by telling the student to confirm the exact date
+  // officially. No specific date or time is ever asserted, because those
+  // move every cycle and are set per university.
+  const DEADLINE_SHAPE = {
+    UK: 'Medicine, dentistry, veterinary and Oxford/Cambridge courses typically close in mid-October; most other UK courses in late January. Both shift year to year — confirm the exact date on UCAS and each course page.',
+    US: 'Many early-application deadlines (early action/decision) typically fall around early November, with regular decision later. Every university sets its own — confirm on each admissions page.',
+    CA: 'Deadlines are set per university and per province, and often differ by programme. Confirm on each course page.',
+    SG: 'Application windows are set per university and differ for international applicants. Confirm on each admissions page.',
+    HK: 'Application windows are set per university, with separate local and international routes. Confirm on each admissions page.',
+  };
+  // Order by typical earliness so the sequence reads correctly even without
+  // dates: earlier-closing cycles first, then the rest alphabetically.
+  const DEADLINE_ORDER = { UK: 0, US: 1 };
   const countries = [...new Set(savedCourses.map(c => c.country))]
-    .sort((a, b) => (COUNTRY_LABELS[a] ?? a).localeCompare(COUNTRY_LABELS[b] ?? b));
+    .sort((a, b) => (DEADLINE_ORDER[a] ?? 8) - (DEADLINE_ORDER[b] ?? 8)
+      || (COUNTRY_LABELS[a] ?? a).localeCompare(COUNTRY_LABELS[b] ?? b));
   countries.forEach(k => {
     const label = COUNTRY_LABELS[k] ?? k;
     tasks.push({
       id: `deadline:${k}`,
-      group: 'Deadlines',
-      label: `Confirm exact deadlines for your ${label} course${savedCourses.filter(c => c.country === k).length === 1 ? '' : 's'}`,
-      detail: k === 'UK'
-        ? 'UCAS sets the main round; some courses (and Oxford and Cambridge) close earlier. Check each course page.'
-        : 'Each university sets its own dates — check every course page on your list.',
+      group: '4 · Deadlines',
+      label: `Confirm exact deadlines for your ${label} course${savedCourses.filter(c => c.country === k).length === 1 ? '' : 's'} on official pages`,
+      detail: DEADLINE_SHAPE[k] ?? 'Each university sets its own dates — confirm on every course page on your list.',
       link: null,
     });
   });
@@ -2195,6 +2209,8 @@ function renderApplyingPanel() {
         ${counts.match} match${counts.match === 1 ? '' : 'es'} ·
         ${counts.safety} safet${counts.safety === 1 ? 'y' : 'ies'}${counts.unknown ? ` · ${counts.unknown} unclassified` : ''}</p>`
     : `<p class="applying-summary__balance applying-summary__balance--muted">Add predicted grades in Check Combination to see your reach/match/safety balance.</p>`;
+  const usNote = savedCourses.some(c => c.country === 'US')
+    ? `<p class="applying-summary__note">${esc(US_NO_SAFETY_NOTE)}</p>` : '';
 
   const _yrs = studentYears();
   const _yrLabel = AltioraState.getProfile().yearGroup;
@@ -2222,6 +2238,7 @@ function renderApplyingPanel() {
           <strong>${unis.size}</strong> universit${unis.size === 1 ? 'y' : 'ies'} ·
           ${esc(countryBits.join(', '))}</p>
         ${balanceLine}
+        ${usNote}
         <button class="home-card__link" data-go-shortlist>View full shortlist →</button>
       </section>
     </div>`;
@@ -2321,6 +2338,9 @@ function buildCounselorSummaryHtml() {
     shortlistHtml += `
       <p class="cs-counsel"><strong>${esc(bal.classified > 0 ? `Your list: ${bal.countsBits.join(' · ')}` : `Your list: ${saved.length} course${saved.length === 1 ? '' : 's'}, unclassified`)}</strong>
         ${esc(bal.advice)}</p>`;
+    if (saved.some(c => c.country === 'US')) {
+      shortlistHtml += `<p class="cs-none">${esc(US_NO_SAFETY_NOTE)}</p>`;
+    }
   }
 
   /* ── Admission tests across the shortlist (typical windows only) ── */
@@ -3563,7 +3583,27 @@ function hasValidGrade(system, grade) {
   return false;
 }
 
+// US admissions are holistic: there is no published cutoff a student can
+// clear to make a US course a comfortable back-up. So a US course is CAPPED
+// at 'match' — it can never be labelled a safety anywhere in the app. The
+// cap lives in this one wrapper so every consumer (cards, shortlist counts,
+// balance counsel, graduation gating, the printable summary) is consistent
+// by construction rather than by remembering.
 function shortlistVerdict(course, system, predictedGrade, profile) {
+  const v = shortlistVerdictRaw(course, system, predictedGrade, profile);
+  return (course.country === 'US' && v === 'safety') ? 'match' : v;
+}
+
+// True when the honest verdict was held back by the US holistic rule — the
+// surfaces use this to show the quiet explanatory note.
+function usSafetyCapped(course, system, predictedGrade, profile) {
+  return course.country === 'US'
+    && shortlistVerdictRaw(course, system, predictedGrade, profile) === 'safety';
+}
+
+const US_NO_SAFETY_NOTE = 'US admissions are holistic — no course is a guaranteed safety.';
+
+function shortlistVerdictRaw(course, system, predictedGrade, profile) {
   const gradeSet = hasValidGrade(system, predictedGrade);
 
   if (system === 'US_AP') {
@@ -3687,6 +3727,12 @@ function buildShortlistCard(course, studentTags, hasSubjects) {
   const verdictHtml = vMeta
     ? `<span class="shortlist-verdict shortlist-verdict--${vMeta.cls}">${qualify ? axis('Grades') : ''}${esc(vMeta.label)}</span>`
     : '';
+  // Explain the absence, not just the cap: on any US course showing a
+  // verdict, say why "Safety" is never one of the options. (The cap in
+  // shortlistVerdict is the structural guarantee; this is the sentence that
+  // tells the student what it means.)
+  const usCapNote = (course.country === 'US' && vMeta)
+    ? `<p class="card-us-nosafety">${esc(US_NO_SAFETY_NOTE)}</p>` : '';
 
   const card = document.createElement('div');
   card.className = 'course-card course-card--saved';
@@ -3694,6 +3740,7 @@ function buildShortlistCard(course, studentTags, hasSubjects) {
   card.dataset.category = course.category ?? '';
   card.innerHTML = `
     <div class="card-status-row">${badgeHtml}${verdictHtml}</div>
+    ${usCapNote}
     <div class="card-header">
       <div class="card-title-group">
         <span class="card-flag" aria-hidden="true">${flag}</span>
@@ -4013,10 +4060,17 @@ function renderWorkspaceHome() {
   // forward. Session-dismissed via "Not yet"; never auto-advances.
   const nextStage = NEXT_STAGE[stage];
   const showGrad = prog.done && nextStage && !_gradDismissed.has(stage);
+  // Building a list is never "finished" — the criteria being met means the
+  // list has a workable foundation, not that refining it is over. Say that,
+  // rather than implying the student is done with it. (Gating is untouched:
+  // showGrad still keys off exactly the same prog.done.)
+  const gradText = stage === 'building'
+    ? `Your list has a solid foundation — ${esc(prog.achieved ?? 'nice work')}. You can keep refining it from the Applying stage. Ready to ${esc(GRAD_INVITE[nextStage] ?? 'move on')}?`
+    : `You've got what you need from this stage — ${esc(prog.achieved ?? 'nice work')}. Ready to ${esc(GRAD_INVITE[nextStage] ?? 'move on')}?`;
   const gradHtml = showGrad ? `
     <section class="home-next home-grad" aria-label="Stage complete — ready to move on">
-      <span class="home-grad__eyebrow">Stage complete ✓</span>
-      <p class="home-next__text">You've got what you need from this stage — ${esc(prog.achieved ?? 'nice work')}. Ready to ${esc(GRAD_INVITE[nextStage] ?? 'move on')}?</p>
+      <span class="home-grad__eyebrow">${stage === 'building' ? 'Solid foundation ✓' : 'Stage complete ✓'}</span>
+      <p class="home-next__text">${gradText}</p>
       <div class="home-next__actions">
         <button class="home-next__btn home-next__btn--primary" data-grad-accept="${esc(nextStage)}">Move to ${esc(STAGES[nextStage].name)} →</button>
         <button class="home-next__btn" data-grad-later>Not yet</button>
