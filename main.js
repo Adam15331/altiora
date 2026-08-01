@@ -637,9 +637,17 @@ function updateCheckFraming() {
   const retro = planIsRetro();   // the same normalised-year rule as the planner
   const intro = $('checkIntro');
   if (intro) {
-    intro.textContent = retro
-      ? 'Here’s what your subjects open. Add your predicted grades to see which courses are strong matches.'
-      : 'Pick your subjects and instantly see which courses are open, possible, or out of reach. Your qualification system is set from your profile — change it anytime from the bar above.';
+    // Grades already set → stop asking for them; report what they bought,
+    // using the SAME live pipeline count Check renders with (subjectsFitCount).
+    const gradesSet = !!state.predictedGrade && state.selectedSubjects.length > 0;
+    if (gradesSet) {
+      const n = subjectsFitCount();
+      intro.textContent = `Here’s what your subjects open — ${n} strong match${n === 1 ? '' : 'es'} at your predicted grades.`;
+    } else {
+      intro.textContent = retro
+        ? 'Here’s what your subjects open. Add your predicted grades to see which courses are strong matches.'
+        : 'Pick your subjects and instantly see which courses are open, possible, or out of reach. Your qualification system is set from your profile — change it anytime from the bar above.';
+    }
   }
   // "Select 3–5 subjects" is choosing language — it only shows when the
   // picker is genuinely being used to choose (2+ years out, or nothing saved
@@ -964,12 +972,12 @@ function syncGradeRows() {
     rows.innerHTML = `<p class="grade-rows__empty">Pick your subjects above — each gets its own predicted grade.</p>`;
   } else {
     rows.innerHTML = state.selectedSubjects.map(s => `
-      <label class="grade-row">
-        <span class="grade-row__subject">${esc(s)}</span>
-        <span class="select-wrap"><select class="grade-select grade-select--compact" data-grade-subject="${esc(s)}">
+      <label class="grade-pair">
+        <span class="grade-pair__subject">${esc(s)}</span>
+        <select class="grade-inline-select" data-grade-subject="${esc(s)}" aria-label="Predicted grade for ${esc(s)}">
           <option value="">—</option>
           ${scale.map(g => `<option value="${esc(g)}"${_gradeMap[s] === g ? ' selected' : ''}>${esc(g)}</option>`).join('')}
-        </select></span>
+        </select>
       </label>`).join('');
   }
   commitGradeMap({ render: false });
@@ -992,11 +1000,27 @@ function buildGradeInput(systemKey) {
     ? `<p class="grade-conversion-hint">${esc(GRADE_CONVERSION_HINTS[systemKey])}</p>`
     : '';
 
+  // ONE merged section: the grade rows already name every subject, so this
+  // header owns both concepts and carries the Edit affordance (opening the
+  // same picker as before) — no separate "Your subjects" row repeating them.
+  const isLetter = LETTER_GRADE_SYSTEMS.has(systemKey);
+  const setAllHtml = isLetter ? `
+        <label class="grade-setall">
+          <span class="grade-setall__label">Set all</span>
+          <select id="gradeSetAll" class="grade-inline-select">
+            <option value="">—</option>
+            ${GRADE_SCALES[systemKey].map(g => `<option value="${esc(g)}">${esc(g)}</option>`).join('')}
+          </select>
+        </label>` : '';
   const header = `
       <div class="grade-input-header">
-        <span class="control-label">Your predicted grades</span>
+        <span class="control-label">${isLetter ? 'Your subjects &amp; predicted grades' : 'Your predicted grades'}</span>
         <span class="grade-input-tooltip" aria-label="${esc(tooltipText)}" tabindex="0" title="${esc(tooltipText)}">ⓘ</span>
-        <span class="picker-hint-inline">${hint}</span>
+        <span class="picker-hint-inline grade-input-hint">${hint}</span>
+        <span class="grade-input-header__actions">
+          ${setAllHtml}
+          <button type="button" id="gradeEditSubjects" class="subject-summary__edit" aria-label="Edit your subjects">Edit subjects</button>
+        </span>
       </div>`;
   // Leaving the input blank is itself "skip" → subject-only matching.
   const footer = `
@@ -1011,26 +1035,7 @@ function buildGradeInput(systemKey) {
     // Per-subject predictions: offers in these systems are grade PROFILES
     // ("A*AA"), so each selected subject gets its own compact select. The
     // "Set all to" quick action keeps the uniform case one click.
-    const rowLabel = {
-      UK_A_Level: 'Predicted grade for each of your A-Level subjects',
-      SG_A_Level: 'Predicted grade for each of your subjects',
-      HK_DSE:     'Predicted level for each of your subjects',
-    }[systemKey];
-    const scale = GRADE_SCALES[systemKey];
-    bodyHtml = `
-      <div class="grade-input-body">
-        <div class="grade-rows-head">
-          <span class="grade-option-label">${esc(rowLabel)}</span>
-          <label class="grade-setall">
-            <span class="grade-setall__label">Set all to</span>
-            <span class="select-wrap"><select id="gradeSetAll" class="grade-select grade-select--compact">
-              <option value="">—</option>
-              ${scale.map(g => `<option value="${esc(g)}">${esc(g)}</option>`).join('')}
-            </select></span>
-          </label>
-        </div>
-        <div id="gradeRows" class="grade-rows"></div>
-      </div>`;
+    bodyHtml = `<div id="gradeRows" class="grade-rows"></div>`;
     wire = () => {
       $('gradeSetAll').addEventListener('change', e => {
         const g = e.target.value;
@@ -4152,8 +4157,14 @@ function syncPickerCollapse() {
   const inOnboard = section.parentElement?.id === 'subjectOnboardSlot';
   const collapsed = !!state.pickerCollapsed && state.selectedSubjects.length > 0 && !inOnboard;
   section.classList.toggle('subject-picker-section--collapsed', collapsed);
-  row.classList.toggle('hidden', !collapsed);
-  row.innerHTML = collapsed ? `
+  // The merged "Your subjects & predicted grades" section above already names
+  // every subject and owns the Edit affordance, so the old standalone summary
+  // row would just repeat it. It stays in the DOM (empty) purely as the
+  // collapse anchor — for IB/AP, whose grade control lists no subjects, it
+  // still carries the list.
+  const listsSubjects = !LETTER_GRADE_SYSTEMS.has(state.checkSystem);
+  row.classList.toggle('hidden', !collapsed || !listsSubjects);
+  row.innerHTML = (collapsed && listsSubjects) ? `
     <span class="subject-summary__label">Your subjects:</span>
     <span class="subject-summary__list">${state.selectedSubjects.map(esc).join(' <span class="subject-summary__dot">·</span> ')}</span>
     <button type="button" id="subjectSummaryEdit" class="subject-summary__edit" aria-label="Edit your subjects">Edit</button>` : '';
@@ -4401,6 +4412,7 @@ function renderCheckResults() {
   // workspace home reflects them (runs before the early return so it
   // also captures grade-only and cleared-subject changes).
   syncProfileFromCheck();
+  updateCheckFraming();   // intro reflects the CURRENT grade state + live count
 
   if (state.selectedSubjects.length === 0) {
     section.classList.add('hidden');
@@ -6920,6 +6932,15 @@ function init() {
 
   // Compact picker view: Edit expands (delegated — the summary row re-renders),
   // Done collapses. Session preference only, never persisted.
+  // Edit lives in the merged grade-section header (and, for IB/AP, still in
+  // the summary row). Delegated on document so both survive re-renders.
+  document.addEventListener('click', e => {
+    if (e.target.closest?.('#gradeEditSubjects')) {
+      state.pickerCollapsed = false;
+      syncPickerCollapse();
+      $('subjectPickerSection')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  });
   $('subjectSummaryRow')?.addEventListener('click', e => {
     if (e.target.closest('#subjectSummaryEdit')) { state.pickerCollapsed = false; syncPickerCollapse(); }
   });
