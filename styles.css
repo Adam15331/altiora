@@ -4813,3 +4813,146 @@ button.plan-combo-tag--drop:focus-visible {
   line-height: 1.7;
 }
 .applying-orientation__list strong { color: var(--ce-ink); }
+
+/* ═══════════════════════════════════════════════════════════════
+ * COUNSELOR SUMMARY — printable one-page snapshot.
+ * Monochrome-safe by construction: hierarchy comes from Bricolage vs
+ * mono type and hairlines, never from fills or colour, so it survives
+ * greyscale printing intact.
+ * ═══════════════════════════════════════════════════════════════ */
+.cs-doc { max-width: 74ch; }
+.cs-doc__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--ce-ink);
+  margin-bottom: var(--space-5);
+}
+.cs-doc__title {
+  font-family: var(--ce-font-display);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  letter-spacing: -.02em;
+  color: var(--ce-ink);
+  margin: 0 0 var(--space-1);
+}
+.cs-doc__sub { margin: 0; font-size: var(--text-sm); color: var(--ce-ink-60); line-height: 1.5; }
+.cs-print-btn {
+  flex-shrink: 0;
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  background: var(--ce-accent);
+  color: var(--ce-ink);
+  border: 1px solid var(--ce-ink);
+  border-radius: var(--ce-radius-pill);
+  padding: 7px 16px;
+  cursor: pointer;
+}
+.cs-section { margin-bottom: var(--space-5); }
+.cs-section__head {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ce-ink-60);
+  margin: 0 0 var(--space-2);
+  padding-bottom: 3px;
+  border-bottom: var(--ce-hairline);
+}
+.cs-dl { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: var(--space-2) var(--space-5); }
+.cs-dl dt {
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--ce-ink-30);
+}
+.cs-dl dd { margin: 0; font-size: var(--text-sm); color: var(--ce-ink); line-height: 1.5; }
+.cs-list { list-style: none; margin: 0 0 var(--space-2); padding: 0; }
+.cs-list li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 4px 0;
+  border-bottom: var(--ce-hairline);
+  font-size: var(--text-sm);
+  line-height: 1.45;
+}
+.cs-list li:last-child { border-bottom: none; }
+.cs-list__main { color: var(--ce-ink); min-width: 0; overflow-wrap: anywhere; }
+.cs-list__sub {
+  display: block;
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  letter-spacing: .04em;
+  color: var(--ce-ink-30);
+}
+.cs-list__side {
+  flex-shrink: 0;
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  color: var(--ce-ink-60);
+  text-align: right;
+}
+.cs-group { margin-bottom: var(--space-3); }
+.cs-group__label {
+  display: block;
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ce-ink-30);
+  margin-bottom: 2px;
+}
+.cs-lead, .cs-counsel {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ce-ink);
+  line-height: 1.55;
+}
+.cs-counsel strong { display: block; font-family: var(--ce-font-mono); font-size: 12px; }
+.cs-none { margin: 0 0 var(--space-2); font-size: var(--text-sm); font-style: italic; color: var(--ce-ink-60); }
+.cs-doc__foot {
+  margin-top: var(--space-6);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--ce-ink);
+}
+.cs-doc__foot p {
+  margin: 0 0 var(--space-1);
+  font-size: 11px;
+  color: var(--ce-ink-60);
+  line-height: 1.5;
+}
+
+/* ─── Print: the summary IS the page; app chrome disappears ───── */
+@media print {
+  @page { margin: 14mm; }
+  /* Everything except the summary panel is hidden outright. */
+  /* Hide the PAGE footer only — scoped, because the summary's own honesty
+     footer is also a <footer> and is the single most important line here. */
+  .nav, .stage-bar, body > footer, .toast, .cs-print-btn { display: none !important; }
+  #workspace > .panel:not(#panel-summary) { display: none !important; }
+  body, .content, main { background: #fff !important; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .cs-doc { max-width: none; color: #000; }
+  .cs-doc__title { font-size: 20pt; }
+  .cs-doc__sub { font-size: 9pt; }
+  .cs-section { margin-bottom: 10pt; page-break-inside: avoid; }
+  .cs-section__head { font-size: 8pt; color: #000; border-bottom: 0.5pt solid #000; }
+  .cs-dl dt { font-size: 7pt; color: #444; }
+  .cs-dl dd, .cs-list li, .cs-lead, .cs-counsel, .cs-none { font-size: 9pt; color: #000; }
+  .cs-list li { border-bottom: 0.4pt solid #bbb; page-break-inside: avoid; }
+  .cs-list__side, .cs-list__sub { color: #444; }
+  .cs-group { page-break-inside: avoid; }
+  .cs-doc__foot { border-top: 0.5pt solid #000; margin-top: 12pt; }
+  .cs-doc__foot p { font-size: 7.5pt; color: #333; }
+}

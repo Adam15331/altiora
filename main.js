@@ -1328,6 +1328,7 @@ function switchMode(mode) {
   $('panel-home')              .classList.toggle('hidden', mode !== 'home');
   $('panel-field-overview')    .classList.toggle('hidden', mode !== 'field-overview');
   $('panel-story')             ?.classList.toggle('hidden', mode !== 'story');
+  $('panel-summary')           ?.classList.toggle('hidden', mode !== 'summary');
 
   // The shortlist and home are cross-stage views, not stage tools —
   // highlight their own controls rather than a stage-tool button.
@@ -1374,6 +1375,9 @@ function switchMode(mode) {
   }
   if (mode === 'story') {
     renderStoryPanel();
+  }
+  if (mode === 'summary') {
+    renderCounselorSummary();
   }
 
   // Record the workspace view in history (the field profile records itself,
@@ -1942,6 +1946,7 @@ function rerenderCurrentView() {
     case 'home':     renderWorkspaceHome(); break;
     case 'applying': renderApplyingPanel(); break;
     case 'story':    renderStoryPanel(); break;
+    case 'summary':  renderCounselorSummary(); break;
     // shortlist: the glance counsel is year- and system-aware.
     case 'shortlist': renderShortlist(); break;
     // strengths: the grid is system-agnostic, but the intro copy and the
@@ -2226,6 +2231,187 @@ function renderApplyingPanel() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+ * COUNSELOR SUMMARY — a printable one-page snapshot.
+ *
+ * Compiles what the student already has into something they can put on
+ * a table in front of a parent, teacher or counselor. Every line is
+ * READ from existing state through the existing helpers — no new
+ * engines, no new data, and the shared wording functions
+ * (shortlistBalance, storyCounsel) guarantee it says exactly what the
+ * app says on screen.
+ *
+ * It also mitigates localStorage loss: a printed page (or browser
+ * save-as-PDF) is a snapshot that survives a cleared browser.
+ *
+ * Timing is always the verified TYPICAL WINDOW from admissionTestInfo,
+ * never a fixed date — same rule as the Applying checklist.
+ * ═══════════════════════════════════════════════════════════════ */
+
+// Subjects + per-subject predicted grades, in the student's own system.
+function summarySubjectRows() {
+  const p = AltioraState.getProfile();
+  const subjects = Array.isArray(p.subjects) ? p.subjects : [];
+  if (!subjects.length) return { rows: [], note: 'No subjects entered yet.' };
+  const g = p.predictedGrades;
+  const gradeFor = s => {
+    if (!g) return null;
+    if (typeof g === 'object') return g[s] ?? null;
+    return (typeof g === 'string') ? g : null;   // IB points / AP letter / legacy average
+  };
+  const rows = subjects.map(s => ({ subject: s, grade: gradeFor(s) }));
+  const anyGrade = rows.some(r => r.grade);
+  return { rows, note: anyGrade ? null : 'No predicted grades entered.' };
+}
+
+function buildCounselorSummaryHtml() {
+  const p       = AltioraState.getProfile();
+  const sysLbl  = p.qualificationSystem
+    ? (qualificationMappings[p.qualificationSystem]?.systemLabel ?? p.qualificationSystem) : null;
+  const stage   = p.stage && STAGES[p.stage] ? STAGES[p.stage].name : null;
+  const fields  = activeCandidateFields().map(f => CATEGORY_LABEL_MAP[f]);
+  const saved   = AltioraState.getShortlist()
+    .map(id => (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null)
+    .filter(Boolean);
+  const none = txt => `<p class="cs-none">${esc(txt)}</p>`;
+
+  /* ── Snapshot ── */
+  const snapshot = `
+    <dl class="cs-dl">
+      <div><dt>Qualification</dt><dd>${sysLbl ? esc(sysLbl) : 'Not set'}</dd></div>
+      <div><dt>Year group</dt><dd>${p.yearGroup ? esc(p.yearGroup) : 'Not set'}</dd></div>
+      <div><dt>Stage</dt><dd>${stage ? esc(stage) : 'Not set'}</dd></div>
+      <div><dt>Fields of interest</dt><dd>${fields.length ? esc(fields.join(' · ')) : 'None kept yet'}</dd></div>
+    </dl>`;
+
+  /* ── Subjects & predicted grades ── */
+  const { rows: subjRows, note: subjNote } = summarySubjectRows();
+  const subjectsHtml = subjRows.length
+    ? `<ul class="cs-list">${subjRows.map(r =>
+        `<li><span class="cs-list__main">${esc(r.subject)}</span> <span class="cs-list__side">${r.grade ? esc(r.grade) : '—'}</span></li>`).join('')}</ul>
+       ${subjNote ? none(subjNote) : ''}`
+    : none(subjNote);
+
+  /* ── Shortlist by verdict, with each course's requirement ── */
+  const gradeKey = SYSTEM_GRADE_KEY[p.qualificationSystem];
+  const reqFor = c => {
+    const raw = gradeKey ? c.grades?.[gradeKey] : null;
+    if (raw != null && raw !== '') return String(raw);
+    if (c.country === 'US') return 'holistic — no fixed offer';
+    return 'not published';
+  };
+  let shortlistHtml;
+  if (!saved.length) {
+    shortlistHtml = none('No courses saved yet.');
+  } else {
+    const { byId } = shortlistVerdicts(saved);
+    const ORDER = [['reach', 'Reach'], ['match', 'Match'], ['safety', 'Safety'], ['unknown', 'Not classified']];
+    const groups = ORDER.map(([key, label]) => ({
+      label, items: saved.filter(c => byId.get(c.id) === key),
+    })).filter(g => g.items.length);
+    shortlistHtml = groups.map(g => `
+      <div class="cs-group">
+        <span class="cs-group__label">${esc(g.label)} (${g.items.length})</span>
+        <ul class="cs-list">${g.items.map(c => `
+          <li>
+            <span class="cs-list__main">${esc(c.name)} — ${esc(c.university)}<span class="cs-list__sub">${esc(COUNTRY_LABELS[c.country] ?? c.country)}</span></span>
+            <span class="cs-list__side"> ${esc(reqFor(c))}</span>
+          </li>`).join('')}</ul>
+      </div>`).join('');
+    const bal = shortlistBalance(saved);
+    shortlistHtml += `
+      <p class="cs-counsel"><strong>${esc(bal.classified > 0 ? `Your list: ${bal.countsBits.join(' · ')}` : `Your list: ${saved.length} course${saved.length === 1 ? '' : 's'}, unclassified`)}</strong>
+        ${esc(bal.advice)}</p>`;
+  }
+
+  /* ── Admission tests across the shortlist (typical windows only) ── */
+  const testInfoFor = t => (typeof admissionTestInfo !== 'undefined') ? admissionTestInfo[t] : null;
+  const tests = [...new Set(saved.flatMap(c => Array.isArray(c.admissionTests) ? c.admissionTests : []))]
+    .sort((a, b) => (testInfoFor(a)?.regOpensMonth ?? 98) - (testInfoFor(b)?.regOpensMonth ?? 98) || a.localeCompare(b));
+  const testsHtml = tests.length
+    ? `<ul class="cs-list">${tests.map(t => {
+        const i = testInfoFor(t);
+        return `<li>
+          <span class="cs-list__main">${esc(i?.name ?? t)}${i?.fullName ? `<span class="cs-list__sub">${esc(i.fullName)}</span>` : ''}</span>
+          <span class="cs-list__side"> ${esc(i ? `registration ${i.typicalRegistrationWindow}` : 'check the official site')}</span>
+        </li>`;
+      }).join('')}</ul>
+      <p class="cs-none">Typical windows — they shift year to year, so confirm on each test's official site.</p>`
+    : none(saved.length ? 'No admission tests required across these courses.' : 'No courses saved, so no tests to list.');
+
+  /* ── Story bank ── */
+  const entries = AltioraState.getAchievements();
+  const pinned  = activeCandidateFields();
+  const yrs     = studentYears();
+  let storyHtml;
+  if (!entries.length && !pinned.length) {
+    storyHtml = none('Nothing in the story bank yet.');
+  } else {
+    const perField = pinned.map(f => {
+      const tagged = entries.filter(a => (a.fields || []).includes(f));
+      return `<li>
+        <span class="cs-list__main">${esc(CATEGORY_LABEL_MAP[f])}</span>
+        <span class="cs-list__side"> ${tagged.length ? `${tagged.length} ${tagged.length === 1 ? 'entry' : 'entries'}` : 'none yet'}</span>
+      </li>`;
+    }).join('');
+    const general = entries.filter(a => !(a.fields || []).length).length;
+    // One counsel line per DISTINCT piece of advice. In the application year
+    // the thin-story counsel is field-agnostic, so two thin fields would
+    // otherwise print the identical sentence twice — merge their labels
+    // instead, and name the field so the reader knows what it refers to.
+    const byText = new Map();
+    pinned.forEach(f => {
+      const tagged = entries.filter(a => (a.fields || []).includes(f));
+      const { text } = storyCounsel(CATEGORY_LABEL_MAP[f], tagged, yrs);
+      byText.set(text, [...(byText.get(text) ?? []), CATEGORY_LABEL_MAP[f]]);
+    });
+    const counselLines = [...byText.entries()].map(([text, labels]) => {
+      // Only prefix when the sentence doesn't already name the field itself.
+      const named = labels.some(l => text.includes(l));
+      const prefix = named ? '' : `${labels.join(' & ')}: `;
+      return `<p class="cs-counsel">${esc(prefix + text)}</p>`;
+    }).join('');
+    storyHtml = `
+      <p class="cs-lead">${entries.length} ${entries.length === 1 ? 'entry' : 'entries'} total${general ? `, ${general} untagged` : ''}.</p>
+      ${perField ? `<ul class="cs-list">${perField}</ul>` : ''}
+      ${counselLines || (pinned.length ? '' : none('Pin fields in the planner to track a story per field.'))}`;
+  }
+
+  // Generation date: a real timestamp on a snapshot artifact is honest and
+  // necessary (it tells the reader how current the page is). It is NOT an
+  // admissions date — no deadline is ever asserted anywhere in this document.
+  const generated = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  return `
+    <div class="cs-doc">
+      <header class="cs-doc__header">
+        <div>
+          <h1 class="cs-doc__title">Counselor summary</h1>
+          <p class="cs-doc__sub">A snapshot of this student's university planning, compiled from Altiora.</p>
+        </div>
+        <button type="button" class="cs-print-btn" data-do-print>Print / Save as PDF</button>
+      </header>
+
+      <section class="cs-section"><h2 class="cs-section__head">Snapshot</h2>${snapshot}</section>
+      <section class="cs-section"><h2 class="cs-section__head">Subjects &amp; predicted grades</h2>${subjectsHtml}</section>
+      <section class="cs-section"><h2 class="cs-section__head">Course shortlist</h2>${shortlistHtml}</section>
+      <section class="cs-section"><h2 class="cs-section__head">Admission tests</h2>${testsHtml}</section>
+      <section class="cs-section"><h2 class="cs-section__head">Story bank</h2>${storyHtml}</section>
+
+      <footer class="cs-doc__foot">
+        <p>Generated ${esc(generated)} · altiora.app</p>
+        <p><strong>Always verify all requirements, deadlines and test dates with universities directly.</strong>
+          Altiora matches on subjects and published typical offers; it is a planning aid, not an admissions decision.</p>
+      </footer>
+    </div>`;
+}
+
+function renderCounselorSummary() {
+  const panel = $('panel-summary');
+  if (!panel) return;
+  panel.innerHTML = buildCounselorSummaryHtml();
+}
+
+/* ═══════════════════════════════════════════════════════════════
  * STORY BANK — not a record, a narrative.
  * A counselor doesn't inventory a student's activities; they mine
  * them for story: what you did, what it taught you, why it mattered.
@@ -2409,6 +2595,13 @@ function storyCardHtml(a) {
 // student's own data: how many reflective entries the field has × how far
 // they are from applying. No fabricated university claims, no scoring.
 function storyCounselHtml(label, entries, yrs) {
+  const { text, tone } = storyCounsel(label, entries, yrs);
+  return `<p class="story-counsel story-counsel--${tone}">${esc(text)}</p>`;
+}
+
+// The counsel WORDING alone — shared by the story view and the printable
+// Counselor Summary so the two can never drift apart.
+function storyCounsel(label, entries, yrs) {
   const reflective = entries.filter(entryHasReflection).length;
   const strong = reflective >= 3;
   let text, tone;
@@ -2430,7 +2623,7 @@ function storyCounselHtml(label, entries, yrs) {
       text = `Focus on telling the strongest version of what you already have; your reflections above are the raw material.`;
     }
   }
-  return `<p class="story-counsel story-counsel--${tone}">${esc(text)}</p>`;
+  return { text, tone };
 }
 
 // One field's story: header + count + (for pinned fields) year-aware counsel,
@@ -2638,6 +2831,9 @@ function wireAchievementsEvents() {
     if (!t.closest) return;
     // "Open your story" from anywhere (Applying card, home card, quick access).
     if (t.closest('[data-open-story]')) { switchMode('story'); return; }
+    // Printable Counselor Summary: open it, then print from within it.
+    if (t.closest('[data-open-summary]')) { switchMode('summary'); return; }
+    if (t.closest('[data-do-print]'))     { window.print(); return; }
     if (t.closest('#achvAddBtn'))    { openAchievementForm(null); return; }
     if (t.closest('#achvCancelBtn')) { closeAchievementForm(); return; }
     // Field tag chips in the form toggle in place (no form submit).
@@ -3039,6 +3235,7 @@ function renderShortlist() {
   panel.innerHTML =
     `<div class="shortlist-toolbar">
        <button id="exportCsvBtn" class="export-csv-btn" type="button">⬇ Export CSV</button>
+       <button class="export-csv-btn" type="button" data-open-summary>🖨 Print summary</button>
      </div>`
     + buildShortlistInsightsHtml(saved)
     + `<div id="shortlistGroups"></div>`;
@@ -3077,7 +3274,9 @@ function renderShortlist() {
 
 // Balance verdict: the shape of the list plus one line of counselor
 // advice. Factual and kind — about the LIST's shape, never the student.
-function buildBalanceVerdictHtml(saved) {
+// The balance WORDING, computed once and shared by the on-screen verdict and
+// the printable Counselor Summary — so the two can never drift apart.
+function shortlistBalance(saved) {
   const { counts, hasGrades } = shortlistVerdicts(saved);
   const classified = counts.reach + counts.match + counts.safety;
   const countsBits = [
@@ -3129,6 +3328,12 @@ function buildBalanceVerdictHtml(saved) {
 
     advice = lead + anchor + timing;
   }
+
+  return { counts, hasGrades, classified, countsBits, advice };
+}
+
+function buildBalanceVerdictHtml(saved) {
+  const { classified, countsBits, advice } = shortlistBalance(saved);
 
   const countsLine = classified > 0
     ? `<span class="shortlist-balance__counts">Your list: ${countsBits.join(' · ')}</span>`
@@ -3890,6 +4095,7 @@ function renderWorkspaceHome() {
           ${toolBtns}
           <button class="home-quick__btn" data-go-tool="shortlist">🔖 My Shortlist (${saved.length})</button>
           <button class="home-quick__btn" data-open-story>📖 Your story</button>
+          <button class="home-quick__btn" data-open-summary>🖨 Print summary</button>
           <button class="home-quick__btn" data-change-stage>Change stage</button>
         </div>
       </section>
