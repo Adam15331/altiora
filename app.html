@@ -10,7 +10,7 @@
   <!-- Confident Editorial type — loaded via <link> (reliable) not @import -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
   <link rel="stylesheet" href="tokens.css?v=9" />
-  <link rel="stylesheet" href="styles.css?v=65" />
+  <link rel="stylesheet" href="styles.css?v=67" />
   <script defer data-domain="altiora.app" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
@@ -212,6 +212,12 @@
           <button id="shortlistLink" class="shortlist-link" type="button" aria-label="View your saved shortlist">
             <span class="shortlist-link__icon" aria-hidden="true">🔖</span>
             <span class="shortlist-link__text">My Shortlist (<span id="shortlistCount">0</span>)</span>
+          </button>
+          <!-- Story is a durable student-owned asset like fields and the
+               shortlist — reachable from every stage, not an Applying tab. -->
+          <button id="storyLink" class="shortlist-link" type="button" data-open-story aria-label="Open your story">
+            <span class="shortlist-link__icon" aria-hidden="true">📖</span>
+            <span class="shortlist-link__text">My Story (<span id="storyCount">0</span>)</span>
           </button>
           </div><!-- /stage-bar__row -->
         </div>
@@ -497,10 +503,10 @@
   <script src="data/courseRequirements.js?v=18"></script>
   <script src="data/university-profiles.js?v=2"></script>
   <script src="data/admissionTestInfo.js?v=1"></script>
-  <script src="data/fieldProfiles.js?v=1"></script>
+  <script src="data/fieldProfiles.js?v=2"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
-  <script src="state.js?v=12"></script>
-  <script src="main.js?v=75"></script>
+  <script src="state.js?v=13"></script>
+  <script src="main.js?v=77"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);
