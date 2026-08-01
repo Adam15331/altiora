@@ -2579,6 +2579,65 @@ footer p {
   outline: none;
   border-color: var(--color-text-secondary);
 }
+/* Per-subject grade rows (letter-profile systems) */
+.grade-select--compact { min-width: 84px; padding-right: 26px; }
+.grade-rows-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  width: 100%;
+}
+/* The row-mode label must be allowed to shrink/wrap (the shared
+   .grade-option-label is flex-shrink:0 for the old single-select layout). */
+.grade-rows-head .grade-option-label {
+  flex: 1 1 auto;
+  flex-shrink: 1;
+  min-width: 0;
+}
+.grade-setall {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.grade-setall__label {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ce-ink-60);
+}
+.grade-rows {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  width: 100%;
+}
+.grade-row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 4px 6px 4px 12px;
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius-pill);
+  background: var(--ce-surface);
+}
+.grade-row__subject {
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+.grade-rows__empty {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+@media (max-width: 480px) {
+  .grade-rows { gap: var(--space-2); }
+  .grade-row { width: 100%; justify-content: space-between; }
+}
 .grade-number-input {
   font-family: var(--font-sans);
   font-size: var(--text-sm);
