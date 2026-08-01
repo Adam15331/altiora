@@ -36,7 +36,7 @@ const AltioraState = (() => {
         stage:               null,   // "exploring" | "choosing" | "building" | "applying"
         qualificationSystem: null,
         subjects:            [],      // subject tag strings
-        predictedGrades:     null,    // grade string or IB number
+        predictedGrades:     null,    // letter systems: {subject → grade} map · IB: points string · AP: letter string
         interests:           [],      // category strings
         candidateFields:     [],      // category ids the student is considering (max 3, order = priority)
         achievements:        [],      // the student's STORY BANK: entries with reflections + optional field tags — see addAchievement()
@@ -89,6 +89,17 @@ const AltioraState = (() => {
     // Old saves have no achievements key (or, defensively, a corrupt one) —
     // normalise to a clean array so every caller can rely on the shape.
     if (!Array.isArray(profile.achievements)) profile.achievements = [];
+    // Per-subject grade migration: letter-profile systems (UK/SG A-Levels,
+    // HK DSE) moved from one average string to a {subject → grade} map. An
+    // old save's single average hydrates as that grade for EVERY saved
+    // subject — nothing lost, nothing re-asked. IB/AP strings pass through.
+    const LETTER_SYSTEMS = ['UK_A_Level', 'SG_A_Level', 'HK_DSE'];
+    if (typeof profile.predictedGrades === 'string' && profile.predictedGrades
+        && LETTER_SYSTEMS.includes(profile.qualificationSystem)
+        && Array.isArray(profile.subjects) && profile.subjects.length) {
+      const uniform = profile.predictedGrades;
+      profile.predictedGrades = Object.fromEntries(profile.subjects.map(s => [s, uniform]));
+    }
     // Additive story-bank fields: entries saved before the story rebuild have
     // no reflection prompts and no field tags. Backfill them so every entry
     // has the full shape (empty reflections, untagged = General). Pre-existing

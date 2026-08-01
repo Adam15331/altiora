@@ -265,14 +265,96 @@ main     { flex: 1; padding: var(--pad); }
  * ═══════════════════════════════════════════════════════════════ */
 .stage-bar {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--space-4);
+  flex-direction: column;
+  gap: var(--space-3);
   padding-bottom: var(--space-4);
   margin-bottom: var(--space-8);
   border-bottom: 1px solid var(--color-border);
 }
+.stage-bar__row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+.stage-bar__spacer { flex: 1 1 auto; }
 .stage-bar__indicator { position: relative; }
+
+/* ── Journey bar: the four stages, always visible, CE-voiced ────── */
+.journey-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.journey-bar__slot { display: inline-flex; align-items: center; gap: var(--space-2); }
+.journey-bar__step {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius-pill);
+  background: transparent;
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ce-ink-60);
+  cursor: pointer;
+  transition: border-color var(--t-fast), color var(--t-fast);
+}
+.journey-bar__step:hover { border-color: var(--ce-ink); color: var(--ce-ink); }
+.journey-bar__step--current {
+  background: var(--ce-accent);
+  border-color: var(--ce-ink);
+  color: var(--ce-ink);
+}
+.journey-bar__step--done    { color: var(--ce-status-strong); border-color: rgba(30,122,64,.45); }
+.journey-bar__step--skipped { color: var(--ce-ink-30); }
+.journey-bar__step--todo    { color: var(--ce-ink-30); }
+.journey-bar__sep { color: var(--ce-ink-30); font-family: var(--ce-font-mono); font-size: 11px; }
+.journey-bar__num { display: none; }
+.journey-bar__next {
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  background: var(--ce-accent);
+  color: var(--ce-ink);
+  border: none;
+  border-radius: var(--ce-radius-pill);
+  padding: 4px 10px;
+  cursor: pointer;
+  animation: journey-next-pulse 2.4s ease-in-out infinite;
+}
+@keyframes journey-next-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
+@media (prefers-reduced-motion: reduce) { .journey-bar__next { animation: none; } }
+
+/* 375px: numbered steps, label only on the current one */
+@media (max-width: 560px) {
+  .journey-bar { gap: 6px; }
+  .journey-bar__sep { display: none; }
+  .journey-bar__step { padding: 4px 9px; }
+  .journey-bar__num { display: inline; }
+  .journey-bar__step:not(.journey-bar__step--current) .journey-bar__label { display: none; }
+  .journey-bar__step--current .journey-bar__num { display: none; }
+}
+
+/* ── Profile popover: system + year in one place ────────────────── */
+.profile-menu { min-width: 240px; }
+.profile-menu__label {
+  display: block;
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--ce-ink-30);
+  padding: var(--space-2) 12px 2px;
+}
 
 .stage-indicator {
   display: inline-flex;
@@ -544,6 +626,12 @@ main     { flex: 1; padding: var(--pad); }
   padding: 0 0 0 var(--space-3);
 }
 .shortlist-grade-rows li { font-size: var(--text-sm); }
+/* One-country observation — a soft aside, visually quieter than the facts. */
+.shortlist-insights__list li.shortlist-country-note {
+  color: var(--ce-ink-60);
+  font-style: italic;
+  padding-top: var(--space-1);
+}
 .shortlist-insight-tag {
   display: inline-block;
   padding: 2px 9px;
@@ -2491,6 +2579,65 @@ footer p {
   outline: none;
   border-color: var(--color-text-secondary);
 }
+/* Per-subject grade rows (letter-profile systems) */
+.grade-select--compact { min-width: 84px; padding-right: 26px; }
+.grade-rows-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  width: 100%;
+}
+/* The row-mode label must be allowed to shrink/wrap (the shared
+   .grade-option-label is flex-shrink:0 for the old single-select layout). */
+.grade-rows-head .grade-option-label {
+  flex: 1 1 auto;
+  flex-shrink: 1;
+  min-width: 0;
+}
+.grade-setall {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.grade-setall__label {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ce-ink-60);
+}
+.grade-rows {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  width: 100%;
+}
+.grade-row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 4px 6px 4px 12px;
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius-pill);
+  background: var(--ce-surface);
+}
+.grade-row__subject {
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+.grade-rows__empty {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+@media (max-width: 480px) {
+  .grade-rows { gap: var(--space-2); }
+  .grade-row { width: 100%; justify-content: space-between; }
+}
 .grade-number-input {
   font-family: var(--font-sans);
   font-size: var(--text-sm);
@@ -3473,27 +3620,9 @@ button.plan-combo-tag--drop:focus-visible {
 .card-axis { color: var(--ce-ink-60); }
 
 /* ═══════════════════════════════════════════════════════════════
- * MOVE 3 — stage graduation: journey strip + graduation card.
- * Orientation, not gamification: one quiet mono line, one warm card.
+ * MOVE 3 — stage graduation card (the old home journey strip is
+ * replaced by the persistent journey bar in the nav).
  * ═══════════════════════════════════════════════════════════════ */
-
-.journey-strip {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: var(--space-4) 0 0;
-  font-family: var(--ce-font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .07em;
-  text-transform: uppercase;
-}
-.journey-strip__stage--current { color: var(--ce-ink); }
-.journey-strip__stage--done    { color: var(--ce-status-strong); }
-.journey-strip__stage--skipped { color: var(--ce-ink-30); }
-.journey-strip__stage--todo    { color: var(--ce-ink-30); }
-.journey-strip__sep            { color: var(--ce-ink-30); font-weight: 400; }
 
 /* ═══════════════════════════════════════════════════════════════
  * STAGE 1 DEPTH — the Field Overview as a genuine reading surface,

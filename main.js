@@ -746,6 +746,21 @@ function renderCheckEmptyState() {
 const A_LEVEL_RANK = { 'A*': 5, 'A': 4, 'B': 3, 'C': 2, 'D': 1, 'E': 0 };
 const AP_TO_LETTER  = { '5': 'A*', '4': 'A', '3': 'B', '2': 'C', '1': 'D' };
 const DSE_RANK      = { '5**': 7, '5*': 6, '5': 5, '4': 4, '3': 3, '2': 2, '1': 1 };
+// SG A-Levels grade below E: S (sub-pass) and U (ungraded). Offers never ask
+// for them, but a student can honestly predict them.
+const SG_RANK       = { 'A': 5, 'B': 4, 'C': 3, 'D': 2, 'E': 1, 'S': 0, 'U': -1 };
+
+// Letter-profile systems: offers are grade PROFILES ("A*AA"), so the student
+// side is per-subject predictions compared slot-by-slot — not one average.
+const LETTER_GRADE_SYSTEMS = new Set(['UK_A_Level', 'SG_A_Level', 'HK_DSE']);
+const GRADE_SCALES = {
+  UK_A_Level: ['A*', 'A', 'B', 'C', 'D', 'E'],
+  SG_A_Level: ['A', 'B', 'C', 'D', 'E', 'S', 'U'],
+  HK_DSE:     ['5**', '5*', '5', '4', '3', '2', '1'],
+};
+function systemRank(system) {
+  return system === 'HK_DSE' ? DSE_RANK : system === 'SG_A_Level' ? SG_RANK : A_LEVEL_RANK;
+}
 
 function parseALevelGrades(str) {
   return (str ?? '').match(/A\*|[A-E]/g) ?? [];
@@ -753,6 +768,59 @@ function parseALevelGrades(str) {
 
 function parseDseGrades(str) {
   return (str ?? '').match(/5\*\*|5\*|[1-5]/g) ?? [];
+}
+
+function parseOfferGrades(system, str) {
+  return (system === 'HK_DSE' ? parseDseGrades(str) : parseALevelGrades(str)).slice(0, 3);
+}
+
+// The student's predicted-grade LIST for a letter system. Accepts BOTH
+// shapes: the per-subject map {subject → grade} (current), and the legacy
+// single-average string, which expands to a uniform profile over the offer's
+// slots — exactly what "average X" claimed. Returns null when unusable.
+function studentGradeList(system, studentGrade, slots) {
+  const rank = systemRank(system);
+  if (typeof studentGrade === 'string') {
+    return Object.prototype.hasOwnProperty.call(rank, studentGrade)
+      ? Array(Math.max(1, slots)).fill(studentGrade) : null;
+  }
+  if (studentGrade && typeof studentGrade === 'object') {
+    const vals = Object.values(studentGrade).filter(g => Object.prototype.hasOwnProperty.call(rank, g));
+    return vals.length ? vals : null;
+  }
+  return null;
+}
+
+// THE letter-system comparison: sort both profiles descending and compare
+// slot-by-slot (student's best vs the offer's highest requirement, and so
+// on). Meets = every compared slot satisfied. Every letter-system consumer
+// (checkStatusFor, shortlist verdicts, graduation balance) flows through
+// here — one pipeline, no parallel logic.
+function compareProfileToOffer(system, studentGrade, offerGrades) {
+  const rank = systemRank(system);
+  const o = offerGrades.map(g => rank[g]).filter(v => v != null).sort((a, b) => b - a);
+  if (!o.length) return 'unknown';
+  const sList = studentGradeList(system, studentGrade, o.length);
+  if (!sList) return 'unknown';
+  const s = sList.map(g => rank[g]).sort((a, b) => b - a);
+  const n = Math.min(s.length, o.length);
+  for (let i = 0; i < n; i++) if (s[i] < o[i]) return 'above';
+  return 'met';
+}
+
+// "Comfortably below your level": STRICTLY above the offer in every compared
+// slot (the per-subject generalisation of the old "a full grade above the
+// offer's top grade" rule — identical for uniform profiles).
+function profileComfortablyAbove(system, studentGrade, offerGrades) {
+  const rank = systemRank(system);
+  const o = offerGrades.map(g => rank[g]).filter(v => v != null).sort((a, b) => b - a);
+  if (!o.length) return false;
+  const sList = studentGradeList(system, studentGrade, o.length);
+  if (!sList) return false;
+  const s = sList.map(g => rank[g]).sort((a, b) => b - a);
+  const n = Math.min(s.length, o.length);
+  for (let i = 0; i < n; i++) if (s[i] <= o[i]) return false;
+  return true;
 }
 
 // Tri-state grade comparison in the student's own qualification system.
@@ -766,18 +834,13 @@ function parseDseGrades(str) {
 // grades we can't read must never fall through to a strong match.
 function compareGradeToStudent(course, system, studentGrade) {
   if (!studentGrade) return 'unknown';
-  if (system === 'UK_A_Level') {
-    const gradeStr = course.grades?.aLevels;
-    if (!gradeStr) return 'unknown';
-    const grades = parseALevelGrades(gradeStr);
-    const top3 = grades.slice(0, 3);
-    if (!top3.length) return 'unknown';
-    if (studentGrade === 'A*') return 'met';
-    if (studentGrade === 'A')  return top3.some(g => g === 'A*') ? 'above' : 'met';
-    if (studentGrade === 'B')  return top3.every(g => A_LEVEL_RANK[g] >= A_LEVEL_RANK['A']) ? 'above' : 'met';
-    if (studentGrade === 'C')  return top3.some(g => A_LEVEL_RANK[g] >= A_LEVEL_RANK['A']) ? 'above' : 'met';
-    if (studentGrade === 'D')  return top3.some(g => A_LEVEL_RANK[g] >= A_LEVEL_RANK['B']) ? 'above' : 'met';
-    return 'unknown';
+  // Letter-profile systems (UK/SG A-Levels, HK DSE): offer profile vs the
+  // student's per-subject predictions, slot-by-slot. Legacy single-average
+  // strings still compare (as a uniform profile) — no save left behind.
+  if (LETTER_GRADE_SYSTEMS.has(system)) {
+    const raw = course.grades?.[SYSTEM_GRADE_KEY[system]];
+    if (!raw) return 'unknown';
+    return compareProfileToOffer(system, studentGrade, parseOfferGrades(system, raw));
   }
   if (system === 'IB') {
     // grades.ib is an integer points total (e.g. 39); US/holistic courses
@@ -802,24 +865,6 @@ function compareGradeToStudent(course, system, studentGrade) {
     if (A_LEVEL_RANK[studentGrade] == null || A_LEVEL_RANK[courseMinLetter] == null) return 'unknown';
     return A_LEVEL_RANK[studentGrade] < A_LEVEL_RANK[courseMinLetter] ? 'above' : 'met';
   }
-  if (system === 'SG_A_Level') {
-    const sgStr = course.grades?.sgALevels;
-    if (!sgStr) return 'unknown';
-    const grades = parseALevelGrades(sgStr);
-    if (!grades.length) return 'unknown';
-    if (A_LEVEL_RANK[studentGrade] == null) return 'unknown';
-    const minRank = Math.min(...grades.map(g => A_LEVEL_RANK[g] ?? 0));
-    return A_LEVEL_RANK[studentGrade] < minRank ? 'above' : 'met';
-  }
-  if (system === 'HK_DSE') {
-    const dseStr = course.grades?.hkDse;
-    if (!dseStr) return 'unknown';
-    const grades = parseDseGrades(dseStr);
-    if (!grades.length) return 'unknown';
-    if (DSE_RANK[studentGrade] == null) return 'unknown';
-    const minRank = Math.min(...grades.map(g => DSE_RANK[g] ?? 0));
-    return (DSE_RANK[studentGrade] ?? 0) < minRank ? 'above' : 'met';
-  }
   return 'unknown';
 }
 
@@ -830,15 +875,56 @@ function isGradeAboveStudent(course, system, studentGrade) {
   return compareGradeToStudent(course, system, studentGrade) === 'above';
 }
 
-// For a grey course (predicted grade below the typical offer), describe the
-// gap as { have, need } strings in the active qualification system, e.g.
-// { have: "A*", need: "A*A*A" } or { have: "37 points", need: "39 points" }.
+// For a grey course (predictions below the typical offer), describe the gap.
+// Letter systems get a PROFILE-aware gap: { have: "A*AA", need: "A*A*A",
+// shortTotal, shortSlots } computed slot-by-slot, so "one grade short in one
+// subject" (the near-miss tier) reads exactly as the comparison found it.
+// IB keeps its points strings.
 function gradeGapInfo(course, system, studentGrade) {
   if (!studentGrade) return null;
   const need = course.grades?.[SYSTEM_GRADE_KEY[system]] ?? null;
   if (!need) return null;
   if (system === 'IB') return { have: `${studentGrade} points`, need: `${need} points` };
+  if (LETTER_GRADE_SYSTEMS.has(system)) {
+    const rank  = systemRank(system);
+    const offer = parseOfferGrades(system, need);
+    const sList = studentGradeList(system, studentGrade, offer.length);
+    if (sList && offer.length) {
+      const sorted = sList.slice().sort((a, b) => (rank[b] ?? -9) - (rank[a] ?? -9));
+      const o = offer.map(g => rank[g]).sort((a, b) => b - a);
+      const s = sorted.map(g => rank[g]);
+      let shortSlots = 0, shortTotal = 0;
+      for (let i = 0; i < Math.min(s.length, o.length); i++) {
+        if (s[i] < o[i]) { shortSlots++; shortTotal += o[i] - s[i]; }
+      }
+      return { have: sorted.slice(0, Math.max(offer.length, sorted.length)).join(''), need: String(need), shortSlots, shortTotal };
+    }
+  }
   return { have: String(studentGrade), need: String(need) };
+}
+
+// Display form of the persisted predictions: maps render as the sorted
+// profile ("A*AA" / "5*54"), strings (legacy average, IB points, AP letter)
+// render as-is. Null when nothing usable is set.
+function formatPredictedGrades(g, system) {
+  if (!g) return null;
+  if (typeof g === 'string') return g;
+  if (typeof g !== 'object') return null;
+  const rank = systemRank(system);
+  const vals = Object.values(g).filter(v => Object.prototype.hasOwnProperty.call(rank, v));
+  if (!vals.length) return null;
+  return vals.sort((a, b) => (rank[b] ?? -9) - (rank[a] ?? -9)).join('');
+}
+
+// Human sentence for a grade gap — profile-aware where we have slot data.
+function gradeGapText(gap) {
+  if (typeof gap.shortTotal === 'number' && gap.shortTotal > 0) {
+    const mag = gap.shortTotal === 1
+      ? 'one grade short'
+      : `${gap.shortTotal} grades short${gap.shortSlots > 1 ? ` across ${gap.shortSlots} subjects` : ''}`;
+    return `You're predicted ${gap.have} — this asks ${gap.need}: ${mag}`;
+  }
+  return `You have ${gap.have}, course asks for ${gap.need}`;
 }
 
 const GRADE_CONVERSION_HINTS = {
@@ -848,10 +934,53 @@ const GRADE_CONVERSION_HINTS = {
   HK_DSE:     'DSE 5** ≈ A*; 5 ≈ A. Conversions vary – always verify.',
 };
 
+// Live per-subject predictions for letter systems (subject → grade). The
+// derived value the pipeline reads is state.predictedGrade: a map with only
+// the SELECTED subjects' set grades, or null when none — so every existing
+// "grades set?" gate keeps working. A legacy single-average grade restored
+// from an old save sits in _pendingUniform until subject rows exist, then
+// fills them uniformly (the visible migration — nothing lost, nothing
+// re-asked).
+let _gradeMap = {};
+let _pendingUniform = null;
+
+function commitGradeMap({ render = true } = {}) {
+  const entries = Object.entries(_gradeMap)
+    .filter(([s, g]) => g && state.selectedSubjects.includes(s));
+  state.predictedGrade = entries.length ? Object.fromEntries(entries) : null;
+  if (render) renderCheckResults();
+}
+
+// (Re)build one grade row per selected subject, preserving set values.
+// Called on entry (buildGradeInput wiring) and on every subject toggle.
+function syncGradeRows() {
+  const rows = $('gradeRows');
+  if (!rows) return;                           // not a letter-system input
+  const scale = GRADE_SCALES[state.checkSystem] ?? [];
+  if (_pendingUniform != null) {
+    state.selectedSubjects.forEach(s => { if (!(s in _gradeMap)) _gradeMap[s] = _pendingUniform; });
+  }
+  if (!state.selectedSubjects.length) {
+    rows.innerHTML = `<p class="grade-rows__empty">Pick your subjects above — each gets its own predicted grade.</p>`;
+  } else {
+    rows.innerHTML = state.selectedSubjects.map(s => `
+      <label class="grade-row">
+        <span class="grade-row__subject">${esc(s)}</span>
+        <span class="select-wrap"><select class="grade-select grade-select--compact" data-grade-subject="${esc(s)}">
+          <option value="">—</option>
+          ${scale.map(g => `<option value="${esc(g)}"${_gradeMap[s] === g ? ' selected' : ''}>${esc(g)}</option>`).join('')}
+        </select></span>
+      </label>`).join('');
+  }
+  commitGradeMap({ render: false });
+}
+
 function buildGradeInput(systemKey) {
   const section = $('gradeInputSection');
   if (!section) return;
   state.predictedGrade = null;
+  _gradeMap = {};
+  _pendingUniform = null;
   if (!systemKey) { section.classList.add('hidden'); section.innerHTML = ''; return; }
 
   const tooltipText = "Grades affect which courses show as strong matches — it's a guide, not a hard filter.";
@@ -878,22 +1007,48 @@ function buildGradeInput(systemKey) {
   let bodyHtml = '';
   let wire     = null;
 
-  if (systemKey === 'UK_A_Level') {
+  if (LETTER_GRADE_SYSTEMS.has(systemKey)) {
+    // Per-subject predictions: offers in these systems are grade PROFILES
+    // ("A*AA"), so each selected subject gets its own compact select. The
+    // "Set all to" quick action keeps the uniform case one click.
+    const rowLabel = {
+      UK_A_Level: 'Predicted grade for each of your A-Level subjects',
+      SG_A_Level: 'Predicted grade for each of your subjects',
+      HK_DSE:     'Predicted level for each of your subjects',
+    }[systemKey];
+    const scale = GRADE_SCALES[systemKey];
     bodyHtml = `
       <div class="grade-input-body">
-        <label class="grade-option-label" for="gradeSelectALevel">Average predicted grade across your A-Level subjects</label>
-        <div class="select-wrap">
-          <select id="gradeSelectALevel" class="grade-select">
-            <option value="">— Leave blank —</option>
-            <option value="A*">A* (predicting mostly A*s)</option>
-            <option value="A">A (predicting mostly As)</option>
-            <option value="B">B (predicting mostly Bs)</option>
-            <option value="C">C (predicting mostly Cs)</option>
-            <option value="D">D (predicting mostly Ds)</option>
-          </select>
+        <div class="grade-rows-head">
+          <span class="grade-option-label">${esc(rowLabel)}</span>
+          <label class="grade-setall">
+            <span class="grade-setall__label">Set all to</span>
+            <span class="select-wrap"><select id="gradeSetAll" class="grade-select grade-select--compact">
+              <option value="">—</option>
+              ${scale.map(g => `<option value="${esc(g)}">${esc(g)}</option>`).join('')}
+            </select></span>
+          </label>
         </div>
+        <div id="gradeRows" class="grade-rows"></div>
       </div>`;
-    wire = () => wireSelectGrade('gradeSelectALevel');
+    wire = () => {
+      $('gradeSetAll').addEventListener('change', e => {
+        const g = e.target.value;
+        if (!g) return;
+        state.selectedSubjects.forEach(s => { _gradeMap[s] = g; });
+        syncGradeRows();
+        commitGradeMap();
+        e.target.value = '';
+      });
+      $('gradeRows').addEventListener('change', e => {
+        const sel = e.target.closest('[data-grade-subject]');
+        if (!sel) return;
+        const subj = sel.dataset.gradeSubject;
+        if (sel.value) _gradeMap[subj] = sel.value; else delete _gradeMap[subj];
+        commitGradeMap();
+      });
+      syncGradeRows();
+    };
   } else if (systemKey === 'IB') {
     bodyHtml = `
       <div class="grade-input-body">
@@ -923,40 +1078,6 @@ function buildGradeInput(systemKey) {
         </div>
       </div>`;
     wire = () => wireSelectGrade('gradeSelectAP');
-  } else if (systemKey === 'SG_A_Level') {
-    bodyHtml = `
-      <div class="grade-input-body">
-        <label class="grade-option-label" for="gradeSelectSG">Average predicted grade across your H2 subjects</label>
-        <div class="select-wrap">
-          <select id="gradeSelectSG" class="grade-select">
-            <option value="">— Leave blank —</option>
-            <option value="A">A — predicting mostly As</option>
-            <option value="B">B — predicting mostly Bs</option>
-            <option value="C">C — predicting mostly Cs</option>
-            <option value="D">D — predicting mostly Ds</option>
-            <option value="E">E — predicting mostly Es</option>
-          </select>
-        </div>
-      </div>`;
-    wire = () => wireSelectGrade('gradeSelectSG');
-  } else if (systemKey === 'HK_DSE') {
-    bodyHtml = `
-      <div class="grade-input-body">
-        <label class="grade-option-label" for="gradeSelectDSE">Average predicted level across your elective subjects</label>
-        <div class="select-wrap">
-          <select id="gradeSelectDSE" class="grade-select">
-            <option value="">— Leave blank —</option>
-            <option value="5**">5** — predicting mostly 5**s</option>
-            <option value="5*">5* — predicting mostly 5*s</option>
-            <option value="5">5 — predicting mostly 5s</option>
-            <option value="4">4 — predicting mostly 4s</option>
-            <option value="3">3 — predicting mostly 3s</option>
-            <option value="2">2 — predicting mostly 2s</option>
-            <option value="1">1 — predicting mostly 1s</option>
-          </select>
-        </div>
-      </div>`;
-    wire = () => wireSelectGrade('gradeSelectDSE');
   } else {
     section.classList.add('hidden');
     section.innerHTML = '';
@@ -1508,9 +1629,15 @@ function restoreSubjectPickerHome() {
 }
 
 /* ─── Year indicator (global control, same pattern as system) ──── */
-function openYearMenu()  { $('yearMenu')?.classList.remove('hidden'); $('yearIndicatorBtn')?.setAttribute('aria-expanded', 'true'); }
-function closeYearMenu() { $('yearMenu')?.classList.add('hidden');    $('yearIndicatorBtn')?.setAttribute('aria-expanded', 'false'); }
-function toggleYearMenu(){ $('yearMenu')?.classList.contains('hidden') ? openYearMenu() : closeYearMenu(); }
+// The system and year controls live together in ONE profile popover
+// ("A-Levels · Year 12 ▾"). The historical open/close names are kept as
+// aliases so every existing call site keeps working unchanged.
+function openProfileMenu()  { $('profileMenu')?.classList.remove('hidden'); $('profileIndicatorBtn')?.setAttribute('aria-expanded', 'true'); }
+function closeProfileMenu() { $('profileMenu')?.classList.add('hidden');    $('profileIndicatorBtn')?.setAttribute('aria-expanded', 'false'); }
+function toggleProfileMenu(){ $('profileMenu')?.classList.contains('hidden') ? openProfileMenu() : closeProfileMenu(); }
+function openYearMenu()  { openProfileMenu(); }
+function closeYearMenu() { closeProfileMenu(); }
+function toggleYearMenu(){ toggleProfileMenu(); }
 
 // Reflect the profile year in the global indicator and rebuild the menu for
 // the ACTIVE system (year labels are system-specific). Subscribed to state,
@@ -1608,16 +1735,56 @@ function applyStageChrome(stage) {
   $('stageProposal').classList.add('hidden');
   $('subjectOnboard')?.classList.add('hidden');
   $('workspace').classList.remove('hidden');
-  closeStageMenu();
-  closeSystemMenu();
-  closeYearMenu();
-  $('stageIndicatorName').textContent = STAGES[stage].name;
-  $$('#stageMenu .stage-menu__item').forEach(item =>
-    item.classList.toggle('stage-menu__item--current', item.dataset.stage === stage)
-  );
+  closeProfileMenu();
+  renderJourneyBar(stage);
   updateSystemIndicator(AltioraState.getProfile().qualificationSystem);
   updateYearIndicator();
   renderStageToolNav(stage);
+}
+
+/* ─── Journey bar — the four stages, live, on every screen ────────
+ * Replaces the old "Stage:" dropdown. Pure projection of existing
+ * machinery: per-step state from stageProgress (the home strip's
+ * logic), clicks run enterStage exactly as the dropdown did, and the
+ * "Next →" chip runs the existing graduation acceptance. Subscribed
+ * to state, so completing a stage's criteria lights the chip live. */
+
+const JOURNEY_LABELS = {
+  exploring: 'Exploring fields',
+  choosing:  'Choosing subjects',
+  building:  'Building list',
+  applying:  'Applying',
+};
+
+function renderJourneyBar(stageOverride) {
+  const bar = $('journeyBar');
+  if (!bar) return;
+  const stage  = STAGES[stageOverride] ? stageOverride
+               : (AltioraState.getProfile().stage || DEFAULT_STAGE);
+  const curIdx = STAGE_ORDER.indexOf(stage);
+  const progress = Object.fromEntries(STAGE_ORDER.map(s => [s, stageProgress(s)]));
+  // Graduation surfacing: current stage done → the NEXT step carries a
+  // subtle chip on every screen. The richer card on home stays.
+  const next     = NEXT_STAGE[stage];
+  const showNext = !!next && progress[stage].done;
+
+  bar.innerHTML = STAGE_ORDER.map((s, i) => {
+    // Same skip semantics as the old home strip: earlier stages a
+    // late-joiner never did show quietly dimmed, never as failures.
+    let cls, mark = '';
+    if (i === curIdx)               { cls = 'current'; }
+    else if (progress[s].done)      { cls = 'done'; mark = '✓ '; }
+    else if (i < curIdx)            { cls = 'skipped'; }
+    else                            { cls = 'todo'; }
+    const nextChip = (showNext && s === next)
+      ? `<button type="button" class="journey-bar__next" data-journey-next="${s}">Next →</button>` : '';
+    return `<span class="journey-bar__slot">
+      <button type="button" class="journey-bar__step journey-bar__step--${cls}"
+              data-journey-stage="${s}"${i === curIdx ? ' aria-current="step"' : ''}
+              title="${esc(STAGES[s].name)}">
+        <span class="journey-bar__num" aria-hidden="true">${i + 1}</span><span class="journey-bar__label">${mark}${esc(JOURNEY_LABELS[s])}</span>
+      </button>${nextChip}</span>`;
+  }).join('<span class="journey-bar__sep" aria-hidden="true">→</span>');
 }
 
 // Reflect the active system in the global indicator + menu.
@@ -1769,25 +1936,18 @@ function rerenderCurrentView() {
     case 'home':     renderWorkspaceHome(); break;
     case 'applying': renderApplyingPanel(); break;
     case 'story':    renderStoryPanel(); break;
+    // shortlist: the glance counsel is year- and system-aware.
+    case 'shortlist': renderShortlist(); break;
     // strengths: the grid is system-agnostic, but the intro copy and the
     // per-field subject-coverage line are year/subject/system-aware.
     case 'strengths': renderStrengthsIntro(); renderStrengthsResults(); break;
   }
 }
 
-/* ─── System indicator dropdown (global system control) ────────── */
-function openSystemMenu() {
-  $('systemMenu')?.classList.remove('hidden');
-  $('systemIndicatorBtn')?.setAttribute('aria-expanded', 'true');
-}
-function closeSystemMenu() {
-  $('systemMenu')?.classList.add('hidden');
-  $('systemIndicatorBtn')?.setAttribute('aria-expanded', 'false');
-}
-function toggleSystemMenu() {
-  if ($('systemMenu')?.classList.contains('hidden')) openSystemMenu();
-  else closeSystemMenu();
-}
+/* ─── System control — lives inside the profile popover ────────── */
+function openSystemMenu()   { openProfileMenu(); }
+function closeSystemMenu()  { closeProfileMenu(); }
+function toggleSystemMenu() { toggleProfileMenu(); }
 
 // Build the per-stage tool sub-nav: primary tool front and centre,
 // secondary tools as lighter links. Every tool is free.
@@ -2620,7 +2780,7 @@ let _lastSubjectsSig = '';
 function subjectsSig() {
   if (typeof AltioraState === 'undefined') return '';
   const p = AltioraState.getProfile();
-  return (Array.isArray(p.subjects) ? p.subjects : []).join('|') + '::' + (p.predictedGrades ?? '');
+  return (Array.isArray(p.subjects) ? p.subjects : []).join('|') + '::' + JSON.stringify(p.predictedGrades ?? '');
 }
 function syncSubjectSurfaces() {
   const sig = subjectsSig();
@@ -2771,12 +2931,42 @@ function buildBalanceVerdictHtml(saved) {
     advice = hasGrades
       ? 'These courses can’t be classified against your grades — check each course’s requirements directly.'
       : 'Add predicted grades in Check Combination to see whether your list is balanced.';
-  } else if (counts.safety === 0 && counts.reach > 0) {
-    advice = 'Every course here is competitive — add 1–2 safer choices so you’re covered.';
-  } else if (counts.reach === 0) {
-    advice = 'Nothing ambitious here — you have room to aim higher.';
   } else {
-    advice = 'Good spread — ambitious choices anchored by safer ones.';
+    // Prescriptive counsel from the list's actual shape. Target shape:
+    // 1–2 reaches + a core of matches + 1–2 safeties. Name what's missing
+    // and how many — never a vague verdict.
+    const gaps = [];
+    if (counts.reach === 0)  gaps.push('1–2 reaches (ambitious choices)');
+    if (counts.match === 0)  gaps.push('a core of matches (at your level)');
+    if (counts.safety === 0) gaps.push('1–2 safeties (comfortable back-ups)');
+
+    let lead;
+    if (!gaps.length) {
+      lead = 'Good spread — ambitious choices anchored by safer ones.';
+    } else {
+      const have = [];
+      if (counts.match  > 0) have.push(counts.match >= 2 ? 'a solid core of matches' : 'one match at your level');
+      if (counts.reach  > 0) have.push(counts.reach === 1 ? 'one ambitious reach' : `${counts.reach} ambitious reaches`);
+      if (counts.safety > 0) have.push(counts.safety === 1 ? 'one safety' : `${counts.safety} safeties`);
+      const haveTxt = have.length
+        ? have.join(' and ').replace(/^./, ch => ch.toUpperCase()) + '. '
+        : '';
+      lead = `${haveTxt}To balance it: add ${gaps.join(' and ')}.`;
+    }
+
+    // UK anchor where the list is UK-heavy — UCAS's 5 choices are the real
+    // target (a stable, factual number; nothing else numeric is claimed).
+    const ukHeavy = saved.filter(c => c.country === 'UK').length > saved.length / 2;
+    const anchor = ukHeavy ? ' UK applications give you 5 UCAS choices.' : '';
+
+    // Year-aware close: time to build long, or time to finalise.
+    const yrs = studentYears();
+    const timing =
+      (yrs != null && yrs >= 1) ? ' You have time — build a longer list (6–8) and narrow later.' :
+      (yrs === 0)               ? (ukHeavy ? ' This year, finalise toward a balanced 5.'
+                                           : ' This year, finalise toward a balanced final list.') : '';
+
+    advice = lead + anchor + timing;
   }
 
   const countsLine = classified > 0
@@ -2821,17 +3011,39 @@ function buildShortlistInsightsHtml(saved) {
     ? `<li><span class="shortlist-insight-label">Registration windows:</span> <span class="shortlist-reg-windows">${regBits.join(' · ')}</span></li>`
     : '';
 
-  // Grade ranges computed per qualification system (mixed systems → one row each).
-  const gradeRows = shortlistGradeRange(saved);
+  // What the saved courses ask for — in the STUDENT'S system, honestly.
+  const req = shortlistRequirementsSummary(saved);
   let gradeHtml = '';
-  if (gradeRows.length === 1) {
-    const r = gradeRows[0];
-    gradeHtml = `<li><span class="shortlist-insight-label">Grade range:</span> <strong>${esc(r.label)}: ${esc(r.range)}</strong></li>`;
-  } else if (gradeRows.length > 1) {
-    gradeHtml = `<li><span class="shortlist-insight-label">Grade ranges:</span>
+  if (req.range || req.notes.length) {
+    const bits = [];
+    if (req.range) bits.push(`<strong>${esc(req.sysLabel)}: ${esc(req.range)}</strong>`);
+    req.notes.forEach(n => bits.push(esc(n)));
+    gradeHtml = `<li><span class="shortlist-insight-label">What your saved courses ask for:</span> ${bits.join(' · ')}</li>`;
+  } else if (req.fallbackRows.length) {
+    // Nothing on the list is expressible in the student's system — show what
+    // IS published, honestly labelled, rather than nothing or a fake figure.
+    gradeHtml = `<li><span class="shortlist-insight-label">What your saved courses ask for:</span>
+        <span class="text-secondary">no ${esc(req.sysLabel)} figures published — shown as the universities state them:</span>
         <ul class="shortlist-grade-rows">
-          ${gradeRows.map(r => `<li><strong>${esc(r.label)}:</strong> ${esc(r.range)}</li>`).join('')}
+          ${req.fallbackRows.map(r => `<li><strong>${esc(r.label)}:</strong> ${esc(r.range)}</li>`).join('')}
         </ul></li>`;
+  }
+
+  // One-country observation — soft, only once the list has real shape (3+
+  // saves all in one country). Never pushy; deliberate focus is fine.
+  let countryNote = '';
+  if (saved.length >= 3 && countries.size === 1) {
+    const only = [...countries][0];
+    const others = Object.keys(COUNTRY_LABELS)
+      .filter(k => k !== only && (typeof courses !== 'undefined') && courses.some(c => c.country === k))
+      .map(k => COUNTRY_LABELS[k]);
+    if (others.length) {
+      const otherTxt = others.length > 1
+        ? `${others.slice(0, -1).join(', ')} and ${others[others.length - 1]}`
+        : others[0];
+      countryNote = `<li class="shortlist-country-note">All your choices are in ${esc(COUNTRY_LABELS[only] ?? only)} —
+        if that's deliberate, great; if not, your subjects open courses in ${esc(otherTxt)} too.</li>`;
+    }
   }
 
   return `
@@ -2845,8 +3057,59 @@ function buildShortlistInsightsHtml(saved) {
         <li><span class="shortlist-insight-label">Admission tests you'll need:</span> ${testsHtml}</li>
         ${regLine}
         ${gradeHtml}
+        ${countryNote}
       </ul>
     </div>`;
+}
+
+// The entry-requirement summary for the glance, in the STUDENT'S OWN system
+// only. Courses with indicative admissions (US holistic) are never forced
+// into the range — they get an honest counted note instead. Falls back to
+// the per-system rows only when nothing on the list is expressible in the
+// student's system.
+function shortlistRequirementsSummary(saved) {
+  const system   = (typeof AltioraState !== 'undefined') ? AltioraState.getProfile().qualificationSystem : null;
+  const key      = SYSTEM_GRADE_KEY[system];
+  const sysLabel = SYSTEM_SHORT_LABELS[system] ?? 'grade';
+
+  // US courses publish no fixed offer in ANY system — holistic admissions.
+  const holistic   = saved.filter(c => c.country === 'US' && !(key && c.grades?.[key]));
+  const rest       = saved.filter(c => !holistic.includes(c));
+  const withFigure = key ? rest.filter(c => c.grades?.[key] != null && c.grades[key] !== '') : [];
+  const noFigure   = rest.length - withFigure.length;
+
+  const notes = [];
+  if (holistic.length) {
+    notes.push(`${holistic.length} US course${holistic.length === 1 ? ' uses' : 's use'} holistic admissions — no fixed offer`);
+  }
+  if (withFigure.length && noFigure > 0) {
+    notes.push(`${noFigure} course${noFigure === 1 ? " doesn't" : " don't"} publish a ${sysLabel} figure`);
+  }
+
+  let range = null;
+  if (withFigure.length) {
+    const vals = withFigure.map(c => c.grades[key]);
+    if (system === 'IB') {
+      const nums = vals.filter(v => typeof v === 'number' && !isNaN(v));
+      if (nums.length) {
+        const lo = Math.min(...nums), hi = Math.max(...nums);
+        range = lo === hi ? `${lo} points` : `${lo}–${hi} points`;
+      }
+    } else if (system === 'UK_A_Level' || system === 'SG_A_Level') {
+      // Strongest offer first, e.g. "A*AA–AAA"; a single value stands alone.
+      const ranked = vals.slice().sort((a, b) => aLevelOfferStrength(b) - aLevelOfferStrength(a));
+      range = ranked[0] === ranked[ranked.length - 1] ? ranked[0] : `${ranked[0]}–${ranked[ranked.length - 1]}`;
+    } else {
+      // HK DSE / AP — distinct spread (no reliable cross-grade ranking).
+      const uniq = [...new Set(vals.map(String))].sort();
+      range = uniq.length === 1 ? uniq[0] : `${uniq[0]}–${uniq[uniq.length - 1]}`;
+    }
+  }
+
+  // Only when the student's system yields nothing: show what other systems
+  // publish (minus figures for the holistic courses, which have none anyway).
+  const fallbackRows = (!range && rest.length) ? shortlistGradeRange(rest) : [];
+  return { range, notes, fallbackRows, sysLabel };
 }
 
 // Grade spread across saved courses, computed SEPARATELY per qualification
@@ -2913,15 +3176,23 @@ const VERDICT_META = {
 // cross-system verdict.
 function hasValidGrade(system, grade) {
   if (!grade) return false;
-  if (system === 'UK_A_Level' || system === 'SG_A_Level' || system === 'US_AP') {
-    return Object.prototype.hasOwnProperty.call(A_LEVEL_RANK, grade);
+  // Letter systems: the current shape is a per-subject map (valid when ANY
+  // entry is a real grade on this system's scale); a legacy single-average
+  // string stays valid too.
+  if (LETTER_GRADE_SYSTEMS.has(system)) {
+    const rank = systemRank(system);
+    if (typeof grade === 'string') return Object.prototype.hasOwnProperty.call(rank, grade);
+    if (typeof grade === 'object') {
+      return Object.values(grade).some(v => Object.prototype.hasOwnProperty.call(rank, v));
+    }
+    return false;
+  }
+  if (system === 'US_AP') {
+    return typeof grade === 'string' && Object.prototype.hasOwnProperty.call(A_LEVEL_RANK, grade);
   }
   if (system === 'IB') {
     const n = parseInt(grade, 10);
     return !isNaN(n) && n >= 24 && n <= 45;
-  }
-  if (system === 'HK_DSE') {
-    return Object.prototype.hasOwnProperty.call(DSE_RANK, grade);
   }
   return false;
 }
@@ -2960,15 +3231,16 @@ function shortlistVerdict(course, system, predictedGrade, profile) {
   // Elite-tier holistic US courses are reaches for everyone with grades set.
   if (course.country === 'US' && ELITE_HOLISTIC_TIERS.has(course.universityContext?.tier)) return 'reach';
 
-  if (system === 'UK_A_Level' || system === 'SG_A_Level') {
+  if (system === 'UK_A_Level' || system === 'SG_A_Level' || system === 'HK_DSE') {
     const gradeStr = course.grades?.[SYSTEM_GRADE_KEY[system]];
     if (!gradeStr) return 'unknown';
-    if (isGradeAboveStudent(course, system, predictedGrade)) return 'reach';
-    const top3 = parseALevelGrades(gradeStr).slice(0, 3);
-    if (!top3.length) return 'unknown';
-    const maxNeed = Math.max(...top3.map(g => A_LEVEL_RANK[g] ?? 0));
-    // A full grade above the offer's TOP grade = comfortably below your level.
-    return (A_LEVEL_RANK[predictedGrade] ?? 0) > maxNeed ? 'safety' : 'match';
+    const offer = parseOfferGrades(system, gradeStr);
+    const cmp = compareProfileToOffer(system, predictedGrade, offer);
+    if (cmp === 'unknown') return 'unknown';
+    if (cmp === 'above')   return 'reach';
+    // Strictly above the offer in every compared slot = comfortably below
+    // your level (the per-subject form of the old top-grade rule).
+    return profileComfortablyAbove(system, predictedGrade, offer) ? 'safety' : 'match';
   }
 
   if (system === 'IB') {
@@ -2989,15 +3261,6 @@ function shortlistVerdict(course, system, predictedGrade, profile) {
     return pts >= need + 3 ? 'safety' : 'match';
   }
 
-  if (system === 'HK_DSE') {
-    const dseStr = course.grades?.hkDse;
-    if (!dseStr) return 'unknown';
-    if (isGradeAboveStudent(course, system, predictedGrade)) return 'reach';
-    const grades = parseDseGrades(dseStr);
-    if (!grades.length) return 'unknown';
-    const maxNeed = Math.max(...grades.map(g => DSE_RANK[g] ?? 0));
-    return (DSE_RANK[predictedGrade] ?? 0) > maxNeed ? 'safety' : 'match';
-  }
 
   return 'unknown';
 }
@@ -3380,21 +3643,13 @@ function renderWorkspaceHome() {
     ? (qualificationMappings[profile.qualificationSystem]?.systemLabel ?? profile.qualificationSystem)
     : null;
   const subjects = Array.isArray(profile.subjects) ? profile.subjects : [];
-  const grades   = profile.predictedGrades || null;
+  const grades   = formatPredictedGrades(profile.predictedGrades, profile.qualificationSystem);
   const candidateLabels = plannerFields().map(id => CATEGORY_LABEL_MAP[id] ?? id);
 
   // ── Journey strip: you are here. Earlier stages the student never did
   // show as quietly skipped (dimmed), never as failures.
-  const curIdx = STAGE_ORDER.indexOf(stage);
-  const STRIP_LABELS = { exploring: 'Exploring fields', choosing: 'Choosing', building: 'Building', applying: 'Applying' };
-  const stripHtml = STAGE_ORDER.map((s, i) => {
-    let cls, mark;
-    if (i === curIdx)                      { cls = 'current'; mark = ' ●'; }
-    else if (progressByStage[s].done)      { cls = 'done';    mark = ' ✓'; }
-    else if (i < curIdx)                   { cls = 'skipped'; mark = '';   }
-    else                                   { cls = 'todo';    mark = '';   }
-    return `<span class="journey-strip__stage journey-strip__stage--${cls}">${esc(STRIP_LABELS[s])}${mark}</span>`;
-  }).join('<span class="journey-strip__sep" aria-hidden="true">→</span>');
+  // (The old home journey strip is gone — the persistent journey bar in the
+  // nav is the single progress display, so home doesn't duplicate it.)
 
   // ── Graduation card: stage done → a positive, dismissible invitation
   // forward. Session-dismissed via "Not yet"; never auto-advances.
@@ -3444,7 +3699,6 @@ function renderWorkspaceHome() {
       <header class="home__header">
         <h1 class="home__welcome">${_isReturningUser ? 'Welcome back.' : "You're all set."}</h1>
         <p class="home__stage">You're in the <strong>${esc(cfg.name)}</strong> stage — ${_isReturningUser ? esc(STAGE_SUMMARY[stage] ?? '') : "here's your next step."}</p>
-        <p class="journey-strip" aria-label="Your journey progress">${stripHtml}</p>
       </header>
 
       ${gradHtml || `
@@ -3588,21 +3842,40 @@ function restoreGradeFromProfile(systemKey) {
   if (typeof AltioraState === 'undefined') return;
   const g = AltioraState.getProfile().predictedGrades;
   if (!g) return;
-  const GRADE_INPUT_IDS = {
-    UK_A_Level: 'gradeSelectALevel', IB: 'gradeInputIB', US_AP: 'gradeSelectAP',
-    SG_A_Level: 'gradeSelectSG',     HK_DSE: 'gradeSelectDSE',
-  };
+
+  // Letter systems: restore the per-subject map into the grade rows. A
+  // legacy single-average string becomes a uniform fill (_pendingUniform),
+  // applied as subject rows appear — the in-place migration; the next
+  // write-through persists it as a map. Values invalid for this system's
+  // scale stay out rather than guessing.
+  if (LETTER_GRADE_SYSTEMS.has(systemKey)) {
+    const rank = systemRank(systemKey);
+    if (typeof g === 'string') {
+      if (!Object.prototype.hasOwnProperty.call(rank, g)) return;
+      _pendingUniform = g;
+    } else if (g && typeof g === 'object') {
+      Object.entries(g).forEach(([subj, v]) => {
+        if (Object.prototype.hasOwnProperty.call(rank, v)) _gradeMap[subj] = v;
+      });
+    } else return;
+    syncGradeRows();   // renders rows for any already-selected subjects + derives state.predictedGrade
+    return;
+  }
+
+  const GRADE_INPUT_IDS = { IB: 'gradeInputIB', US_AP: 'gradeSelectAP' };
   const el = $(GRADE_INPUT_IDS[systemKey] ?? '');
   if (!el) return;
+  const gs = (typeof g === 'string') ? g : null;   // IB/AP only ever store strings
+  if (!gs) return;
   if (el.tagName === 'SELECT') {
-    if (![...el.options].some(o => o.value === g)) return;
-    el.value = g;
+    if (![...el.options].some(o => o.value === gs)) return;
+    el.value = gs;
   } else {
-    const v = parseInt(g, 10);
+    const v = parseInt(gs, 10);
     if (isNaN(v) || v < 24 || v > 45) return;   // IB points range
     el.value = String(v);
   }
-  state.predictedGrade = g;
+  state.predictedGrade = gs;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -3791,6 +4064,7 @@ function onSubjectToggle(e = null) {
 
   syncSubjectCount();
   syncPickerCollapse();
+  syncGradeRows();                    // per-subject grade rows track the selection
   $('categoryPickerSection').classList.toggle('hidden', state.selectedSubjects.length === 0);
   renderCheckEmptyState();
   clearTimeout(_subjectDebounce);
@@ -4563,7 +4837,7 @@ function buildCheckCard(course, result) {
       <span class="card-cat-badge">${esc(catLabel)}</span>
     </div>
     ${gradeStr ? gradeLineHtml(gradeStr, sys) : ''}
-    ${(status === 'grey' && result.gradeGap) ? `<p class="card-grade-gap">⚠️ You have ${esc(result.gradeGap.have)}, course asks for ${esc(result.gradeGap.need)}</p>` : ''}
+    ${(status === 'grey' && result.gradeGap) ? `<p class="card-grade-gap">⚠️ ${esc(gradeGapText(result.gradeGap))}</p>` : ''}
     ${status === 'unconfirmed' ? `<p class="card-grade-unconfirmed">◔ Your subjects fit, but this course doesn't publish a grade requirement we can compare with your predicted grade — so we can't confirm it's a match. Check the university's official page.</p>` : ''}
     ${fieldCoreHtml}
     ${usTestLineHtml(course)}
@@ -6530,36 +6804,40 @@ function init() {
     card.addEventListener('click', () => chooseSystem(card.dataset.system))
   );
 
-  // Stage indicator dropdown (switch stage anytime)
-  $('stageIndicatorBtn')?.addEventListener('click', e => {
-    e.stopPropagation();
-    toggleStageMenu();
+  // Journey bar — clicking a step switches stage exactly as the old
+  // dropdown did (enterStage; proposes-never-imprisons untouched). The
+  // "Next →" chip runs the existing graduation acceptance. Delegated on
+  // the bar container, which persists across innerHTML re-renders.
+  $('journeyBar')?.addEventListener('click', e => {
+    const nextBtn = e.target.closest('[data-journey-next]');
+    if (nextBtn) {
+      logEvent('stage_graduate', { to: nextBtn.dataset.journeyNext, via: 'journey_bar' });
+      enterStage(nextBtn.dataset.journeyNext);
+      return;
+    }
+    const step = e.target.closest('[data-journey-stage]');
+    if (step) enterStage(step.dataset.journeyStage);
   });
-  $$('#stageMenu .stage-menu__item').forEach(item =>
-    item.addEventListener('click', () => enterStage(item.dataset.stage))
-  );
+  // Reactive: any state change that flips a stage's done-criteria (saving a
+  // 3rd course, keeping a field…) re-projects the bar on every screen.
+  AltioraState.subscribe(() => renderJourneyBar());
 
-  // System indicator dropdown — the single global control for the system.
-  $('systemIndicatorBtn')?.addEventListener('click', e => {
+  // Profile pill ("A-Levels · Year 12 ▾") — ONE popover holding the system
+  // and year controls; same single-source behaviour and propagation as the
+  // two pills it replaces.
+  $('profileIndicatorBtn')?.addEventListener('click', e => {
     e.stopPropagation();
-    toggleSystemMenu();
+    toggleProfileMenu();
   });
   $$('#systemMenu .stage-menu__item').forEach(item =>
     item.addEventListener('click', () => changeSystem(item.dataset.system))
   );
-  document.addEventListener('click', closeSystemMenu);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSystemMenu(); });
-
-  // Year indicator dropdown — the single global control for the year group.
-  // Menu items are (re)built by updateYearIndicator, which subscribes to
-  // state so every year/system change propagates to this surface.
-  $('yearIndicatorBtn')?.addEventListener('click', e => {
-    e.stopPropagation();
-    toggleYearMenu();
-  });
-  $('yearMenu')?.addEventListener('click', e => e.stopPropagation());
-  document.addEventListener('click', closeYearMenu);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeYearMenu(); });
+  document.addEventListener('click', closeProfileMenu);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeProfileMenu(); });
+  // Year items are (re)built inside the popover by updateYearIndicator, which
+  // subscribes to state so every year/system change propagates here. Clicks
+  // inside the popover must not bubble to the document-close handler.
+  $('profileMenu')?.addEventListener('click', e => e.stopPropagation());
   AltioraState.subscribe(updateYearIndicator);
 
   // Stage proposal (year-informed onboarding): accept routes into the

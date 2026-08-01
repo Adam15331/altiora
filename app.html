@@ -10,7 +10,7 @@
   <!-- Confident Editorial type — loaded via <link> (reliable) not @import -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
   <link rel="stylesheet" href="tokens.css?v=9" />
-  <link rel="stylesheet" href="styles.css?v=60" />
+  <link rel="stylesheet" href="styles.css?v=63" />
   <script defer data-domain="altiora.app" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
@@ -167,43 +167,36 @@
       <div id="workspace" class="hidden">
 
         <div class="stage-bar">
-          <div class="stage-bar__indicator">
-            <button id="stageIndicatorBtn" class="stage-indicator" aria-haspopup="true" aria-expanded="false" aria-controls="stageMenu">
-              <span class="stage-indicator__label">Stage: <strong id="stageIndicatorName">…</strong></span>
-              <span class="stage-indicator__caret" aria-hidden="true">▾</span>
-            </button>
-            <div id="stageMenu" class="stage-menu hidden" role="menu" aria-label="Switch stage">
-              <button class="stage-menu__item" data-stage="exploring"  role="menuitem">Exploring fields</button>
-              <button class="stage-menu__item" data-stage="choosing"  role="menuitem">Choosing my subjects</button>
-              <button class="stage-menu__item" data-stage="building"  role="menuitem">Building my university list</button>
-              <button class="stage-menu__item" data-stage="applying"  role="menuitem">Applying</button>
-            </div>
-          </div>
-          <div class="stage-bar__indicator">
-            <button id="systemIndicatorBtn" class="stage-indicator" aria-haspopup="true" aria-expanded="false" aria-controls="systemMenu">
-              <span class="stage-indicator__label">System: <strong id="systemIndicatorName">…</strong></span>
-              <span class="stage-indicator__caret" aria-hidden="true">▾</span>
-            </button>
-            <div id="systemMenu" class="stage-menu hidden" role="menu" aria-label="Switch qualification system">
-              <button class="stage-menu__item" data-system="UK_A_Level" role="menuitem">UK A-Levels</button>
-              <button class="stage-menu__item" data-system="IB"         role="menuitem">International Baccalaureate</button>
-              <button class="stage-menu__item" data-system="US_AP"      role="menuitem">US APs</button>
-              <button class="stage-menu__item" data-system="SG_A_Level" role="menuitem">Singapore A-Levels</button>
-              <button class="stage-menu__item" data-system="HK_DSE"     role="menuitem">Hong Kong DSE</button>
-            </div>
-          </div>
-          <div class="stage-bar__indicator">
-            <button id="yearIndicatorBtn" class="stage-indicator" aria-haspopup="true" aria-expanded="false" aria-controls="yearMenu">
-              <span class="stage-indicator__label">Year: <strong id="yearIndicatorName">—</strong></span>
-              <span class="stage-indicator__caret" aria-hidden="true">▾</span>
-            </button>
-            <div id="yearMenu" class="stage-menu hidden" role="menu" aria-label="Change your year group">
-              <!-- items rendered by JS for the active system (updateYearIndicator) -->
-            </div>
-          </div>
+          <!-- Journey bar: the four stages with live per-step progress —
+               replaces the old "Stage:" dropdown (rendered by JS). -->
+          <nav id="journeyBar" class="journey-bar" aria-label="Your journey">
+            <!-- rendered by JS (renderJourneyBar) -->
+          </nav>
+          <div class="stage-bar__row">
           <nav id="stageToolNav" class="stage-tool-nav" aria-label="Tools for this stage">
             <!-- rendered by JS for the active stage -->
           </nav>
+          <span class="stage-bar__spacer" aria-hidden="true"></span>
+          <div class="stage-bar__indicator">
+            <button id="profileIndicatorBtn" class="stage-indicator" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">
+              <span class="stage-indicator__label"><strong id="systemIndicatorName">…</strong> · <strong id="yearIndicatorName">—</strong></span>
+              <span class="stage-indicator__caret" aria-hidden="true">▾</span>
+            </button>
+            <div id="profileMenu" class="stage-menu profile-menu hidden" role="menu" aria-label="Your qualification system and year">
+              <span class="profile-menu__label">Qualification system</span>
+              <div id="systemMenu" role="group" aria-label="Switch qualification system">
+                <button class="stage-menu__item" data-system="UK_A_Level" role="menuitem">UK A-Levels</button>
+                <button class="stage-menu__item" data-system="IB"         role="menuitem">International Baccalaureate</button>
+                <button class="stage-menu__item" data-system="US_AP"      role="menuitem">US APs</button>
+                <button class="stage-menu__item" data-system="SG_A_Level" role="menuitem">Singapore A-Levels</button>
+                <button class="stage-menu__item" data-system="HK_DSE"     role="menuitem">Hong Kong DSE</button>
+              </div>
+              <span class="profile-menu__label">Year group</span>
+              <div id="yearMenu" role="group" aria-label="Change your year group">
+                <!-- items rendered by JS for the active system (updateYearIndicator) -->
+              </div>
+            </div>
+          </div>
           <div class="fields-nav">
             <button id="fieldsLink" class="shortlist-link" type="button"
                     aria-haspopup="true" aria-expanded="false" aria-controls="fieldsMenu"
@@ -220,6 +213,7 @@
             <span class="shortlist-link__icon" aria-hidden="true">🔖</span>
             <span class="shortlist-link__text">My Shortlist (<span id="shortlistCount">0</span>)</span>
           </button>
+          </div><!-- /stage-bar__row -->
         </div>
 
       <!-- ═══════════════════════════════════════════════════════
@@ -505,8 +499,8 @@
   <script src="data/admissionTestInfo.js?v=1"></script>
   <script src="data/fieldProfiles.js?v=1"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
-  <script src="state.js?v=10"></script>
-  <script src="main.js?v=70"></script>
+  <script src="state.js?v=11"></script>
+  <script src="main.js?v=73"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);
