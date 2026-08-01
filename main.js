@@ -1769,6 +1769,8 @@ function rerenderCurrentView() {
     case 'home':     renderWorkspaceHome(); break;
     case 'applying': renderApplyingPanel(); break;
     case 'story':    renderStoryPanel(); break;
+    // shortlist: the glance counsel is year- and system-aware.
+    case 'shortlist': renderShortlist(); break;
     // strengths: the grid is system-agnostic, but the intro copy and the
     // per-field subject-coverage line are year/subject/system-aware.
     case 'strengths': renderStrengthsIntro(); renderStrengthsResults(); break;
@@ -2771,12 +2773,42 @@ function buildBalanceVerdictHtml(saved) {
     advice = hasGrades
       ? 'These courses can’t be classified against your grades — check each course’s requirements directly.'
       : 'Add predicted grades in Check Combination to see whether your list is balanced.';
-  } else if (counts.safety === 0 && counts.reach > 0) {
-    advice = 'Every course here is competitive — add 1–2 safer choices so you’re covered.';
-  } else if (counts.reach === 0) {
-    advice = 'Nothing ambitious here — you have room to aim higher.';
   } else {
-    advice = 'Good spread — ambitious choices anchored by safer ones.';
+    // Prescriptive counsel from the list's actual shape. Target shape:
+    // 1–2 reaches + a core of matches + 1–2 safeties. Name what's missing
+    // and how many — never a vague verdict.
+    const gaps = [];
+    if (counts.reach === 0)  gaps.push('1–2 reaches (ambitious choices)');
+    if (counts.match === 0)  gaps.push('a core of matches (at your level)');
+    if (counts.safety === 0) gaps.push('1–2 safeties (comfortable back-ups)');
+
+    let lead;
+    if (!gaps.length) {
+      lead = 'Good spread — ambitious choices anchored by safer ones.';
+    } else {
+      const have = [];
+      if (counts.match  > 0) have.push(counts.match >= 2 ? 'a solid core of matches' : 'one match at your level');
+      if (counts.reach  > 0) have.push(counts.reach === 1 ? 'one ambitious reach' : `${counts.reach} ambitious reaches`);
+      if (counts.safety > 0) have.push(counts.safety === 1 ? 'one safety' : `${counts.safety} safeties`);
+      const haveTxt = have.length
+        ? have.join(' and ').replace(/^./, ch => ch.toUpperCase()) + '. '
+        : '';
+      lead = `${haveTxt}To balance it: add ${gaps.join(' and ')}.`;
+    }
+
+    // UK anchor where the list is UK-heavy — UCAS's 5 choices are the real
+    // target (a stable, factual number; nothing else numeric is claimed).
+    const ukHeavy = saved.filter(c => c.country === 'UK').length > saved.length / 2;
+    const anchor = ukHeavy ? ' UK applications give you 5 UCAS choices.' : '';
+
+    // Year-aware close: time to build long, or time to finalise.
+    const yrs = studentYears();
+    const timing =
+      (yrs != null && yrs >= 1) ? ' You have time — build a longer list (6–8) and narrow later.' :
+      (yrs === 0)               ? (ukHeavy ? ' This year, finalise toward a balanced 5.'
+                                           : ' This year, finalise toward a balanced final list.') : '';
+
+    advice = lead + anchor + timing;
   }
 
   const countsLine = classified > 0
@@ -2821,17 +2853,39 @@ function buildShortlistInsightsHtml(saved) {
     ? `<li><span class="shortlist-insight-label">Registration windows:</span> <span class="shortlist-reg-windows">${regBits.join(' · ')}</span></li>`
     : '';
 
-  // Grade ranges computed per qualification system (mixed systems → one row each).
-  const gradeRows = shortlistGradeRange(saved);
+  // What the saved courses ask for — in the STUDENT'S system, honestly.
+  const req = shortlistRequirementsSummary(saved);
   let gradeHtml = '';
-  if (gradeRows.length === 1) {
-    const r = gradeRows[0];
-    gradeHtml = `<li><span class="shortlist-insight-label">Grade range:</span> <strong>${esc(r.label)}: ${esc(r.range)}</strong></li>`;
-  } else if (gradeRows.length > 1) {
-    gradeHtml = `<li><span class="shortlist-insight-label">Grade ranges:</span>
+  if (req.range || req.notes.length) {
+    const bits = [];
+    if (req.range) bits.push(`<strong>${esc(req.sysLabel)}: ${esc(req.range)}</strong>`);
+    req.notes.forEach(n => bits.push(esc(n)));
+    gradeHtml = `<li><span class="shortlist-insight-label">What your saved courses ask for:</span> ${bits.join(' · ')}</li>`;
+  } else if (req.fallbackRows.length) {
+    // Nothing on the list is expressible in the student's system — show what
+    // IS published, honestly labelled, rather than nothing or a fake figure.
+    gradeHtml = `<li><span class="shortlist-insight-label">What your saved courses ask for:</span>
+        <span class="text-secondary">no ${esc(req.sysLabel)} figures published — shown as the universities state them:</span>
         <ul class="shortlist-grade-rows">
-          ${gradeRows.map(r => `<li><strong>${esc(r.label)}:</strong> ${esc(r.range)}</li>`).join('')}
+          ${req.fallbackRows.map(r => `<li><strong>${esc(r.label)}:</strong> ${esc(r.range)}</li>`).join('')}
         </ul></li>`;
+  }
+
+  // One-country observation — soft, only once the list has real shape (3+
+  // saves all in one country). Never pushy; deliberate focus is fine.
+  let countryNote = '';
+  if (saved.length >= 3 && countries.size === 1) {
+    const only = [...countries][0];
+    const others = Object.keys(COUNTRY_LABELS)
+      .filter(k => k !== only && (typeof courses !== 'undefined') && courses.some(c => c.country === k))
+      .map(k => COUNTRY_LABELS[k]);
+    if (others.length) {
+      const otherTxt = others.length > 1
+        ? `${others.slice(0, -1).join(', ')} and ${others[others.length - 1]}`
+        : others[0];
+      countryNote = `<li class="shortlist-country-note">All your choices are in ${esc(COUNTRY_LABELS[only] ?? only)} —
+        if that's deliberate, great; if not, your subjects open courses in ${esc(otherTxt)} too.</li>`;
+    }
   }
 
   return `
@@ -2845,8 +2899,59 @@ function buildShortlistInsightsHtml(saved) {
         <li><span class="shortlist-insight-label">Admission tests you'll need:</span> ${testsHtml}</li>
         ${regLine}
         ${gradeHtml}
+        ${countryNote}
       </ul>
     </div>`;
+}
+
+// The entry-requirement summary for the glance, in the STUDENT'S OWN system
+// only. Courses with indicative admissions (US holistic) are never forced
+// into the range — they get an honest counted note instead. Falls back to
+// the per-system rows only when nothing on the list is expressible in the
+// student's system.
+function shortlistRequirementsSummary(saved) {
+  const system   = (typeof AltioraState !== 'undefined') ? AltioraState.getProfile().qualificationSystem : null;
+  const key      = SYSTEM_GRADE_KEY[system];
+  const sysLabel = SYSTEM_SHORT_LABELS[system] ?? 'grade';
+
+  // US courses publish no fixed offer in ANY system — holistic admissions.
+  const holistic   = saved.filter(c => c.country === 'US' && !(key && c.grades?.[key]));
+  const rest       = saved.filter(c => !holistic.includes(c));
+  const withFigure = key ? rest.filter(c => c.grades?.[key] != null && c.grades[key] !== '') : [];
+  const noFigure   = rest.length - withFigure.length;
+
+  const notes = [];
+  if (holistic.length) {
+    notes.push(`${holistic.length} US course${holistic.length === 1 ? ' uses' : 's use'} holistic admissions — no fixed offer`);
+  }
+  if (withFigure.length && noFigure > 0) {
+    notes.push(`${noFigure} course${noFigure === 1 ? " doesn't" : " don't"} publish a ${sysLabel} figure`);
+  }
+
+  let range = null;
+  if (withFigure.length) {
+    const vals = withFigure.map(c => c.grades[key]);
+    if (system === 'IB') {
+      const nums = vals.filter(v => typeof v === 'number' && !isNaN(v));
+      if (nums.length) {
+        const lo = Math.min(...nums), hi = Math.max(...nums);
+        range = lo === hi ? `${lo} points` : `${lo}–${hi} points`;
+      }
+    } else if (system === 'UK_A_Level' || system === 'SG_A_Level') {
+      // Strongest offer first, e.g. "A*AA–AAA"; a single value stands alone.
+      const ranked = vals.slice().sort((a, b) => aLevelOfferStrength(b) - aLevelOfferStrength(a));
+      range = ranked[0] === ranked[ranked.length - 1] ? ranked[0] : `${ranked[0]}–${ranked[ranked.length - 1]}`;
+    } else {
+      // HK DSE / AP — distinct spread (no reliable cross-grade ranking).
+      const uniq = [...new Set(vals.map(String))].sort();
+      range = uniq.length === 1 ? uniq[0] : `${uniq[0]}–${uniq[uniq.length - 1]}`;
+    }
+  }
+
+  // Only when the student's system yields nothing: show what other systems
+  // publish (minus figures for the holistic courses, which have none anyway).
+  const fallbackRows = (!range && rest.length) ? shortlistGradeRange(rest) : [];
+  return { range, notes, fallbackRows, sysLabel };
 }
 
 // Grade spread across saved courses, computed SEPARATELY per qualification

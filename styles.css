@@ -544,6 +544,12 @@ main     { flex: 1; padding: var(--pad); }
   padding: 0 0 0 var(--space-3);
 }
 .shortlist-grade-rows li { font-size: var(--text-sm); }
+/* One-country observation — a soft aside, visually quieter than the facts. */
+.shortlist-insights__list li.shortlist-country-note {
+  color: var(--ce-ink-60);
+  font-style: italic;
+  padding-top: var(--space-1);
+}
 .shortlist-insight-tag {
   display: inline-block;
   padding: 2px 9px;
