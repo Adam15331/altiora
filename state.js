@@ -40,6 +40,7 @@ const AltioraState = (() => {
         interests:           [],      // category strings
         candidateFields:     [],      // category ids the student is considering (max 3, order = priority)
         achievements:        [],      // the student's STORY BANK: entries with reflections + optional field tags — see addAchievement()
+        applicationTasks:    {},      // Applying checklist: { taskId: true } for completed tasks — see setApplicationTask()
         yearGroup:            null,   // raw year label in the student's own system, e.g. "Year 12", "Grade 11", "Form 5"
         yearsUntilApplication: null,  // normalised scale driving ALL logic: 3 (3+ years out) | 2 | 1 | 0 (application year)
         yearSetAt:            null,   // ISO date the year was last set — for future academic-year rollover detection
@@ -89,6 +90,15 @@ const AltioraState = (() => {
     // Old saves have no achievements key (or, defensively, a corrupt one) —
     // normalise to a clean array so every caller can rely on the shape.
     if (!Array.isArray(profile.achievements)) profile.achievements = [];
+    // Applying checklist state is additive: old saves have no key at all.
+    // Normalise to a plain map of taskId → true so callers can rely on it.
+    if (!profile.applicationTasks || typeof profile.applicationTasks !== 'object'
+        || Array.isArray(profile.applicationTasks)) {
+      profile.applicationTasks = {};
+    } else {
+      profile.applicationTasks = Object.fromEntries(
+        Object.entries(profile.applicationTasks).filter(([, v]) => v === true));
+    }
     // Per-subject grade migration: letter-profile systems (UK/SG A-Levels,
     // HK DSE) moved from one average string to a {subject → grade} map. An
     // old save's single average hydrates as that grade for EVERY saved
@@ -199,7 +209,7 @@ const AltioraState = (() => {
   function setProfile(partial) {
     if (!partial || typeof partial !== 'object') return;
     const allowed = ['stage', 'qualificationSystem', 'subjects', 'predictedGrades', 'interests', 'candidateFields',
-                     'yearGroup', 'yearsUntilApplication', 'yearSetAt'];
+                     'yearGroup', 'yearsUntilApplication', 'yearSetAt', 'applicationTasks'];
     allowed.forEach(key => {
       if (key in partial) _state.profile[key] = partial[key];
     });
@@ -337,6 +347,35 @@ const AltioraState = (() => {
     }
   }
 
+  /* ─── Applying checklist ──────────────────────────────────────
+   * Completed-task state for the Applying dashboard, keyed by STABLE
+   * task ids (e.g. "test-reg:ESAT"). Because ids are derived from the
+   * task's meaning rather than its position, a checked task keeps its
+   * tick when the shortlist changes around it, and tasks that stop
+   * applying simply stop being generated — their state is harmless.
+   * ───────────────────────────────────────────────────────────── */
+  function _tasksRef() {
+    if (!_state.profile.applicationTasks || typeof _state.profile.applicationTasks !== 'object') {
+      _state.profile.applicationTasks = {};
+    }
+    return _state.profile.applicationTasks;
+  }
+
+  function getApplicationTasks() {
+    return { ..._tasksRef() };
+  }
+
+  function isApplicationTaskDone(taskId) {
+    return _tasksRef()[taskId] === true;
+  }
+
+  function setApplicationTask(taskId, done) {
+    if (typeof taskId !== 'string' || !taskId) return;
+    const tasks = _tasksRef();
+    if (done) tasks[taskId] = true; else delete tasks[taskId];
+    _commit();
+  }
+
   function addToShortlist(courseId) {
     if (courseId == null) return;
     if (!_state.shortlist.includes(courseId)) {
@@ -403,6 +442,9 @@ const AltioraState = (() => {
     addCandidateField,
     removeCandidateField,
     MAX_CANDIDATE_FIELDS,
+    getApplicationTasks,
+    isApplicationTaskDone,
+    setApplicationTask,
     getAchievements,
     addAchievement,
     updateAchievement,

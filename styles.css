@@ -2884,6 +2884,103 @@ footer p {
   color: var(--color-text-primary);
   margin: 0 0 var(--space-3);
 }
+/* ── Applying execution checklist — real, checkable, persistent ── */
+.applying-section__count {
+  margin-left: var(--space-3);
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ce-ink-30);
+}
+.applying-tasks { display: flex; flex-direction: column; gap: var(--space-5); }
+.applying-task-group { display: flex; flex-direction: column; gap: var(--space-2); }
+.applying-task-group__label {
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ce-ink-30);
+}
+.applying-task {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: var(--ce-hairline);
+  cursor: pointer;
+}
+.applying-task-group .applying-task:last-child { border-bottom: none; }
+.applying-task__box {
+  flex-shrink: 0;
+  width: 17px;
+  height: 17px;
+  margin-top: 2px;
+  accent-color: var(--ce-ink);
+  cursor: pointer;
+}
+.applying-task__body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.applying-task__label {
+  font-size: var(--text-base);
+  color: var(--ce-ink);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.applying-task__detail {
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.applying-task__link {
+  align-self: flex-start;
+  margin-top: 2px;
+  padding: 0;
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  letter-spacing: .04em;
+  color: var(--ce-ink);
+  background: none;
+  border: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.applying-task--done .applying-task__label {
+  color: var(--ce-ink-30);
+  text-decoration: line-through;
+}
+.applying-task--done .applying-task__detail { color: var(--ce-ink-30); }
+.applying-tasks__foot {
+  margin: var(--space-4) 0 0;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--ce-ink-30);
+  line-height: 1.5;
+}
+/* Compact shortlist summary (full cards live on the Shortlist page) */
+.applying-summary__counts {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.6;
+}
+.applying-summary__counts strong { color: var(--ce-ink); }
+.applying-summary__balance {
+  margin: 0 0 var(--space-3);
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  color: var(--ce-ink);
+  line-height: 1.6;
+}
+.applying-summary__balance--muted {
+  font-family: var(--ce-font-body);
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+}
+
 .applying-checklist {
   list-style: none;
   margin: 0;

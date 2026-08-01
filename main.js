@@ -1332,6 +1332,7 @@ function switchMode(mode) {
   // The shortlist and home are cross-stage views, not stage tools —
   // highlight their own controls rather than a stage-tool button.
   $('shortlistLink')?.classList.toggle('shortlist-link--active', mode === 'shortlist');
+  $('storyLink')?.classList.toggle('shortlist-link--active', mode === 'story');
   $('homeLink')?.classList.toggle('home-link--active', mode === 'home');
 
   if (mode === 'check') {
@@ -1401,7 +1402,7 @@ const MODE_LABELS = {
   plan:                 'Subject Planner',
   reverse:              'Course Finder',
   check:                'Check Combination',
-  applying:             'Application Tools',
+  applying:             'Applying',
 };
 
 const DEFAULT_STAGE = 'exploring';
@@ -1989,25 +1990,153 @@ function renderStageToolNav(stage) {
 // from the same admissionTestInfo typical windows already in the data (no
 // invented dates) with official links; once courses are saved, the existing
 // per-course test checklist takes over and this block disappears.
-function applicationYearOrientationHtml() {
-  if (studentYears() !== 0) return '';
-  const infos = (typeof admissionTestInfo !== 'undefined')
-    ? Object.values(admissionTestInfo).slice().sort((a, b) => (a.regOpensMonth ?? 98) - (b.regOpensMonth ?? 98))
-    : [];
-  if (!infos.length) return '';
-  const rows = infos.map(i => `
-    <li><strong>${esc(i.name)}</strong> — registration ${esc(i.regShort ?? i.typicalRegistrationWindow)}
-      <a class="applying-test-link" href="${esc(i.officialUrl)}" target="_blank" rel="noopener noreferrer">Official site →</a></li>`).join('');
-  const yearLabel = (typeof AltioraState !== 'undefined' && AltioraState.getProfile().yearGroup) || 'your final year';
-  return `
-    <section class="applying-section applying-orientation" aria-label="Your application year">
-      <h2 class="applying-section__head">This is your application cycle</h2>
-      <p class="applying-orientation__lead">You're in ${esc(yearLabel)} — applications happen this school year,
-        and admission-test registrations typically close well before application deadlines.
-        Typical registration windows (always confirm on the official site):</p>
-      <ul class="applying-test-list applying-orientation__list">${rows}</ul>
-      <p class="applying-orientation__foot">Each university sets its own deadlines — check the official pages for every course you're considering.</p>
-    </section>`;
+/* ═══════════════════════════════════════════════════════════════
+ * APPLYING CHECKLIST — the execution layer.
+ * Tasks are DERIVED from the saved shortlist (tests actually required,
+ * countries actually present) plus the few generic steps every
+ * application needs. Every task id is stable and meaning-derived
+ * ("test-reg:ESAT"), so ticks survive shortlist edits and reloads.
+ *
+ * Timing is expressed as TYPICAL WINDOWS from the verified
+ * admissionTestInfo layer — never a hardcoded calendar date. Where a
+ * deadline is university-set (UCAS, course pages) we say so and point
+ * at the official source rather than inventing a month.
+ * ═══════════════════════════════════════════════════════════════ */
+
+// Ordered task list for the current shortlist. Order = the sequence a
+// student actually acts in: register for tests → sit tests → get the
+// application itself ready → confirm the deadlines that close it.
+function applyingTasks(savedCourses) {
+  const testInfoFor = t => (typeof admissionTestInfo !== 'undefined') ? admissionTestInfo[t] : null;
+  const tests = [...new Set(savedCourses.flatMap(c => Array.isArray(c.admissionTests) ? c.admissionTests : []))]
+    .sort((a, b) => (testInfoFor(a)?.regOpensMonth ?? 98) - (testInfoFor(b)?.regOpensMonth ?? 98) || a.localeCompare(b));
+
+  const tasks = [];
+
+  // 1. Register for each required test — ONE entry per test, the single
+  //    place registration timing lives on this page.
+  tests.forEach(t => {
+    const info = testInfoFor(t);
+    tasks.push({
+      id: `test-reg:${t}`,
+      group: 'Admission tests',
+      label: `Register for ${info?.name ?? t}`,
+      // Avoid stacked parentheses when the window string already carries one.
+      detail: info
+        ? `Registration ${info.typicalRegistrationWindow}. Typical window — confirm the exact dates.`
+        : 'Check the official site for this cycle’s registration window.',
+      link: info ? { url: info.officialUrl, label: 'Official site' } : null,
+    });
+  });
+  // 2. Sit each test.
+  tests.forEach(t => {
+    const info = testInfoFor(t);
+    tasks.push({
+      id: `test-sit:${t}`,
+      group: 'Admission tests',
+      label: `Sit ${info?.name ?? t}`,
+      detail: info
+        ? `Test ${info.typicalTestWindow}. Typical window — registration closes before it.`
+        : 'Check the official site for this cycle’s test window.',
+      link: null,
+    });
+  });
+
+  // 3. The application itself.
+  tasks.push({
+    id: 'app:grades',
+    group: 'Your application',
+    label: 'Confirm your predicted grades with your school',
+    detail: 'What your school submits is what universities see — check it matches what you entered here.',
+    link: null,
+  });
+  tasks.push({
+    id: 'app:statement',
+    group: 'Your application',
+    label: 'Draft your personal statement',
+    detail: 'Your story bank is the raw material — the reflections you have already written.',
+    link: null,
+    action: { mode: 'story', label: 'Open your story' },
+  });
+  tasks.push({
+    id: 'app:references',
+    group: 'Your application',
+    label: 'Ask for your reference',
+    detail: 'Referees need notice. Ask early rather than in the week the form closes.',
+    link: null,
+  });
+
+  // 4. Deadlines, per country actually on the list. Universities and
+  //    application services publish these; we point rather than guess.
+  const countries = [...new Set(savedCourses.map(c => c.country))]
+    .sort((a, b) => (COUNTRY_LABELS[a] ?? a).localeCompare(COUNTRY_LABELS[b] ?? b));
+  countries.forEach(k => {
+    const label = COUNTRY_LABELS[k] ?? k;
+    tasks.push({
+      id: `deadline:${k}`,
+      group: 'Deadlines',
+      label: `Confirm exact deadlines for your ${label} course${savedCourses.filter(c => c.country === k).length === 1 ? '' : 's'}`,
+      detail: k === 'UK'
+        ? 'UCAS sets the main round; some courses (and Oxford and Cambridge) close earlier. Check each course page.'
+        : 'Each university sets its own dates — check every course page on your list.',
+      link: null,
+    });
+  });
+
+  return tasks;
+}
+
+// Direct projection of state → the checklist DOM. Safe to run on every
+// state change; no-ops when the Applying panel isn't on screen.
+function renderApplyingChecklist() {
+  const host = $('applyingChecklist');
+  if (!host) return;
+  const saved = AltioraState.getShortlist()
+    .map(id => (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null)
+    .filter(Boolean);
+  const tasks = applyingTasks(saved);
+  const doneCount = tasks.filter(t => AltioraState.isApplicationTaskDone(t.id)).length;
+
+  const countEl = $('applyingChecklistCount');
+  if (countEl) countEl.textContent = tasks.length ? `${doneCount}/${tasks.length} done` : '';
+
+  // Group in generated order, preserving the action sequence.
+  const groups = [];
+  tasks.forEach(t => {
+    const g = groups.find(x => x.name === t.group);
+    (g ? g : (groups.push({ name: t.group, items: [] }), groups[groups.length - 1])).items.push(t);
+  });
+
+  host.innerHTML = groups.map(g => `
+    <div class="applying-task-group">
+      <span class="applying-task-group__label">${esc(g.name)}</span>
+      ${g.items.map(t => {
+        const done = AltioraState.isApplicationTaskDone(t.id);
+        return `
+        <label class="applying-task${done ? ' applying-task--done' : ''}">
+          <input type="checkbox" class="applying-task__box" data-app-task="${esc(t.id)}"${done ? ' checked' : ''}>
+          <span class="applying-task__body">
+            <span class="applying-task__label">${esc(t.label)}</span>
+            <span class="applying-task__detail">${esc(t.detail)}</span>
+            ${t.link ? `<a class="applying-task__link" href="${esc(t.link.url)}" target="_blank" rel="noopener noreferrer">${esc(t.link.label)} →</a>` : ''}
+            ${t.action ? `<button type="button" class="applying-task__link applying-task__action" data-go-tool="${esc(t.action.mode)}">${esc(t.action.label)} →</button>` : ''}
+          </span>
+        </label>`;
+      }).join('')}
+    </div>`).join('');
+}
+
+// Delegated once — survives every re-render of the panel.
+function wireApplyingChecklist() {
+  document.addEventListener('change', e => {
+    const box = e.target.closest?.('[data-app-task]');
+    if (!box) return;
+    AltioraState.setApplicationTask(box.dataset.appTask, box.checked);
+  });
+  document.addEventListener('click', e => {
+    const btn = e.target.closest?.('.applying-task__action');
+    if (btn) { e.preventDefault(); switchMode(btn.dataset.goTool); }
+  });
 }
 
 function renderApplyingPanel() {
@@ -2017,13 +2146,6 @@ function renderApplyingPanel() {
   const savedCourses = ids
     .map(id => (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null)
     .filter(Boolean);
-
-  // One honest line — no feature promises (the "What's coming" callout
-  // promised deferred tools to the most time-pressed users in the product).
-  // (applicationYearOrientationHtml defined below renderApplyingPanel.)
-  const roadmap = `
-    <p class="applying-footnote" role="note">Keep your applications organised here — your shortlist,
-    achievements, and what each course needs all live on this page.</p>`;
 
   if (!savedCourses.length) {
     // Subjects-aware landing: a student who just told onboarding their
@@ -2035,93 +2157,71 @@ function renderApplyingPanel() {
       ? `
         <div class="applying-empty">
           <p><strong>Your subjects open ${fitCount} course${fitCount === 1 ? '' : 's'}</strong> — let's build your application list.
-          Save the ones you're applying to, and they'll show up here with a checklist of what's next.</p>
+          Save the ones you're applying to, and this page becomes your checklist of what's next.</p>
           <button class="home-next__btn home-next__btn--primary" data-go-applying>See the ${fitCount} courses your subjects fit →</button>
         </div>`
       : `
         <div class="applying-empty">
-          <p>Your shortlist is empty. Save the courses you're applying to, and they'll show up here with a checklist of what's next.</p>
+          <p>Your shortlist is empty. Save the courses you're applying to, and this page becomes your checklist of what's next.</p>
           <button class="home-next__btn home-next__btn--primary" data-go-applying>Find courses to apply to →</button>
         </div>`;
     panel.innerHTML = `
       <div class="applying">
         <header class="applying__header">
           <h1 class="applying__title">Applying</h1>
-          <p class="applying__sub">Save courses you're applying to, and we'll help you keep them organised here.</p>
+          <p class="applying__sub">Your next actions live here — the checklist builds itself from the courses you save.</p>
         </header>
         ${emptyHtml}
-        ${applicationYearOrientationHtml()}
-        ${storyApplyingCardHtml()}
-        ${roadmap}
       </div>`;
     panel.querySelector('[data-go-applying]')?.addEventListener('click', () => switchMode('check'));
     return;
   }
 
-  // Admission tests required across the saved courses (deduped), ordered by
-  // when registration typically opens — the order the student must act in.
-  const tests = [...new Set(savedCourses.flatMap(c => Array.isArray(c.admissionTests) ? c.admissionTests : []))];
-  const testInfoFor = t => (typeof admissionTestInfo !== 'undefined') ? admissionTestInfo[t] : null;
-  tests.sort((a, b) => (testInfoFor(a)?.regOpensMonth ?? 98) - (testInfoFor(b)?.regOpensMonth ?? 98) || a.localeCompare(b));
+  // Compact shortlist summary — this page is about NEXT ACTIONS, so the
+  // full course cards stay on the Shortlist page rather than being
+  // re-rendered here. Balance reuses the existing verdict machinery.
+  const { counts, hasGrades } = shortlistVerdicts(savedCourses);
+  const unis = new Set(savedCourses.map(c => c.university));
+  const countryBits = [...new Set(savedCourses.map(c => c.country))]
+    .map(k => COUNTRY_LABELS[k] ?? k);
+  const classified = counts.reach + counts.match + counts.safety;
+  const balanceLine = (hasGrades && classified > 0)
+    ? `<p class="applying-summary__balance">${counts.reach} reach${counts.reach === 1 ? '' : 'es'} ·
+        ${counts.match} match${counts.match === 1 ? '' : 'es'} ·
+        ${counts.safety} safet${counts.safety === 1 ? 'y' : 'ies'}${counts.unknown ? ` · ${counts.unknown} unclassified` : ''}</p>`
+    : `<p class="applying-summary__balance applying-summary__balance--muted">Add predicted grades in Check Combination to see your reach/match/safety balance.</p>`;
 
-  const testItems = tests.map(t => {
-    const info = testInfoFor(t);
-    if (!info) {
-      return `<li><strong>${esc(t)}</strong> — check the official site for registration and test dates.</li>`;
-    }
-    return `<li>
-      <strong>${esc(info.name)}</strong> <span class="applying-test-full">(${esc(info.fullName)})</span> —
-      registration ${esc(info.typicalRegistrationWindow)}; test ${esc(info.typicalTestWindow)}.
-      <a class="applying-test-link" href="${esc(info.officialUrl)}" target="_blank" rel="noopener noreferrer">Official site →</a>
-      ${info.notes ? `<span class="applying-test-note">${esc(info.notes)}</span>` : ''}
-    </li>`;
-  }).join('');
-
-  // Year-relevant timing: connect the typical windows to THEIR timeline.
-  // Honest and typical-windows-based — no invented dates.
   const _yrs = studentYears();
   const _yrLabel = AltioraState.getProfile().yearGroup;
-  const timelineNote =
-    _yrs === 0 ? `<p class="applying-timeline-note">You're in ${esc(_yrLabel)} — your application year, so these windows apply to you <strong>now</strong>. Registration deadlines come before the tests themselves; check those first.</p>` :
-    _yrs === 1 ? `<p class="applying-timeline-note">You apply next year — most admission tests are sat early in your final year, so note when registration opens for your cycle (often the spring/summer before).</p>` : '';
-
-  const testsSection = tests.length
-    ? `<li><strong>Register for your admission tests</strong> — in the order registration opens:
-         ${timelineNote}
-         <ul class="applying-test-list">${testItems}</ul></li>`
-    : `<li><strong>No admission tests</strong> required across your saved courses.</li>`;
+  const timingNote =
+    _yrs === 0 ? `<p class="applying-timeline-note">You're in ${esc(_yrLabel)} — this is your application cycle, so these windows apply to you <strong>now</strong>. Registration closes before every test.</p>` :
+    _yrs === 1 ? `<p class="applying-timeline-note">You apply next year — most admission tests are sat early in your final year, so note when registration opens for your cycle.</p>` : '';
 
   panel.innerHTML = `
     <div class="applying">
       <header class="applying__header">
         <h1 class="applying__title">Applying</h1>
-        <p class="applying__sub">Your shortlist: <strong>${savedCourses.length}</strong> course${savedCourses.length === 1 ? '' : 's'}.</p>
+        <p class="applying__sub">Your next actions, in the order they happen.</p>
       </header>
 
       <section class="applying-section">
-        <h2 class="applying-section__head">What's next</h2>
-        <ul class="applying-checklist">
-          ${testsSection}
-          <li>Check <strong>UCAS</strong> and the universities' own deadlines for each of your courses.</li>
-          <li>Make sure your personal statement reflects these courses.</li>
-        </ul>
+        <h2 class="applying-section__head">What's next<span id="applyingChecklistCount" class="applying-section__count"></span></h2>
+        ${timingNote}
+        <div id="applyingChecklist" class="applying-tasks"></div>
+        <p class="applying-tasks__foot">Windows are typical and shift year to year — always confirm on the official page.</p>
       </section>
 
       <section class="applying-section">
         <h2 class="applying-section__head">Your shortlist</h2>
-        <div id="applyingShortlistGrid" class="results-group__grid"></div>
+        <p class="applying-summary__counts"><strong>${savedCourses.length}</strong> course${savedCourses.length === 1 ? '' : 's'} ·
+          <strong>${unis.size}</strong> universit${unis.size === 1 ? 'y' : 'ies'} ·
+          ${esc(countryBits.join(', '))}</p>
+        ${balanceLine}
         <button class="home-card__link" data-go-shortlist>View full shortlist →</button>
       </section>
-
-      ${storyApplyingCardHtml()}
-
-      ${roadmap}
     </div>`;
 
-  const studentTags = (state.selectedTags && state.selectedTags.size) ? state.selectedTags : tagsFromProfile();
-  const hasSubjects = studentTags.size > 0;
-  const grid = panel.querySelector('#applyingShortlistGrid');
-  savedCourses.forEach(c => grid.appendChild(buildShortlistCard(c, studentTags, hasSubjects)));
+  renderApplyingChecklist();
   panel.querySelector('[data-go-shortlist]')?.addEventListener('click', () => switchMode('shortlist'));
 }
 
@@ -2266,19 +2366,6 @@ function achievementsSectionHtml() {
           <button type="button" class="fo-btn" id="achvCancelBtn">Cancel</button>
         </div>
       </form>
-    </section>`;
-}
-
-// Compact "Your story" card for the Applying view — the full bank lives in
-// its own cross-stage panel (reachable here and from the workspace home).
-function storyApplyingCardHtml() {
-  const n = (typeof AltioraState !== 'undefined') ? AltioraState.getAchievements().length : 0;
-  return `
-    <section class="applying-section">
-      <h2 class="applying-section__head">Your story</h2>
-      <p class="achv__note">Your activities and reflections — raw material for personal statements and interviews.${
-        n ? ` You have <strong>${n}</strong> ${n === 1 ? 'entry' : 'entries'} so far.` : ''}</p>
-      <button type="button" class="fo-btn fo-btn--primary" data-open-story>Open your story →</button>
     </section>`;
 }
 
@@ -2717,6 +2804,14 @@ function wireSaveButton(cardEl) {
 function updateShortlistCount() {
   const el = $('shortlistCount');
   if (el) el.textContent = String(AltioraState.getShortlist().length);
+}
+
+// "My Story" nav count — the third durable student-owned asset, beside
+// My fields and My Shortlist. Subscribed, like the other two.
+function updateStoryCount() {
+  const el = $('storyCount');
+  if (el) el.textContent = String(AltioraState.getAchievements().length);
+  $('storyLink')?.classList.toggle('shortlist-link--active', state.mode === 'story');
 }
 
 /* ─── "My fields" indicator (kept candidate fields) ─────────────
@@ -3348,13 +3443,6 @@ function shortlistVerdicts(saved) {
   return { byId, counts, hasGrades: !!system && hasValidGrade(system, grade), system };
 }
 
-// One-line timing fragment for an admission test (static verified data).
-function testTimingLineHtml(testId) {
-  const info = (typeof admissionTestInfo !== 'undefined') ? admissionTestInfo[testId] : null;
-  if (!info) return '';
-  return `<p class="card-test-timing">${esc(info.name)} — registration ${esc(info.typicalRegistrationWindow)}; test ${esc(info.typicalTestWindow)} → <a href="${esc(info.officialUrl)}" target="_blank" rel="noopener noreferrer">official site</a></p>`;
-}
-
 // A saved-course card: same visual system and info as a result card, plus a
 // GREEN/AMBER/RED match badge (target / possible / stretch) and a Remove
 // action. The badge needs the student's subjects; when none are known it
@@ -3423,8 +3511,7 @@ function buildShortlistCard(course, studentTags, hasSubjects) {
     ${tests.length ? `
       <div class="card-admission-tests">
         ${tests.map(t => `<span class="admission-test-tag">${esc(t)} required</span>`).join('')}
-      </div>
-      ${tests.map(testTimingLineHtml).join('')}` : ''}
+      </div>` : ''}
     ${(course.verification?.status ?? 'unverified') !== 'verified'
       ? `<p class="card-unverified">⚠ Requirements not yet verified — confirm with the university.</p>`
       : ''}
@@ -3627,7 +3714,7 @@ function baseNextStep(stage, profile, shortlistCount) {
     case 'applying':
       return {
         text: `Work on applications for your ${shortlistCount} saved course${shortlistCount === 1 ? '' : 's'}.`,
-        actions: [{ tool: 'applying', label: 'Open application tools' }, { tool: 'shortlist', label: 'View shortlist' }],
+        actions: [{ tool: 'applying', label: 'Open Applying' }, { tool: 'shortlist', label: 'View shortlist' }],
       };
     default:
       return { text: 'Pick up where you left off.', actions: [] };
@@ -3680,7 +3767,7 @@ function computeNextStep(stage, profile, shortlistCount, progress) {
       exploring: [{ tool: 'strengths', label: 'Start with Strengths' }],
       choosing:  [{ tool: 'plan', label: 'Subject Planner' }, { tool: 'check', label: 'Check Combination' }],
       building:  [{ tool: 'check', label: 'Check Combination' }, { tool: 'shortlist', label: 'Review your shortlist' }],
-      applying:  [{ tool: 'applying', label: 'Open application tools' }],
+      applying:  [{ tool: 'applying', label: 'Open Applying' }],
     };
     return { text: prog.missing[0] + urgency, actions: STAGE_ACTIONS[stage] ?? [] };
   }
@@ -7056,7 +7143,14 @@ function init() {
   // on every change (same anti-desync pattern as the fan-outs above).
   AltioraState.subscribe(renderAchievementsList);
   AltioraState.subscribe(renderStoryHomeCard);
+  AltioraState.subscribe(updateStoryCount);
+  updateStoryCount();
   wireAchievementsEvents();
+
+  // Applying checklist: ticks persist in state, and the list re-projects on
+  // every change (a shortlist edit adds/removes tasks without a reload).
+  AltioraState.subscribe(renderApplyingChecklist);
+  wireApplyingChecklist();
 
   // Workspace home: the wordmark is the home control; delegated actions on the home panel.
   $('navHome')?.addEventListener('click', goHome);
