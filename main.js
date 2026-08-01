@@ -6407,7 +6407,11 @@ const _fieldsVisited  = new Set();
 // The long-form profile body — the discovery read that now LEADS the
 // Field Overview, with admissions material following under its own break.
 function fieldProfileHtml(fp) {
-  const paras = txt => String(txt).split('\n\n').map(p => `<p class="fo-prose">${esc(p)}</p>`).join('');
+  // Prose renderer with a light authoring convention for skimmability:
+  // **a bold lead-in phrase** at the head of a micro-paragraph. Escaping
+  // happens FIRST, so the markup can never inject anything.
+  const paras = txt => String(txt).split('\n\n').map(p =>
+    `<p class="fo-prose">${esc(p).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}</p>`).join('');
   const branches = fp.branches.map(b =>
     `<div class="fo-branch"><strong>${esc(b.name)}.</strong> ${esc(b.blurb)}</div>`).join('');
   const myths = fp.misconceptions.map(m => `
@@ -6434,19 +6438,78 @@ function fieldProfileHtml(fp) {
   // source index, so adjacent sections always differ — the Teak "candy
   // accents rotating down the page" rhythm, not one flat yellow.
   const sections = [
-    { head: 'What it actually is',              body: paras(fp.whatItIs) },
-    { head: 'Where it branches',                body: branches },
-    { head: 'A day in the life',                body: paras(fp.dayInTheLife) },
-    { head: 'The degree vs the school subject', body: paras(fp.degreeVsSchool) },
-    { head: "Who thrives — and who doesn't",    body: paras(fp.whoThrives) },
-    { head: 'Misconceptions',                   body: myths },
-    { head: 'Where it leads',                   body: `${paths}${paras(fp.careers.honestNote)}` },
+    { id: 'overview',   nav: 'Overview',           head: 'What it actually is',              body: paras(fp.whatItIs) },
+    {                                              head: 'Where it branches',                body: branches },
+    { id: 'day',        nav: 'Day in the life',    head: 'A day in the life',                body: paras(fp.dayInTheLife) },
+    { id: 'degree',     nav: 'Degree vs school',   head: 'The degree vs the school subject', body: paras(fp.degreeVsSchool) },
+    {                                              head: "Who thrives — and who doesn't",    body: paras(fp.whoThrives) },
+    { id: 'myths',      nav: 'Misconceptions',     head: 'Misconceptions',                   body: myths },
+    { id: 'leads',      nav: 'Where it leads',     head: 'Where it leads',                   body: `${paths}${paras(fp.careers.honestNote)}` },
   ];
   if (compares) sections.push({ head: 'Often compared with', body: `<div class="fo-compares">${compares}</div>` });
+  // Supercurricular roadmap — placed after "Often compared with", named to
+  // match the Story Bank so the tie-in reads as one idea.
+  if (fp.roadmap) {
+    sections.push({
+      id: 'roadmap', nav: 'Building your story',
+      head: `Building your ${fp.name} story`,
+      body: fieldRoadmapHtml(fp.roadmap),
+      // Explicit accent: this is the LAST profile section, and the admissions
+      // block that follows opens on a hardcoded yellow. Sage keeps every
+      // adjacent pair distinct across the seam (…lavender → sage → yellow…).
+      accent: 'fo-accent-sage',
+    });
+  }
 
-  return sections.map((s, i) =>
-    `<section class="fo-section"><h2 class="fo-section__head ${FO_HEAD_ACCENTS[i % FO_HEAD_ACCENTS.length]}">${s.head}</h2>${s.body}</section>`
+  const navItems = sections.filter(s => s.nav)
+    .map(s => `<a class="fo-anchornav__link" href="#fo-sec-${s.id}" data-fo-anchor="fo-sec-${s.id}">${esc(s.nav)}</a>`)
+    .concat(`<a class="fo-anchornav__link" href="#foGateBreak" data-fo-anchor="foGateBreak">Getting in</a>`)
+    .join('');
+  const nav = `<nav class="fo-anchornav" aria-label="Jump to a section">${navItems}</nav>`;
+
+  return nav + sections.map((s, i) =>
+    `<section class="fo-section"${s.id ? ` id="fo-sec-${s.id}"` : ''}><h2 class="fo-section__head ${s.accent ?? FO_HEAD_ACCENTS[i % FO_HEAD_ACCENTS.length]}">${esc(s.head)}</h2>${s.body}</section>`
   ).join('');
+}
+
+// "Building your [Field] story" — reading, verified competitions, and
+// self-starter project prompts, closing with the Story Bank tie-in.
+// Deliberately makes NO claim about what universities require or prefer.
+function fieldRoadmapHtml(rm) {
+  const reading = (rm.reading ?? []).map(r => `
+    <li class="fo-road__item">
+      <span class="fo-road__title">${esc(r.title)}</span>
+      <span class="fo-road__by">${esc(r.by)}</span>
+      <span class="fo-road__note">${esc(r.note)}</span>
+    </li>`).join('');
+  const comps = (rm.competitions ?? []).map(c => `
+    <li class="fo-road__item">
+      <span class="fo-road__title">${esc(c.name)}</span>
+      <span class="fo-road__note">${esc(c.line)}</span>
+      <a class="fo-road__link" href="${esc(c.url)}" target="_blank" rel="noopener noreferrer">Official site →</a>
+    </li>`).join('');
+  const projects = (rm.projects ?? []).map(p => `<li class="fo-road__item fo-road__item--plain">${esc(p)}</li>`).join('');
+
+  return `
+    <p class="fo-prose fo-road__lead">Depth beats a long list. These are real starting points — pick one you would
+      genuinely enjoy, and let it become something you can talk about.</p>
+    <div class="fo-road">
+      <div class="fo-road__group">
+        <h3 class="fo-road__head">Reading &amp; listening</h3>
+        <ul class="fo-road__list">${reading}</ul>
+      </div>
+      <div class="fo-road__group">
+        <h3 class="fo-road__head">Competitions &amp; challenges</h3>
+        <ul class="fo-road__list">${comps}</ul>
+        <p class="fo-road__caveat">Dates and eligibility change each year — check the official page before planning around one.</p>
+      </div>
+      <div class="fo-road__group">
+        <h3 class="fo-road__head">Projects you can start now</h3>
+        <ul class="fo-road__list">${projects}</ul>
+      </div>
+    </div>
+    <p class="fo-road__tiein">Done something like this?
+      <button type="button" class="fo-road__tiein-btn" data-open-story>Add it to your story →</button></p>`;
 }
 
 // Rotating heading-accent classes (see .fo-accent-* in styles.css). Cycled by
@@ -6697,6 +6760,16 @@ function renderFieldOverview(fieldId) {
   panel.querySelectorAll('[data-compare-field]').forEach(btn =>
     btn.addEventListener('click', () =>
       openFieldOverview(btn.dataset.compareField, { from: _overviewFrom, strengths: _overviewStrengths })));
+
+  // Anchor nav: smooth in-page jumps. Handled rather than left to the native
+  // hash so the sticky bar never covers the heading, and so the URL keeps the
+  // app's own route rather than gaining a stray fragment.
+  panel.querySelectorAll('[data-fo-anchor]').forEach(a =>
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.getElementById(a.dataset.foAnchor)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }));
   // Unified back: one step through app history (same as the nav "← Back" and
   // the browser Back button). The label stays contextual; the mechanism is one.
   $('foBack')?.addEventListener('click', appBack);

@@ -27,9 +27,9 @@ const fieldProfiles = {
       { name: 'Aerospace', blurb: 'Aircraft and spacecraft. Prestigious and popular, but note that much of the actual work is mechanical/electrical engineering applied to very demanding constraints.' },
       { name: 'Biomedical', blurb: 'Engineering applied to medicine — prosthetics, implants, imaging, medical devices. Usually gated on maths and physics, not biology.' },
     ],
-    dayInTheLife: 'A working engineer’s week is a mix of modelling and meetings. You might spend the morning in simulation software or a spreadsheet, checking whether a design carries its loads with margin to spare, then the afternoon in a design review defending your choices to colleagues whose job is to find the holes. There are site or lab visits, test results that don’t match the model (finding out why is half the job), and a steady stream of documentation — because in engineering, if it isn’t written down and checked, it didn’t happen.\n\nAs a student, the texture is different: problem sheets, labs, and group design projects. Expect a lot of desk time with maths before anyone lets you near anything expensive.',
-    degreeVsSchool: 'The honest gap: an engineering degree, especially the first two years, is mostly applied mathematics and physics — calculus, mechanics, differential equations, done at pace. Students who chose it because they loved building things at school sometimes hit this wall hard. The building comes back (design projects grow each year, and final-year projects can be genuinely yours), but you earn it through the maths. If problem sheets full of forces and integrals sound miserable rather than satisfying, look carefully before committing.',
-    whoThrives: 'Engineering suits pragmatists: people who get satisfaction from things that work, who can accept "good enough within constraints" instead of chasing perfect, and who don’t mind grinding through unglamorous detail because the detail is where failures hide. You need staying power in maths more than brilliance at it. People tend to be miserable in engineering if they need quick creative payoff, hate group projects (there are many), or wanted the physics ideas without the industrial application.',
+    dayInTheLife: '**A working engineer’s week is a mix of modelling and meetings.** You might spend the morning in simulation software or a spreadsheet, checking whether a design carries its loads with margin to spare, then the afternoon in a design review defending your choices to colleagues whose job is to find the holes.\n\n**Then there is the rest of it**: site or lab visits, test results that don’t match the model (finding out why is half the job), and a steady stream of documentation — because in engineering, if it isn’t written down and checked, it didn’t happen.\n\nAs a student, the texture is different: problem sheets, labs, and group design projects. Expect a lot of desk time with maths before anyone lets you near anything expensive.',
+    degreeVsSchool: '**The honest gap.** An engineering degree, especially the first two years, is mostly applied mathematics and physics — calculus, mechanics, differential equations, done at pace. Students who chose it because they loved building things at school sometimes hit this wall hard.\n\n**The building does come back.** Design projects grow each year, and final-year projects can be genuinely yours — but you earn it through the maths. If problem sheets full of forces and integrals sound miserable rather than satisfying, look carefully before committing.',
+    whoThrives: '**Engineering suits pragmatists.** People who get satisfaction from things that work, who can accept "good enough within constraints" instead of chasing perfect, and who don’t mind grinding through unglamorous detail because the detail is where failures hide. You need staying power in maths more than brilliance at it.\n\n**It goes badly** if you need quick creative payoff, hate group projects (there are many), or wanted the physics ideas without the industrial application.',
     misconceptions: [
       { myth: 'Engineering students spend their time building things.', reality: 'The first years are dominated by maths and physics problem sheets. Hands-on design grows over the degree, but the foundation is analytical.' },
       { myth: 'You need to be a maths genius.', reality: 'You need maths stamina — willingness to practise until methods are second nature. Steady beats brilliant.' },
@@ -37,7 +37,7 @@ const fieldProfiles = {
     ],
     careers: {
       paths: ['Mechanical / civil / electrical engineering practice', 'Energy and renewables', 'Aerospace and automotive', 'Software and technology (a very common jump)', 'Consulting', 'Finance and quantitative roles', 'Product management', 'Project management and infrastructure delivery'],
-      honestNote: 'Engineering is one of the most employable degrees because it certifies you can handle hard quantitative work — which is exactly why a large share of engineering graduates end up in software, finance or consulting rather than traditional engineering, where pay in some branches (especially civil, early on) is famously modest relative to the effort of the degree. Professional accreditation (towards chartership) matters if you stay in the discipline, so check that courses are accredited.',
+      honestNote: '**Engineering is one of the most employable degrees** because it certifies you can handle hard quantitative work — which is exactly why a large share of engineering graduates end up in software, finance or consulting rather than traditional engineering, where pay in some branches (especially civil, early on) is famously modest relative to the effort of the degree.\n\n**If you stay in the discipline, accreditation matters.** Check that courses are accredited towards chartership.',
     },
     oftenComparedWith: [
       { fieldId: 'cs', howToThinkAboutIt: 'Both are maths-heavy building disciplines. The split is physical versus abstract: engineering deals with materials, forces and things that can break in the real world; computer science deals with information, logic and systems made of pure structure. If you’d rather debug a program than a gearbox, lean CS; if you want your work to exist physically, lean engineering. Electrical engineering sits genuinely in the middle.' },
@@ -59,9 +59,9 @@ const fieldProfiles = {
       { name: 'Theory', blurb: 'The mathematics of computation itself — algorithms, complexity, what is provably impossible. Closest to pure maths.' },
       { name: 'Human-computer interaction', blurb: 'How people actually use software, and how to design it so they can. The branch for people who care about the human side.' },
     ],
-    dayInTheLife: 'A working software engineer reads far more code than they write. A normal day: pick up a task, spend most of the effort understanding the existing system and why the bug happens, change perhaps thirty lines, write tests, then have colleagues review the change and argue about it — that argument is quality control, not hostility. Add meetings about what to build next, and the occasional genuinely absorbing deep-focus stretch that is the reason many people love the job.\n\nAs a student: lectures that feel like maths, programming assignments that consume weekends (the last bug always takes the longest), and the strange joy of a thing finally working at 1 a.m.',
-    degreeVsSchool: 'School computing is mostly "make a thing that works". A CS degree begins with why it works: discrete mathematics, proofs, data structures and algorithm analysis, computer architecture. Plenty of students arrive loving coding and are ambushed by how mathematical the first year is. The reverse surprise also happens — people who never coded before university and flourish, because the degree teaches from first principles. Prior coding experience helps less, and mathematical comfort helps more, than most applicants expect.',
-    whoThrives: 'CS suits people with puzzle stamina — those who can be stuck for two hours, stay curious rather than frustrated, and feel the fix was worth it. Precision matters: careless-but-fast is a painful fit. You don’t need to have coded since age ten; you need to enjoy debugging, which is the actual daily texture of the field. People tend to be miserable in CS if they want the prestige of "tech" but dislike sitting with hard abstract problems, or if vague, open-ended fiddly detail drains them.',
+    dayInTheLife: '**A working software engineer reads far more code than they write.** A normal day: pick up a task, spend most of the effort understanding the existing system and why the bug happens, change perhaps thirty lines, write tests, then have colleagues review the change and argue about it — that argument is quality control, not hostility.\n\n**Around that** sit meetings about what to build next, and the occasional genuinely absorbing deep-focus stretch that is the reason many people love the job.\n\nAs a student: lectures that feel like maths, programming assignments that consume weekends (the last bug always takes the longest), and the strange joy of a thing finally working at 1 a.m.',
+    degreeVsSchool: '**School computing is mostly "make a thing that works".** A CS degree begins with why it works: discrete mathematics, proofs, data structures and algorithm analysis, computer architecture. Plenty of students arrive loving coding and are ambushed by how mathematical the first year is.\n\n**The reverse surprise also happens.** People who never coded before university often flourish, because the degree teaches from first principles. Prior coding experience helps less, and mathematical comfort helps more, than most applicants expect.',
+    whoThrives: '**CS suits people with puzzle stamina** — those who can be stuck for two hours, stay curious rather than frustrated, and feel the fix was worth it. Precision matters: careless-but-fast is a painful fit. You don’t need to have coded since age ten; you need to enjoy debugging, which is the actual daily texture of the field.\n\n**It goes badly** if you want the prestige of "tech" but dislike sitting with hard abstract problems, or if vague, open-ended fiddly detail drains you.',
     misconceptions: [
       { myth: 'Computer science = learning to code.', reality: 'Coding is the tool. The degree is mathematics, algorithms and systems design — closer to applied maths than to a coding bootcamp.' },
       { myth: 'You must have been programming since childhood.', reality: 'Universities teach from scratch. Mathematical readiness predicts success better than years of hobby coding.' },
@@ -90,8 +90,8 @@ const fieldProfiles = {
       { name: 'Mathematical finance', blurb: 'Pricing, risk and markets treated mathematically. A common specialisation in later years for the finance-bound.' },
     ],
     dayInTheLife: 'A maths student’s week revolves around problem sheets: a handful of questions that can take hours each, most of that time spent stuck. Being stuck is not failure — it is the actual activity, the mathematical equivalent of training with weights. Lectures move fast and build relentlessly; miss two weeks and the tower wobbles. Then there are supervisions or tutorials where your attempts get pulled apart and rebuilt properly.\n\nWorking mathematicians — in research, finance or data — keep the same rhythm at higher stakes: long stretches of focused thinking, punctuated by writing up arguments precisely enough that others can check every step.',
-    degreeVsSchool: 'The gap is the largest of any subject. Being top of your school class in maths is the entry ticket, not a prediction of comfort: university maths replaces calculation with abstraction and proof, and nearly everyone — including future stars — feels lost for a stretch of first year. Further Mathematics at school softens the landing where it’s available. The students who struggle most are often those who were never stuck at school and haven’t yet learned what to do when they are.',
-    whoThrives: 'Maths suits people who enjoy being stuck — who treat a resistant problem as a puzzle to live with rather than an insult. It rewards patience, precision, and a taste for understanding things completely instead of approximately. It is more social than its reputation (problem sheets are half-collaborative everywhere), but the core work is deep solitary focus. People tend to be miserable in maths if they need visible real-world output, if "prove it" feels like pointless ceremony, or if their enjoyment of school maths was mostly the enjoyment of being quick.',
+    degreeVsSchool: '**The gap is the largest of any subject.** Being top of your school class in maths is the entry ticket, not a prediction of comfort: university maths replaces calculation with abstraction and proof, and nearly everyone — including future stars — feels lost for a stretch of first year.\n\n**Further Mathematics softens the landing** where it’s available. The students who struggle most are often those who were never stuck at school and haven’t yet learned what to do when they are.',
+    whoThrives: '**Maths suits people who enjoy being stuck** — who treat a resistant problem as a puzzle to live with rather than an insult. It rewards patience, precision, and a taste for understanding things completely instead of approximately. It is more social than its reputation (problem sheets are half-collaborative everywhere), but the core work is deep solitary focus.\n\n**It goes badly** if you need visible real-world output, if "prove it" feels like pointless ceremony, or if your enjoyment of school maths was mostly the enjoyment of being quick.',
     misconceptions: [
       { myth: 'Mathematicians are people who calculate quickly.', reality: 'Speed arithmetic is nearly irrelevant. The degree is about proof, structure and abstraction — many fine mathematicians are slow and deep.' },
       { myth: 'A maths degree leads mainly to teaching.', reality: 'Maths graduates are heavily recruited into finance, data science, technology and research — it is one of the most career-flexible degrees.' },
@@ -122,8 +122,8 @@ const fieldProfiles = {
       { name: 'Materials science', blurb: 'Designing matter itself — semiconductors, polymers, batteries. An underrated bridge between physics, chemistry and engineering.' },
     ],
     dayInTheLife: 'The honest texture of research science: most experiments don’t work, and the job is finding out why. A research scientist’s week is experiment design, bench or computer time, analysing data that refuses to be clean, reading papers, and writing — because a result that isn’t communicated might as well not exist. The eureka moments are real but rare; the sustaining pleasure is smaller and daily, the puzzle slowly yielding.\n\nAs a student: lectures and problem sets (very mathematical in physics), afternoons in teaching labs where the experiment is designed to work and sometimes still doesn’t, and lab reports that teach you to write like a scientist.',
-    degreeVsSchool: 'School science is a tour of settled answers; a science degree walks you to the edge where answers run out. Physics applicants are most often surprised: the degree is mathematics nearly all the way down, and enjoying the ideas of physics is not the same as enjoying the calculus that expresses them. Chemistry surprises with sheer lab hours; biology surprises with statistics and molecular detail replacing the whole-organism story told at school.',
-    whoThrives: 'Science suits the patiently curious: people who can hold a question for months, tolerate ambiguity and failed runs, and find genuine satisfaction in small increments of certainty. Precision and honesty matter — fudging data is the field’s cardinal sin. People tend to be miserable in science if they need frequent visible wins, if repetitive careful procedure feels like drudgery rather than craft, or (in physics specifically) if heavy mathematics is a price rather than a pleasure.',
+    degreeVsSchool: '**School science is a tour of settled answers**; a science degree walks you to the edge where answers run out.\n\n**Each subject surprises differently.** Physics applicants are most often caught out: the degree is mathematics nearly all the way down, and enjoying the ideas of physics is not the same as enjoying the calculus that expresses them. Chemistry surprises with sheer lab hours; biology surprises with statistics and molecular detail replacing the whole-organism story told at school.',
+    whoThrives: '**Science suits the patiently curious** — people who can hold a question for months, tolerate ambiguity and failed runs, and find genuine satisfaction in small increments of certainty. Precision and honesty matter: fudging data is the field’s cardinal sin.\n\n**It goes badly** if you need frequent visible wins, if repetitive careful procedure feels like drudgery rather than craft, or (in physics specifically) if heavy mathematics is a price rather than a pleasure.',
     misconceptions: [
       { myth: 'Science is a parade of eureka moments.', reality: 'It is mostly careful, repetitive work and experiments that fail informatively. The breakthroughs are built out of months of unglamorous rigour.' },
       { myth: 'A science degree means a lab-coat career.', reality: 'Most science graduates work outside research labs — in data, industry, finance, policy and teaching. The degree is a thinking credential as much as a vocational one.' },
@@ -152,9 +152,9 @@ const fieldProfiles = {
       { name: 'Public health', blurb: 'Treating populations instead of patients: epidemics, screening, prevention, policy. Medicine at statistical scale.' },
       { name: 'Academic medicine', blurb: 'Combining clinical work with research — the route by which treatments actually improve.' },
     ],
-    dayInTheLife: 'A junior doctor’s day: ward round from early morning, seeing each patient, adjusting plans; then hours executing those plans — bloods, referrals, discharge letters, chasing results, documenting everything. Interspersed: conversations that matter enormously (explaining a diagnosis, talking with a family) and stretches of administrative slog. Nights and weekends are part of the deal for years. The dramatic saves of television exist but are rare punctuation; the substance is systematic care, teamwork and paperwork done properly, because in medicine "properly" is what safety is made of.\n\nAs a student: anatomy and physiology by the bucketload early on, then clinical years rotating through the hospital learning at the bedside.',
-    degreeVsSchool: 'School biology rewards understanding elegant systems. Medical school adds two things school never asked of you: memory volume (the sheer quantity to be retained is the real difficulty — few concepts are hard, but there are thousands of them) and the clinical skill of talking to strangers about intimate things while thinking diagnostically. Being the best biologist in your school says little about how you’ll take a history from a frightened patient at 3 a.m.',
-    whoThrives: 'Medicine suits people with stamina in both senses — for long training and long shifts, and for other people’s distress without absorbing it destructively. It rewards conscientiousness, teamwork and comfort with hierarchy and protocol, especially early on. Delayed gratification is structural: autonomy and specialisation come years in. People tend to be miserable in medicine if they mainly loved the science (research may fit better), if they resent being told where to work and what to learn, or if they need their evenings to be reliably their own.',
+    dayInTheLife: '**A junior doctor’s day** starts with the ward round: seeing each patient, adjusting plans. Then come hours of executing those plans — bloods, referrals, discharge letters, chasing results, documenting everything.\n\n**Interspersed are the two extremes**: conversations that matter enormously (explaining a diagnosis, talking with a family) and stretches of administrative slog. Nights and weekends are part of the deal for years.\n\n**The dramatic saves of television are rare punctuation.** The substance is systematic care, teamwork and paperwork done properly, because in medicine "properly" is what safety is made of.\n\nAs a student: anatomy and physiology by the bucketload early on, then clinical years rotating through the hospital learning at the bedside.',
+    degreeVsSchool: '**School biology rewards understanding elegant systems.** Medical school adds two things school never asked of you.\n\n**First, memory volume** — the sheer quantity to be retained is the real difficulty; few concepts are hard, but there are thousands of them. **Second, the clinical skill** of talking to strangers about intimate things while thinking diagnostically. Being the best biologist in your school says little about how you’ll take a history from a frightened patient at 3 a.m.',
+    whoThrives: '**Medicine suits people with stamina in both senses** — for long training and long shifts, and for other people’s distress without absorbing it destructively. It rewards conscientiousness, teamwork and comfort with hierarchy and protocol, especially early on. Delayed gratification is structural: autonomy and specialisation come years in.\n\n**It goes badly** if you mainly loved the science (research may fit better), if you resent being told where to work and what to learn, or if you need your evenings to be reliably your own.',
     misconceptions: [
       { myth: 'Medicine is science at the highest level.', reality: 'It is a people profession that uses science. Communication, stamina and judgement under uncertainty are the daily skills; the deepest science happens in research.' },
       { myth: 'Getting in is the hard part.', reality: 'Admission is fiercely competitive, but the training path afterwards is long, examined and competitive at several further gates, particularly for popular specialties.' },
@@ -184,8 +184,8 @@ const fieldProfiles = {
       { name: 'Development & policy', blurb: 'Economics aimed at poverty, health, education and government decisions — the branch for the mission-driven.' },
     ],
     dayInTheLife: 'A working economist — at a bank, a ministry, a consultancy — spends the day between data and argument: cleaning datasets, running statistical models, then turning the output into a chart and two paragraphs a decision-maker will actually read. The writing matters as much as the maths; an analysis that can’t persuade doesn’t count.\n\nAs a student: problem sets that look like applied maths, statistics and coding work in econometrics, and essays that force you to connect models to the news. The mix of quantitative and verbal is the degree’s signature — and its workload.',
-    degreeVsSchool: 'School economics is largely diagrams and discussion. A serious university economics degree is mathematical from the first term — calculus and statistics are the working language, and the strongest courses require and use A-level-Maths-and-beyond heavily. Students who loved debating economic ideas but dislike mathematics often have a hard landing; students from pure-maths backgrounds are frequently surprised to find they’re expected to write well too. It is genuinely both.',
-    whoThrives: 'Economics suits people who like both sides of their brain working: comfortable with algebra and data, but equally interested in the human question underneath. It rewards scepticism — the instinct to ask "compared to what?" and "what does the data actually show?". People tend to be miserable in economics if they wanted current-affairs debate without mathematics, or pure mathematics without essays, or if they need their models to be exactly true rather than usefully wrong.',
+    degreeVsSchool: '**School economics is largely diagrams and discussion.** A serious university economics degree is mathematical from the first term — calculus and statistics are the working language, and the strongest courses require and use A-level-Maths-and-beyond heavily.\n\n**It is genuinely both subjects at once.** Students who loved debating economic ideas but dislike mathematics often have a hard landing; students from pure-maths backgrounds are frequently surprised to find they’re expected to write well too.',
+    whoThrives: '**Economics suits people who like both sides of their brain working** — comfortable with algebra and data, but equally interested in the human question underneath. It rewards scepticism: the instinct to ask "compared to what?" and "what does the data actually show?".\n\n**It goes badly** if you wanted current-affairs debate without mathematics, or pure mathematics without essays, or if you need your models to be exactly true rather than usefully wrong.',
     misconceptions: [
       { myth: 'Economics is about money and business.', reality: 'It is about choice and incentives everywhere — crime, marriage, climate, elections. Money is one instrument in a much bigger orchestra.' },
       { myth: 'Economists predict the stock market.', reality: 'Mostly they don’t and mostly they can’t — much of the field explains why reliable prediction is impossible. The real work is explaining mechanisms and evaluating policies.' },
@@ -216,8 +216,8 @@ const fieldProfiles = {
       { name: 'International law', blurb: 'Treaties, trade, war and states. Grand in scope; a small professional field in practice.' },
     ],
     dayInTheLife: 'A junior solicitor’s day is documents: reading them, drafting them, marking up someone else’s, and writing careful emails about the differences. Precision is the profession — a misplaced clause is a lawsuit. There are client calls, negotiations, and deadlines that occasionally eat evenings; courtroom advocacy belongs to barristers, and even for them, preparation outweighs performance many times over.\n\nAs a student: a reading list that genuinely means it, seminars where you’re expected to argue positions you may not hold, and problem questions — invented messes you must untangle with authorities cited.',
-    degreeVsSchool: 'No school subject maps onto law, which levels the field. The nearest preparation is essay subjects — history especially — because the degree is precise reading and argued writing in quantity. The surprise for many is how technical it is: less "is this just?" and more "what exactly did the court hold, and does it bind here?". The justice questions are present, but they live inside a machinery of precedent and interpretation you must first master.',
-    whoThrives: 'Law suits careful readers and natural arguers — people who enjoy finding the load-bearing sentence in forty pages, who can hold two opposing arguments honestly, and who find precision satisfying rather than pedantic. Detail-tolerance is non-negotiable. People tend to be miserable in law if they wanted performance rather than preparation, if ambiguity frustrates them (law is argued precisely because answers aren’t settled), or if they can’t bear reading as the main event.',
+    degreeVsSchool: '**No school subject maps onto law**, which levels the field. The nearest preparation is essay subjects — history especially — because the degree is precise reading and argued writing in quantity.\n\n**The surprise for many is how technical it is**: less "is this just?" and more "what exactly did the court hold, and does it bind here?". The justice questions are present, but they live inside a machinery of precedent and interpretation you must first master.',
+    whoThrives: '**Law suits careful readers and natural arguers** — people who enjoy finding the load-bearing sentence in forty pages, who can hold two opposing arguments honestly, and who find precision satisfying rather than pedantic. Detail-tolerance is non-negotiable.\n\n**It goes badly** if you wanted performance rather than preparation, if ambiguity frustrates you (law is argued precisely because answers aren’t settled), or if you can’t bear reading as the main event.',
     misconceptions: [
       { myth: 'Law is courtroom drama.', reality: 'The overwhelming majority of legal work is documents, advice and negotiation. Most lawyers rarely see a courtroom; even barristers prepare far more than they perform.' },
       { myth: 'You memorise laws.', reality: 'You learn to find, read and apply law — the skill is interpretation and argument, not recall. The law changes; the method is the degree.' },
@@ -246,9 +246,9 @@ const fieldProfiles = {
       { name: 'Operations & supply chain', blurb: 'How things actually get made and delivered. Unfashionable and quietly critical — the branch the pandemic made famous.' },
       { name: 'Business analytics', blurb: 'Decisions from data. The fastest-growing branch and the one that most rewards adding real statistical skills.' },
     ],
-    dayInTheLife: 'There is no single business job, so no single day — but the early-career pattern across functions is recognisable: analysis in spreadsheets and slides, meetings to align people who see the problem differently, and communication, endlessly — because in organisations, an idea that isn’t sold doesn’t happen. A junior consultant builds models and interviews clients; a junior marketer runs campaigns and reads their numbers; a junior analyst reconciles data and presents it upward.\n\nAs a student: case studies, group projects (many — the degree is deliberately collaborative), presentations, and coursework spanning accounting to organisational psychology.',
-    degreeVsSchool: 'Business at school barely predicts the degree, which is broader and more numerical than most applicants expect — accounting, statistics and finance are core, not optional. The bigger honest gap is between the degree and the outcome: unlike medicine or engineering, a business degree certifies no specific skill, so employers weigh what you did alongside it — internships, projects, societies — unusually heavily. The students who treat the degree as a base camp rather than the climb do far better than those who expect it to place them somewhere by itself.',
-    whoThrives: 'Business suits energetic generalists: people who like moving between problems, working through and with other people, and getting to practical outcomes rather than theoretical depth. Communication is the core competence — comfort presenting, persuading and working in imperfect teams. People tend to be miserable in business if they crave one deep discipline, find group work an ordeal, or expected the degree to be the easy option (the workload is real; it’s the depth, not the volume, that differs).',
+    dayInTheLife: '**There is no single business job, so no single day** — but the early-career pattern across functions is recognisable: analysis in spreadsheets and slides, meetings to align people who see the problem differently, and communication, endlessly, because in organisations an idea that isn’t sold doesn’t happen.\n\n**The function changes the texture.** A junior consultant builds models and interviews clients; a junior marketer runs campaigns and reads their numbers; a junior analyst reconciles data and presents it upward.\n\nAs a student: case studies, group projects (many — the degree is deliberately collaborative), presentations, and coursework spanning accounting to organisational psychology.',
+    degreeVsSchool: '**Business at school barely predicts the degree**, which is broader and more numerical than most applicants expect — accounting, statistics and finance are core, not optional.\n\n**The bigger honest gap is between the degree and the outcome.** Unlike medicine or engineering, a business degree certifies no specific skill, so employers weigh what you did alongside it — internships, projects, societies — unusually heavily. The students who treat the degree as a base camp rather than the climb do far better than those who expect it to place them somewhere by itself.',
+    whoThrives: '**Business suits energetic generalists** — people who like moving between problems, working through and with other people, and getting to practical outcomes rather than theoretical depth. Communication is the core competence: comfort presenting, persuading and working in imperfect teams.\n\n**It goes badly** if you crave one deep discipline, find group work an ordeal, or expected the degree to be the easy option (the workload is real; it’s the depth, not the volume, that differs).',
     misconceptions: [
       { myth: 'Business is the easy degree.', reality: 'It is the broad degree. Accounting, statistics and finance modules have real teeth; the difference from harder-reputation degrees is specialisation, not effort.' },
       { myth: 'A business degree teaches you to run a business.', reality: 'It teaches the functions businesses run on. Judgement comes from doing — which is why internships and ventures alongside the degree matter so much.' },
@@ -278,8 +278,8 @@ const fieldProfiles = {
       { name: 'Sociology & social policy', blurb: 'From minds to societies: inequality, institutions, culture — the structural forces psychology alone can’t see.' },
     ],
     dayInTheLife: 'A research psychologist’s week: designing studies, recruiting participants, collecting data that arrives slower and messier than planned, statistics, and writing — the publishing rhythm of any science. A clinical psychologist’s week (after postgraduate training): assessments, therapy sessions, case notes, supervision and multidisciplinary meetings — emotionally substantial work with structure around it.\n\nAs a student: lectures across the whole span from neurons to societies, a statistics-and-methods spine running through every year, and a final-year research project where you finally run your own study — for many, the moment the degree clicks.',
-    degreeVsSchool: 'The gap has one word on it: statistics. Applicants imagine reading about minds; the degree insists you measure them, and the methods-and-stats modules are compulsory, substantial and the most common unpleasant surprise. The second gap: a psychology degree does not make you a therapist — clinical routes are separate, postgraduate and among the most competitive trainings anywhere. Knowing both facts in advance is the difference between choosing the subject and choosing its stereotype.',
-    whoThrives: 'Psychology suits the people-curious with a tolerance for rigour: those who can hold both "this human story is fascinating" and "but what does the evidence actually show?" without dropping either. Comfort with numbers is genuinely required. For the clinical path, emotional resilience and patience with a long competitive route are part of the deal. People tend to be miserable in psychology if statistics feels like betrayal of why they came, or if they expected settled answers about human nature rather than carefully-qualified evidence.',
+    degreeVsSchool: '**The gap has one word on it: statistics.** Applicants imagine reading about minds; the degree insists you measure them, and the methods-and-stats modules are compulsory, substantial and the most common unpleasant surprise.\n\n**The second gap: a psychology degree does not make you a therapist.** Clinical routes are separate, postgraduate and among the most competitive trainings anywhere. Knowing both facts in advance is the difference between choosing the subject and choosing its stereotype.',
+    whoThrives: '**Psychology suits the people-curious with a tolerance for rigour** — those who can hold both "this human story is fascinating" and "but what does the evidence actually show?" without dropping either. Comfort with numbers is genuinely required. For the clinical path, emotional resilience and patience with a long competitive route are part of the deal.\n\n**It goes badly** if statistics feels like a betrayal of why you came, or if you expected settled answers about human nature rather than carefully-qualified evidence.',
     misconceptions: [
       { myth: 'Psychology teaches you to read people.', reality: 'It teaches you to test claims about people. Much of the degree is discovering that folk intuitions — including yours — often fail when measured.' },
       { myth: 'A psychology degree makes you a therapist.', reality: 'Clinical practice requires separate postgraduate training that is heavily oversubscribed. The undergraduate degree is a science degree.' },
@@ -310,8 +310,8 @@ const fieldProfiles = {
       { name: 'Interior & exhibition design', blurb: 'Space at the human scale — where architecture meets brand, story and experience.' },
     ],
     dayInTheLife: 'In practice, an architect’s week mixes design time (less than outsiders imagine) with everything that makes design real: coordinating with structural engineers, checking regulations, redlining drawings, client meetings where the budget shrinks, and site visits where the built thing differs from the drawn thing and must be resolved today. Junior years involve a lot of drawing production and detail work before the design authority arrives.\n\nAs a student, the studio dominates: long hours — sometimes very long around deadlines — making models and drawings, in a cohort that becomes unusually close because everyone is in it together at 2 a.m.',
-    degreeVsSchool: 'No school subject is architecture, and schools rarely warn about the two real entry requirements: a portfolio that shows how you see (drawing skill matters less than observation and ideas), and stamina for critique — having work you laboured over publicly pulled apart, weekly, and coming back stronger. Maths and physics requirements are usually modest; the demanding parts are time, iteration and emotional durability. Students who need clear right answers find the open-endedness hard; that open-endedness is the subject.',
-    whoThrives: 'Architecture suits visual thinkers with persistence: people who notice buildings and spaces compulsively, who can iterate on feedback without taking it as a verdict on themselves, and who accept that creative work lives inside constraints — budgets, clients, regulations — rather than despite them. People tend to be miserable in architecture if they want pure artistic freedom (that’s art school), quick qualification, or evenings that reliably belong to them during studio years.',
+    degreeVsSchool: '**No school subject is architecture**, and schools rarely warn about the two real entry requirements: a portfolio that shows how you see (drawing skill matters less than observation and ideas), and stamina for critique — having work you laboured over publicly pulled apart, weekly, and coming back stronger.\n\n**The demanding parts are time, iteration and emotional durability**, not the maths and physics requirements, which are usually modest. Students who need clear right answers find the open-endedness hard; that open-endedness is the subject.',
+    whoThrives: '**Architecture suits visual thinkers with persistence** — people who notice buildings and spaces compulsively, who can iterate on feedback without taking it as a verdict on themselves, and who accept that creative work lives inside constraints (budgets, clients, regulations) rather than despite them.\n\n**It goes badly** if you want pure artistic freedom (that’s art school), quick qualification, or evenings that reliably belong to you during studio years.',
     misconceptions: [
       { myth: 'Architecture is drawing beautiful buildings.', reality: 'It is negotiating beauty with structure, regulation, budget and client — the drawing is the start of the argument, not the job.' },
       { myth: 'It’s a quick creative degree.', reality: 'Full qualification takes around seven years of study and practice. It is one of the longest professional trainings outside medicine.' },
@@ -328,7 +328,208 @@ const fieldProfiles = {
   },
 };
 
+/* ═══════════════════════════════════════════════════════════════
+ * SUPERCURRICULAR ROADMAPS — "Building your [Field] story"
+ *
+ * The static version of tactical counselor advice: what a student can
+ * actually DO to build depth in a field. Three categories per field.
+ *
+ * HONESTY RULES (enforced by test assertion):
+ *   · Every competition is REAL and was verified against its official
+ *     site before being listed here; anything unverifiable is omitted.
+ *   · Reading lists are real, named, checkable titles only.
+ *   · Project prompts are authored editorial framed as building YOUR
+ *     story/evidence. Nothing here claims a university requires,
+ *     prefers, rewards or is impressed by any of it — universities
+ *     publish no verifiable weightings, so such a claim would be
+ *     fabricated. It's about having a story to tell, which is true.
+ * ═══════════════════════════════════════════════════════════════ */
+
+const fieldRoadmaps = {
+
+  engineering: {
+    reading: [
+      { title: 'Structures: Or Why Things Don’t Fall Down', by: 'J. E. Gordon', note: 'The classic on why bridges, bones and beams hold — readable with school physics.' },
+      { title: 'To Engineer Is Human', by: 'Henry Petroski', note: 'On failure as the engine of design. Short, and it reframes what engineers actually do.' },
+      { title: '99% Invisible', by: 'podcast', note: 'Episodes on the designed world — infrastructure, materials, and the decisions behind them.' },
+    ],
+    competitions: [
+      { name: 'The Big Bang Competition', line: 'National STEM project competition — enter a science, engineering or technology project you have built or investigated. Free, ages 11–18.', url: 'https://www.thebigbang.org.uk/the-big-bang-competition/' },
+      { name: 'British Physics Olympiad', line: 'A ladder of physics problem papers sat in school, from the accessible Junior/Senior Challenges up to the Olympiad rounds.', url: 'https://www.bpho.org.uk/' },
+      { name: 'UKMT Senior Mathematical Challenge', line: 'A 90-minute problem paper — good practice for the mathematical thinking engineering leans on.', url: 'https://ukmt.org.uk/senior-challenges/senior-mathematical-challenge' },
+    ],
+    projects: [
+      'Take something in your house that annoys you and redesign it on paper — sketch it, name the constraint you are fighting (cost, strength, space), and say what you would trade away.',
+      'Build the simplest version of something that moves — a catapult, a bridge from spaghetti, a small motor circuit — then test it to destruction and write down where and why it failed.',
+      'Pick a piece of local infrastructure you walk past weekly and work out how it carries its load. A page of diagrams beats a term of vague enthusiasm.',
+    ],
+  },
+
+  cs: {
+    reading: [
+      { title: 'Code: The Hidden Language of Computer Hardware and Software', by: 'Charles Petzold', note: 'Builds a computer from a light switch upwards. The best answer to “but how does it actually work?”' },
+      { title: 'Algorithms to Live By', by: 'Brian Christian & Tom Griffiths', note: 'Computer-science ideas applied to ordinary decisions — a painless route into what the theory is for.' },
+      { title: 'CS50: Introduction to Computer Science', by: 'Harvard, free online', note: 'The widely used free introductory course. Doing a few problem sets teaches more than reading about coding.' },
+    ],
+    competitions: [
+      { name: 'UK Bebras Computational Thinking Challenge', line: 'Short logic and computational-thinking puzzles, no coding needed. Sat in school each November, ages 6–19.', url: 'https://www.bebras.uk/' },
+      { name: 'British Informatics Olympiad', line: 'The national programming competition: a three-hour paper set in school, any language, with a Cambridge final for top scorers.', url: 'https://www.olympiad.org.uk/' },
+      { name: 'CyberFirst Girls Competition', line: 'NCSC (GCHQ) cyber-security challenges — cryptography, logic and code-breaking, in teams.', url: 'https://www.ncsc.gov.uk/cyberfirst/girls-competition' },
+    ],
+    projects: [
+      'Build something that solves a real annoyance in your week — a script that renames your files, a page that tracks your revision, a bot that reminds you of deadlines. Small and used beats big and abandoned.',
+      'Take a program you have written and make it twice as fast, or half as long. Write a paragraph on what you changed and why — that paragraph is the interesting part.',
+      'Recreate something you use without looking at its source: a calculator, a to-do list, a simple game. Getting stuck and unsticking yourself is the whole point.',
+    ],
+  },
+
+  mathematics: {
+    reading: [
+      { title: 'Humble Pi', by: 'Matt Parker', note: 'What happens when maths goes wrong in the real world. Funny, and quietly serious about rigour.' },
+      { title: 'A Mathematician’s Apology', by: 'G. H. Hardy', note: 'Short, personal, and the clearest statement of why pure mathematicians do it at all.' },
+      { title: '3Blue1Brown', by: 'YouTube, free', note: 'The Essence of Calculus and Essence of Linear Algebra series — visual intuition for what you will meet in first year.' },
+    ],
+    competitions: [
+      { name: 'UKMT Senior Mathematical Challenge', line: '90 minutes of multiple-choice problems for Year 13 and below; strong scores lead on to the Olympiad rounds.', url: 'https://ukmt.org.uk/senior-challenges/senior-mathematical-challenge' },
+      { name: 'British Mathematical Olympiad Round 1', line: 'Six problems in 3.5 hours needing full written proofs — the real step up from challenge-style questions.', url: 'https://ukmt.org.uk/senior-challenges/british-maths-olympiad-round-1' },
+      { name: 'Senior Team Maths Challenge', line: 'Teams of four from Year 12–13 at regional finals — the same problem-solving, done out loud with other people.', url: 'https://ukmt.org.uk/team-challenges/senior-team-mathematical-challenge' },
+    ],
+    projects: [
+      'Prove something small properly and write it up in one page — that the square root of 2 is irrational, or that there are infinitely many primes. Writing a proof cleanly is the skill the degree is built on.',
+      'Take a result you were taught as a rule and find out where it comes from. Why does that formula work? Chase it until you could explain it to your class.',
+      'Pick a question with no tidy answer — how many people share your birthday in school, how long a queue gets at lunch — model it, then check your model against what actually happens.',
+    ],
+  },
+
+  sciences: {
+    reading: [
+      { title: 'Seven Brief Lessons on Physics', by: 'Carlo Rovelli', note: 'Ninety pages that cover the big ideas of modern physics without maths. A good test of whether the ideas grip you.' },
+      { title: 'The Disappearing Spoon', by: 'Sam Kean', note: 'The periodic table told through stories — chemistry as history, accident and obsession.' },
+      { title: 'The Infinite Monkey Cage', by: 'BBC Radio 4 podcast', note: 'Working scientists arguing about their own subjects, which is closer to real science than any textbook.' },
+    ],
+    competitions: [
+      { name: 'British Physics Olympiad', line: 'Fifteen annual physics competitions, from accessible challenge papers to the Olympiad rounds. Sat in school.', url: 'https://www.bpho.org.uk/' },
+      { name: 'UK Chemistry Olympiad', line: 'The Royal Society of Chemistry’s national competition for 16–19 year olds, sat in school in January.', url: 'https://edu.rsc.org/enrichment/uk-chemistry-olympiad' },
+      { name: 'British Biology Olympiad', line: 'For students aged 16–18, run by the UK Biology Competitions charity; leads towards the international olympiad.', url: 'https://ukbiologycompetitions.org/british-biology-olympiad/' },
+    ],
+    projects: [
+      'Run one proper experiment at home with a control — germination under different conditions, rusting, the maths of a bouncing ball — and write it up with your uncertainties honestly stated.',
+      'Read one real paper on something you care about (many are free) and write half a page on what they did and what you did not follow. Naming your confusion is genuine scientific work.',
+      'Keep a two-month notebook on a natural process you can observe — a tide, a mould, the night sky — and look for the pattern. Sustained observation is rarer than enthusiasm.',
+    ],
+  },
+
+  medicine: {
+    reading: [
+      { title: 'Do No Harm', by: 'Henry Marsh', note: 'A neurosurgeon on his own mistakes. The most honest book about medicine as a job rather than a calling.' },
+      { title: 'This Is Going to Hurt', by: 'Adam Kay', note: 'Junior doctor diaries — funny, then not. Read it for the working conditions, not the anecdotes.' },
+      { title: 'Bad Science', by: 'Ben Goldacre', note: 'How to read evidence and spot the bad kind. Directly useful for interviews and for the rest of your life.' },
+    ],
+    competitions: [
+      { name: 'British Biology Olympiad', line: 'For students aged 16–18 — the main national biology competition, sat in school.', url: 'https://ukbiologycompetitions.org/british-biology-olympiad/' },
+      { name: 'Biology Challenge', line: 'Two short multiple-choice papers for Years 9–10, rewarding curiosity beyond the syllabus. A good early start.', url: 'https://ukbiologycompetitions.org/biology-challenge/' },
+      { name: 'UK Chemistry Olympiad', line: 'The Royal Society of Chemistry’s competition for 16–19 year olds — chemistry is the subject most medicine courses insist on.', url: 'https://edu.rsc.org/enrichment/uk-chemistry-olympiad' },
+    ],
+    projects: [
+      'Get any regular contact with people who need care — a care home, a charity shop, a coaching role — and keep a short private log of what you noticed about the people, not about yourself.',
+      'Follow one health story in the news for a month and track how the evidence behind it changes. Medicine is applied uncertainty; this is what that feels like.',
+      'Write a page on an ethical case that genuinely splits you — consent, rationing, a refused treatment — arguing both sides before you land anywhere.',
+    ],
+  },
+
+  economics: {
+    reading: [
+      { title: 'The Undercover Economist', by: 'Tim Harford', note: 'Everyday prices, explained. Still the best on-ramp to thinking like an economist.' },
+      { title: 'Poor Economics', by: 'Abhijit Banerjee & Esther Duflo', note: 'Nobel-winning work on what actually helps — evidence over ideology, written for general readers.' },
+      { title: 'More or Less: Behind the Statistics', by: 'BBC Radio 4 podcast', note: 'Ten-minute demolitions of numbers in the news. Trains the instinct the degree will formalise.' },
+    ],
+    competitions: [
+      { name: 'Marshall Society Essay Competition', line: 'Cambridge’s economics society essay prize, open worldwide to pre-university students. Free to enter.', url: 'https://www.marshallsociety.com/essay-competition' },
+      { name: 'RES Young Economist of the Year', line: 'Royal Economic Society competition for Years 10–13 analysing a contemporary economic problem, with a presented final.', url: 'https://res.org.uk/committees/pd-education-committee/young-economist-of-the-year/' },
+      { name: 'John Locke Institute Global Essay Prize', line: 'Argumentative essay under 2,000 words; Economics is one of its subject categories. Open to under-19s worldwide.', url: 'https://www.johnlockeinstitute.com/essay-competition' },
+    ],
+    projects: [
+      'Pick one price you pay often — a bus fare, a coffee, a game — and work out honestly why it is that number. Write the page you wish someone had written for you.',
+      'Find a public dataset (ONS, World Bank) on something you care about, make one chart, and write two paragraphs on what it does and does not show.',
+      'Take a policy being argued about right now, write the strongest case for it, then the strongest case against, and only then say what you think.',
+    ],
+  },
+
+  law: {
+    reading: [
+      { title: 'The Secret Barrister', by: 'Anonymous', note: 'What the criminal courts are actually like day to day. Corrective to every courtroom drama.' },
+      { title: 'Letters to a Law Student', by: 'Nicholas McBride', note: 'Written precisely for someone deciding whether to apply, and how to read law once they do.' },
+      { title: 'Law in Action', by: 'BBC Radio 4 podcast', note: 'Current legal issues explained by people who practise. Good for interview conversation.' },
+    ],
+    competitions: [
+      { name: 'Bar Mock Trial Competition', line: 'Run by the charity Young Citizens for ages 15–18: teams argue a real-format criminal trial in a real courtroom, judged by practising barristers and judges.', url: 'https://www.youngcitizens.org/programmes/the-bar-mock-trial-competition/' },
+      { name: 'John Locke Institute Global Essay Prize', line: 'Argumentative essay under 2,000 words; Law is one of its subject categories. Open to under-19s worldwide.', url: 'https://www.johnlockeinstitute.com/essay-competition' },
+    ],
+    projects: [
+      'Write a one-page case note on a ruling in the news: what the facts were, what was decided, and what the decision turns on. Do it monthly and you will read judgments faster than most first-years.',
+      'Follow one bill through Parliament and note where it changed and who pushed. Law as it is actually made, rather than as it appears finished.',
+      'Argue a position you disagree with, in writing, well enough that someone who holds it would nod. That is most of what legal reasoning asks.',
+    ],
+  },
+
+  business: {
+    reading: [
+      { title: 'Bad Blood', by: 'John Carreyrou', note: 'The Theranos collapse. A better business education than most success stories.' },
+      { title: 'Shoe Dog', by: 'Phil Knight', note: 'The founding of Nike, told with the cash-flow panic left in.' },
+      { title: 'The Bottom Line', by: 'BBC Radio 4 podcast', note: 'Working executives discussing real operational problems, without the motivational packaging.' },
+    ],
+    competitions: [
+      { name: 'Young Enterprise Company Programme', line: 'Set up and run a real student company over a year, with regional and national finals. Run by the charity Young Enterprise since 1962.', url: 'https://www.young-enterprise.org.uk/what-we-do/programmes/company-programme' },
+      { name: 'John Locke Institute Global Essay Prize', line: 'Argumentative essay under 2,000 words; Economics and Public Policy are among its categories. Open to under-19s worldwide.', url: 'https://www.johnlockeinstitute.com/essay-competition' },
+    ],
+    projects: [
+      'Sell something real to strangers, even at tiny scale, and keep the actual numbers — costs, price, what did not sell. One honest spreadsheet is worth ten business-plan templates.',
+      'Take a small local business you use and write a page on how it makes money: where the margin is, what its biggest risk is, what you would change first.',
+      'Pick a company that failed and work out the decision that killed it. Being specific about the moment is harder, and more interesting, than the story.',
+    ],
+  },
+
+  psychology: {
+    reading: [
+      { title: 'Thinking, Fast and Slow', by: 'Daniel Kahneman', note: 'The foundational book on how judgement actually works. Dense in places — read it slowly.' },
+      { title: 'The Man Who Mistook His Wife for a Hat', by: 'Oliver Sacks', note: 'Case studies where the brain goes strange, told with unusual humanity.' },
+      { title: 'All in the Mind', by: 'BBC Radio 4 podcast', note: 'Current psychology and neuroscience research, explained by the researchers.' },
+    ],
+    competitions: [
+      { name: 'National Psychology Competition', line: 'Run by Royal Holloway, University of London for Year 12 students, against schools across the UK.', url: 'https://www.royalholloway.ac.uk/studying-here/schools-and-colleges/activities-by-subject/psychology/psychology-resources/national-psychology-competition/' },
+      { name: 'John Locke Institute Global Essay Prize', line: 'Argumentative essay under 2,000 words; Psychology is one of its subject categories. Open to under-19s worldwide.', url: 'https://www.johnlockeinstitute.com/essay-competition' },
+    ],
+    projects: [
+      'Replicate a classic finding on your friends — an anchoring effect, a memory-span test — then write down every reason your version might be wrong. The critique is the psychology.',
+      'Read the original paper behind a psychology claim you have heard repeated, and check whether the claim survives the method section.',
+      'Keep a two-week log of your own predictions about your mood, sleep or focus, then compare with what happened. Self-report is unreliable — finding out how unreliable is the lesson.',
+    ],
+  },
+
+  architecture: {
+    reading: [
+      { title: 'How Buildings Learn', by: 'Stewart Brand', note: 'What happens to buildings after they are finished — the part architecture books usually skip.' },
+      { title: 'The Architecture of Happiness', by: 'Alain de Botton', note: 'Why buildings make us feel things. Accessible, and argumentative enough to disagree with.' },
+      { title: '99% Invisible', by: 'podcast', note: 'The design decisions behind ordinary places. Trains you to notice, which is the whole job.' },
+    ],
+    competitions: [
+      { name: 'RIBA National Schools Programme', line: 'The Royal Institute of British Architects runs schools competitions, Architecture Ambassadors workshops and work experience for 16–18s.', url: 'https://www.riba.org/learn/public-and-school-learning/schools/' },
+      { name: 'The Big Bang Competition', line: 'National project competition with a technology and engineering category — a route in for a structural or environmental design project. Free, ages 11–18.', url: 'https://www.thebigbang.org.uk/the-big-bang-competition/' },
+    ],
+    projects: [
+      'Start a sketchbook and draw one building a week from life, badly at first. A portfolio is asked for at application, and it cannot be made in a fortnight.',
+      'Measure a room you know well and redraw it to scale in plan and section. Learning to think in plan is the skill that separates interest from preparation.',
+      'Document a public space near you across a day — who uses it, when, and what defeats them. Then redesign one thing about it and say what you traded away.',
+    ],
+  },
+};
+
+// Attach additively — the profiles above are untouched.
+Object.entries(fieldRoadmaps).forEach(([key, roadmap]) => {
+  if (fieldProfiles[key]) fieldProfiles[key].roadmap = roadmap;
+});
+
 // Node test-harness compatibility (browser loads this as a plain script).
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { fieldProfiles };
+  module.exports = { fieldProfiles, fieldRoadmaps };
 }

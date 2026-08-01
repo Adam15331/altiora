@@ -3809,6 +3809,133 @@ button.plan-combo-tag--drop:focus-visible {
   .fo-leads { columns: 1; }
 }
 
+/* ── Anchor nav: sticky mini-contents for long profiles ─────────── */
+/* Sits directly beneath the sticky site nav (54px tall), never under it. */
+.fo-anchornav {
+  position: sticky;
+  top: 54px;
+  z-index: 40;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  padding: var(--space-3) 0;
+  margin-bottom: var(--space-5);
+  background: var(--ce-bg);
+  border-bottom: var(--ce-hairline);
+}
+.fo-anchornav__link {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ce-ink-60);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.fo-anchornav__link:hover { color: var(--ce-ink); }
+/* Jumped-to headings clear BOTH sticky bars (site nav + anchor nav). */
+.fo-section[id] { scroll-margin-top: 112px; }
+#foGateBreak { scroll-margin-top: 112px; }
+@media (max-width: 560px) {
+  .fo-anchornav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: var(--space-3);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .fo-anchornav::-webkit-scrollbar { display: none; }
+}
+
+/* ── "Building your [Field] story" — supercurricular roadmap ────── */
+.fo-road__lead { color: var(--ce-ink-60); }
+.fo-road {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 66ch;
+}
+.fo-road__head {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ce-ink-60);
+  margin: 0 0 var(--space-3);
+}
+.fo-road__list { list-style: none; margin: 0; padding: 0; }
+.fo-road__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 0 var(--space-3);
+  margin-bottom: var(--space-3);
+  border-bottom: var(--ce-hairline);
+}
+.fo-road__list .fo-road__item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.fo-road__item--plain {
+  font-size: var(--text-sm);
+  color: var(--ce-ink);
+  line-height: 1.65;
+}
+.fo-road__title {
+  font-family: var(--ce-font-display);
+  font-weight: 700;
+  font-size: 1.02rem;
+  letter-spacing: -.01em;
+  color: var(--ce-ink);
+  line-height: 1.3;
+}
+.fo-road__by {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  letter-spacing: .04em;
+  color: var(--ce-ink-30);
+}
+.fo-road__note {
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.55;
+}
+.fo-road__link {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  letter-spacing: .04em;
+  color: var(--ce-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  margin-top: 2px;
+  align-self: flex-start;
+}
+.fo-road__caveat {
+  margin: var(--space-2) 0 0;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--ce-ink-30);
+  line-height: 1.5;
+}
+.fo-road__tiein {
+  margin: var(--space-5) 0 0;
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+}
+.fo-road__tiein-btn {
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  background: var(--ce-accent);
+  color: var(--ce-ink);
+  border: none;
+  border-radius: var(--ce-radius-pill);
+  padding: 5px 14px;
+  margin-left: var(--space-1);
+  cursor: pointer;
+}
+
 /* Comparison cards — inviting, tappable. Soft lavender-tinted panels (NO
    left border), Bricolage title, a lift on hover so they read as cards. */
 .fo-compares { display: flex; flex-direction: column; gap: var(--space-3); max-width: 66ch; }
