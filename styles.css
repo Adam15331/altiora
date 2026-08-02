@@ -4209,11 +4209,15 @@ button.plan-combo-tag--drop:focus-visible {
   font-weight: 400;
   color: var(--ce-ink-60);
 }
+/* The one philosophy note, sitting BELOW the entries and the add action —
+   context for the curious, never a gate in front of the page. */
 .achv__note {
   font-size: var(--text-sm);
   color: var(--ce-ink-60);
   line-height: 1.6;
-  margin: 0 0 var(--space-4);
+  margin: var(--space-5) 0 0;
+  padding-top: var(--space-4);
+  border-top: var(--ce-hairline);
   max-width: 62ch;
 }
 .achv__empty {
@@ -4228,6 +4232,24 @@ button.plan-combo-tag--drop:focus-visible {
   color: var(--ce-ink-60);
   line-height: 1.65;
 }
+/* The empty state is a counselor's opening question, so it carries the
+   weight of a question rather than the greyed tone of a hint. */
+.achv__empty-q {
+  font-family: var(--ce-font-display);
+  font-size: var(--text-lg) !important;
+  color: var(--ce-ink) !important;
+  line-height: 1.4 !important;
+  max-width: 40ch;
+}
+/* One rotating invitation above the add action. An offer, not a task. */
+.story__invite {
+  margin: var(--space-4) 0 var(--space-2);
+  font-size: var(--text-sm);
+  font-style: italic;
+  color: var(--ce-ink-60);
+  line-height: 1.5;
+}
+.story__invite.hidden { display: none; }
 .achv-group { margin-bottom: var(--space-5); }
 .achv-group__label {
   display: block;
@@ -4382,6 +4404,13 @@ button.plan-combo-tag--drop:focus-visible {
   color: var(--ce-ink-30);
 }
 .story-group__inactive {
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ce-ink-30);
+}
+.story-group__src {
   font-family: var(--ce-font-mono);
   font-size: 10px;
   letter-spacing: .06em;

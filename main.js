@@ -2628,13 +2628,9 @@ function achievementsSectionHtml() {
     .map(t => `<option value="${esc(t.id)}">${esc(t.label)}</option>`).join('');
   return `
     <section class="applying-section story" aria-label="Your story bank">
-      <h2 class="applying-section__head">Your story<span id="achvCount" class="achv__count"></span></h2>
-      <p class="achv__note">This is your story bank — not a checklist. Note the things you've done and, in a line each,
-        what they taught you. These reflections are the raw material for personal statements, applications, and
-        interviews. There's no scoring here, and no university "requires" any of it — it's about having a story you
-        can tell, which is honestly the point.</p>
       <div id="achvSummary" class="story__summary"></div>
       <div id="achvList" class="achv__list"></div>
+      <p id="achvInvite" class="story__invite"></p>
       <button type="button" id="achvAddBtn" class="fo-btn fo-btn--primary achv__addbtn">+ Add to your story</button>
       <form id="achvForm" class="achv__form hidden" novalidate>
         <div class="achv__form-row">
@@ -2686,6 +2682,8 @@ function achievementsSectionHtml() {
           <button type="button" class="fo-btn" id="achvCancelBtn">Cancel</button>
         </div>
       </form>
+      <p class="achv__note">No scoring here, and no university requires any of this — it's about having a story
+        you can tell.</p>
     </section>`;
 }
 
@@ -2728,20 +2726,44 @@ function storyCardHtml(a) {
 // One calm, honest counsel line per pinned field, driven ONLY by the
 // student's own data: how many reflective entries the field has × how far
 // they are from applying. No fabricated university claims, no scoring.
-function storyCounselHtml(label, entries, yrs) {
-  const { text, tone } = storyCounsel(label, entries, yrs);
+function storyCounselHtml(label, entries, yrs, opts = {}) {
+  const { text, tone } = storyCounsel(label, entries, yrs, opts);
   return `<p class="story-counsel story-counsel--${tone}">${esc(text)}</p>`;
+}
+
+// What a thin story is worth doing about, given how far off applying is.
+// One wording, shared by the pinned-field counsel and the shortlist-driven
+// gap counsel, so the two can never drift. States what is worth doing —
+// never a quota, a score, or a claim about what universities want.
+function storyGapTail(yrs) {
+  if (yrs == null) return 'a project, a competition, or documented work all count as real evidence.';
+  if (yrs >= 2)   return 'you have time — a project, a competition, or even documented tinkering builds real evidence.';
+  if (yrs === 1)  return 'you have a year, and one project you actually finish is worth more than a list.';
+  return 'focus on telling the strongest version of what you already have.';
 }
 
 // The counsel WORDING alone — shared by the story view and the printable
 // Counselor Summary so the two can never drift apart.
-function storyCounsel(label, entries, yrs) {
+//
+// opts.savedCount: how many shortlisted courses sit in this field. When the
+// student has saved courses here, the gap is anchored in their OWN shortlist
+// rather than in a pinned field — which is what makes the counsel reach a
+// student who saved four Computer Science courses and pinned nothing.
+function storyCounsel(label, entries, yrs, opts = {}) {
   const reflective = entries.filter(entryHasReflection).length;
   const strong = reflective >= 3;
+  const saved  = opts.savedCount ?? 0;
   let text, tone;
   if (strong) {
     text = `A solid ${label} story — the reflections here are personal-statement raw material.`;
     tone = 'strong';
+  } else if (saved > 0) {
+    tone = 'thin';
+    const courses = `${saved} ${label} ${saved === 1 ? 'course' : 'courses'}`;
+    const lead = entries.length === 0
+      ? `You've saved ${courses} and have nothing in your story for it yet`
+      : `You've saved ${courses} and your story for it is still light`;
+    text = `${lead} — ${storyGapTail(yrs)}`;
   } else {
     tone = 'thin';
     const none = entries.length === 0;
@@ -2760,22 +2782,40 @@ function storyCounsel(label, entries, yrs) {
   return { text, tone };
 }
 
-// One field's story: header + count + (for pinned fields) year-aware counsel,
+// Fields the student's SAVED COURSES point at: category id → how many saved
+// courses sit in it. A second signal alongside pinned fields — a shortlist is
+// an expression of interest whether or not a field was ever pinned.
+function shortlistFieldCounts() {
+  if (typeof AltioraState === 'undefined' || typeof courses === 'undefined') return new Map();
+  const counts = new Map();
+  AltioraState.getShortlist()
+    .map(id => courses.find(c => c.id === id))
+    .filter(c => c && CATEGORY_LABEL_MAP[c.category])
+    .forEach(c => counts.set(c.category, (counts.get(c.category) ?? 0) + 1));
+  return counts;
+}
+
+// One field's story: header + count + (for active fields) year-aware counsel,
 // then the tagged entries.
 function storyGroupHtml(bucket, showCounsel) {
   const yrs = studentYears();
-  const counsel = showCounsel ? storyCounselHtml(bucket.label, bucket.entries, yrs) : '';
+  const counsel = showCounsel
+    ? storyCounselHtml(bucket.label, bucket.entries, yrs, { savedCount: bucket.savedCount ?? 0 })
+    : '';
   const cards   = bucket.entries.map(storyCardHtml).join('');
   const n = bucket.entries.length;
   const countLabel = n ? `${n} ${n === 1 ? 'piece' : 'pieces'}` : 'none yet';
   const inactiveTag = bucket.inactive
     ? `<span class="story-group__inactive">field no longer pinned</span>` : '';
+  // Says where a field came from when it isn't one the student pinned.
+  const sourceTag = bucket.fromShortlist
+    ? `<span class="story-group__src">from your shortlist</span>` : '';
   return `
     <section class="story-group${bucket.inactive ? ' story-group--inactive' : ''}">
       <div class="story-group__head">
         <span class="story-group__label">${esc(bucket.label)}</span>
         <span class="story-group__count">${esc(countLabel)}</span>
-        ${inactiveTag}
+        ${inactiveTag}${sourceTag}
       </div>
       ${counsel}
       ${cards}
@@ -2783,7 +2823,8 @@ function storyGroupHtml(bucket, showCounsel) {
 }
 
 // The one-line per-field summary: "Engineering: 4 pieces of your story ·
-// Economics: none yet". Only meaningful once fields are pinned.
+// Economics: none yet". Covers every field on the page — pinned or drawn from
+// the shortlist — so it never omits a group shown below it.
 function storySummaryHtml(items, pinned) {
   if (!pinned.length) {
     return items.length
@@ -2797,6 +2838,42 @@ function storySummaryHtml(items, pinned) {
   return `<p class="story__summary-line">${esc(parts.join(' · '))}</p>`;
 }
 
+// An invitation, never a requirement — one line offering a kind of story the
+// student may not have thought to record. Deliberately phrased as "that
+// counts", not "you need this": nothing here is asked for by any university.
+const STORY_INVITATIONS = {
+  cs:           ['Built something that broke and you fixed it? That’s a story.',
+                 'Taught yourself something no class covered? That counts.'],
+  engineering:  ['Built something that broke and you fixed it? That’s a story.',
+                 'Taken something apart to see how it worked? That counts.'],
+  mathematics:  ['Chased a problem past the point it was set? That’s a story.',
+                 'Found a proof or a pattern that surprised you? That counts.'],
+  sciences:     ['Run an experiment that didn’t work? That’s a story.',
+                 'Read past the syllabus on something that caught you? That counts.'],
+  medicine:     ['Spent time somewhere people were being cared for? That’s a story.',
+                 'Changed your mind about what the work actually involves? That counts.'],
+  law:          ['Read something that changed your mind? That counts.',
+                 'Argued a side you didn’t agree with? That’s a story.'],
+  psychology:   ['Read something that changed your mind? That counts.',
+                 'Noticed something about how people behave and dug into it? That’s a story.'],
+  economics:    ['Followed a story in the news until you understood it? That counts.',
+                 'Made a case with numbers behind it? That’s a story.'],
+  business:     ['Sold, organised, or ran something for real? That’s a story.',
+                 'Persuaded people to back an idea of yours? That counts.'],
+  architecture: ['Drawn, modelled, or built a space of your own? That’s a story.',
+                 'Looked hard at a building and worked out why it works? That counts.'],
+};
+
+// One invitation for one field, rotating as the story grows so the same line
+// doesn't sit there forever. Deterministic: same state → same line.
+function storyInvitation(fieldIds, entryCount) {
+  const withLines = fieldIds.filter(f => STORY_INVITATIONS[f]);
+  if (!withLines.length) return '';
+  const field = withLines[entryCount % withLines.length];
+  const lines = STORY_INVITATIONS[field];
+  return lines[Math.floor(entryCount / withLines.length) % lines.length];
+}
+
 // Direct projection of state → DOM: the story bank, grouped by field. Cheap
 // no-op when the section isn't on screen; safe on every state change.
 function renderAchievementsList() {
@@ -2805,37 +2882,57 @@ function renderAchievementsList() {
 
   const items  = AltioraState.getAchievements();
   const pinned = activeCandidateFields();
+  // The shortlist is the second field signal: saving four Computer Science
+  // courses says as much about direction as pinning the field does.
+  const savedCounts = shortlistFieldCounts();
+  const shortlistOnly = [...savedCounts.keys()]
+    .filter(f => !pinned.includes(f))
+    .sort((a, b) => savedCounts.get(b) - savedCounts.get(a)
+      || CATEGORY_LABEL_MAP[a].localeCompare(CATEGORY_LABEL_MAP[b]));
+  const fields = [...pinned, ...shortlistOnly];
 
   const count = $('achvCount');
   if (count) count.textContent = items.length ? ` (${items.length})` : '';
   const summaryEl = $('achvSummary');
-  if (summaryEl) summaryEl.innerHTML = storySummaryHtml(items, pinned);
+  if (summaryEl) summaryEl.innerHTML = storySummaryHtml(items, fields);
 
-  if (!items.length && !pinned.length) {
+  const invite = $('achvInvite');
+  if (invite) {
+    const line = storyInvitation(fields, items.length);
+    invite.textContent = line;
+    invite.classList.toggle('hidden', !line);
+  }
+
+  // Empty and nothing to organise by: open with a question, not a description.
+  // The scaffolded form does the guiding once they act on it.
+  if (!items.length && !fields.length) {
     list.innerHTML = `
       <div class="achv__empty">
-        <p>Your story bank is empty. As you do things — a project, a role, a competition, some volunteering —
-        note them here with a line on what they taught you. Future-you, writing a personal statement, will be
-        grateful. Pin a field or two in the planner and you can build each field's story separately.</p>
+        <p class="achv__empty-q">What have you done outside class in the last year that you'd actually
+        bother telling someone about?</p>
       </div>`;
     return;
   }
 
   // Field buckets in priority order: pinned fields first (with counsel, even
-  // when empty — that's the whole point for early years), then any field that
-  // is tagged but no longer pinned (shown greyed, tag preserved), then the
-  // untagged "General" bucket last.
-  const buckets = pinned.map(f => ({
+  // when empty — that's the whole point for early years), then fields the
+  // shortlist points at, then any field that is tagged but no longer pinned
+  // (shown greyed, tag preserved), then the untagged "General" bucket last.
+  // A field that is BOTH pinned and shortlisted appears once, with its saved
+  // count folded into that single counsel line.
+  const buckets = fields.map(f => ({
     key: f, label: CATEGORY_LABEL_MAP[f], inactive: false,
+    fromShortlist: !pinned.includes(f),
+    savedCount: savedCounts.get(f) ?? 0,
     entries: items.filter(a => (a.fields || []).includes(f)),
   }));
 
   const taggedIds = new Set(items.flatMap(a => a.fields || []));
   [...taggedIds]
-    .filter(f => !pinned.includes(f) && CATEGORY_LABEL_MAP[f])
+    .filter(f => !fields.includes(f) && CATEGORY_LABEL_MAP[f])
     .sort((a, b) => CATEGORY_LABEL_MAP[a].localeCompare(CATEGORY_LABEL_MAP[b]))
     .forEach(f => buckets.push({
-      key: f, label: CATEGORY_LABEL_MAP[f], inactive: true,
+      key: f, label: CATEGORY_LABEL_MAP[f], inactive: true, savedCount: 0,
       entries: items.filter(a => (a.fields || []).includes(f)),
     }));
 
@@ -3010,9 +3107,8 @@ function renderStoryPanel() {
   panel.innerHTML = `
     <div class="story-view">
       <header class="story-view__header">
-        <h1 class="story-view__title">Your story</h1>
-        <p class="story-view__sub">The things you've done and what they taught you — raw material for your
-          applications, and a way to see where each field's story stands.</p>
+        <h1 class="story-view__title">Your story<span id="achvCount" class="achv__count"></span></h1>
+        <p class="story-view__sub">The things you've done, and what they taught you.</p>
       </header>
       ${achievementsSectionHtml()}
     </div>`;
