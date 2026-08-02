@@ -1996,88 +1996,154 @@ function renderStageToolNav(stage) {
 // invented dates) with official links; once courses are saved, the existing
 // per-course test checklist takes over and this block disappears.
 /* ═══════════════════════════════════════════════════════════════
- * APPLYING CHECKLIST — the execution layer.
- * Tasks are DERIVED from the saved shortlist (tests actually required,
- * countries actually present) plus the few generic steps every
- * application needs. Every task id is stable and meaning-derived
- * ("test-reg:ESAT"), so ticks survive shortlist edits and reloads.
+ * APPLYING — diagnosis first, then execution.
  *
- * Timing is expressed as TYPICAL WINDOWS from the verified
- * admissionTestInfo layer — never a hardcoded calendar date. Where a
- * deadline is university-set (UCAS, course pages) we say so and point
- * at the official source rather than inventing a month.
+ * The page opens with the single most consequential fact about the
+ * application (the shortlist's balance), then the work. Tasks are
+ * DERIVED from the saved shortlist; ids are stable and meaning-derived
+ * ("test-reg:ESAT+TMUA+TARA"), so ticks survive shortlist edits.
+ *
+ * Timing is always a TYPICAL WINDOW from the verified admissionTestInfo
+ * layer — never a hardcoded calendar date. Now/Soon/Later buckets are
+ * computed from those windows' months against today's month, so the
+ * grouping stays correct as the cycle turns without any date literals.
+ *
+ * Deliberately NOT here: any instruction to drop or swap a specific
+ * course, any quantified "effort saved", any invented score target.
+ * The load is stated; the choice is the student's.
  * ═══════════════════════════════════════════════════════════════ */
 
-// Ordered task list for the current shortlist. Order = the sequence a
-// student actually acts in: register for tests → sit tests → get the
-// application itself ready → confirm the deadlines that close it.
-function applyingTasks(savedCourses) {
-  const testInfoFor = t => (typeof admissionTestInfo !== 'undefined') ? admissionTestInfo[t] : null;
-  const tests = [...new Set(savedCourses.flatMap(c => Array.isArray(c.admissionTests) ? c.admissionTests : []))]
-    .sort((a, b) => (testInfoFor(a)?.regOpensMonth ?? 98) - (testInfoFor(b)?.regOpensMonth ?? 98) || a.localeCompare(b));
+const MONTH_NAMES = ['january','february','march','april','may','june',
+                     'july','august','september','october','november','december'];
 
+// First month named in a window string → 1-12, or null. Reads the EXISTING
+// verified window prose; invents nothing.
+function firstMonthIn(str) {
+  const m = String(str ?? '').toLowerCase().match(
+    /\b(january|february|march|april|may|june|july|august|september|october|november|december)\b/);
+  return m ? MONTH_NAMES.indexOf(m[1]) + 1 : null;
+}
+
+// Cycle-relative urgency bucket: 0 Now · 1 Soon · 2 Later. A window that
+// opened in the last few months counts as Now (it is open, act on it).
+function cycleBucket(cycleMonth, nowMonth) {
+  if (cycleMonth == null) return 2;
+  const off = (cycleMonth - nowMonth + 12) % 12;
+  if (off >= 9 || off <= 1) return 0;
+  if (off <= 4) return 1;
+  return 2;
+}
+const BUCKET_LABELS = ['Now', 'Soon', 'Later'];
+
+const testInfoFor = t => (typeof admissionTestInfo !== 'undefined') ? admissionTestInfo[t] : null;
+
+// Tests that share a registration body AND the same opening month are ONE
+// action, not N near-identical rows. Grouping key is derived from the data
+// (provider or official host + regOpensMonth), never hand-listed.
+function groupedTests(tests) {
+  const groups = new Map();
+  tests.forEach(t => {
+    const i = testInfoFor(t);
+    let host = '';
+    try { host = i ? new URL(i.officialUrl).hostname : ''; } catch (_) { host = ''; }
+    const key = `${i?.provider ?? host}|${i?.regOpensMonth ?? 'x'}`;
+    groups.set(key, [...(groups.get(key) ?? []), t]);
+  });
+  return [...groups.values()]
+    .map(members => members.slice().sort())
+    .sort((a, b) => (testInfoFor(a[0])?.regOpensMonth ?? 98) - (testInfoFor(b[0])?.regOpensMonth ?? 98)
+      || a[0].localeCompare(b[0]));
+}
+
+// The shared window sentence for a group, naming any member that differs
+// rather than flattening the difference away.
+function sharedWindowText(members, key) {
+  const vals = members.map(t => [t, testInfoFor(t)?.[key]]).filter(([, v]) => v);
+  if (!vals.length) return null;
+  const uniq = [...new Set(vals.map(([, v]) => v))];
+  if (uniq.length === 1) return uniq[0];
+  const base = uniq.slice().sort((a, b) => a.length - b.length)[0];
+  const extras = vals.filter(([, v]) => v !== base).map(([t, v]) => {
+    const name = testInfoFor(t)?.name ?? t;
+    // Only the part that differs — no repeating the shared sentence.
+    const extra = v.startsWith(base) ? v.slice(base.length).replace(/^[\s.,;·—-]+/, '') : v;
+    return `${name} also: ${extra}`;
+  });
+  return `${base} (${extras.join('; ')})`;
+}
+
+// Ordered task list for the current shortlist.
+function applyingTasks(savedCourses, opts = {}) {
+  const nowMonth = opts.nowMonth ?? (new Date().getMonth() + 1);
+  const tests = [...new Set(savedCourses.flatMap(c => Array.isArray(c.admissionTests) ? c.admissionTests : []))];
+  const groups = groupedTests(tests);
   const tasks = [];
 
-  // 1. Register for each required test — ONE entry per test, the single
-  //    place registration timing lives on this page.
-  tests.forEach(t => {
-    const info = testInfoFor(t);
+  // 1. Register — one task per shared-registration group.
+  groups.forEach(members => {
+    const infos = members.map(testInfoFor);
+    const names = members.map((t, i) => infos[i]?.name ?? t);
+    const win = sharedWindowText(members, 'typicalRegistrationWindow');
+    const provider = infos.find(i => i?.provider)?.provider;
+    const many = members.length > 1;
     tasks.push({
-      id: `test-reg:${t}`,
-      group: '1 · Register for tests',
-      label: `Register for ${info?.name ?? t}`,
-      // Avoid stacked parentheses when the window string already carries one.
-      detail: info
-        ? `Registration ${info.typicalRegistrationWindow}. Typical window — confirm the exact dates.`
+      id: `test-reg:${members.join('+')}`,
+      seq: 1, seqLabel: 'Register for tests',
+      cycleMonth: infos.find(i => i?.regOpensMonth)?.regOpensMonth ?? firstMonthIn(win),
+      label: many ? `Register for your admission tests (${names.join(', ')})`
+                  : `Register for ${names[0]}`,
+      detail: win
+        ? `${many ? 'One registration covers all of them' : 'Registration'}${provider && many ? ` via ${provider}` : ''} — ${win}. Typical window; confirm the exact dates.`
         : 'Check the official site for this cycle’s registration window.',
-      link: info ? { url: info.officialUrl, label: 'Official site' } : null,
+      link: infos[0]?.officialUrl ? { url: infos[0].officialUrl, label: 'Official site' } : null,
+      liveEarly: true,   // registration opens before the application year
     });
   });
-  // 2. Sit each test.
-  tests.forEach(t => {
-    const info = testInfoFor(t);
+
+  // 2. Sit — same grouping.
+  groups.forEach(members => {
+    const infos = members.map(testInfoFor);
+    const names = members.map((t, i) => infos[i]?.name ?? t);
+    const win = sharedWindowText(members, 'typicalTestWindow');
     tasks.push({
-      id: `test-sit:${t}`,
-      group: '2 · Sit the tests',
-      label: `Sit ${info?.name ?? t}`,
-      detail: info
-        ? `Test ${info.typicalTestWindow}. Typical window — registration closes before it.`
-        : 'Check the official site for this cycle’s test window.',
+      id: `test-sit:${members.join('+')}`,
+      seq: 2, seqLabel: 'Sit the tests',
+      cycleMonth: firstMonthIn(win),
+      label: members.length > 1 ? `Sit your admission tests (${names.join(', ')})` : `Sit ${names[0]}`,
+      detail: win ? `Test ${win}. Typical window — registration closes before it.`
+                  : 'Check the official site for this cycle’s test window.',
       link: null,
     });
   });
 
   // 3. The application itself.
+  const entryCount = (typeof AltioraState !== 'undefined') ? AltioraState.getAchievements().length : 0;
   tasks.push({
-    id: 'app:grades',
-    group: '3 · Your application',
+    id: 'app:grades', seq: 3, seqLabel: 'Your application', cycleMonth: null,
     label: 'Confirm your predicted grades with your school',
     detail: 'What your school submits is what universities see — check it matches what you entered here.',
     link: null,
   });
   tasks.push({
-    id: 'app:statement',
-    group: '3 · Your application',
+    id: 'app:statement', seq: 3, seqLabel: 'Your application', cycleMonth: null,
     label: 'Draft your personal statement',
-    detail: 'Your story bank is the raw material — the reflections you have already written.',
+    // Factual state of the story bank — no quota, no readiness score.
+    detail: entryCount
+      ? `You have ${entryCount} story ${entryCount === 1 ? 'entry' : 'entries'} to draw on.`
+      : 'Your story bank is empty — add a few entries first, they’re the raw material.',
     link: null,
-    action: { mode: 'story', label: 'Open your story' },
+    action: { mode: 'story', label: entryCount ? 'Open your story' : 'Start your story' },
+    liveEarly: true,   // story-building is genuinely live in any year
   });
   tasks.push({
-    id: 'app:references',
-    group: '3 · Your application',
+    id: 'app:references', seq: 3, seqLabel: 'Your application', cycleMonth: null,
     label: 'Ask for your reference',
     detail: 'Referees need notice. Ask early rather than in the week the form closes.',
     link: null,
   });
 
-  // 4. Deadlines, per country actually on the list. Universities and
-  //    application services publish these; we point rather than guess.
-  // Typical deadline SHAPES per country. These describe the pattern of a
-  // cycle at month granularity — the honest, stable thing we can say — and
-  // every one ends by telling the student to confirm the exact date
-  // officially. No specific date or time is ever asserted, because those
-  // move every cycle and are set per university.
+  // 4. Deadlines, per country actually on the list. Month-level SHAPES only,
+  // each ending in confirm-officially.
   const DEADLINE_SHAPE = {
     UK: 'Medicine, dentistry, veterinary and Oxford/Cambridge courses typically close in mid-October; most other UK courses in late January. Both shift year to year — confirm the exact date on UCAS and each course page.',
     US: 'Many early-application deadlines (early action/decision) typically fall around early November, with regular decision later. Every university sets its own — confirm on each admissions page.',
@@ -2085,62 +2151,103 @@ function applyingTasks(savedCourses) {
     SG: 'Application windows are set per university and differ for international applicants. Confirm on each admissions page.',
     HK: 'Application windows are set per university, with separate local and international routes. Confirm on each admissions page.',
   };
-  // Order by typical earliness so the sequence reads correctly even without
-  // dates: earlier-closing cycles first, then the rest alphabetically.
   const DEADLINE_ORDER = { UK: 0, US: 1 };
   const countries = [...new Set(savedCourses.map(c => c.country))]
     .sort((a, b) => (DEADLINE_ORDER[a] ?? 8) - (DEADLINE_ORDER[b] ?? 8)
       || (COUNTRY_LABELS[a] ?? a).localeCompare(COUNTRY_LABELS[b] ?? b));
   countries.forEach(k => {
     const label = COUNTRY_LABELS[k] ?? k;
+    const shape = DEADLINE_SHAPE[k] ?? 'Each university sets its own dates — confirm on every course page on your list.';
     tasks.push({
-      id: `deadline:${k}`,
-      group: '4 · Deadlines',
+      id: `deadline:${k}`, seq: 4, seqLabel: 'Deadlines',
+      cycleMonth: firstMonthIn(shape),   // read back from the same sentence
       label: `Confirm exact deadlines for your ${label} course${savedCourses.filter(c => c.country === k).length === 1 ? '' : 's'} on official pages`,
-      detail: DEADLINE_SHAPE[k] ?? 'Each university sets its own dates — confirm on every course page on your list.',
+      detail: shape,
       link: null,
     });
   });
 
+  // The generic application tasks have no window of their own; they belong
+  // with the earliest deadline on the list.
+  const earliestDeadline = tasks.filter(t => t.seq === 4 && t.cycleMonth != null)
+    .reduce((m, t) => (m == null ? t.cycleMonth : Math.min(m, t.cycleMonth)), null);
+  tasks.forEach(t => { if (t.seq === 3 && t.cycleMonth == null) t.cycleMonth = earliestDeadline; });
+
+  tasks.forEach(t => { t.bucket = cycleBucket(t.cycleMonth, nowMonth); });
   return tasks;
 }
 
-// Direct projection of state → the checklist DOM. Safe to run on every
-// state change; no-ops when the Applying panel isn't on screen.
+// Distinct admission tests across the list — the load observation's input.
+function shortlistTestLoad(savedCourses) {
+  return [...new Set(savedCourses.flatMap(c => Array.isArray(c.admissionTests) ? c.admissionTests : []))];
+}
+
+// One factual load observation. States the load; never recommends dropping
+// or swapping a course, never quantifies effort saved.
+function testLoadNoteHtml(savedCourses) {
+  const n = shortlistTestLoad(savedCourses).length;
+  if (n < 2) return '';
+  const text = n >= 3
+    ? `Your list needs ${n} different admission tests — that's a heavy prep load alongside term-time study.`
+    : `Your list needs ${n} different admission tests — each has its own format and preparation.`;
+  return `<p class="applying-diag__load">${esc(text)}</p>`;
+}
+
+// Direct projection of state → the checklist DOM.
 function renderApplyingChecklist() {
   const host = $('applyingChecklist');
   if (!host) return;
   const saved = AltioraState.getShortlist()
     .map(id => (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null)
     .filter(Boolean);
+  const yrs = studentYears();
+  const preview = yrs != null && yrs >= 1;
   const tasks = applyingTasks(saved);
-  const doneCount = tasks.filter(t => AltioraState.isApplicationTaskDone(t.id)).length;
+
+  // In preview the sequence is what matters; in the application year it's
+  // urgency. Actionable-in-preview items are the genuinely live ones.
+  const isLive = t => !preview || (t.liveEarly && (t.id.startsWith('test-reg:') ? yrs === 1 : true));
+  const actionable = tasks.filter(isLive);
+  const doneCount = actionable.filter(t => AltioraState.isApplicationTaskDone(t.id)).length;
 
   const countEl = $('applyingChecklistCount');
-  if (countEl) countEl.textContent = tasks.length ? `${doneCount}/${tasks.length} done` : '';
+  if (countEl) countEl.textContent = preview
+    ? (actionable.length ? `${doneCount}/${actionable.length} you can do now` : '')
+    : (tasks.length ? `${doneCount}/${tasks.length} done` : '');
 
-  // Group in generated order, preserving the action sequence.
   const groups = [];
-  tasks.forEach(t => {
-    const g = groups.find(x => x.name === t.group);
-    (g ? g : (groups.push({ name: t.group, items: [] }), groups[groups.length - 1])).items.push(t);
-  });
+  const push = (name, t) => {
+    const g = groups.find(x => x.name === name);
+    (g ? g : (groups.push({ name, items: [] }), groups[groups.length - 1])).items.push(t);
+  };
+  if (preview) {
+    tasks.slice().sort((a, b) => a.seq - b.seq).forEach(t => push(`${t.seq} · ${t.seqLabel}`, t));
+  } else {
+    tasks.slice()
+      .sort((a, b) => a.bucket - b.bucket || a.seq - b.seq)
+      .forEach(t => push(BUCKET_LABELS[t.bucket], t));
+  }
 
   host.innerHTML = groups.map(g => `
     <div class="applying-task-group">
       <span class="applying-task-group__label">${esc(g.name)}</span>
       ${g.items.map(t => {
-        const done = AltioraState.isApplicationTaskDone(t.id);
+        const live = isLive(t);
+        const done = live && AltioraState.isApplicationTaskDone(t.id);
+        const cls = `applying-task${done ? ' applying-task--done' : ''}${live ? '' : ' applying-task--preview'}`;
+        const box = live
+          ? `<input type="checkbox" class="applying-task__box" data-app-task="${esc(t.id)}"${done ? ' checked' : ''}>`
+          : `<span class="applying-task__marker" aria-hidden="true">·</span>`;
         return `
-        <label class="applying-task${done ? ' applying-task--done' : ''}">
-          <input type="checkbox" class="applying-task__box" data-app-task="${esc(t.id)}"${done ? ' checked' : ''}>
+        <${live ? 'label' : 'div'} class="${cls}">
+          ${box}
           <span class="applying-task__body">
             <span class="applying-task__label">${esc(t.label)}</span>
             <span class="applying-task__detail">${esc(t.detail)}</span>
-            ${t.link ? `<a class="applying-task__link" href="${esc(t.link.url)}" target="_blank" rel="noopener noreferrer">${esc(t.link.label)} →</a>` : ''}
-            ${t.action ? `<button type="button" class="applying-task__link applying-task__action" data-go-tool="${esc(t.action.mode)}">${esc(t.action.label)} →</button>` : ''}
+            ${t.link && live ? `<a class="applying-task__link" href="${esc(t.link.url)}" target="_blank" rel="noopener noreferrer">${esc(t.link.label)} →</a>` : ''}
+            ${t.action && live ? `<button type="button" class="applying-task__link applying-task__action" data-go-tool="${esc(t.action.mode)}">${esc(t.action.label)} →</button>` : ''}
           </span>
-        </label>`;
+        </${live ? 'label' : 'div'}>`;
       }).join('')}
     </div>`).join('');
 }
@@ -2196,50 +2303,57 @@ function renderApplyingPanel() {
     return;
   }
 
-  // Compact shortlist summary — this page is about NEXT ACTIONS, so the
-  // full course cards stay on the Shortlist page rather than being
-  // re-rendered here. Balance reuses the existing verdict machinery.
-  const { counts, hasGrades } = shortlistVerdicts(savedCourses);
-  const unis = new Set(savedCourses.map(c => c.university));
-  const countryBits = [...new Set(savedCourses.map(c => c.country))]
-    .map(k => COUNTRY_LABELS[k] ?? k);
-  const classified = counts.reach + counts.match + counts.safety;
-  const balanceLine = (hasGrades && classified > 0)
-    ? `<p class="applying-summary__balance">${counts.reach} reach${counts.reach === 1 ? '' : 'es'} ·
-        ${counts.match} match${counts.match === 1 ? '' : 'es'} ·
-        ${counts.safety} safet${counts.safety === 1 ? 'y' : 'ies'}${counts.unknown ? ` · ${counts.unknown} unclassified` : ''}</p>`
-    : `<p class="applying-summary__balance applying-summary__balance--muted">Add predicted grades in Check Combination to see your reach/match/safety balance.</p>`;
-  const usNote = savedCourses.some(c => c.country === 'US')
-    ? `<p class="applying-summary__note">${esc(US_NO_SAFETY_NOTE)}</p>` : '';
+  const yrs     = studentYears();
+  const preview = yrs != null && yrs >= 1;
 
-  const _yrs = studentYears();
-  const _yrLabel = AltioraState.getProfile().yearGroup;
-  const timingNote =
-    _yrs === 0 ? `<p class="applying-timeline-note">You're in ${esc(_yrLabel)} — this is your application cycle, so these windows apply to you <strong>now</strong>. Registration closes before every test.</p>` :
-    _yrs === 1 ? `<p class="applying-timeline-note">You apply next year — most admission tests are sat early in your final year, so note when registration opens for your cycle.</p>` : '';
+  // ── THE DIAGNOSTIC. The most consequential fact about this application,
+  // stated first: the shape of the list, in the shared balance wording, plus
+  // one factual observation about test load. No course surgery is suggested.
+  const bal = shortlistBalance(savedCourses);
+  const unis = new Set(savedCourses.map(c => c.university));
+  const countryBits = [...new Set(savedCourses.map(c => c.country))].map(k => COUNTRY_LABELS[k] ?? k);
+  const diagLine = bal.classified > 0
+    ? `Your list: ${bal.countsBits.join(' · ')}`
+    : `Your list: ${savedCourses.length} course${savedCourses.length === 1 ? '' : 's'}, unclassified`;
+  const usNote = savedCourses.some(c => c.country === 'US')
+    ? `<p class="applying-diag__aside">${esc(US_NO_SAFETY_NOTE)}</p>` : '';
+
+  const diagnostic = `
+    <section class="applying-diag" aria-label="Your list at a glance">
+      <p class="applying-diag__counts">${esc(diagLine)}</p>
+      <p class="applying-diag__advice">${esc(bal.advice)}</p>
+      ${testLoadNoteHtml(savedCourses)}
+      ${usNote}
+      <p class="applying-diag__meta"><strong>${savedCourses.length}</strong> course${savedCourses.length === 1 ? '' : 's'} ·
+        <strong>${unis.size}</strong> universit${unis.size === 1 ? 'y' : 'ies'} ·
+        ${esc(countryBits.join(', '))}
+        <button class="home-card__link applying-diag__link" data-go-shortlist>View full shortlist →</button></p>
+    </section>`;
+
+  // ── Year-honest lead. An application-year student gets the dashboard; a
+  // student who applies later gets an explicit PREVIEW, not a year of
+  // premature tasks dressed up as a to-do list.
+  const yrLabel = AltioraState.getProfile().yearGroup;
+  const lead = preview
+    ? `<p class="applying-preview__lead">You apply ${yrs === 1 ? 'next year' : `in ${yrs} years`} — here's what the cycle
+        looks like, and the one or two things worth doing now. The rest is a preview: nothing to tick yet.</p>`
+    : `<p class="applying-timeline-note">You're in ${esc(yrLabel ?? 'your application year')} — this is your application
+        cycle, so these windows apply to you <strong>now</strong>. Registration closes before every test.</p>`;
 
   panel.innerHTML = `
     <div class="applying">
       <header class="applying__header">
         <h1 class="applying__title">Applying</h1>
-        <p class="applying__sub">Your next actions, in the order they happen.</p>
+        <p class="applying__sub">${preview ? 'A preview of the cycle you\'ll run next.' : 'Your next actions, in the order they happen.'}</p>
       </header>
 
-      <section class="applying-section">
-        <h2 class="applying-section__head">What's next<span id="applyingChecklistCount" class="applying-section__count"></span></h2>
-        ${timingNote}
-        <div id="applyingChecklist" class="applying-tasks"></div>
-        <p class="applying-tasks__foot">Windows are typical and shift year to year — always confirm on the official page.</p>
-      </section>
+      ${diagnostic}
 
       <section class="applying-section">
-        <h2 class="applying-section__head">Your shortlist</h2>
-        <p class="applying-summary__counts"><strong>${savedCourses.length}</strong> course${savedCourses.length === 1 ? '' : 's'} ·
-          <strong>${unis.size}</strong> universit${unis.size === 1 ? 'y' : 'ies'} ·
-          ${esc(countryBits.join(', '))}</p>
-        ${balanceLine}
-        ${usNote}
-        <button class="home-card__link" data-go-shortlist>View full shortlist →</button>
+        <h2 class="applying-section__head">${preview ? 'The cycle, in order' : "What's next"}<span id="applyingChecklistCount" class="applying-section__count"></span></h2>
+        ${lead}
+        <div id="applyingChecklist" class="applying-tasks${preview ? ' applying-tasks--preview' : ''}"></div>
+        <p class="applying-tasks__foot">Windows are typical and shift year to year — always confirm on the official page.</p>
       </section>
     </div>`;
 

@@ -28,6 +28,7 @@
  *   regShort                   – compact window for aggregate lines
  *   regOpensMonth              – 1–12 sort key (order by when planning starts);
  *                                90+ = post-undergraduate tests, listed last
+ *   provider                   – shared registration body, where tests share one
  *   officialUrl / notes / checkedDate
  * ═══════════════════════════════════════════════════════════════ */
 
@@ -49,6 +50,7 @@ const admissionTestInfo = {
     regShort: '~Jul–Sep',
     regOpensMonth: 7,
     officialUrl: 'https://esat-tmua.ac.uk/',
+    provider: 'UAT UK',   // per the header note: ESAT/TMUA/TARA share one registration
     notes: 'Oxbridge applicants must sit the October sitting. Used by Cambridge, Imperial, LSE, Warwick, Durham and others.',
     checkedDate: '2026-07-02',
   },
@@ -59,6 +61,7 @@ const admissionTestInfo = {
     regShort: '~Jul–Sep',
     regOpensMonth: 7,
     officialUrl: 'https://esat-tmua.ac.uk/',
+    provider: 'UAT UK',   // per the header note: ESAT/TMUA/TARA share one registration
     notes: 'Cambridge and Imperial engineering/science courses. Oxbridge applicants must sit the October sitting.',
     checkedDate: '2026-07-02',
   },
@@ -69,6 +72,7 @@ const admissionTestInfo = {
     regShort: '~Jul–Sep',
     regOpensMonth: 7,
     officialUrl: 'https://esat-tmua.ac.uk/about-the-tests/tara/',
+    provider: 'UAT UK',   // per the header note: ESAT/TMUA/TARA share one registration
     notes: 'New UAT UK reasoning test used by Oxford and UCL for selected courses from 2026/27.',
     checkedDate: '2026-07-02',
   },
