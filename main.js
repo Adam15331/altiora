@@ -439,6 +439,13 @@ const MATHS_IMPLY = {
   SG_A_Level: { advanced: 'H2 Further Mathematics', standard: 'H2 Mathematics' },
 };
 
+// True only while standard Maths is selected BECAUSE we added it — the student
+// picked the advanced maths without the standard one already on. Picking Maths
+// first and Further Maths second adds nothing, so nothing is announced: a
+// message about an action that never happened reads as second-guessing.
+// Reset whenever the advanced subject is dropped or the picker is rebuilt.
+let _mathsAutoAdded = false;
+
 // IB mutual-exclusion groups.
 // Each entry is { label, subjects[] }. When a user selects a subject that
 // belongs to a group, any other already-selected subject in the same group
@@ -4399,6 +4406,9 @@ function buildSubjectPicker(systemKey) {
   // The IB maths-help banner lives outside #subjectPicker; clear any stale one
   // before (re)building so it never lingers across a system change.
   $('ibMathsHelp')?.remove();
+  // A rebuilt picker has selected nothing, so no auto-add is outstanding.
+  _mathsAutoAdded = false;
+  hideMathsWarningBanner();
 
   if (!systemKey) {
     section.classList.add('hidden');
@@ -4569,13 +4579,23 @@ function buildCategoryPicker() {
 // Purely informational: standard Maths is auto-added (and locked) whenever
 // Further Maths is selected, so the banner just explains what happened.
 function showMathsWarningBanner(imply) {
-  if ($('mathsWarningBanner')) return;
-  const banner = document.createElement('div');
+  const pickerSection = $('subjectPickerSection');
+  if (!pickerSection) return;
+  // The picker is MOVED between the onboarding slot and the tool (placement,
+  // not a copy), so an existing banner may be stranded in the old parent —
+  // re-home it rather than leaving it orphaned and the new placement bare.
+  let banner = $('mathsWarningBanner');
+  if (banner) {
+    if (banner.nextElementSibling !== pickerSection) {
+      pickerSection.parentNode.insertBefore(banner, pickerSection);
+    }
+    return;
+  }
+  banner = document.createElement('div');
   banner.id = 'mathsWarningBanner';
   banner.className = 'maths-warning-banner';
   banner.innerHTML =
     `<span class="maths-warning-banner__msg">ℹ️ ${esc(imply.standard)} is required alongside ${esc(imply.advanced)} — we've added it for you.</span>`;
-  const pickerSection = $('subjectPickerSection');
   pickerSection.parentNode.insertBefore(banner, pickerSection);
 }
 
@@ -4642,14 +4662,20 @@ function onSubjectToggle(e = null) {
     const hasAdv   = state.selectedSubjects.includes(imply.advanced);
     if (stdInput) {
       if (hasAdv) {
+        // Only THIS branch is a genuine auto-add: the standard subject was not
+        // selected and we selected it. If it was already on, we add nothing.
         if (!stdInput.checked) {
           stdInput.checked = true;
           state.selectedSubjects.push(imply.standard);
+          _mathsAutoAdded = true;
         }
+        // The lock is unconditional — standard maths can't be dropped while the
+        // advanced one is selected, whichever order they were picked in.
         stdInput.disabled = true;
         stdInput.closest('.subject-chip')?.classList.add('subject-chip--locked');
-        autoAdded.add(imply.standard);
+        if (_mathsAutoAdded) autoAdded.add(imply.standard);
       } else {
+        _mathsAutoAdded = false;
         stdInput.disabled = false;
         stdInput.closest('.subject-chip')?.classList.remove('subject-chip--locked');
       }
@@ -4673,16 +4699,24 @@ function onSubjectToggle(e = null) {
     chip.classList.toggle('selected', input.checked);
     chip.classList.toggle('chip--auto-added', autoAdded.has(input.value));
     if (indicator) {
-      if (autoAdded.has(input.value)) {
+      // The marker means "this is held in place" — shown in BOTH orders, as
+      // today. Only its wording distinguishes an auto-add from a subject the
+      // student chose themselves and now can't drop.
+      const wasAutoAdded = autoAdded.has(input.value);
+      const isLocked     = input.checked && input.disabled;
+      if (wasAutoAdded || isLocked) {
         indicator.classList.remove('hidden');
-        if (imply) indicator.title = `Added automatically because you selected ${imply.advanced}`;
+        if (imply) indicator.title = wasAutoAdded
+          ? `Added automatically because you selected ${imply.advanced}`
+          : `Kept while ${imply.advanced} is selected`;
       } else if (!input.checked) {
         indicator.classList.add('hidden');
       }
     }
   });
 
-  if (imply && state.selectedSubjects.includes(imply.advanced)) showMathsWarningBanner(imply);
+  // Announced ONLY when this selection genuinely added the standard subject.
+  if (imply && _mathsAutoAdded) showMathsWarningBanner(imply);
   else hideMathsWarningBanner();
 
   syncSubjectCount();
