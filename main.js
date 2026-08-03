@@ -439,6 +439,13 @@ const MATHS_IMPLY = {
   SG_A_Level: { advanced: 'H2 Further Mathematics', standard: 'H2 Mathematics' },
 };
 
+// True only while standard Maths is selected BECAUSE we added it — the student
+// picked the advanced maths without the standard one already on. Picking Maths
+// first and Further Maths second adds nothing, so nothing is announced: a
+// message about an action that never happened reads as second-guessing.
+// Reset whenever the advanced subject is dropped or the picker is rebuilt.
+let _mathsAutoAdded = false;
+
 // IB mutual-exclusion groups.
 // Each entry is { label, subjects[] }. When a user selects a subject that
 // belongs to a group, any other already-selected subject in the same group
@@ -1996,88 +2003,243 @@ function renderStageToolNav(stage) {
 // invented dates) with official links; once courses are saved, the existing
 // per-course test checklist takes over and this block disappears.
 /* ═══════════════════════════════════════════════════════════════
- * APPLYING CHECKLIST — the execution layer.
- * Tasks are DERIVED from the saved shortlist (tests actually required,
- * countries actually present) plus the few generic steps every
- * application needs. Every task id is stable and meaning-derived
- * ("test-reg:ESAT"), so ticks survive shortlist edits and reloads.
+ * APPLYING — diagnosis first, then execution.
  *
- * Timing is expressed as TYPICAL WINDOWS from the verified
- * admissionTestInfo layer — never a hardcoded calendar date. Where a
- * deadline is university-set (UCAS, course pages) we say so and point
- * at the official source rather than inventing a month.
+ * The page opens with the single most consequential fact about the
+ * application (the shortlist's balance), then the work. Tasks are
+ * DERIVED from the saved shortlist; ids are stable and meaning-derived
+ * ("test-reg:ESAT+TMUA+TARA"), so ticks survive shortlist edits.
+ *
+ * Timing is always a TYPICAL WINDOW from the verified admissionTestInfo
+ * layer — never a hardcoded calendar date. Now/Soon/Later buckets are
+ * computed from those windows' months against today's month, so the
+ * grouping stays correct as the cycle turns without any date literals.
+ *
+ * Deliberately NOT here: any instruction to drop or swap a specific
+ * course, any quantified "effort saved", any invented score target.
+ * The load is stated; the choice is the student's.
  * ═══════════════════════════════════════════════════════════════ */
 
-// Ordered task list for the current shortlist. Order = the sequence a
-// student actually acts in: register for tests → sit tests → get the
-// application itself ready → confirm the deadlines that close it.
-function applyingTasks(savedCourses) {
-  const testInfoFor = t => (typeof admissionTestInfo !== 'undefined') ? admissionTestInfo[t] : null;
-  const tests = [...new Set(savedCourses.flatMap(c => Array.isArray(c.admissionTests) ? c.admissionTests : []))]
-    .sort((a, b) => (testInfoFor(a)?.regOpensMonth ?? 98) - (testInfoFor(b)?.regOpensMonth ?? 98) || a.localeCompare(b));
+const MONTH_NAMES = ['january','february','march','april','may','june',
+                     'july','august','september','october','november','december'];
 
-  const tasks = [];
+// First month named in a window string → 1-12, or null. Reads the EXISTING
+// verified window prose; invents nothing.
+function firstMonthIn(str) {
+  const m = String(str ?? '').toLowerCase().match(
+    /\b(january|february|march|april|may|june|july|august|september|october|november|december)\b/);
+  return m ? MONTH_NAMES.indexOf(m[1]) + 1 : null;
+}
 
-  // 1. Register for each required test — ONE entry per test, the single
-  //    place registration timing lives on this page.
+// Cycle-relative urgency bucket: 0 Now · 1 Soon · 2 Later. A window that
+// opened in the last few months counts as Now (it is open, act on it).
+function cycleBucket(cycleMonth, nowMonth) {
+  if (cycleMonth == null) return 2;
+  const off = (cycleMonth - nowMonth + 12) % 12;
+  if (off >= 9 || off <= 1) return 0;
+  if (off <= 4) return 1;
+  return 2;
+}
+const BUCKET_LABELS = ['Now', 'Soon', 'Later'];
+
+const testInfoFor = t => (typeof admissionTestInfo !== 'undefined') ? admissionTestInfo[t] : null;
+
+// Tests that share a registration body AND the same opening month are ONE
+// action, not N near-identical rows. Grouping key is derived from the data
+// (provider or official host + regOpensMonth), never hand-listed.
+function groupedTests(tests) {
+  const groups = new Map();
   tests.forEach(t => {
-    const info = testInfoFor(t);
-    tasks.push({
-      id: `test-reg:${t}`,
-      group: '1 · Register for tests',
-      label: `Register for ${info?.name ?? t}`,
-      // Avoid stacked parentheses when the window string already carries one.
-      detail: info
-        ? `Registration ${info.typicalRegistrationWindow}. Typical window — confirm the exact dates.`
-        : 'Check the official site for this cycle’s registration window.',
-      link: info ? { url: info.officialUrl, label: 'Official site' } : null,
+    const i = testInfoFor(t);
+    let host = '';
+    try { host = i ? new URL(i.officialUrl).hostname : ''; } catch (_) { host = ''; }
+    const key = `${i?.provider ?? host}|${i?.regOpensMonth ?? 'x'}`;
+    groups.set(key, [...(groups.get(key) ?? []), t]);
+  });
+  return [...groups.values()]
+    .map(members => members.slice().sort())
+    .sort((a, b) => (testInfoFor(a[0])?.regOpensMonth ?? 98) - (testInfoFor(b[0])?.regOpensMonth ?? 98)
+      || a[0].localeCompare(b[0]));
+}
+
+// The shared window sentence for a group, naming any member that differs
+// rather than flattening the difference away.
+function sharedWindowText(members, key) {
+  const vals = members.map(t => [t, testInfoFor(t)?.[key]]).filter(([, v]) => v);
+  if (!vals.length) return null;
+  const uniq = [...new Set(vals.map(([, v]) => v))];
+  if (uniq.length === 1) return uniq[0];
+  const base = uniq.slice().sort((a, b) => a.length - b.length)[0];
+  const extras = vals.filter(([, v]) => v !== base).map(([t, v]) => {
+    const name = testInfoFor(t)?.name ?? t;
+    // Only the part that differs — no repeating the shared sentence.
+    const extra = v.startsWith(base) ? v.slice(base.length).replace(/^[\s.,;·—-]+/, '') : v;
+    return `${name} also: ${extra}`;
+  });
+  return `${base} (${extras.join('; ')})`;
+}
+
+/* ─── Why a test is on the list ────────────────────────────────
+ * Four strands, all either the student's OWN data or transcribed from the
+ * test provider's own page (see admissionTestInfo's header for sources):
+ *   who needs it  — derived from the shortlist
+ *   what it is    — admissionTestInfo.description
+ *   consequence   — ONLY where requiredStatus === 'required'
+ *   practice      — admissionTestInfo.prepUrl
+ * Never a score target, cutoff, difficulty rating or pass rate.
+ * ─────────────────────────────────────────────────────────────── */
+
+// A compact, recognisable course label: "Oxford Engineering Science".
+function courseShortLabel(c) {
+  const uni = String(c.university || '')
+    .replace(/^(The\s+)?University of\s+/i, '')
+    .replace(/\s+University$/i, '')
+    .replace(/^Imperial College London$/i, 'Imperial')
+    .replace(/^London School of Economics.*$/i, 'LSE');
+  // Drop the trailing degree designation — it adds length, not recognition.
+  const name = String(c.name || '')
+    .replace(/\s+\(?(B[A-Z][a-z]?|M[A-Z][a-z]{1,4}|LLB|MBChB|MBBS|BEng|MEng|BSc|MSci|BA)\b[\w/()]*\)?\s*$/,'')
+    .trim();
+  return [uni, name].filter(Boolean).join(' ');
+}
+
+// The student's own saved courses that ask for any of these tests.
+function coursesNeedingTests(members, savedCourses) {
+  const want = new Set(members);
+  return savedCourses.filter(c => (c.admissionTests || []).some(t => want.has(t)));
+}
+
+// "Needed for: A, B, C (3 of your 4 saved courses)" — their data, not a claim.
+function testNeedsLine(members, savedCourses) {
+  const hits = coursesNeedingTests(members, savedCourses);
+  if (!hits.length) return null;
+  const total = savedCourses.length;
+  return `Needed for: ${hits.map(courseShortLabel).join(', ')} `
+       + `(${hits.length} of your ${total} saved course${total === 1 ? '' : 's'})`;
+}
+
+// What the test actually is — transcribed description, named per test when a
+// registration covers more than one.
+function testWhatLine(members) {
+  const parts = members.map(t => {
+    const i = testInfoFor(t);
+    if (!i?.description) return null;
+    return members.length > 1 ? `${i.name} — ${i.description}` : i.description;
+  }).filter(Boolean);
+  return parts.length ? parts.join(' ') : null;
+}
+
+// Stated ONLY where the provider's own page says the test is compulsory for
+// the courses that use it. Course-dependent, offer-condition and postgraduate
+// tests get no consequence line — an unverified consequence is worse than none.
+function testConsequenceLine(members) {
+  const req = members.filter(t => testInfoFor(t)?.requiredStatus === 'required');
+  if (!req.length) return null;
+  const names = req.map(t => testInfoFor(t)?.name ?? t);
+  const one = req.length === 1;
+  return `${names.join(' and ')} ${one ? 'is' : 'are'} required by the universities that use `
+       + `${one ? 'it' : 'them'} — miss the registration deadline and you can't apply to those `
+       + `courses this cycle.`;
+}
+
+// Official site + the provider's own free practice materials.
+function testLinks(members, opts = {}) {
+  const out = [];
+  if (!opts.prepOnly) {
+    const off = members.map(testInfoFor).find(i => i?.officialUrl);
+    if (off) out.push({ url: off.officialUrl, label: 'Official site' });
+  }
+  const seen = new Set();
+  members.forEach(t => {
+    const i = testInfoFor(t);
+    if (!i?.prepUrl || seen.has(i.prepUrl)) return;
+    seen.add(i.prepUrl);
+    out.push({
+      url: i.prepUrl,
+      label: members.length > 1 ? `${i.name} practice materials` : 'Practice materials',
     });
   });
-  // 2. Sit each test.
-  tests.forEach(t => {
-    const info = testInfoFor(t);
+  return out;
+}
+
+// Ordered task list for the current shortlist.
+function applyingTasks(savedCourses, opts = {}) {
+  const nowMonth = opts.nowMonth ?? (new Date().getMonth() + 1);
+  const tests = [...new Set(savedCourses.flatMap(c => Array.isArray(c.admissionTests) ? c.admissionTests : []))];
+  const groups = groupedTests(tests);
+  const tasks = [];
+
+  // 1. Register — one task per shared-registration group.
+  groups.forEach(members => {
+    const infos = members.map(testInfoFor);
+    const names = members.map((t, i) => infos[i]?.name ?? t);
+    const win = sharedWindowText(members, 'typicalRegistrationWindow');
+    const provider = infos.find(i => i?.provider)?.provider;
+    const many = members.length > 1;
     tasks.push({
-      id: `test-sit:${t}`,
-      group: '2 · Sit the tests',
-      label: `Sit ${info?.name ?? t}`,
-      detail: info
-        ? `Test ${info.typicalTestWindow}. Typical window — registration closes before it.`
-        : 'Check the official site for this cycle’s test window.',
-      link: null,
+      id: `test-reg:${members.join('+')}`,
+      seq: 1, seqLabel: 'Register for tests',
+      cycleMonth: infos.find(i => i?.regOpensMonth)?.regOpensMonth ?? firstMonthIn(win),
+      label: many ? `Register for your admission tests (${names.join(', ')})`
+                  : `Register for ${names[0]}`,
+      detail: win
+        ? `${many ? 'One registration covers all of them' : 'Registration'}${provider && many ? ` via ${provider}` : ''} — ${win}. Typical window; confirm the exact dates.`
+        : 'Check the official site for this cycle’s registration window.',
+      needs:       testNeedsLine(members, savedCourses),
+      whatItIs:    testWhatLine(members),
+      consequence: testConsequenceLine(members),
+      links:       testLinks(members),
+      liveEarly: true,   // registration opens before the application year
+    });
+  });
+
+  // 2. Sit — same grouping.
+  groups.forEach(members => {
+    const infos = members.map(testInfoFor);
+    const names = members.map((t, i) => infos[i]?.name ?? t);
+    const win = sharedWindowText(members, 'typicalTestWindow');
+    tasks.push({
+      id: `test-sit:${members.join('+')}`,
+      seq: 2, seqLabel: 'Sit the tests',
+      cycleMonth: firstMonthIn(win),
+      label: members.length > 1 ? `Sit your admission tests (${names.join(', ')})` : `Sit ${names[0]}`,
+      detail: win ? `Test ${win}. Typical window — registration closes before it.`
+                  : 'Check the official site for this cycle’s test window.',
+      needs:    testNeedsLine(members, savedCourses),
+      whatItIs: testWhatLine(members),
+      // The missed-deadline consequence belongs to registration, not sitting.
+      links:    testLinks(members, { prepOnly: true }),
     });
   });
 
   // 3. The application itself.
+  const entryCount = (typeof AltioraState !== 'undefined') ? AltioraState.getAchievements().length : 0;
   tasks.push({
-    id: 'app:grades',
-    group: '3 · Your application',
+    id: 'app:grades', seq: 3, seqLabel: 'Your application', cycleMonth: null,
     label: 'Confirm your predicted grades with your school',
     detail: 'What your school submits is what universities see — check it matches what you entered here.',
     link: null,
   });
   tasks.push({
-    id: 'app:statement',
-    group: '3 · Your application',
+    id: 'app:statement', seq: 3, seqLabel: 'Your application', cycleMonth: null,
     label: 'Draft your personal statement',
-    detail: 'Your story bank is the raw material — the reflections you have already written.',
+    // Factual state of the story bank — no quota, no readiness score.
+    detail: entryCount
+      ? `You have ${entryCount} story ${entryCount === 1 ? 'entry' : 'entries'} to draw on.`
+      : 'Your story bank is empty — add a few entries first, they’re the raw material.',
     link: null,
-    action: { mode: 'story', label: 'Open your story' },
+    action: { mode: 'story', label: entryCount ? 'Open your story' : 'Start your story' },
+    liveEarly: true,   // story-building is genuinely live in any year
   });
   tasks.push({
-    id: 'app:references',
-    group: '3 · Your application',
+    id: 'app:references', seq: 3, seqLabel: 'Your application', cycleMonth: null,
     label: 'Ask for your reference',
     detail: 'Referees need notice. Ask early rather than in the week the form closes.',
     link: null,
   });
 
-  // 4. Deadlines, per country actually on the list. Universities and
-  //    application services publish these; we point rather than guess.
-  // Typical deadline SHAPES per country. These describe the pattern of a
-  // cycle at month granularity — the honest, stable thing we can say — and
-  // every one ends by telling the student to confirm the exact date
-  // officially. No specific date or time is ever asserted, because those
-  // move every cycle and are set per university.
+  // 4. Deadlines, per country actually on the list. Month-level SHAPES only,
+  // each ending in confirm-officially.
   const DEADLINE_SHAPE = {
     UK: 'Medicine, dentistry, veterinary and Oxford/Cambridge courses typically close in mid-October; most other UK courses in late January. Both shift year to year — confirm the exact date on UCAS and each course page.',
     US: 'Many early-application deadlines (early action/decision) typically fall around early November, with regular decision later. Every university sets its own — confirm on each admissions page.',
@@ -2085,62 +2247,108 @@ function applyingTasks(savedCourses) {
     SG: 'Application windows are set per university and differ for international applicants. Confirm on each admissions page.',
     HK: 'Application windows are set per university, with separate local and international routes. Confirm on each admissions page.',
   };
-  // Order by typical earliness so the sequence reads correctly even without
-  // dates: earlier-closing cycles first, then the rest alphabetically.
   const DEADLINE_ORDER = { UK: 0, US: 1 };
   const countries = [...new Set(savedCourses.map(c => c.country))]
     .sort((a, b) => (DEADLINE_ORDER[a] ?? 8) - (DEADLINE_ORDER[b] ?? 8)
       || (COUNTRY_LABELS[a] ?? a).localeCompare(COUNTRY_LABELS[b] ?? b));
   countries.forEach(k => {
     const label = COUNTRY_LABELS[k] ?? k;
+    const shape = DEADLINE_SHAPE[k] ?? 'Each university sets its own dates — confirm on every course page on your list.';
     tasks.push({
-      id: `deadline:${k}`,
-      group: '4 · Deadlines',
+      id: `deadline:${k}`, seq: 4, seqLabel: 'Deadlines',
+      cycleMonth: firstMonthIn(shape),   // read back from the same sentence
       label: `Confirm exact deadlines for your ${label} course${savedCourses.filter(c => c.country === k).length === 1 ? '' : 's'} on official pages`,
-      detail: DEADLINE_SHAPE[k] ?? 'Each university sets its own dates — confirm on every course page on your list.',
+      detail: shape,
       link: null,
     });
   });
 
+  // The generic application tasks have no window of their own; they belong
+  // with the earliest deadline on the list.
+  const earliestDeadline = tasks.filter(t => t.seq === 4 && t.cycleMonth != null)
+    .reduce((m, t) => (m == null ? t.cycleMonth : Math.min(m, t.cycleMonth)), null);
+  tasks.forEach(t => { if (t.seq === 3 && t.cycleMonth == null) t.cycleMonth = earliestDeadline; });
+
+  tasks.forEach(t => { t.bucket = cycleBucket(t.cycleMonth, nowMonth); });
   return tasks;
 }
 
-// Direct projection of state → the checklist DOM. Safe to run on every
-// state change; no-ops when the Applying panel isn't on screen.
+// Distinct admission tests across the list — the load observation's input.
+function shortlistTestLoad(savedCourses) {
+  return [...new Set(savedCourses.flatMap(c => Array.isArray(c.admissionTests) ? c.admissionTests : []))];
+}
+
+// One factual load observation. States the load; never recommends dropping
+// or swapping a course, never quantifies effort saved.
+function testLoadNoteHtml(savedCourses) {
+  const n = shortlistTestLoad(savedCourses).length;
+  if (n < 2) return '';
+  const text = n >= 3
+    ? `Your list needs ${n} different admission tests — that's a heavy prep load alongside term-time study.`
+    : `Your list needs ${n} different admission tests — each has its own format and preparation.`;
+  return `<p class="applying-diag__load">${esc(text)}</p>`;
+}
+
+// Direct projection of state → the checklist DOM.
 function renderApplyingChecklist() {
   const host = $('applyingChecklist');
   if (!host) return;
   const saved = AltioraState.getShortlist()
     .map(id => (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null)
     .filter(Boolean);
+  const yrs = studentYears();
+  const preview = yrs != null && yrs >= 1;
   const tasks = applyingTasks(saved);
-  const doneCount = tasks.filter(t => AltioraState.isApplicationTaskDone(t.id)).length;
+
+  // In preview the sequence is what matters; in the application year it's
+  // urgency. Actionable-in-preview items are the genuinely live ones.
+  const isLive = t => !preview || (t.liveEarly && (t.id.startsWith('test-reg:') ? yrs === 1 : true));
+  const actionable = tasks.filter(isLive);
+  const doneCount = actionable.filter(t => AltioraState.isApplicationTaskDone(t.id)).length;
 
   const countEl = $('applyingChecklistCount');
-  if (countEl) countEl.textContent = tasks.length ? `${doneCount}/${tasks.length} done` : '';
+  if (countEl) countEl.textContent = preview
+    ? (actionable.length ? `${doneCount}/${actionable.length} you can do now` : '')
+    : (tasks.length ? `${doneCount}/${tasks.length} done` : '');
 
-  // Group in generated order, preserving the action sequence.
   const groups = [];
-  tasks.forEach(t => {
-    const g = groups.find(x => x.name === t.group);
-    (g ? g : (groups.push({ name: t.group, items: [] }), groups[groups.length - 1])).items.push(t);
-  });
+  const push = (name, t) => {
+    const g = groups.find(x => x.name === name);
+    (g ? g : (groups.push({ name, items: [] }), groups[groups.length - 1])).items.push(t);
+  };
+  if (preview) {
+    tasks.slice().sort((a, b) => a.seq - b.seq).forEach(t => push(`${t.seq} · ${t.seqLabel}`, t));
+  } else {
+    tasks.slice()
+      .sort((a, b) => a.bucket - b.bucket || a.seq - b.seq)
+      .forEach(t => push(BUCKET_LABELS[t.bucket], t));
+  }
 
   host.innerHTML = groups.map(g => `
     <div class="applying-task-group">
       <span class="applying-task-group__label">${esc(g.name)}</span>
       ${g.items.map(t => {
-        const done = AltioraState.isApplicationTaskDone(t.id);
+        const live = isLive(t);
+        const done = live && AltioraState.isApplicationTaskDone(t.id);
+        const cls = `applying-task${done ? ' applying-task--done' : ''}${live ? '' : ' applying-task--preview'}`;
+        const box = live
+          ? `<input type="checkbox" class="applying-task__box" data-app-task="${esc(t.id)}"${done ? ' checked' : ''}>`
+          : `<span class="applying-task__marker" aria-hidden="true">·</span>`;
         return `
-        <label class="applying-task${done ? ' applying-task--done' : ''}">
-          <input type="checkbox" class="applying-task__box" data-app-task="${esc(t.id)}"${done ? ' checked' : ''}>
+        <${live ? 'label' : 'div'} class="${cls}">
+          ${box}
           <span class="applying-task__body">
             <span class="applying-task__label">${esc(t.label)}</span>
             <span class="applying-task__detail">${esc(t.detail)}</span>
-            ${t.link ? `<a class="applying-task__link" href="${esc(t.link.url)}" target="_blank" rel="noopener noreferrer">${esc(t.link.label)} →</a>` : ''}
-            ${t.action ? `<button type="button" class="applying-task__link applying-task__action" data-go-tool="${esc(t.action.mode)}">${esc(t.action.label)} →</button>` : ''}
+            ${t.whatItIs ? `<span class="applying-task__what">${esc(t.whatItIs)}</span>` : ''}
+            ${t.needs ? `<span class="applying-task__needs">${esc(t.needs)}</span>` : ''}
+            ${t.consequence ? `<span class="applying-task__consequence">${esc(t.consequence)}</span>` : ''}
+            ${(t.links || []).length && live ? `<span class="applying-task__links">${
+              t.links.map(l => `<a class="applying-task__link" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer">${esc(l.label)} →</a>`).join('')
+            }</span>` : ''}
+            ${t.action && live ? `<button type="button" class="applying-task__link applying-task__action" data-go-tool="${esc(t.action.mode)}">${esc(t.action.label)} →</button>` : ''}
           </span>
-        </label>`;
+        </${live ? 'label' : 'div'}>`;
       }).join('')}
     </div>`).join('');
 }
@@ -2196,50 +2404,57 @@ function renderApplyingPanel() {
     return;
   }
 
-  // Compact shortlist summary — this page is about NEXT ACTIONS, so the
-  // full course cards stay on the Shortlist page rather than being
-  // re-rendered here. Balance reuses the existing verdict machinery.
-  const { counts, hasGrades } = shortlistVerdicts(savedCourses);
-  const unis = new Set(savedCourses.map(c => c.university));
-  const countryBits = [...new Set(savedCourses.map(c => c.country))]
-    .map(k => COUNTRY_LABELS[k] ?? k);
-  const classified = counts.reach + counts.match + counts.safety;
-  const balanceLine = (hasGrades && classified > 0)
-    ? `<p class="applying-summary__balance">${counts.reach} reach${counts.reach === 1 ? '' : 'es'} ·
-        ${counts.match} match${counts.match === 1 ? '' : 'es'} ·
-        ${counts.safety} safet${counts.safety === 1 ? 'y' : 'ies'}${counts.unknown ? ` · ${counts.unknown} unclassified` : ''}</p>`
-    : `<p class="applying-summary__balance applying-summary__balance--muted">Add predicted grades in Check Combination to see your reach/match/safety balance.</p>`;
-  const usNote = savedCourses.some(c => c.country === 'US')
-    ? `<p class="applying-summary__note">${esc(US_NO_SAFETY_NOTE)}</p>` : '';
+  const yrs     = studentYears();
+  const preview = yrs != null && yrs >= 1;
 
-  const _yrs = studentYears();
-  const _yrLabel = AltioraState.getProfile().yearGroup;
-  const timingNote =
-    _yrs === 0 ? `<p class="applying-timeline-note">You're in ${esc(_yrLabel)} — this is your application cycle, so these windows apply to you <strong>now</strong>. Registration closes before every test.</p>` :
-    _yrs === 1 ? `<p class="applying-timeline-note">You apply next year — most admission tests are sat early in your final year, so note when registration opens for your cycle.</p>` : '';
+  // ── THE DIAGNOSTIC. The most consequential fact about this application,
+  // stated first: the shape of the list, in the shared balance wording, plus
+  // one factual observation about test load. No course surgery is suggested.
+  const bal = shortlistBalance(savedCourses);
+  const unis = new Set(savedCourses.map(c => c.university));
+  const countryBits = [...new Set(savedCourses.map(c => c.country))].map(k => COUNTRY_LABELS[k] ?? k);
+  const diagLine = bal.classified > 0
+    ? `Your list: ${bal.countsBits.join(' · ')}`
+    : `Your list: ${savedCourses.length} course${savedCourses.length === 1 ? '' : 's'}, unclassified`;
+  const usNote = savedCourses.some(c => c.country === 'US')
+    ? `<p class="applying-diag__aside">${esc(US_NO_SAFETY_NOTE)}</p>` : '';
+
+  const diagnostic = `
+    <section class="applying-diag" aria-label="Your list at a glance">
+      <p class="applying-diag__counts">${esc(diagLine)}</p>
+      <p class="applying-diag__advice">${esc(bal.advice)}</p>
+      ${testLoadNoteHtml(savedCourses)}
+      ${usNote}
+      <p class="applying-diag__meta"><strong>${savedCourses.length}</strong> course${savedCourses.length === 1 ? '' : 's'} ·
+        <strong>${unis.size}</strong> universit${unis.size === 1 ? 'y' : 'ies'} ·
+        ${esc(countryBits.join(', '))}
+        <button class="home-card__link applying-diag__link" data-go-shortlist>View full shortlist →</button></p>
+    </section>`;
+
+  // ── Year-honest lead. An application-year student gets the dashboard; a
+  // student who applies later gets an explicit PREVIEW, not a year of
+  // premature tasks dressed up as a to-do list.
+  const yrLabel = AltioraState.getProfile().yearGroup;
+  const lead = preview
+    ? `<p class="applying-preview__lead">You apply ${yrs === 1 ? 'next year' : `in ${yrs} years`} — here's what the cycle
+        looks like, and the one or two things worth doing now. The rest is a preview: nothing to tick yet.</p>`
+    : `<p class="applying-timeline-note">You're in ${esc(yrLabel ?? 'your application year')} — this is your application
+        cycle, so these windows apply to you <strong>now</strong>. Registration closes before every test.</p>`;
 
   panel.innerHTML = `
     <div class="applying">
       <header class="applying__header">
         <h1 class="applying__title">Applying</h1>
-        <p class="applying__sub">Your next actions, in the order they happen.</p>
+        <p class="applying__sub">${preview ? 'A preview of the cycle you\'ll run next.' : 'Your next actions, in the order they happen.'}</p>
       </header>
 
-      <section class="applying-section">
-        <h2 class="applying-section__head">What's next<span id="applyingChecklistCount" class="applying-section__count"></span></h2>
-        ${timingNote}
-        <div id="applyingChecklist" class="applying-tasks"></div>
-        <p class="applying-tasks__foot">Windows are typical and shift year to year — always confirm on the official page.</p>
-      </section>
+      ${diagnostic}
 
       <section class="applying-section">
-        <h2 class="applying-section__head">Your shortlist</h2>
-        <p class="applying-summary__counts"><strong>${savedCourses.length}</strong> course${savedCourses.length === 1 ? '' : 's'} ·
-          <strong>${unis.size}</strong> universit${unis.size === 1 ? 'y' : 'ies'} ·
-          ${esc(countryBits.join(', '))}</p>
-        ${balanceLine}
-        ${usNote}
-        <button class="home-card__link" data-go-shortlist>View full shortlist →</button>
+        <h2 class="applying-section__head">${preview ? 'The cycle, in order' : "What's next"}<span id="applyingChecklistCount" class="applying-section__count"></span></h2>
+        ${lead}
+        <div id="applyingChecklist" class="applying-tasks${preview ? ' applying-tasks--preview' : ''}"></div>
+        <p class="applying-tasks__foot">Windows are typical and shift year to year — always confirm on the official page.</p>
       </section>
     </div>`;
 
@@ -2514,13 +2729,9 @@ function achievementsSectionHtml() {
     .map(t => `<option value="${esc(t.id)}">${esc(t.label)}</option>`).join('');
   return `
     <section class="applying-section story" aria-label="Your story bank">
-      <h2 class="applying-section__head">Your story<span id="achvCount" class="achv__count"></span></h2>
-      <p class="achv__note">This is your story bank — not a checklist. Note the things you've done and, in a line each,
-        what they taught you. These reflections are the raw material for personal statements, applications, and
-        interviews. There's no scoring here, and no university "requires" any of it — it's about having a story you
-        can tell, which is honestly the point.</p>
       <div id="achvSummary" class="story__summary"></div>
       <div id="achvList" class="achv__list"></div>
+      <p id="achvInvite" class="story__invite"></p>
       <button type="button" id="achvAddBtn" class="fo-btn fo-btn--primary achv__addbtn">+ Add to your story</button>
       <form id="achvForm" class="achv__form hidden" novalidate>
         <div class="achv__form-row">
@@ -2572,6 +2783,8 @@ function achievementsSectionHtml() {
           <button type="button" class="fo-btn" id="achvCancelBtn">Cancel</button>
         </div>
       </form>
+      <p class="achv__note">No scoring here, and no university requires any of this — it's about having a story
+        you can tell.</p>
     </section>`;
 }
 
@@ -2614,20 +2827,44 @@ function storyCardHtml(a) {
 // One calm, honest counsel line per pinned field, driven ONLY by the
 // student's own data: how many reflective entries the field has × how far
 // they are from applying. No fabricated university claims, no scoring.
-function storyCounselHtml(label, entries, yrs) {
-  const { text, tone } = storyCounsel(label, entries, yrs);
+function storyCounselHtml(label, entries, yrs, opts = {}) {
+  const { text, tone } = storyCounsel(label, entries, yrs, opts);
   return `<p class="story-counsel story-counsel--${tone}">${esc(text)}</p>`;
+}
+
+// What a thin story is worth doing about, given how far off applying is.
+// One wording, shared by the pinned-field counsel and the shortlist-driven
+// gap counsel, so the two can never drift. States what is worth doing —
+// never a quota, a score, or a claim about what universities want.
+function storyGapTail(yrs) {
+  if (yrs == null) return 'a project, a competition, or documented work all count as real evidence.';
+  if (yrs >= 2)   return 'you have time — a project, a competition, or even documented tinkering builds real evidence.';
+  if (yrs === 1)  return 'you have a year, and one project you actually finish is worth more than a list.';
+  return 'focus on telling the strongest version of what you already have.';
 }
 
 // The counsel WORDING alone — shared by the story view and the printable
 // Counselor Summary so the two can never drift apart.
-function storyCounsel(label, entries, yrs) {
+//
+// opts.savedCount: how many shortlisted courses sit in this field. When the
+// student has saved courses here, the gap is anchored in their OWN shortlist
+// rather than in a pinned field — which is what makes the counsel reach a
+// student who saved four Computer Science courses and pinned nothing.
+function storyCounsel(label, entries, yrs, opts = {}) {
   const reflective = entries.filter(entryHasReflection).length;
   const strong = reflective >= 3;
+  const saved  = opts.savedCount ?? 0;
   let text, tone;
   if (strong) {
     text = `A solid ${label} story — the reflections here are personal-statement raw material.`;
     tone = 'strong';
+  } else if (saved > 0) {
+    tone = 'thin';
+    const courses = `${saved} ${label} ${saved === 1 ? 'course' : 'courses'}`;
+    const lead = entries.length === 0
+      ? `You've saved ${courses} and have nothing in your story for it yet`
+      : `You've saved ${courses} and your story for it is still light`;
+    text = `${lead} — ${storyGapTail(yrs)}`;
   } else {
     tone = 'thin';
     const none = entries.length === 0;
@@ -2646,22 +2883,40 @@ function storyCounsel(label, entries, yrs) {
   return { text, tone };
 }
 
-// One field's story: header + count + (for pinned fields) year-aware counsel,
+// Fields the student's SAVED COURSES point at: category id → how many saved
+// courses sit in it. A second signal alongside pinned fields — a shortlist is
+// an expression of interest whether or not a field was ever pinned.
+function shortlistFieldCounts() {
+  if (typeof AltioraState === 'undefined' || typeof courses === 'undefined') return new Map();
+  const counts = new Map();
+  AltioraState.getShortlist()
+    .map(id => courses.find(c => c.id === id))
+    .filter(c => c && CATEGORY_LABEL_MAP[c.category])
+    .forEach(c => counts.set(c.category, (counts.get(c.category) ?? 0) + 1));
+  return counts;
+}
+
+// One field's story: header + count + (for active fields) year-aware counsel,
 // then the tagged entries.
 function storyGroupHtml(bucket, showCounsel) {
   const yrs = studentYears();
-  const counsel = showCounsel ? storyCounselHtml(bucket.label, bucket.entries, yrs) : '';
+  const counsel = showCounsel
+    ? storyCounselHtml(bucket.label, bucket.entries, yrs, { savedCount: bucket.savedCount ?? 0 })
+    : '';
   const cards   = bucket.entries.map(storyCardHtml).join('');
   const n = bucket.entries.length;
   const countLabel = n ? `${n} ${n === 1 ? 'piece' : 'pieces'}` : 'none yet';
   const inactiveTag = bucket.inactive
     ? `<span class="story-group__inactive">field no longer pinned</span>` : '';
+  // Says where a field came from when it isn't one the student pinned.
+  const sourceTag = bucket.fromShortlist
+    ? `<span class="story-group__src">from your shortlist</span>` : '';
   return `
     <section class="story-group${bucket.inactive ? ' story-group--inactive' : ''}">
       <div class="story-group__head">
         <span class="story-group__label">${esc(bucket.label)}</span>
         <span class="story-group__count">${esc(countLabel)}</span>
-        ${inactiveTag}
+        ${inactiveTag}${sourceTag}
       </div>
       ${counsel}
       ${cards}
@@ -2669,7 +2924,8 @@ function storyGroupHtml(bucket, showCounsel) {
 }
 
 // The one-line per-field summary: "Engineering: 4 pieces of your story ·
-// Economics: none yet". Only meaningful once fields are pinned.
+// Economics: none yet". Covers every field on the page — pinned or drawn from
+// the shortlist — so it never omits a group shown below it.
 function storySummaryHtml(items, pinned) {
   if (!pinned.length) {
     return items.length
@@ -2683,6 +2939,42 @@ function storySummaryHtml(items, pinned) {
   return `<p class="story__summary-line">${esc(parts.join(' · '))}</p>`;
 }
 
+// An invitation, never a requirement — one line offering a kind of story the
+// student may not have thought to record. Deliberately phrased as "that
+// counts", not "you need this": nothing here is asked for by any university.
+const STORY_INVITATIONS = {
+  cs:           ['Built something that broke and you fixed it? That’s a story.',
+                 'Taught yourself something no class covered? That counts.'],
+  engineering:  ['Built something that broke and you fixed it? That’s a story.',
+                 'Taken something apart to see how it worked? That counts.'],
+  mathematics:  ['Chased a problem past the point it was set? That’s a story.',
+                 'Found a proof or a pattern that surprised you? That counts.'],
+  sciences:     ['Run an experiment that didn’t work? That’s a story.',
+                 'Read past the syllabus on something that caught you? That counts.'],
+  medicine:     ['Spent time somewhere people were being cared for? That’s a story.',
+                 'Changed your mind about what the work actually involves? That counts.'],
+  law:          ['Read something that changed your mind? That counts.',
+                 'Argued a side you didn’t agree with? That’s a story.'],
+  psychology:   ['Read something that changed your mind? That counts.',
+                 'Noticed something about how people behave and dug into it? That’s a story.'],
+  economics:    ['Followed a story in the news until you understood it? That counts.',
+                 'Made a case with numbers behind it? That’s a story.'],
+  business:     ['Sold, organised, or ran something for real? That’s a story.',
+                 'Persuaded people to back an idea of yours? That counts.'],
+  architecture: ['Drawn, modelled, or built a space of your own? That’s a story.',
+                 'Looked hard at a building and worked out why it works? That counts.'],
+};
+
+// One invitation for one field, rotating as the story grows so the same line
+// doesn't sit there forever. Deterministic: same state → same line.
+function storyInvitation(fieldIds, entryCount) {
+  const withLines = fieldIds.filter(f => STORY_INVITATIONS[f]);
+  if (!withLines.length) return '';
+  const field = withLines[entryCount % withLines.length];
+  const lines = STORY_INVITATIONS[field];
+  return lines[Math.floor(entryCount / withLines.length) % lines.length];
+}
+
 // Direct projection of state → DOM: the story bank, grouped by field. Cheap
 // no-op when the section isn't on screen; safe on every state change.
 function renderAchievementsList() {
@@ -2691,37 +2983,57 @@ function renderAchievementsList() {
 
   const items  = AltioraState.getAchievements();
   const pinned = activeCandidateFields();
+  // The shortlist is the second field signal: saving four Computer Science
+  // courses says as much about direction as pinning the field does.
+  const savedCounts = shortlistFieldCounts();
+  const shortlistOnly = [...savedCounts.keys()]
+    .filter(f => !pinned.includes(f))
+    .sort((a, b) => savedCounts.get(b) - savedCounts.get(a)
+      || CATEGORY_LABEL_MAP[a].localeCompare(CATEGORY_LABEL_MAP[b]));
+  const fields = [...pinned, ...shortlistOnly];
 
   const count = $('achvCount');
   if (count) count.textContent = items.length ? ` (${items.length})` : '';
   const summaryEl = $('achvSummary');
-  if (summaryEl) summaryEl.innerHTML = storySummaryHtml(items, pinned);
+  if (summaryEl) summaryEl.innerHTML = storySummaryHtml(items, fields);
 
-  if (!items.length && !pinned.length) {
+  const invite = $('achvInvite');
+  if (invite) {
+    const line = storyInvitation(fields, items.length);
+    invite.textContent = line;
+    invite.classList.toggle('hidden', !line);
+  }
+
+  // Empty and nothing to organise by: open with a question, not a description.
+  // The scaffolded form does the guiding once they act on it.
+  if (!items.length && !fields.length) {
     list.innerHTML = `
       <div class="achv__empty">
-        <p>Your story bank is empty. As you do things — a project, a role, a competition, some volunteering —
-        note them here with a line on what they taught you. Future-you, writing a personal statement, will be
-        grateful. Pin a field or two in the planner and you can build each field's story separately.</p>
+        <p class="achv__empty-q">What have you done outside class in the last year that you'd actually
+        bother telling someone about?</p>
       </div>`;
     return;
   }
 
   // Field buckets in priority order: pinned fields first (with counsel, even
-  // when empty — that's the whole point for early years), then any field that
-  // is tagged but no longer pinned (shown greyed, tag preserved), then the
-  // untagged "General" bucket last.
-  const buckets = pinned.map(f => ({
+  // when empty — that's the whole point for early years), then fields the
+  // shortlist points at, then any field that is tagged but no longer pinned
+  // (shown greyed, tag preserved), then the untagged "General" bucket last.
+  // A field that is BOTH pinned and shortlisted appears once, with its saved
+  // count folded into that single counsel line.
+  const buckets = fields.map(f => ({
     key: f, label: CATEGORY_LABEL_MAP[f], inactive: false,
+    fromShortlist: !pinned.includes(f),
+    savedCount: savedCounts.get(f) ?? 0,
     entries: items.filter(a => (a.fields || []).includes(f)),
   }));
 
   const taggedIds = new Set(items.flatMap(a => a.fields || []));
   [...taggedIds]
-    .filter(f => !pinned.includes(f) && CATEGORY_LABEL_MAP[f])
+    .filter(f => !fields.includes(f) && CATEGORY_LABEL_MAP[f])
     .sort((a, b) => CATEGORY_LABEL_MAP[a].localeCompare(CATEGORY_LABEL_MAP[b]))
     .forEach(f => buckets.push({
-      key: f, label: CATEGORY_LABEL_MAP[f], inactive: true,
+      key: f, label: CATEGORY_LABEL_MAP[f], inactive: true, savedCount: 0,
       entries: items.filter(a => (a.fields || []).includes(f)),
     }));
 
@@ -2896,9 +3208,8 @@ function renderStoryPanel() {
   panel.innerHTML = `
     <div class="story-view">
       <header class="story-view__header">
-        <h1 class="story-view__title">Your story</h1>
-        <p class="story-view__sub">The things you've done and what they taught you — raw material for your
-          applications, and a way to see where each field's story stands.</p>
+        <h1 class="story-view__title">Your story<span id="achvCount" class="achv__count"></span></h1>
+        <p class="story-view__sub">The things you've done, and what they taught you.</p>
       </header>
       ${achievementsSectionHtml()}
     </div>`;
@@ -4189,6 +4500,9 @@ function buildSubjectPicker(systemKey) {
   // The IB maths-help banner lives outside #subjectPicker; clear any stale one
   // before (re)building so it never lingers across a system change.
   $('ibMathsHelp')?.remove();
+  // A rebuilt picker has selected nothing, so no auto-add is outstanding.
+  _mathsAutoAdded = false;
+  hideMathsWarningBanner();
 
   if (!systemKey) {
     section.classList.add('hidden');
@@ -4359,13 +4673,23 @@ function buildCategoryPicker() {
 // Purely informational: standard Maths is auto-added (and locked) whenever
 // Further Maths is selected, so the banner just explains what happened.
 function showMathsWarningBanner(imply) {
-  if ($('mathsWarningBanner')) return;
-  const banner = document.createElement('div');
+  const pickerSection = $('subjectPickerSection');
+  if (!pickerSection) return;
+  // The picker is MOVED between the onboarding slot and the tool (placement,
+  // not a copy), so an existing banner may be stranded in the old parent —
+  // re-home it rather than leaving it orphaned and the new placement bare.
+  let banner = $('mathsWarningBanner');
+  if (banner) {
+    if (banner.nextElementSibling !== pickerSection) {
+      pickerSection.parentNode.insertBefore(banner, pickerSection);
+    }
+    return;
+  }
+  banner = document.createElement('div');
   banner.id = 'mathsWarningBanner';
   banner.className = 'maths-warning-banner';
   banner.innerHTML =
     `<span class="maths-warning-banner__msg">ℹ️ ${esc(imply.standard)} is required alongside ${esc(imply.advanced)} — we've added it for you.</span>`;
-  const pickerSection = $('subjectPickerSection');
   pickerSection.parentNode.insertBefore(banner, pickerSection);
 }
 
@@ -4432,14 +4756,20 @@ function onSubjectToggle(e = null) {
     const hasAdv   = state.selectedSubjects.includes(imply.advanced);
     if (stdInput) {
       if (hasAdv) {
+        // Only THIS branch is a genuine auto-add: the standard subject was not
+        // selected and we selected it. If it was already on, we add nothing.
         if (!stdInput.checked) {
           stdInput.checked = true;
           state.selectedSubjects.push(imply.standard);
+          _mathsAutoAdded = true;
         }
+        // The lock is unconditional — standard maths can't be dropped while the
+        // advanced one is selected, whichever order they were picked in.
         stdInput.disabled = true;
         stdInput.closest('.subject-chip')?.classList.add('subject-chip--locked');
-        autoAdded.add(imply.standard);
+        if (_mathsAutoAdded) autoAdded.add(imply.standard);
       } else {
+        _mathsAutoAdded = false;
         stdInput.disabled = false;
         stdInput.closest('.subject-chip')?.classList.remove('subject-chip--locked');
       }
@@ -4463,16 +4793,24 @@ function onSubjectToggle(e = null) {
     chip.classList.toggle('selected', input.checked);
     chip.classList.toggle('chip--auto-added', autoAdded.has(input.value));
     if (indicator) {
-      if (autoAdded.has(input.value)) {
+      // The marker means "this is held in place" — shown in BOTH orders, as
+      // today. Only its wording distinguishes an auto-add from a subject the
+      // student chose themselves and now can't drop.
+      const wasAutoAdded = autoAdded.has(input.value);
+      const isLocked     = input.checked && input.disabled;
+      if (wasAutoAdded || isLocked) {
         indicator.classList.remove('hidden');
-        if (imply) indicator.title = `Added automatically because you selected ${imply.advanced}`;
+        if (imply) indicator.title = wasAutoAdded
+          ? `Added automatically because you selected ${imply.advanced}`
+          : `Kept while ${imply.advanced} is selected`;
       } else if (!input.checked) {
         indicator.classList.add('hidden');
       }
     }
   });
 
-  if (imply && state.selectedSubjects.includes(imply.advanced)) showMathsWarningBanner(imply);
+  // Announced ONLY when this selection genuinely added the standard subject.
+  if (imply && _mathsAutoAdded) showMathsWarningBanner(imply);
   else hideMathsWarningBanner();
 
   syncSubjectCount();

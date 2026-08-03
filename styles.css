@@ -2934,6 +2934,40 @@ footer p {
   line-height: 1.55;
   overflow-wrap: anywhere;
 }
+/* Why this test is here: what it is, whose courses ask for it, and — only
+   where the provider confirms the test is compulsory — what missing the
+   registration deadline costs. No borders, no boxes; hierarchy by weight. */
+.applying-task__what {
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.applying-task__needs {
+  margin-top: 2px;
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  letter-spacing: .02em;
+  color: var(--ce-ink-60);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.applying-task__consequence {
+  margin-top: 2px;
+  font-size: var(--text-sm);
+  color: var(--ce-ink);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.applying-task__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+.applying-task--done .applying-task__what,
+.applying-task--done .applying-task__needs,
+.applying-task--done .applying-task__consequence { color: var(--ce-ink-30); }
 .applying-task__link {
   align-self: flex-start;
   margin-top: 2px;
@@ -4209,11 +4243,15 @@ button.plan-combo-tag--drop:focus-visible {
   font-weight: 400;
   color: var(--ce-ink-60);
 }
+/* The one philosophy note, sitting BELOW the entries and the add action —
+   context for the curious, never a gate in front of the page. */
 .achv__note {
   font-size: var(--text-sm);
   color: var(--ce-ink-60);
   line-height: 1.6;
-  margin: 0 0 var(--space-4);
+  margin: var(--space-5) 0 0;
+  padding-top: var(--space-4);
+  border-top: var(--ce-hairline);
   max-width: 62ch;
 }
 .achv__empty {
@@ -4228,6 +4266,24 @@ button.plan-combo-tag--drop:focus-visible {
   color: var(--ce-ink-60);
   line-height: 1.65;
 }
+/* The empty state is a counselor's opening question, so it carries the
+   weight of a question rather than the greyed tone of a hint. */
+.achv__empty-q {
+  font-family: var(--ce-font-display);
+  font-size: var(--text-lg) !important;
+  color: var(--ce-ink) !important;
+  line-height: 1.4 !important;
+  max-width: 40ch;
+}
+/* One rotating invitation above the add action. An offer, not a task. */
+.story__invite {
+  margin: var(--space-4) 0 var(--space-2);
+  font-size: var(--text-sm);
+  font-style: italic;
+  color: var(--ce-ink-60);
+  line-height: 1.5;
+}
+.story__invite.hidden { display: none; }
 .achv-group { margin-bottom: var(--space-5); }
 .achv-group__label {
   display: block;
@@ -4382,6 +4438,13 @@ button.plan-combo-tag--drop:focus-visible {
   color: var(--ce-ink-30);
 }
 .story-group__inactive {
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ce-ink-30);
+}
+.story-group__src {
   font-family: var(--ce-font-mono);
   font-size: 10px;
   letter-spacing: .06em;
@@ -4971,4 +5034,76 @@ button.plan-combo-tag--drop:focus-visible {
   font-style: italic;
   color: var(--ce-ink-60);
   line-height: 1.5;
+}
+
+/* ── Applying: the diagnostic leads the page ──────────────────── */
+.applying-diag {
+  padding: 0 0 var(--space-5);
+  margin-bottom: var(--space-5);
+  border-bottom: var(--ce-hairline);
+}
+.applying-diag__counts {
+  margin: 0 0 var(--space-1);
+  font-family: var(--ce-font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  color: var(--ce-ink);
+  line-height: 1.5;
+}
+.applying-diag__advice {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-base);
+  color: var(--ce-ink);
+  line-height: 1.55;
+  max-width: 64ch;
+}
+.applying-diag__load {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.55;
+  max-width: 64ch;
+}
+.applying-diag__aside {
+  margin: 0 0 var(--space-2);
+  font-size: 12px;
+  font-style: italic;
+  color: var(--ce-ink-60);
+  line-height: 1.5;
+}
+.applying-diag__meta {
+  margin: var(--space-3) 0 0;
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  color: var(--ce-ink-60);
+  line-height: 1.7;
+}
+.applying-diag__meta strong { color: var(--ce-ink); }
+.applying-diag__link { margin-left: var(--space-2); }
+
+/* ── Preview mode (student applies in a later year) ───────────── */
+.applying-preview__lead {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.6;
+  max-width: 64ch;
+}
+.applying-task--preview {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: var(--ce-hairline);
+  opacity: .55;
+  cursor: default;
+}
+.applying-task-group .applying-task--preview:last-child { border-bottom: none; }
+.applying-task__marker {
+  flex-shrink: 0;
+  width: 17px;
+  margin-top: 2px;
+  text-align: center;
+  color: var(--ce-ink-30);
 }
