@@ -2079,6 +2079,89 @@ function sharedWindowText(members, key) {
   return `${base} (${extras.join('; ')})`;
 }
 
+/* ─── Why a test is on the list ────────────────────────────────
+ * Four strands, all either the student's OWN data or transcribed from the
+ * test provider's own page (see admissionTestInfo's header for sources):
+ *   who needs it  — derived from the shortlist
+ *   what it is    — admissionTestInfo.description
+ *   consequence   — ONLY where requiredStatus === 'required'
+ *   practice      — admissionTestInfo.prepUrl
+ * Never a score target, cutoff, difficulty rating or pass rate.
+ * ─────────────────────────────────────────────────────────────── */
+
+// A compact, recognisable course label: "Oxford Engineering Science".
+function courseShortLabel(c) {
+  const uni = String(c.university || '')
+    .replace(/^(The\s+)?University of\s+/i, '')
+    .replace(/\s+University$/i, '')
+    .replace(/^Imperial College London$/i, 'Imperial')
+    .replace(/^London School of Economics.*$/i, 'LSE');
+  // Drop the trailing degree designation — it adds length, not recognition.
+  const name = String(c.name || '')
+    .replace(/\s+\(?(B[A-Z][a-z]?|M[A-Z][a-z]{1,4}|LLB|MBChB|MBBS|BEng|MEng|BSc|MSci|BA)\b[\w/()]*\)?\s*$/,'')
+    .trim();
+  return [uni, name].filter(Boolean).join(' ');
+}
+
+// The student's own saved courses that ask for any of these tests.
+function coursesNeedingTests(members, savedCourses) {
+  const want = new Set(members);
+  return savedCourses.filter(c => (c.admissionTests || []).some(t => want.has(t)));
+}
+
+// "Needed for: A, B, C (3 of your 4 saved courses)" — their data, not a claim.
+function testNeedsLine(members, savedCourses) {
+  const hits = coursesNeedingTests(members, savedCourses);
+  if (!hits.length) return null;
+  const total = savedCourses.length;
+  return `Needed for: ${hits.map(courseShortLabel).join(', ')} `
+       + `(${hits.length} of your ${total} saved course${total === 1 ? '' : 's'})`;
+}
+
+// What the test actually is — transcribed description, named per test when a
+// registration covers more than one.
+function testWhatLine(members) {
+  const parts = members.map(t => {
+    const i = testInfoFor(t);
+    if (!i?.description) return null;
+    return members.length > 1 ? `${i.name} — ${i.description}` : i.description;
+  }).filter(Boolean);
+  return parts.length ? parts.join(' ') : null;
+}
+
+// Stated ONLY where the provider's own page says the test is compulsory for
+// the courses that use it. Course-dependent, offer-condition and postgraduate
+// tests get no consequence line — an unverified consequence is worse than none.
+function testConsequenceLine(members) {
+  const req = members.filter(t => testInfoFor(t)?.requiredStatus === 'required');
+  if (!req.length) return null;
+  const names = req.map(t => testInfoFor(t)?.name ?? t);
+  const one = req.length === 1;
+  return `${names.join(' and ')} ${one ? 'is' : 'are'} required by the universities that use `
+       + `${one ? 'it' : 'them'} — miss the registration deadline and you can't apply to those `
+       + `courses this cycle.`;
+}
+
+// Official site + the provider's own free practice materials.
+function testLinks(members, opts = {}) {
+  const out = [];
+  if (!opts.prepOnly) {
+    const off = members.map(testInfoFor).find(i => i?.officialUrl);
+    if (off) out.push({ url: off.officialUrl, label: 'Official site' });
+  }
+  const seen = new Set();
+  members.forEach(t => {
+    const i = testInfoFor(t);
+    if (!i?.prepUrl || seen.has(i.prepUrl)) return;
+    seen.add(i.prepUrl);
+    out.push({
+      url: i.prepUrl,
+      label: members.length > 1 ? `${i.name} practice materials` : 'Practice materials',
+    });
+  });
+  return out;
+}
+
 // Ordered task list for the current shortlist.
 function applyingTasks(savedCourses, opts = {}) {
   const nowMonth = opts.nowMonth ?? (new Date().getMonth() + 1);
@@ -2102,7 +2185,10 @@ function applyingTasks(savedCourses, opts = {}) {
       detail: win
         ? `${many ? 'One registration covers all of them' : 'Registration'}${provider && many ? ` via ${provider}` : ''} — ${win}. Typical window; confirm the exact dates.`
         : 'Check the official site for this cycle’s registration window.',
-      link: infos[0]?.officialUrl ? { url: infos[0].officialUrl, label: 'Official site' } : null,
+      needs:       testNeedsLine(members, savedCourses),
+      whatItIs:    testWhatLine(members),
+      consequence: testConsequenceLine(members),
+      links:       testLinks(members),
       liveEarly: true,   // registration opens before the application year
     });
   });
@@ -2119,7 +2205,10 @@ function applyingTasks(savedCourses, opts = {}) {
       label: members.length > 1 ? `Sit your admission tests (${names.join(', ')})` : `Sit ${names[0]}`,
       detail: win ? `Test ${win}. Typical window — registration closes before it.`
                   : 'Check the official site for this cycle’s test window.',
-      link: null,
+      needs:    testNeedsLine(members, savedCourses),
+      whatItIs: testWhatLine(members),
+      // The missed-deadline consequence belongs to registration, not sitting.
+      links:    testLinks(members, { prepOnly: true }),
     });
   });
 
@@ -2251,7 +2340,12 @@ function renderApplyingChecklist() {
           <span class="applying-task__body">
             <span class="applying-task__label">${esc(t.label)}</span>
             <span class="applying-task__detail">${esc(t.detail)}</span>
-            ${t.link && live ? `<a class="applying-task__link" href="${esc(t.link.url)}" target="_blank" rel="noopener noreferrer">${esc(t.link.label)} →</a>` : ''}
+            ${t.whatItIs ? `<span class="applying-task__what">${esc(t.whatItIs)}</span>` : ''}
+            ${t.needs ? `<span class="applying-task__needs">${esc(t.needs)}</span>` : ''}
+            ${t.consequence ? `<span class="applying-task__consequence">${esc(t.consequence)}</span>` : ''}
+            ${(t.links || []).length && live ? `<span class="applying-task__links">${
+              t.links.map(l => `<a class="applying-task__link" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer">${esc(l.label)} →</a>`).join('')
+            }</span>` : ''}
             ${t.action && live ? `<button type="button" class="applying-task__link applying-task__action" data-go-tool="${esc(t.action.mode)}">${esc(t.action.label)} →</button>` : ''}
           </span>
         </${live ? 'label' : 'div'}>`;

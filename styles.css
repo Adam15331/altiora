@@ -2934,6 +2934,40 @@ footer p {
   line-height: 1.55;
   overflow-wrap: anywhere;
 }
+/* Why this test is here: what it is, whose courses ask for it, and — only
+   where the provider confirms the test is compulsory — what missing the
+   registration deadline costs. No borders, no boxes; hierarchy by weight. */
+.applying-task__what {
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.applying-task__needs {
+  margin-top: 2px;
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  letter-spacing: .02em;
+  color: var(--ce-ink-60);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.applying-task__consequence {
+  margin-top: 2px;
+  font-size: var(--text-sm);
+  color: var(--ce-ink);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.applying-task__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+.applying-task--done .applying-task__what,
+.applying-task--done .applying-task__needs,
+.applying-task--done .applying-task__consequence { color: var(--ce-ink-30); }
 .applying-task__link {
   align-self: flex-start;
   margin-top: 2px;
