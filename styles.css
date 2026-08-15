@@ -2685,6 +2685,17 @@ footer p {
   color: var(--color-text-tertiary);
   line-height: 1.5;
 }
+/* Names the subjects still blank while a partial profile keeps the app in
+   subject-only mode. Calm, not an error — a hairline rule, no left border. */
+.grade-incomplete {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: var(--ce-hairline);
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.55;
+}
+.grade-incomplete.hidden { display: none; }
 
 /* ═══════════════════════════════════════════════════════════════
  * Empty state — Mode A suggestions

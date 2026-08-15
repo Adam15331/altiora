@@ -93,7 +93,12 @@ const STATUS_SUBJECT_ONLY = {
   amber: 'Partly fit',
   red:   'Subjects don’t fit',
 };
-function gradesInformMatch() { return !!state.predictedGrade; }
+// Grade-aware matching is ALL-OR-NOTHING: a half-filled profile behaves
+// exactly like an empty one (subject-only language), because a slot-by-slot
+// comparison against blank slots is wrong, not merely incomplete.
+function gradesInformMatch() {
+  return gradeProfileComplete(state.checkSystem, state.predictedGrade, state.selectedSubjects);
+}
 function statusLabel(status) {
   return (!gradesInformMatch() && STATUS_SUBJECT_ONLY[status]) || STATUS[status]?.label || '';
 }
@@ -640,15 +645,18 @@ function apGuidancePanelHtml(category) {
 // Year-aware framing for Check Combination — copy only, matching untouched.
 // For a student whose subjects are set (normalised year <= 1) the tool READS
 // ("what your subjects open"); for a student still choosing it's a sandbox.
-function updateCheckFraming() {
+// `counts` is the object renderCheckResults already computed for the summary
+// bar. Passing it through is what guarantees the intro and the summary quote
+// the same number; without it the intro recomputes from the same pipeline.
+function updateCheckFraming(counts = null) {
   const retro = planIsRetro();   // the same normalised-year rule as the planner
   const intro = $('checkIntro');
   if (intro) {
-    // Grades already set → stop asking for them; report what they bought,
-    // using the SAME live pipeline count Check renders with (subjectsFitCount).
-    const gradesSet = !!state.predictedGrade && state.selectedSubjects.length > 0;
+    // "At your predicted grades" may only be claimed on a COMPLETE profile —
+    // a half-filled one is subject-only, and says so.
+    const gradesSet = gradesInformMatch() && state.selectedSubjects.length > 0;
     if (gradesSet) {
-      const n = subjectsFitCount();
+      const n = counts ? counts.green : checkFitCount();
       intro.textContent = `Here’s what your subjects open — ${n} strong match${n === 1 ? '' : 'es'} at your predicted grades.`;
     } else {
       intro.textContent = retro
@@ -963,7 +971,35 @@ function commitGradeMap({ render = true } = {}) {
   const entries = Object.entries(_gradeMap)
     .filter(([s, g]) => g && state.selectedSubjects.includes(s));
   state.predictedGrade = entries.length ? Object.fromEntries(entries) : null;
+  syncGradeCompletenessPrompt();
   if (render) renderCheckResults();
+}
+
+// Plain-English list: "Biology, Chemistry and Physics".
+function joinAnd(items) {
+  if (items.length <= 1) return items[0] ?? '';
+  return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
+}
+
+// Names exactly what is still blank, and why it matters. Calm and factual —
+// no quota, no readiness score, no claim about what universities want.
+// Reactive: re-run on every grade or subject change, and hidden the moment
+// the profile is complete (or nothing has been entered at all, where the
+// existing "leave blank to skip" help already says the right thing).
+function syncGradeCompletenessPrompt() {
+  const el = $('gradeIncomplete');
+  if (!el) return;
+  const missing = missingGradeSubjects(
+    state.checkSystem, state.predictedGrade, state.selectedSubjects);
+  const started = !!state.predictedGrade;
+  const show = started && missing.length > 0;
+  el.classList.toggle('hidden', !show);
+  if (show) {
+    el.textContent = `Add grades for ${joinAnd(missing)} to see which courses are strong matches.`;
+  }
+  // "Optional — leave blank to skip" is the right thing to say to someone who
+  // hasn't started, and a confusing contradiction to someone mid-way through.
+  document.querySelector('.grade-input-help')?.classList.toggle('hidden', show);
 }
 
 // (Re)build one grade row per selected subject, preserving set values.
@@ -1042,7 +1078,8 @@ function buildGradeInput(systemKey) {
     // Per-subject predictions: offers in these systems are grade PROFILES
     // ("A*AA"), so each selected subject gets its own compact select. The
     // "Set all to" quick action keeps the uniform case one click.
-    bodyHtml = `<div id="gradeRows" class="grade-rows"></div>`;
+    bodyHtml = `<div id="gradeRows" class="grade-rows"></div>
+      <p id="gradeIncomplete" class="grade-incomplete hidden"></p>`;
     wire = () => {
       $('gradeSetAll').addEventListener('change', e => {
         const g = e.target.value;
@@ -3871,6 +3908,31 @@ const VERDICT_META = {
 // student's CURRENT system — a stale value left over from a previous
 // system (e.g. IB points after switching to A-Level) must never feed a
 // cross-system verdict.
+// The subjects whose predicted grade is still blank, in selection order.
+// Empty when the profile is complete (or when the system has a single input).
+function missingGradeSubjects(system, grade, subjects) {
+  const subs = Array.isArray(subjects) ? subjects : [];
+  if (!LETTER_GRADE_SYSTEMS.has(system) || !subs.length) return [];
+  // A legacy single-average value applies to every subject — nothing missing.
+  if (typeof grade === 'string') return hasValidGrade(system, grade) ? [] : subs.slice();
+  const rank = systemRank(system);
+  const map  = (grade && typeof grade === 'object') ? grade : {};
+  return subs.filter(s => !Object.prototype.hasOwnProperty.call(rank, map[s]));
+}
+
+// Slot-by-slot offer comparison is only meaningful against a COMPLETE grade
+// profile: with some subjects blank there is nothing to put in those slots, so
+// a partial profile yields a WRONG answer rather than a partial one. Letter
+// systems therefore need a grade for EVERY selected subject; IB and AP are a
+// single input and are complete the moment a valid value is entered.
+function gradeProfileComplete(system, grade, subjects) {
+  if (!hasValidGrade(system, grade)) return false;
+  if (!LETTER_GRADE_SYSTEMS.has(system)) return true;
+  const subs = Array.isArray(subjects) ? subjects : [];
+  if (!subs.length) return false;
+  return missingGradeSubjects(system, grade, subs).length === 0;
+}
+
 function hasValidGrade(system, grade) {
   if (!grade) return false;
   // Letter systems: the current shape is a per-subject map (valid when ANY
@@ -3915,7 +3977,9 @@ function usSafetyCapped(course, system, predictedGrade, profile) {
 const US_NO_SAFETY_NOTE = 'US admissions are holistic — no course is a guaranteed safety.';
 
 function shortlistVerdictRaw(course, system, predictedGrade, profile) {
-  const gradeSet = hasValidGrade(system, predictedGrade);
+  // Same all-or-nothing rule as Check: reach/match/safety rests on the same
+  // slot-by-slot comparison, so a partial profile yields no verdict at all.
+  const gradeSet = gradeProfileComplete(system, predictedGrade, profile?.subjects);
 
   if (system === 'US_AP') {
     if (course.country === 'US') {
@@ -3994,9 +4058,14 @@ function shortlistVerdicts(saved) {
     byId.set(c.id, v);
     counts[v]++;
   });
-  // "Grades set" means valid in the CURRENT system — a stale cross-system
-  // value counts as not set, so every surface shows the nudge consistently.
-  return { byId, counts, hasGrades: !!system && hasValidGrade(system, grade), system };
+  // "Grades set" means a COMPLETE profile valid in the CURRENT system — a
+  // stale cross-system value or a half-filled one counts as not set, so every
+  // surface (counts, balance counsel, graduation gating, the printable
+  // summary) shows the nudge consistently.
+  return {
+    byId, counts, system,
+    hasGrades: !!system && gradeProfileComplete(system, grade, profile.subjects),
+  };
 }
 
 // A saved-course card: same visual system and info as a result card, plus a
@@ -5042,7 +5111,9 @@ function checkStatusFor(course) {
   // under the AP system there is deliberately no grade cutoff (competitiveness
   // is judged by AP count above), so an 'unknown' there is expected, not a
   // data gap, and must not be demoted to 'unconfirmed'.
-  if (state.predictedGrade && (result.status === 'green' || result.status === 'amber')) {
+  // Gated on a COMPLETE profile — with some subjects blank we stay in
+  // subject-only mode and never produce grey/unconfirmed at all.
+  if (gradesInformMatch() && (result.status === 'green' || result.status === 'amber')) {
     const holisticApPath = state.checkSystem === 'US_AP'
       && course.country === 'US' && !!course.apContext;
     const cmp = compareGradeToStudent(course, state.checkSystem, state.predictedGrade);
@@ -5080,13 +5151,50 @@ function checkStatusFor(course) {
   return result;
 }
 
-// Live "subjects fit" count over the WHOLE dataset (no country/category
-// lens) — the same pipeline Check renders with, so the number the Applying
-// landing quotes is the number Check shows on an unfiltered view.
+// The course set Check is currently rendering — the country/category lens
+// applied. ONE definition, so nothing can count a different population.
+function checkPool() {
+  if (typeof courses === 'undefined') return [];
+  return courses
+    .filter(c => state.countryFilter === 'All' || c.country === state.countryFilter)
+    .filter(c => state.selectedCategories.size === 0 || state.selectedCategories.has(c.category));
+}
+
+// ONE classification pass over a pool → the grouped courses and the counts.
+// Check computes this once per render and hands the SAME object to the intro
+// line and the summary bar, so the two can never quote different numbers.
+function classifyPool(pool) {
+  const byStatus = { green: [], amber: [], grey: [], unconfirmed: [], red: [] };
+  pool.forEach(course => {
+    const result = checkStatusFor(course);
+    byStatus[result.status].push({ course, result });
+  });
+  const counts = {
+    green: byStatus.green.length,
+    amber: byStatus.amber.length,
+    grey: byStatus.grey.length,
+    unconfirmed: byStatus.unconfirmed.length,
+    red: byStatus.red.length,
+  };
+  return { byStatus, counts, total: Object.values(counts).reduce((a, b) => a + b, 0) };
+}
+
+// Live "subjects fit" count over the WHOLE dataset (no lens) — what the
+// Applying landing quotes, where no lens exists. Check's own intro uses the
+// LENSED count instead (see updateCheckFraming), because it sits directly
+// above the lensed summary bar.
 function subjectsFitCount() {
   if (typeof courses === 'undefined') return 0;
   if (!state.selectedTags || !state.selectedTags.size) return 0;
   return courses.reduce((n, c) => n + (checkStatusFor(c).status === 'green' ? 1 : 0), 0);
+}
+
+// The lensed green count, from the one pipeline. Passed in by
+// renderCheckResults (already computed); recomputed only when the intro is
+// refreshed on its own.
+function checkFitCount() {
+  if (!state.selectedTags || !state.selectedTags.size) return 0;
+  return classifyPool(checkPool()).counts.green;
 }
 
 function renderCheckResults() {
@@ -5097,7 +5205,10 @@ function renderCheckResults() {
   // workspace home reflects them (runs before the early return so it
   // also captures grade-only and cleared-subject changes).
   syncProfileFromCheck();
-  updateCheckFraming();   // intro reflects the CURRENT grade state + live count
+  syncGradeCompletenessPrompt();
+  // Provisional pass so the intro is right even when we return early below;
+  // the real render re-runs it with the counts it computed (one pipeline).
+  updateCheckFraming();
 
   if (state.selectedSubjects.length === 0) {
     section.classList.add('hidden');
@@ -5138,30 +5249,16 @@ function renderCheckResults() {
     $('summaryBar').before(warn);
   }
 
-  const pool = courses
-    .filter(c => state.countryFilter === 'All' || c.country === state.countryFilter)
-    .filter(c => state.selectedCategories.size === 0 || state.selectedCategories.has(c.category));
-
-  const byStatus = { green: [], amber: [], grey: [], unconfirmed: [], red: [] };
-  pool.forEach(course => {
-    const result = checkStatusFor(course);
-    byStatus[result.status].push({ course, result });
-  });
+  // ONE classification pass. The same counts object feeds the intro line, the
+  // summary bar and the badges — the three can never disagree.
+  const { byStatus, counts, total } = classifyPool(checkPool());
 
   // Sort each group by university name
   ['green', 'amber', 'grey', 'unconfirmed', 'red'].forEach(s =>
     byStatus[s].sort((a, b) => a.course.university.localeCompare(b.course.university))
   );
 
-  const counts = {
-    green: byStatus.green.length,
-    amber: byStatus.amber.length,
-    grey: byStatus.grey.length,
-    unconfirmed: byStatus.unconfirmed.length,
-    red: byStatus.red.length,
-  };
-  const total  = counts.green + counts.amber + counts.grey + counts.unconfirmed + counts.red;
-
+  updateCheckFraming(counts);
   renderSummaryBar(state.selectedSubjects.length, counts, total);
 
   // Pills are icon+count; their tooltips/labels follow the same language rule.
