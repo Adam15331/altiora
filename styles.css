@@ -345,6 +345,12 @@ main     { flex: 1; padding: var(--pad); }
 
 /* ── Profile popover: system + year in one place ────────────────── */
 .profile-menu { min-width: 240px; }
+/* The pill sits right-of-centre, so a left-anchored popover runs off a
+   phone screen (pre-existing: 393px right edge on a 375px viewport).
+   Anchor it to the pill's right edge on narrow screens instead. */
+@media (max-width: 560px) {
+  .stage-bar__indicator .profile-menu { left: auto; right: 0; }
+}
 .profile-menu__label {
   display: block;
   font-family: var(--ce-font-mono);
@@ -354,6 +360,15 @@ main     { flex: 1; padding: var(--pad); }
   text-transform: uppercase;
   color: var(--ce-ink-30);
   padding: var(--space-2) 12px 2px;
+}
+/* Says plainly what backup is: a file on the device, not a service. */
+.profile-menu__note {
+  margin: 2px 0 var(--space-2);
+  padding: 0 12px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--ce-ink-30);
+  max-width: 34ch;
 }
 
 .stage-indicator {
@@ -4927,6 +4942,27 @@ button.plan-combo-tag--drop:focus-visible {
   padding: 7px 16px;
   cursor: pointer;
 }
+/* One line, not a banner: the print page is a snapshot, the backup file is
+   the working data. Hidden when printing — it is a screen action. */
+.cs-backup-line {
+  margin: 0 0 var(--space-5);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ce-ink-60);
+  max-width: 62ch;
+}
+.cs-backup-link {
+  font: inherit;
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--ce-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+@media print { .cs-backup-line { display: none; } }
+
 .cs-section { margin-bottom: var(--space-5); }
 .cs-section__head {
   font-family: var(--ce-font-mono);

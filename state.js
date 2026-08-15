@@ -25,6 +25,17 @@ const AltioraState = (() => {
 
   const STORAGE_KEY = 'altiora_state_v1';
 
+  // The shape version carried in a backup envelope. Bump ONLY when an
+  // older export would need handling beyond _hydrateFromRaw — which is
+  // the same path old localStorage saves already take, so a lower number
+  // in an import is not an error, it is just an older save.
+  const SCHEMA_VERSION = 1;
+
+  // Every localStorage key the app owns. There is exactly one today; the
+  // export envelope is keyed by name so adding a second key later needs
+  // no change to the file format.
+  const OWNED_KEYS = [STORAGE_KEY];
+
   /* ─── Default shape ───────────────────────────────────────────
    * Returned fresh on first visit and by resetState(). Kept as a
    * factory (not a shared constant) so callers can never mutate the
@@ -179,6 +190,104 @@ const AltioraState = (() => {
       _state.meta.hasOnboarded = false;
     }
     _persist();   // write back the refreshed lastVisit / fresh defaults
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+   * BACKUP: EXPORT / IMPORT
+   * A file the student keeps. Nothing leaves the device and nothing is
+   * stored by us — the envelope is written locally and read back locally.
+   * ═══════════════════════════════════════════════════════════════ */
+
+  // The full envelope, ready to serialise. `data` is keyed by localStorage
+  // key name so a future second key needs no format change.
+  function exportBackup() {
+    const data = {};
+    OWNED_KEYS.forEach(k => {
+      if (k === STORAGE_KEY) {
+        // Serialise the LIVE state, not the stored string: they are
+        // equivalent, and this also works when storage is unavailable.
+        data[k] = JSON.stringify(_state);
+        return;
+      }
+      if (_storageOK) {
+        const v = window.localStorage.getItem(k);
+        if (v != null) data[k] = v;
+      }
+    });
+    return {
+      app: 'altiora',
+      schemaVersion: SCHEMA_VERSION,
+      exportedAt: new Date().toISOString(),
+      data,
+    };
+  }
+
+  // Backup filename: altiora-backup-YYYY-MM-DD.json
+  function backupFilename(now) {
+    const d = now instanceof Date ? now : new Date();
+    const pad = n => String(n).padStart(2, '0');
+    return `altiora-backup-${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}.json`;
+  }
+
+  // Validate WITHOUT touching state. Returns { ok:true, envelope } or
+  // { ok:false, error } with a message meant to be shown to the student.
+  function validateBackup(text) {
+    let parsed;
+    try {
+      parsed = JSON.parse(text);
+    } catch (_) {
+      return { ok: false, error: 'That file isn’t readable — it may be incomplete or not a backup file.' };
+    }
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      return { ok: false, error: 'That file isn’t an Altiora backup.' };
+    }
+    if (parsed.app !== 'altiora') {
+      return { ok: false, error: 'That file isn’t an Altiora backup.' };
+    }
+    if (!parsed.data || typeof parsed.data !== 'object' || Array.isArray(parsed.data)) {
+      return { ok: false, error: 'That backup is missing its saved data.' };
+    }
+    if (typeof parsed.data[STORAGE_KEY] !== 'string') {
+      return { ok: false, error: 'That backup is missing its saved data.' };
+    }
+    // The payload must itself be parseable before we accept the file —
+    // otherwise a truncated export would validate and then wipe state.
+    try {
+      const inner = JSON.parse(parsed.data[STORAGE_KEY]);
+      if (!inner || typeof inner !== 'object' || Array.isArray(inner)) {
+        return { ok: false, error: 'That backup’s saved data is damaged.' };
+      }
+    } catch (_) {
+      return { ok: false, error: 'That backup’s saved data is damaged.' };
+    }
+    // A LOWER schemaVersion is not an error: it is an older save, and it
+    // goes through the same hydration path old localStorage saves take.
+    // A HIGHER one was written by a newer build than this one.
+    const v = parsed.schemaVersion;
+    if (typeof v === 'number' && v > SCHEMA_VERSION) {
+      return { ok: false, error: 'That backup was made by a newer version of Altiora than this one.' };
+    }
+    return { ok: true, envelope: parsed };
+  }
+
+  // All-or-nothing REPLACE. Validates first; only on success does any
+  // state change happen. Returns the same result shape as validateBackup.
+  function importBackup(text) {
+    const res = validateBackup(text);
+    if (!res.ok) return res;
+    const raw = res.envelope.data[STORAGE_KEY];
+    // The SAME hydration path old saves use — no parallel migration.
+    const next = _hydrateFromRaw(raw);
+    _state = next;
+    _state.meta.lastVisit = new Date().toISOString();
+    OWNED_KEYS.filter(k => k !== STORAGE_KEY).forEach(k => {
+      const v = res.envelope.data[k];
+      if (_storageOK && typeof v === 'string') {
+        try { window.localStorage.setItem(k, v); } catch (_) { /* quota — keep going */ }
+      }
+    });
+    _commit();
+    return { ok: true, envelope: res.envelope };
   }
 
   /* ─── Deep-ish clone for reads ────────────────────────────────
@@ -457,8 +566,14 @@ const AltioraState = (() => {
     setOnboarded,
     resetState,
     subscribe,
+    // Backup: a file the student keeps. Nothing is uploaded anywhere.
+    exportBackup,
+    backupFilename,
+    validateBackup,
+    importBackup,
     // Exposed for debugging / future migrations.
     STORAGE_KEY,
+    SCHEMA_VERSION,
     storageAvailable: _storageOK,
   };
 })();

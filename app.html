@@ -10,7 +10,7 @@
   <!-- Confident Editorial type — loaded via <link> (reliable) not @import -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
   <link rel="stylesheet" href="tokens.css?v=9" />
-  <link rel="stylesheet" href="styles.css?v=74" />
+  <link rel="stylesheet" href="styles.css?v=75" />
   <script defer data-domain="altiora.app" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
@@ -194,6 +194,13 @@
               <span class="profile-menu__label">Year group</span>
               <div id="yearMenu" role="group" aria-label="Change your year group">
                 <!-- items rendered by JS for the active system (updateYearIndicator) -->
+              </div>
+              <span class="profile-menu__label">Your data</span>
+              <div role="group" aria-label="Back up or restore your data">
+                <button id="backupExportBtn" class="stage-menu__item" role="menuitem" type="button">Back up my data</button>
+                <button id="backupImportBtn" class="stage-menu__item" role="menuitem" type="button">Restore from backup</button>
+                <input id="backupImportFile" type="file" accept="application/json,.json" class="hidden" aria-hidden="true" tabindex="-1">
+                <p class="profile-menu__note">Saves a file to your device. Altiora stores nothing — the file is yours to keep.</p>
               </div>
             </div>
           </div>
@@ -512,8 +519,8 @@
   <script src="data/admissionTestInfo.js?v=3"></script>
   <script src="data/fieldProfiles.js?v=2"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
-  <script src="state.js?v=13"></script>
-  <script src="main.js?v=85"></script>
+  <script src="state.js?v=14"></script>
+  <script src="main.js?v=86"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);
