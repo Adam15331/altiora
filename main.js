@@ -1693,6 +1693,82 @@ function openYearMenu()  { openProfileMenu(); }
 function closeYearMenu() { closeProfileMenu(); }
 function toggleYearMenu(){ toggleProfileMenu(); }
 
+/* ═══════════════════════════════════════════════════════════════
+ * BACKUP — export to a file, restore from one.
+ * The file lives on the student's device. Nothing is uploaded, nothing
+ * is stored by us, and the copy never says otherwise.
+ * ═══════════════════════════════════════════════════════════════ */
+
+function exportBackupFile() {
+  let url = null;
+  try {
+    const envelope = AltioraState.exportBackup();
+    const blob = new Blob([JSON.stringify(envelope, null, 2)], { type: 'application/json' });
+    url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = AltioraState.backupFilename();
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    showToast('Backup saved to your device.');
+    logEvent('backup_export', {});
+  } catch (err) {
+    console.error('[backup] export failed:', err);
+    showToast('Couldn’t save the backup file.');
+  } finally {
+    // Revoke on the next frame so the download has taken the handle.
+    if (url) setTimeout(() => URL.revokeObjectURL(url), 0);
+  }
+}
+
+// Read → validate → confirm → replace. Nothing changes unless the file
+// validates AND the student confirms; the confirm names the consequence.
+function importBackupFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onerror = () => showToast('Couldn’t read that file.');
+  reader.onload = () => {
+    const text = String(reader.result ?? '');
+    const check = AltioraState.validateBackup(text);
+    if (!check.ok) {
+      showToast(check.error);
+      logEvent('backup_import_rejected', { reason: check.error });
+      return;
+    }
+    const when = check.envelope.exportedAt
+      ? new Date(check.envelope.exportedAt).toLocaleDateString('en-GB',
+          { day: 'numeric', month: 'long', year: 'numeric' })
+      : null;
+    const ok = window.confirm(
+      `Restore this backup${when ? ` from ${when}` : ''}?\n\n`
+      + 'This replaces everything currently saved on this device.');
+    if (!ok) return;
+    const res = AltioraState.importBackup(text);
+    if (!res.ok) { showToast(res.error); return; }
+    logEvent('backup_import', {});
+    closeProfileMenu();
+    // Re-project everything from the restored state.
+    location.reload();
+  };
+  reader.readAsText(file);
+}
+
+function wireBackupControls() {
+  $('backupExportBtn')?.addEventListener('click', () => { closeProfileMenu(); exportBackupFile(); });
+  $('backupImportBtn')?.addEventListener('click', () => $('backupImportFile')?.click());
+  $('backupImportFile')?.addEventListener('change', e => {
+    const file = e.target.files?.[0];
+    e.target.value = '';           // so re-picking the same file re-fires
+    importBackupFile(file);
+  });
+  // The Counselor Summary already exists as the loss hedge; its own
+  // export line is delegated here so it survives re-renders.
+  document.addEventListener('click', e => {
+    if (e.target.closest?.('[data-backup-export]')) { e.preventDefault(); exportBackupFile(); }
+  });
+}
+
 // Reflect the profile year in the global indicator and rebuild the menu for
 // the ACTIVE system (year labels are system-specific). Subscribed to state,
 // so every year/system change propagates here without manual calls.
@@ -2662,6 +2738,9 @@ function buildCounselorSummaryHtml() {
         </div>
         <button type="button" class="cs-print-btn" data-do-print>Print / Save as PDF</button>
       </header>
+      <p class="cs-backup-line">This page is a printed snapshot. To keep your working data,
+        <button type="button" class="cs-backup-link" data-backup-export>back it up to a file</button> —
+        it saves to your device and restores on any other.</p>
 
       <section class="cs-section"><h2 class="cs-section__head">Snapshot</h2>${snapshot}</section>
       <section class="cs-section"><h2 class="cs-section__head">Subjects &amp; predicted grades</h2>${subjectsHtml}</section>
@@ -7846,6 +7925,7 @@ function init() {
   // every change (a shortlist edit adds/removes tasks without a reload).
   AltioraState.subscribe(renderApplyingChecklist);
   wireApplyingChecklist();
+  wireBackupControls();
 
   // Workspace home: the wordmark is the home control; delegated actions on the home panel.
   $('navHome')?.addEventListener('click', goHome);
