@@ -4797,6 +4797,37 @@ button.plan-combo-tag--drop:focus-visible {
   color: var(--ce-ink);
   text-align: center;
 }
+/* The in-copy door to Exploring fields — body text with an underline, in
+   the reason's own style. A link in a sentence, not a banner or a pill. */
+.stage-proposal__link {
+  padding: 0;
+  background: none;
+  border: none;
+  font: inherit;
+  color: var(--ce-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+/* Home late-joiner line: one plain mono sentence, no box, no border. */
+.home-explore-nudge {
+  margin: var(--space-4) 0 0;
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  letter-spacing: .03em;
+  color: var(--ce-ink-60);
+  line-height: 1.6;
+}
+.home-explore-nudge__link {
+  padding: 0;
+  background: none;
+  border: none;
+  font: inherit;
+  color: var(--ce-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
 .stage-proposal__reason strong {
   background: var(--ce-accent);
   padding: 0 6px 1px;

@@ -1525,12 +1525,21 @@ function studentYears() {
 }
 
 // Why we propose that stage — visible reasoning, in the student's own terms.
+// The year implies URGENCY, not certainty: a late-year student may still be
+// undecided on their field, which is completely normal — so the late-year
+// proposals carry a real door into Exploring fields, in the same body style.
+// The link routes through enterStage, the identical path the manual stage
+// cards use, so the armed subject question still fires.
 function stageProposalReason(yearLabel, stage) {
+  const explore = label =>
+    `<button type="button" class="stage-proposal__link" data-proposal-goto="exploring">${label}</button>`;
   const REASONS = {
     exploring: `You're in ${yearLabel}, so we'll start you at <strong>Exploring fields</strong> — there's real time before any big decisions, so this is the moment to discover which fields and degrees actually fit you.`,
     choosing:  `You're in ${yearLabel}, so we'll start you at <strong>Choosing your subjects</strong> — your subject choices are the live decision right now, and they shape which doors stay open later.`,
-    building:  `You're in ${yearLabel}, so we'll start you at <strong>Building your university list</strong> — your subjects are set, and now it's about where they can take you.`,
-    applying:  `You're in ${yearLabel}, so we'll start you at <strong>Applying</strong> — this is your application year, so deadlines, admission tests, and applications are the focus.`,
+    building:  `You're in ${yearLabel}, so we'll start you at <strong>Building your university list</strong> — your subjects are set, and now it's about where they can take you.
+      Not sure what you want to study yet? That's completely normal at this point — you can start at ${explore('Exploring fields')} instead, and your subjects will follow you there.`,
+    applying:  `You're in ${yearLabel}, so we'll start you at <strong>Applying</strong> — this is your application year, so deadlines, admission tests, and applications are the focus.
+      Still weighing what to study? You can ${explore('explore fields')} first — the deadlines don't move, but nothing stops you deciding and applying in the same year.`,
   };
   return REASONS[stage] ?? '';
 }
@@ -3626,6 +3635,26 @@ function renderStoryHomeCard() {
   slot.innerHTML = storyHomeCardHtml();
 }
 
+// Late-joiner nudge: a student who arrived at building/applying with no
+// pinned fields may still be undecided on WHAT to study — normal, and the
+// all-stages door exists but wasn't being found. One plain mono line; shown
+// only while pinned fields = 0, and it disappears the moment they pin
+// (subscribed projection, never a one-time read).
+function renderHomeExploreNudge() {
+  const slot = $('homeExploreNudge');
+  if (!slot) return;
+  const yrs   = studentYears();
+  const stage = AltioraState.getProfile().stage;
+  const show  = yrs != null && yrs <= 1
+    && (stage === 'building' || stage === 'applying')
+    && activeCandidateFields().length === 0;
+  slot.innerHTML = show
+    ? `<p class="home-explore-nudge">Fields still an open question?
+         <button type="button" class="home-explore-nudge__link" data-home-goto-exploring>Exploring fields</button>
+         is one click away.</p>`
+    : '';
+}
+
 /* ─── Stage indicator dropdown (switch stage anytime) ──────────── */
 function openStageMenu() {
   $('stageMenu')?.classList.remove('hidden');
@@ -4866,6 +4895,8 @@ function renderWorkspaceHome() {
         <div id="homeStorySlot" class="home-story-slot"></div>
       </div>
 
+      <div id="homeExploreNudge"></div>
+
       <section class="home-quick" aria-label="Quick access">
         <span class="home-quick__label">Quick access</span>
         <div class="home-quick__row">
@@ -4881,6 +4912,7 @@ function renderWorkspaceHome() {
 
   // Project the story summary card into its slot (reactive on its own too).
   renderStoryHomeCard();
+  renderHomeExploreNudge();
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -8122,6 +8154,23 @@ function init() {
     logEvent('stage_proposal_manual', {});
     showStageSelect();
   });
+  // The in-copy "Exploring fields" door on late-year proposals: the SAME
+  // entry path as a manual stage card (enterStage), so the armed subject
+  // question fires identically. Delegated — the reason is re-rendered.
+  $('stageProposalReason')?.addEventListener('click', e => {
+    const link = e.target.closest?.('[data-proposal-goto]');
+    if (!link) return;
+    logEvent('stage_proposal_explore_link', {});
+    enterStage(link.dataset.proposalGoto);
+  });
+  // Home late-joiner nudge → Exploring fields, via the same enterStage path
+  // as the journey-bar steps. Delegated: the home panel re-renders freely.
+  document.addEventListener('click', e => {
+    if (e.target.closest?.('[data-home-goto-exploring]')) {
+      logEvent('home_explore_nudge', {});
+      enterStage('exploring');
+    }
+  });
 
   // Onboarding subject capture (late years): continue commits the picker
   // selection; "I'll do this later" never gates onboarding.
@@ -8181,6 +8230,7 @@ function init() {
   // on every change (same anti-desync pattern as the fan-outs above).
   AltioraState.subscribe(renderAchievementsList);
   AltioraState.subscribe(renderStoryHomeCard);
+  AltioraState.subscribe(renderHomeExploreNudge);
   AltioraState.subscribe(updateStoryCount);
   updateStoryCount();
   wireAchievementsEvents();
