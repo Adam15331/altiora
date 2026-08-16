@@ -382,6 +382,7 @@ const AltioraState = (() => {
     { id: 'award',        label: 'Award / Prize' },
     { id: 'certificate',  label: 'Certificate / Qualification' },
     { id: 'competition',  label: 'Competition' },
+    { id: 'project',      label: 'Project' },
     { id: 'leadership',   label: 'Leadership / Role' },
     { id: 'volunteering', label: 'Volunteering / Community' },
     { id: 'work',         label: 'Work Experience / Internship' },
