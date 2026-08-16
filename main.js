@@ -3396,6 +3396,7 @@ function renderStoryPanel() {
   renderAchievementsList();
   renderStatementRefs();
   syncStatementCounters();
+  syncStatementChrome();
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -3490,19 +3491,21 @@ function statementSectionHtml() {
     </section>`;
   }
   const drafts = AltioraState.getStatementDrafts();
+  // Grid areas: editor + its meta on the left, the reference rail on the
+  // right spanning both rows — so the rail can be height-capped BY the
+  // textarea (height:0 + min-height:100%), and the phone order can be
+  // textarea → rail → counter line without extra markup.
   const qs = UCAS_STATEMENT.questions.map((q, i) => `
     <div class="stmt__q" data-stmt-q="${q.id}">
-      <h3 class="stmt__question"><span class="stmt__qnum">${i + 1}</span>${esc(q.text)}</h3>
+      <h3 class="stmt__question"><span class="stmt__qnum">${i + 1} ·</span> ${esc(q.text)}</h3>
       <p class="stmt__prompt">${esc(STATEMENT_PROMPTS[q.id])}</p>
       <div class="stmt__grid">
-        <div class="stmt__editor">
-          <textarea class="stmt__ta" data-stmt-input="${q.id}"
-            aria-label="Your answer to: ${esc(q.text)}"
-            spellcheck="true">${esc(drafts[q.id] ?? '')}</textarea>
-          <div class="stmt__meta">
-            <span class="stmt__count" data-stmt-count="${q.id}"></span>
-            <button type="button" class="stmt__copy" data-stmt-copy="${q.id}">Copy as plain text</button>
-          </div>
+        <textarea class="stmt__ta" data-stmt-input="${q.id}"
+          aria-label="Your answer to: ${esc(q.text)}"
+          spellcheck="true">${esc(drafts[q.id] ?? '')}</textarea>
+        <div class="stmt__meta">
+          <span class="stmt__count" data-stmt-count="${q.id}"></span>
+          <button type="button" class="stmt__copy" data-stmt-copy="${q.id}">Copy as plain text</button>
         </div>
         <aside class="stmt__refs" aria-label="Your story entries relevant to this question">
           <span class="stmt__refs-label">From your story</span>
@@ -3513,11 +3516,12 @@ function statementSectionHtml() {
 
   return `
     <section class="stmt" aria-label="Draft your statement" data-stmt-sig="${esc(statementShapeSig())}">
+      <p class="stmt__eyebrow"><span class="stmt__swatch" aria-hidden="true"></span>Your statement</p>
       <h2 class="stmt__head">Draft your statement</h2>
-      <p class="stmt__format">Three questions, answered as one statement: ${fmtChars(UCAS_STATEMENT.totalLimit)} characters
-        across all three (spaces and line breaks count), at least ${UCAS_STATEMENT.perAnswerMin} per answer.
-        The question text doesn't count — only what you write.</p>
+      <p class="stmt__format">Three questions, read as one statement — 4,000 characters across all
+        three, at least 350 each. Only what you write counts.</p>
       <p class="stmt__total" data-stmt-total aria-live="polite"></p>
+      <div data-stmt-empty class="hidden"></div>
       ${qs}
       <p class="achv__note">Assemble from your own material — the finished statement is submitted on UCAS, not here.
         Your drafts stay on this device only, which matches UCAS's own advice not to share your statement or post it anywhere.</p>
@@ -3566,6 +3570,19 @@ function renderStatementRefs() {
   if (statementDraftingState() !== 'active') return;
   const haveEntries = AltioraState.getAchievements().length > 0;
   const havePins    = activeCandidateFields().length > 0;
+  // ZERO entries: one section-level line instead of three identical empty
+  // rails. The rails (and their matching rules) are untouched — they simply
+  // don't render until there is at least one entry to place.
+  const section = document.querySelector('.stmt');
+  const emptySlot = section?.querySelector('[data-stmt-empty]');
+  section?.classList.toggle('stmt--no-entries', !haveEntries);
+  if (emptySlot) {
+    emptySlot.classList.toggle('hidden', haveEntries);
+    emptySlot.innerHTML = haveEntries ? '' :
+      `<p class="stmt__empty-line">Your story is empty — entries you add will appear beside the questions they fit.
+        <button type="button" class="stmt__refs-add" data-stmt-add-entry>Add your first entry</button>.</p>`;
+  }
+  if (!haveEntries) return;
   UCAS_STATEMENT.questions.forEach(q => {
     const host = document.querySelector(`[data-stmt-refs="${q.id}"]`);
     if (!host) return;
@@ -3601,11 +3618,37 @@ function syncStatementSurface() {
   renderStatementRefs();
 }
 
+// Auto-grow: the textarea tracks its content from ~6 lines up to 60vh,
+// then scrolls. Presentation only — the value and autosave are untouched.
+function autosizeStatementTextarea(ta) {
+  ta.style.height = 'auto';
+  ta.style.height = Math.min(ta.scrollHeight + 2, Math.round(window.innerHeight * 0.6)) + 'px';
+}
+
+// "Copy as plain text" is dimmed and inert while its box is empty; space is
+// reserved (the disabled button keeps its footprint), so no layout shift.
+function syncStatementCopyButtons() {
+  UCAS_STATEMENT.questions.forEach(q => {
+    const ta  = document.querySelector(`[data-stmt-input="${q.id}"]`);
+    const btn = document.querySelector(`[data-stmt-copy="${q.id}"]`);
+    if (ta && btn) btn.disabled = ta.value.length === 0;
+  });
+}
+
+// Run after every (re)build of the section: size every box to its restored
+// draft and set the copy buttons' live/dimmed state.
+function syncStatementChrome() {
+  document.querySelectorAll('.stmt__ta').forEach(autosizeStatementTextarea);
+  syncStatementCopyButtons();
+}
+
 let _stmtSaveTimers = {};
 function wireStatementDrafting() {
   document.addEventListener('input', e => {
     const ta = e.target.closest?.('[data-stmt-input]');
     if (!ta) return;
+    autosizeStatementTextarea(ta);               // grow with the content
+    syncStatementCopyButtons();                  // live once any text exists
     syncStatementCounters();                     // instant feedback…
     const q = ta.dataset.stmtInput;
     clearTimeout(_stmtSaveTimers[q]);            // …debounced persistence
@@ -5446,6 +5489,7 @@ function renderSummaryBar(subjectCount, counts, total) {
       <div class="summary-seg summary-seg--unconfirmed" style="width:${uPct.toFixed(2)}%"></div>
       <div class="summary-seg summary-seg--red"   style="width:${rPct.toFixed(2)}%"></div>
     </div>
+    <p class="coverage-line">Altiora checks a selected, verified set of universities — plenty of good courses exist beyond it.</p>
   `;
 }
 
@@ -5700,6 +5744,21 @@ function renderCheckResults() {
   const container = $('courseGrid');
   container.innerHTML = '';
   let cardIndex = 0;
+
+  // Coverage-honest empty state: a field + country lens that yields ZERO is
+  // a fact about OUR coverage, never about what exists. Rendering only —
+  // counts and filtering above are untouched.
+  if (total === 0 && state.selectedCategories.size > 0 && state.countryFilter !== 'All') {
+    const fieldNames = [...state.selectedCategories]
+      .map(id => CATEGORY_LABEL_MAP[id] ?? id).join(' / ');
+    const countryName = COUNTRY_LABELS[state.countryFilter] ?? state.countryFilter;
+    container.innerHTML = `
+      <p class="coverage-empty">No ${esc(fieldNames)} courses in our ${esc(countryName)} set yet.
+        That's a gap in our coverage, not proof they don't exist — try All countries,
+        or go straight to university websites.</p>`;
+    // No return: every step below no-ops on empty groups, so the normal
+    // spinner/scroll/search handling still runs.
+  }
 
   // Section headings follow the same subject-only / grade-mode language rule
   // as every other label (statusLabel) — colours and grouping identical.

@@ -1621,6 +1621,24 @@ main     { flex: 1; padding: var(--pad); }
 .summary-stat--amber   { color: var(--color-match-possible); }
 .summary-stat--red     { color: var(--color-match-reach); }
 
+/* Coverage honesty: the results are a census of OUR verified set, never of
+   what exists. One plain mono line under the summary; no box, no border. */
+.coverage-line {
+  margin: var(--space-2) 0 0;
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  letter-spacing: .03em;
+  color: var(--ce-ink-30);
+  line-height: 1.5;
+}
+/* The zero-result field+country state: plain prose, not an alarm box. */
+.coverage-empty {
+  margin: var(--space-5) 0;
+  font-size: var(--text-base);
+  color: var(--ce-ink-60);
+  line-height: 1.65;
+  max-width: 58ch;
+}
 .summary-progress {
   height: 3px;
   background: var(--color-border);
@@ -4387,15 +4405,58 @@ button.plan-combo-tag--drop:focus-visible {
   line-height: 1.6;
   max-width: 62ch;
 }
+/* Shared total: a slim sticky mono line so the running count stays visible
+   wherever the student is typing. Sits below the sticky app nav (top offset
+   = nav height); plain text on canvas, hairline underline, no box. */
 .stmt__total {
+  position: sticky;
+  top: 57px;
+  z-index: 5;
   margin: 0 0 var(--space-4);
+  padding: 6px 0;
+  background: var(--ce-bg);
+  border-bottom: var(--ce-hairline);
   font-family: var(--ce-font-mono);
   font-size: 12px;
   letter-spacing: .03em;
   color: var(--ce-ink-60);
 }
 .stmt__total--over { color: var(--ce-ink); font-weight: 700; }
-.stmt__q { margin-bottom: var(--space-6); }
+/* Section eyebrow: mono small-caps + a small butter swatch, the same
+   eyebrow grammar as the landing sections. */
+.stmt__eyebrow {
+  margin: 0 0 6px;
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ce-ink-60);
+}
+.stmt__swatch {
+  display: inline-block;
+  width: 9px; height: 9px;
+  margin-right: 8px;
+  background: var(--ce-accent);
+}
+/* Zero entries: one consolidated line under the intro; the rails hide. */
+.stmt__empty-line {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.6;
+  max-width: 58ch;
+}
+.stmt--no-entries .stmt__refs { display: none; }
+.stmt--no-entries .stmt__grid {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "editor" "meta";
+}
+.stmt__q {
+  border-top: var(--ce-hairline);
+  padding-top: var(--space-4);
+  margin-bottom: var(--space-5);
+}
 .stmt__question {
   margin: 0 0 4px;
   font-size: var(--text-base);
@@ -4406,11 +4467,14 @@ button.plan-combo-tag--drop:focus-visible {
   gap: var(--space-2);
   align-items: baseline;
 }
+/* Functional-layer question number, scaffold-form grammar ("1 · …"),
+   in the section's accent (butter's readable text token). */
 .stmt__qnum {
   font-family: var(--ce-font-mono);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  color: var(--ce-ink-30);
+  letter-spacing: .07em;
+  color: var(--ce-status-possible);
   flex-shrink: 0;
 }
 .stmt__prompt {
@@ -4424,14 +4488,16 @@ button.plan-combo-tag--drop:focus-visible {
 .stmt__grid {
   display: grid;
   grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-  gap: var(--space-4);
-  align-items: start;
+  grid-template-areas: "editor refs" "meta refs";
+  gap: var(--space-2) var(--space-4);
 }
-.stmt__editor { min-width: 0; }
 .stmt__ta {
+  grid-area: editor;
   display: block;
   width: 100%;
-  min-height: 12rem;
+  min-height: 9.5rem;           /* ~6 lines at 16px/1.6 */
+  max-height: 60vh;
+  overflow-y: auto;
   padding: var(--space-3);
   font-family: var(--ce-font-body);
   font-size: 16px;              /* ≥16px so phone browsers don't zoom the field */
@@ -4440,16 +4506,17 @@ button.plan-combo-tag--drop:focus-visible {
   background: var(--ce-surface);
   border: var(--ce-hairline);
   border-radius: var(--ce-radius);
-  resize: vertical;
+  resize: none;                 /* auto-grow replaces the manual handle */
 }
-.stmt__ta:focus { outline: 2px solid var(--ce-ink); outline-offset: 1px; }
+/* Focus: the hairline shifts to the butter accent. No glow, no shadow. */
+.stmt__ta:focus { outline: none; border-color: var(--ce-accent); }
 .stmt__meta {
+  grid-area: meta;
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-2);
-  margin-top: 6px;
 }
 .stmt__count {
   font-family: var(--ce-font-mono);
@@ -4469,7 +4536,22 @@ button.plan-combo-tag--drop:focus-visible {
   text-underline-offset: 3px;
   cursor: pointer;
 }
-.stmt__refs { min-width: 0; }
+/* Dimmed and inert while the box is empty — same footprint, no shift. */
+.stmt__copy:disabled {
+  color: var(--ce-ink-30);
+  cursor: default;
+  pointer-events: none;
+}
+/* The rail is height-capped BY its textarea: height:0 + min-height:100%
+   makes the grid row's height come from the editor column alone, and the
+   rail scrolls inside that. */
+.stmt__refs {
+  grid-area: refs;
+  min-width: 0;
+  height: 0;
+  min-height: 100%;
+  overflow-y: auto;
+}
 .stmt__refs-label {
   display: block;
   font-family: var(--ce-font-mono);
@@ -4498,7 +4580,12 @@ button.plan-combo-tag--drop:focus-visible {
   cursor: pointer;
 }
 @media (max-width: 700px) {
-  .stmt__grid { grid-template-columns: minmax(0, 1fr); }
+  /* Phone order: textarea → rail → counter line. */
+  .stmt__grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "editor" "refs" "meta";
+  }
+  .stmt__refs { height: auto; min-height: 0; max-height: 45vh; }
 }
 .achv-group { margin-bottom: var(--space-5); }
 .achv-group__label {
