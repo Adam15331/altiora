@@ -3,712 +3,295 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Altiora — Check your subjects against top university courses. Free.</title>
-<meta name="description" content="Check your A-Levels, IB, AP or DSE subjects against 295 courses at leading universities in the UK, US, Canada, Singapore, and Hong Kong. Instant results, no account needed.">
+<title>Altiora — the university counselor your school doesn't have</title>
+<meta name="description" content="Free guidance from 'no idea what to study' to a finished application plan — subjects, courses, shortlist, story. 295 verified courses across 5 qualification systems. No account; your data stays on your device.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="tokens.css?v=9">
 <style>
+/* ═══ Confident Editorial — same tokens as the app (tokens.css) ═══
+   Palette used on this page, all from --ce-*:
+   canvas #F5F4EF · surface #FBFAF6 · ink #1F1A17 · accent #F2D64B
+   coral #E89B7D · sage #86C99A · lavender #B9A3D9 · hairline rgba(31,26,23,.12) */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { scroll-behavior: smooth; }
 body {
-  font-family: var(--font-sans);
-  background: var(--color-bg);
-  color: var(--color-text-primary);
+  font-family: var(--ce-font-body);
+  background: var(--ce-bg);
+  color: var(--ce-ink);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
-
 a { color: inherit; text-decoration: none; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
 
-/* ─── NAV ─── */
-nav {
+/* mono functional layer */
+.mono {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+/* ─── Nav ─── */
+.nav {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(246,247,249,0.94);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--color-border);
-  padding: 0 var(--pad);
-  height: 56px;
-  display: flex; align-items: center;
+  background: var(--ce-bg);
+  border-bottom: var(--ce-hairline);
 }
-.nav-inner {
-  max-width: 1040px; margin: 0 auto; width: 100%;
-  display: flex; align-items: center; justify-content: space-between;
+.nav__inner {
+  max-width: 1040px; margin: 0 auto; padding: 0 20px;
+  height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
 }
-.nav-logo {
-  font-family: var(--font-sans);
-  font-size: 1.125rem; font-weight: 800;
-  color: var(--color-text-primary);
-  letter-spacing: -.5px;
-}
-.nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
-.nav-links a {
-  font-size: var(--text-sm);
-  color: var(--color-text-secondary);
-  transition: color var(--t-fast);
-}
-.nav-links a:hover { color: var(--color-text-primary); }
-.nav-cta { display: flex; align-items: center; gap: var(--space-3); }
-.btn-ghost {
-  font-family: var(--font-sans); font-size: var(--text-sm); font-weight: 500;
-  color: var(--color-text-secondary); background: none; border: none; cursor: pointer;
-  text-decoration: none; transition: color var(--t-fast);
-}
-.btn-ghost:hover { color: var(--color-text-primary); }
-.btn-primary {
-  font-family: var(--font-sans); font-size: var(--text-sm); font-weight: 600;
-  color: #fff; background: var(--color-text-primary);
-  border: none; border-radius: 7px;
-  padding: 9px 20px; cursor: pointer; text-decoration: none;
-  display: inline-flex; align-items: center; gap: 6px;
-  letter-spacing: -.01em;
-  transition: background var(--t-fast); white-space: nowrap;
-}
-.btn-primary:hover { background: #1A1916; }
-
-/* ─── HERO ─── */
-.hero {
-  max-width: 1120px; margin: 0 auto;
-  padding: var(--space-20) var(--pad) var(--space-16);
-  display: grid;
-  grid-template-columns: 1.02fr .98fr;
-  gap: var(--space-12);
-  align-items: center;
-}
-.hero-copy { text-align: left; }
-.hero-eyebrow {
-  display: inline-flex; align-items: center;
-  background: var(--color-match-strong-bg);
-  color: var(--color-match-strong);
-  border-radius: var(--radius-full);
-  padding: 4px 14px;
-  font-size: var(--text-xs); font-weight: 700;
-  letter-spacing: .05em; text-transform: uppercase;
-  margin-bottom: var(--space-6);
-}
-.hero-heading {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 5.5vw, 4rem);
-  font-weight: 600;
-  line-height: 1.04;
-  letter-spacing: -.04em;
-  color: var(--color-text-primary);
-  margin-bottom: var(--space-5);
-}
-.hero-sub {
-  font-size: clamp(1.0625rem, 2vw, 1.25rem);
-  color: var(--color-text-secondary);
-  line-height: 1.6;
-  max-width: 480px; margin: 0 0 var(--space-8);
-}
-.hero-cta {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--color-text-primary); color: #fff;
-  font-family: var(--font-sans); font-size: var(--text-base); font-weight: 600;
-  padding: 14px 32px;
-  border-radius: 7px;
-  text-decoration: none;
-  letter-spacing: -.01em;
-  transition: background var(--t-fast), opacity var(--t-fast);
-  margin-bottom: var(--space-5);
-}
-.hero-cta:hover { background: #1A1916; }
-.hero-quals {
-  font-size: var(--text-sm);
-  color: var(--color-text-tertiary);
-  margin-bottom: 0;
-}
-.hero-quals span { margin: 0 8px; color: var(--color-border); }
-
-/* Signature element — a real match result, the thing Altiora produces */
-.hero-demo {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 12px 40px rgba(20,21,26,.07), 0 2px 6px rgba(20,21,26,.04);
-  overflow: hidden;
-}
-.hero-demo__head {
-  padding: var(--space-4) var(--space-5);
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-bg);
-}
-.hero-demo__eyebrow {
-  display: block;
-  font-size: var(--text-xs); font-weight: 700;
-  letter-spacing: .07em; text-transform: uppercase;
-  color: var(--color-text-tertiary);
-  margin-bottom: var(--space-2);
-}
-.hero-demo__subjects { display: flex; flex-wrap: wrap; gap: 6px; }
-.hero-demo__chip {
-  font-size: var(--text-sm); font-weight: 600;
-  padding: 4px 12px;
-  border-radius: var(--radius-full);
-  background: var(--color-text-primary); color: #fff;
-}
-.hero-demo__list {
-  padding: var(--space-3);
-  display: flex; flex-direction: column; gap: var(--space-2);
-}
-.hero-demo__row {
-  border: 1px solid var(--color-border);
-  border-left-width: 4px;
-  border-radius: var(--radius-md);
-  padding: var(--space-3) var(--space-4);
-}
-.hero-demo__row--green { border-left-color: var(--color-match-strong); }
-.hero-demo__row--amber { border-left-color: var(--color-match-possible); }
-.hero-demo__row--red   { border-left-color: var(--color-match-reach); }
-.hero-demo__status {
-  display: block;
-  font-size: var(--text-xs); font-weight: 700;
-  letter-spacing: .07em; text-transform: uppercase;
-  margin-bottom: 4px;
-}
-.hero-demo__status--green { color: var(--color-match-strong); }
-.hero-demo__status--amber { color: var(--color-match-possible); }
-.hero-demo__status--red   { color: var(--color-match-reach); }
-.hero-demo__course { font-size: var(--text-base); font-weight: 600; color: var(--color-text-primary); }
-.hero-demo__meta { font-size: var(--text-sm); color: var(--color-text-secondary); margin-top: 2px; }
-
-@media (max-width: 860px) {
-  .hero {
-    grid-template-columns: 1fr;
-    gap: var(--space-10);
-    padding-top: var(--space-12);
-  }
-  .hero-sub { max-width: none; }
-}
-
-/* ─── PROOF STRIP ─── */
-.proof {
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-bg);
-  padding: var(--space-10) var(--pad);
-}
-.proof-inner {
-  max-width: 760px; margin: 0 auto;
-  display: flex; align-items: center; justify-content: center;
-  gap: 3rem; flex-wrap: wrap;
-}
-.proof-stat { text-align: center; }
-.proof-num {
-  font-family: var(--font-display);
-  font-size: 2.5rem; font-weight: 600;
-  color: var(--color-text-primary); line-height: 1; margin-bottom: 4px;
-  letter-spacing: -.04em;
-}
-.proof-label { font-size: var(--text-xs); color: var(--color-text-tertiary); }
-.proof-divider { width: 1px; height: 36px; background: var(--color-border); }
-
-/* ─── FEATURES ─── */
-.features { padding: var(--space-16) var(--pad); }
-.features-inner { max-width: 960px; margin: 0 auto; }
-.section-eyebrow {
-  font-size: var(--text-xs); font-weight: 700;
-  letter-spacing: .08em; text-transform: uppercase;
-  color: var(--color-match-strong);
-  margin-bottom: var(--space-3);
-}
-.section-title {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 600;
-  color: var(--color-text-primary);
-  line-height: 1.15; letter-spacing: -.04em;
-  margin-bottom: var(--space-3); max-width: 560px;
-}
-.section-sub {
-  font-size: var(--text-base);
-  color: var(--color-text-secondary);
-  max-width: 480px; line-height: 1.7;
-  margin-bottom: var(--space-10);
-}
-.feature-grid {
-  display: grid; grid-template-columns: repeat(3,1fr);
-  gap: var(--space-4);
-}
-.feature-card {
-  padding: var(--space-6);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
-  transition: border-color var(--t-base);
-}
-.feature-card:hover { border-color: var(--color-text-tertiary); }
-.feature-icon {
-  width: 40px; height: 40px; border-radius: var(--radius-sm);
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: var(--space-4);
-}
-.feature-name {
-  font-size: var(--text-lg); font-weight: 600;
-  color: var(--color-text-primary); margin-bottom: var(--space-2);
-}
-.feature-desc {
-  font-size: var(--text-sm); color: var(--color-text-secondary);
-  line-height: 1.7; margin-bottom: var(--space-4);
-}
-.feature-bullets { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-.feature-bullets li {
-  display: flex; align-items: flex-start; gap: 8px;
-  font-size: var(--text-sm); color: var(--color-text-secondary);
-}
-.feature-bullets li::before {
-  content: ''; display: block;
-  width: 4px; height: 4px; border-radius: 50%;
-  background: var(--color-text-tertiary); margin-top: 8px; flex-shrink: 0;
-}
-.coming-soon-badge {
+.nav__logo { font-family: var(--ce-font-display); font-weight: 800; font-size: 1.25rem; }
+.nav__links { display: flex; align-items: center; gap: 22px; list-style: none; }
+.nav__links a { font-family: var(--ce-font-mono); font-size: 12px; letter-spacing: .04em; color: var(--ce-ink-60); }
+.nav__links a:hover { color: var(--ce-ink); }
+.btn {
   display: inline-block;
-  font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
-  background: var(--color-match-possible-bg); color: var(--color-match-possible);
-  padding: 2px 8px; border-radius: var(--radius-full); margin-bottom: var(--space-4);
+  font-family: var(--ce-font-mono); font-size: 13px; font-weight: 700; letter-spacing: .03em;
+  background: var(--ce-accent); color: var(--ce-ink);
+  border: 1px solid var(--ce-ink);
+  border-radius: var(--ce-radius-pill);
+  padding: 9px 20px;
+  cursor: pointer;
 }
+.btn:hover { transform: translateY(-1px); }
+.btn--nav { padding: 7px 16px; font-size: 12px; }
 
-/* ─── HOW IT WORKS ─── */
-.how { padding: var(--space-16) var(--pad); background: var(--color-surface); }
-.how-inner { max-width: 960px; margin: 0 auto; }
-.how-header { text-align: center; margin-bottom: var(--space-12); }
-.how-header .section-title { margin: 0 auto var(--space-3); text-align: center; }
-.steps { display: grid; grid-template-columns: repeat(4,1fr); gap: var(--space-4); }
-.step { text-align: center; padding: var(--space-4); }
-.step-num {
-  width: 48px; height: 48px; border-radius: 50%;
-  border: 1px solid var(--color-border); background: var(--color-surface);
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto var(--space-4);
-  font-family: var(--font-display);
-  font-size: var(--text-xl); font-weight: 600;
-  color: var(--color-text-primary);
+/* ─── Hero ─── */
+.hero { padding: 72px 0 64px; border-bottom: var(--ce-hairline); }
+.hero__grid { display: grid; grid-template-columns: minmax(0, 11fr) minmax(0, 9fr); gap: 48px; align-items: center; }
+.hero__eyebrow { color: var(--ce-ink-60); margin-bottom: 18px; }
+.hero__eyebrow .dot { color: var(--ce-ink-30); padding: 0 4px; }
+h1 {
+  font-family: var(--ce-font-display); font-weight: 800;
+  font-size: clamp(2.1rem, 5.2vw, 3.4rem);
+  line-height: 1.06; letter-spacing: -.02em;
+  margin-bottom: 20px;
 }
-.step-title {
-  font-size: var(--text-base); font-weight: 600;
-  color: var(--color-text-primary); margin-bottom: var(--space-2);
-}
-.step-body { font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; }
+.hero__sub { font-size: 1.06rem; color: var(--ce-ink-60); max-width: 54ch; margin-bottom: 26px; }
+.hero__ctaline { margin-top: 10px; font-family: var(--ce-font-mono); font-size: 11px; letter-spacing: .04em; color: var(--ce-ink-30); }
 
-/* ─── TESTIMONIALS ─── */
-.testi { padding: var(--space-16) var(--pad); }
-.testi-inner { max-width: 960px; margin: 0 auto; }
-.testi-header { text-align: center; margin-bottom: var(--space-10); }
-.testi-header .section-title { margin: 0 auto var(--space-3); text-align: center; }
-.testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--space-4); }
-.testi-card {
-  padding: var(--space-6);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
+/* Hero demo — subjects only, the app's REAL no-grade labels. No grades exist
+   anywhere in this mock, so no grade-language may appear either. */
+.demo {
+  background: var(--ce-surface);
+  border: var(--ce-hairline);
+  padding: 18px;
 }
-.testi-stars { display: flex; gap: 2px; margin-bottom: var(--space-4); font-size: 14px; color: #D9730D; }
-.testi-text {
-  font-size: var(--text-sm); color: var(--color-text-secondary);
-  line-height: 1.75; margin-bottom: var(--space-5);
+.demo__label { color: var(--ce-ink-30); margin-bottom: 12px; }
+.demo__chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.demo__chip {
+  font-family: var(--ce-font-mono); font-size: 11px; letter-spacing: .02em;
+  border: 1px solid var(--ce-ink);
+  border-radius: var(--ce-radius-pill);
+  padding: 4px 12px;
+  background: var(--ce-bg);
 }
-.testi-text strong { color: var(--color-text-primary); font-weight: 600; }
-.testi-person {
-  display: flex; align-items: center; gap: var(--space-3);
-  border-top: 1px solid var(--color-border); padding-top: var(--space-4);
+.demo__row {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  padding: 10px 0;
+  border-top: var(--ce-hairline);
 }
-.testi-avatar {
-  width: 36px; height: 36px; border-radius: 50%;
-  font-size: var(--text-xs); font-weight: 700; color: #fff;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.testi-name { font-size: var(--text-sm); font-weight: 600; color: var(--color-text-primary); }
-.testi-meta { font-size: var(--text-xs); color: var(--color-text-tertiary); }
-.testi-outcome {
-  margin-left: auto;
-  font-size: var(--text-xs); font-weight: 600;
-  padding: 3px 10px; border-radius: var(--radius-full);
-}
+.demo__course { min-width: 0; }
+.demo__name { font-family: var(--ce-font-display); font-weight: 700; font-size: .95rem; display: block; }
+.demo__uni { font-size: .8rem; color: var(--ce-ink-60); }
+.demo__verdict { font-family: var(--ce-font-mono); font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+.demo__verdict--fit    { color: var(--ce-status-strong); }
+.demo__verdict--partly { color: var(--ce-status-possible); }
+.demo__verdict--not    { color: var(--ce-status-reach); }
+.demo__foot { margin-top: 12px; font-size: .78rem; color: var(--ce-ink-30); line-height: 1.5; }
 
-/* ─── CTA ─── */
-.cta-section {
-  padding: var(--space-16) var(--pad);
-  text-align: center; background: var(--color-surface);
-  border-top: 1px solid var(--color-border);
+/* ─── Sections ─── */
+section { padding: 64px 0; border-bottom: var(--ce-hairline); }
+.sec__eyebrow { margin-bottom: 10px; }
+.sec__eyebrow, .step__num { color: var(--ce-ink-60); }
+.swatch { display: inline-block; width: 9px; height: 9px; margin-right: 8px; vertical-align: baseline; }
+.swatch--accent   { background: var(--ce-accent); }
+.swatch--coral    { background: var(--ce-coral); }
+.swatch--sage     { background: var(--ce-sage); }
+.swatch--lavender { background: var(--ce-lavender); }
+h2 {
+  font-family: var(--ce-font-display); font-weight: 800;
+  font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+  line-height: 1.15; letter-spacing: -.01em;
+  margin-bottom: 12px;
 }
-.cta-inner { max-width: 560px; margin: 0 auto; }
-.cta-heading {
-  font-family: var(--font-display);
-  font-size: clamp(2.25rem, 5vw, 3.25rem); font-weight: 600;
-  color: var(--color-text-primary);
-  line-height: 1.1; letter-spacing: -.04em;
-  margin-bottom: var(--space-4);
-}
-.cta-sub {
-  font-size: var(--text-base); color: var(--color-text-secondary);
-  line-height: 1.7; margin-bottom: var(--space-8);
-}
-.cta-small {
-  display: block; margin-top: var(--space-4);
-  font-size: var(--text-xs); color: var(--color-text-tertiary);
-}
+.sec__lead { color: var(--ce-ink-60); max-width: 58ch; margin-bottom: 34px; }
 
-/* ─── FOOTER ─── */
-footer {
-  border-top: 1px solid var(--color-border);
-  padding: var(--space-12) var(--pad) var(--space-8);
+/* Journey steps */
+.steps { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px; }
+.step {
+  background: var(--ce-surface);
+  border: var(--ce-hairline);
+  padding: 22px;
 }
-.footer-inner { max-width: 1040px; margin: 0 auto; }
-.footer-top {
-  display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
-  gap: 3rem; padding-bottom: var(--space-8);
-  border-bottom: 1px solid var(--color-border); margin-bottom: var(--space-6);
+.step__num { display: block; margin-bottom: 10px; }
+.step__title { font-family: var(--ce-font-display); font-weight: 700; font-size: 1.12rem; margin-bottom: 6px; }
+.step__desc { font-size: .93rem; color: var(--ce-ink-60); }
+.step__example {
+  display: inline-block; margin-top: 12px;
+  font-family: var(--ce-font-mono); font-size: 11px; letter-spacing: .02em;
+  color: var(--ce-ink);
+  background: var(--ce-accent-tint);
+  padding: 3px 10px;
 }
-.footer-logo {
-  font-family: var(--font-sans); font-size: var(--text-base);
-  font-weight: 700; color: var(--color-text-primary);
-  display: block; margin-bottom: var(--space-3);
-}
-.footer-mission {
-  font-size: var(--text-sm); color: var(--color-text-tertiary);
-  line-height: 1.75; max-width: 280px;
-}
-.footer-col-head {
-  font-size: var(--text-xs); font-weight: 600; text-transform: uppercase;
-  letter-spacing: .08em; color: var(--color-text-tertiary);
-  margin-bottom: var(--space-4);
-}
-.footer-links { list-style: none; display: flex; flex-direction: column; gap: var(--space-2); }
-.footer-links a {
-  font-size: var(--text-sm); color: var(--color-text-secondary);
-  transition: color var(--t-fast);
-}
-.footer-links a:hover { color: var(--color-text-primary); }
-.footer-bottom {
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: var(--space-4);
-}
-.footer-copy { font-size: var(--text-xs); color: var(--color-text-tertiary); }
-.footer-badges { display: flex; gap: var(--space-2); flex-wrap: wrap; }
-.footer-badge {
-  font-size: var(--text-xs); padding: 3px 10px;
-  border-radius: var(--radius-full);
-  border: 1px solid var(--color-border);
-  color: var(--color-text-tertiary);
-}
+.step a.step__link { text-decoration: underline; text-underline-offset: 3px; }
 
-/* ─── REVEAL ANIMATION ─── */
-.reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
-.reveal.visible { opacity: 1; transform: translateY(0); }
-.reveal-delay-1 { transition-delay: .1s; }
-.reveal-delay-2 { transition-delay: .2s; }
-.reveal-delay-3 { transition-delay: .3s; }
+/* Trust bullets */
+.trust { list-style: none; display: grid; gap: 18px; max-width: 62ch; }
+.trust li { padding-top: 18px; border-top: var(--ce-hairline); font-size: .97rem; color: var(--ce-ink-60); }
+.trust li strong { color: var(--ce-ink); font-weight: 600; }
 
-/* ─── RESPONSIVE ─── */
-@media (max-width: 960px) {
-  .footer-top { grid-template-columns: 1fr 1fr; }
-  .feature-grid { grid-template-columns: 1fr; gap: var(--space-3); }
+/* Prose sections */
+.prose { max-width: 60ch; color: var(--ce-ink-60); font-size: 1rem; }
+.prose strong { color: var(--ce-ink); font-weight: 600; }
+
+/* Footer CTA */
+.foot-cta { text-align: center; padding: 72px 0 26px; border-bottom: none; }
+.foot-cta h2 { margin-bottom: 22px; }
+.foot-cta .small {
+  margin-top: 26px;
+  font-family: var(--ce-font-mono); font-size: 11px; letter-spacing: .05em;
+  color: var(--ce-ink-30);
 }
-@media (max-width: 720px) {
-  :root { --pad: 20px; }
-  nav .nav-links { display: none; }
-  .hero-heading { font-size: 2rem; }
-  .hero-features { grid-template-columns: 1fr; }
-  .steps { grid-template-columns: 1fr 1fr; }
-  .testi-grid { grid-template-columns: 1fr; }
-  .footer-top { grid-template-columns: 1fr; gap: 2rem; }
-  .proof-divider { display: none; }
-}
-@media (max-width: 480px) {
-  .hero-heading { font-size: 1.75rem; }
-  .steps { grid-template-columns: 1fr; }
+.foot-cta .small .dot { padding: 0 6px; }
+
+/* ─── Phone ─── */
+@media (max-width: 760px) {
+  .nav__links { display: none; }
+  .hero { padding: 44px 0 44px; }
+  .hero__grid { grid-template-columns: minmax(0,1fr); gap: 32px; }
+  section { padding: 44px 0; }
+  .steps { grid-template-columns: minmax(0,1fr); }
 }
 </style>
-  <script defer data-domain="altiora.app" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-inner">
-    <a href="#" class="nav-logo">Altiora</a>
-    <ul class="nav-links">
-      <li><a href="#features">Features</a></li>
-      <li><a href="#how">How it works</a></li>
+<nav class="nav" aria-label="Main">
+  <div class="nav__inner">
+    <a class="nav__logo" href="#top">Altiora</a>
+    <ul class="nav__links">
+      <li><a href="#journey">Journey</a></li>
+      <li><a href="#trust">Trust</a></li>
       <li><a href="#about">About</a></li>
     </ul>
-    <div class="nav-cta">
-      <a href="app.html" class="btn-ghost">Try the checker</a>
-      <a href="app.html" class="btn-primary">Start free →</a>
-    </div>
+    <a class="btn btn--nav" href="app.html">Start →</a>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-copy">
-    <div class="hero-eyebrow">Free for every student</div>
-    <h1 class="hero-heading">Know which courses your subjects open.</h1>
-    <p class="hero-sub">Enter your A-levels, IB, APs, or local qualifications and see — instantly — which of 295 degrees across the UK, US, Canada, Singapore, and Hong Kong are within reach.</p>
-    <a href="app.html" class="hero-cta">Check my subjects →</a>
-    <p class="hero-quals">
-      A-Levels<span>·</span>IB<span>·</span>AP<span>·</span>Singapore<span>·</span>Hong Kong
-    </p>
-  </div>
+<header class="hero" id="top">
+  <div class="wrap hero__grid">
+    <div>
+      <p class="mono hero__eyebrow">Free<span class="dot">·</span>No account<span class="dot">·</span>Your data stays on your device</p>
+      <h1>The university counselor your school doesn't have.</h1>
+      <p class="hero__sub">Altiora guides you from &ldquo;no idea what to study&rdquo; to a finished application plan &mdash; subjects, courses, shortlist, story. Built on 295 verified courses across the UK, US, Canada, Singapore and Hong Kong. Every requirement checked against the university's own page.</p>
+      <a class="btn" href="app.html">Start your journey →</a>
+      <p class="hero__ctaline">Takes about a minute, no signup.</p>
+    </div>
 
-  <div class="hero-demo" aria-hidden="true">
-    <div class="hero-demo__head">
-      <span class="hero-demo__eyebrow">Your subjects</span>
-      <div class="hero-demo__subjects">
-        <span class="hero-demo__chip">Maths</span>
-        <span class="hero-demo__chip">Physics</span>
-        <span class="hero-demo__chip">Chemistry</span>
+    <!-- Subjects-only demo: three REAL courses (uk-engineering-cambridge,
+         uk-law-oxford, uk-medicine-oxford), verdicts computed by the app's
+         real pipeline for these subjects with NO grades entered. -->
+    <div class="demo" aria-label="Example: subject match with no grades entered">
+      <p class="mono demo__label">Your subjects — no grades needed</p>
+      <div class="demo__chips">
+        <span class="demo__chip">Mathematics</span>
+        <span class="demo__chip">Further Mathematics</span>
+        <span class="demo__chip">Physics</span>
       </div>
-    </div>
-    <div class="hero-demo__list">
-      <div class="hero-demo__row hero-demo__row--green">
-        <span class="hero-demo__status hero-demo__status--green">Strong match</span>
-        <div class="hero-demo__course">Engineering · Imperial College London</div>
-        <div class="hero-demo__meta">A*A*A · IB 40 · all subjects met</div>
+      <div class="demo__row">
+        <span class="demo__course">
+          <span class="demo__name">Engineering BA/MEng</span>
+          <span class="demo__uni">University of Cambridge</span>
+        </span>
+        <span class="demo__verdict demo__verdict--fit">Subjects fit</span>
       </div>
-      <div class="hero-demo__row hero-demo__row--amber">
-        <span class="hero-demo__status hero-demo__status--amber">Possible</span>
-        <div class="hero-demo__course">Computer Science · UCL</div>
-        <div class="hero-demo__meta">A*AA · IB 39 · grades are the deciding factor</div>
+      <div class="demo__row">
+        <span class="demo__course">
+          <span class="demo__name">Law (Jurisprudence) BA</span>
+          <span class="demo__uni">University of Oxford</span>
+        </span>
+        <span class="demo__verdict demo__verdict--partly">Partly fit</span>
       </div>
-      <div class="hero-demo__row hero-demo__row--red">
-        <span class="hero-demo__status hero-demo__status--red">Out of reach</span>
-        <div class="hero-demo__course">Medicine · University of Cambridge</div>
-        <div class="hero-demo__meta">Needs Biology — not in your subjects</div>
+      <div class="demo__row">
+        <span class="demo__course">
+          <span class="demo__name">Medicine MBChB</span>
+          <span class="demo__uni">University of Oxford</span>
+        </span>
+        <span class="demo__verdict demo__verdict--not">Subjects don&rsquo;t fit</span>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- PROOF STRIP -->
-<div class="proof">
-  <div class="proof-inner">
-    <div class="proof-stat"><div class="proof-num">295</div><div class="proof-label">Courses covered</div></div>
-    <div class="proof-divider"></div>
-    <div class="proof-stat"><div class="proof-num">5</div><div class="proof-label">Qualification systems</div></div>
-    <div class="proof-divider"></div>
-    <div class="proof-stat"><div class="proof-num">5</div><div class="proof-label">Countries</div></div>
-    <div class="proof-divider"></div>
-    <div class="proof-stat"><div class="proof-num">£0</div><div class="proof-label">Always free</div></div>
-  </div>
-</div>
-
-<!-- FEATURES -->
-<section class="features" id="features">
-  <div class="features-inner">
-    <div class="reveal">
-      <div class="section-eyebrow">What Altiora does</div>
-      <h2 class="section-title">Three tools. One clear path.</h2>
-      <p class="section-sub">Built for students who want to understand their options before they commit.</p>
-    </div>
-    <div class="feature-grid reveal">
-      <div class="feature-card">
-        <div class="feature-icon" style="background:var(--color-cat-cs-bg)">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="var(--color-cat-cs)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="6" height="6" rx="1.2"/><rect x="11" y="3" width="6" height="6" rx="1.2"/>
-            <rect x="3" y="11" width="6" height="6" rx="1.2"/><rect x="11" y="11" width="6" height="6" rx="1.2"/>
-          </svg>
-        </div>
-        <div class="feature-name">Check Combination</div>
-        <div class="feature-desc">Pick your subjects across 6 qualification systems and instantly see which courses are a strong match (green), possible (amber), or out of reach (red).</div>
-        <ul class="feature-bullets">
-          <li>Works with A-Levels, IB, AP, Singapore &amp; HK DSE</li>
-          <li>Filter by country, subject area, or grade</li>
-          <li>Grade thresholds shown per qualification</li>
-          <li>Admission test requirements flagged</li>
-        </ul>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:var(--color-cat-economics-bg)">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="var(--color-cat-economics)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="9" cy="9" r="5.5"/><path d="M14.5 14.5l2.5 2.5"/>
-          </svg>
-        </div>
-        <div class="feature-name">Course Finder</div>
-        <div class="feature-desc">Search by degree or university and see exactly which subjects you need, translated into your own qualification system.</div>
-        <ul class="feature-bullets">
-          <li>Search 295 degree programmes</li>
-          <li>Requirements shown in your curriculum</li>
-          <li>Essential vs preferred subjects</li>
-          <li>Copy requirements list in one click</li>
-        </ul>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:var(--color-cat-engineering-bg)">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="var(--color-cat-engineering)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M10 5.5c0-1.5-1.3-2.5-3.5-2.5H3.5v11H6.5c2.2 0 3.5 1 3.5 1V5.5z"/>
-            <path d="M10 5.5c0-1.5 1.3-2.5 3.5-2.5h3v11h-3c-2.2 0-3.5 1-3.5 1V5.5z"/>
-          </svg>
-        </div>
-        <div class="feature-name">Subject Planner</div>
-        <div class="feature-desc">Choose what you want to study and see which subject combinations keep the most doors open — before you commit.</div>
-        <ul class="feature-bullets">
-          <li>Choose from 10 subject areas</li>
-          <li>See essential subjects ranked by impact</li>
-          <li>Top subject combos with match scores</li>
-          <li>Jump straight to full results</li>
-        </ul>
-      </div>
-    </div>
-    <div class="feature-grid reveal" style="margin-top: var(--space-8); grid-template-columns: 1fr;">
-      <div class="feature-card" style="border-color: var(--color-match-strong); border-left-width: 4px;">
-        <div class="feature-icon" style="background: var(--color-cat-psychology-bg)">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="var(--color-cat-psychology)" stroke-width="1.5">
-            <path d="M10 3a7 7 0 0 1 7 7c0 2-1 4-2.5 5.5L10 19l-4.5-3.5A7 7 0 0 1 10 3z"/>
-            <path d="M7 8h6M10 8v5"/>
-          </svg>
-        </div>
-        <div class="feature-name">Start with your strengths</div>
-        <div class="feature-desc">Not sure what to study? Tell us what you're good at — we'll show you degrees that fit.</div>
-        <ul class="feature-bullets">
-          <li>"I like Maths and Physics" → Engineering, CS, Physics</li>
-          <li>"I'm good at essays" → Law, History, PPE</li>
-          <li>"I love Biology and Chemistry" → Medicine, Biochemistry</li>
-        </ul>
-        <a href="app.html?mode=strengths" class="btn-primary" style="margin-top: var(--space-4); align-self: flex-start;">Find my path →</a>
-      </div>
+      <p class="demo__foot">Real courses, real verdicts on subjects alone. Add predicted grades in the app for the fuller picture.</p>
     </div>
   </div>
-</section>
+</header>
 
-<!-- HOW IT WORKS -->
-<section class="how" id="how">
-  <div class="how-inner">
-    <div class="how-header reveal">
-      <div class="section-eyebrow">The journey</div>
-      <h2 class="section-title">From subjects to shortlist in minutes.</h2>
-    </div>
+<section id="journey">
+  <div class="wrap">
+    <p class="mono sec__eyebrow"><span class="swatch swatch--accent" aria-hidden="true"></span>The journey</p>
+    <h2>Wherever you are, Altiora meets you there.</h2>
+    <p class="sec__lead">&mdash; and proposes, never imprisons.</p>
     <div class="steps">
-      <div class="step reveal">
-        <div class="step-num">01</div>
-        <div class="step-title">Pick your system</div>
-        <div class="step-body">Choose your qualification — A-Levels, IB, AP, Singapore or Hong Kong DSE.</div>
+      <div class="step step--1">
+        <span class="mono step__num"><span class="swatch swatch--accent" aria-hidden="true"></span>1 · Exploring fields</span>
+        <p class="step__desc">Not sure what to study? <a class="step__link" href="app.html?mode=strengths">Start from your strengths and interests</a>, and read honest guides to ten fields.</p>
       </div>
-      <div class="step reveal reveal-delay-1">
-        <div class="step-num">02</div>
-        <div class="step-title">Select subjects</div>
-        <div class="step-body">Pick the subjects you're taking or planning to take. Results update instantly.</div>
+      <div class="step step--2">
+        <span class="mono step__num"><span class="swatch swatch--coral" aria-hidden="true"></span>2 · Choosing subjects</span>
+        <p class="step__desc">See which subject combinations keep your fields open, and what each door costs to close.</p>
+        <span class="step__example">Without Maths: Engineering 50 → 17</span>
       </div>
-      <div class="step reveal reveal-delay-2">
-        <div class="step-num">03</div>
-        <div class="step-title">See your matches</div>
-        <div class="step-body">Courses are grouped into strong matches, possible, and out of reach — with grades shown.</div>
+      <div class="step step--3">
+        <span class="mono step__num"><span class="swatch swatch--sage" aria-hidden="true"></span>3 · Building your list</span>
+        <p class="step__desc">Check your subjects and predicted grades against real requirements. Build a shortlist with honest reach/match/safety verdicts.</p>
       </div>
-      <div class="step reveal reveal-delay-3">
-        <div class="step-num">04</div>
-        <div class="step-title">Explore and plan</div>
-        <div class="step-body">Dig into university profiles, flip to Course Finder, or use Subject Planner to optimise your choices.</div>
+      <div class="step step--4">
+        <span class="mono step__num"><span class="swatch swatch--lavender" aria-hidden="true"></span>4 · Applying</span>
+        <p class="step__desc">A plan built from your own shortlist: which admission tests, when the windows open, and a place to draft your UCAS statement from your own material.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ABOUT -->
-<section class="testi" id="about">
-  <div class="testi-inner">
-    <div class="testi-header reveal">
-      <div class="section-eyebrow">Why we built this</div>
-      <h2 class="section-title">Built by students, for students.</h2>
-    </div>
-    <div class="testi-grid">
-      <div class="testi-card reveal">
-        <p class="testi-text">University admissions guidance is expensive, inconsistent, and often unavailable outside well-funded schools. Altiora exists to change that — giving every student access to clear, accurate subject-matching information, regardless of their school or background.</p>
-        <div class="testi-person" style="border-top:none;padding-top:0">
-          <div class="testi-avatar" style="background:var(--color-cat-cs-bg);color:var(--color-cat-cs);font-size:18px">◎</div>
-          <div>
-            <div class="testi-name">Our mission</div>
-            <div class="testi-meta">Equal access to university guidance</div>
-          </div>
-        </div>
-      </div>
-      <div class="testi-card reveal reveal-delay-1">
-        <p class="testi-text">Subject requirements are scattered across hundreds of university web pages, written in different formats for different qualifications. We mapped them all into a single, consistent database — so you can search once and see your options clearly, whatever curriculum you're on.</p>
-        <div class="testi-person" style="border-top:none;padding-top:0">
-          <div class="testi-avatar" style="background:var(--color-cat-economics-bg);color:var(--color-cat-economics);font-size:18px">◎</div>
-          <div>
-            <div class="testi-name">The data</div>
-            <div class="testi-meta">295 courses · 6 qualification systems</div>
-          </div>
-        </div>
-      </div>
-      <div class="testi-card reveal reveal-delay-2">
-        <p class="testi-text">Altiora shows subject eligibility only. Grades, personal statements, interviews, and admission tests all matter equally — always verify requirements directly with each university before applying. We flag admission tests where known, but the official admissions page is the source of truth.</p>
-        <div class="testi-person" style="border-top:none;padding-top:0">
-          <div class="testi-avatar" style="background:var(--color-cat-engineering-bg);color:var(--color-cat-engineering);font-size:18px">◎</div>
-          <div>
-            <div class="testi-name">A note on accuracy</div>
-            <div class="testi-meta">Always check the university directly</div>
-          </div>
-        </div>
-      </div>
-    </div>
+<section id="trust">
+  <div class="wrap">
+    <p class="mono sec__eyebrow"><span class="swatch swatch--sage" aria-hidden="true"></span>Why you can trust the answers</p>
+    <h2>Verified, or honestly unsure.</h2>
+    <ul class="trust">
+      <li><strong>Every course requirement is verified against the university's official page,</strong> with the source and date stored. When we couldn't verify something, the app says so instead of guessing.</li>
+      <li><strong>No invented cutoffs, no &ldquo;universities want X&rdquo;, no score targets.</strong> If the data doesn't exist, you'll see caution, not confidence.</li>
+      <li><strong>Deadlines shift every year,</strong> so we show windows and link you to the official page, never a hardcoded date.</li>
+    </ul>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-section">
-  <div class="cta-inner reveal">
-    <h2 class="cta-heading">Start in under<br>two minutes.</h2>
-    <p class="cta-sub">No account. No credit card. Just pick your subjects and see where you stand — right now.</p>
-    <a href="app.html" class="hero-cta">Check my subjects →</a>
-    <span class="cta-small">Free for every student. No account required.</span>
+<section id="privacy">
+  <div class="wrap">
+    <p class="mono sec__eyebrow"><span class="swatch swatch--lavender" aria-hidden="true"></span>Yours, privately</p>
+    <h2>No account. No tracking.</h2>
+    <p class="prose">Everything you build lives on your device, and you can back it up to a file you keep. UCAS itself advises students not to share statement drafts &mdash; here, they never leave your machine.</p>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div>
-        <a href="#" class="footer-logo">Altiora</a>
-        <p class="footer-mission">We believe every student — regardless of school, postcode, or background — deserves the same quality of university guidance. Free, always.</p>
-      </div>
-      <div>
-        <div class="footer-col-head">Product</div>
-        <ul class="footer-links">
-          <li><a href="app.html">Course Checker</a></li>
-          <li><a href="app.html">Subject Planner</a></li>
-          <li><a href="app.html">Course Finder</a></li>
-          <li><a href="#" style="opacity:.45;pointer-events:none">Personal Statement <span style="font-size:10px">(soon)</span></a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="footer-col-head">Qualifications</div>
-        <ul class="footer-links">
-          <li><a href="app.html">UK A-Levels</a></li>
-          <li><a href="app.html">IB Diploma</a></li>
-          <li><a href="app.html">US AP</a></li>
-          <li><a href="app.html">Singapore A-Levels · HK DSE</a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="footer-col-head">Company</div>
-        <ul class="footer-links">
-          <li><a href="#">Our mission</a></li>
-          <li><a href="#">Team</a></li>
-          <li><a href="#">Privacy</a></li>
-          <li><a href="#">Terms</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <div class="footer-copy">© 2026 Altiora. Built for students, by people who remember being one.</div>
-      <div class="footer-badges">
-        <span class="footer-badge">🔒 GDPR compliant</span>
-        <span class="footer-badge">✓ Free forever</span>
-        <span class="footer-badge">🌍 Global coverage</span>
-      </div>
-    </div>
+<section id="about">
+  <div class="wrap">
+    <p class="mono sec__eyebrow"><span class="swatch swatch--coral" aria-hidden="true"></span>Who made this</p>
+    <h2>Built by a student who needed it.</h2>
+    <p class="prose">University guidance is expensive, inconsistent, and mostly unavailable outside well-funded schools. Altiora is our attempt to level that &mdash; free, for every student.</p>
   </div>
-</footer>
+</section>
 
-<script>
-const obs = new IntersectionObserver(
-  entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
-  { threshold: 0.12 }
-);
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-</script>
+<section class="foot-cta">
+  <div class="wrap">
+    <h2>Start where you are.</h2>
+    <a class="btn" href="app.html">Begin →</a>
+    <p class="small">295 courses<span class="dot">·</span>5 qualification systems<span class="dot">·</span>always free</p>
+  </div>
+</section>
+
 </body>
 </html>
