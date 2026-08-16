@@ -1539,7 +1539,7 @@ function stageProposalReason(yearLabel, stage) {
     building:  `You're in ${yearLabel}, so we'll start you at <strong>Building your university list</strong> — your subjects are set, and now it's about where they can take you.
       Not sure what you want to study yet? That's completely normal at this point — you can start at ${explore('Exploring fields')} instead, and your subjects will follow you there.`,
     applying:  `You're in ${yearLabel}, so we'll start you at <strong>Applying</strong> — this is your application year, so deadlines, admission tests, and applications are the focus.
-      Still weighing what to study? You can ${explore('explore fields')} first — the deadlines don't move, but nothing stops you deciding and applying in the same year.`,
+      Still weighing what to study? You can ${explore('explore fields')} first — the deadlines won't wait, but nothing stops you deciding and applying in the same year.`,
   };
   return REASONS[stage] ?? '';
 }
