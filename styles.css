@@ -132,13 +132,14 @@ a:hover { opacity: .8; }
   padding: 2px 0; border: none; background: none;
   font-family: inherit; text-align: left; cursor: pointer;
   border-radius: 3px;
+  text-decoration: none;   /* the wordmark is now a plain <a> */
 }
+/* One brand, one logo: identical to the landing page's wordmark. */
 .nav__logo    {
-  font-family: var(--font-sans);
-  font-size: 1.125rem;
+  font-family: var(--ce-font-display);
+  font-size: 1.25rem;
   font-weight: 800;
   color: var(--color-text-primary);
-  letter-spacing: -.5px;
   text-decoration: none;
   text-underline-offset: 3px;
   transition: text-decoration-color var(--t-base);
@@ -279,6 +280,42 @@ main     { flex: 1; padding: var(--pad); }
 }
 .stage-bar__spacer { flex: 1 1 auto; }
 .stage-bar__indicator { position: relative; }
+/* The right-hand side of the toolbar: the profile pill and the three
+   collection pills. Each inner cluster is ONE flex item, so when space
+   runs out a whole cluster drops to the next line together — a pill can
+   never be orphaned away from its group. */
+.stage-bar__me {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-left: auto;
+}
+.stage-bar__collections {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: var(--space-3);
+}
+/* Inside a cluster the pills' own right-push is the cluster's job. */
+.stage-bar__collections .shortlist-link { margin-left: 0; }
+/* Phone: stack the toolbar as left-aligned cluster rows, and tighten the
+   collection pills so all three fit side by side at 375px. */
+@media (max-width: 560px) {
+  .stage-bar__spacer { display: none; }
+  .stage-bar__me { margin-left: 0; width: 100%; justify-content: flex-start; }
+  .stage-bar__collections { gap: 4px; }
+  .stage-bar__collections .shortlist-link {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+  /* Emoji icons are aria-hidden decoration; at phone width the names
+     alone fit three-across without cramping. */
+  .stage-bar__collections .shortlist-link__icon { display: none; }
+  /* The fields pill's caret is redundant at phone width — the pill itself
+     is obviously tappable. Cosmetic only; the menu behaviour is untouched. */
+  .stage-bar__collections .stage-indicator__caret { display: none; }
+}
 
 /* ── Journey bar: the four stages, always visible, CE-voiced ────── */
 .journey-bar {
@@ -3348,7 +3385,7 @@ footer p {
  * ═══════════════════════════════════════════════════════════════ */
 
 /* ── Brand wordmark → Bricolage for character ──────────────────── */
-.nav__logo { font-family: var(--ce-font-display); font-weight: 700; }
+.nav__logo { font-family: var(--ce-font-display); font-weight: 800; }
 
 /* ── Display headings → Bricolage, confident weights ───────────── *
  * Several titles were set to the body sans in earlier passes; bring

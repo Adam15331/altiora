@@ -8244,7 +8244,8 @@ function init() {
   AltioraState.subscribe(syncStatementSurface);
 
   // Workspace home: the wordmark is the home control; delegated actions on the home panel.
-  $('navHome')?.addEventListener('click', goHome);
+  // The wordmark is now a plain link to the landing page (href="./") — no JS.
+  // In-app home stays reachable via goHome() callers (Back, journey routing).
 
   // App-wide back: the nav "← Back" control and the browser Back/Forward
   // buttons (and the mobile back gesture) all resolve through the router.

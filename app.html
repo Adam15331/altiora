@@ -10,7 +10,7 @@
   <!-- Confident Editorial type — loaded via <link> (reliable) not @import -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
   <link rel="stylesheet" href="tokens.css?v=9" />
-  <link rel="stylesheet" href="styles.css?v=78" />
+  <link rel="stylesheet" href="styles.css?v=79" />
   <script defer data-domain="altiora.app" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
@@ -22,10 +22,13 @@
         <span aria-hidden="true">←</span>
         <span class="nav__back-label">Back</span>
       </button>
-      <button type="button" id="navHome" class="nav__brand" aria-label="Altiora home" title="Go home">
+      <!-- The wordmark is the brand, and it links to the front door. Relative
+           "./" so it resolves under the GitHub Pages subpath. In-app home
+           navigation belongs to the Back button and the journey bar. -->
+      <a id="navHome" class="nav__brand" href="./" aria-label="Altiora — about this site" title="About Altiora">
         <span class="nav__logo">Altiora</span>
         <span class="nav__tagline">Your journey, guided.</span>
-      </button>
+      </a>
     </div>
   </nav>
 
@@ -172,11 +175,15 @@
           <nav id="journeyBar" class="journey-bar" aria-label="Your journey">
             <!-- rendered by JS (renderJourneyBar) -->
           </nav>
+          <!-- One toolbar line: tool pills left, profile + collections right.
+               Each cluster is a single flex item, so narrow widths wrap whole
+               clusters — never one orphaned pill. -->
           <div class="stage-bar__row">
           <nav id="stageToolNav" class="stage-tool-nav" aria-label="Tools for this stage">
             <!-- rendered by JS for the active stage -->
           </nav>
           <span class="stage-bar__spacer" aria-hidden="true"></span>
+          <div class="stage-bar__me">
           <div class="stage-bar__indicator">
             <button id="profileIndicatorBtn" class="stage-indicator" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">
               <span class="stage-indicator__label"><strong id="systemIndicatorName">…</strong> · <strong id="yearIndicatorName">—</strong></span>
@@ -204,6 +211,7 @@
               </div>
             </div>
           </div>
+          <div class="stage-bar__collections">
           <div class="fields-nav">
             <button id="fieldsLink" class="shortlist-link" type="button"
                     aria-haspopup="true" aria-expanded="false" aria-controls="fieldsMenu"
@@ -226,6 +234,8 @@
             <span class="shortlist-link__icon" aria-hidden="true">📖</span>
             <span class="shortlist-link__text">My Story (<span id="storyCount">0</span>)</span>
           </button>
+          </div><!-- /stage-bar__collections -->
+          </div><!-- /stage-bar__me -->
           </div><!-- /stage-bar__row -->
         </div>
 
@@ -520,7 +530,7 @@
   <script src="data/fieldProfiles.js?v=2"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
   <script src="state.js?v=15"></script>
-  <script src="main.js?v=89"></script>
+  <script src="main.js?v=90"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);
