@@ -2918,12 +2918,16 @@ function storySynthesis(a) {
 
 // One entry: a collapsible card. Open by default so the synthesis is
 // visible at a glance; the summary row collapses it to just the title.
-function storyCardHtml(a) {
+// opts.readOnly renders the SAME card as a reference — no Edit/Delete,
+// collapsed by default (the statement rail cites entries, it doesn't
+// manage them). One renderer, two placements; never forked.
+function storyCardHtml(a, opts = {}) {
   const meta = [a.organisation, a.level, a.date].filter(Boolean).map(esc).join(' · ');
   const typeLabel = achievementTypeLabel(a.type);
   const synthesis = storySynthesis(a);
+  const readOnly = !!opts.readOnly;
   return `
-    <details class="achv-card story-card" data-achv-id="${esc(a.id)}" open>
+    <details class="achv-card story-card" data-achv-id="${esc(a.id)}"${readOnly ? '' : ' open'}>
       <summary class="story-card__summary">
         <span class="achv-card__title">${esc(a.title)}</span>
         <span class="achv-card__meta">${esc(typeLabel)}${meta ? ` · ${meta}` : ''}</span>
@@ -2932,10 +2936,11 @@ function storyCardHtml(a) {
       <div class="story-card__body">
         ${synthesis ? `<p class="story-card__synthesis">${esc(synthesis)}</p>` : ''}
         ${a.description ? `<p class="achv-card__desc">${esc(a.description)}</p>` : ''}
+        ${readOnly ? '' : `
         <div class="achv-card__actions">
           <button type="button" class="achv-card__btn" data-achv-edit="${esc(a.id)}">Edit</button>
           <button type="button" class="achv-card__btn achv-card__btn--del" data-achv-del="${esc(a.id)}">Delete</button>
-        </div>
+        </div>`}
       </div>
     </details>`;
 }
@@ -3328,8 +3333,235 @@ function renderStoryPanel() {
         <p class="story-view__sub">The things you've done, and what they taught you.</p>
       </header>
       ${achievementsSectionHtml()}
+      ${statementSectionHtml()}
     </div>`;
   renderAchievementsList();
+  renderStatementRefs();
+  syncStatementCounters();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * UCAS STATEMENT DRAFTING — assemble from your own material.
+ * Three editors, one per official UCAS question, official wording
+ * verbatim. The student's story-bank entries sit beside each question
+ * as read-only references. Drafting here is scaffolding: the finished
+ * statement is submitted on UCAS, not here.
+ *
+ * HARD RULE: prompting is QUESTIONS ONLY. No example sentences, no
+ * sentence starters, no model paragraphs, no claims about what strong
+ * statements do or what admissions tutors want.
+ * ═══════════════════════════════════════════════════════════════ */
+
+// Format transcribed by the maintainer from the official UCAS guidance,
+// read directly on 2026-08-15 (ucas.com is unfetchable from this build
+// environment, so this constant is the recorded source of truth).
+// UCAS also states: the three answers are reviewed as ONE statement,
+// there is no "wrong" place for a piece of evidence, and answers should
+// not repeat each other — reflected in the prompting questions below.
+const UCAS_STATEMENT = {
+  source: 'https://www.ucas.com/applying/applying-to-university/writing-your-personal-statement/how-to-write-your-personal-statement-for-2026-entry-onwards',
+  checkedDate: '2026-08-15',
+  totalLimit: 4000,    // characters ACROSS all three answers, incl. spaces + line breaks
+  perAnswerMin: 350,   // character minimum PER answer
+  // Official question wording, verbatim. Question text does NOT count
+  // toward the limit.
+  questions: [
+    { id: 'q1', text: 'Why do you want to study this course or subject?' },
+    { id: 'q2', text: 'How have your qualifications and studies helped you to prepare for this course or subject?' },
+    { id: 'q3', text: 'What else have you done to prepare outside of education, and why are these experiences useful?' },
+  ],
+};
+
+// Altiora's own prompting — questions only, pointing the student back at
+// their material, never at a formula.
+const STATEMENT_PROMPTS = {
+  q1: 'Which of your entries shows why this subject, and not a neighbouring one?',
+  q2: 'Where did your studies go beyond what was asked of you — and what pulled you there?',
+  q3: 'What did you do that nobody required — and what does it show? UCAS reads all three answers as one statement: does each experience appear only once?',
+};
+
+// Which story entries sit beside which question, by entry TYPE (Q2/Q3)
+// or by the student's pinned fields (Q1). References, not rules — the
+// full story bank is always right above.
+const STATEMENT_Q2_TYPES = new Set(['certificate', 'award', 'competition']);
+const STATEMENT_Q3_TYPES = new Set(['leadership', 'volunteering', 'work', 'activity', 'other']);
+
+function statementRefsFor(qid) {
+  const items = AltioraState.getAchievements();
+  if (qid === 'q1') {
+    const pinned = activeCandidateFields();
+    return items.filter(a => (a.fields || []).some(f => pinned.includes(f)));
+  }
+  if (qid === 'q2') return items.filter(a => STATEMENT_Q2_TYPES.has(a.type));
+  return items.filter(a => STATEMENT_Q3_TYPES.has(a.type));
+}
+
+// Visibility: the drafting surface is a UCAS artefact, so it exists only
+// for UK A-Level students, and only near application (yearsUntilApplication
+// <= 1). Earlier UK years get one plain line; other systems get nothing.
+function statementDraftingState() {
+  const p = AltioraState.getProfile();
+  if (p.qualificationSystem !== 'UK_A_Level') return 'hidden';
+  const yrs = studentYears();
+  return (yrs != null && yrs <= 1) ? 'active' : 'locked';
+}
+
+// The inputs the section's SHAPE depends on. When these change the section
+// re-renders; a mere draft keystroke (which also commits state) must not —
+// re-rendering mid-typing would destroy the textarea's focus and cursor.
+function statementShapeSig() {
+  const p = AltioraState.getProfile();
+  return `${p.qualificationSystem}|${studentYears()}`;
+}
+
+function fmtChars(n) { return n.toLocaleString('en-GB'); }
+
+function statementSectionHtml() {
+  const mode = statementDraftingState();
+  if (mode === 'hidden') return '';
+  if (mode === 'locked') {
+    return `
+    <section class="stmt stmt--locked" aria-label="Draft your statement" data-stmt-sig="${esc(statementShapeSig())}">
+      <p class="stmt__locked-line">Statement drafting unlocks closer to application.</p>
+    </section>`;
+  }
+  const drafts = AltioraState.getStatementDrafts();
+  const qs = UCAS_STATEMENT.questions.map((q, i) => `
+    <div class="stmt__q" data-stmt-q="${q.id}">
+      <h3 class="stmt__question"><span class="stmt__qnum">${i + 1}</span>${esc(q.text)}</h3>
+      <p class="stmt__prompt">${esc(STATEMENT_PROMPTS[q.id])}</p>
+      <div class="stmt__grid">
+        <div class="stmt__editor">
+          <textarea class="stmt__ta" data-stmt-input="${q.id}"
+            aria-label="Your answer to: ${esc(q.text)}"
+            spellcheck="true">${esc(drafts[q.id] ?? '')}</textarea>
+          <div class="stmt__meta">
+            <span class="stmt__count" data-stmt-count="${q.id}"></span>
+            <button type="button" class="stmt__copy" data-stmt-copy="${q.id}">Copy as plain text</button>
+          </div>
+        </div>
+        <aside class="stmt__refs" aria-label="Your story entries relevant to this question">
+          <span class="stmt__refs-label">From your story</span>
+          <div data-stmt-refs="${q.id}"></div>
+        </aside>
+      </div>
+    </div>`).join('');
+
+  return `
+    <section class="stmt" aria-label="Draft your statement" data-stmt-sig="${esc(statementShapeSig())}">
+      <h2 class="stmt__head">Draft your statement</h2>
+      <p class="stmt__format">Three questions, answered as one statement: ${fmtChars(UCAS_STATEMENT.totalLimit)} characters
+        across all three (spaces and line breaks count), at least ${UCAS_STATEMENT.perAnswerMin} per answer.
+        The question text doesn't count — only what you write.</p>
+      <p class="stmt__total" data-stmt-total aria-live="polite"></p>
+      ${qs}
+      <p class="achv__note">Assemble from your own material — the finished statement is submitted on UCAS, not here.
+        Your drafts stay on this device only, which matches UCAS's own advice not to share your statement or post it anywhere.</p>
+    </section>`;
+}
+
+// Read the LIVE textarea values (they lead the state by a debounce tick).
+function statementLiveValues() {
+  const out = {};
+  UCAS_STATEMENT.questions.forEach(q => {
+    const ta = document.querySelector(`[data-stmt-input="${q.id}"]`);
+    out[q.id] = ta ? ta.value : (AltioraState.getStatementDrafts()[q.id] ?? '');
+  });
+  return out;
+}
+
+// Counters are plain statements of fact in mono — never an alarm.
+function syncStatementCounters() {
+  if (!document.querySelector('[data-stmt-total]')) return;
+  const vals = statementLiveValues();
+  let total = 0;
+  UCAS_STATEMENT.questions.forEach(q => {
+    const n = vals[q.id].length;      // .length counts spaces and line breaks
+    total += n;
+    const el = document.querySelector(`[data-stmt-count="${q.id}"]`);
+    if (!el) return;
+    el.textContent = n === 0
+      ? `0 characters · minimum ${UCAS_STATEMENT.perAnswerMin}`
+      : n < UCAS_STATEMENT.perAnswerMin
+        ? `${fmtChars(n)} characters · below the ${UCAS_STATEMENT.perAnswerMin} minimum`
+        : `${fmtChars(n)} characters`;
+  });
+  const totalEl = document.querySelector('[data-stmt-total]');
+  if (totalEl) {
+    totalEl.textContent = total <= UCAS_STATEMENT.totalLimit
+      ? `${fmtChars(total)} / ${fmtChars(UCAS_STATEMENT.totalLimit)} characters across all three`
+      : `${fmtChars(total)} / ${fmtChars(UCAS_STATEMENT.totalLimit)} characters — ${fmtChars(total - UCAS_STATEMENT.totalLimit)} over the limit`;
+    totalEl.classList.toggle('stmt__total--over', total > UCAS_STATEMENT.totalLimit);
+  }
+}
+
+// The read-only reference rail beside each question. Re-rendered on every
+// state change (entries and pinned fields move); textareas are never
+// touched here, so typing focus survives.
+function renderStatementRefs() {
+  if (statementDraftingState() !== 'active') return;
+  UCAS_STATEMENT.questions.forEach(q => {
+    const host = document.querySelector(`[data-stmt-refs="${q.id}"]`);
+    if (!host) return;
+    const refs = statementRefsFor(q.id);
+    host.innerHTML = refs.length
+      ? refs.map(a => storyCardHtml(a, { readOnly: true })).join('')
+      : `<p class="stmt__refs-empty">Nothing in your story fits this question yet.
+           <button type="button" class="stmt__refs-add" data-stmt-add-entry>Add an entry</button></p>`;
+  });
+}
+
+// Shape changes (system/year) rebuild the section; everything else only
+// refreshes the reference rails. Subscribed once at init.
+function syncStatementSurface() {
+  const panel = $('panel-story');
+  if (!panel || !panel.querySelector('.story-view')) return;
+  const section = panel.querySelector('.stmt');
+  const sig = statementShapeSig();
+  if ((section?.dataset.stmtSig ?? null) !== (statementDraftingState() === 'hidden' ? null : sig)) {
+    renderStoryPanel();
+    return;
+  }
+  renderStatementRefs();
+}
+
+let _stmtSaveTimers = {};
+function wireStatementDrafting() {
+  document.addEventListener('input', e => {
+    const ta = e.target.closest?.('[data-stmt-input]');
+    if (!ta) return;
+    syncStatementCounters();                     // instant feedback…
+    const q = ta.dataset.stmtInput;
+    clearTimeout(_stmtSaveTimers[q]);            // …debounced persistence
+    _stmtSaveTimers[q] = setTimeout(() => AltioraState.setStatementDraft(q, ta.value), 500);
+  });
+  document.addEventListener('click', e => {
+    const copy = e.target.closest?.('[data-stmt-copy]');
+    if (copy) {
+      const ta = document.querySelector(`[data-stmt-input="${copy.dataset.stmtCopy}"]`);
+      const text = ta ? ta.value : '';
+      const done = () => showToast('Copied as plain text.');
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text).then(done, () => {
+          ta?.select(); document.execCommand('copy'); done();
+        });
+      } else {
+        ta?.select(); document.execCommand('copy'); done();
+      }
+      return;
+    }
+    if (e.target.closest?.('[data-stmt-add-entry]')) {
+      openAchievementForm(null);
+    }
+  });
+  // Flush a pending draft if the page is being left inside the debounce window.
+  window.addEventListener('pagehide', () => {
+    Object.keys(_stmtSaveTimers).forEach(q => {
+      clearTimeout(_stmtSaveTimers[q]);
+      const ta = document.querySelector(`[data-stmt-input="${q}"]`);
+      if (ta) AltioraState.setStatementDraft(q, ta.value);
+    });
+  });
 }
 
 // The compact home summary: "5 entries · Engineering strong · Economics none
@@ -7926,6 +8158,8 @@ function init() {
   AltioraState.subscribe(renderApplyingChecklist);
   wireApplyingChecklist();
   wireBackupControls();
+  wireStatementDrafting();
+  AltioraState.subscribe(syncStatementSurface);
 
   // Workspace home: the wordmark is the home control; delegated actions on the home panel.
   $('navHome')?.addEventListener('click', goHome);

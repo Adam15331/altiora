@@ -52,6 +52,7 @@ const AltioraState = (() => {
         candidateFields:     [],      // category ids the student is considering (max 3, order = priority)
         achievements:        [],      // the student's STORY BANK: entries with reflections + optional field tags — see addAchievement()
         applicationTasks:    {},      // Applying checklist: { taskId: true } for completed tasks — see setApplicationTask()
+        statementDrafts:     { q1: '', q2: '', q3: '' },  // UCAS statement drafts, one string per official question — see setStatementDraft()
         yearGroup:            null,   // raw year label in the student's own system, e.g. "Year 12", "Grade 11", "Form 5"
         yearsUntilApplication: null,  // normalised scale driving ALL logic: 3 (3+ years out) | 2 | 1 | 0 (application year)
         yearSetAt:            null,   // ISO date the year was last set — for future academic-year rollover detection
@@ -110,6 +111,14 @@ const AltioraState = (() => {
       profile.applicationTasks = Object.fromEntries(
         Object.entries(profile.applicationTasks).filter(([, v]) => v === true));
     }
+    // UCAS statement drafts are additive: old saves have no key. Normalise
+    // to the three-question shape with plain strings so callers never guard.
+    const drafts = profile.statementDrafts;
+    profile.statementDrafts = {
+      q1: (drafts && typeof drafts.q1 === 'string') ? drafts.q1 : '',
+      q2: (drafts && typeof drafts.q2 === 'string') ? drafts.q2 : '',
+      q3: (drafts && typeof drafts.q3 === 'string') ? drafts.q3 : '',
+    };
     // Per-subject grade migration: letter-profile systems (UK/SG A-Levels,
     // HK DSE) moved from one average string to a {subject → grade} map. An
     // old save's single average hydrates as that grade for EVERY saved
@@ -485,6 +494,29 @@ const AltioraState = (() => {
     _commit();
   }
 
+  /* ─── UCAS statement drafts ───────────────────────────────────
+   * Three long-form strings, one per official question. Draft text is
+   * stored verbatim (no trimming — whitespace is the student's own and
+   * counts toward the UCAS character limit).
+   * ───────────────────────────────────────────────────────────── */
+  function _draftsRef() {
+    const d = _state.profile.statementDrafts;
+    if (!d || typeof d !== 'object') {
+      _state.profile.statementDrafts = { q1: '', q2: '', q3: '' };
+    }
+    return _state.profile.statementDrafts;
+  }
+
+  function getStatementDrafts() {
+    return { ..._draftsRef() };
+  }
+
+  function setStatementDraft(q, text) {
+    if (!['q1', 'q2', 'q3'].includes(q)) return;
+    _draftsRef()[q] = (text == null) ? '' : String(text);
+    _commit();
+  }
+
   function addToShortlist(courseId) {
     if (courseId == null) return;
     if (!_state.shortlist.includes(courseId)) {
@@ -554,6 +586,8 @@ const AltioraState = (() => {
     getApplicationTasks,
     isApplicationTaskDone,
     setApplicationTask,
+    getStatementDrafts,
+    setStatementDraft,
     getAchievements,
     addAchievement,
     updateAchievement,
