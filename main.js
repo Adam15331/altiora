@@ -3420,9 +3420,15 @@ function statementSectionHtml() {
   const mode = statementDraftingState();
   if (mode === 'hidden') return '';
   if (mode === 'locked') {
+    // Two locked states, two truths: a KNOWN early year genuinely is early;
+    // an UNSET year is us not knowing — saying "too early" there would be a
+    // confident claim built on absent data.
+    const line = studentYears() == null
+      ? `<button type="button" class="stmt__locked-link" data-stmt-open-profile>Set your year</button> to unlock statement drafting.`
+      : 'Statement drafting unlocks closer to application.';
     return `
     <section class="stmt stmt--locked" aria-label="Draft your statement" data-stmt-sig="${esc(statementShapeSig())}">
-      <p class="stmt__locked-line">Statement drafting unlocks closer to application.</p>
+      <p class="stmt__locked-line">${line}</p>
     </section>`;
   }
   const drafts = AltioraState.getStatementDrafts();
@@ -3500,12 +3506,24 @@ function syncStatementCounters() {
 // touched here, so typing focus survives.
 function renderStatementRefs() {
   if (statementDraftingState() !== 'active') return;
+  const haveEntries = AltioraState.getAchievements().length > 0;
+  const havePins    = activeCandidateFields().length > 0;
   UCAS_STATEMENT.questions.forEach(q => {
     const host = document.querySelector(`[data-stmt-refs="${q.id}"]`);
     if (!host) return;
     const refs = statementRefsFor(q.id);
-    host.innerHTML = refs.length
-      ? refs.map(a => storyCardHtml(a, { readOnly: true })).join('')
+    if (refs.length) {
+      host.innerHTML = refs.map(a => storyCardHtml(a, { readOnly: true })).join('');
+      return;
+    }
+    // Q1 matches entries BY PINNED FIELD, so with entries but no pins the
+    // honest statement is "we can't match", not "nothing fits" — the same
+    // rule as the honesty labels: absent data is never a confident claim.
+    // Q2/Q3 match by entry type, so their empty line stays accurate; Q1
+    // keeps it only when there are genuinely no entries at all.
+    host.innerHTML = (q.id === 'q1' && haveEntries && !havePins)
+      ? `<p class="stmt__refs-empty">Pin the fields you're considering and your entries will show here.
+           <button type="button" class="stmt__refs-add" data-stmt-open-fields>Open My fields</button></p>`
       : `<p class="stmt__refs-empty">Nothing in your story fits this question yet.
            <button type="button" class="stmt__refs-add" data-stmt-add-entry>Add an entry</button></p>`;
   });
@@ -3552,6 +3570,20 @@ function wireStatementDrafting() {
     }
     if (e.target.closest?.('[data-stmt-add-entry]')) {
       openAchievementForm(null);
+      return;
+    }
+    // "Open My fields": the fields pill in the nav — its own toggle owns the
+    // open/close state, so go through the real control rather than a copy.
+    if (e.target.closest?.('[data-stmt-open-fields]')) {
+      const pill = $('fieldsLink');
+      pill?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      pill?.click();
+      return;
+    }
+    // "Set your year": the profile pill popover, where the year lives.
+    if (e.target.closest?.('[data-stmt-open-profile]')) {
+      $('profileIndicatorBtn')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      openProfileMenu();
     }
   });
   // Flush a pending draft if the page is being left inside the debounce window.

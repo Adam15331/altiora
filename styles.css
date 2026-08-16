@@ -4327,6 +4327,16 @@ button.plan-combo-tag--drop:focus-visible {
   letter-spacing: .03em;
   color: var(--ce-ink-30);
 }
+.stmt__locked-link {
+  padding: 0;
+  background: none;
+  border: none;
+  font: inherit;
+  color: var(--ce-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
 .stmt__head {
   font-family: var(--ce-font-display);
   font-size: var(--text-xl);
