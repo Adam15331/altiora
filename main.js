@@ -2107,7 +2107,11 @@ function renderStageToolNav(stage) {
   if (stage === 'exploring' && _yrs != null && _yrs <= 1) tools = tools.filter(t => t !== 'plan');
   nav.innerHTML = tools.map((mode, i) => {
     const cls = `stage-tool${i === 0 ? ' stage-tool--primary' : ''}`;
-    return `<button class="${cls}" data-mode="${mode}">${esc(MODE_LABELS[mode] || mode)}</button>`;
+    // The Applying stage's only tool pill would repeat the journey bar's
+    // active "Applying" label an inch below it — here (and only here) the
+    // pill reads "My plan". Same target, same behaviour, tool-nav only.
+    const label = (stage === 'applying' && mode === 'applying') ? 'My plan' : (MODE_LABELS[mode] || mode);
+    return `<button class="${cls}" data-mode="${mode}">${esc(label)}</button>`;
   }).join('');
 
   $$('#stageToolNav .stage-tool').forEach(btn =>
@@ -2979,20 +2983,40 @@ function storySynthesis(a) {
 // opts.readOnly renders the SAME card as a reference — no Edit/Delete,
 // collapsed by default (the statement rail cites entries, it doesn't
 // manage them). One renderer, two placements; never forked.
+// The three scaffold answers as labelled lines — the form's own step names
+// in the mono functional layer. Only filled parts render; never an empty
+// label. Legacy "why it mattered" text joins the WHAT IT SHOWED line.
+function storyScaffoldHtml(a) {
+  const showed = [a.whatItTaught, a.whyItMattered].filter(v => v && v.trim()).join(' ');
+  const lines = [
+    ['What happened',  a.situation],
+    ['What you did',   a.whatIDid],
+    ['What it showed', showed],
+  ].filter(([, v]) => v && v.trim());
+  if (!lines.length) return '';
+  return `<dl class="story-card__scaffold">${lines.map(([l, v]) =>
+    `<div class="story-card__line"><dt class="story-card__linelabel">${esc(l)}</dt><dd class="story-card__linetext">${esc(v.trim())}</dd></div>`).join('')}</dl>`;
+}
+
 function storyCardHtml(a, opts = {}) {
   const meta = [a.organisation, a.level, a.date].filter(Boolean).map(esc).join(' · ');
   const typeLabel = achievementTypeLabel(a.type);
-  const synthesis = storySynthesis(a);
+  const scaffold = storyScaffoldHtml(a);
   const readOnly = !!opts.readOnly;
+  // Read-only rail cards get an explicit mono More/Less affordance instead
+  // of the bare caret; the text swap is CSS-driven off the [open] state.
+  const affordance = readOnly
+    ? `<span class="story-card__more" aria-hidden="true"></span>`
+    : `<span class="story-card__caret" aria-hidden="true">▾</span>`;
   return `
     <details class="achv-card story-card" data-achv-id="${esc(a.id)}"${readOnly ? '' : ' open'}>
       <summary class="story-card__summary">
         <span class="achv-card__title">${esc(a.title)}</span>
         <span class="achv-card__meta">${esc(typeLabel)}${meta ? ` · ${meta}` : ''}</span>
-        <span class="story-card__caret" aria-hidden="true">▾</span>
+        ${affordance}
       </summary>
       <div class="story-card__body">
-        ${synthesis ? `<p class="story-card__synthesis">${esc(synthesis)}</p>` : ''}
+        ${scaffold}
         ${a.description ? `<p class="achv-card__desc">${esc(a.description)}</p>` : ''}
         ${readOnly ? '' : `
         <div class="achv-card__actions">
@@ -3588,7 +3612,14 @@ function renderStatementRefs() {
     if (!host) return;
     const refs = statementRefsFor(q.id);
     if (refs.length) {
+      // Preserve per-card expansion across the rail-only re-renders that
+      // every state commit (e.g. a draft autosave) triggers.
+      const openIds = new Set([...host.querySelectorAll('details[open]')].map(d => d.dataset.achvId));
       host.innerHTML = refs.map(a => storyCardHtml(a, { readOnly: true })).join('');
+      openIds.forEach(id => {
+        const d = host.querySelector(`details[data-achv-id="${CSS.escape(id)}"]`);
+        if (d) d.open = true;
+      });
       return;
     }
     // Q1 matches entries BY PINNED FIELD, so with entries but no pins the

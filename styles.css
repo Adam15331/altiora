@@ -4457,6 +4457,9 @@ button.plan-combo-tag--drop:focus-visible {
   padding-top: var(--space-4);
   margin-bottom: var(--space-5);
 }
+/* The sticky total already draws a hairline; question 1 must not add a
+   second one directly beneath it. */
+[data-stmt-empty] + .stmt__q { border-top: none; padding-top: var(--space-2); }
 .stmt__question {
   margin: 0 0 4px;
   font-size: var(--text-base);
@@ -4822,6 +4825,38 @@ button.plan-combo-tag--drop:focus-visible {
   transition: transform var(--t-fast);
 }
 .story-card[open] .story-card__caret { transform: rotate(180deg); }
+/* Scaffold answers as labelled lines: micro mono label + body text. */
+.story-card__scaffold { margin: 0 0 var(--space-2); }
+.story-card__line { margin-bottom: var(--space-2); }
+.story-card__line:last-child { margin-bottom: 0; }
+.story-card__linelabel {
+  font-family: var(--ce-font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ce-ink-30);
+  margin-bottom: 1px;
+}
+.story-card__linetext {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ce-ink);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+/* Read-only rail cards: explicit mono expand affordance; the label swaps
+   with the details [open] state, pure CSS. */
+.story-card__more {
+  flex-shrink: 0;
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--ce-ink-60);
+}
+.story-card__more::after { content: 'More ˅'; }
+.story-card[open] .story-card__more::after { content: 'Less ˄'; }
 .story-card__body { margin-top: var(--space-2); }
 .story-card__synthesis {
   margin: 0 0 var(--space-2);
