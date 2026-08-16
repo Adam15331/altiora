@@ -4310,6 +4310,159 @@ button.plan-combo-tag--drop:focus-visible {
   line-height: 1.5;
 }
 .story__invite.hidden { display: none; }
+
+/* ─── UCAS statement drafting ─────────────────────────────────────
+   Three plain editors under the story bank. Counters are Space Mono
+   statements of fact; over/under states are text, never alarms. */
+.stmt {
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: var(--ce-hairline);
+}
+.stmt--locked { padding-bottom: var(--space-2); }
+.stmt__locked-line {
+  margin: 0;
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  letter-spacing: .03em;
+  color: var(--ce-ink-30);
+}
+.stmt__locked-link {
+  padding: 0;
+  background: none;
+  border: none;
+  font: inherit;
+  color: var(--ce-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.stmt__head {
+  font-family: var(--ce-font-display);
+  font-size: var(--text-xl);
+  color: var(--ce-ink);
+  margin: 0 0 var(--space-2);
+}
+.stmt__format {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.6;
+  max-width: 62ch;
+}
+.stmt__total {
+  margin: 0 0 var(--space-4);
+  font-family: var(--ce-font-mono);
+  font-size: 12px;
+  letter-spacing: .03em;
+  color: var(--ce-ink-60);
+}
+.stmt__total--over { color: var(--ce-ink); font-weight: 700; }
+.stmt__q { margin-bottom: var(--space-6); }
+.stmt__question {
+  margin: 0 0 4px;
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--ce-ink);
+  line-height: 1.45;
+  display: flex;
+  gap: var(--space-2);
+  align-items: baseline;
+}
+.stmt__qnum {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ce-ink-30);
+  flex-shrink: 0;
+}
+.stmt__prompt {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-sm);
+  font-style: italic;
+  color: var(--ce-ink-60);
+  line-height: 1.55;
+  max-width: 58ch;
+}
+.stmt__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: var(--space-4);
+  align-items: start;
+}
+.stmt__editor { min-width: 0; }
+.stmt__ta {
+  display: block;
+  width: 100%;
+  min-height: 12rem;
+  padding: var(--space-3);
+  font-family: var(--ce-font-body);
+  font-size: 16px;              /* ≥16px so phone browsers don't zoom the field */
+  line-height: 1.6;
+  color: var(--ce-ink);
+  background: var(--ce-surface);
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius);
+  resize: vertical;
+}
+.stmt__ta:focus { outline: 2px solid var(--ce-ink); outline-offset: 1px; }
+.stmt__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-top: 6px;
+}
+.stmt__count {
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  letter-spacing: .03em;
+  color: var(--ce-ink-60);
+}
+.stmt__copy {
+  padding: 0;
+  background: none;
+  border: none;
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  letter-spacing: .04em;
+  color: var(--ce-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.stmt__refs { min-width: 0; }
+.stmt__refs-label {
+  display: block;
+  font-family: var(--ce-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--ce-ink-30);
+  margin-bottom: var(--space-2);
+}
+.stmt__refs .achv-card { margin-bottom: var(--space-2); }
+.stmt__refs-empty {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ce-ink-60);
+  line-height: 1.55;
+}
+.stmt__refs-add {
+  padding: 0;
+  background: none;
+  border: none;
+  font: inherit;
+  color: var(--ce-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+@media (max-width: 700px) {
+  .stmt__grid { grid-template-columns: minmax(0, 1fr); }
+}
 .achv-group { margin-bottom: var(--space-5); }
 .achv-group__label {
   display: block;
