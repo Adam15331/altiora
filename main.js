@@ -5446,6 +5446,7 @@ function renderSummaryBar(subjectCount, counts, total) {
       <div class="summary-seg summary-seg--unconfirmed" style="width:${uPct.toFixed(2)}%"></div>
       <div class="summary-seg summary-seg--red"   style="width:${rPct.toFixed(2)}%"></div>
     </div>
+    <p class="coverage-line">Altiora checks a selected, verified set of universities — plenty of good courses exist beyond it.</p>
   `;
 }
 
@@ -5700,6 +5701,21 @@ function renderCheckResults() {
   const container = $('courseGrid');
   container.innerHTML = '';
   let cardIndex = 0;
+
+  // Coverage-honest empty state: a field + country lens that yields ZERO is
+  // a fact about OUR coverage, never about what exists. Rendering only —
+  // counts and filtering above are untouched.
+  if (total === 0 && state.selectedCategories.size > 0 && state.countryFilter !== 'All') {
+    const fieldNames = [...state.selectedCategories]
+      .map(id => CATEGORY_LABEL_MAP[id] ?? id).join(' / ');
+    const countryName = COUNTRY_LABELS[state.countryFilter] ?? state.countryFilter;
+    container.innerHTML = `
+      <p class="coverage-empty">No ${esc(fieldNames)} courses in our ${esc(countryName)} set yet.
+        That's a gap in our coverage, not proof they don't exist — try All countries,
+        or go straight to university websites.</p>`;
+    // No return: every step below no-ops on empty groups, so the normal
+    // spinner/scroll/search handling still runs.
+  }
 
   // Section headings follow the same subject-only / grade-mode language rule
   // as every other label (statusLabel) — colours and grouping identical.

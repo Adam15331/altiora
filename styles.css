@@ -1621,6 +1621,24 @@ main     { flex: 1; padding: var(--pad); }
 .summary-stat--amber   { color: var(--color-match-possible); }
 .summary-stat--red     { color: var(--color-match-reach); }
 
+/* Coverage honesty: the results are a census of OUR verified set, never of
+   what exists. One plain mono line under the summary; no box, no border. */
+.coverage-line {
+  margin: var(--space-2) 0 0;
+  font-family: var(--ce-font-mono);
+  font-size: 11px;
+  letter-spacing: .03em;
+  color: var(--ce-ink-30);
+  line-height: 1.5;
+}
+/* The zero-result field+country state: plain prose, not an alarm box. */
+.coverage-empty {
+  margin: var(--space-5) 0;
+  font-size: var(--text-base);
+  color: var(--ce-ink-60);
+  line-height: 1.65;
+  max-width: 58ch;
+}
 .summary-progress {
   height: 3px;
   background: var(--color-border);
