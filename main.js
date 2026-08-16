@@ -2809,6 +2809,17 @@ const STORY_STEP_EXAMPLES = {
   competition:  { s: "Our robotics team's sensor kept misreading distance in bright light",
                   d: 'Rewrote the calibration code and tested it in different rooms over two weekends',
                   t: "I like debugging more than building from scratch — and I don't stop until I find the cause" },
+  // Self-directed work rotates between an EPQ voice and an Extended Essay
+  // voice — the shape of an entry, never a result. No named universities,
+  // no invented statistics, no outcome claims.
+  project:      [
+                  { s: 'Chose battery recycling for my EPQ after a chemistry lesson left me with more questions than answers',
+                    d: 'Read past the syllabus, interviewed a local repair shop, and rewrote my question twice when the evidence pointed elsewhere',
+                    t: 'I can run a long project on my own steam — and changing your question is progress, not failure' },
+                  { s: 'Wrote my Extended Essay on how translation changes a poem, starting from one line that bothered me',
+                    d: 'Compared three translations stanza by stanza and kept a log of every draft of my argument',
+                    t: 'I argue better on paper after letting an idea sit for a week' },
+                ],
   leadership:   { s: 'Our student council had ideas but meetings kept going in circles',
                   d: 'Started writing a one-page agenda and chasing actions between meetings',
                   t: "I'd rather organise quietly than talk loudly — and it works" },
@@ -2826,14 +2837,51 @@ const STORY_STEP_EXAMPLES = {
                   t: "I lose track of time when I'm making something" },
 };
 
+// Per-type hint under the Type select — discoverability only. Exists for
+// students who already have such a piece of work; nothing here suggests
+// anyone should do one.
+const ACHIEVEMENT_TYPE_HINTS = {
+  project: 'EPQ, Extended Essay, or any self-directed project or piece of research.',
+};
+
+// The three scaffold questions. Self-directed work has no external brief or
+// pace-setter, so 'project' asks in those terms; every other type keeps the
+// original questions.
+const STORY_STEP_QUESTIONS = {
+  default: {
+    s: 'What challenge, project, or question did you take on?',
+    d: 'What did you personally do about it?',
+    t: 'What did it teach you, or show about you?',
+  },
+  project: {
+    s: 'What question or problem did you choose — and why that one?',
+    d: "How did you go about it? Research, building, writing, changing course when something didn't work?",
+    t: "What did it teach you — about the subject, or about how you work when nobody's setting the pace?",
+  },
+};
+
 // Reflect the selected TYPE's examples under the three step inputs, so a
 // DofE student, a club captain, and a coder each see a relatable line.
+// A type may carry an ARRAY of example sets — those rotate deterministically
+// with the size of the story bank (same rotation rule as the invitations).
 function updateStoryStepExamples() {
   const type = $('achvType')?.value;
-  const ex = STORY_STEP_EXAMPLES[type] ?? STORY_STEP_EXAMPLES.other;
+  const raw = STORY_STEP_EXAMPLES[type] ?? STORY_STEP_EXAMPLES.other;
+  const n = (typeof AltioraState !== 'undefined') ? AltioraState.getAchievements().length : 0;
+  const ex = Array.isArray(raw) ? raw[n % raw.length] : raw;
   document.querySelectorAll('[data-step-eg]').forEach(el => {
     el.textContent = `e.g. “${ex[el.dataset.stepEg]}”`;
   });
+  const qs = STORY_STEP_QUESTIONS[type] ?? STORY_STEP_QUESTIONS.default;
+  document.querySelectorAll('[data-step-q]').forEach(el => {
+    el.textContent = qs[el.dataset.stepQ];
+  });
+  const hint = $('achvTypeHint');
+  if (hint) {
+    const text = ACHIEVEMENT_TYPE_HINTS[type] ?? '';
+    hint.textContent = text;
+    hint.classList.toggle('hidden', !text);
+  }
 }
 
 // The pinned candidate fields that resolve to a known category — the single
@@ -2862,6 +2910,7 @@ function achievementsSectionHtml() {
         <div class="achv__form-row">
           <label class="achv__label" for="achvType"><span>Type<span class="achv__req">*</span></span>
             <div class="select-wrap"><select id="achvType" class="achv__select">${typeOptions}</select></div>
+            <span id="achvTypeHint" class="achv__type-hint hidden"></span>
           </label>
           <label class="achv__label achv__label--grow" for="achvTitle"><span>Title<span class="achv__req">*</span></span>
             <input id="achvTitle" class="achv__input" type="text" maxlength="120"
@@ -2886,17 +2935,17 @@ function achievementsSectionHtml() {
         <div class="story__prompts">
           <p class="story__prompts-lead">Three tiny steps — one line each is plenty, and every step is optional.</p>
           <label class="achv__label achv__label--prompt" for="achvSituation">
-            <span class="story-step__head"><span class="story-step__num">1 · The situation</span>What challenge, project, or question did you take on?</span>
+            <span class="story-step__head"><span class="story-step__num">1 · The situation</span><span data-step-q="s">What challenge, project, or question did you take on?</span></span>
             <input id="achvSituation" class="achv__input" type="text" maxlength="400" placeholder="One line is plenty">
             <span class="story-step__eg" data-step-eg="s"></span>
           </label>
           <label class="achv__label achv__label--prompt" for="achvWhatIDid">
-            <span class="story-step__head"><span class="story-step__num">2 · What you did</span>What did you personally do about it?</span>
+            <span class="story-step__head"><span class="story-step__num">2 · What you did</span><span data-step-q="d">What did you personally do about it?</span></span>
             <input id="achvWhatIDid" class="achv__input" type="text" maxlength="400" placeholder="One line is plenty">
             <span class="story-step__eg" data-step-eg="d"></span>
           </label>
           <label class="achv__label achv__label--prompt" for="achvWhatItTaught">
-            <span class="story-step__head"><span class="story-step__num">3 · What it showed</span>What did it teach you, or show about you?</span>
+            <span class="story-step__head"><span class="story-step__num">3 · What it showed</span><span data-step-q="t">What did it teach you, or show about you?</span></span>
             <input id="achvWhatItTaught" class="achv__input" type="text" maxlength="400" placeholder="One line is plenty">
             <span class="story-step__eg" data-step-eg="t"></span>
           </label>
@@ -3392,7 +3441,7 @@ const STATEMENT_PROMPTS = {
 // Which story entries sit beside which question, by entry TYPE (Q2/Q3)
 // or by the student's pinned fields (Q1). References, not rules — the
 // full story bank is always right above.
-const STATEMENT_Q2_TYPES = new Set(['certificate', 'award', 'competition']);
+const STATEMENT_Q2_TYPES = new Set(['certificate', 'award', 'competition', 'project']);
 const STATEMENT_Q3_TYPES = new Set(['leadership', 'volunteering', 'work', 'activity', 'other']);
 
 function statementRefsFor(qid) {

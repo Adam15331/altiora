@@ -4584,6 +4584,14 @@ button.plan-combo-tag--drop:focus-visible {
 }
 .achv__label--grow { flex: 2; }
 .achv__req { color: var(--ce-status-possible); margin-left: 2px; }
+/* Per-type hint under the Type select — one muted line, no box. */
+.achv__type-hint {
+  display: block;
+  margin-top: 3px;
+  font-size: var(--text-xs);
+  color: var(--ce-ink-30);
+  line-height: 1.5;
+}
 .achv__input, .achv__select {
   font-family: var(--ce-font-body);
   font-size: var(--text-base);
