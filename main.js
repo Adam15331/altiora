@@ -2235,13 +2235,36 @@ function coursesNeedingTests(members, savedCourses) {
   return savedCourses.filter(c => (c.admissionTests || []).some(t => want.has(t)));
 }
 
-// "Needed for: A, B, C (3 of your 4 saved courses)" — their data, not a claim.
+// How a course relates to one of its tests. Anything but an explicit
+// "optional-lower-offer" hydrates as "required" — old saves and courses
+// without the field fail safe in the strict direction.
+function testRelationFor(course, test) {
+  const rel = course?.admissionTestRelations?.[test];
+  return rel === 'optional-lower-offer' ? 'optional-lower-offer' : 'required';
+}
+
+// "Needed for: A, B (2 of your 4 saved courses)" — their data, not a claim.
+// Where the verified source says the test only lowers the offer, say that
+// instead: "required" is requirement language we may not use for it.
 function testNeedsLine(members, savedCourses) {
   const hits = coursesNeedingTests(members, savedCourses);
   if (!hits.length) return null;
+  const want = new Set(members);
+  const isRequiredFor = c => (c.admissionTests || [])
+    .some(t => want.has(t) && testRelationFor(c, t) === 'required');
+  const needed   = hits.filter(c => isRequiredFor(c));
+  const optional = hits.filter(c => !isRequiredFor(c));
   const total = savedCourses.length;
-  return `Needed for: ${hits.map(courseShortLabel).join(', ')} `
-       + `(${hits.length} of your ${total} saved course${total === 1 ? '' : 's'})`;
+  const parts = [];
+  if (needed.length) {
+    parts.push(`Needed for: ${needed.map(courseShortLabel).join(', ')} `
+             + `(${needed.length} of your ${total} saved course${total === 1 ? '' : 's'})`);
+  }
+  if (optional.length) {
+    parts.push(`Optional for: ${optional.map(courseShortLabel).join(', ')} `
+             + `— can lower the offer. Not needed for the standard offer.`);
+  }
+  return parts.join(' · ');
 }
 
 // What the test actually is — transcribed description, named per test when a

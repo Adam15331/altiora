@@ -13,6 +13,16 @@
  *   grades.aLevels / .ib / .ap / .sgALevels / .hkDse
  *   admissionTests  – standardised test codes (TMUA, ESAT, PAT, LNAT, UCAT, STEP, TSA, HAT …)
  *   universityContext.tier / .intlFriendly / .notes
+ *
+ * ibHL tag semantics (IB Higher Level subject requirements):
+ *   Mathematics_Advanced = HL Mathematics: Analysis and Approaches ONLY
+ *   Mathematics_Standard = HL Mathematics with either AA or AI accepted
+ *
+ * ADDITIVE — admissionTestRelations (optional):
+ *   { <testCode>: "required" | "optional-lower-offer" } per course.
+ *   Absent field or absent test code hydrates as "required" — the strict,
+ *   fail-safe default. Set "optional-lower-offer" ONLY where the verified
+ *   source states the test lowers the offer rather than being required.
  */
 
 const courses = [
@@ -645,6 +655,23 @@ const courses = [
     notes: "AAB. Portfolio required.",
   },
   {
+    id: "uk-maths-edinburgh", name: "Mathematics BSc (Hons)",
+    university: "University of Edinburgh", country: "UK", degreeLevel: "BSc", category: "mathematics",
+    // RANGE, NOT OFFER: Edinburgh publishes the range of grades most
+    // applicants needed in recent years, not a single standard offer.
+    // Ranges never enter grade fields (verified-with-null, the NUS/McGill
+    // pattern) — the range and the firm subject floors live in notes.
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Mathematics_Advanced"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "7 in HL Mathematics (Analysis and Approaches only) is firm in any offer; SL English 5" },
+    admissionTests: [],
+    universityContext: {
+      tier: "world-top-50",
+      intlFriendly: true,
+      notes: "Scotland's largest research university; international students apply via UCAS on the same terms as UK students.",
+    },
+    notes: "Edinburgh publishes a range rather than a single standard offer — recent offers ran from A*A*A* to A*AB, always including A* in Mathematics. UCAS G100. A-Level grades in one set of exams; Further Mathematics preferred; the Mathematics qualification must be no more than two academic years old at entry. IB: from 38 points with 766 at HL to 34 points with 765 at HL — firm in any offer: 7 in HL Mathematics (Analysis and Approaches only) and 5 in SL English, with the same two-year recency rule on the Mathematics qualification. Direct entry to Year 2 (Scottish 4-year degree) may be possible if places are available: A*A*A* in one sitting including A* in Mathematics and A* in Further Mathematics, or IB 38 with 766 at HL including 7 in HL Maths AA. No admission test appears anywhere in the entry requirements — the absence is confirmed on the official page, not unchecked.",
+  },
+  {
     id: "uk-medicine-kcl", name: "Medicine MBBS",
     university: "King's College London", country: "UK", degreeLevel: "MBBS", category: "medicine",
     requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
@@ -814,6 +841,23 @@ const courses = [
     notes: "AAB. No specific required subjects.",
   },
   {
+    id: "uk-maths-manchester", name: "Mathematics BSc",
+    university: "University of Manchester", country: "UK", degreeLevel: "BSc", category: "mathematics",
+    // FM mirrors the Bristol pattern (genuinely not required), not the
+    // Durham one. The "A* in Mathematics OR Further Mathematics" either-slot
+    // shape cannot be expressed by the slot schema — carried in notes; same
+    // k-of-n follow-up as uk-maths-bristol / ca-cs-mcgill.
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Mathematics_Advanced"] },
+    grades: { aLevels: "A*AA", ib: 37, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "7,6,6 at HL incl 7 in Mathematics — ONLY HL Mathematics: Analysis and Approaches accepted" },
+    admissionTests: [],
+    universityContext: {
+      tier: "world-top-50",
+      intlFriendly: true,
+      notes: "Large Russell Group university with one of the UK's biggest international student communities.",
+    },
+    notes: "UCAS G100. A*AA including A* in Mathematics OR Further Mathematics. Further Mathematics preferred but not essential; when taken, it is included in the offer. Offers are based on three A-Levels taken in the same sitting. No aptitude test for 2027 entry and no interviews — the absence is confirmed on the official page, not unchecked. Accredited by the Royal Statistical Society and the Institute of Mathematics and its Applications.",
+  },
+  {
     id: "uk-economics-warwick", name: "Economics BSc",
     university: "University of Warwick", country: "UK", degreeLevel: "BSc", category: "economics",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Economics","Statistics"] },
@@ -845,6 +889,9 @@ const courses = [
     requirements: { essential: ["Mathematics_Standard","Mathematics_Advanced"], preferred: [], useful: ["Physics"] },
     grades: { aLevels: "A*A*A", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "776 at HL incl 7 in HL Maths (Analysis & Approaches); 766 at HL accepted with the 7 in HL Maths AA plus an accepted mathematics test" },
     admissionTests: ["TMUA","STEP"],
+    // Verified 2026-08-16: the test route is an ALTERNATIVE (lower) offer,
+    // never a requirement for the standard offer.
+    admissionTestRelations: { TMUA: "optional-lower-offer", STEP: "optional-lower-offer" },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -862,6 +909,9 @@ const courses = [
     requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Mathematics_Advanced","Physics","Computer_Science","Economics","Chemistry","Biology"] },
     grades: { aLevels: "A*A*A", ib: 40, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "40 with 18 at HL, incl 7 in HL Mathematics — Analysis & Approaches OR Applications & Interpretation both accepted (many competitive maths courses take only AA) — and 6 at HL in another mathematics-related subject (Biology, Chemistry, Computer Science, Economics or Physics)" },
     admissionTests: ["STEP"],
+    // Verified 2026-08-16: "STEP paper achievement may be included as part of
+    // an alternative offer — an alternative, not a requirement."
+    admissionTestRelations: { STEP: "optional-lower-offer" },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -1063,6 +1113,24 @@ const courses = [
       notes: "Consistently top-ranked for student satisfaction; strong placement-year culture in business and engineering.",
     },
     notes: "AAA. Mathematics essential.",
+  },
+  {
+    id: "uk-maths-bath", name: "Mathematics BSc (Hons)",
+    university: "University of Bath", country: "UK", degreeLevel: "BSc", category: "mathematics",
+    // Durham/Cambridge FM pattern: Further Mathematics is REQUIRED ("You
+    // must study Further Mathematics to be considered"). The either/or IB
+    // HL structure (7,7,6 with 6 in Maths AA OR 7,6,6 / 7,7,5 with 7 in
+    // Maths AA) cannot bind to one ibHL number — carried verbatim in the
+    // HL note; same k-of-n follow-up as uk-maths-bristol.
+    requirements: { essential: ["Mathematics_Standard","Mathematics_Advanced"], preferred: [], useful: ["Physics"] },
+    grades: { aLevels: "A*A*A", ib: 36, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "36 points and either 7,7,6 at HL incl 6 in Mathematics: Analysis & Approaches, or 7,6,6 / 7,7,5 at HL incl 7 in Maths AA — AA required at HL; Applications & Interpretation not considered" },
+    admissionTests: [],
+    universityContext: {
+      tier: "national-leading",
+      intlFriendly: true,
+      notes: "Consistently top-ranked for student satisfaction; strong placement-year culture in business and engineering.",
+    },
+    notes: "Typical offer A*A*A in three A levels including A*A in Mathematics and Further Mathematics — Further Mathematics is required ('You must study Further Mathematics to be considered'); the full A-level is strongly preferred, with AS-level Further Maths considered only in exceptional cases via A*A*A including A* in Mathematics plus A in AS Further Mathematics plus grade 2 in any STEP or Merit in GCE AEA Mathematics. Bath's published alternative offers: A*AA or A*A*B including A*A in Mathematics and Further Mathematics plus grade A in an EPQ or IEPQ, or an appropriate grade in another recognised project qualification. With A-level Mathematics and Further Mathematics (or IB/Advanced Highers), Bath does not consider STEP, MAT or TMUA at all; STEP enters only through the exceptional AS-Further-Maths route, and MAT is no longer accepted from 2025. Accredited by the IMA (Chartered Mathematician educational requirements).",
   },
   {
     id: "uk-economics-bath", name: "Economics BSc",
@@ -1647,6 +1715,24 @@ const courses = [
     notes: "Highly selective. Strong quantitative background preferred.",
   },
   {
+    id: "us-maths-stanford", name: "Mathematics BS",
+    university: "Stanford University", country: "US", degreeLevel: "BS", category: "mathematics",
+    requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    apContext: {
+      minCompetitiveAPs: 7, recommendedAPs: 10,
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
+      note: "US admissions is holistic — no hard subject requirements.",
+    },
+    universityContext: {
+      tier: "world-top-5",
+      intlFriendly: true,
+      notes: "Holistic admissions; international students apply via the Common App alongside domestic applicants.",
+    },
+    notes: "BS through the Stanford Bulletin's MATH-BS program; Stanford admits undergraduates undeclared — students declare the major after admission, so applicants apply to Stanford, not to the maths degree.",
+  },
+  {
     id: "us-cs-harvard", name: "Computer Science AB/SM",
     university: "Harvard University", country: "US", degreeLevel: "AB", category: "cs",
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
@@ -2043,6 +2129,24 @@ const courses = [
     notes: "Extremely selective.",
   },
   {
+    id: "us-maths-caltech", name: "Mathematics BS",
+    university: "Caltech", country: "US", degreeLevel: "BS", category: "mathematics",
+    requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    apContext: {
+      minCompetitiveAPs: 7, recommendedAPs: 10,
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
+      note: "US admissions is holistic — no hard subject requirements.",
+    },
+    universityContext: {
+      tier: "world-top-10",
+      intlFriendly: true,
+      notes: "Smallest and most STEM-intensive world-top-10 university; admits only ~200 students per year.",
+    },
+    notes: "Caltech calls its majors 'options'; the mathematics option is a BS (confirmed on Caltech's own admissions pages) centred on proof-based work — algebra, analysis, topology and geometry. All Caltech undergraduates complete the institute's shared core curriculum regardless of option.",
+  },
+  {
     id: "us-cs-cmu", name: "Computer Science BS",
     university: "Carnegie Mellon University", country: "US", degreeLevel: "BS", category: "cs",
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
@@ -2095,6 +2199,24 @@ const courses = [
       notes: "Top-ranked for computer science and robotics; strong tech industry recruitment.",
     },
     notes: "Highly selective. Quantitative focus.",
+  },
+  {
+    id: "us-maths-cmu", name: "Mathematical Sciences BS",
+    university: "Carnegie Mellon University", country: "US", degreeLevel: "BS", category: "mathematics",
+    requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    apContext: {
+      minCompetitiveAPs: 5, recommendedAPs: 8,
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
+      note: "US admissions is holistic — no hard subject requirements.",
+    },
+    universityContext: {
+      tier: "world-top-100",
+      intlFriendly: true,
+      notes: "Top-ranked for computer science and robotics; strong tech industry recruitment.",
+    },
+    notes: "BS in Mathematical Sciences through the Mellon College of Science; CMU admission is by college/school. The degree offers named concentrations including Mathematical Sciences, Operations Research and Statistics, Statistics, Discrete Mathematics and Logic, and Computational and Applied Mathematics.",
   },
   {
     id: "us-cs-berkeley", name: "Electrical Engineering & Computer Sciences (EECS) BS",
@@ -2169,6 +2291,24 @@ const courses = [
     notes: "Highly selective.",
   },
   {
+    id: "us-maths-berkeley", name: "Mathematics BA",
+    university: "UC Berkeley", country: "US", degreeLevel: "BA", category: "mathematics",
+    requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    apContext: {
+      minCompetitiveAPs: 4, recommendedAPs: 6,
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
+      note: "US admissions is holistic — no hard subject requirements.",
+    },
+    universityContext: {
+      tier: "world-top-25",
+      intlFriendly: true,
+      notes: "Top public university; international students pay non-resident tuition (~$44k/yr) and face a separate, competitive admissions pool.",
+    },
+    notes: "BA through the College of Letters & Science (L&S awards BA degrees). Admission is to L&S undeclared; students declare Mathematics after completing the lower-division sequence (Math 53, 54 or 56, and 55) with a minimum grade of C in each. An Applied Mathematics BA also exists in the same college.",
+  },
+  {
     id: "us-cs-michigan", name: "Computer Science BS",
     university: "University of Michigan", country: "US", degreeLevel: "BS", category: "cs",
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
@@ -2239,6 +2379,24 @@ const courses = [
       notes: "'Public Ivy' with a strong research reputation; international admissions is competitive and fees are higher than for in-state students.",
     },
     notes: "Competitive.",
+  },
+  {
+    id: "us-maths-michigan", name: "Mathematics BS/BA",
+    university: "University of Michigan", country: "US", degreeLevel: "BS/BA", category: "mathematics",
+    requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    apContext: {
+      minCompetitiveAPs: 4, recommendedAPs: 6,
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
+      note: "US admissions is holistic — no hard subject requirements.",
+    },
+    universityContext: {
+      tier: "world-top-100",
+      intlFriendly: true,
+      notes: "'Public Ivy' with a strong research reputation; international admissions is competitive and fees are higher than for in-state students.",
+    },
+    notes: "Offered through the College of Literature, Science, and the Arts (LSA) with several sub-plans (Pure Mathematics, Mathematical Sciences, Honors Mathematics); the plan is designed and declared with a department advisor, typically by sophomore year. LSA awards both BA and BS by coursework mix — the degree letters are not fixed by the major.",
   },
   {
     id: "us-business-nyu", name: "Business (Stern School) BS",
@@ -3548,6 +3706,24 @@ const courses = [
     notes: "Competitive.",
   },
   {
+    id: "us-maths-ucla", name: "Mathematics BS",
+    university: "UCLA", country: "US", degreeLevel: "BS", category: "mathematics",
+    requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    apContext: {
+      minCompetitiveAPs: 4, recommendedAPs: 6,
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
+      note: "US admissions is holistic — no hard subject requirements.",
+    },
+    universityContext: {
+      tier: "world-top-100",
+      intlFriendly: true,
+      notes: "Top public university in Los Angeles; international admissions is highly competitive and fees are high.",
+    },
+    notes: "BS; UCLA's maths department offers seven undergraduate majors (including Applied Mathematics, Mathematics of Computation, and Financial Actuarial Mathematics). Students enter as premajors and declare Mathematics after completing the calculus sequence with a minimum 2.5 GPA in it — the major is not automatic on admission.",
+  },
+  {
     id: "us-business-usc", name: "Business Administration BS (Marshall)",
     university: "University of Southern California", country: "US", degreeLevel: "BS", category: "business",
     requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
@@ -4429,6 +4605,9 @@ const courseVerification = {
   "uk-maths-ucl": { status: "verified", source: "https://www.ucl.ac.uk/maths/study/bscmsci-mathematics/admissions", checkedDate: "2026-06-28", notes: "A*A*A / IB 40 / 776 HL (7 in Maths AA) / STEP (or A*AA+STEP route) confirmed." },
   "uk-economics-warwick": { status: "verified", source: "https://warwick.ac.uk/study/undergraduate/courses/bsc-economics/", checkedDate: "2026-06-28", notes: "A*AA (incl A in Maths) / IB 38 (6 in HL Maths) confirmed. TMUA optional (high scorers may get reduced AAA offer); no required test." },
   "uk-maths-warwick": { status: "verified", source: "https://warwick.ac.uk/fac/sci/maths/studywithus/ug/our-offer/", checkedDate: "2026-06-28", notes: "A*A*A / IB 39 / 666 HL / TMUA (or STEP grade 2) all confirmed." },
+  "uk-maths-bath": { status: "verified", source: "https://www.bath.ac.uk/courses/undergraduate-2027/mathematical-sciences/bsc-mathematics/", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Bath 2027-entry course page, read directly by the maintainer. A-Level typical offer A*A*A in three A levels incl A*A in Mathematics and Further Mathematics; FM REQUIRED ('You must study Further Mathematics to be considered'), full A-level strongly preferred, AS-level FM only in exceptional cases via A*A*A incl A* Maths + A in AS Further Maths + grade 2 in any STEP or Merit in GCE AEA Mathematics. Published alternative offers (Bath's own offer structure, recorded verbatim): A*AA or A*A*B incl A*A in Maths and Further Maths PLUS grade A in an EPQ or IEPQ, or an appropriate grade in another recognised project qualification. IB: 36 points and EITHER 7,7,6 at HL incl 6 in Maths AA OR 7,6,6 / 7,7,5 at HL incl 7 in Maths AA; AA required at HL, Applications & Interpretation not considered. TESTS: with A-level Maths+FM (or IB/Advanced Highers) Bath does not consider STEP, MAT or TMUA at all; STEP enters only via the exceptional AS-FM route; MAT no longer accepted from 2025 — admissionTests stays empty, the note carries the exceptional case. IMA accredited (Chartered Mathematician educational requirements). Contextual offers exist and are NOT stored, per policy. SCHEMA LIMITATION: the either/or IB HL structure is two routes that cannot bind to one ibHL number — carried verbatim in the HL note; the A*A-in-the-pair A-Level shape rides the slot sort as with uk-maths-durham; same k-of-n follow-up family as uk-maths-bristol / ca-cs-mcgill." },
+  "uk-maths-edinburgh": { status: "verified", source: "https://study.ed.ac.uk/programmes/undergraduate/55-mathematics/entry-requirements", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Edinburgh 2027-entry entry-requirements page, read directly by the maintainer. STRUCTURAL: Edinburgh publishes the RANGE of grades most applicants needed in recent years, not a single standard offer — the verification succeeded, and what it confirmed is a range. Per the standing rule (distributions and ranges never enter grade fields), aLevels and ib stay NULL (verified-with-null, the NUS/McGill pattern); the range and the firm floors are the notes. A-Level range A*A*A* to A*AB in one set of exams; FIRM inside any offer: Mathematics at A*; Further Mathematics preferred; Maths qualification no more than two academic years old at entry. IB range 38 (766 HL) to 34 (765 HL); FIRM: HL Mathematics (Analysis and Approaches ONLY) at 7; SL English at 5; same recency rule. Direct entry to Year 2 'may be possible if places are available' (page's own framing): A*A*A* in one sitting incl Maths A* and Further Maths A*, or IB 38 / 766 HL incl 7 in HL Maths AA. No admission test appears anywhere in the entry requirements — a verified absence, stated as confirmed in the student-facing note. Widening-access minima exist and are NOT stored, per policy." },
+  "uk-maths-manchester": { status: "verified", source: "https://www.manchester.ac.uk/study/undergraduate/courses/2027/00590/bsc-mathematics/", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Manchester 2027-entry course page, read directly by the maintainer. A-Level: A*AA including A* in Mathematics OR Further Mathematics; Further Maths preferred but not essential — when taken, it is included in the offer; offers are based on three A-Levels taken in the same sitting. IB: 37 points with 7,6,6 at HL including 7 in Mathematics; ONLY HL Mathematics: Analysis and Approaches is accepted. NO admission test for 2027 entry and no interviews — confirmed on the official page, a verified absence, not unchecked. Accredited by the Royal Statistical Society and the Institute of Mathematics and its Applications. SCHEMA LIMITATION: the 'A* in Mathematics OR Further Mathematics' either-slot shape is one-of-a-set, which the slot schema cannot express — carried verbatim in notes; encoded as Maths essential, FM useful (the Bristol pattern); same k-of-n follow-up as uk-maths-bristol / ca-cs-mcgill." },
   "uk-maths-durham": { status: "verified", source: "https://www.durham.ac.uk/study/courses/mathematics-g100/", checkedDate: "2026-08-16", notes: "RESOLVED 2026-08-16 from the official Durham 2027-entry course page, read directly by the maintainer. A-Level two routes: (a) A*A*A including A*A* in Mathematics and Further Mathematics; (b) A*AA including A*A in Mathematics and Further Mathematics plus suitable performance in an accepted mathematics test — Durham's materials name TMUA, or Grade 2 in any STEP. The test route is an ALTERNATIVE (lower) offer, never a requirement for the standard offer. IB: 38 with 776 at HL incl 7 in HL Maths (Analysis & Approaches); or 766 at HL with the 7 in HL Maths AA plus an accepted mathematics test. Further Mathematics required on both A-Level routes — encoded with the same essential [Mathematics_Standard, Mathematics_Advanced] shape as uk-maths-cambridge / uk-maths-warwick. Stored grades = route (a)." },
   "uk-maths-bristol": { status: "verified", source: "https://www.bristol.ac.uk/study/undergraduate/2027/maths/bsc-mathematics/", checkedDate: "2026-08-16", notes: "RESOLVED 2026-08-16 from the official Bristol 2027-entry course page, read directly by the maintainer. A-Level two routes: (a) A*A*A including A* in Mathematics and A in another mathematics-related subject — Bristol's list verbatim: Biology; Chemistry; Computer Science; Economics; Physics; (b) A*AA including A*A (in any order) in Mathematics and Further Mathematics. STEP paper achievement may be included as part of an alternative offer. IB: 40 with 18 at HL, incl 7 at HL in Mathematics (either Analysis and Approaches OR Applications and Interpretations — an acceptance many competitive maths courses do not offer) and 6 at HL in another mathematics-related subject (same list). Further Mathematics NOT required (route (a) has no FM) — stored grades = route (a), Maths essential, FM not essential, route (b) in notes. SCHEMA LIMITATION: the 'A in ONE of five listed subjects' shape is one-of-a-set, which essential/preferred (both AND-lists) cannot express — the list is carried verbatim in notes and the tags stay at the closest honest fit; same k-of-n follow-up as ca-cs-mcgill." },
   "uk-cs-warwick": { status: "verified", source: "https://warwick.ac.uk/study/undergraduate/courses/bsc-computer-science/", checkedDate: "2026-06-28", notes: "A*A*A / IB 39 / 766 HL confirmed. TMUA REQUIRED for 2026/27 (stored 'no test' was wrong; contextual applicants exempt)." },
@@ -4485,6 +4664,12 @@ const courseVerification = {
   "us-engineering-princeton": { status: "verified", source: "https://ir.princeton.edu/document/546", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test-OPTIONAL for 2025-26 entry (testing required only from the 2027-28 cycle). Indicative middle-50%: SAT 1500–1560, ACT 34–35 (CDS 2024-25). Course existence & naming verified against official source. Re-mapped from non-existent generic 'Engineering & Applied Science BSE'; the BSE is awarded only via named departments." },
   "us-economics-princeton": { status: "verified", source: "https://ir.princeton.edu/document/546", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test-OPTIONAL for 2025-26 entry (testing required only from the 2027-28 cycle). Indicative middle-50%: SAT 1500–1560, ACT 34–35 (CDS 2024-25). Course existence & naming verified against official source." },
   "us-maths-princeton": { status: "verified", source: "https://ir.princeton.edu/document/546", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test-OPTIONAL for 2025-26 entry (testing required only from the 2027-28 cycle). Indicative middle-50%: SAT 1500–1560, ACT 34–35 (CDS 2024-25). Course existence & naming verified against official source." },
+  "us-maths-stanford": { status: "verified", source: "https://bulletin.stanford.edu/programs/MATH-BS", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Stanford Bulletin MATH-BS program page, read directly by the maintainer. BS through the Bulletin's MATH-BS program; Stanford admits undergraduates undeclared — students declare the major after admission, so applicants apply to Stanford, not to the maths degree. Test policy and admissions context come from the shared Stanford University record, unchanged." },
+  "us-maths-berkeley": { status: "verified", source: "https://undergraduate.catalog.berkeley.edu/programs/25540U", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Berkeley undergraduate catalog program page, read directly by the maintainer. BA through the College of Letters & Science (L&S awards BA degrees). Admission is to L&S undeclared; students declare Mathematics after completing the lower-division sequence (Math 53, 54 or 56, and 55) with a minimum grade of C in each — a declaration requirement inside Berkeley, not an admissions cutoff. An Applied Mathematics BA also exists in the same college. Test policy comes from the shared UC Berkeley record (test-blind), unchanged." },
+  "us-maths-caltech": { status: "verified", source: "https://www.catalog.caltech.edu/current/information-for-undergraduate-students/graduation-requirements-all-options/mathematics-option-ma/", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Caltech catalog mathematics-option page, read directly by the maintainer. Caltech calls its majors 'options'; the mathematics option is a BS (confirmed on Caltech's own admissions pages) centred on proof-based work — algebra, analysis, topology and geometry. All Caltech undergraduates complete the institute's shared core curriculum regardless of option. Test policy comes from the shared Caltech record, unchanged." },
+  "us-maths-cmu": { status: "verified", source: "http://coursecatalog.web.cmu.edu/schools-colleges/melloncollegeofscience/departmentofmathematicalsciences/", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official CMU course catalog (Department of Mathematical Sciences), read directly by the maintainer. BS in Mathematical Sciences through the Mellon College of Science; CMU admission is by college/school. Named concentrations include Mathematical Sciences, Operations Research and Statistics, Statistics, Discrete Mathematics and Logic, and Computational and Applied Mathematics. Test policy comes from the shared Carnegie Mellon record (varies by college), unchanged." },
+  "us-maths-ucla": { status: "verified", source: "https://ww3.math.ucla.edu/majors-minors-specializations/", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official UCLA Mathematics department majors page, read directly by the maintainer. BS; the department offers seven undergraduate majors (including Applied Mathematics, Mathematics of Computation, and Financial Actuarial Mathematics). Students enter as premajors and declare Mathematics after completing the calculus sequence with a minimum 2.5 GPA in it — a declaration requirement inside UCLA, not an admissions cutoff; the major is not automatic on admission. Test policy comes from the shared UCLA record (test-blind), unchanged." },
+  "us-maths-michigan": { status: "verified", source: "https://lsa.umich.edu/lsa/academics/majors-minors/mathematics-major.html", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Michigan LSA mathematics-major page, read directly by the maintainer. Offered through the College of Literature, Science, and the Arts with several sub-plans (Pure Mathematics, Mathematical Sciences, Honors Mathematics); the plan is designed and declared with a department advisor, typically by sophomore year. DEGREE LETTERS: the fetched pages name the major but not the degree letters, and LSA awards both BA and BS by coursework mix; the existing Michigan entries carry per-degree letters (BS, BSE, BBA, BA) and do not settle an LSA maths default, so the label is stored as BS/BA — the letters were NOT asserted from the source. Test policy comes from the shared University of Michigan record, unchanged." },
   "us-cs-stanford": { status: "verified", source: "https://admission.stanford.edu/apply/first-year/testing.html", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test required (resumed for 2025-26 cycle / Class of 2030). Indicative middle-50%: SAT 1510–1570, ACT 34–35 (CDS 2024-25). Course existence & naming verified against official source." },
   "us-engineering-stanford": { status: "verified", source: "https://admission.stanford.edu/apply/first-year/testing.html", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test required (resumed for 2025-26 cycle / Class of 2030). Indicative middle-50%: SAT 1510–1570, ACT 34–35 (CDS 2024-25). Course existence & naming verified against official source." },
   "us-economics-stanford": { status: "verified", source: "https://admission.stanford.edu/apply/first-year/testing.html", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test required (resumed for 2025-26 cycle / Class of 2030). Indicative middle-50%: SAT 1510–1570, ACT 34–35 (CDS 2024-25). Course existence & naming verified against official source." },
