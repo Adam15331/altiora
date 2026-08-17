@@ -2507,6 +2507,27 @@ const courses = [
     notes: "Highly selective.",
   },
   {
+    id: "us-maths-duke", name: "Mathematics BS/AB",
+    // BS/AB compound is the verified truth (same pattern as Michigan's
+    // BS/BA and Brown's AB/ScB) — the department offers both; see
+    // verification.
+    university: "Duke University", country: "US", degreeLevel: "BS/AB", category: "mathematics",
+    requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    apContext: {
+      minCompetitiveAPs: 5, recommendedAPs: 8,
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
+      note: "US admissions is holistic — no hard subject requirements.",
+    },
+    universityContext: {
+      tier: "world-top-100",
+      intlFriendly: true,
+      notes: "Top private research university in North Carolina; strong medical and policy research.",
+    },
+    notes: "Duke's department offers both the AB and the BS through Trinity College of Arts & Sciences; the bulletin itself states students planning graduate study in mathematics or the sciences should consider the BS (eight courses numbered 230+, vs seven for the AB). Duke admission is to the university, not the major.",
+  },
+  {
     id: "us-economics-duke", name: "Economics BA",
     university: "Duke University", country: "US", degreeLevel: "BA", category: "economics",
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
@@ -2699,6 +2720,19 @@ const courses = [
     notes: "Bachelor of Computing (Hons) at NTU's College of Computing and Data Science; H2 Maths plus one H2 science/computing subject required. A-Level indicative grade profile (10th percentile) AAB/C for AY2025-26.",
   },
   {
+    id: "sg-maths-ntu", name: "Mathematical Sciences BSc",
+    university: "Nanyang Technological University", country: "SG", degreeLevel: "BSc", category: "mathematics",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Physics","Computer_Science"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    universityContext: {
+      tier: "world-top-25",
+      intlFriendly: true,
+      notes: "Technology-focused university that has risen rapidly in global rankings; the NTU-Imperial Medicine degree is jointly taught.",
+    },
+    notes: "BSc in Mathematical Sciences through the School of Physical and Mathematical Sciences (programme code MATH), covering pure and applied mathematics, statistics, and theoretical computer science. NTU's official Indicative Grade Profile publication lists a Mathematical Sciences row (and joint programmes with Economics and Physics); profiles vary from year to year and meeting them does not guarantee admission.",
+  },
+  {
     id: "sg-engineering-ntu", name: "Electrical & Electronic Engineering BEng",
     university: "Nanyang Technological University", country: "SG", degreeLevel: "BEng", category: "engineering",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Physics"], useful: ["Chemistry","Computer_Science"] },
@@ -2870,6 +2904,19 @@ const courses = [
       notes: "Hong Kong's flagship university; consistently ranked among Asia's top 3; all teaching is in English.",
     },
     notes: "Admitted via HKU's Computing and Data Science scheme (JUPAS JS6999); students take BEng in Computer Science. Indicative expected lower boundary: IB 36 or A-Level AAA - real intake is competitive and higher.",
+  },
+  {
+    id: "hk-maths-hku", name: "Mathematics BSc",
+    university: "University of Hong Kong", country: "HK", degreeLevel: "BSc", category: "mathematics",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Physics","Statistics"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    universityContext: {
+      tier: "world-top-25",
+      intlFriendly: true,
+      notes: "Hong Kong's flagship university; consistently ranked among Asia's top 3; all teaching is in English.",
+    },
+    notes: "HKU Science admits into one BSc programme (JUPAS JS6901); students choose from the Science majors — including Mathematics and a more demanding Mathematics (Intensive) — with up to two years to decide, flexibility to change, and no quota per major. JUPAS admission uses the best 5 HKDSE subjects, which must include English, Mathematics and the best science elective, with 1.5x weighting on science electives, Mathematics and M1/M2 (per the Faculty's own FAQ).",
   },
   {
     id: "hk-engineering-hku", name: "Engineering BEng",
@@ -4031,6 +4078,50 @@ const courses = [
     notes: "Apply to the Faculty of Arts & Science 'Computer Science' admission category; a supplemental application is mandatory. Calculus-level maths is essential and admission is highly competitive (official guidance: competitive A&S programs need 30-35+ IB predicted).",
   },
   {
+    id: "ca-maths-toronto", name: "Mathematics HBSc",
+    university: "University of Toronto", country: "CA", degreeLevel: "HBSc", category: "mathematics",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Physics","Computer_Science"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    universityContext: {
+      tier: "world-top-50",
+      intlFriendly: true,
+      notes: "Canada's leading research university; international students pay a higher fee tier (~CAD 45,000–60,000/yr).",
+    },
+    notes: "Leads to the Honours Bachelor of Science through the Faculty of Arts & Science (St George). The department offers eight Specialist programs plus Major and Minor; the Major (ASMAJ1165) is open enrolment — any student who has completed 4.0 credits may enrol — while Specialists carry their own requirements. Program is chosen after first year, not on admission.",
+  },
+  {
+    id: "ca-maths-ubc", name: "Mathematics BSc",
+    university: "University of British Columbia", country: "CA", degreeLevel: "BSc", category: "mathematics",
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Physics","Computer_Science"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "UBC's own page: IB Math Applications & Interpretations SL (and Math Studies) do NOT satisfy the math requirement for science-based programs — acceptable routes are Math Analysis & Approaches SL or HL, or Math AI at HL only." },
+    admissionTests: [],
+    universityContext: {
+      tier: "world-top-50",
+      intlFriendly: true,
+      notes: "Major research university on the Pacific coast; one of the most popular Canadian universities for international students.",
+    },
+    notes: "Admission is to the Faculty of Science (Vancouver); the Mathematics major/honours is applied for afterwards — the department's transfer route from year 2 requires first-year calculus, linear algebra and a computing credit. IB students: Math Applications & Interpretations SL (and Math Studies) do not satisfy the math requirement for science-based programs — acceptable routes are Math Analysis & Approaches SL or HL, or Math AI at HL only. A BA Mathematics also exists.",
+  },
+  {
+    id: "ca-maths-mcgill", name: "Mathematics BSc",
+    university: "McGill University", country: "CA", degreeLevel: "BSc", category: "mathematics",
+    // McGill Faculty of Science prerequisite: Mathematics AND TWO OF Biology,
+    // Chemistry or Physics. The schema has no k-of-n shape (essential and
+    // preferred are both AND-lists), so the sciences sit in preferred — they
+    // downgrade rather than exclude. Maths is Standard, not Advanced: McGill
+    // accepts SL Math AA. See courseVerification notes; flagged for follow-up.
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Physics","Chemistry","Biology"], useful: ["Computer_Science","Statistics"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "No HL subjects strictly required: the maths prerequisite may be met with Maths AA at HL or SL, or Maths AI at HL only. Minimum expectation is 5+ in every HL/SL subject; admission is competitive and successful applicants typically exceed this." },
+    admissionTests: [],
+    universityContext: {
+      tier: "world-top-50",
+      intlFriendly: true,
+      notes: "Known as 'the Harvard of Canada'; English-speaking campus in French-speaking Montreal with strong medicine and law.",
+    },
+    notes: "Apply to the Faculty of Science (Physical, Earth, Math & Computer Sciences group); maths is a prerequisite (AA HL/SL or AI HL) and admission is competitive well above McGill's published minimum of 5s in all IB subjects.",
+  },
+  {
     id: "ca-engineering-utoronto", name: "Engineering Science BASc",
     university: "University of Toronto", country: "CA", degreeLevel: "BASc", category: "engineering",
     requirements: { essential: ["Mathematics_Advanced","Physics"], preferred: ["Chemistry"], useful: ["Computer_Science"] },
@@ -4720,6 +4811,12 @@ const courseVerification = {
   "us-engineering-princeton": { status: "verified", source: "https://ir.princeton.edu/document/546", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test-OPTIONAL for 2025-26 entry (testing required only from the 2027-28 cycle). Indicative middle-50%: SAT 1500–1560, ACT 34–35 (CDS 2024-25). Course existence & naming verified against official source. Re-mapped from non-existent generic 'Engineering & Applied Science BSE'; the BSE is awarded only via named departments." },
   "us-economics-princeton": { status: "verified", source: "https://ir.princeton.edu/document/546", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test-OPTIONAL for 2025-26 entry (testing required only from the 2027-28 cycle). Indicative middle-50%: SAT 1500–1560, ACT 34–35 (CDS 2024-25). Course existence & naming verified against official source." },
   "us-maths-princeton": { status: "verified", source: "https://ir.princeton.edu/document/546", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test-OPTIONAL for 2025-26 entry (testing required only from the 2027-28 cycle). Indicative middle-50%: SAT 1500–1560, ACT 34–35 (CDS 2024-25). Course existence & naming verified against official source." },
+  "us-maths-duke": { status: "verified", source: "https://undergraduate.bulletins.duke.edu/programs/U-MATH-BS", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Duke undergraduate bulletin, read directly by the maintainer. The department offers both the AB and the BS through Trinity College of Arts & Sciences; the bulletin itself states students planning graduate study in mathematics or the sciences should consider the BS (eight courses numbered 230+, vs seven for the AB). DEGREE LETTERS: both are real, so the label is stored as the compound BS/AB — the same pattern as us-maths-michigan (BS/BA) and us-maths-brown (AB/ScB). Duke admission is to the university, not the major. Test policy comes from the shared Duke University record, unchanged." },
+  "ca-maths-toronto": { status: "verified", source: "https://artsci.calendar.utoronto.ca/section/Mathematics", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official U of T Arts & Science calendar Mathematics section, read directly by the maintainer. Leads to the Honours Bachelor of Science (Faculty of Arts & Science, St George). Eight Specialist programs plus Major and Minor; the Major (ASMAJ1165) is open enrolment — any student who has completed 4.0 credits may enrol — while Specialists carry their own requirements. Program is chosen after first year, not on admission. The calendar publishes no per-course entry grades, so every grade field stays null; the requirement tags are subject-fit guidance only, not transcribed prerequisites." },
+  "ca-maths-ubc": { status: "verified", source: "https://you.ubc.ca/ubc_programs/mathematics-vancouver-bsc/", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official UBC program page, read directly by the maintainer. Admission is to the Faculty of Science (Vancouver); the Mathematics major/honours is applied for afterwards — the department's transfer route from year 2 requires first-year calculus, linear algebra and a computing credit. VERIFIED SUBJECT FACT (door-closing, recorded verbatim): UBC's own page states IB Math Applications & Interpretations SL (and Math Studies) do NOT satisfy the math requirement for science-based programs — acceptable routes are Math Analysis & Approaches SL or HL, or Math AI at HL only. A BA Mathematics also exists. No per-course entry grades published, so every grade field stays null. Maths encoded as Mathematics_Standard essential (AA at SL accepted — the same reasoning recorded on ca-cs-mcgill)." },
+  "ca-maths-mcgill": { status: "verified", source: "https://www.mcgill.ca/undergraduate-admissions/apply/requirements/international/ib", checkedDate: "2026-08-15", notes: "Source and checkedDate copied from ca-cs-mcgill — the same official McGill IB requirements page (page last updated 2026-02-20, read directly by the maintainer 2026-08-15) covers this entry: Mathematics sits in the same Faculty of Science 'Physical, Earth, Math and Computer Sciences' group. Lowest grades used for September 2025 admission for the group: 36-37 IB subject points predicted, or 36 final, with 5s and at least one 6 across math and science. UNIT WARNING — these figures are SUBJECT POINTS OUT OF 42, EXCLUDING the 3 bonus points; our grades.ib field holds /45 totals, so these values must NEVER be placed in grades.ib — every grade field stays null. PREREQUISITES: Mathematics AND TWO OF Biology, Chemistry or Physics, with at least one math or science at Higher Level — encoded identically to the corrected ca-cs-mcgill: the 'two of three' k-of-n shape cannot be expressed (essential/preferred are AND-lists), so the sciences sit in preferred where their absence downgrades rather than excludes; same follow-up flag. McGill's caveats carried over: grades equal to or better than these do NOT guarantee admission; admission is competitive and subject to space; minimums may fluctuate up or down in any given year. Maths prerequisite may be met with HL Math AA, SL Math AA, or HL Math AI; SL Math AI is not acceptable where maths is required." },
+  "sg-maths-ntu": { status: "verified", source: "https://www.ntu.edu.sg/spms/admissions", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official NTU SPMS admissions pages, read directly by the maintainer. BSc in Mathematical Sciences through the School of Physical and Mathematical Sciences (programme code MATH), covering pure and applied mathematics, statistics, and theoretical computer science. NTU's official IGP publication lists a Mathematical Sciences row (plus joint programmes with Economics and Physics), but the row's percentile values were NOT transcribed in this pass — a later pass can add them from the official IGP PDF already stored on sg-economics-ntu (https://www.ntu.edu.sg/docs/default-source/undergraduate-admissions/igp/ntu_igp.pdf). Until then every grade field stays null; nothing here is approximated. Standing NTU caveats carried from the sibling entries: profiles vary from year to year and meeting them does not guarantee admission; the H1 content subject drops out of the University Admission Score from AY2026/2027; profiles include offers made under Aptitude-based Admissions. The requirement tags are subject-fit guidance only, not transcribed prerequisites." },
+  "hk-maths-hku": { status: "verified", source: "https://www.scifac.hku.hk/prospective/ug/6901-bsc/majors/mathematics", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official HKU Faculty of Science pages, read directly by the maintainer. HKU Science admits into one BSc programme (JUPAS JS6901); students choose from the Science majors — including Mathematics and a more demanding Mathematics (Intensive) — with up to two years to decide, flexibility to change, and no quota per major. JUPAS admission uses the best 5 HKDSE subjects, which must include English, Mathematics and the best science elective, with 1.5x weighting on science electives, Mathematics and M1/M2 (per the Faculty's own FAQ). No per-major grade profile is stored — hkDse and every other grade field stays null; the structural admission facts live in notes. The requirement tags are subject-fit guidance consistent with the weighting facts." },
   "us-maths-cornell": { status: "verified", source: "https://math.cornell.edu/major", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Cornell Mathematics department major page, read directly by the maintainer. BA through the College of Arts and Sciences. Students are admitted to the major after completing a semester of linear algebra and a semester of multivariable calculus each with B− or better — the major is applied for after arrival, not on admission (an internal declaration requirement, not an admissions cutoff). Seven concentrations available; courses toward the major must be taken for letter grades. Test policy comes from the shared Cornell University record, unchanged." },
   "us-maths-columbia": { status: "verified", source: "https://bulletin.columbia.edu/columbia-college/departments-instruction/mathematics/", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Columbia College bulletin mathematics pages, read directly by the maintainer. BA through Columbia College. The department also offers joint majors (Mathematics–Statistics, Computer Science–Mathematics, Economics–Mathematics); a separate Applied Mathematics BS runs through Columbia Engineering. No course graded D or lower counts toward the major — an internal major rule, not an admissions cutoff. Test policy comes from the shared Columbia University record, unchanged." },
   "us-maths-brown": { status: "verified", source: "https://www.brown.edu/undergraduate-programs/mathematics-ab-scb", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Brown undergraduate-programs page, read directly by the maintainer. Brown calls majors 'concentrations'; Mathematics leads to either the AB or the ScB, and Brown itself states the ScB is strongly recommended for those aiming at graduate study in mathematics. DEGREE LETTERS: the compound AB/ScB is the verified truth — the one concentration leads to either degree — so the label is stored as AB/ScB, the same pattern as us-maths-michigan's BS/BA. Brown's open curriculum means no university-wide distribution requirements sit around the concentration. Test policy comes from the shared Brown University record, unchanged." },
