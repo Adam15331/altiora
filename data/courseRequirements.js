@@ -820,6 +820,23 @@ const courses = [
     notes: "AAB. No specific required subjects.",
   },
   {
+    id: "uk-maths-manchester", name: "Mathematics BSc",
+    university: "University of Manchester", country: "UK", degreeLevel: "BSc", category: "mathematics",
+    // FM mirrors the Bristol pattern (genuinely not required), not the
+    // Durham one. The "A* in Mathematics OR Further Mathematics" either-slot
+    // shape cannot be expressed by the slot schema — carried in notes; same
+    // k-of-n follow-up as uk-maths-bristol / ca-cs-mcgill.
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Mathematics_Advanced"] },
+    grades: { aLevels: "A*AA", ib: 37, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "7,6,6 at HL incl 7 in Mathematics — ONLY HL Mathematics: Analysis and Approaches accepted" },
+    admissionTests: [],
+    universityContext: {
+      tier: "world-top-50",
+      intlFriendly: true,
+      notes: "Large Russell Group university with one of the UK's biggest international student communities.",
+    },
+    notes: "UCAS G100. A*AA including A* in Mathematics OR Further Mathematics. Further Mathematics preferred but not essential; when taken, it is included in the offer. Offers are based on three A-Levels taken in the same sitting. No aptitude test for 2027 entry and no interviews — the absence is confirmed on the official page, not unchecked. Accredited by the Royal Statistical Society and the Institute of Mathematics and its Applications.",
+  },
+  {
     id: "uk-economics-warwick", name: "Economics BSc",
     university: "University of Warwick", country: "UK", degreeLevel: "BSc", category: "economics",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Economics","Statistics"] },
@@ -4549,6 +4566,7 @@ const courseVerification = {
   "uk-maths-ucl": { status: "verified", source: "https://www.ucl.ac.uk/maths/study/bscmsci-mathematics/admissions", checkedDate: "2026-06-28", notes: "A*A*A / IB 40 / 776 HL (7 in Maths AA) / STEP (or A*AA+STEP route) confirmed." },
   "uk-economics-warwick": { status: "verified", source: "https://warwick.ac.uk/study/undergraduate/courses/bsc-economics/", checkedDate: "2026-06-28", notes: "A*AA (incl A in Maths) / IB 38 (6 in HL Maths) confirmed. TMUA optional (high scorers may get reduced AAA offer); no required test." },
   "uk-maths-warwick": { status: "verified", source: "https://warwick.ac.uk/fac/sci/maths/studywithus/ug/our-offer/", checkedDate: "2026-06-28", notes: "A*A*A / IB 39 / 666 HL / TMUA (or STEP grade 2) all confirmed." },
+  "uk-maths-manchester": { status: "verified", source: "https://www.manchester.ac.uk/study/undergraduate/courses/2027/00590/bsc-mathematics/", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Manchester 2027-entry course page, read directly by the maintainer. A-Level: A*AA including A* in Mathematics OR Further Mathematics; Further Maths preferred but not essential — when taken, it is included in the offer; offers are based on three A-Levels taken in the same sitting. IB: 37 points with 7,6,6 at HL including 7 in Mathematics; ONLY HL Mathematics: Analysis and Approaches is accepted. NO admission test for 2027 entry and no interviews — confirmed on the official page, a verified absence, not unchecked. Accredited by the Royal Statistical Society and the Institute of Mathematics and its Applications. SCHEMA LIMITATION: the 'A* in Mathematics OR Further Mathematics' either-slot shape is one-of-a-set, which the slot schema cannot express — carried verbatim in notes; encoded as Maths essential, FM useful (the Bristol pattern); same k-of-n follow-up as uk-maths-bristol / ca-cs-mcgill." },
   "uk-maths-durham": { status: "verified", source: "https://www.durham.ac.uk/study/courses/mathematics-g100/", checkedDate: "2026-08-16", notes: "RESOLVED 2026-08-16 from the official Durham 2027-entry course page, read directly by the maintainer. A-Level two routes: (a) A*A*A including A*A* in Mathematics and Further Mathematics; (b) A*AA including A*A in Mathematics and Further Mathematics plus suitable performance in an accepted mathematics test — Durham's materials name TMUA, or Grade 2 in any STEP. The test route is an ALTERNATIVE (lower) offer, never a requirement for the standard offer. IB: 38 with 776 at HL incl 7 in HL Maths (Analysis & Approaches); or 766 at HL with the 7 in HL Maths AA plus an accepted mathematics test. Further Mathematics required on both A-Level routes — encoded with the same essential [Mathematics_Standard, Mathematics_Advanced] shape as uk-maths-cambridge / uk-maths-warwick. Stored grades = route (a)." },
   "uk-maths-bristol": { status: "verified", source: "https://www.bristol.ac.uk/study/undergraduate/2027/maths/bsc-mathematics/", checkedDate: "2026-08-16", notes: "RESOLVED 2026-08-16 from the official Bristol 2027-entry course page, read directly by the maintainer. A-Level two routes: (a) A*A*A including A* in Mathematics and A in another mathematics-related subject — Bristol's list verbatim: Biology; Chemistry; Computer Science; Economics; Physics; (b) A*AA including A*A (in any order) in Mathematics and Further Mathematics. STEP paper achievement may be included as part of an alternative offer. IB: 40 with 18 at HL, incl 7 at HL in Mathematics (either Analysis and Approaches OR Applications and Interpretations — an acceptance many competitive maths courses do not offer) and 6 at HL in another mathematics-related subject (same list). Further Mathematics NOT required (route (a) has no FM) — stored grades = route (a), Maths essential, FM not essential, route (b) in notes. SCHEMA LIMITATION: the 'A in ONE of five listed subjects' shape is one-of-a-set, which essential/preferred (both AND-lists) cannot express — the list is carried verbatim in notes and the tags stay at the closest honest fit; same k-of-n follow-up as ca-cs-mcgill." },
   "uk-cs-warwick": { status: "verified", source: "https://warwick.ac.uk/study/undergraduate/courses/bsc-computer-science/", checkedDate: "2026-06-28", notes: "A*A*A / IB 39 / 766 HL confirmed. TMUA REQUIRED for 2026/27 (stored 'no test' was wrong; contextual applicants exempt)." },
