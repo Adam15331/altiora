@@ -14,6 +14,10 @@
  *   admissionTests  – standardised test codes (TMUA, ESAT, PAT, LNAT, UCAT, STEP, TSA, HAT …)
  *   universityContext.tier / .intlFriendly / .notes
  *
+ * ibHL tag semantics (IB Higher Level subject requirements):
+ *   Mathematics_Advanced = HL Mathematics: Analysis and Approaches ONLY
+ *   Mathematics_Standard = HL Mathematics with either AA or AI accepted
+ *
  * ADDITIVE — admissionTestRelations (optional):
  *   { <testCode>: "required" | "optional-lower-offer" } per course.
  *   Absent field or absent test code hydrates as "required" — the strict,
@@ -649,6 +653,23 @@ const courses = [
       notes: "Scotland's largest research university; international students apply via UCAS on the same terms as UK students.",
     },
     notes: "AAB. Portfolio required.",
+  },
+  {
+    id: "uk-maths-edinburgh", name: "Mathematics BSc (Hons)",
+    university: "University of Edinburgh", country: "UK", degreeLevel: "BSc", category: "mathematics",
+    // RANGE, NOT OFFER: Edinburgh publishes the range of grades most
+    // applicants needed in recent years, not a single standard offer.
+    // Ranges never enter grade fields (verified-with-null, the NUS/McGill
+    // pattern) — the range and the firm subject floors live in notes.
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Mathematics_Advanced"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "7 in HL Mathematics (Analysis and Approaches only) is firm in any offer; SL English 5" },
+    admissionTests: [],
+    universityContext: {
+      tier: "world-top-50",
+      intlFriendly: true,
+      notes: "Scotland's largest research university; international students apply via UCAS on the same terms as UK students.",
+    },
+    notes: "Edinburgh publishes a range rather than a single standard offer — recent offers ran from A*A*A* to A*AB, always including A* in Mathematics. UCAS G100. A-Level grades in one set of exams; Further Mathematics preferred; the Mathematics qualification must be no more than two academic years old at entry. IB: from 38 points with 766 at HL to 34 points with 765 at HL — firm in any offer: 7 in HL Mathematics (Analysis and Approaches only) and 5 in SL English, with the same two-year recency rule on the Mathematics qualification. Direct entry to Year 2 (Scottish 4-year degree) may be possible if places are available: A*A*A* in one sitting including A* in Mathematics and A* in Further Mathematics, or IB 38 with 766 at HL including 7 in HL Maths AA. No admission test appears anywhere in the entry requirements — the absence is confirmed on the official page, not unchecked.",
   },
   {
     id: "uk-medicine-kcl", name: "Medicine MBBS",
@@ -4566,6 +4587,7 @@ const courseVerification = {
   "uk-maths-ucl": { status: "verified", source: "https://www.ucl.ac.uk/maths/study/bscmsci-mathematics/admissions", checkedDate: "2026-06-28", notes: "A*A*A / IB 40 / 776 HL (7 in Maths AA) / STEP (or A*AA+STEP route) confirmed." },
   "uk-economics-warwick": { status: "verified", source: "https://warwick.ac.uk/study/undergraduate/courses/bsc-economics/", checkedDate: "2026-06-28", notes: "A*AA (incl A in Maths) / IB 38 (6 in HL Maths) confirmed. TMUA optional (high scorers may get reduced AAA offer); no required test." },
   "uk-maths-warwick": { status: "verified", source: "https://warwick.ac.uk/fac/sci/maths/studywithus/ug/our-offer/", checkedDate: "2026-06-28", notes: "A*A*A / IB 39 / 666 HL / TMUA (or STEP grade 2) all confirmed." },
+  "uk-maths-edinburgh": { status: "verified", source: "https://study.ed.ac.uk/programmes/undergraduate/55-mathematics/entry-requirements", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Edinburgh 2027-entry entry-requirements page, read directly by the maintainer. STRUCTURAL: Edinburgh publishes the RANGE of grades most applicants needed in recent years, not a single standard offer — the verification succeeded, and what it confirmed is a range. Per the standing rule (distributions and ranges never enter grade fields), aLevels and ib stay NULL (verified-with-null, the NUS/McGill pattern); the range and the firm floors are the notes. A-Level range A*A*A* to A*AB in one set of exams; FIRM inside any offer: Mathematics at A*; Further Mathematics preferred; Maths qualification no more than two academic years old at entry. IB range 38 (766 HL) to 34 (765 HL); FIRM: HL Mathematics (Analysis and Approaches ONLY) at 7; SL English at 5; same recency rule. Direct entry to Year 2 'may be possible if places are available' (page's own framing): A*A*A* in one sitting incl Maths A* and Further Maths A*, or IB 38 / 766 HL incl 7 in HL Maths AA. No admission test appears anywhere in the entry requirements — a verified absence, stated as confirmed in the student-facing note. Widening-access minima exist and are NOT stored, per policy." },
   "uk-maths-manchester": { status: "verified", source: "https://www.manchester.ac.uk/study/undergraduate/courses/2027/00590/bsc-mathematics/", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Manchester 2027-entry course page, read directly by the maintainer. A-Level: A*AA including A* in Mathematics OR Further Mathematics; Further Maths preferred but not essential — when taken, it is included in the offer; offers are based on three A-Levels taken in the same sitting. IB: 37 points with 7,6,6 at HL including 7 in Mathematics; ONLY HL Mathematics: Analysis and Approaches is accepted. NO admission test for 2027 entry and no interviews — confirmed on the official page, a verified absence, not unchecked. Accredited by the Royal Statistical Society and the Institute of Mathematics and its Applications. SCHEMA LIMITATION: the 'A* in Mathematics OR Further Mathematics' either-slot shape is one-of-a-set, which the slot schema cannot express — carried verbatim in notes; encoded as Maths essential, FM useful (the Bristol pattern); same k-of-n follow-up as uk-maths-bristol / ca-cs-mcgill." },
   "uk-maths-durham": { status: "verified", source: "https://www.durham.ac.uk/study/courses/mathematics-g100/", checkedDate: "2026-08-16", notes: "RESOLVED 2026-08-16 from the official Durham 2027-entry course page, read directly by the maintainer. A-Level two routes: (a) A*A*A including A*A* in Mathematics and Further Mathematics; (b) A*AA including A*A in Mathematics and Further Mathematics plus suitable performance in an accepted mathematics test — Durham's materials name TMUA, or Grade 2 in any STEP. The test route is an ALTERNATIVE (lower) offer, never a requirement for the standard offer. IB: 38 with 776 at HL incl 7 in HL Maths (Analysis & Approaches); or 766 at HL with the 7 in HL Maths AA plus an accepted mathematics test. Further Mathematics required on both A-Level routes — encoded with the same essential [Mathematics_Standard, Mathematics_Advanced] shape as uk-maths-cambridge / uk-maths-warwick. Stored grades = route (a)." },
   "uk-maths-bristol": { status: "verified", source: "https://www.bristol.ac.uk/study/undergraduate/2027/maths/bsc-mathematics/", checkedDate: "2026-08-16", notes: "RESOLVED 2026-08-16 from the official Bristol 2027-entry course page, read directly by the maintainer. A-Level two routes: (a) A*A*A including A* in Mathematics and A in another mathematics-related subject — Bristol's list verbatim: Biology; Chemistry; Computer Science; Economics; Physics; (b) A*AA including A*A (in any order) in Mathematics and Further Mathematics. STEP paper achievement may be included as part of an alternative offer. IB: 40 with 18 at HL, incl 7 at HL in Mathematics (either Analysis and Approaches OR Applications and Interpretations — an acceptance many competitive maths courses do not offer) and 6 at HL in another mathematics-related subject (same list). Further Mathematics NOT required (route (a) has no FM) — stored grades = route (a), Maths essential, FM not essential, route (b) in notes. SCHEMA LIMITATION: the 'A in ONE of five listed subjects' shape is one-of-a-set, which essential/preferred (both AND-lists) cannot express — the list is carried verbatim in notes and the tags stay at the closest honest fit; same k-of-n follow-up as ca-cs-mcgill." },
