@@ -13,6 +13,12 @@
  *   grades.aLevels / .ib / .ap / .sgALevels / .hkDse
  *   admissionTests  – standardised test codes (TMUA, ESAT, PAT, LNAT, UCAT, STEP, TSA, HAT …)
  *   universityContext.tier / .intlFriendly / .notes
+ *
+ * ADDITIVE — admissionTestRelations (optional):
+ *   { <testCode>: "required" | "optional-lower-offer" } per course.
+ *   Absent field or absent test code hydrates as "required" — the strict,
+ *   fail-safe default. Set "optional-lower-offer" ONLY where the verified
+ *   source states the test lowers the offer rather than being required.
  */
 
 const courses = [
@@ -845,6 +851,9 @@ const courses = [
     requirements: { essential: ["Mathematics_Standard","Mathematics_Advanced"], preferred: [], useful: ["Physics"] },
     grades: { aLevels: "A*A*A", ib: 38, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "776 at HL incl 7 in HL Maths (Analysis & Approaches); 766 at HL accepted with the 7 in HL Maths AA plus an accepted mathematics test" },
     admissionTests: ["TMUA","STEP"],
+    // Verified 2026-08-16: the test route is an ALTERNATIVE (lower) offer,
+    // never a requirement for the standard offer.
+    admissionTestRelations: { TMUA: "optional-lower-offer", STEP: "optional-lower-offer" },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -862,6 +871,9 @@ const courses = [
     requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Mathematics_Advanced","Physics","Computer_Science","Economics","Chemistry","Biology"] },
     grades: { aLevels: "A*A*A", ib: 40, ap: null, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "40 with 18 at HL, incl 7 in HL Mathematics — Analysis & Approaches OR Applications & Interpretation both accepted (many competitive maths courses take only AA) — and 6 at HL in another mathematics-related subject (Biology, Chemistry, Computer Science, Economics or Physics)" },
     admissionTests: ["STEP"],
+    // Verified 2026-08-16: "STEP paper achievement may be included as part of
+    // an alternative offer — an alternative, not a requirement."
+    admissionTestRelations: { STEP: "optional-lower-offer" },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
