@@ -1985,6 +1985,24 @@ const courses = [
     notes: "Highly selective.",
   },
   {
+    id: "us-maths-columbia", name: "Mathematics BA",
+    university: "Columbia University", country: "US", degreeLevel: "BA", category: "mathematics",
+    requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    apContext: {
+      minCompetitiveAPs: 7, recommendedAPs: 10,
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
+      note: "US admissions is holistic — no hard subject requirements.",
+    },
+    universityContext: {
+      tier: "world-top-50",
+      intlFriendly: true,
+      notes: "Ivy League in Manhattan; Core Curriculum requires all students to study a shared canon of texts.",
+    },
+    notes: "BA through Columbia College. The department also offers joint majors (Mathematics–Statistics, Computer Science–Mathematics, Economics–Mathematics); a separate Applied Mathematics BS runs through Columbia Engineering. No course graded D or lower counts toward the major.",
+  },
+  {
     id: "us-economics-columbia", name: "Economics BA",
     university: "Columbia University", country: "US", degreeLevel: "BA", category: "economics",
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
@@ -3382,6 +3400,26 @@ const courses = [
     notes: "Ivy League. Open Curriculum — no core requirements.",
   },
   {
+    id: "us-maths-brown", name: "Mathematics AB/ScB",
+    // AB/ScB compound is the verified truth (same pattern as Michigan's
+    // BS/BA) — the concentration leads to either degree; see verification.
+    university: "Brown University", country: "US", degreeLevel: "AB/ScB", category: "mathematics",
+    requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    apContext: {
+      minCompetitiveAPs: 5, recommendedAPs: 8,
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
+      note: "US admissions is holistic — no hard subject requirements.",
+    },
+    universityContext: {
+      tier: "world-top-100",
+      intlFriendly: true,
+      notes: "Ivy League university with an Open Curriculum — no required courses outside your chosen concentration.",
+    },
+    notes: "Brown calls majors 'concentrations'; Mathematics leads to either the AB or the ScB, and Brown itself states the ScB is strongly recommended for those aiming at graduate study in mathematics. Brown's open curriculum means no university-wide distribution requirements sit around the concentration.",
+  },
+  {
     id: "us-economics-brown", name: "Economics AB",
     university: "Brown University", country: "US", degreeLevel: "AB", category: "economics",
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
@@ -3416,6 +3454,24 @@ const courses = [
       notes: "Ivy League land-grant university; largest Ivy by enrolment with several specialised professional colleges.",
     },
     notes: "Ivy League. Top-ranked CS programme.",
+  },
+  {
+    id: "us-maths-cornell", name: "Mathematics BA",
+    university: "Cornell University", country: "US", degreeLevel: "BA", category: "mathematics",
+    requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    apContext: {
+      minCompetitiveAPs: 5, recommendedAPs: 8,
+      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
+      note: "US admissions is holistic — no hard subject requirements.",
+    },
+    universityContext: {
+      tier: "world-top-25",
+      intlFriendly: true,
+      notes: "Ivy League land-grant university; largest Ivy by enrolment with several specialised professional colleges.",
+    },
+    notes: "BA through Arts and Sciences. Students are admitted to the major after completing a semester of linear algebra and a semester of multivariable calculus each with B− or better — the major is applied for after arrival, not on admission. Seven concentrations available; courses toward the major must be taken for letter grades.",
   },
   {
     id: "us-engineering-cornell", name: "Engineering BS",
@@ -4664,6 +4720,9 @@ const courseVerification = {
   "us-engineering-princeton": { status: "verified", source: "https://ir.princeton.edu/document/546", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test-OPTIONAL for 2025-26 entry (testing required only from the 2027-28 cycle). Indicative middle-50%: SAT 1500–1560, ACT 34–35 (CDS 2024-25). Course existence & naming verified against official source. Re-mapped from non-existent generic 'Engineering & Applied Science BSE'; the BSE is awarded only via named departments." },
   "us-economics-princeton": { status: "verified", source: "https://ir.princeton.edu/document/546", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test-OPTIONAL for 2025-26 entry (testing required only from the 2027-28 cycle). Indicative middle-50%: SAT 1500–1560, ACT 34–35 (CDS 2024-25). Course existence & naming verified against official source." },
   "us-maths-princeton": { status: "verified", source: "https://ir.princeton.edu/document/546", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test-OPTIONAL for 2025-26 entry (testing required only from the 2027-28 cycle). Indicative middle-50%: SAT 1500–1560, ACT 34–35 (CDS 2024-25). Course existence & naming verified against official source." },
+  "us-maths-cornell": { status: "verified", source: "https://math.cornell.edu/major", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Cornell Mathematics department major page, read directly by the maintainer. BA through the College of Arts and Sciences. Students are admitted to the major after completing a semester of linear algebra and a semester of multivariable calculus each with B− or better — the major is applied for after arrival, not on admission (an internal declaration requirement, not an admissions cutoff). Seven concentrations available; courses toward the major must be taken for letter grades. Test policy comes from the shared Cornell University record, unchanged." },
+  "us-maths-columbia": { status: "verified", source: "https://bulletin.columbia.edu/columbia-college/departments-instruction/mathematics/", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Columbia College bulletin mathematics pages, read directly by the maintainer. BA through Columbia College. The department also offers joint majors (Mathematics–Statistics, Computer Science–Mathematics, Economics–Mathematics); a separate Applied Mathematics BS runs through Columbia Engineering. No course graded D or lower counts toward the major — an internal major rule, not an admissions cutoff. Test policy comes from the shared Columbia University record, unchanged." },
+  "us-maths-brown": { status: "verified", source: "https://www.brown.edu/undergraduate-programs/mathematics-ab-scb", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Brown undergraduate-programs page, read directly by the maintainer. Brown calls majors 'concentrations'; Mathematics leads to either the AB or the ScB, and Brown itself states the ScB is strongly recommended for those aiming at graduate study in mathematics. DEGREE LETTERS: the compound AB/ScB is the verified truth — the one concentration leads to either degree — so the label is stored as AB/ScB, the same pattern as us-maths-michigan's BS/BA. Brown's open curriculum means no university-wide distribution requirements sit around the concentration. Test policy comes from the shared Brown University record, unchanged." },
   "us-maths-stanford": { status: "verified", source: "https://bulletin.stanford.edu/programs/MATH-BS", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Stanford Bulletin MATH-BS program page, read directly by the maintainer. BS through the Bulletin's MATH-BS program; Stanford admits undergraduates undeclared — students declare the major after admission, so applicants apply to Stanford, not to the maths degree. Test policy and admissions context come from the shared Stanford University record, unchanged." },
   "us-maths-berkeley": { status: "verified", source: "https://undergraduate.catalog.berkeley.edu/programs/25540U", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Berkeley undergraduate catalog program page, read directly by the maintainer. BA through the College of Letters & Science (L&S awards BA degrees). Admission is to L&S undeclared; students declare Mathematics after completing the lower-division sequence (Math 53, 54 or 56, and 55) with a minimum grade of C in each — a declaration requirement inside Berkeley, not an admissions cutoff. An Applied Mathematics BA also exists in the same college. Test policy comes from the shared UC Berkeley record (test-blind), unchanged." },
   "us-maths-caltech": { status: "verified", source: "https://www.catalog.caltech.edu/current/information-for-undergraduate-students/graduation-requirements-all-options/mathematics-option-ma/", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Caltech catalog mathematics-option page, read directly by the maintainer. Caltech calls its majors 'options'; the mathematics option is a BS (confirmed on Caltech's own admissions pages) centred on proof-based work — algebra, analysis, topology and geometry. All Caltech undergraduates complete the institute's shared core curriculum regardless of option. Test policy comes from the shared Caltech record, unchanged." },
