@@ -1733,6 +1733,24 @@ const courses = [
     notes: "BS through the Stanford Bulletin's MATH-BS program; Stanford admits undergraduates undeclared — students declare the major after admission, so applicants apply to Stanford, not to the maths degree.",
   },
   {
+    id: "us-psychology-stanford", name: "Psychology BA",
+    university: "Stanford University", country: "US", degreeLevel: "BA", category: "psychology",
+    requirements: { essential: [], preferred: [], useful: ["Psychology","Biology","Statistics"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    apContext: {
+      minCompetitiveAPs: 7, recommendedAPs: 10,
+      recommendedSubjects: ["AP Psychology", "AP Statistics", "AP Biology"],
+      note: "US admissions is holistic — no hard subject requirements.",
+    },
+    universityContext: {
+      tier: "world-top-5",
+      intlFriendly: true,
+      notes: "Holistic admissions; international students apply via the Common App alongside domestic applicants.",
+    },
+    notes: "BA with optional honors through the School of Humanities & Sciences; the Bulletin requires a minimum of 70 units in Psychology (60 within the department), anchored by PSYCH 1 and PSYCH 10 (statistics); AP credit may not be used toward the major. Stanford admits undeclared — students declare Psychology after admission.",
+  },
+  {
     id: "us-cs-harvard", name: "Computer Science AB/SM",
     university: "Harvard University", country: "US", degreeLevel: "AB", category: "cs",
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
@@ -2417,6 +2435,24 @@ const courses = [
     notes: "Offered through the College of Literature, Science, and the Arts (LSA) with several sub-plans (Pure Mathematics, Mathematical Sciences, Honors Mathematics); the plan is designed and declared with a department advisor, typically by sophomore year. LSA awards both BA and BS by coursework mix — the degree letters are not fixed by the major.",
   },
   {
+    id: "us-psychology-michigan", name: "Psychology BA",
+    university: "University of Michigan", country: "US", degreeLevel: "BA", category: "psychology",
+    requirements: { essential: [], preferred: [], useful: ["Psychology","Biology","Statistics"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    apContext: {
+      minCompetitiveAPs: 4, recommendedAPs: 6,
+      recommendedSubjects: ["AP Psychology", "AP Statistics", "AP Biology"],
+      note: "US admissions is holistic — no hard subject requirements.",
+    },
+    universityContext: {
+      tier: "world-top-100",
+      intlFriendly: true,
+      notes: "'Public Ivy' with a strong research reputation; international admissions is competitive and fees are higher than for in-state students.",
+    },
+    notes: "Offered through the College of Literature, Science, and the Arts: students apply to LSA, complete prerequisites, then declare — the department's own pages state this order. A more natural-science-focused sibling major exists, Biopsychology, Cognition, and Neuroscience (BCN), worth knowing about for science-leaning students. AP Psychology 4/5 earns credit for the intro course, per the department's page.",
+  },
+  {
     id: "us-business-nyu", name: "Business (Stern School) BS",
     university: "New York University", country: "US", degreeLevel: "BS", category: "business",
     requirements: { essential: [], preferred: [], useful: ["Statistics","Business"] },
@@ -2627,6 +2663,21 @@ const courses = [
       notes: "Singapore's flagship university; actively recruits international students with competitive scholarship schemes.",
     },
     notes: "UCAT is required only for international-qualification and IB forecast applicants; local A-Level applicants sit no admissions test. Good H2 Chemistry plus H2 Biology or Physics required; shortlisted candidates attend the FSA multiple mini-interview and all applicants submit a portfolio.",
+  },
+  {
+    id: "sg-psychology-nus", name: "Psychology BSocSci",
+    // Degree letters mirror the dataset's existing NUS FASS convention
+    // (sg-economics-nus, BSocSci) — see verification note.
+    university: "National University of Singapore", country: "SG", degreeLevel: "BSocSci", category: "psychology",
+    requirements: { essential: [], preferred: ["Psychology"], useful: ["Biology","Mathematics_Standard"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "No indicative IB profile published — NUS states the IB applicant sample is too small." },
+    admissionTests: [],
+    universityContext: {
+      tier: "world-top-10",
+      intlFriendly: true,
+      notes: "Singapore's flagship university; actively recruits international students with competitive scholarship schemes.",
+    },
+    notes: "Admission is via the NUS College of Humanities and Sciences (CHS) common intake — the Faculty of Arts and Social Sciences' Psychology major is declared after entry. The AY2025/26 indicative grade profile for the Humanities and Sciences intake: 10th percentile ABB/C, 90th percentile AAA/A (admitted-student distribution, not a cutoff).",
   },
   {
     id: "sg-law-nus", name: "Law LLB",
@@ -3827,6 +3878,24 @@ const courses = [
     notes: "BS; UCLA's maths department offers seven undergraduate majors (including Applied Mathematics, Mathematics of Computation, and Financial Actuarial Mathematics). Students enter as premajors and declare Mathematics after completing the calculus sequence with a minimum 2.5 GPA in it — the major is not automatic on admission.",
   },
   {
+    id: "us-psychology-ucla", name: "Psychology BA",
+    university: "UCLA", country: "US", degreeLevel: "BA", category: "psychology",
+    requirements: { essential: [], preferred: [], useful: ["Psychology","Biology","Statistics"] },
+    grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    apContext: {
+      minCompetitiveAPs: 4, recommendedAPs: 6,
+      recommendedSubjects: ["AP Psychology", "AP Statistics", "AP Biology"],
+      note: "US admissions is holistic — no hard subject requirements.",
+    },
+    universityContext: {
+      tier: "world-top-100",
+      intlFriendly: true,
+      notes: "Top public university in Los Angeles; international admissions is highly competitive and fees are high.",
+    },
+    notes: "Entry is via pre-major then application, and the department publishes the mechanics — these are internal major-declaration requirements, not admissions cutoffs: freshman admits must complete preparatory coursework by fall of third year with a minimum 2.5 GPA to apply; 2.9+ in the prep courses guarantees admission to the major; 2.5–2.89 enters a competitive pool the department itself says is unlikely to be admitted; transfer students must be admitted directly and cannot switch in. Psychobiology and Cognitive Science are sibling majors.",
+  },
+  {
     id: "us-business-usc", name: "Business Administration BS (Marshall)",
     university: "University of Southern California", country: "US", degreeLevel: "BS", category: "business",
     requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
@@ -4811,6 +4880,10 @@ const courseVerification = {
   "us-engineering-princeton": { status: "verified", source: "https://ir.princeton.edu/document/546", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test-OPTIONAL for 2025-26 entry (testing required only from the 2027-28 cycle). Indicative middle-50%: SAT 1500–1560, ACT 34–35 (CDS 2024-25). Course existence & naming verified against official source. Re-mapped from non-existent generic 'Engineering & Applied Science BSE'; the BSE is awarded only via named departments." },
   "us-economics-princeton": { status: "verified", source: "https://ir.princeton.edu/document/546", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test-OPTIONAL for 2025-26 entry (testing required only from the 2027-28 cycle). Indicative middle-50%: SAT 1500–1560, ACT 34–35 (CDS 2024-25). Course existence & naming verified against official source." },
   "us-maths-princeton": { status: "verified", source: "https://ir.princeton.edu/document/546", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test-OPTIONAL for 2025-26 entry (testing required only from the 2027-28 cycle). Indicative middle-50%: SAT 1500–1560, ACT 34–35 (CDS 2024-25). Course existence & naming verified against official source." },
+  "us-psychology-stanford": { status: "verified", source: "https://bulletin.stanford.edu/programs/PSYCH-BA", checkedDate: "2026-08-18", notes: "RESOLVED 2026-08-18 from the official Stanford Bulletin PSYCH-BA program page, read directly by the maintainer. BA with optional honors (School of Humanities & Sciences); minimum 70 units in Psychology (60 within the department), anchored by PSYCH 1 and PSYCH 10 (statistics); AP credit may not be used toward the major. Stanford admits undeclared — students declare Psychology after admission. Test policy comes from the shared Stanford University record, unchanged." },
+  "us-psychology-michigan": { status: "verified", source: "https://lsa.umich.edu/psych/prospective-students/undergraduate.html", checkedDate: "2026-08-18", notes: "RESOLVED 2026-08-18 from the official Michigan psychology department pages, read directly by the maintainer. BA through LSA: students apply to LSA, complete prerequisites, then declare — the department's own pages state this order. Sibling major named for science-leaning students: Biopsychology, Cognition, and Neuroscience (BCN). AP Psychology 4/5 earns credit for the intro course, per the department's page. Test policy comes from the shared University of Michigan record, unchanged." },
+  "us-psychology-ucla": { status: "verified", source: "https://www.psych.ucla.edu/undergraduate/psychology-undergraduate-advising/major-declaration/", checkedDate: "2026-08-18", notes: "RESOLVED 2026-08-18 from the official UCLA psychology department major-declaration page, read directly by the maintainer. Entry is via pre-major then application; UCLA's own published mechanics: preparatory coursework complete by fall of third year with minimum 2.5 GPA to apply; 2.9+ in prep courses guarantees admission to the major; 2.5–2.89 enters a competitive pool the department itself says is unlikely to be admitted; transfers must be admitted directly and cannot switch in. MARKER (same pattern as us-maths-ucla): these GPA figures are internal major-declaration requirements inside UCLA, not admissions cutoffs, and are labelled as such in the student-facing note. Psychobiology and Cognitive Science are sibling majors. Test policy comes from the shared UCLA record (test-blind), unchanged." },
+  "sg-psychology-nus": { status: "verified", source: "https://www.nus.edu.sg/oam/admissions/indicative-grade-profile", checkedDate: "2026-08-15", notes: "Source and checkedDate copied from sg-sciences-nus — the same official NUS Office of Admissions Indicative Grade Profile page (publication date January 2026, Table 1 = AY2025/2026 representative grade profiles, 3H2/1H1 format), read directly by the maintainer, covers this entry: Psychology sits in the Faculty of Arts and Social Sciences within the College of Humanities and Sciences common intake, so the applicable row is 'Humanities and Sciences': 10th percentile ABB/C, 90th percentile AAA/A, 1976 places for AY2025/2026 — the same row as sg-economics-nus, sg-sciences-nus and sg-maths-nus. Grade C is assumed for General Paper and Project Work in deriving these. NUS states profiles vary from year to year and that meeting them does not guarantee admission. From AY2026/2027 the H1 content subject is no longer part of the University Admission Score by default, and applicants are told to use the 3 H2 grades only as an indication of competitiveness; NUS states no profile has yet been established under the revised UAS. Profiles include offers made under Aptitude Based Admissions. NUS does not publish IB profiles at all (sample size too small), so grades.ib is null as a CONFIRMED FACT, not a data gap. STORAGE: this is a distribution of admitted students, not an entry requirement, so every grade field (aLevels, ib, ap, sgALevels, hkDse) stays null — checkStatusFor reads grade fields as offers to be met, and storing a percentile there would render it to students as a cutoff. DEGREE LETTERS: BSocSci mirrors the dataset's existing NUS FASS convention (sg-economics-nus), not asserted from this pass's source. Subject prerequisites were NOT part of this batch's verified values; the requirement tags are subject-fit guidance only." },
   "us-maths-duke": { status: "verified", source: "https://undergraduate.bulletins.duke.edu/programs/U-MATH-BS", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official Duke undergraduate bulletin, read directly by the maintainer. The department offers both the AB and the BS through Trinity College of Arts & Sciences; the bulletin itself states students planning graduate study in mathematics or the sciences should consider the BS (eight courses numbered 230+, vs seven for the AB). DEGREE LETTERS: both are real, so the label is stored as the compound BS/AB — the same pattern as us-maths-michigan (BS/BA) and us-maths-brown (AB/ScB). Duke admission is to the university, not the major. Test policy comes from the shared Duke University record, unchanged." },
   "ca-maths-toronto": { status: "verified", source: "https://artsci.calendar.utoronto.ca/section/Mathematics", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official U of T Arts & Science calendar Mathematics section, read directly by the maintainer. Leads to the Honours Bachelor of Science (Faculty of Arts & Science, St George). Eight Specialist programs plus Major and Minor; the Major (ASMAJ1165) is open enrolment — any student who has completed 4.0 credits may enrol — while Specialists carry their own requirements. Program is chosen after first year, not on admission. The calendar publishes no per-course entry grades, so every grade field stays null; the requirement tags are subject-fit guidance only, not transcribed prerequisites." },
   "ca-maths-ubc": { status: "verified", source: "https://you.ubc.ca/ubc_programs/mathematics-vancouver-bsc/", checkedDate: "2026-08-17", notes: "RESOLVED 2026-08-17 from the official UBC program page, read directly by the maintainer. Admission is to the Faculty of Science (Vancouver); the Mathematics major/honours is applied for afterwards — the department's transfer route from year 2 requires first-year calculus, linear algebra and a computing credit. VERIFIED SUBJECT FACT (door-closing, recorded verbatim): UBC's own page states IB Math Applications & Interpretations SL (and Math Studies) do NOT satisfy the math requirement for science-based programs — acceptable routes are Math Analysis & Approaches SL or HL, or Math AI at HL only. A BA Mathematics also exists. No per-course entry grades published, so every grade field stays null. Maths encoded as Mathematics_Standard essential (AA at SL accepted — the same reasoning recorded on ca-cs-mcgill)." },
