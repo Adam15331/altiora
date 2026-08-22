@@ -5288,7 +5288,11 @@ button.plan-combo-tag--drop:focus-visible {
   color: var(--ce-ink-30);
 }
 .cs-list__side {
-  flex-shrink: 0;
+  /* Long registration-window text must wrap at narrow widths, never push
+     the page wider (pre-existing 375px overflow). */
+  flex-shrink: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-family: var(--ce-font-mono);
   font-size: 12px;
   color: var(--ce-ink-60);
