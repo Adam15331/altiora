@@ -4736,15 +4736,45 @@ const apRequirementsByCourse = {
   },
 };
 
+// AP subject names normalise to the canonical picker names in
+// qualificationMappings "US_AP".subjects at the merge point, so later
+// batches inherit it. Only names verified to have an exact canonical
+// counterpart are mapped; anything else passes through untouched.
+// University wording that differs from canonical stays in note.
+var AP_NAME_CANON = {
+  "Calculus BC":          "AP Calculus BC",
+  "Physics 2":            "AP Physics 2",
+  "Physics C: Mechanics": "AP Physics C: Mechanics",
+  "Calculus AB":          "AP Calculus AB",
+  "Physics 1":            "AP Physics 1",
+  "Research":             "AP Research",
+};
+
 courses.forEach(function (c) {
   const ar = apRequirementsByCourse[c.id] || apRequirementsByUniversity[c.university] || null;
-  // ONE level of nesting only: a route may not carry its own
-  // alternativeRoutes. Enforced here, at the merge point — the same place
-  // the codebase already normalises usAdmissions onto records.
-  if (ar && Array.isArray(ar.alternativeRoutes)) {
-    ar.alternativeRoutes.forEach(function (r) {
-      if (r && typeof r === "object" && "alternativeRoutes" in r) delete r.alternativeRoutes;
-    });
+  if (ar) {
+    // ONE level of nesting only: a route may not carry its own
+    // alternativeRoutes. Enforced here, at the merge point — the same place
+    // the codebase already normalises usAdmissions onto records.
+    if (Array.isArray(ar.alternativeRoutes)) {
+      ar.alternativeRoutes.forEach(function (r) {
+        if (r && typeof r === "object" && "alternativeRoutes" in r) delete r.alternativeRoutes;
+      });
+    }
+    // Canonical-name normalisation (idempotent — shared framework objects
+    // pass through here once per course).
+    var canon = function (n) { return AP_NAME_CANON[n] || n; };
+    var normObj = function (o) {
+      if (Array.isArray(o.mustInclude)) o.mustInclude = o.mustInclude.map(canon);
+      if (Array.isArray(o.mustIncludeOneOf)) {
+        o.mustIncludeOneOf = o.mustIncludeOneOf.map(function (set) {
+          return Array.isArray(set) ? set.map(canon) : set;
+        });
+      }
+      if (Array.isArray(o.excluded)) o.excluded = o.excluded.map(canon);
+    };
+    normObj(ar);
+    if (Array.isArray(ar.alternativeRoutes)) ar.alternativeRoutes.forEach(function (r) { if (r && typeof r === "object") normObj(r); });
   }
   c.apRequirement = ar;
 });

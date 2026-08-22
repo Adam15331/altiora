@@ -99,6 +99,17 @@ const STATUS_SUBJECT_ONLY = {
 function gradesInformMatch() {
   return gradeProfileComplete(state.checkSystem, state.predictedGrade, state.selectedSubjects);
 }
+
+// True only when the student's AP grades exist PER SUBJECT (scores 1–5 keyed
+// by AP name) — the shape a real AP comparison needs. Derived from state, not
+// hardcoded: the current entry UI stores a single average letter, so this is
+// false for every profile today and every course caps at amber; when
+// per-subject AP entry ships, the cap lifts here without another edit.
+function apStudentGradesComparable() {
+  const g = state.predictedGrade;
+  return !!g && typeof g === 'object' && !Array.isArray(g)
+    && Object.values(g).some(v => /^[1-5]$/.test(String(v)));
+}
 function statusLabel(status) {
   return (!gradesInformMatch() && STATUS_SUBJECT_ONLY[status]) || STATUS[status]?.label || '';
 }
@@ -4452,12 +4463,12 @@ function shortlistVerdictRaw(course, system, predictedGrade, profile) {
   const gradeSet = gradeProfileComplete(system, predictedGrade, profile?.subjects);
 
   if (system === 'US_AP') {
-    // No AP requirement held for this course → not assessable, on any
-    // country. Where apRequirement IS held, there is still no student-side
-    // AP comparison yet (the single average letter compares to nothing);
-    // no reach/match is manufactured from it.
-    if (course.apRequirement == null) return 'unknown';
-    return 'unknown';
+    // ONE PIPELINE: read the status Check itself computes — no second AP
+    // rule here. That status is capped below green until per-subject AP
+    // grades exist (apStudentGradesComparable), so today every course is
+    // not assessable. A genuinely green course (full comparison run and
+    // met) reads as a match; no reach/match is manufactured short of that.
+    return checkStatusFor(course).status === 'green' ? 'match' : 'unknown';
   }
 
   // No valid grade in the current system → no verdicts anywhere. The
@@ -5551,12 +5562,14 @@ function checkStatusFor(course) {
 
   const result = classify(course, state.selectedTags);
   if (tooFew && result.status === 'green') result.status = 'amber';
-  // AP: no course may show a STRONG match to an AP student until it carries
-  // an actual AP entry requirement (apRequirement). Derived from the data,
-  // not hardcoded — as verified apRequirement records are added per course,
-  // green becomes reachable for those courses automatically.
+  // AP: no course may show a STRONG match until the comparison can actually
+  // RUN — which needs per-subject AP grades on the student side. Holding
+  // requirement data (apRequirement) is not enough: with only the single
+  // average letter, a populated course would award green off subject tags
+  // alone with nothing checked. Half a check must never render as a full
+  // verdict, so the cap keys on comparability, not on data held.
   if (state.checkSystem === 'US_AP' && result.status === 'green'
-      && course.apRequirement == null) {
+      && !apStudentGradesComparable()) {
     result.status = 'amber';
   }
   // Grade gate. A subject-strong course only KEEPS a green/amber verdict when
