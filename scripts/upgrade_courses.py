@@ -1,82 +1,11 @@
 #!/usr/bin/env python3
 """
 Transform courseRequirements.js:
-  Upgrade 1 – Add apContext to all US courses (after admissionTests line)
   Upgrade 2 – Add ibHL / ibHLNote inside grades object for ALL courses
 """
 
 import re
 import sys
-
-# ─── AP CONTEXT DATA ─────────────────────────────────────────────
-
-# minCompetitiveAPs / recommendedAPs by spec tier label
-AP_TIERS = {
-    'top10':     {'min': 7, 'rec': 10},
-    'top50':     {'min': 5, 'rec': 8},
-    'national':  {'min': 4, 'rec': 6},
-}
-
-US_UNI_TIER = {
-    # World Top 10
-    'MIT':                             'top10',
-    'Stanford University':             'top10',
-    'Harvard University':              'top10',
-    'Princeton University':            'top10',
-    'Yale University':                 'top10',
-    'Columbia University':             'top10',
-    'Caltech':                         'top10',
-    # World Top 50
-    'Northwestern University':         'top50',
-    'Duke University':                 'top50',
-    'Johns Hopkins University':        'top50',
-    'Cornell University':              'top50',
-    'Dartmouth College':               'top50',
-    'Brown University':                'top50',
-    'Rice University':                 'top50',
-    'Vanderbilt University':           'top50',
-    'University of Notre Dame':        'top50',
-    'Washington University in St. Louis': 'top50',
-    'Emory University':                'top50',
-    'Carnegie Mellon University':      'top50',
-    'Georgetown University':           'top50',
-    # Strong National
-    'UCLA':                            'national',
-    'UC Berkeley':                     'national',
-    'University of Michigan':          'national',
-    'New York University':             'national',
-    'University of Southern California': 'national',
-    'Georgia Tech':                    'national',
-    'University of Virginia':          'national',
-    'University of Illinois Urbana-Champaign': 'national',
-    'Purdue University':               'national',
-    'UNC Chapel Hill':                 'national',
-    'University of Pennsylvania':      'national',
-}
-
-AP_SUBJECTS = {
-    'cs':         ['AP Calculus BC', 'AP Physics C: Mechanics', 'AP Computer Science A'],
-    'engineering':['AP Calculus BC', 'AP Physics C: Mechanics', 'AP Computer Science A'],
-    'medicine':   ['AP Biology', 'AP Chemistry', 'AP Calculus BC'],
-    'sciences':   ['AP Biology', 'AP Chemistry', 'AP Calculus BC'],
-    'economics':  ['AP Calculus AB', 'AP Statistics', 'AP Microeconomics', 'AP Macroeconomics'],
-    'business':   ['AP Calculus AB', 'AP Statistics', 'AP Microeconomics', 'AP Macroeconomics'],
-    'law':        ['AP English Language', 'AP US History', 'AP Government'],
-    'mathematics':['AP Calculus BC', 'AP Statistics'],
-}
-
-def build_ap_context(university, category):
-    tier_key = US_UNI_TIER.get(university, 'national')
-    tier = AP_TIERS[tier_key]
-    subs = AP_SUBJECTS.get(category, AP_SUBJECTS['cs'])
-    subs_js = ', '.join(f'"{s}"' for s in subs)
-    return (
-        f'    apContext: {{\n'
-        f'      minCompetitiveAPs: {tier["min"]}, recommendedAPs: {tier["rec"]},\n'
-        f'      recommendedSubjects: [{subs_js}],\n'
-        f'      note: "US admissions is holistic — no hard subject requirements.",\n'
-        f'    }},\n'
-    )
 
 # ─── IB HL DATA ──────────────────────────────────────────────────
 
@@ -198,7 +127,6 @@ def transform(src_path, dst_path):
     cur_university = None
     cur_category   = None
     # Stats
-    us_ap_count    = 0
     ib_total       = 0
     ib_nonempty    = 0
 
@@ -244,18 +172,10 @@ def transform(src_path, dst_path):
 
         out.append(line)
 
-        # ── Upgrade 1: insert apContext after admissionTests line ─
-        if cur_country == 'US':
-            m_at = re.match(r'(\s+admissionTests:\s*\[.*\],)', stripped)
-            if m_at:
-                ctx = build_ap_context(cur_university, cur_category)
-                out.append(ctx)
-                us_ap_count += 1
 
     with open(dst_path, 'w', encoding='utf-8') as f:
         f.writelines(out)
 
-    print(f'US courses updated with apContext : {us_ap_count}')
     print(f'Courses updated with ibHL data    : {ib_total}')
     print(f'Courses where ibHL is non-empty   : {ib_nonempty}')
     print(f'Courses where ibHL is empty       : {ib_total - ib_nonempty}')
