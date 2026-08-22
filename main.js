@@ -599,49 +599,6 @@ function fieldEmptySuggestions(category, system) {
   return out.length ? out : null;
 }
 
-// AP admissions context for a field, derived from its US courses' apContext.
-// AP has no fixed subject count — competitiveness is about how many rigorous,
-// field-aligned APs you take. Returns the field-relevant APs and the typical
-// competitive count range (min across tiers → recommended at the top schools).
-function apFieldGuidance(category) {
-  const us = courses.filter(c => c.country === 'US' && c.category === category && c.apContext);
-  if (!us.length) return null;
-  const subs = us[0].apContext.recommendedSubjects ?? [];
-  const mins = us.map(c => c.apContext.minCompetitiveAPs).filter(n => typeof n === 'number');
-  const recs = us.map(c => c.apContext.recommendedAPs).filter(n => typeof n === 'number');
-  if (!mins.length) return null;
-  return {
-    subjects: subs,
-    minLow:  Math.min(...mins),
-    recHigh: Math.max(...(recs.length ? recs : mins)),
-  };
-}
-
-// Shared AP guidance panel (Check empty-state + Subject Planner). Reframes AP
-// away from the "pick N subjects" model: count matters, and the specific APs
-// should align with the intended major. Informational — the student still
-// selects their actual APs in the picker.
-function apGuidancePanelHtml(category) {
-  const g = category ? apFieldGuidance(category) : null;
-  const fieldLabel = category ? (CATEGORY_LABEL_MAP[category] ?? category) : null;
-  const countMsg = g
-    ? `Competitive US applicants typically take <strong>${g.minLow}–${g.recHigh}+ APs</strong> aligned to their intended major — the most selective schools expect <strong>${g.recHigh}+</strong>.`
-    : `There's no fixed number of APs. Competitive US applicants take many — often 7–12 — aligned to their intended major.`;
-  const fieldLine = (g && fieldLabel && g.subjects.length)
-    ? `<p class="ap-guidance__line">APs that align with <strong>${esc(fieldLabel)}</strong>:</p>`
-    : '';
-  const chips = (g && g.subjects.length)
-    ? `<div class="ap-guidance__chips">${g.subjects.map(s => `<span class="ap-guidance__chip">${esc(s)}</span>`).join('')}</div>`
-    : '';
-  return `
-    <div class="ap-guidance">
-      <p class="ap-guidance__lead">🇺🇸 US admissions is holistic — but AP <em>rigour and count</em> are real factors. ${countMsg}</p>
-      ${fieldLine}
-      ${chips}
-      <p class="ap-guidance__foot">Add more rigorous APs across subjects (maths, sciences, humanities) to strengthen your application — a handful of APs is rarely enough on its own for the most selective schools.</p>
-    </div>`;
-}
-
 // Year-aware framing for Check Combination — copy only, matching untouched.
 // For a student whose subjects are set (normalised year <= 1) the tool READS
 // ("what your subjects open"); for a student still choosing it's a sandbox.
@@ -698,7 +655,7 @@ function renderCheckEmptyState() {
   const retro = planIsRetro();
 
   // AP doesn't have a fixed subject count, so don't present "3-subject
-  // combinations" as a complete answer. Show count + field-aligned guidance.
+  // combinations" as a complete answer.
   if (state.checkSystem === 'US_AP') {
     const apCat = ef ? ef.category : null;
     const builtKey = `US_AP|${apCat ?? ''}|${retro ? 'r' : 'p'}`;
@@ -710,7 +667,6 @@ function renderCheckEmptyState() {
         <p class="check-empty-state__heading">${retro
           ? 'Enter the APs you’re taking to see what they open'
           : 'Select your APs above to see matching courses'}</p>
-        ${apGuidancePanelHtml(apCat)}
       </div>`;
     return;
   }
@@ -1125,6 +1081,7 @@ function buildGradeInput(systemKey) {
             <option value="D">1 (D) — predicting mostly 1s</option>
           </select>
         </div>
+        <p class="grade-input-note">AP entry requirements aren't held yet, so this isn't compared to courses.</p>
       </div>`;
     wire = () => wireSelectGrade('gradeSelectAP');
   } else {
@@ -4412,7 +4369,7 @@ function aLevelOfferStrength(str) {
  * REACH / MATCH / SAFETY — shortlist verdicts.
  * Classifies a saved course against the student's predicted grades in
  * their own system, reusing the same machinery as Check Combination
- * (isGradeAboveStudent, the grade parsers, apContext). UNKNOWN is the
+ * (isGradeAboveStudent, the grade parsers). UNKNOWN is the
  * honest answer whenever the signal is thin — never force a bucket.
  * ═══════════════════════════════════════════════════════════════ */
 
@@ -4500,18 +4457,9 @@ function shortlistVerdictRaw(course, system, predictedGrade, profile) {
   const gradeSet = gradeProfileComplete(system, predictedGrade, profile?.subjects);
 
   if (system === 'US_AP') {
-    if (course.country === 'US') {
-      // Holistic: the AP model's signal is AP COUNT, not a grade. With no
-      // APs entered there is no signal → no verdict, elite or not.
-      const apCount = profile?.subjects?.length || 0;
-      const ctx = course.apContext;
-      if (!apCount) return 'unknown';
-      // Signal present → elite-tier holistic courses are reaches for
-      // everyone; that honesty only applies once we know something.
-      if (ELITE_HOLISTIC_TIERS.has(course.universityContext?.tier)) return 'reach';
-      if (!ctx || typeof ctx.minCompetitiveAPs !== 'number') return 'unknown';
-      return apCount < ctx.minCompetitiveAPs ? 'reach' : 'match';
-    }
+    // No AP entry requirement held for this course (grades.ap null) →
+    // not assessable, on any country. The same rule as checkStatusFor's
+    // green cap: verdicts arrive per course as grades.ap is populated.
     if (!gradeSet) return 'unknown';
     const apStr = course.grades?.ap;
     if (!apStr) return 'unknown';
@@ -4727,12 +4675,12 @@ const GRAD_INVITE = {
 // stage is done is exactly who should be quietly invited forward again.
 const _gradDismissed = new Set();
 
-// AP model: the competitive AP count for the pinned fields, data-driven via
-// apFieldGuidance (minimum competitive APs per field); generic floor of 5
-// when no pinned field has AP guidance.
+// AP model: the AP-count target for the choosing-stage gate. Formerly derived
+// from per-course tier numbers that were removed as unsourced; only this
+// generic floor remains. NOTE: the floor itself has no source either —
+// flagged for a follow-up decision on this gate's wording.
 function apTargetCount(cats) {
-  const mins = cats.map(c => apFieldGuidance(c)?.minLow).filter(n => typeof n === 'number');
-  return mins.length ? Math.max(...mins) : 5;
+  return 5;
 }
 
 // Do the student's OWN subjects keep each pinned field genuinely open?
@@ -4787,8 +4735,8 @@ function stageProgress(stage) {
         return { done: true, missing: [], achieved: `you've built ${subjects.length} APs${fieldNames.length ? ` aligned with ${fieldNames.join(' and ')}` : ''}` };
       }
       return { done: false, missing: [subjects.length
-        ? `You have ${subjects.length} AP${subjects.length === 1 ? '' : 's'} — competitive applicants${fieldNames.length ? ` for ${fieldNames.join(' and ')}` : ''} typically take ${target}+.`
-        : `Build your AP list — aim for ${target}+ APs aligned with your field${fields.length === 1 ? '' : 's'}.`] };
+        ? `You have ${subjects.length} AP${subjects.length === 1 ? '' : 's'} — keep building rigorous APs${fieldNames.length ? ` aligned with ${fieldNames.join(' and ')}` : ''}.`
+        : `Build your AP list — rigorous APs aligned with your field${fields.length === 1 ? '' : 's'}.`] };
     }
     if (subjects.length < 3) {
       return { done: false, missing: [fields.length
@@ -5613,14 +5561,13 @@ function checkStatusFor(course) {
 
   const result = classify(course, state.selectedTags);
   if (tooFew && result.status === 'green') result.status = 'amber';
-  // AP: a strong subject match alone doesn't make a few-AP profile a STRONG
-  // match for selective US schools — competitiveness depends on AP count.
-  // Hold back GREEN to POSSIBLE when below the course's competitive AP bar.
-  if (state.checkSystem === 'US_AP' && course.country === 'US' && course.apContext
-      && result.status === 'green'
-      && apCount < course.apContext.minCompetitiveAPs) {
+  // AP: no course may show a STRONG match to an AP student until it carries
+  // an actual AP entry requirement (grades.ap). Derived from the data, not
+  // hardcoded — as verified grades.ap values are added per course, green
+  // becomes reachable for those courses automatically.
+  if (state.checkSystem === 'US_AP' && result.status === 'green'
+      && course.grades?.ap == null) {
     result.status = 'amber';
-    result.apCountShort = { have: apCount, need: course.apContext.minCompetitiveAPs };
   }
   // Grade gate. A subject-strong course only KEEPS a green/amber verdict when
   // its grade requirement can actually be compared against the student and
@@ -5629,15 +5576,16 @@ function checkStatusFor(course) {
   //   'met'     → keep the subject verdict (green/amber)
   //   'unknown' → requirement can't be read → fail safe to 'unconfirmed',
   //               NEVER a strong/possible match built on absent data.
-  // The one carve-out is the explicit US_AP holistic path: for US courses
-  // under the AP system there is deliberately no grade cutoff (competitiveness
-  // is judged by AP count above), so an 'unknown' there is expected, not a
-  // data gap, and must not be demoted to 'unconfirmed'.
+  // The one carve-out is the US_AP no-data path: while a course holds no AP
+  // entry requirement (grades.ap null), the AP score the student entered has
+  // nothing to be compared against — on ANY country. An 'unknown' there is
+  // expected, not a data gap, and must not demote the status; entering a
+  // score can never make a result worse than leaving it blank.
   // Gated on a COMPLETE profile — with some subjects blank we stay in
   // subject-only mode and never produce grey/unconfirmed at all.
   if (gradesInformMatch() && (result.status === 'green' || result.status === 'amber')) {
     const holisticApPath = state.checkSystem === 'US_AP'
-      && course.country === 'US' && !!course.apContext;
+      && course.grades?.ap == null;
     const cmp = compareGradeToStudent(course, state.checkSystem, state.predictedGrade);
     if (cmp === 'above') {
       result.status = 'grey';
@@ -5766,7 +5714,7 @@ function renderCheckResults() {
     warn.textContent = state.checkSystem === 'HK_DSE'
       ? 'DSE students typically need 4 core subjects + 2 electives (6 subjects total). Select more subjects for accurate results.'
       : state.checkSystem === 'US_AP'
-      ? 'Competitive US applicants take several rigorous APs (often 7+), aligned to their major. Add more APs to see a fuller picture — results below are indicative only.'
+      ? 'Competitive US applicants take several rigorous APs, aligned to their major. Add more APs to see a fuller picture — results below are indicative only.'
       : `Universities require a full subject combination — please select at least ${minNeeded} subjects to see accurate results. Results below are indicative only.`;
     $('summaryBar').before(warn);
   }
@@ -6122,27 +6070,10 @@ function buildCheckCard(course, result) {
     fieldCoreHtml = `<p class="card-field-core">${esc(FIELD_CORE_REASON[result.fieldCore.category])}</p>`;
   }
 
-  // ── AP context UI ────────────────────────────────────────────
-  let apWarningHtml = '';
-  let apNoteHtml    = '';
-  let apRecsHtml    = '';
-  if (sys === 'US_AP' && course.country === 'US' && course.apContext) {
-    const ctx     = course.apContext;
-    const apCount = state.selectedSubjects.length;
-    apNoteHtml = `<p class="card-ap-note">${esc(ctx.note)}</p>`;
-    if (apCount < ctx.minCompetitiveAPs) {
-      const apTooltip = 'US universities consider essays, projects, and extracurriculars equally with AP scores';
-      const mostCompetitive = (ctx.recommendedAPs && ctx.recommendedAPs > ctx.minCompetitiveAPs)
-        ? `; the most competitive have ${ctx.recommendedAPs}+`
-        : '';
-      apWarningHtml = `
-      <div class="card-admission-tests">
-        <span class="admission-test-tag admission-test-tag--ap-note">Competitive applicants often have ${ctx.minCompetitiveAPs}+ APs${mostCompetitive} · ${apCount} selected — holistic review means exceptions are common <button type="button" class="ap-info-btn" aria-label="${esc(apTooltip)}" title="${esc(apTooltip)}">ⓘ</button></span>
-      </div>`;
-    }
-    if (ctx.recommendedSubjects?.length) {
-      apRecsHtml = `<p class="card-ap-recs">Recommended APs for this field: ${ctx.recommendedSubjects.map(s => esc(s)).join(', ')}</p>`;
-    }
+  // ── AP note ──────────────────────────────────────────────────
+  let apNoteHtml = '';
+  if (sys === 'US_AP' && course.grades?.ap == null) {
+    apNoteHtml = `<p class="card-ap-note">AP entry requirements not held for this course.</p>`;
   }
 
   // ── US admissions: one compact per-card line (usTestLineHtml). The old
@@ -6234,13 +6165,11 @@ function buildCheckCard(course, result) {
     ${fieldCoreHtml}
     ${usTestLineHtml(course)}
     ${ibHlHtml}
-    ${apWarningHtml}
     ${tests.length ? `
       <div class="card-admission-tests">
         ${tests.map(t => `<span class="admission-test-tag">${esc(t)} required</span>`).join('')}
       </div>` : ''}
     ${apNoteHtml}
-    ${apRecsHtml}
     ${unverifiedHtml}
     ${footerHtml}
     ${cardMoreHtml(course)}
@@ -7043,13 +6972,11 @@ function renderSingleFieldPlan(category) {
   }
 
   /* ── Section B: top subject combinations (or AP guidance) ── */
-  // AP has no fixed-count combination model — replace the ranked 3–5 subject
-  // combos with field-aligned AP guidance driven by apContext.
+  // AP has no fixed-count combination model.
   if (state.planSystem === 'US_AP') {
     $('planCombinations').innerHTML = `
       <h3 class="plan-section-head">Building a strong AP profile for ${esc(catLabel)}</h3>
-      <p class="plan-section-sub">AP admission isn't about a fixed set of subjects — it's about taking enough rigorous, field-aligned APs.</p>
-      ${apGuidancePanelHtml(category)}`;
+      <p class="plan-section-sub">AP admission isn't about a fixed set of subjects — it's about taking enough rigorous, field-aligned APs.</p>`;
     $('planResults').classList.remove('hidden');
     requestAnimationFrame(() =>
       $('planResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
@@ -7232,26 +7159,12 @@ function renderMultiFieldPlan(cats) {
 
   /* ── AP: multi-field profile guidance (no "pick 3" model) ── */
   if (sys === 'US_AP') {
-    const guidances = cats.map(cat => ({ cat, g: apFieldGuidance(cat) }));
-    const withG = guidances.filter(x => x.g && x.g.subjects.length);
-    let sharedHtml = '';
-    if (withG.length === cats.length && nFields > 1) {
-      const shared = withG.map(x => new Set(x.g.subjects))
-        .reduce((acc, s) => new Set([...acc].filter(v => s.has(v))));
-      if (shared.size) {
-        sharedHtml = `
-          <p class="ap-guidance__line"><span class="plan-chip-covers plan-chip-covers--all">APs that serve ${nFields === 2 ? 'both' : 'all'} of your fields</span></p>
-          <div class="ap-guidance__chips">${[...shared].map(s => `<span class="ap-guidance__chip">${esc(s)}</span>`).join('')}</div>`;
-      }
-    }
     $('planCombinations').innerHTML = `
       <h3 class="plan-section-head">Building a strong AP profile for your fields</h3>
       <p class="plan-section-sub">AP admission isn't about a fixed set of subjects — build enough rigorous APs aligned with the fields you're considering.</p>
-      ${sharedHtml}
       ${cats.map(cat => `
         <div class="plan-ap-field">
           <span class="plan-field-badge">${esc(CATEGORY_LABEL_MAP[cat] ?? cat)}</span>
-          ${apGuidancePanelHtml(cat)}
         </div>`).join('')}`;
     $('planResults').classList.remove('hidden');
     requestAnimationFrame(() =>
@@ -8027,7 +7940,7 @@ function renderFieldOverview(fieldId) {
 
       <section class="fo-section">
         ${sys === 'US_AP'
-          ? `<h2 class="fo-section__head fo-accent-coral">Building a strong AP profile</h2>${apGuidancePanelHtml(cat)}`
+          ? `<h2 class="fo-section__head fo-accent-coral">Building a strong AP profile</h2>`
           : `<h2 class="fo-section__head fo-accent-coral">Typical strong combinations</h2>
         <div class="fo-combos">${combosHtml}</div>
         ${sys ? '' : `<p class="fo-muted fo-muted--hint">Example combinations shown in general terms — pick your qualification system in Check Combination to see them in your own subjects.</p>`}`}

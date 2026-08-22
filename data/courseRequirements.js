@@ -1558,11 +1558,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-5",
       intlFriendly: true,
@@ -1576,11 +1571,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-5",
       intlFriendly: true,
@@ -1594,11 +1584,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-5",
       intlFriendly: true,
@@ -1612,11 +1597,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Biology", "AP Chemistry", "AP Calculus BC", "AP Physics 1"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-5",
       intlFriendly: true,
@@ -1630,11 +1610,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-5",
       intlFriendly: true,
@@ -1648,11 +1623,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-5",
       intlFriendly: true,
@@ -1666,11 +1636,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-5",
       intlFriendly: true,
@@ -1684,11 +1649,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-5",
       intlFriendly: true,
@@ -1702,11 +1662,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-5",
       intlFriendly: true,
@@ -1720,11 +1675,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-5",
       intlFriendly: true,
@@ -1738,11 +1688,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Psychology","Biology","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Psychology", "AP Statistics", "AP Biology"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-5",
       intlFriendly: true,
@@ -1756,11 +1701,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-5",
       intlFriendly: true,
@@ -1774,11 +1714,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-5",
       intlFriendly: true,
@@ -1792,11 +1727,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Philosophy","Economics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP English Language", "AP US History", "AP US Government", "AP English Literature"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-5",
       intlFriendly: true,
@@ -1810,11 +1740,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Physics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Biology", "AP Chemistry", "AP Calculus BC", "AP Physics 1"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-5",
       intlFriendly: true,
@@ -1828,11 +1753,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-5",
       intlFriendly: true,
@@ -1846,11 +1766,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-50",
       intlFriendly: true,
@@ -1864,11 +1779,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: [] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-50",
       intlFriendly: true,
@@ -1882,11 +1792,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-50",
       intlFriendly: true,
@@ -1900,11 +1805,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-50",
       intlFriendly: true,
@@ -1918,11 +1818,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -1936,11 +1831,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -1954,11 +1844,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Philosophy","Economics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP English Language", "AP US History", "AP US Government", "AP English Literature"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -1972,11 +1857,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Physics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Biology", "AP Chemistry", "AP Calculus BC", "AP Physics 1"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -1990,11 +1870,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-50",
       intlFriendly: true,
@@ -2008,11 +1883,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-50",
       intlFriendly: true,
@@ -2026,11 +1896,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-50",
       intlFriendly: true,
@@ -2044,11 +1909,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: [] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-50",
       intlFriendly: true,
@@ -2062,11 +1922,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science","Business"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -2080,11 +1935,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -2098,11 +1948,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -2116,11 +1961,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-10",
       intlFriendly: true,
@@ -2134,11 +1974,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Biology", "AP Chemistry", "AP Calculus BC", "AP Physics 1"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-10",
       intlFriendly: true,
@@ -2152,11 +1987,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-10",
       intlFriendly: true,
@@ -2170,11 +2000,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 7, recommendedAPs: 10,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-10",
       intlFriendly: true,
@@ -2188,11 +2013,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -2206,11 +2026,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -2224,11 +2039,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -2242,11 +2052,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -2260,11 +2065,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -2278,11 +2078,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -2296,11 +2091,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -2314,11 +2104,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics","Business"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -2332,11 +2117,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -2350,11 +2130,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -2368,11 +2143,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -2386,11 +2156,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics","Business"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -2404,11 +2169,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -2422,11 +2182,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -2440,11 +2195,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Psychology","Biology","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Psychology", "AP Statistics", "AP Biology"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -2458,11 +2208,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics","Business"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -2476,11 +2221,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -2494,11 +2234,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Philosophy","Economics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP English Language", "AP US History", "AP US Government", "AP English Literature"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -2512,11 +2247,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -2530,11 +2260,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -2551,11 +2276,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -2569,11 +2289,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -2587,11 +2302,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -2605,11 +2315,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -3395,11 +3100,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-50",
       intlFriendly: true,
@@ -3413,11 +3113,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-50",
       intlFriendly: true,
@@ -3431,11 +3126,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-50",
       intlFriendly: true,
@@ -3449,11 +3139,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -3467,11 +3152,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -3485,11 +3165,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -3505,11 +3180,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -3523,11 +3193,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -3541,11 +3206,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -3559,11 +3219,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -3577,11 +3232,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -3595,11 +3245,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -3613,11 +3258,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-25",
       intlFriendly: true,
@@ -3631,11 +3271,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -3649,11 +3284,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -3667,11 +3297,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -3685,11 +3310,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -3703,11 +3323,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -3721,11 +3336,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -3739,11 +3349,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -3757,11 +3362,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -3775,11 +3375,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -3793,11 +3388,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 5, recommendedAPs: 8,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -3811,11 +3401,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -3829,11 +3414,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -3847,11 +3427,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -3865,11 +3440,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Physics C: Mechanics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -3883,11 +3453,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Psychology","Biology","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Psychology", "AP Statistics", "AP Biology"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -3901,11 +3466,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -3919,11 +3479,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -3937,11 +3492,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -3955,11 +3505,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -3973,11 +3518,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -3991,11 +3531,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -4009,11 +3544,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -4027,11 +3557,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -4045,11 +3570,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -4063,11 +3583,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Physics C: Mechanics", "AP Physics C: Electricity & Magnetism", "AP Chemistry", "AP Computer Science A"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -4081,11 +3596,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Computer Science A", "AP Physics C: Mechanics", "AP Statistics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "world-top-100",
       intlFriendly: true,
@@ -4099,11 +3609,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
@@ -4117,11 +3622,6 @@ const courses = [
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, ap: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
-    apContext: {
-      minCompetitiveAPs: 4, recommendedAPs: 6,
-      recommendedSubjects: ["AP Calculus BC", "AP Statistics", "AP Microeconomics", "AP Macroeconomics"],
-      note: "US admissions is holistic — no hard subject requirements.",
-    },
     universityContext: {
       tier: "national-leading",
       intlFriendly: true,
