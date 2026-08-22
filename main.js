@@ -122,7 +122,8 @@ const ELITE_HOLISTIC_TIERS = new Set(['world-top-5', 'world-top-10', 'world-top-
 const SYSTEM_GRADE_KEY = {
   UK_A_Level: 'aLevels',
   IB:         'ib',
-  US_AP:      'ap',
+  // US_AP has no grades key: grades.ap was removed from the schema; AP
+  // requirements live in course.apRequirement.
   SG_A_Level: 'sgALevels',
   HK_DSE:     'hkDse',
 };
@@ -723,7 +724,8 @@ function renderCheckEmptyState() {
  * ═══════════════════════════════════════════════════════════════ */
 
 const A_LEVEL_RANK = { 'A*': 5, 'A': 4, 'B': 3, 'C': 2, 'D': 1, 'E': 0 };
-const AP_TO_LETTER  = { '5': 'A*', '4': 'A', '3': 'B', '2': 'C', '1': 'D' };
+// (AP→A-Level conversion removed: no published AP-to-A-Level equivalence
+// exists. AP requirements live in course.apRequirement, stated directly.)
 const DSE_RANK      = { '5**': 7, '5*': 6, '5': 5, '4': 4, '3': 3, '2': 2, '1': 1 };
 // SG A-Levels grade below E: S (sub-pass) and U (ungraded). Offers never ask
 // for them, but a student can honestly predict them.
@@ -834,16 +836,8 @@ function compareGradeToStudent(course, system, studentGrade) {
     if (isNaN(need)) return 'unknown';
     return studentPts < need ? 'above' : 'met';
   }
-  if (system === 'US_AP') {
-    const apStr = course.grades?.ap;
-    if (!apStr) return 'unknown';
-    const digits = apStr.match(/[1-5]/g);
-    if (!digits?.length) return 'unknown';
-    const minScore = Math.min(...digits.map(Number));
-    const courseMinLetter = AP_TO_LETTER[String(minScore)];
-    if (A_LEVEL_RANK[studentGrade] == null || A_LEVEL_RANK[courseMinLetter] == null) return 'unknown';
-    return A_LEVEL_RANK[studentGrade] < A_LEVEL_RANK[courseMinLetter] ? 'above' : 'met';
-  }
+  // US_AP deliberately has no branch here: AP comparison does not run
+  // through this function. AP requirements live in course.apRequirement.
   return 'unknown';
 }
 
@@ -4347,8 +4341,9 @@ function shortlistGradeRange(saved) {
     }
   }
 
-  // HK DSE / AP — list the distinct spread (no reliable cross-grade ranking).
-  for (const [key, label] of [['hkDse', 'HK DSE'], ['ap', 'AP']]) {
+  // HK DSE — list the distinct spread (no reliable cross-grade ranking).
+  // (grades.ap removed from the schema; AP requirements live in apRequirement.)
+  for (const [key, label] of [['hkDse', 'HK DSE']]) {
     const vals = saved.map(c => c.grades?.[key]).filter(Boolean);
     if (vals.length) {
       const uniq = [...new Set(vals)].sort();
@@ -4457,17 +4452,12 @@ function shortlistVerdictRaw(course, system, predictedGrade, profile) {
   const gradeSet = gradeProfileComplete(system, predictedGrade, profile?.subjects);
 
   if (system === 'US_AP') {
-    // No AP entry requirement held for this course (grades.ap null) →
-    // not assessable, on any country. The same rule as checkStatusFor's
-    // green cap: verdicts arrive per course as grades.ap is populated.
-    if (!gradeSet) return 'unknown';
-    const apStr = course.grades?.ap;
-    if (!apStr) return 'unknown';
-    if (isGradeAboveStudent(course, system, predictedGrade)) return 'reach';
-    const digits = apStr.match(/[1-5]/g);
-    if (!digits?.length) return 'unknown';
-    const needLetter = AP_TO_LETTER[String(Math.max(...digits.map(Number)))];
-    return (A_LEVEL_RANK[predictedGrade] ?? 0) > (A_LEVEL_RANK[needLetter] ?? 0) ? 'safety' : 'match';
+    // No AP requirement held for this course → not assessable, on any
+    // country. Where apRequirement IS held, there is still no student-side
+    // AP comparison yet (the single average letter compares to nothing);
+    // no reach/match is manufactured from it.
+    if (course.apRequirement == null) return 'unknown';
+    return 'unknown';
   }
 
   // No valid grade in the current system → no verdicts anywhere. The
@@ -5562,11 +5552,11 @@ function checkStatusFor(course) {
   const result = classify(course, state.selectedTags);
   if (tooFew && result.status === 'green') result.status = 'amber';
   // AP: no course may show a STRONG match to an AP student until it carries
-  // an actual AP entry requirement (grades.ap). Derived from the data, not
-  // hardcoded — as verified grades.ap values are added per course, green
-  // becomes reachable for those courses automatically.
+  // an actual AP entry requirement (apRequirement). Derived from the data,
+  // not hardcoded — as verified apRequirement records are added per course,
+  // green becomes reachable for those courses automatically.
   if (state.checkSystem === 'US_AP' && result.status === 'green'
-      && course.grades?.ap == null) {
+      && course.apRequirement == null) {
     result.status = 'amber';
   }
   // Grade gate. A subject-strong course only KEEPS a green/amber verdict when
@@ -5576,21 +5566,20 @@ function checkStatusFor(course) {
   //   'met'     → keep the subject verdict (green/amber)
   //   'unknown' → requirement can't be read → fail safe to 'unconfirmed',
   //               NEVER a strong/possible match built on absent data.
-  // The one carve-out is the US_AP no-data path: while a course holds no AP
-  // entry requirement (grades.ap null), the AP score the student entered has
-  // nothing to be compared against — on ANY country. An 'unknown' there is
-  // expected, not a data gap, and must not demote the status; entering a
-  // score can never make a result worse than leaving it blank.
+  // US_AP is exempt from the grade gate entirely: AP comparison does not
+  // run through compareGradeToStudent (which would always answer 'unknown'
+  // for it), and entering the average AP score must never demote a result
+  // below its blank-score status. The apRequirement cap above is the sole
+  // AP-specific gate.
   // Gated on a COMPLETE profile — with some subjects blank we stay in
   // subject-only mode and never produce grey/unconfirmed at all.
-  if (gradesInformMatch() && (result.status === 'green' || result.status === 'amber')) {
-    const holisticApPath = state.checkSystem === 'US_AP'
-      && course.grades?.ap == null;
+  if (state.checkSystem !== 'US_AP'
+      && gradesInformMatch() && (result.status === 'green' || result.status === 'amber')) {
     const cmp = compareGradeToStudent(course, state.checkSystem, state.predictedGrade);
     if (cmp === 'above') {
       result.status = 'grey';
       result.gradeGap = gradeGapInfo(course, state.checkSystem, state.predictedGrade);
-    } else if (cmp === 'unknown' && !holisticApPath) {
+    } else if (cmp === 'unknown') {
       result.status = 'unconfirmed';
     }
   }
@@ -6070,10 +6059,33 @@ function buildCheckCard(course, result) {
     fieldCoreHtml = `<p class="card-field-core">${esc(FIELD_CORE_REASON[result.fieldCore.category])}</p>`;
   }
 
-  // ── AP note ──────────────────────────────────────────────────
+  // ── AP requirement ───────────────────────────────────────────
+  // Null → the standing data-absence line. Non-null → the record's own
+  // contents, plainly; excluded APs scoped to the COURSE, never the
+  // subject. A partial record surfaces the existing partial caution.
   let apNoteHtml = '';
-  if (sys === 'US_AP' && course.grades?.ap == null) {
-    apNoteHtml = `<p class="card-ap-note">AP entry requirements not held for this course.</p>`;
+  if (sys === 'US_AP') {
+    const ar = course.apRequirement;
+    if (ar == null) {
+      apNoteHtml = `<p class="card-ap-note">AP entry requirements not held for this course.</p>`;
+    } else {
+      const lines = [];
+      if (typeof ar.gpaMin === 'number') lines.push(`GPA minimum: ${ar.gpaMin}`);
+      if (typeof ar.count === 'number') lines.push(`AP exams: ${ar.count}`);
+      if (Array.isArray(ar.grades) && ar.grades.length) lines.push(`Grades: ${ar.grades.join(', ')}`);
+      if (Array.isArray(ar.mustInclude) && ar.mustInclude.length) lines.push(`Must include: ${ar.mustInclude.join(', ')}`);
+      (Array.isArray(ar.mustIncludeOneOf) ? ar.mustIncludeOneOf : []).forEach(set => {
+        if (Array.isArray(set) && set.length) lines.push(`One of: ${set.join(' or ')}`);
+      });
+      (Array.isArray(ar.excluded) ? ar.excluded : []).forEach(s => {
+        lines.push(`${s} does not count towards this course's requirement.`);
+      });
+      if (ar.note) lines.push(ar.note);
+      apNoteHtml = lines.map(l => `<p class="card-ap-note">${esc(l)}</p>`).join('');
+      if (ar.sourceStatus === 'partial') {
+        apNoteHtml += `<p class="card-unverified">⚠ Some requirements not yet verified — confirm with the university before relying on these.</p>`;
+      }
+    }
   }
 
   // ── US admissions: one compact per-card line (usTestLineHtml). The old
