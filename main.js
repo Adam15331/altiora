@@ -2205,6 +2205,15 @@ function testRelationFor(course, test) {
   return rel === 'optional-lower-offer' ? 'optional-lower-offer' : 'required';
 }
 
+// ONE renderer for the admission-test tag on both card surfaces (Check and
+// Shortlist), reading the SAME relation the Applying checklist reads — the
+// cards must never contradict the checklist or the course's own notes.
+function testTagHtml(course, test) {
+  return testRelationFor(course, test) === 'optional-lower-offer'
+    ? `<span class="admission-test-tag admission-test-tag--optional">${esc(test)} optional — can lower the offer</span>`
+    : `<span class="admission-test-tag">${esc(test)} required</span>`;
+}
+
 // "Needed for: A, B (2 of your 4 saved courses)" — their data, not a claim.
 // Where the verified source says the test only lowers the offer, say that
 // instead: "required" is requirement language we may not use for it.
@@ -4609,7 +4618,7 @@ function buildShortlistCard(course, studentTags, hasSubjects) {
     </div>
     ${tests.length ? `
       <div class="card-admission-tests">
-        ${tests.map(t => `<span class="admission-test-tag">${esc(t)} required</span>`).join('')}
+        ${tests.map(t => testTagHtml(course, t)).join('')}
       </div>` : ''}
     ${(course.verification?.status ?? 'unverified') !== 'verified'
       ? `<p class="card-unverified">⚠ Requirements not yet verified — confirm with the university.</p>`
@@ -6192,7 +6201,7 @@ function buildCheckCard(course, result) {
     ${ibHlHtml}
     ${tests.length ? `
       <div class="card-admission-tests">
-        ${tests.map(t => `<span class="admission-test-tag">${esc(t)} required</span>`).join('')}
+        ${tests.map(t => testTagHtml(course, t)).join('')}
       </div>` : ''}
     ${apNoteHtml}
     ${unverifiedHtml}
