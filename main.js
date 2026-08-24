@@ -2682,16 +2682,25 @@ function buildCounselorSummaryHtml() {
   const testInfoFor = t => (typeof admissionTestInfo !== 'undefined') ? admissionTestInfo[t] : null;
   const tests = [...new Set(saved.flatMap(c => Array.isArray(c.admissionTests) ? c.admissionTests : []))]
     .sort((a, b) => (testInfoFor(a)?.regOpensMonth ?? 98) - (testInfoFor(b)?.regOpensMonth ?? 98) || a.localeCompare(b));
+  // Optional marker — the SAME wording the course cards use, via the same
+  // testRelationFor. Strict: a test reads optional here only when EVERY
+  // saved course carrying it stores the optional relation; one required
+  // carrier keeps the plain (required) rendering.
+  const testOptionalEverywhere = t => saved
+    .filter(c => (Array.isArray(c.admissionTests) ? c.admissionTests : []).includes(t))
+    .every(c => testRelationFor(c, t) === 'optional-lower-offer');
   const testsHtml = tests.length
     ? `<ul class="cs-list">${tests.map(t => {
         const i = testInfoFor(t);
+        const label = i?.name ?? t;
+        const shown = testOptionalEverywhere(t) ? `${label} optional — can lower the offer` : label;
         return `<li>
-          <span class="cs-list__main">${esc(i?.name ?? t)}${i?.fullName ? `<span class="cs-list__sub">${esc(i.fullName)}</span>` : ''}</span>
+          <span class="cs-list__main">${esc(shown)}${i?.fullName ? `<span class="cs-list__sub">${esc(i.fullName)}</span>` : ''}</span>
           <span class="cs-list__side"> ${esc(i ? `registration ${i.typicalRegistrationWindow}` : 'check the official site')}</span>
         </li>`;
       }).join('')}</ul>
       <p class="cs-none">Typical windows — they shift year to year, so confirm on each test's official site.</p>`
-    : none(saved.length ? 'No admission tests required across these courses.' : 'No courses saved, so no tests to list.');
+    : none(saved.length ? 'No admission tests across these courses.' : 'No courses saved, so no tests to list.');
 
   /* ── Story bank ── */
   const entries = AltioraState.getAchievements();
@@ -2983,7 +2992,7 @@ function storySynthesis(a) {
 function storyScaffoldHtml(a) {
   const showed = [a.whatItTaught, a.whyItMattered].filter(v => v && v.trim()).join(' ');
   const lines = [
-    ['What happened',  a.situation],
+    ['The situation',  a.situation],
     ['What you did',   a.whatIDid],
     ['What it showed', showed],
   ].filter(([, v]) => v && v.trim());
@@ -4214,16 +4223,34 @@ function buildShortlistInsightsHtml(saved) {
   const plural    = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
   // Admission tests with per-test course counts (not blindly deduplicated),
-  // most-required first.
+  // most-required first — split by the SAME relation the cards and checklist
+  // read (testRelationFor). "You'll need" may only claim tests whose
+  // relation is required; optional-lower-offer tests get their own line.
   const testCounts = {};
+  const reqCounts = {}, optCounts = {};
   saved.forEach(c => (Array.isArray(c.admissionTests) ? c.admissionTests : [])
-    .forEach(t => { testCounts[t] = (testCounts[t] ?? 0) + 1; }));
-  const testEntries = Object.entries(testCounts)
+    .forEach(t => {
+      testCounts[t] = (testCounts[t] ?? 0) + 1;
+      const bucket = testRelationFor(c, t) === 'optional-lower-offer' ? optCounts : reqCounts;
+      bucket[t] = (bucket[t] ?? 0) + 1;
+    }));
+  const sortCounts = o => Object.entries(o)
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-  const testsHtml = testEntries.length
-    ? testEntries.map(([t, n]) =>
-        `<span class="shortlist-insight-tag">${esc(t)} (${n} course${n === 1 ? '' : 's'})</span>`).join(' ')
-    : `<span class="text-secondary">None across your saved courses</span>`;
+  const testEntries = sortCounts(testCounts);
+  const reqEntries  = sortCounts(reqCounts);
+  const optEntries  = sortCounts(optCounts);
+  const testTags = entries => entries.map(([t, n]) =>
+    `<span class="shortlist-insight-tag">${esc(t)} (${n} course${n === 1 ? '' : 's'})</span>`).join(' ');
+  // Only-optional shortlists must NOT render the "you'll need" line at all;
+  // with no tests anywhere the existing None line stays as before.
+  const needLine = (reqEntries.length || !optEntries.length)
+    ? `<li><span class="shortlist-insight-label">Admission tests you'll need:</span> ${reqEntries.length
+        ? testTags(reqEntries)
+        : `<span class="text-secondary">None across your saved courses</span>`}</li>`
+    : '';
+  const optLine = optEntries.length
+    ? `<li><span class="shortlist-insight-label">Optional tests that can lower an offer:</span> ${testTags(optEntries)}</li>`
+    : '';
 
   // Registration windows for the tests on the list (static verified data).
   const regBits = testEntries
@@ -4277,7 +4304,8 @@ function buildShortlistInsightsHtml(saved) {
         <li><strong>${plural(saved.length, 'course', 'courses')}</strong> saved across
             <strong>${plural(unis.size, 'university', 'universities')}</strong> in
             <strong>${plural(countries.size, 'country', 'countries')}</strong></li>
-        <li><span class="shortlist-insight-label">Admission tests you'll need:</span> ${testsHtml}</li>
+        ${needLine}
+        ${optLine}
         ${regLine}
         ${gradeHtml}
         ${countryNote}
