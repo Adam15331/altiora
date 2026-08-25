@@ -3485,9 +3485,23 @@ function statementRefsFor(qid) {
 // Visibility: the drafting surface is a UCAS artefact, so it exists only
 // for UK A-Level students, and only near application (yearsUntilApplication
 // <= 1). Earlier UK years get one plain line; other systems get nothing.
+// True when the shortlist is non-empty and holds not a single UK course —
+// the one case that hides the statement surface. The UCAS statement is a
+// DESTINATION artefact: it follows where the student is applying, not which
+// qualification they hold. An empty shortlist keeps the surface visible
+// (deliberate: it must not flicker in and out as courses are saved and
+// removed); country comes from course.country, the same field every other
+// country filter reads.
+function shortlistExcludesUK() {
+  if (typeof courses === 'undefined') return false;
+  const saved = AltioraState.getShortlist()
+    .map(id => courses.find(c => c.id === id))
+    .filter(Boolean);
+  return saved.length > 0 && !saved.some(c => c.country === 'UK');
+}
+
 function statementDraftingState() {
-  const p = AltioraState.getProfile();
-  if (p.qualificationSystem !== 'UK_A_Level') return 'hidden';
+  if (shortlistExcludesUK()) return 'hidden';
   const yrs = studentYears();
   return (yrs != null && yrs <= 1) ? 'active' : 'locked';
 }
@@ -3496,8 +3510,7 @@ function statementDraftingState() {
 // re-renders; a mere draft keystroke (which also commits state) must not —
 // re-rendering mid-typing would destroy the textarea's focus and cursor.
 function statementShapeSig() {
-  const p = AltioraState.getProfile();
-  return `${p.qualificationSystem}|${studentYears()}`;
+  return `${shortlistExcludesUK() ? 'noUK' : 'uk'}|${studentYears()}`;
 }
 
 function fmtChars(n) { return n.toLocaleString('en-GB'); }
