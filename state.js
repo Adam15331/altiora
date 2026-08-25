@@ -47,7 +47,7 @@ const AltioraState = (() => {
         stage:               null,   // "exploring" | "choosing" | "building" | "applying"
         qualificationSystem: null,
         subjects:            [],      // subject tag strings
-        predictedGrades:     null,    // letter systems: {subject → grade} map · IB: points string · AP: letter string
+        predictedGrades:     null,    // letter systems: {subject → grade} map · IB: points string · AP: {subject → '1'-'5'} map (legacy single letter is discarded, never converted)
         interests:           [],      // category strings
         candidateFields:     [],      // category ids the student is considering (max 3, order = priority)
         achievements:        [],      // the student's STORY BANK: entries with reflections + optional field tags — see addAchievement()
