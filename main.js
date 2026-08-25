@@ -3044,8 +3044,8 @@ function storyCounselHtml(label, entries, yrs, opts = {}) {
 // never a quota, a score, or a claim about what universities want.
 function storyGapTail(yrs) {
   if (yrs == null) return 'a project, a competition, or documented work all count as real evidence.';
-  if (yrs >= 2)   return 'you have time — a project, a competition, or even documented tinkering builds real evidence.';
-  if (yrs === 1)  return 'you have a year, and one project you actually finish is worth more than a list.';
+  if (yrs >= 2)   return 'there’s time to build something — documented tinkering counts as real evidence.';
+  if (yrs === 1)  return 'there’s still time for one project you actually finish, which is worth more than a list.';
   return 'focus on telling the strongest version of what you already have.';
 }
 
@@ -3619,8 +3619,7 @@ function renderStatementRefs() {
   if (emptySlot) {
     emptySlot.classList.toggle('hidden', haveEntries);
     emptySlot.innerHTML = haveEntries ? '' :
-      `<p class="stmt__empty-line">Your story is empty — entries you add will appear beside the questions they fit.
-        <button type="button" class="stmt__refs-add" data-stmt-add-entry>Add your first entry</button>.</p>`;
+      `<p class="stmt__empty-line">Your story is empty — entries you add will appear beside the questions they fit.</p>`;
   }
   if (!haveEntries) return;
   UCAS_STATEMENT.questions.forEach(q => {
