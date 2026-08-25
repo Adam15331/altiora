@@ -3044,8 +3044,8 @@ function storyCounselHtml(label, entries, yrs, opts = {}) {
 // never a quota, a score, or a claim about what universities want.
 function storyGapTail(yrs) {
   if (yrs == null) return 'a project, a competition, or documented work all count as real evidence.';
-  if (yrs >= 2)   return 'you have time — a project, a competition, or even documented tinkering builds real evidence.';
-  if (yrs === 1)  return 'you have a year, and one project you actually finish is worth more than a list.';
+  if (yrs >= 2)   return 'there’s time to build something, and documented tinkering counts as real evidence.';
+  if (yrs === 1)  return 'there’s still time for one project you actually finish, which is worth more than a list.';
   return 'focus on telling the strongest version of what you already have.';
 }
 
@@ -3081,7 +3081,7 @@ function storyCounsel(label, entries, yrs, opts = {}) {
         ? `Nothing in your ${label} story yet — you have time. A project, a competition, or even documented tinkering builds real evidence.`
         : `Your ${label} story is still light — you have time. A project, a competition, or even documented tinkering builds real evidence.`;
     } else if (yrs === 1) {
-      text = `Your ${label} story is thin and time is short — one focused project or role this term is worth more than many small additions.`;
+      text = `Your ${label} story is thin — one focused project or role is worth more than many small additions.`;
     } else { // yrs === 0 — the application year
       text = `Focus on telling the strongest version of what you already have; your reflections above are the raw material.`;
     }
@@ -3485,9 +3485,23 @@ function statementRefsFor(qid) {
 // Visibility: the drafting surface is a UCAS artefact, so it exists only
 // for UK A-Level students, and only near application (yearsUntilApplication
 // <= 1). Earlier UK years get one plain line; other systems get nothing.
+// True when the shortlist is non-empty and holds not a single UK course —
+// the one case that hides the statement surface. The UCAS statement is a
+// DESTINATION artefact: it follows where the student is applying, not which
+// qualification they hold. An empty shortlist keeps the surface visible
+// (deliberate: it must not flicker in and out as courses are saved and
+// removed); country comes from course.country, the same field every other
+// country filter reads.
+function shortlistExcludesUK() {
+  if (typeof courses === 'undefined') return false;
+  const saved = AltioraState.getShortlist()
+    .map(id => courses.find(c => c.id === id))
+    .filter(Boolean);
+  return saved.length > 0 && !saved.some(c => c.country === 'UK');
+}
+
 function statementDraftingState() {
-  const p = AltioraState.getProfile();
-  if (p.qualificationSystem !== 'UK_A_Level') return 'hidden';
+  if (shortlistExcludesUK()) return 'hidden';
   const yrs = studentYears();
   return (yrs != null && yrs <= 1) ? 'active' : 'locked';
 }
@@ -3496,8 +3510,7 @@ function statementDraftingState() {
 // re-renders; a mere draft keystroke (which also commits state) must not —
 // re-rendering mid-typing would destroy the textarea's focus and cursor.
 function statementShapeSig() {
-  const p = AltioraState.getProfile();
-  return `${p.qualificationSystem}|${studentYears()}`;
+  return `${shortlistExcludesUK() ? 'noUK' : 'uk'}|${studentYears()}`;
 }
 
 function fmtChars(n) { return n.toLocaleString('en-GB'); }
@@ -3606,8 +3619,7 @@ function renderStatementRefs() {
   if (emptySlot) {
     emptySlot.classList.toggle('hidden', haveEntries);
     emptySlot.innerHTML = haveEntries ? '' :
-      `<p class="stmt__empty-line">Your story is empty — entries you add will appear beside the questions they fit.
-        <button type="button" class="stmt__refs-add" data-stmt-add-entry>Add your first entry</button>.</p>`;
+      `<p class="stmt__empty-line">Your story is empty — entries you add will appear beside the questions they fit.</p>`;
   }
   if (!haveEntries) return;
   UCAS_STATEMENT.questions.forEach(q => {
