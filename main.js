@@ -3044,7 +3044,7 @@ function storyCounselHtml(label, entries, yrs, opts = {}) {
 // never a quota, a score, or a claim about what universities want.
 function storyGapTail(yrs) {
   if (yrs == null) return 'a project, a competition, or documented work all count as real evidence.';
-  if (yrs >= 2)   return 'there’s time to build something — documented tinkering counts as real evidence.';
+  if (yrs >= 2)   return 'there’s time to build something, and documented tinkering counts as real evidence.';
   if (yrs === 1)  return 'there’s still time for one project you actually finish, which is worth more than a list.';
   return 'focus on telling the strongest version of what you already have.';
 }
@@ -3081,7 +3081,7 @@ function storyCounsel(label, entries, yrs, opts = {}) {
         ? `Nothing in your ${label} story yet — you have time. A project, a competition, or even documented tinkering builds real evidence.`
         : `Your ${label} story is still light — you have time. A project, a competition, or even documented tinkering builds real evidence.`;
     } else if (yrs === 1) {
-      text = `Your ${label} story is thin and time is short — one focused project or role this term is worth more than many small additions.`;
+      text = `Your ${label} story is thin — one focused project or role is worth more than many small additions.`;
     } else { // yrs === 0 — the application year
       text = `Focus on telling the strongest version of what you already have; your reflections above are the raw material.`;
     }
