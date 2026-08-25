@@ -2891,6 +2891,19 @@ function updateStoryStepExamples() {
   }
 }
 
+// The 150-character description target — a US-application convenience shown
+// only when the shortlist holds a US course. A TARGET, never a limit: no
+// truncation, no blocking, no error state; the count reads the same at 20,
+// 150 and 300 characters.
+function syncDescCharTarget() {
+  const ta = $('achvDesc'), count = $('achvDescCount'), note = $('achvDescCountNote');
+  if (!ta || !count || !note) return;
+  const show = shortlistIncludesUS();
+  count.classList.toggle('hidden', !show);
+  note.classList.toggle('hidden', !show);
+  if (show) count.textContent = `${ta.value.length} / 150`;
+}
+
 // The pinned candidate fields that resolve to a known category — the single
 // source of truth for the story tag picker and the per-field story views.
 function activeCandidateFields() {
@@ -2918,6 +2931,7 @@ function achievementsSectionHtml() {
           <label class="achv__label" for="achvType"><span>Type<span class="achv__req">*</span></span>
             <div class="select-wrap"><select id="achvType" class="achv__select">${typeOptions}</select></div>
             <span id="achvTypeHint" class="achv__type-hint hidden"></span>
+            <span class="achv__widen-note">Paid work, looking after family, and things you taught yourself all count. Most people leave these out.</span>
           </label>
           <label class="achv__label achv__label--grow" for="achvTitle"><span>Title<span class="achv__req">*</span></span>
             <input id="achvTitle" class="achv__input" type="text" maxlength="120"
@@ -2938,6 +2952,8 @@ function achievementsSectionHtml() {
         <label class="achv__label achv__label--prompt" for="achvDesc">Short description <span class="achv__opt">(optional)</span>
           <textarea id="achvDesc" class="achv__input achv__textarea" rows="2" maxlength="500"
             placeholder="A sentence or two, if it helps"></textarea>
+          <span id="achvDescCount" class="achv__desc-count hidden" aria-live="polite"></span>
+          <span id="achvDescCountNote" class="achv__desc-count-note hidden">US applications cap this at 150 characters. Worth practising the short version.</span>
         </label>
         <div class="story__prompts">
           <p class="story__prompts-lead">Three tiny steps — one line each is plenty, and every step is optional.</p>
@@ -3301,6 +3317,7 @@ function openAchievementForm(entry) {
   $('achvSaveBtn').textContent = entry ? 'Save changes' : 'Save to your story';
   $('achvAddBtn')?.classList.add('hidden');
   form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  syncDescCharTarget();
   $('achvTitle').focus();
 }
 
@@ -3397,6 +3414,11 @@ function wireAchievementsEvents() {
       submitAchievementForm();
     }
   });
+  // Live 150-character target on the description — document-delegated like
+  // the rest of the form, so it survives any re-render.
+  document.addEventListener('input', (e) => {
+    if (e.target?.id === 'achvDesc') syncDescCharTarget();
+  });
   // The step examples follow the chosen entry type (rotating relatable
   // placeholders); delegated so form re-renders can't orphan it.
   document.addEventListener('change', (e) => {
@@ -3469,8 +3491,8 @@ const STATEMENT_PROMPTS = {
 // Which story entries sit beside which question, by entry TYPE (Q2/Q3)
 // or by the student's pinned fields (Q1). References, not rules — the
 // full story bank is always right above.
-const STATEMENT_Q2_TYPES = new Set(['certificate', 'award', 'competition', 'project']);
-const STATEMENT_Q3_TYPES = new Set(['leadership', 'volunteering', 'work', 'activity', 'other']);
+const STATEMENT_Q2_TYPES = new Set(['certificate', 'award', 'competition', 'project', 'selftaught']);
+const STATEMENT_Q3_TYPES = new Set(['leadership', 'volunteering', 'work', 'activity', 'caring', 'sport', 'arts', 'club', 'other']);
 
 function statementRefsFor(qid) {
   const items = AltioraState.getAchievements();
@@ -3498,6 +3520,18 @@ function shortlistExcludesUK() {
     .map(id => courses.find(c => c.id === id))
     .filter(Boolean);
   return saved.length > 0 && !saved.some(c => c.country === 'UK');
+}
+
+// US twin of shortlistExcludesUK, same style, same course.country field:
+// true when at least one saved course is a US course. Drives US-destination
+// conveniences (the 150-character description target) the way its sibling
+// drives the UCAS statement gate.
+function shortlistIncludesUS() {
+  if (typeof courses === 'undefined') return false;
+  return AltioraState.getShortlist()
+    .map(id => courses.find(c => c.id === id))
+    .filter(Boolean)
+    .some(c => c.country === 'US');
 }
 
 function statementDraftingState() {

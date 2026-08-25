@@ -4613,6 +4613,32 @@ button.plan-combo-tag--drop:focus-visible {
   color: var(--ce-ink-30);
   line-height: 1.5;
 }
+/* What counts — plain mono line under the type picker, no pill, no border */
+.achv__widen-note {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--ce-font-mono);
+  font-size: var(--text-xs);
+  color: var(--ce-ink-60);
+  line-height: 1.5;
+}
+/* 150-character description target — same tone at every length: a target,
+   never an error state */
+.achv__desc-count {
+  display: block;
+  margin-top: 3px;
+  font-family: var(--ce-font-mono);
+  font-size: var(--text-xs);
+  color: var(--ce-ink-60);
+}
+.achv__desc-count-note {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--ce-font-mono);
+  font-size: var(--text-xs);
+  color: var(--ce-ink-30);
+  line-height: 1.5;
+}
 .achv__input, .achv__select {
   font-family: var(--ce-font-body);
   font-size: var(--text-base);
