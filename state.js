@@ -47,7 +47,7 @@ const AltioraState = (() => {
         stage:               null,   // "exploring" | "choosing" | "building" | "applying"
         qualificationSystem: null,
         subjects:            [],      // subject tag strings
-        predictedGrades:     null,    // letter systems: {subject → grade} map · IB: points string · AP: letter string
+        predictedGrades:     null,    // letter systems: {subject → grade} map · IB: points string · AP: {subject → '1'-'5'} map (legacy single letter is discarded, never converted)
         interests:           [],      // category strings
         candidateFields:     [],      // category ids the student is considering (max 3, order = priority)
         achievements:        [],      // the student's STORY BANK: entries with reflections + optional field tags — see addAchievement()
@@ -387,6 +387,14 @@ const AltioraState = (() => {
     { id: 'volunteering', label: 'Volunteering / Community' },
     { id: 'work',         label: 'Work Experience / Internship' },
     { id: 'activity',     label: 'Extracurricular Activity' },
+    // Widened categories — the things students overlook. "Paid work" and
+    // "Volunteering or community" were specified but collide with the
+    // existing work / volunteering types, which stay authoritative.
+    { id: 'caring',       label: 'Caring or family responsibility' },
+    { id: 'sport',        label: 'Sport' },
+    { id: 'arts',         label: 'Arts or music' },
+    { id: 'club',         label: 'Club or society' },
+    { id: 'selftaught',   label: 'Self-taught or independent learning' },
     { id: 'other',        label: 'Other' },
   ];
   const _ACHIEVEMENT_TYPE_IDS = new Set(ACHIEVEMENT_TYPES.map(t => t.id));

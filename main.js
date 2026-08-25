@@ -108,7 +108,35 @@ function gradesInformMatch() {
 function apStudentGradesComparable() {
   const g = state.predictedGrade;
   return !!g && typeof g === 'object' && !Array.isArray(g)
-    && Object.values(g).some(v => /^[1-5]$/.test(String(v)));
+    && Object.values(g).some(v => AP_SCORE_RE.test(String(v)));
+}
+
+// Does the student's per-subject AP profile satisfy this course's HELD
+// apRequirement grade data? Conservative on every axis:
+//   - only a requirement carrying a grades[] array is comparable at all —
+//     framework records without grades (Durham/Edinburgh/UCL) never pass;
+//   - excluded APs are removed before anything is counted;
+//   - mustInclude / mustIncludeOneOf are checked against the canonical
+//     picker names the data was normalised to;
+//   - the required grades, best-first, must each be met slot-by-slot.
+// NOT checked (no student data is held for it): gpaMin. A pass here is a
+// pass on the AP-grade portion of the requirement only.
+function apRequirementMet(course) {
+  const ar = course?.apRequirement;
+  if (!ar || !Array.isArray(ar.grades) || !ar.grades.length) return false;
+  const g = state.predictedGrade;
+  if (!g || typeof g !== 'object') return false;
+  const excluded = new Set(Array.isArray(ar.excluded) ? ar.excluded : []);
+  const have = new Map(Object.entries(g)
+    .filter(([subj, v]) => !excluded.has(subj) && AP_SCORE_RE.test(String(v)))
+    .map(([subj, v]) => [subj, Number(v)]));
+  if (Array.isArray(ar.mustInclude) && !ar.mustInclude.every(s => have.has(s))) return false;
+  if (Array.isArray(ar.mustIncludeOneOf)
+      && !ar.mustIncludeOneOf.every(set => !Array.isArray(set) || set.some(s => have.has(s)))) return false;
+  const need = ar.grades.slice().sort((a, b) => b - a);
+  const best = [...have.values()].sort((a, b) => b - a);
+  if (best.length < need.length) return false;
+  return need.every((n, i) => best[i] >= n);
 }
 function statusLabel(status) {
   return (!gradesInformMatch() && STATUS_SUBJECT_ONLY[status]) || STATUS[status]?.label || '';
@@ -629,7 +657,9 @@ function updateCheckFraming(counts = null) {
       intro.textContent = `Here’s what your subjects open — ${n} strong match${n === 1 ? '' : 'es'} at your predicted grades.`;
     } else {
       intro.textContent = retro
-        ? 'Here’s what your subjects open. Add your predicted grades to see which courses are strong matches.'
+        ? (state.checkSystem === 'US_AP'
+            ? 'Here’s what your subjects open. Add your predicted grades to see how they compare where we hold requirements.'
+            : 'Here’s what your subjects open. Add your predicted grades to see which courses are strong matches.')
         : 'Pick your subjects and instantly see which courses are open, possible, or out of reach. Your qualification system is set from your profile — change it anytime from the bar above.';
     }
   }
@@ -749,7 +779,15 @@ const GRADE_SCALES = {
   UK_A_Level: ['A*', 'A', 'B', 'C', 'D', 'E'],
   SG_A_Level: ['A', 'B', 'C', 'D', 'E', 'S', 'U'],
   HK_DSE:     ['5**', '5*', '5', '4', '3', '2', '1'],
+  // AP scores are integers 1–5 ONLY — no letters, no A-Level equivalents.
+  US_AP:      ['5', '4', '3', '2', '1'],
 };
+// Systems whose grade entry is one control per selected subject. AP shares
+// the letter systems' rows machinery (same _gradeMap/commitGradeMap path);
+// it stays OUT of LETTER_GRADE_SYSTEMS because its comparison semantics
+// (apRequirement, digits) are its own.
+const PER_SUBJECT_GRADE_SYSTEMS = new Set([...LETTER_GRADE_SYSTEMS, 'US_AP']);
+const AP_SCORE_RE = /^[1-5]$/;
 function systemRank(system) {
   return system === 'HK_DSE' ? DSE_RANK : system === 'SG_A_Level' ? SG_RANK : A_LEVEL_RANK;
 }
@@ -913,7 +951,7 @@ function gradeGapText(gap) {
 
 const GRADE_CONVERSION_HINTS = {
   IB:         'IB 38 points ≈ A*AA at A-Level. Check university websites for specific conversion policies.',
-  US_AP:      'AP 5 ≈ A* at A-Level. US universities use holistic review – grades are one factor.',
+  US_AP:      'US universities use holistic review – grades are one factor.',
   SG_A_Level: 'Singapore A-Level grades are roughly equivalent to UK A-Levels. Confirm with each university.',
   HK_DSE:     'DSE 5** ≈ A*; 5 ≈ A. Conversions vary – always verify.',
 };
@@ -1007,7 +1045,7 @@ function buildGradeInput(systemKey) {
   // ONE merged section: the grade rows already name every subject, so this
   // header owns both concepts and carries the Edit affordance (opening the
   // same picker as before) — no separate "Your subjects" row repeating them.
-  const isLetter = LETTER_GRADE_SYSTEMS.has(systemKey);
+  const isLetter = PER_SUBJECT_GRADE_SYSTEMS.has(systemKey);
   const setAllHtml = isLetter ? `
         <label class="grade-setall">
           <span class="grade-setall__label">Set all</span>
@@ -1035,12 +1073,15 @@ function buildGradeInput(systemKey) {
   let bodyHtml = '';
   let wire     = null;
 
-  if (LETTER_GRADE_SYSTEMS.has(systemKey)) {
+  if (PER_SUBJECT_GRADE_SYSTEMS.has(systemKey)) {
     // Per-subject predictions: offers in these systems are grade PROFILES
     // ("A*AA"), so each selected subject gets its own compact select. The
-    // "Set all to" quick action keeps the uniform case one click.
+    // "Set all to" quick action keeps the uniform case one click. US_AP
+    // shares this exact machinery — its scale is the digits 1–5, no letters.
     bodyHtml = `<div id="gradeRows" class="grade-rows"></div>
-      <p id="gradeIncomplete" class="grade-incomplete hidden"></p>`;
+      <p id="gradeIncomplete" class="grade-incomplete hidden"></p>` + (systemKey === 'US_AP'
+        ? `\n      <p class="grade-input-note">AP entry requirements aren't held yet, so this isn't compared to courses.</p>`
+        : '');
     wire = () => {
       $('gradeSetAll').addEventListener('change', e => {
         const g = e.target.value;
@@ -1072,23 +1113,6 @@ function buildGradeInput(systemKey) {
         renderCheckResults();
       });
     };
-  } else if (systemKey === 'US_AP') {
-    bodyHtml = `
-      <div class="grade-input-body">
-        <label class="grade-option-label" for="gradeSelectAP">Average predicted AP score across your exams</label>
-        <div class="select-wrap">
-          <select id="gradeSelectAP" class="grade-select">
-            <option value="">— Leave blank —</option>
-            <option value="A*">5 (A*) — predicting mostly 5s</option>
-            <option value="A">4 (A) — predicting mostly 4s</option>
-            <option value="B">3 (B) — predicting mostly 3s</option>
-            <option value="C">2 (C) — predicting mostly 2s</option>
-            <option value="D">1 (D) — predicting mostly 1s</option>
-          </select>
-        </div>
-        <p class="grade-input-note">AP entry requirements aren't held yet, so this isn't compared to courses.</p>
-      </div>`;
-    wire = () => wireSelectGrade('gradeSelectAP');
   } else {
     section.classList.add('hidden');
     section.innerHTML = '';
@@ -2891,6 +2915,19 @@ function updateStoryStepExamples() {
   }
 }
 
+// The 150-character description target — a US-application convenience shown
+// only when the shortlist holds a US course. A TARGET, never a limit: no
+// truncation, no blocking, no error state; the count reads the same at 20,
+// 150 and 300 characters.
+function syncDescCharTarget() {
+  const ta = $('achvDesc'), count = $('achvDescCount'), note = $('achvDescCountNote');
+  if (!ta || !count || !note) return;
+  const show = shortlistIncludesUS();
+  count.classList.toggle('hidden', !show);
+  note.classList.toggle('hidden', !show);
+  if (show) count.textContent = `${ta.value.length} / 150`;
+}
+
 // The pinned candidate fields that resolve to a known category — the single
 // source of truth for the story tag picker and the per-field story views.
 function activeCandidateFields() {
@@ -2918,6 +2955,7 @@ function achievementsSectionHtml() {
           <label class="achv__label" for="achvType"><span>Type<span class="achv__req">*</span></span>
             <div class="select-wrap"><select id="achvType" class="achv__select">${typeOptions}</select></div>
             <span id="achvTypeHint" class="achv__type-hint hidden"></span>
+            <span class="achv__widen-note">Paid work, looking after family, and things you taught yourself all count. Most people leave these out.</span>
           </label>
           <label class="achv__label achv__label--grow" for="achvTitle"><span>Title<span class="achv__req">*</span></span>
             <input id="achvTitle" class="achv__input" type="text" maxlength="120"
@@ -2938,6 +2976,8 @@ function achievementsSectionHtml() {
         <label class="achv__label achv__label--prompt" for="achvDesc">Short description <span class="achv__opt">(optional)</span>
           <textarea id="achvDesc" class="achv__input achv__textarea" rows="2" maxlength="500"
             placeholder="A sentence or two, if it helps"></textarea>
+          <span id="achvDescCount" class="achv__desc-count hidden" aria-live="polite"></span>
+          <span id="achvDescCountNote" class="achv__desc-count-note hidden">US applications cap this at 150 characters. Worth practising the short version.</span>
         </label>
         <div class="story__prompts">
           <p class="story__prompts-lead">Three tiny steps — one line each is plenty, and every step is optional.</p>
@@ -3301,6 +3341,7 @@ function openAchievementForm(entry) {
   $('achvSaveBtn').textContent = entry ? 'Save changes' : 'Save to your story';
   $('achvAddBtn')?.classList.add('hidden');
   form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  syncDescCharTarget();
   $('achvTitle').focus();
 }
 
@@ -3397,6 +3438,11 @@ function wireAchievementsEvents() {
       submitAchievementForm();
     }
   });
+  // Live 150-character target on the description — document-delegated like
+  // the rest of the form, so it survives any re-render.
+  document.addEventListener('input', (e) => {
+    if (e.target?.id === 'achvDesc') syncDescCharTarget();
+  });
   // The step examples follow the chosen entry type (rotating relatable
   // placeholders); delegated so form re-renders can't orphan it.
   document.addEventListener('change', (e) => {
@@ -3469,8 +3515,8 @@ const STATEMENT_PROMPTS = {
 // Which story entries sit beside which question, by entry TYPE (Q2/Q3)
 // or by the student's pinned fields (Q1). References, not rules — the
 // full story bank is always right above.
-const STATEMENT_Q2_TYPES = new Set(['certificate', 'award', 'competition', 'project']);
-const STATEMENT_Q3_TYPES = new Set(['leadership', 'volunteering', 'work', 'activity', 'other']);
+const STATEMENT_Q2_TYPES = new Set(['certificate', 'award', 'competition', 'project', 'selftaught']);
+const STATEMENT_Q3_TYPES = new Set(['leadership', 'volunteering', 'work', 'activity', 'caring', 'sport', 'arts', 'club', 'other']);
 
 function statementRefsFor(qid) {
   const items = AltioraState.getAchievements();
@@ -3498,6 +3544,18 @@ function shortlistExcludesUK() {
     .map(id => courses.find(c => c.id === id))
     .filter(Boolean);
   return saved.length > 0 && !saved.some(c => c.country === 'UK');
+}
+
+// US twin of shortlistExcludesUK, same style, same course.country field:
+// true when at least one saved course is a US course. Drives US-destination
+// conveniences (the 150-character description target) the way its sibling
+// drives the UCAS statement gate.
+function shortlistIncludesUS() {
+  if (typeof courses === 'undefined') return false;
+  return AltioraState.getShortlist()
+    .map(id => courses.find(c => c.id === id))
+    .filter(Boolean)
+    .some(c => c.country === 'US');
 }
 
 function statementDraftingState() {
@@ -4442,11 +4500,15 @@ const VERDICT_META = {
 // Empty when the profile is complete (or when the system has a single input).
 function missingGradeSubjects(system, grade, subjects) {
   const subs = Array.isArray(subjects) ? subjects : [];
-  if (!LETTER_GRADE_SYSTEMS.has(system) || !subs.length) return [];
+  if (!PER_SUBJECT_GRADE_SYSTEMS.has(system) || !subs.length) return [];
   // A legacy single-average value applies to every subject — nothing missing.
-  if (typeof grade === 'string') return hasValidGrade(system, grade) ? [] : subs.slice();
-  const rank = systemRank(system);
+  // (US_AP excepted: its old average letter is discarded, never applied.)
+  if (typeof grade === 'string') {
+    return (system !== 'US_AP' && hasValidGrade(system, grade)) ? [] : subs.slice();
+  }
   const map  = (grade && typeof grade === 'object') ? grade : {};
+  if (system === 'US_AP') return subs.filter(s => !AP_SCORE_RE.test(String(map[s] ?? '')));
+  const rank = systemRank(system);
   return subs.filter(s => !Object.prototype.hasOwnProperty.call(rank, map[s]));
 }
 
@@ -4457,7 +4519,7 @@ function missingGradeSubjects(system, grade, subjects) {
 // single input and are complete the moment a valid value is entered.
 function gradeProfileComplete(system, grade, subjects) {
   if (!hasValidGrade(system, grade)) return false;
-  if (!LETTER_GRADE_SYSTEMS.has(system)) return true;
+  if (!PER_SUBJECT_GRADE_SYSTEMS.has(system)) return true;
   const subs = Array.isArray(subjects) ? subjects : [];
   if (!subs.length) return false;
   return missingGradeSubjects(system, grade, subs).length === 0;
@@ -4477,7 +4539,11 @@ function hasValidGrade(system, grade) {
     return false;
   }
   if (system === 'US_AP') {
-    return typeof grade === 'string' && Object.prototype.hasOwnProperty.call(A_LEVEL_RANK, grade);
+    // Per-subject digit map only. A legacy single-letter average is NOT
+    // valid — there is no defensible AP-to-letter conversion, so it is
+    // discarded rather than converted.
+    return !!grade && typeof grade === 'object' && !Array.isArray(grade)
+      && Object.values(grade).some(v => AP_SCORE_RE.test(String(v)));
   }
   if (system === 'IB') {
     const n = parseInt(grade, 10);
@@ -5163,21 +5229,26 @@ function restoreGradeFromProfile(systemKey) {
   // applied as subject rows appear — the in-place migration; the next
   // write-through persists it as a map. Values invalid for this system's
   // scale stay out rather than guessing.
-  if (LETTER_GRADE_SYSTEMS.has(systemKey)) {
-    const rank = systemRank(systemKey);
+  if (PER_SUBJECT_GRADE_SYSTEMS.has(systemKey)) {
+    const isAP  = systemKey === 'US_AP';
+    const valid = isAP
+      ? v => AP_SCORE_RE.test(String(v))
+      : (rank => v => Object.prototype.hasOwnProperty.call(rank, v))(systemRank(systemKey));
     if (typeof g === 'string') {
-      if (!Object.prototype.hasOwnProperty.call(rank, g)) return;
+      // Legacy AP single-average letter: DISCARDED, never converted — no
+      // defensible AP-to-letter equivalence exists. The rows start blank
+      // and the next grade edit persists the per-subject map (or null).
+      if (isAP) { syncGradeRows(); return; }
+      if (!valid(g)) return;
       _pendingUniform = g;
     } else if (g && typeof g === 'object') {
-      Object.entries(g).forEach(([subj, v]) => {
-        if (Object.prototype.hasOwnProperty.call(rank, v)) _gradeMap[subj] = v;
-      });
+      Object.entries(g).forEach(([subj, v]) => { if (valid(v)) _gradeMap[subj] = String(v); });
     } else return;
     syncGradeRows();   // renders rows for any already-selected subjects + derives state.predictedGrade
     return;
   }
 
-  const GRADE_INPUT_IDS = { IB: 'gradeInputIB', US_AP: 'gradeSelectAP' };
+  const GRADE_INPUT_IDS = { IB: 'gradeInputIB' };
   const el = $(GRADE_INPUT_IDS[systemKey] ?? '');
   if (!el) return;
   const gs = (typeof g === 'string') ? g : null;   // IB/AP only ever store strings
@@ -5611,14 +5682,13 @@ function checkStatusFor(course) {
 
   const result = classify(course, state.selectedTags);
   if (tooFew && result.status === 'green') result.status = 'amber';
-  // AP: no course may show a STRONG match until the comparison can actually
-  // RUN — which needs per-subject AP grades on the student side. Holding
-  // requirement data (apRequirement) is not enough: with only the single
-  // average letter, a populated course would award green off subject tags
-  // alone with nothing checked. Half a check must never render as a full
-  // verdict, so the cap keys on comparability, not on data held.
+  // AP: no course may show a STRONG match until the comparison actually
+  // RUNS AND PASSES — which needs per-subject AP grades on the student side
+  // AND held apRequirement grade data on the course, met slot-by-slot.
+  // Everything else stays capped at amber: subject fit alone is never a
+  // strong match, and half a check must never render as a full verdict.
   if (state.checkSystem === 'US_AP' && result.status === 'green'
-      && !apStudentGradesComparable()) {
+      && !(apStudentGradesComparable() && apRequirementMet(course))) {
     result.status = 'amber';
   }
   // Grade gate. A subject-strong course only KEEPS a green/amber verdict when
