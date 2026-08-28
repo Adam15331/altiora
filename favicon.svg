@@ -3,5 +3,5 @@
        bar, on the CE canvas tile. Flat fills only; tokens, not samples. -->
   <rect width="100" height="100" rx="22" fill="#F5F4EF"/>
   <path fill="#1F1A17" d="M43 14 L57 14 L82 74 L66 74 L50 36 L34 74 L18 74 Z"/>
-  <rect x="30" y="82" width="40" height="10" fill="#F2D64B"/>
+  <rect x="30" y="80" width="40" height="13" fill="#F2D64B"/>
 </svg>
