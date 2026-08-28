@@ -8277,11 +8277,9 @@ function esc(str) {
 }
 
 function logEvent(eventName, properties = {}) {
-  if (typeof window.plausible === 'function') {
-    window.plausible(eventName, { props: properties });
-  } else {
-    console.log('[Analytics]', eventName, properties);
-  }
+  // Cloudflare Web Analytics is a page-view beacon with no custom-event API,
+  // so interaction events stay console-only.
+  console.log('[Analytics]', eventName, properties);
 }
 
 /* ═══════════════════════════════════════════════════════════════
