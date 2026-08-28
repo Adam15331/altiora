@@ -2787,7 +2787,7 @@ function buildCounselorSummaryHtml() {
       <section class="cs-section"><h2 class="cs-section__head">Story bank</h2>${storyHtml}</section>
 
       <footer class="cs-doc__foot">
-        <p>Generated ${esc(generated)} · altiora.app</p>
+        <p>Generated ${esc(generated)} · usealtiora.com</p>
         <p><strong>Always verify all requirements, deadlines and test dates with universities directly.</strong>
           Altiora matches on subjects and published typical offers; it is a planning aid, not an admissions decision.</p>
       </footer>
@@ -8296,7 +8296,7 @@ function init() {
         <div class="data-error-banner" role="alert" aria-live="assertive">
           <p class="data-error-banner__msg">
             ⚠️ Failed to load course data. Please check your internet connection and refresh the page.
-            If the problem persists, <a href="mailto:support@altiora.app">contact support</a>.
+            If the problem persists, <a href="mailto:support@usealtiora.com">contact support</a>.
           </p>
           <button type="button" class="data-error-banner__retry" onclick="window.location.reload()">↺ Retry</button>
         </div>`;
