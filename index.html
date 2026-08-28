@@ -56,7 +56,7 @@ a { color: inherit; text-decoration: none; }
 }
 .nav__logo { font-family: var(--ce-font-display); font-weight: 800; font-size: 1.25rem; }
 /* Hover affordance: the butter bar stretches into an underline (SVG ignores text-decoration). */
-.nav__logo svg rect { transition: width .18s ease; }
+.nav__logo svg rect { transition: width var(--t-base); }
 .nav__logo:hover svg rect, .nav__logo:focus-visible svg rect { width: 360px; }
 .nav__links { display: flex; align-items: center; gap: 22px; list-style: none; }
 .nav__links a { font-family: var(--ce-font-mono); font-size: 12px; letter-spacing: .04em; color: var(--ce-ink-60); }
