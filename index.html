@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Altiora — the university counselor your school doesn't have</title>
 <meta name="description" content="Free guidance from 'no idea what to study' to a finished application plan — subjects, courses, shortlist, story. 320 verified courses across 5 qualification systems. No account; your data stays on your device.">
+<link rel="canonical" href="https://usealtiora.com/">
+<link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
+<link rel="icon" href="favicon.svg" type="image/svg+xml" sizes="any">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://usealtiora.com/">
+<meta property="og:title" content="Altiora — the university counselor your school doesn't have">
+<meta property="og:description" content="Free guidance from 'no idea what to study' to a finished application plan — subjects, courses, shortlist, story. 320 verified courses across 5 qualification systems. No account; your data stays on your device.">
+<meta name="twitter:card" content="summary">
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "48e78fd025b74d35921517dcb99a87ed"}'></script><!-- End Cloudflare Web Analytics -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
@@ -46,6 +55,9 @@ a { color: inherit; text-decoration: none; }
   height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
 }
 .nav__logo { font-family: var(--ce-font-display); font-weight: 800; font-size: 1.25rem; }
+/* Hover affordance: the butter bar stretches into an underline (SVG ignores text-decoration). */
+.nav__logo svg rect { transition: width .18s ease; }
+.nav__logo:hover svg rect, .nav__logo:focus-visible svg rect { width: 360px; }
 .nav__links { display: flex; align-items: center; gap: 22px; list-style: none; }
 .nav__links a { font-family: var(--ce-font-mono); font-size: 12px; letter-spacing: .04em; color: var(--ce-ink-60); }
 .nav__links a:hover { color: var(--ce-ink); }
@@ -174,7 +186,7 @@ h2 {
 
 <nav class="nav" aria-label="Main">
   <div class="nav__inner">
-    <a class="nav__logo" href="#top">Altiora</a>
+    <a class="nav__logo" href="#top" aria-label="Altiora"><svg viewBox="0 0 400 100" height="26" style="display:block" aria-hidden="true" focusable="false"><path fill="currentColor" d="M25 14 L39 14 L64 74 L48 74 L32 36 L16 74 L0 74 Z"/><rect x="12" y="82" width="40" height="10" fill="#F2D64B"/><text x="84" y="74" font-family="'Bricolage Grotesque',system-ui,sans-serif" font-weight="800" font-size="60" letter-spacing="2" fill="currentColor">ALTIORA</text></svg></a>
     <ul class="nav__links">
       <li><a href="#journey">Journey</a></li>
       <li><a href="#trust">Trust</a></li>

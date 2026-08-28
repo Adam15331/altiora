@@ -144,9 +144,12 @@ a:hover { opacity: .8; }
   text-underline-offset: 3px;
   transition: text-decoration-color var(--t-base);
 }
-/* Subtle "it's clickable" affordance — faint underline on hover/focus */
-.nav__brand:hover .nav__logo,
-.nav__brand:focus-visible .nav__logo { text-decoration: underline; }
+/* Subtle "it's clickable" affordance — the lockup's butter bar stretches
+ * into an underline beneath the wordmark on hover/focus (SVG content
+ * ignores text-decoration; rect geometry is animatable CSS). */
+.nav__logo svg rect { transition: width var(--t-base); }
+.nav__brand:hover .nav__logo svg rect,
+.nav__brand:focus-visible .nav__logo svg rect { width: 360px; }
 .nav__brand:focus-visible { outline: 2px solid var(--color-text-primary); outline-offset: 3px; }
 .nav__brand:focus:not(:focus-visible) { outline: none; }
 .nav__tagline {
