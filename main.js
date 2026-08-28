@@ -974,13 +974,9 @@ function commitGradeMap({ render = true } = {}) {
   if (render) renderCheckResults();
 }
 
-// Plain-English list: "Biology, Chemistry and Physics".
-function joinAnd(items) {
-  if (items.length <= 1) return items[0] ?? '';
-  return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
-}
-
-// Names exactly what is still blank, and why it matters. Calm and factual —
+// Counts what is still blank, and why it matters — the grade rows above
+// already show WHICH subjects are blank, so this line never names them
+// (nine named APs read as a paragraph). Calm and factual —
 // no quota, no readiness score, no claim about what universities want.
 // Reactive: re-run on every grade or subject change, and hidden the moment
 // the profile is complete (or nothing has been entered at all, where the
@@ -994,7 +990,9 @@ function syncGradeCompletenessPrompt() {
   const show = started && missing.length > 0;
   el.classList.toggle('hidden', !show);
   if (show) {
-    el.textContent = `Add grades for ${joinAnd(missing)} to see which courses are strong matches.`;
+    el.textContent = missing.length === 1
+      ? 'Add a grade for 1 more subject to see which courses are strong matches.'
+      : `Add grades for ${missing.length} more subjects to see which courses are strong matches.`;
   }
   // "Optional — leave blank to skip" is the right thing to say to someone who
   // hasn't started, and a confusing contradiction to someone mid-way through.
@@ -1067,7 +1065,7 @@ function buildGradeInput(systemKey) {
   // Leaving the input blank is itself "skip" → subject-only matching.
   const footer = `
       ${conversionHint}
-      <p class="grade-input-help">Optional — leave blank to skip and match on subjects alone.</p>`;
+      <p class="grade-input-help">Optional — leave any blank to match on subjects alone.</p>`;
 
   // Per-system grade body + a wiring callback. Everything else is shared.
   let bodyHtml = '';
@@ -5508,6 +5506,9 @@ function syncPickerCollapse() {
   // still carries the list.
   const listsSubjects = !LETTER_GRADE_SYSTEMS.has(state.checkSystem);
   row.classList.toggle('hidden', !collapsed || !listsSubjects);
+  // The header "Edit subjects" exists to reopen the collapsed picker; while
+  // the picker is already open it has nothing to do, so it hides.
+  $('gradeEditSubjects')?.classList.toggle('hidden', !collapsed);
   row.innerHTML = (collapsed && listsSubjects) ? `
     <span class="subject-summary__label">Your subjects:</span>
     <span class="subject-summary__list">${state.selectedSubjects.map(esc).join(' <span class="subject-summary__dot">·</span> ')}</span>
