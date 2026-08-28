@@ -2668,15 +2668,19 @@ footer p {
 .grade-inline-select:hover  { border-bottom-color: var(--ce-ink-30); }
 .grade-inline-select:focus  { outline: none; border-bottom-color: var(--ce-ink); }
 
+/* One subject per row at every width: AP names run long and selections run
+ * to eight-plus, so a wrapped flow turns ragged. Subject left, grade right —
+ * the same shape the narrow viewport always used. */
 .grade-rows {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3) var(--space-6);
+  flex-direction: column;
+  gap: var(--space-2);
   width: 100%;
 }
 .grade-pair {
-  display: inline-flex;
-  align-items: baseline;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: var(--space-2);
   min-width: 0;
 }
@@ -2696,9 +2700,6 @@ footer p {
 @media (max-width: 560px) {
   .grade-input-header__actions { margin-left: 0; width: 100%; justify-content: space-between; }
   .grade-input-hint { display: none; }
-  .grade-rows { gap: var(--space-2); }
-  /* Full-width pairs: subject left, grade right — nothing can clip. */
-  .grade-pair { width: 100%; justify-content: space-between; align-items: center; }
 }
 .grade-number-input {
   font-family: var(--font-sans);
