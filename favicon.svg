@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Confident Editorial mark: butter tile, ink peak — a geometric A
+       ("altiora": toward higher things). Flat fills only. -->
+  <rect width="64" height="64" rx="12" fill="#F2D64B"/>
+  <path fill="#1F1A17" fill-rule="evenodd" d="M32 10 L56 54 L8 54 Z M32 27.5 L23.5 43 L40.5 43 Z"/>
+</svg>
