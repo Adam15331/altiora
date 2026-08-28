@@ -1065,7 +1065,7 @@ function buildGradeInput(systemKey) {
   // Leaving the input blank is itself "skip" → subject-only matching.
   const footer = `
       ${conversionHint}
-      <p class="grade-input-help">Optional — leave any blank to match on subjects alone.</p>`;
+      <p class="grade-input-help">Optional — leave ${isLetter ? 'any ' : ''}blank to match on subjects alone.</p>`;
 
   // Per-system grade body + a wiring callback. Everything else is shared.
   let bodyHtml = '';
@@ -5502,9 +5502,9 @@ function syncPickerCollapse() {
   // The merged "Your subjects & predicted grades" section above already names
   // every subject and owns the Edit affordance, so the old standalone summary
   // row would just repeat it. It stays in the DOM (empty) purely as the
-  // collapse anchor — for IB/AP, whose grade control lists no subjects, it
+  // collapse anchor — for IB, whose grade control lists no subjects, it
   // still carries the list.
-  const listsSubjects = !LETTER_GRADE_SYSTEMS.has(state.checkSystem);
+  const listsSubjects = !PER_SUBJECT_GRADE_SYSTEMS.has(state.checkSystem);
   row.classList.toggle('hidden', !collapsed || !listsSubjects);
   // The header "Edit subjects" exists to reopen the collapsed picker; while
   // the picker is already open it has nothing to do, so it hides.
