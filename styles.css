@@ -158,6 +158,31 @@ a:hover { opacity: .8; }
   letter-spacing: .01em;
 }
 
+/* About credit pill (top right): outline pill, canvas panel, hairline,
+ * no shadow. The panel is fixed just under the sticky nav so it can never
+ * be clipped by the header or overflow a 375px viewport. */
+.about-wrap { position: relative; margin-left: auto; }
+.about-pill {
+  font-family: var(--ce-font-mono); font-size: 12px; font-weight: 700; letter-spacing: .03em;
+  background: transparent; color: var(--ce-ink);
+  border: 1px solid var(--ce-ink); border-radius: var(--ce-radius-pill);
+  padding: 7px 16px; cursor: pointer;
+}
+.about-panel {
+  display: none; position: fixed; right: 12px; top: 62px;
+  width: min(320px, calc(100vw - 24px));
+  background: var(--ce-bg); border: var(--ce-hairline); border-radius: 10px;
+  padding: 16px 34px 16px 18px; z-index: 200; text-align: left;
+}
+.about-panel.open { display: block; }
+@media (hover: hover) and (pointer: fine) { .about-wrap:hover .about-panel { display: block; } }
+.about-panel p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: var(--ce-ink); }
+.about-panel p:last-child { margin-bottom: 0; }
+.about-panel__close {
+  position: absolute; top: 6px; right: 8px; background: none; border: none;
+  font-size: 16px; line-height: 1; color: var(--ce-ink-60); cursor: pointer; padding: 4px;
+}
+
 /* ═══════════════════════════════════════════════════════════════
  * Main layout
  * ═══════════════════════════════════════════════════════════════ */

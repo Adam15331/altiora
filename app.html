@@ -18,7 +18,7 @@
   <!-- Confident Editorial type — loaded via <link> (reliable) not @import -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
   <link rel="stylesheet" href="tokens.css?v=9" />
-  <link rel="stylesheet" href="styles.css?v=89" />
+  <link rel="stylesheet" href="styles.css?v=90" />
   <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "48e78fd025b74d35921517dcb99a87ed"}'></script><!-- End Cloudflare Web Analytics -->
 </head>
 <body>
@@ -37,6 +37,14 @@
         <span class="nav__logo"><svg viewBox="0 0 400 100" height="26" style="display:block" aria-hidden="true" focusable="false"><path fill="currentColor" d="M25 14 L39 14 L64 74 L48 74 L32 36 L16 74 L0 74 Z"/><rect x="12" y="82" width="40" height="10" fill="#F2D64B"/><text x="84" y="74" font-family="'Bricolage Grotesque',system-ui,sans-serif" font-weight="800" font-size="60" letter-spacing="2" fill="currentColor">ALTIORA</text></svg></span>
         <span class="nav__tagline">Your journey, guided.</span>
       </a>
+      <div class="about-wrap">
+        <button type="button" id="aboutPill" class="about-pill" aria-expanded="false" aria-controls="aboutPanel">About</button>
+        <div id="aboutPanel" class="about-panel" role="dialog" aria-label="About Altiora">
+          <button type="button" id="aboutClose" class="about-panel__close" aria-label="Close">&times;</button>
+          <p>Altiora is free, has no accounts, and keeps your data on your device. Every university requirement is checked against an official source.</p>
+          <p>Developed by Adam Arab, a Year 12 student in Dubai, UAE.</p>
+        </div>
+      </div>
     </div>
   </nav>
 
@@ -538,7 +546,7 @@
   <script src="data/fieldProfiles.js?v=2"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
   <script src="state.js?v=18"></script>
-  <script src="main.js?v=110"></script>
+  <script src="main.js?v=111"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);

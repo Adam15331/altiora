@@ -8436,6 +8436,22 @@ function init() {
     if (rmBtn) { togglePinnedField(rmBtn.dataset.removeField); /* subscription re-renders, popover stays open */ }
   });
   document.addEventListener('click', closeFieldsMenu);
+
+  // About pill: tap/click toggles, close control, click-away and Escape
+  // dismiss — same popover pattern as the fields menu. Hover-reveal is CSS,
+  // on hover-capable devices only.
+  const aboutSet = open => {
+    $('aboutPanel')?.classList.toggle('open', open);
+    $('aboutPill')?.setAttribute('aria-expanded', String(open));
+  };
+  $('aboutPill')?.addEventListener('click', e => {
+    e.stopPropagation();
+    aboutSet(!$('aboutPanel')?.classList.contains('open'));
+  });
+  $('aboutClose')?.addEventListener('click', e => { e.stopPropagation(); aboutSet(false); });
+  $('aboutPanel')?.addEventListener('click', e => e.stopPropagation());
+  document.addEventListener('click', () => aboutSet(false));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') aboutSet(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFieldsMenu(); });
   // One reactive fan-out keeps EVERY candidateFields surface in sync (nav
   // count/dropdown, field-profile pins, Strengths KEEP buttons, planner grid,

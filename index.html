@@ -72,6 +72,30 @@ a { color: inherit; text-decoration: none; }
 }
 .btn:hover { transform: translateY(-1px); }
 .btn--nav { padding: 7px 16px; font-size: 12px; }
+/* About credit pill: Start's geometry, outline not filled — Start stays the
+   only yellow pill. Panel: canvas, hairline, no shadow, fixed under the nav
+   so it can never clip or overflow at narrow widths. */
+.about-wrap { position: relative; }
+.about-pill {
+  font-family: var(--ce-font-mono); font-size: 12px; font-weight: 700; letter-spacing: .03em;
+  background: transparent; color: var(--ce-ink);
+  border: 1px solid var(--ce-ink); border-radius: var(--ce-radius-pill);
+  padding: 7px 16px; cursor: pointer;
+}
+.about-panel {
+  display: none; position: fixed; right: 12px; top: 66px;
+  width: min(320px, calc(100vw - 24px));
+  background: var(--ce-bg); border: var(--ce-hairline); border-radius: 10px;
+  padding: 16px 34px 16px 18px; z-index: 200; text-align: left;
+}
+.about-panel.open { display: block; }
+@media (hover: hover) and (pointer: fine) { .about-wrap:hover .about-panel { display: block; } }
+.about-panel p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: var(--ce-ink); }
+.about-panel p:last-child { margin-bottom: 0; }
+.about-panel__close {
+  position: absolute; top: 6px; right: 8px; background: none; border: none;
+  font-size: 16px; line-height: 1; color: var(--ce-ink-60); cursor: pointer; padding: 4px;
+}
 
 /* ─── Hero ─── */
 .hero { padding: 72px 0 64px; border-bottom: var(--ce-hairline); }
@@ -190,8 +214,15 @@ h2 {
     <ul class="nav__links">
       <li><a href="#journey">Journey</a></li>
       <li><a href="#trust">Trust</a></li>
-      <li><a href="#about">About</a></li>
     </ul>
+    <div class="about-wrap">
+      <button type="button" id="aboutPill" class="about-pill" aria-expanded="false" aria-controls="aboutPanel">About</button>
+      <div id="aboutPanel" class="about-panel" role="dialog" aria-label="About Altiora">
+        <button type="button" id="aboutClose" class="about-panel__close" aria-label="Close">&times;</button>
+        <p>Altiora is free, has no accounts, and keeps your data on your device. Every university requirement is checked against an official source.</p>
+        <p>Developed by Adam Arab, a Year 12 student in Dubai, UAE.</p>
+      </div>
+    </div>
     <a class="btn btn--nav" href="app.html">Start →</a>
   </div>
 </nav>
@@ -288,14 +319,6 @@ h2 {
   </div>
 </section>
 
-<section id="about">
-  <div class="wrap">
-    <p class="mono sec__eyebrow"><span class="swatch swatch--coral" aria-hidden="true"></span>Who made this</p>
-    <h2>Built by a student who needed it.</h2>
-    <p class="prose">University guidance is expensive, inconsistent, and mostly unavailable outside well-funded schools. Altiora is our attempt to level that &mdash; free, for every student.</p>
-  </div>
-</section>
-
 <section class="foot-cta">
   <div class="wrap">
     <h2>Start where you are.</h2>
@@ -304,5 +327,21 @@ h2 {
   </div>
 </section>
 
+<script>
+// About pill: tap/click toggles, close control, click-away and Escape
+// dismiss — the same popover pattern as the app's fields menu (hover-reveal
+// is CSS, on hover-capable devices only).
+(function () {
+  var pill = document.getElementById('aboutPill');
+  var panel = document.getElementById('aboutPanel');
+  if (!pill || !panel) return;
+  function set(open) { panel.classList.toggle('open', open); pill.setAttribute('aria-expanded', String(open)); }
+  pill.addEventListener('click', function (e) { e.stopPropagation(); set(!panel.classList.contains('open')); });
+  document.getElementById('aboutClose').addEventListener('click', function (e) { e.stopPropagation(); set(false); });
+  panel.addEventListener('click', function (e) { e.stopPropagation(); });
+  document.addEventListener('click', function () { set(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+})();
+</script>
 </body>
 </html>
