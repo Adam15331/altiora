@@ -3644,11 +3644,11 @@ function syncStatementCounters() {
     total += n;
     const el = document.querySelector(`[data-stmt-count="${q.id}"]`);
     if (!el) return;
-    el.textContent = n === 0
-      ? `0 characters · minimum ${UCAS_STATEMENT.perAnswerMin}`
-      : n < UCAS_STATEMENT.perAnswerMin
-        ? `${fmtChars(n)} characters · below the ${UCAS_STATEMENT.perAnswerMin} minimum`
-        : `${fmtChars(n)} characters`;
+    // Progress, not deficit: distance to the minimum until it's met, then
+    // a plain count. No bars, no colours — a counter, not a game.
+    el.textContent = n < UCAS_STATEMENT.perAnswerMin
+      ? `${UCAS_STATEMENT.perAnswerMin - n} characters to go`
+      : `${fmtChars(n)} characters`;
   });
   const totalEl = document.querySelector('[data-stmt-total]');
   if (totalEl) {
@@ -3673,9 +3673,17 @@ function renderStatementRefs() {
   const emptySlot = section?.querySelector('[data-stmt-empty]');
   section?.classList.toggle('stmt--no-entries', !haveEntries);
   if (emptySlot) {
-    emptySlot.classList.toggle('hidden', haveEntries);
-    emptySlot.innerHTML = haveEntries ? '' :
-      `<p class="stmt__empty-line">Your story is empty — entries you add will appear beside the questions they fit.</p>`;
+    // Section-level notes, shown ONCE rather than repeated per question:
+    // zero entries, or (with entries) zero pinned fields. Q1 matches by
+    // pinned field, so "pin your fields" is genuinely different information
+    // from "nothing fits" — but it belongs at the top, not in every rail.
+    emptySlot.classList.toggle('hidden', haveEntries && havePins);
+    emptySlot.innerHTML = !haveEntries
+      ? `<p class="stmt__empty-line">Your story is empty — entries you add will appear beside the questions they fit.</p>`
+      : !havePins
+        ? `<p class="stmt__refs-empty">Pin the fields you're considering and your entries will show here.
+             <button type="button" class="stmt__refs-add" data-stmt-open-fields>Open My fields</button></p>`
+        : '';
   }
   if (!haveEntries) return;
   UCAS_STATEMENT.questions.forEach(q => {
@@ -3693,15 +3701,9 @@ function renderStatementRefs() {
       });
       return;
     }
-    // Q1 matches entries BY PINNED FIELD, so with entries but no pins the
-    // honest statement is "we can't match", not "nothing fits" — the same
-    // rule as the honesty labels: absent data is never a confident claim.
-    // Q2/Q3 match by entry type, so their empty line stays accurate; Q1
-    // keeps it only when there are genuinely no entries at all.
-    host.innerHTML = (q.id === 'q1' && haveEntries && !havePins)
-      ? `<p class="stmt__refs-empty">Pin the fields you're considering and your entries will show here.
-           <button type="button" class="stmt__refs-add" data-stmt-open-fields>Open My fields</button></p>`
-      : `<p class="stmt__refs-empty">Nothing in your story fits this question yet.
+    // One empty state for every question: adaptive rails, consistent voice.
+    // (The no-pins case renders once at the section top, never per rail.)
+    host.innerHTML = `<p class="stmt__refs-empty">Nothing in your story fits this question yet.
            <button type="button" class="stmt__refs-add" data-stmt-add-entry>Add an entry</button></p>`;
   });
 }
