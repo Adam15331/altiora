@@ -1402,6 +1402,7 @@ main     { flex: 1; padding: var(--pad); }
 
 /* Subject chip — white/black toggle per spec */
 .subject-chip {
+  position: relative;   /* anchors the full-bleed hidden checkbox below */
   display: inline-flex; align-items: center;
   padding: var(--space-2) var(--space-4);
   border: 1px solid var(--color-border);
@@ -1415,7 +1416,12 @@ main     { flex: 1; padding: var(--pad); }
   user-select: none; white-space: nowrap;
 }
 .subject-chip input[type="checkbox"] {
-  position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none;
+  /* Covers the whole chip rather than a 1×1 box: tapping a chip focuses this
+   * input, and the browser natively scrolls the FOCUS TARGET into view —
+   * centring it when it is fully offscreen. A 1px box a few px below the
+   * fold therefore yanked the page ~half a viewport on mobile taps. Sized
+   * to the chip, the focus target is what the finger is already on. */
+  position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none;
 }
 .subject-chip:hover {
   border-color: var(--color-text-tertiary);
