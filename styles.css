@@ -158,16 +158,18 @@ a:hover { opacity: .8; }
   letter-spacing: .01em;
 }
 
-/* About credit pill (top right): outline pill, canvas panel, hairline,
- * no shadow. The panel is fixed just under the sticky nav so it can never
- * be clipped by the header or overflow a 375px viewport. */
+/* About credit pill (top right): filled butter pill matching the landing
+ * page's Start button (same geometry, --ce-accent fill). Canvas panel,
+ * hairline, no shadow. The panel is fixed just under the sticky nav so it
+ * can never be clipped by the header or overflow a 375px viewport. */
 .about-wrap { position: relative; margin-left: auto; }
 .about-pill {
   font-family: var(--ce-font-mono); font-size: 12px; font-weight: 700; letter-spacing: .03em;
-  background: transparent; color: var(--ce-ink);
+  background: var(--ce-accent); color: var(--ce-ink);
   border: 1px solid var(--ce-ink); border-radius: var(--ce-radius-pill);
-  padding: 7px 16px; cursor: pointer;
+  padding: 7px 16px; line-height: 1.6; cursor: pointer;
 }
+.about-pill:hover { transform: translateY(-1px); }
 .about-panel {
   display: none; position: fixed; right: 12px; top: 62px;
   width: min(320px, calc(100vw - 24px));
