@@ -1462,7 +1462,6 @@ const SYSTEM_SHORT_LABELS = {
 
 const YEAR_OPTIONS = {
   UK_A_Level: [
-    { label: 'Year 9',  years: 3 },
     { label: 'Year 10', years: 3 },
     { label: 'Year 11', years: 2 },
     { label: 'Year 12', years: 1 },
@@ -1475,7 +1474,6 @@ const YEAR_OPTIONS = {
     { label: 'IB DP Year 2', years: 0 },
   ],
   US_AP: [
-    { label: 'Grade 8',  years: 3 },
     { label: 'Grade 9',  years: 3 },
     { label: 'Grade 10', years: 2 },
     { label: 'Grade 11', years: 1 },
