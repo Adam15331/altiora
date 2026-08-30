@@ -160,8 +160,8 @@ a:hover { opacity: .8; }
 
 /* About credit pill (top right): filled butter pill matching the landing
  * page's Start button (same geometry, --ce-accent fill). Canvas panel,
- * hairline, no shadow. The panel is fixed just under the sticky nav so it
- * can never be clipped by the header or overflow a 375px viewport. */
+ * hairline, no shadow. The panel anchors beneath the pill and clamps to
+ * the viewport gutters at narrow widths, so it can never clip. */
 .about-wrap { position: relative; margin-left: auto; }
 .about-pill {
   font-family: var(--ce-font-mono); font-size: 12px; font-weight: 700; letter-spacing: .03em;
@@ -171,17 +171,29 @@ a:hover { opacity: .8; }
 }
 .about-pill:hover { transform: translateY(-1px); }
 .about-panel {
-  display: none; position: fixed; right: 12px; top: 62px;
-  width: min(320px, calc(100vw - 24px));
+  display: none; position: absolute; right: 0; top: calc(100% + 8px);
+  width: min(340px, calc(100vw - 24px));
   background: var(--ce-bg); border: var(--ce-hairline); border-radius: 10px;
-  padding: 16px 34px 16px 18px; z-index: 200; text-align: left;
+  padding: 20px 22px; z-index: 200; text-align: left;
+}
+/* Anchored to the pill (the wrap is its positioned parent). At phone widths
+   the pill can sit mid-nav, so the panel clamps to the viewport gutters
+   instead of overflowing an edge. */
+@media (max-width: 560px) {
+  .about-panel { position: fixed; left: 12px; right: 12px; width: auto; top: 70px; }
 }
 .about-panel.open { display: block; }
 @media (hover: hover) and (pointer: fine) { .about-wrap:hover .about-panel { display: block; } }
-.about-panel p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: var(--ce-ink); }
-.about-panel p:last-child { margin-bottom: 0; }
+.about-panel p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--ce-ink); padding-right: 14px; }
+/* The credit is a footnote, not a second claim: hairline rule, mono, muted. */
+.about-panel p.about-panel__credit {
+  margin-top: 14px; padding: 12px 0 0;
+  border-top: var(--ce-hairline);
+  font-family: var(--ce-font-mono); font-size: 11px; letter-spacing: .02em;
+  color: var(--ce-ink-60);
+}
 .about-panel__close {
-  position: absolute; top: 6px; right: 8px; background: none; border: none;
+  position: absolute; top: 8px; right: 10px; background: none; border: none;
   font-size: 16px; line-height: 1; color: var(--ce-ink-60); cursor: pointer; padding: 4px;
 }
 
