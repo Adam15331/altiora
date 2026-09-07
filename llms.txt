@@ -1,0 +1,30 @@
+# Altiora
+
+> A free, client-side web tool that helps students aged 14 to 18 compare university course entry requirements against their own subjects and predicted grades.
+
+Altiora is a static web application. It runs entirely in the browser, has no accounts, and stores the student's data only on the student's own device.
+
+## Coverage
+
+- Universities in the UK, US, Canada, Singapore and Hong Kong.
+- Qualification systems: UK A-Levels, International Baccalaureate, US Advanced Placement, Singapore-Cambridge A-Levels and Hong Kong DSE.
+- The dataset holds 320 course records (counted from the entries in data/courseRequirements.js).
+
+## How requirements are sourced
+
+- Every course requirement is checked against an official university source. Each record carries the source URL and the date it was checked.
+- Where a source could not be fully verified, the record is marked partial rather than presented as confirmed. At the time of writing, 4 of the 320 records carry a partial verification status (read from data/courseRequirements.js).
+- If a university does not publish a figure, Altiora does not supply one.
+
+## Pages
+
+- Landing page: https://usealtiora.com/
+- The app: https://usealtiora.com/app.html — the tool itself. Its content is rendered by JavaScript after load; the raw HTML contains no course, requirement or field-profile content.
+
+## Data files
+
+- data/courseRequirements.js — course records and their verification status
+- data/qualificationMappings.js — subject names per qualification system
+- data/fieldProfiles.js — written profiles of the fields of study
+- data/admissionTestInfo.js — admission test information
+- data/university-profiles.js — university-level notes
