@@ -320,7 +320,7 @@
           >
             <!-- chip labels inserted by JS -->
           </div>
-          <p id="subjectPickerHint" class="picker-hint">Select 3–5 subjects for best results. Results update instantly.</p>
+          <p id="subjectPickerHint" class="picker-hint"><!-- filled per system from MIN_SUBJECTS (buildSubjectPicker) --></p>
         </div>
 
         <!-- Empty state — shown when system is chosen but no subjects selected yet -->
@@ -546,7 +546,7 @@
   <script src="data/fieldProfiles.js?v=2"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
   <script src="state.js?v=18"></script>
-  <script src="main.js?v=113"></script>
+  <script src="main.js?v=114"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);

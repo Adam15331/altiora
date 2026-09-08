@@ -5164,6 +5164,11 @@ function buildSubjectPicker(systemKey) {
     return;
   }
 
+  // The picker hint states the SAME minimum the verdict logic enforces
+  // (checkStatusFor demotes below MIN_SUBJECTS) — one number, one pipeline.
+  const hint = $('subjectPickerHint');
+  if (hint) hint.textContent = `Select at least ${MIN_SUBJECTS[systemKey] ?? 3} subjects for best results. Results update instantly.`;
+
   const subjects = Object.keys(qualificationMappings[systemKey]?.subjects ?? {});
   const frag = document.createDocumentFragment();
   subjects.forEach(name => {
