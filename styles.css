@@ -5522,9 +5522,8 @@ button.plan-combo-tag--drop:focus-visible {
 
 /* ═══════════════════════════════════════════════════════════════
  * ENTRY REQUIREMENTS PANEL (requirements-view.js)
- * One card per requirement category, its left edge and faint tint keyed
- * to the verification status; the badge, date and source sit in a
- * divided footer. Cards stack to one column on phones and in narrow
+ * One flat, neutral card per requirement category (hairline border,
+ * rounded corners); the badge, date and source sit in a divided footer. Cards stack to one column on phones and in narrow
  * course cards, two columns where the panel is wide.
  * ═══════════════════════════════════════════════════════════════ */
 .reqs {
@@ -5577,26 +5576,17 @@ button.plan-combo-tag--drop:focus-visible {
   grid-template-columns: minmax(0, 1fr);
   gap: 10px;
 }
-/* One card per category: a status-coloured left edge and a faint tint of
- * the same hue. The badge in the footer states the status in words, so
- * colour is never the only signal. */
+/* One card per category: a flat, neutral container on the page background.
+ * The badge in the footer states the verification status. */
 .reqs__row {
-  --reqs-edge: var(--ce-ink-30);
-  --reqs-tint: var(--ce-surface);
   display: flex;
   flex-direction: column;
   min-width: 0;
   border: var(--ce-hairline);
-  border-left: 4px solid var(--reqs-edge);
   border-radius: 6px;
-  background: var(--ce-surface);
-  background: linear-gradient(var(--reqs-tint), var(--reqs-tint)), var(--ce-surface);
+  background: transparent;
   overflow: hidden;
 }
-.reqs__row--verified      { --reqs-edge: var(--ce-status-strong);   --reqs-tint: var(--ce-sage-tint); }
-.reqs__row--partial       { --reqs-edge: var(--ce-status-possible); --reqs-tint: var(--ce-accent-tint); }
-.reqs__row--unverified    { --reqs-edge: var(--ce-status-reach);    --reqs-tint: rgba(31,26,23,0.035); }
-.reqs__row--notApplicable { --reqs-edge: var(--ce-lavender);        --reqs-tint: var(--ce-lavender-tint); }
 .reqs__label {
   margin: 0;
   padding: 10px 12px 4px;
@@ -5624,13 +5614,13 @@ button.plan-combo-tag--drop:focus-visible {
  * that lists several things becomes a nested list. */
 .reqs__items { margin: 0; padding: 0 0 0 1.1em; list-style: disc; }
 .reqs__items > li + li { margin-top: 4px; }
-.reqs__items li::marker { color: var(--reqs-edge); }
+.reqs__items li::marker { color: var(--color-text-secondary); }
 .reqs__item-label { font-weight: var(--weight-semibold); }
 .reqs__sublist { margin: 3px 0 0; padding: 0 0 0 1.1em; list-style: circle; }
 .reqs__sublist > li + li { margin-top: 2px; }
 .reqs__text { margin: 0; }
 .reqs__text--muted { color: var(--color-text-secondary); }
-/* Footer: status badge, date and sources, set apart by a rule and a tint. */
+/* Footer: status badge, date and sources, set apart by a rule. */
 .reqs__meta {
   display: flex;
   flex-wrap: wrap;
@@ -5639,7 +5629,7 @@ button.plan-combo-tag--drop:focus-visible {
   margin: 0;
   padding: 8px 12px;
   border-top: var(--ce-hairline);
-  background: rgba(31,26,23,0.035);
+  background: transparent;
   font-size: var(--text-xs);
   line-height: var(--leading-snug);
   color: var(--color-text-secondary);
