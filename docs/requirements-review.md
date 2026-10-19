@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 109 | 1 | 210 | 0 |
-| English language | 106 | 6 | 208 | 0 |
-| Admissions tests | 295 | 15 | 10 | 0 |
-| Subject prerequisites | 189 | 121 | 10 | 0 |
-| A-Level requirements | 200 | 32 | 84 | 4 |
-| IB requirements | 260 | 35 | 21 | 4 |
-| Other qualifications | 117 | 39 | 164 | 0 |
-| Other requirements | 114 | 3 | 203 | 0 |
+| SAT / ACT | 116 | 1 | 203 | 0 |
+| English language | 113 | 6 | 201 | 0 |
+| Admissions tests | 294 | 16 | 10 | 0 |
+| Subject prerequisites | 183 | 127 | 10 | 0 |
+| A-Level requirements | 194 | 38 | 84 | 4 |
+| IB requirements | 256 | 39 | 21 | 4 |
+| Other qualifications | 124 | 39 | 157 | 0 |
+| Other requirements | 121 | 3 | 196 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -54,6 +54,23 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-history-oxford` | A-Level requirements | History is strongly advised but not an absolute requirement; English is not mentioned for single-honours History (kept as preferred from the course dataset). Partly verified: the official page states History is strongly advised but does not name English, which is held as preferred for matching. |
 | `uk-history-oxford` | IB requirements | Partly verified: the official page states History is strongly advised but does not name English, which is held as preferred for matching. |
 | `uk-history-oxford` | Other requirements | The interview dates on this page (weeks of 9 and 16 December) appear to be from an earlier cycle. Partly verified: the page still shows details from an earlier admissions cycle. |
+| `uk-medicine-cambridge` | Subject prerequisites | Official (2027 entry): Chemistry plus one or two other science/mathematics subjects, depending on the College. |
+| `uk-medicine-cambridge` | A-Level requirements | Official (2027 entry): A*A*A minimum offer; Chemistry plus one or two other science/mathematics subjects from Mathematics, Biology (or Human Biology), Physics, Further Mathematics — the number depends on the College. Biology is one option, not a universal requirement. Colleges usually require A* in Chemistry. |
+| `uk-medicine-cambridge` | IB requirements | Official (2027 entry): 41-42 points with 776 at HL; HL Chemistry plus one or two other science/mathematics subjects (College-dependent). Cambridge publishes a minimum of 41–42 points with 776 at HL (the exact figure is set by the College); 41 is the lower end. Some Colleges (e.g. Churchill, Corpus Christi, Selwyn) usually make IB offers above the minimum. |
+| `uk-cs-cambridge` | Subject prerequisites | Official (2027 entry): Further Mathematics is required where available, not just preferred. |
+| `uk-cs-cambridge` | A-Level requirements | Official (2027 entry): A*A*A; Mathematics required, and Further Mathematics to AS or A level is required if the school offers it (otherwise contact the College). Colleges usually require A* in Mathematics and/or Further Mathematics. Minimum offer level for 2027 entry; Colleges may set higher or more specific offers (e.g. an A* in a named subject). |
+| `uk-maths-cambridge` | Admissions tests | Official (2027 entry): all Mathematics applicants must take the TMUA; STEP is an offer condition, not a pre-application test. |
+| `uk-naturalsciences-cambridge` | Subject prerequisites | Official (2027 entry): Mathematics required; Chemistry is one of the options. |
+| `uk-naturalsciences-cambridge` | A-Level requirements | Official (2027 entry): A*A*A; Mathematics required plus two other science/mathematics subjects (Biology, Chemistry, Physics, or Further Mathematics at A level). Chemistry is not named as universally required; some Colleges and first-year options need specific sciences. Minimum offer level for 2027 entry; Colleges may set higher or more specific offers (e.g. an A* in a named subject). |
+| `uk-naturalsciences-cambridge` | IB requirements | Official (2027 entry): the A-level subject rules apply at IB Higher Level (Mathematics plus two other sciences); Analysis and Approaches expected for Natural Sciences (Physical), recommended for (Biological). Cambridge publishes a minimum of 41–42 points with 776 at HL (the exact figure is set by the College); 41 is the lower end. Some Colleges (e.g. Churchill, Corpus Christi, Selwyn) usually make IB offers above the minimum. |
+| `uk-engineering-cambridge` | Subject prerequisites | Official (2027 entry): Further Mathematics is required where available, not just preferred. |
+| `uk-engineering-cambridge` | A-Level requirements | Official (2027 entry): A*A*A; Mathematics and Physics required, and Further Mathematics to AS or A level required if the school offers it. Colleges usually require A* in Mathematics and/or Further Mathematics and often A*/7 in Physics or another science. Minimum offer level for 2027 entry; Colleges may set higher or more specific offers (e.g. an A* in a named subject). |
+| `uk-economics-cambridge` | Subject prerequisites | Partly verified: the official page does not state the preferred subject(s) held for matching (Mathematics_Advanced, Economics). |
+| `uk-economics-cambridge` | A-Level requirements | Further Mathematics is also required by six Colleges (Christ’s, Churchill, Corpus Christi, Magdalene, St John’s, Sidney Sussex). Economics is not required; the page’s figures on what entrants studied describe admitted students, not requirements. Minimum offer level for 2027 entry; Colleges may set higher or more specific offers (e.g. an A* in a named subject). Partly verified: the official page does not state the preferred subject(s) held for matching (Mathematics_Advanced, Economics). |
+| `uk-economics-cambridge` | IB requirements | Official (2027 entry): 41-42 points with 776 at HL; HL Mathematics: Analysis and Approaches. Cambridge publishes a minimum of 41–42 points with 776 at HL (the exact figure is set by the College); 41 is the lower end. Some Colleges (e.g. Churchill, Corpus Christi, Selwyn) usually make IB offers above the minimum. |
+| `uk-law-cambridge` | Subject prerequisites | Official (2027 entry): no specific subjects; Cambridge says common subjects among entrants are not favoured. The engine’s preferred subjects (History, English) are kept as codes only. |
+| `uk-law-cambridge` | A-Level requirements | Official (2027 entry): A*AA minimum offer; no specific subjects required, and common subject combinations of entrants “doesn't mean they're favoured”. Minimum offer level for 2027 entry; Colleges may set higher or more specific offers (e.g. an A* in a named subject). |
+| `uk-law-cambridge` | IB requirements | Official (2027 entry): 41-42 points with 776 at HL; no specific subjects. Cambridge publishes a minimum of 41–42 points with 776 at HL (the exact figure is set by the College); 41 is the lower end. Some Colleges (e.g. Churchill, Corpus Christi, Selwyn) usually make IB offers above the minimum. |
 | `uk-medicine-imperial` | Subject prerequisites | Official (2027 entry): Biology and Chemistry are required (A* in either). The page does not list Mathematics as a preferred subject. |
 | `uk-medicine-imperial` | A-Level requirements | Official (2027 entry): minimum entry standard A*AA, to include A* and A in Biology and Chemistry (A* in either) and A in a third subject; typical offer A*AA (A* in Biology or Chemistry). All qualifications must be taken in the same sitting; resits are not accepted. The page does not list Mathematics as a preferred subject. |
 | `uk-medicine-imperial` | IB requirements | Official (2027 entry): minimum entry standard 38 points including 6 in Biology and 6 in Chemistry at higher level; typical offer 39 points including 6, 7 in Biology/Chemistry at higher level. No grade is stated for a third HL subject. |
@@ -373,6 +390,23 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `uk-history-oxford` | A-Level requirements | Official page strongly advises History but does not name English; data/courseRequirements.js holds preferred [History, English]. Owner decision. |
 | `uk-history-oxford` | IB requirements | Official page strongly advises History but does not name English; data/courseRequirements.js holds preferred [History, English]. Owner decision. |
 | `uk-history-oxford` | Other qualifications | Re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/applying-to-oxford/for-international-students/international-qualifications (HTTP 403 to automated checks on 2026-10-19). Record the AP requirement for applicants with a US high-school diploma for this course, with a verbatim snippet. |
+| `uk-medicine-cambridge` | Subject prerequisites | Biology is one of several options on the official page, not required by itself; data/courseRequirements.js holds Chemistry + Biology essential, Physics preferred. Owner decision. |
+| `uk-medicine-cambridge` | A-Level requirements | Official page requires Chemistry plus one or two of Maths/Biology/Physics/Further Maths (College-dependent), not Biology specifically; data/courseRequirements.js holds Chemistry + Biology essential, Physics preferred. Owner decision. |
+| `uk-medicine-cambridge` | IB requirements | Official page requires HL Chemistry plus one or two other science/maths subjects; data/courseRequirements.js holds ibHL Chemistry + Biology + Mathematics and Biology as essential. Owner decision. |
+| `uk-cs-cambridge` | Subject prerequisites | Further Mathematics is required (where offered) on the official page; data/courseRequirements.js holds it as preferred. Owner decision. |
+| `uk-cs-cambridge` | A-Level requirements | Official page requires Further Mathematics (AS or A level) where the school offers it; data/courseRequirements.js holds it as preferred only. Owner decision. |
+| `uk-maths-cambridge` | Admissions tests | Official page requires the TMUA for all applicants (plus STEP as an offer condition); data/courseRequirements.js holds admissionTests ["STEP"] only. Owner decision. |
+| `uk-naturalsciences-cambridge` | Subject prerequisites | Mathematics is required and Chemistry is optional on the official page; data/courseRequirements.js holds the reverse (Chemistry essential, Mathematics preferred). Owner decision. |
+| `uk-naturalsciences-cambridge` | A-Level requirements | Official page requires Mathematics + two of Biology/Chemistry/Physics/Further Maths; data/courseRequirements.js holds Chemistry essential and Mathematics, Physics preferred. Owner decision. |
+| `uk-naturalsciences-cambridge` | IB requirements | Official page requires HL Mathematics + two other HL sciences; data/courseRequirements.js holds Chemistry essential with ibHL Mathematics_Advanced + Chemistry. Owner decision. |
+| `uk-engineering-cambridge` | Subject prerequisites | Further Mathematics is required (where offered) on the official page; data/courseRequirements.js holds it as preferred. Owner decision. |
+| `uk-engineering-cambridge` | A-Level requirements | Official page requires Further Mathematics (AS or A level) where the school offers it; data/courseRequirements.js holds it as preferred only. Owner decision. |
+| `uk-economics-cambridge` | Subject prerequisites | Official page does not name the engine’s preferred subject(s) [Mathematics_Advanced, Economics] as preferred; data/courseRequirements.js holds them. Owner decision. |
+| `uk-economics-cambridge` | A-Level requirements | Official page does not name the engine’s preferred subject(s) [Mathematics_Advanced, Economics] as preferred; data/courseRequirements.js holds them. Owner decision. |
+| `uk-economics-cambridge` | IB requirements | Official page asks for HL Mathematics: Analysis and Approaches; data/courseRequirements.js holds ibHL Mathematics_Standard (shown as AA or AI). Owner decision. |
+| `uk-law-cambridge` | Subject prerequisites | Official page states no subject preference; data/courseRequirements.js holds History + English as preferred. Owner decision. |
+| `uk-law-cambridge` | A-Level requirements | Offer agrees; the official page names no required or favoured subjects, while data/courseRequirements.js holds History and English as preferred. Owner decision. |
+| `uk-law-cambridge` | IB requirements | IB score agrees (the engine holds no HL note; 776 at HL added for display); the official page names no favoured subjects, while data/courseRequirements.js holds History and English as preferred. Owner decision. |
 | `uk-medicine-imperial` | Subject prerequisites | Preferred subject not confirmed: the official page does not list Mathematics as preferred; data/courseRequirements.js holds preferred Mathematics_Standard. Owner decision. |
 | `uk-medicine-imperial` | A-Level requirements | Offer differs: official minimum and typical offer A*AA (A* in Biology or Chemistry); data/courseRequirements.js holds AAA. Mathematics is not listed as preferred on the page; the engine holds preferred Mathematics_Standard. Owner decision. Excluded subjects, the contextual offer and the practical endorsement are display-only; the matcher does not apply them. |
 | `uk-medicine-imperial` | IB requirements | Typical offer differs: official 39 points with 6, 7 in Biology/Chemistry HL; data/courseRequirements.js holds 38 and "666 at HL" (38 is the official minimum entry standard; the third HL 6 is not stated). Mathematics is not listed as preferred on the page. Owner decision. |
@@ -657,13 +691,6 @@ category — check the official source; never copy a hint in as a value.
 | `uk-law-oxford` | University of Oxford | SAT / ACT, Other qualifications | SAT / ACT: Not verified: University of Oxford’s pages could not be opened for checking on 19 Oct 2026 — check the official page.; Other qualifications: Not verified: University of Oxford’s pages could not be opened for checking on 19 Oct 2026 — check the official page. |
 | `uk-economics-oxford` | University of Oxford | SAT / ACT, English language, Other qualifications | SAT / ACT: Not verified: University of Oxford’s pages could not be opened for checking on 19 Oct 2026 — check the official page.; English language: Not verified: University of Oxford’s pages could not be opened for checking on 19 Oct 2026 — check the official page.; Other qualifications: Not verified: University of Oxford’s pages could not be opened for checking on 19 Oct 2026 — check the official page. |
 | `uk-history-oxford` | University of Oxford | SAT / ACT, English language, Other qualifications | SAT / ACT: Not verified: University of Oxford’s pages could not be opened for checking on 19 Oct 2026 — check the official page.; English language: Not verified: University of Oxford’s pages could not be opened for checking on 19 Oct 2026 — check the official page.; Other qualifications: Not verified: University of Oxford’s pages could not be opened for checking on 19 Oct 2026 — check the official page. |
-| `uk-medicine-cambridge` | University of Cambridge | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-cs-cambridge` | University of Cambridge | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-maths-cambridge` | University of Cambridge | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-naturalsciences-cambridge` | University of Cambridge | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-engineering-cambridge` | University of Cambridge | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-economics-cambridge` | University of Cambridge | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `uk-law-cambridge` | University of Cambridge | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
 | `uk-economics-lse` | London School of Economics | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-finance-lse` | London School of Economics | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-accounting-lse` | London School of Economics | SAT / ACT, English language, Other qualifications, Other requirements |  |
