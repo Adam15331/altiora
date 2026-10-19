@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 84 | 0 | 236 | 0 |
-| English language | 84 | 0 | 236 | 0 |
+| SAT / ACT | 89 | 0 | 231 | 0 |
+| English language | 89 | 0 | 231 | 0 |
 | Admissions tests | 308 | 12 | 0 | 0 |
-| Subject prerequisites | 225 | 95 | 0 | 0 |
-| A-Level requirements | 216 | 10 | 90 | 4 |
-| IB requirements | 278 | 11 | 27 | 4 |
-| Other qualifications | 92 | 38 | 190 | 0 |
-| Other requirements | 83 | 1 | 236 | 0 |
+| Subject prerequisites | 220 | 100 | 0 | 0 |
+| A-Level requirements | 221 | 10 | 85 | 4 |
+| IB requirements | 283 | 11 | 22 | 4 |
+| Other qualifications | 97 | 38 | 185 | 0 |
+| Other requirements | 88 | 1 | 231 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -160,6 +160,11 @@ Shown with a "Partly verified" badge and the note below.
 | `us-business-washu` | Subject prerequisites | Official: WashU does not require specific courses. Successful candidates’ transcripts often include 4 years of English, 4 of mathematics, 3–4 of laboratory science, 3–4 of history/social science and 2+ of one foreign language; business (Olin) strongly recommends calculus. |
 | `us-business-emory` | Subject prerequisites | Official (Oxford College catalog — applies to applicants to Oxford College, one of the two colleges first-year applicants can apply to): at least sixteen acceptable units; Oxford strongly recommends English 4, Mathematics (including Algebra II) 4, Foreign language 2, Social studies 3, Laboratory sciences 3. Emory’s admissions pages (apply.emory.edu) state no high-school course requirements or recommendations for Emory College applicants. |
 | `us-economics-emory` | Subject prerequisites | Official (Oxford College catalog — applies to applicants to Oxford College, one of the two colleges first-year applicants can apply to): at least sixteen acceptable units; Oxford strongly recommends English 4, Mathematics (including Algebra II) 4, Foreign language 2, Social studies 3, Laboratory sciences 3. Emory’s admissions pages (apply.emory.edu) state no high-school course requirements or recommendations for Emory College applicants. |
+| `us-cs-ucla` | Subject prerequisites | Official (UC A–G, as listed by UCLA): 15 A–G courses, at least 11 finished before the last year of high school — 2 years history/social science; 4 years college-preparatory English; 3 years mathematics (4 recommended); 2 years laboratory science (3 recommended); 2 years language other than English (3 recommended); 1 year visual and performing arts (if available); 1 year college-preparatory elective. If a required subject is not available, UCLA considers the application without it. Samueli School of Engineering admits by declared major, “with more emphasis on science and math programs”; its 2025–26 announcement says additional math concluding with calculus or precalculus in the senior year is strongly recommended. |
+| `us-engineering-ucla` | Subject prerequisites | Official (UC A–G, as listed by UCLA): 15 A–G courses, at least 11 finished before the last year of high school — 2 years history/social science; 4 years college-preparatory English; 3 years mathematics (4 recommended); 2 years laboratory science (3 recommended); 2 years language other than English (3 recommended); 1 year visual and performing arts (if available); 1 year college-preparatory elective. If a required subject is not available, UCLA considers the application without it. Samueli School of Engineering admits by declared major, “with more emphasis on science and math programs”; its 2025–26 announcement says additional math concluding with calculus or precalculus in the senior year is strongly recommended. |
+| `us-economics-ucla` | Subject prerequisites | Official (UC A–G, as listed by UCLA): 15 A–G courses, at least 11 finished before the last year of high school — 2 years history/social science; 4 years college-preparatory English; 3 years mathematics (4 recommended); 2 years laboratory science (3 recommended); 2 years language other than English (3 recommended); 1 year visual and performing arts (if available); 1 year college-preparatory elective. If a required subject is not available, UCLA considers the application without it. For the College of Letters and Science the applicant’s major is not considered in review, so no major-specific subjects apply. |
+| `us-maths-ucla` | Subject prerequisites | Official (UC A–G, as listed by UCLA): 15 A–G courses, at least 11 finished before the last year of high school — 2 years history/social science; 4 years college-preparatory English; 3 years mathematics (4 recommended); 2 years laboratory science (3 recommended); 2 years language other than English (3 recommended); 1 year visual and performing arts (if available); 1 year college-preparatory elective. If a required subject is not available, UCLA considers the application without it. For the College of Letters and Science the applicant’s major is not considered in review, so no major-specific subjects apply. |
+| `us-psychology-ucla` | Subject prerequisites | Official (UC A–G, as listed by UCLA): 15 A–G courses, at least 11 finished before the last year of high school — 2 years history/social science; 4 years college-preparatory English; 3 years mathematics (4 recommended); 2 years laboratory science (3 recommended); 2 years language other than English (3 recommended); 1 year visual and performing arts (if available); 1 year college-preparatory elective. If a required subject is not available, UCLA considers the application without it. For the College of Letters and Science the applicant’s major is not considered in review, so no major-specific subjects apply. |
 | `us-business-usc` | Subject prerequisites | Official: students are expected to have earned a grade of C or better in at least three years of high-school mathematics, including Advanced Algebra (Algebra II); outside mathematics no specific curriculum is prescribed or required, and careful attention is paid to preparation for the intended major. |
 | `us-business-usc` | IB requirements | Official: “We typically expect the full IB Diploma Programme, with strong academic performance (scores of 5-7 on all HL and SL exams) across all subjects.” |
 | `us-business-usc` | Other qualifications | USC’s admissions pages checked (First-Year Students, International Students, Test Optional FAQ, What We Look For) do not say how AP scores are treated for other applicants; the recommendation above is stated only for home-schooled applicants. |
@@ -208,11 +213,6 @@ Shown to students only as "Previously recorded, not verified". Confirm or correc
 | `us-psychology-michigan` | SAT / ACT | Test-optional |
 | `us-business-nyu` | SAT / ACT | Test-optional |
 | `us-cs-nyu` | SAT / ACT | Test-optional |
-| `us-cs-ucla` | SAT / ACT | Test-blind (scores not used) |
-| `us-engineering-ucla` | SAT / ACT | Test-blind (scores not used) |
-| `us-economics-ucla` | SAT / ACT | Test-blind (scores not used) |
-| `us-maths-ucla` | SAT / ACT | Test-blind (scores not used) |
-| `us-psychology-ucla` | SAT / ACT | Test-blind (scores not used) |
 | `us-business-uva` | SAT / ACT | Test-optional |
 | `us-cs-uva` | SAT / ACT | Test-optional |
 | `us-economics-uva` | SAT / ACT | Test-optional |
@@ -315,6 +315,11 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `us-business-washu` | Subject prerequisites | Official source lists recommended coursework, including calculus (strongly recommended) for Business; data/courseRequirements.js holds none. Owner decision. |
 | `us-business-emory` | Subject prerequisites | Official source (Oxford College catalog) lists 16 units and strongly recommended coursework (English 4, Maths incl. Algebra II 4, Foreign language 2, Social studies 3, Lab sciences 3); data/courseRequirements.js holds none. Owner decision. Emory College’s own coursework guidance was not found on apply.emory.edu. |
 | `us-economics-emory` | Subject prerequisites | Official source (Oxford College catalog) lists 16 units and strongly recommended coursework (English 4, Maths incl. Algebra II 4, Foreign language 2, Social studies 3, Lab sciences 3); data/courseRequirements.js holds none. Owner decision. Emory College’s own coursework guidance was not found on apply.emory.edu. |
+| `us-cs-ucla` | Subject prerequisites | Official source lists the UC A–G subject requirements plus Samueli’s strong recommendation of senior-year calculus/precalculus; data/courseRequirements.js holds none. Owner decision. |
+| `us-engineering-ucla` | Subject prerequisites | Official source lists the UC A–G subject requirements plus Samueli’s strong recommendation of senior-year calculus/precalculus; data/courseRequirements.js holds none. Owner decision. |
+| `us-economics-ucla` | Subject prerequisites | Official source lists the UC A–G subject requirements; data/courseRequirements.js holds none. Owner decision. |
+| `us-maths-ucla` | Subject prerequisites | Official source lists the UC A–G subject requirements; data/courseRequirements.js holds none. Owner decision. |
+| `us-psychology-ucla` | Subject prerequisites | Official source lists the UC A–G subject requirements; data/courseRequirements.js holds none. Owner decision. |
 | `us-business-usc` | Subject prerequisites | Official source states a minimum expectation of C or better in at least three years of high-school mathematics including Algebra II; data/courseRequirements.js holds none. Owner decision. |
 | `us-business-usc` | IB requirements | Official source states an IB score expectation (5–7 on all HL and SL exams); data/courseRequirements.js holds no IB data. Owner decision. |
 | `us-cs-usc` | Subject prerequisites | Official source states a minimum expectation of C or better in at least three years of high-school mathematics including Algebra II; data/courseRequirements.js holds none. Owner decision. Viterbi also describes a year of Calculus as important preparation for CS. |
@@ -549,11 +554,6 @@ category — check the official source; never copy a hint in as a value.
 | `hk-law-cityu` | City University of Hong Kong | SAT / ACT, English language, Other requirements | notes mention an interview / portfolio / audition |
 | `hk-business-cityu` | City University of Hong Kong | SAT / ACT, English language, IB requirements, Other requirements | notes mention IB |
 | `hk-economics-cityu` | City University of Hong Kong | SAT / ACT, English language, IB requirements, Other requirements | notes mention IB |
-| `us-cs-ucla` | UCLA | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-engineering-ucla` | UCLA | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-economics-ucla` | UCLA | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-maths-ucla` | UCLA | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-psychology-ucla` | UCLA | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-business-uva` | University of Virginia | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-cs-uva` | University of Virginia | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-economics-uva` | University of Virginia | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
