@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 122 | 1 | 197 | 0 |
-| English language | 119 | 6 | 195 | 0 |
+| SAT / ACT | 126 | 3 | 191 | 0 |
+| English language | 125 | 6 | 189 | 0 |
 | Admissions tests | 294 | 16 | 10 | 0 |
-| Subject prerequisites | 180 | 130 | 10 | 0 |
-| A-Level requirements | 191 | 41 | 84 | 4 |
-| IB requirements | 252 | 43 | 21 | 4 |
-| Other qualifications | 130 | 39 | 151 | 0 |
-| Other requirements | 127 | 3 | 190 | 0 |
+| Subject prerequisites | 174 | 136 | 10 | 0 |
+| A-Level requirements | 185 | 47 | 84 | 4 |
+| IB requirements | 246 | 49 | 21 | 4 |
+| Other qualifications | 134 | 41 | 145 | 0 |
+| Other requirements | 133 | 3 | 184 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -117,6 +117,28 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-psychology-edinburgh` | Other qualifications | Edinburgh requires three standardised test scores; APs count among them. AP Research is not accepted towards the three. AP scores are used for admissions only and carry no advanced credit, as Scotland has no core curriculum. Per-course grade requirements are not yet captured. |
 | `uk-architecture-edinburgh` | Other qualifications | Edinburgh requires three standardised test scores; APs count among them. AP Research is not accepted towards the three. AP scores are used for admissions only and carry no advanced credit, as Scotland has no core curriculum. Per-course grade requirements are not yet captured. |
 | `uk-maths-edinburgh` | Other qualifications | Edinburgh requires three standardised test scores; APs count among them. AP Research is not accepted towards the three. AP scores are used for admissions only and carry no advanced credit, as Scotland has no core curriculum. Per-course grade requirements are not yet captured. |
+| `uk-medicine-kcl` | SAT / ACT | King’s general US-qualification table (undated, current). The Medicine page’s country selector loads by script and could not be read, so it is not confirmed that every Route 1 combination is accepted for Medicine. |
+| `uk-medicine-kcl` | Subject prerequisites | Official (2027 entry): Required A-level grade A in Chemistry and Biology; preferred subjects: no preferred subjects. |
+| `uk-medicine-kcl` | A-Level requirements | Official (2027 entry): A*AA including grade A in Biology and Chemistry; no preferred subjects. King’s makes no contextual offers for this programme. The A*AA offer and required subjects agree. |
+| `uk-medicine-kcl` | IB requirements | Official (2027 entry): 38 points overall or an aggregate score of 19 from three Higher Levels; must include grade 6 in Higher Level Biology and Higher Level Chemistry. King’s does not state "666"; no preferred subjects are listed. |
+| `uk-medicine-kcl` | Other qualifications | King’s general US-qualification table (undated, current). The Medicine page’s country selector loads by script and could not be read, so it is not confirmed that every Route 1 combination is accepted for Medicine. |
+| `uk-law-kcl` | Subject prerequisites | Official (2027 entry): required subjects: none; preferred subjects: none. |
+| `uk-law-kcl` | A-Level requirements | Official (2027 entry): A*AA (contextual AAB); no required or preferred subjects. The A*AA offer agrees. |
+| `uk-law-kcl` | IB requirements | Official (2027 entry): 38 points overall or 19 from three Higher Levels (contextual 35 or 17); no preferred subjects. The score agrees. |
+| `uk-cs-kcl` | SAT / ACT | Shown at the A*A*A level of King’s published 2027 offer; data/courseRequirements.js holds AAA for this course (see the A-Level row). |
+| `uk-cs-kcl` | Subject prerequisites | Official (2027 entry): required grade A in Mathematics or Further Mathematics; preferred subjects Computing, Computer Science. |
+| `uk-cs-kcl` | A-Level requirements | Official (2027 entry): A*A*A including grade A in Mathematics or Further Mathematics (AAA is the contextual offer); preferred subjects Computing, Computer Science. |
+| `uk-cs-kcl` | IB requirements | Official (2027 entry): 39 points overall or 20 from three Higher Levels, including 6 in HL Mathematics: Analysis & Approaches — score and HL requirement agree; King’s preferred subjects are Computing/Computer Science. |
+| `uk-cs-kcl` | Other qualifications | Shown at the A*A*A level of King’s published 2027 offer; data/courseRequirements.js holds AAA for this course (see the A-Level row). |
+| `uk-economics-kcl` | Subject prerequisites | Official (2027 entry): required grade A in Mathematics; no preferred subjects. |
+| `uk-economics-kcl` | A-Level requirements | Official (2027 entry): A*AA including grade A in Mathematics (contextual AAB); no preferred subjects. The offer and required subject agree. |
+| `uk-economics-kcl` | IB requirements | Official (2027 entry): 38 points overall or 19 from three Higher Levels, including 6 in HL Mathematics (AA or AI) — score and HL requirement agree; no preferred subjects. |
+| `uk-nursing-kcl` | Subject prerequisites | Official (2027 entry): no subject requirements and no preferred subjects; five GCSEs at grade 4/C including English Language, Mathematics and Science. |
+| `uk-nursing-kcl` | A-Level requirements | Official (2027 entry): BBC (contextual BCC) with no subject requirements. The BBC offer agrees; Biology is not required by King’s. |
+| `uk-nursing-kcl` | IB requirements | Official (2027 entry): 31 points overall or 14 from three Higher Levels (contextual 30 or 13); no subject requirements. The score agrees. |
+| `uk-psychology-kcl` | Subject prerequisites | Official (2027 entry): required grade A in one of Biology, Chemistry, Mathematics, Physics or Psychology; preferred subjects not specified; GCSE Mathematics grade 6/B. |
+| `uk-psychology-kcl` | A-Level requirements | Official (2027 entry): A*AA including grade A in one of Biology, Chemistry, Mathematics, Physics or Psychology (contextual AAB). The A*AA offer agrees. |
+| `uk-psychology-kcl` | IB requirements | Official (2027 entry): 38 points overall or 19 from three Higher Levels, including 6 at HL in one of Biology, Chemistry, Mathematics, Physics or Psychology. The score agrees. |
 | `uk-maths-durham` | Other qualifications | Durham converts its A-Level requirement into an AP equivalent via a university equivalency table. Students at a school offering AP curriculum are expected to submit AP exams. Exams must be sat and submitted; the course grade is not accepted. Any subject-specific requirement must be evidenced with an AP exam. The equivalency table values are not yet captured. |
 | `uk-maths-bristol` | Other qualifications | Bristol requires a high school diploma with GPA 3.2 minimum, 3.4 for competitive courses, plus three additional qualifications. APs count at 4 or above, more commonly 5. SAT evidence-based reading and writing at 650, ACT at 28, or Honors classes taken in both semesters of Grade 12 may each substitute for an AP. The 3.4 competitive-course threshold is not yet mapped to specific courses. |
 | `uk-cs-bristol` | Other qualifications | Bristol requires a high school diploma with GPA 3.2 minimum, 3.4 for competitive courses, plus three additional qualifications. APs count at 4 or above, more commonly 5. SAT evidence-based reading and writing at 650, ACT at 28, or Honors classes taken in both semesters of Grade 12 may each substitute for an AP. The 3.4 competitive-course threshold is not yet mapped to specific courses. |
@@ -454,6 +476,24 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `uk-politics-lse` | IB requirements | Required subject missing: LSE requires Mathematics; data/courseRequirements.js holds requirements.essential [] and preferred ["Mathematics_Standard","Economics"]. Owner decision. |
 | `uk-management-lse` | A-Level requirements | Contextual offer is display-only — the matcher does not apply it. |
 | `uk-management-lse` | IB requirements | Contextual offer is display-only — the matcher does not apply it. |
+| `uk-medicine-kcl` | Subject prerequisites | Preferred subject differs: King’s lists no preferred subjects; data/courseRequirements.js holds requirements.preferred ["Mathematics_Standard"]. Owner decision. |
+| `uk-medicine-kcl` | A-Level requirements | Preferred subject differs: King’s lists no preferred subjects; data/courseRequirements.js holds requirements.preferred ["Mathematics_Standard"]. Owner decision. Excluded subjects, practical endorsement and contextual offer are display-only — the matcher does not apply them. |
+| `uk-medicine-kcl` | IB requirements | Preferred subject differs (King’s lists none; engine holds ["Mathematics_Standard"]); HL note "666 at HL" is not King’s wording (official: 6 in HL Biology and HL Chemistry, or 19 from three HLs); data/courseRequirements.js holds grades.ibHLNote "666 at HL". Owner decision. |
+| `uk-law-kcl` | Subject prerequisites | Preferred subjects differ: King’s lists none; data/courseRequirements.js holds requirements.preferred ["History","English"]. Owner decision. |
+| `uk-law-kcl` | A-Level requirements | Preferred subjects differ: King’s lists none; data/courseRequirements.js holds requirements.preferred ["History","English"]. Owner decision. Excluded subjects, practical endorsement and contextual offer are display-only — the matcher does not apply them. |
+| `uk-law-kcl` | IB requirements | Preferred subjects differ: King’s lists none; data/courseRequirements.js holds requirements.preferred ["History","English"]. Owner decision. Contextual offer is display-only. |
+| `uk-cs-kcl` | Subject prerequisites | Preferred subjects differ: King’s prefers Computing/Computer Science; data/courseRequirements.js holds requirements.preferred ["Mathematics_Advanced"]. Owner decision. |
+| `uk-cs-kcl` | A-Level requirements | A-level offer differs: King’s standard offer is A*A*A (AAA is the contextual offer); data/courseRequirements.js holds grades.aLevels "AAA". Preferred subjects differ (Computing/Computer Science vs engine ["Mathematics_Advanced"]). Owner decision. Excluded subjects, practical endorsement and contextual offer are display-only — the matcher does not apply them. |
+| `uk-cs-kcl` | IB requirements | Preferred subjects differ: King’s prefers Computing/Computer Science; data/courseRequirements.js holds requirements.preferred ["Mathematics_Advanced"]. Owner decision. |
+| `uk-economics-kcl` | Subject prerequisites | Preferred subjects differ: King’s lists none; data/courseRequirements.js holds requirements.preferred ["Economics","Mathematics_Advanced"]. Owner decision. |
+| `uk-economics-kcl` | A-Level requirements | Preferred subjects differ: King’s lists none; data/courseRequirements.js holds requirements.preferred ["Economics","Mathematics_Advanced"]. Owner decision. Excluded subjects, practical endorsement and contextual offer are display-only — the matcher does not apply them. |
+| `uk-economics-kcl` | IB requirements | Preferred subjects differ: King’s lists none; data/courseRequirements.js holds requirements.preferred ["Economics","Mathematics_Advanced"]. Owner decision. Contextual offer is display-only. |
+| `uk-nursing-kcl` | Subject prerequisites | Subject requirements differ: King’s lists no required or preferred A-level subjects; data/courseRequirements.js holds requirements.essential ["Biology"] and preferred ["Chemistry","Psychology"]. Owner decision. |
+| `uk-nursing-kcl` | A-Level requirements | Extra required subject: data/courseRequirements.js holds requirements.essential ["Biology"] (and preferred ["Chemistry","Psychology"]); King’s lists no subject requirements. Owner decision. Excluded subjects, practical endorsement and contextual offer are display-only — the matcher does not apply them. |
+| `uk-nursing-kcl` | IB requirements | Extra required subject: data/courseRequirements.js holds requirements.essential ["Biology"]; King’s lists no subject requirements. Owner decision. Contextual offer is display-only. |
+| `uk-psychology-kcl` | Subject prerequisites | Subject requirement differs: King’s requires an A in one of Biology/Chemistry/Mathematics/Physics/Psychology; data/courseRequirements.js holds requirements.essential [] and preferred ["Psychology","Mathematics_Standard"]. Owner decision. |
+| `uk-psychology-kcl` | A-Level requirements | Required one-of subject group not held: data/courseRequirements.js holds requirements.essential [] and preferred ["Psychology","Mathematics_Standard"]. Owner decision. Excluded subjects, practical endorsement and contextual offer are display-only — the matcher does not apply them. |
+| `uk-psychology-kcl` | IB requirements | HL requirement not held: King’s requires 6 at HL in one of Biology/Chemistry/Mathematics/Physics/Psychology; data/courseRequirements.js holds grades.ibHL [] and requirements.essential []. Owner decision. Contextual offer is display-only. |
 | `uk-medicine-birmingham` | Subject prerequisites | Biology is one option for the second science, not a requirement, and Maths is an alternative second science rather than preferred; data/courseRequirements.js holds essential [Chemistry, Biology], preferred [Mathematics_Standard]. Owner decision. |
 | `uk-medicine-birmingham` | A-Level requirements | Offer differs (official AAA, not A*AA) and the second science is any one of Biology/Human Biology, Physics or Maths (Biology not specifically required; no preferred subject); data/courseRequirements.js holds A*AA, essential [Chemistry, Biology], preferred [Mathematics_Standard]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
 | `uk-medicine-birmingham` | IB requirements | HL grades differ (official 666, not 766) and the second HL science is any of Biology/Physics/Maths; data/courseRequirements.js holds ibHLNote "766 at HL", ibHL [Chemistry, Biology]. Owner decision. |
@@ -734,12 +774,6 @@ category — check the official source; never copy a hint in as a value.
 | `uk-psychology-edinburgh` | University of Edinburgh | SAT / ACT, English language, Other requirements |  |
 | `uk-architecture-edinburgh` | University of Edinburgh | SAT / ACT, English language, Other requirements | notes mention an interview / portfolio / audition |
 | `uk-maths-edinburgh` | University of Edinburgh | SAT / ACT, English language, A-Level requirements, Other requirements | notes mention A-Level grades |
-| `uk-medicine-kcl` | King's College London | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-law-kcl` | King's College London | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-cs-kcl` | King's College London | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-economics-kcl` | King's College London | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-nursing-kcl` | King's College London | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `uk-psychology-kcl` | King's College London | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-medicine-manchester` | University of Manchester | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-cs-manchester` | University of Manchester | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-economics-manchester` | University of Manchester | SAT / ACT, English language, Other qualifications, Other requirements |  |
