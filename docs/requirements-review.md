@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 98 | 1 | 221 | 0 |
-| English language | 98 | 0 | 222 | 0 |
-| Admissions tests | 297 | 13 | 10 | 0 |
-| Subject prerequisites | 200 | 110 | 10 | 0 |
-| A-Level requirements | 212 | 20 | 84 | 4 |
-| IB requirements | 274 | 21 | 21 | 4 |
-| Other qualifications | 106 | 39 | 175 | 0 |
-| Other requirements | 99 | 1 | 220 | 0 |
+| SAT / ACT | 106 | 1 | 213 | 0 |
+| English language | 106 | 0 | 214 | 0 |
+| Admissions tests | 296 | 14 | 10 | 0 |
+| Subject prerequisites | 196 | 114 | 10 | 0 |
+| A-Level requirements | 207 | 25 | 84 | 4 |
+| IB requirements | 266 | 29 | 21 | 4 |
+| Other qualifications | 114 | 39 | 167 | 0 |
+| Other requirements | 107 | 1 | 212 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -25,6 +25,24 @@ Shown with a "Partly verified" badge and the note below.
 
 | Course | Category | What is unconfirmed |
 |---|---|---|
+| `uk-medicine-imperial` | Subject prerequisites | Official (2027 entry): Biology and Chemistry are required (A* in either). The page does not list Mathematics as a preferred subject. |
+| `uk-medicine-imperial` | A-Level requirements | Official (2027 entry): minimum entry standard A*AA, to include A* and A in Biology and Chemistry (A* in either) and A in a third subject; typical offer A*AA (A* in Biology or Chemistry). All qualifications must be taken in the same sitting; resits are not accepted. The page does not list Mathematics as a preferred subject. |
+| `uk-medicine-imperial` | IB requirements | Official (2027 entry): minimum entry standard 38 points including 6 in Biology and 6 in Chemistry at higher level; typical offer 39 points including 6, 7 in Biology/Chemistry at higher level. No grade is stated for a third HL subject. |
+| `uk-cs-imperial` | A-Level requirements | Official (2027 entry): minimum entry standard A*A*A – A*AAA, to include A* in Mathematics and A*, A in two further subjects or AAA in three further subjects, with Further Mathematics preferred; typical offer A*A*A* (three A-levels) or A*A*AA (four A-levels). ICT, Business Studies, General Studies and Critical Thinking are not accepted. |
+| `uk-cs-imperial` | IB requirements | Official (2027 entry): minimum entry standard 41 points including 7 in Mathematics and 7 in another relevant subject at higher level; typical offer 42 points. |
+| `uk-electrical-imperial` | IB requirements | Official (2027 entry): minimum entry standard 40 points including 7 in Mathematics and 7 in Physics at higher level; typical offer 41 points. |
+| `uk-mechanical-imperial` | Subject prerequisites | Official (2027 entry): Mathematics (A*) and Physics are required. The page does not list Further Mathematics or any other subject as preferred. |
+| `uk-mechanical-imperial` | A-Level requirements | Official (2027 entry): minimum entry standard A*A*A or A*AAA (A* in Mathematics; A* in Physics with three A-levels, at least A with four); typical offer A*A*A* (three A-levels) or A*A*AA (four A-levels). The page does not list Further Mathematics as preferred. |
+| `uk-mechanical-imperial` | IB requirements | Official (2027 entry): minimum entry standard 40 points including 6 in Mathematics and 6 in Physics at higher level; typical offer 40 points including 7 in Mathematics and 7 in Physics at higher level. No grade is stated for a third HL subject. |
+| `uk-chemical-imperial` | Subject prerequisites | Official (2027 entry): Mathematics and Chemistry are required, and the third A-level must be one of Biology, Business Studies, Economics, Further Mathematics or Physics. Physics is one of several accepted third subjects, not singled out as preferred. |
+| `uk-chemical-imperial` | A-Level requirements | Official (2027 entry): minimum entry standard and typical offer A*A*A (three A-levels; A*A*AA with four), with A* in Chemistry, A* in Mathematics and A in Biology, Business Studies, Economics, Further Mathematics or Physics. A fourth A-level is preferred in Physics, Biology, Further Mathematics, Business Studies or Economics. |
+| `uk-chemical-imperial` | IB requirements | Official (2027 entry): minimum entry standard 40 points including 7 in Mathematics, 7 in Chemistry and 6 in Biology, Business Management, Economics or Physics at higher level; typical offer 41 points. |
+| `uk-physics-imperial` | IB requirements | Official (2027 entry): minimum entry standard 40 points including 7 in Mathematics, 7 in Physics and 6 in a third subject at higher level; typical offer 42 points. |
+| `uk-maths-imperial` | IB requirements | Official (2027 entry): minimum entry standard 39 points including 7 in Mathematics and 6 in another subject at higher level; typical offer 40 points. |
+| `uk-bioengineering-imperial` | Admissions tests | Official (2027 entry): “This department does not use a test as part of its selection process.” |
+| `uk-bioengineering-imperial` | Subject prerequisites | Official (2027 entry): Mathematics (A*) and Physics (A) are required; the third subject is open. The page does not list Chemistry as preferred. |
+| `uk-bioengineering-imperial` | A-Level requirements | Official (2027 entry): minimum entry standard A*AA (A* in Mathematics, A in Physics, A in a third subject); typical offer A*AA – A*A*A. Under the department’s contextual admissions scheme, applicants predicted AAA in the relevant subjects are guaranteed an interview. The page does not list Chemistry as preferred. |
+| `uk-bioengineering-imperial` | IB requirements | Official (2027 entry): minimum entry standard 39 points including 6 in Mathematics, 6 in Physics and 6 in a third subject at higher level; typical offer 40 points. Physics HL is required, not “Physics or Chemistry”. |
 | `uk-medicine-ucl` | Other qualifications | UCL accepts AP exams for direct entry. Requirements are tiered against the A-Level equivalent for each course, with alternative routes trading AP count against SAT or ACT. The tier table is not yet captured. |
 | `uk-cs-ucl` | Other qualifications | UCL accepts AP exams for direct entry. Requirements are tiered against the A-Level equivalent for each course, with alternative routes trading AP count against SAT or ACT. The tier table is not yet captured. |
 | `uk-engineering-ucl` | Other qualifications | UCL accepts AP exams for direct entry. Requirements are tiered against the A-Level equivalent for each course, with alternative routes trading AP count against SAT or ACT. The tier table is not yet captured. |
@@ -276,6 +294,28 @@ still holds a value a verified official source contradicts. Not shown in the pan
 
 | Course | Category | Flag |
 |---|---|---|
+| `uk-medicine-imperial` | Subject prerequisites | Preferred subject not confirmed: the official page does not list Mathematics as preferred; data/courseRequirements.js holds preferred Mathematics_Standard. Owner decision. |
+| `uk-medicine-imperial` | A-Level requirements | Offer differs: official minimum and typical offer A*AA (A* in Biology or Chemistry); data/courseRequirements.js holds AAA. Mathematics is not listed as preferred on the page; the engine holds preferred Mathematics_Standard. Owner decision. Excluded subjects, the contextual offer and the practical endorsement are display-only; the matcher does not apply them. |
+| `uk-medicine-imperial` | IB requirements | Typical offer differs: official 39 points with 6, 7 in Biology/Chemistry HL; data/courseRequirements.js holds 38 and "666 at HL" (38 is the official minimum entry standard; the third HL 6 is not stated). Mathematics is not listed as preferred on the page. Owner decision. |
+| `uk-cs-imperial` | Subject prerequisites | The page also recommends Computer Science and Physics; data/courseRequirements.js lists only Further Mathematics as preferred. Display note only — owner decision whether to add them. |
+| `uk-cs-imperial` | A-Level requirements | Offer differs: official minimum A*A*A – A*AAA, typical A*A*A* (three A-levels); data/courseRequirements.js holds A*AA. Owner decision. Excluded subjects and the practical endorsement are display-only; the matcher does not apply them. |
+| `uk-cs-imperial` | IB requirements | IB differs: official minimum 41 points (7 in Mathematics HL and 7 in another relevant HL subject), typical 42; data/courseRequirements.js holds 39 and "776 at HL". Owner decision. |
+| `uk-electrical-imperial` | A-Level requirements | Excluded subjects and the practical endorsement are display-only; the matcher does not apply them. |
+| `uk-electrical-imperial` | IB requirements | IB differs: official minimum 40 points (7 in Mathematics HL, 7 in Physics HL), typical 41; data/courseRequirements.js holds 39 and "776 at HL". Owner decision. |
+| `uk-mechanical-imperial` | Subject prerequisites | Preferred subject not confirmed: the official page does not list Further Mathematics as preferred; data/courseRequirements.js holds preferred Mathematics_Advanced. Owner decision. |
+| `uk-mechanical-imperial` | A-Level requirements | Typical offer differs: official A*A*A* (three A-levels); data/courseRequirements.js holds A*A*A, which is the official minimum entry standard. Further Mathematics is not listed as preferred (engine preferred Mathematics_Advanced). Owner decision. Excluded subjects and the practical endorsement are display-only; the matcher does not apply them. |
+| `uk-mechanical-imperial` | IB requirements | Partly agrees: 40 points and HL Mathematics/Physics match the typical offer, but data/courseRequirements.js "776 at HL" adds a third HL 6 the page does not state (typical: 7 Maths HL, 7 Physics HL; minimum: 6, 6). Owner decision. |
+| `uk-chemical-imperial` | Subject prerequisites | Subject rule differs: official third subject from Biology, Business Studies, Economics, Further Mathematics or Physics; data/courseRequirements.js holds preferred Physics only. Owner decision. |
+| `uk-chemical-imperial` | A-Level requirements | Grades agree (A*A*A), but the official third subject must be one of Biology, Business Studies, Economics, Further Mathematics or Physics; data/courseRequirements.js holds only preferred Physics. Owner decision. Excluded subjects and the practical endorsement are display-only; the matcher does not apply them. |
+| `uk-chemical-imperial` | IB requirements | IB score differs: official minimum 40 points, typical 41 (HL 7 Mathematics, 7 Chemistry, 6 in Biology/Business Management/Economics/Physics); data/courseRequirements.js holds 39 and "776 at HL". Owner decision. |
+| `uk-physics-imperial` | A-Level requirements | Excluded subjects and the practical endorsement are display-only; the matcher does not apply them. |
+| `uk-physics-imperial` | IB requirements | Typical offer differs: official 42 points; data/courseRequirements.js holds 40 and "776 at HL", which match the official minimum entry standard. Owner decision. |
+| `uk-maths-imperial` | A-Level requirements | Excluded subjects and the practical endorsement are display-only; the matcher does not apply them. |
+| `uk-maths-imperial` | IB requirements | Typical offer differs: official 40 points; data/courseRequirements.js holds 39 (the official minimum) and "776 at HL", while the page states 7 in Mathematics HL and 6 in one other HL subject. Owner decision. |
+| `uk-bioengineering-imperial` | Admissions tests | Test differs: the official page says no admissions test is used; data/courseRequirements.js holds ESAT. Owner decision. |
+| `uk-bioengineering-imperial` | Subject prerequisites | Preferred subject not confirmed: the official page does not list Chemistry as preferred; data/courseRequirements.js holds preferred Chemistry. Owner decision. |
+| `uk-bioengineering-imperial` | A-Level requirements | Offer differs: official minimum A*AA, typical A*AA – A*A*A; data/courseRequirements.js holds AAA (AAA appears on the page only as the contextual-scheme threshold for a guaranteed interview). Chemistry is not listed as preferred (engine preferred Chemistry). Owner decision. Excluded subjects and the practical endorsement are display-only; the matcher does not apply them. |
+| `uk-bioengineering-imperial` | IB requirements | IB differs: official minimum 39 (HL 6 Mathematics, 6 Physics, 6 third subject), typical 40; data/courseRequirements.js holds 38 and "HL6 Mathematics + HL6 Physics or Chemistry; 39 typical". Owner decision. |
 | `uk-medicine-birmingham` | Subject prerequisites | Biology is one option for the second science, not a requirement, and Maths is an alternative second science rather than preferred; data/courseRequirements.js holds essential [Chemistry, Biology], preferred [Mathematics_Standard]. Owner decision. |
 | `uk-medicine-birmingham` | A-Level requirements | Offer differs (official AAA, not A*AA) and the second science is any one of Biology/Human Biology, Physics or Maths (Biology not specifically required; no preferred subject); data/courseRequirements.js holds A*AA, essential [Chemistry, Biology], preferred [Mathematics_Standard]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
 | `uk-medicine-birmingham` | IB requirements | HL grades differ (official 666, not 766) and the second HL science is any of Biology/Physics/Maths; data/courseRequirements.js holds ibHLNote "766 at HL", ibHL [Chemistry, Biology]. Owner decision. |
@@ -548,14 +588,6 @@ category — check the official source; never copy a hint in as a value.
 | `uk-engineering-cambridge` | University of Cambridge | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-economics-cambridge` | University of Cambridge | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
 | `uk-law-cambridge` | University of Cambridge | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `uk-medicine-imperial` | Imperial College London | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-cs-imperial` | Imperial College London | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-electrical-imperial` | Imperial College London | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-mechanical-imperial` | Imperial College London | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-chemical-imperial` | Imperial College London | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-physics-imperial` | Imperial College London | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-maths-imperial` | Imperial College London | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-bioengineering-imperial` | Imperial College London | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-economics-lse` | London School of Economics | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-finance-lse` | London School of Economics | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-accounting-lse` | London School of Economics | SAT / ACT, English language, Other qualifications, Other requirements |  |
