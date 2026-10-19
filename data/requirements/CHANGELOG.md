@@ -3530,3 +3530,62 @@ Format:
 - `uk-law-cambridge` · subjectPrerequisites: row partial → verified.
 - `uk-law-cambridge` · aLevel: row partial → verified.
 - `uk-law-cambridge` · ib: row partial → verified.
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: Imperial College London
+
+- `uk-medicine-imperial` · engine `grades.aLevels`: AAA → A*AA (offer). Source: https://www.imperial.ac.uk/study/courses/undergraduate/medicine/
+  > Typical offer A*AA (A* in Biology or Chemistry)
+- `uk-medicine-imperial` · engine `grades.ib`: 38 → 39 (ib-score). Source: https://www.imperial.ac.uk/study/courses/undergraduate/medicine/
+  > Typical offer 39 points
+- `uk-medicine-imperial` · engine `grades.ibHLNote`: 666 at HL → 6 and 7 in HL Biology/Chemistry (ib-note). Source: https://www.imperial.ac.uk/study/courses/undergraduate/medicine/
+  > Typical offer 39 points To include: 6, 7 in Biology/Chemistry at higher level
+- `uk-medicine-imperial` · engine `requirements.preferred`: [Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://www.imperial.ac.uk/study/courses/undergraduate/medicine/
+  > A* and A in Biology and Chemistry (A* in either)
+- `uk-medicine-imperial` · subjectPrerequisites: row partial → verified.
+- `uk-medicine-imperial` · aLevel: row partial → verified (owner flag kept).
+- `uk-medicine-imperial` · ib: row partial → verified.
+- `uk-cs-imperial` · engine `grades.aLevels`: A*AA → A*A*A* (offer). Source: https://www.imperial.ac.uk/study/courses/undergraduate/computing-meng/
+  > Typical offer A*A*A* (applicants studying three A-levels)
+- `uk-cs-imperial` · engine `grades.ib`: 39 → 42 (ib-score). Source: https://www.imperial.ac.uk/study/courses/undergraduate/computing-meng/
+  > Typical offer 42 points
+- `uk-cs-imperial` · engine `grades.ibHLNote`: 776 at HL → 7 in HL Mathematics; 7 in another relevant HL subject (ib-note). Source: https://www.imperial.ac.uk/study/courses/undergraduate/computing-meng/
+  > 7 in Mathematics at higher level 7 in another relevant subject at higher level
+- `uk-cs-imperial` · aLevel: row partial → verified (owner flag kept).
+- `uk-cs-imperial` · ib: row partial → partial (owner flag kept).
+- `uk-electrical-imperial` · engine `grades.ib`: 39 → 41 (ib-score). Source: https://www.imperial.ac.uk/study/courses/undergraduate/electrical-electronic-engineering-meng/
+  > Typical offer 41 points
+- `uk-electrical-imperial` · engine `grades.ibHLNote`: 776 at HL → 7 in HL Mathematics; 7 in HL Physics (ib-note). Source: https://www.imperial.ac.uk/study/courses/undergraduate/electrical-electronic-engineering-meng/
+  > 7 in Mathematics at higher level 7 in Physics at higher level
+- `uk-electrical-imperial` · ib: row partial → partial (owner flag kept).
+- `uk-mechanical-imperial` · engine `grades.aLevels`: A*A*A → A*A*A* (offer). Source: https://www.imperial.ac.uk/study/courses/undergraduate/mechanical-engineering/
+  > Typical offer A*A*A* (applicants studying three A-levels)
+- `uk-mechanical-imperial` · engine `grades.ibHLNote`: 776 at HL → 7 in HL Mathematics; 7 in HL Physics (ib-note). Source: https://www.imperial.ac.uk/study/courses/undergraduate/mechanical-engineering/
+  > Typical offer 40 points To include: 7 in Mathematics at higher level 7 in Physics at higher level
+- `uk-mechanical-imperial` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.imperial.ac.uk/study/courses/undergraduate/mechanical-engineering/
+  > A* in Mathematics A/A* in Physics (A* is required if applying with three A-levels. At least an A is required if applying with four A-levels) A in a third and/or fourth subject
+- `uk-mechanical-imperial` · subjectPrerequisites: row partial → verified.
+- `uk-mechanical-imperial` · aLevel: row partial → verified (owner flag kept).
+- `uk-mechanical-imperial` · ib: row partial → verified.
+- `uk-chemical-imperial` · engine `grades.ib`: 39 → 41 (ib-score). Source: https://www.imperial.ac.uk/study/courses/undergraduate/chemical-engineering/
+  > Typical offer 41 points
+- `uk-chemical-imperial` · ib: row partial → partial (owner flag kept).
+- `uk-physics-imperial` · engine `grades.ib`: 40 → 42 (ib-score). Source: https://www.imperial.ac.uk/study/courses/undergraduate/physics-bsc/
+  > Typical offer 42 points
+- `uk-physics-imperial` · ib: row partial → partial (owner flag kept).
+- `uk-maths-imperial` · engine `grades.ib`: 39 → 40 (ib-score). Source: https://www.imperial.ac.uk/study/courses/undergraduate/mathematics-bsc/
+  > Typical offer 40 points
+- `uk-maths-imperial` · engine `grades.ibHLNote`: 776 at HL → 7 in HL Mathematics; 6 in another HL subject (ib-note). Source: https://www.imperial.ac.uk/study/courses/undergraduate/mathematics-bsc/
+  > 7 in Mathematics at higher level 6 in another subject at higher level
+- `uk-maths-imperial` · ib: row partial → partial (owner flag kept).
+- `uk-bioengineering-imperial` · engine `admissionTests`: [ESAT] → [] (test-remove). Source: https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/
+  > This department does not use a test as part of its selection process.
+- `uk-bioengineering-imperial` · engine `requirements.preferred`: [Chemistry] → [] (preferred-remove-unlisted). Source: https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/
+  > A* in Mathematics A in Physics A in a third subject
+- `uk-bioengineering-imperial` · engine `grades.ib`: 38 → 40 (ib-score). Source: https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/
+  > Typical offer 40 points
+- `uk-bioengineering-imperial` · engine `grades.ibHLNote`: HL6 Mathematics + HL6 Physics or Chemistry; 39 typical → 666 at HL (ib-note). Source: https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/
+  > 6 in Mathematics at higher level 6 in Physics at higher level 6 in a third subject at higher level
+- `uk-bioengineering-imperial` · admissionsTests: row partial → verified.
+- `uk-bioengineering-imperial` · subjectPrerequisites: row partial → verified.
+- `uk-bioengineering-imperial` · aLevel: row partial → partial (owner flag kept).
+- `uk-bioengineering-imperial` · ib: row partial → partial (owner flag kept).

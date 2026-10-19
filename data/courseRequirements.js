@@ -256,8 +256,8 @@ const courses = [
   {
     id: "uk-medicine-imperial", name: "Medicine MBBS",
     university: "Imperial College London", country: "UK", degreeLevel: "MBBS", category: "medicine",
-    requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
-    grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "666 at HL"},
+    requirements: { essential: ["Chemistry","Biology"], preferred: [], useful: ["Physics"] },
+    grades: { aLevels: "A*AA", ib: 39, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "6 and 7 in HL Biology/Chemistry"},
     admissionTests: ["UCAT"],
     universityContext: {
       tier: "world-top-5",
@@ -270,7 +270,7 @@ const courses = [
     id: "uk-cs-imperial", name: "Computing MEng",
     university: "Imperial College London", country: "UK", degreeLevel: "MEng", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "A*AA", ib: 39, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "776 at HL" },
+    grades: { aLevels: "A*A*A*", ib: 42, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "7 in HL Mathematics; 7 in another relevant HL subject" },
     admissionTests: ["TMUA"],
     universityContext: {
       tier: "world-top-5",
@@ -283,7 +283,7 @@ const courses = [
     id: "uk-electrical-imperial", name: "Electrical & Electronic Engineering MEng",
     university: "Imperial College London", country: "UK", degreeLevel: "MEng", category: "engineering",
     requirements: { essential: ["Mathematics_Standard","Physics"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science"] },
-    grades: { aLevels: "A*A*A", ib: 39, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "776 at HL" },
+    grades: { aLevels: "A*A*A", ib: 41, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "7 in HL Mathematics; 7 in HL Physics" },
     admissionTests: ["ESAT"],
     universityContext: {
       tier: "world-top-5",
@@ -295,8 +295,8 @@ const courses = [
   {
     id: "uk-mechanical-imperial", name: "Mechanical Engineering MEng",
     university: "Imperial College London", country: "UK", degreeLevel: "MEng", category: "engineering",
-    requirements: { essential: ["Mathematics_Standard","Physics"], preferred: ["Mathematics_Advanced"], useful: ["Chemistry"] },
-    grades: { aLevels: "A*A*A", ib: 40, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "776 at HL" },
+    requirements: { essential: ["Mathematics_Standard","Physics"], preferred: [], useful: ["Chemistry"] },
+    grades: { aLevels: "A*A*A*", ib: 40, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "7 in HL Mathematics; 7 in HL Physics" },
     admissionTests: ["ESAT"],
     universityContext: {
       tier: "world-top-5",
@@ -309,7 +309,7 @@ const courses = [
     id: "uk-chemical-imperial", name: "Chemical Engineering MEng",
     university: "Imperial College London", country: "UK", degreeLevel: "MEng", category: "engineering",
     requirements: { essential: ["Mathematics_Standard","Chemistry"], preferred: ["Physics"], useful: ["Biology"] },
-    grades: { aLevels: "A*A*A", ib: 39, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Chemistry"], ibHLNote: "776 at HL" },
+    grades: { aLevels: "A*A*A", ib: 41, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Chemistry"], ibHLNote: "776 at HL" },
     admissionTests: ["ESAT"],
     universityContext: {
       tier: "world-top-5",
@@ -322,7 +322,7 @@ const courses = [
     id: "uk-physics-imperial", name: "Physics BSc/MSci",
     university: "Imperial College London", country: "UK", degreeLevel: "MSci", category: "sciences",
     requirements: { essential: ["Mathematics_Standard","Physics"], preferred: ["Mathematics_Advanced"], useful: ["Chemistry"] },
-    grades: { aLevels: "A*A*A", ib: 40, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "776 at HL" },
+    grades: { aLevels: "A*A*A", ib: 42, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "776 at HL" },
     admissionTests: ["ESAT"],
     universityContext: {
       tier: "world-top-5",
@@ -335,7 +335,7 @@ const courses = [
     id: "uk-maths-imperial", name: "Mathematics BSc/MSci",
     university: "Imperial College London", country: "UK", degreeLevel: "MSci", category: "mathematics",
     requirements: { essential: ["Mathematics_Standard","Mathematics_Advanced"], preferred: [], useful: ["Physics","Statistics"] },
-    grades: { aLevels: "A*A*A", ib: 39, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "776 at HL" },
+    grades: { aLevels: "A*A*A", ib: 40, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "7 in HL Mathematics; 6 in another HL subject" },
     admissionTests: ["TMUA"],
     universityContext: {
       tier: "world-top-5",
@@ -347,9 +347,9 @@ const courses = [
   {
     id: "uk-bioengineering-imperial", name: "Biomedical Engineering MEng",
     university: "Imperial College London", country: "UK", degreeLevel: "MEng", category: "engineering",
-    requirements: { essential: ["Mathematics_Standard","Physics"], preferred: ["Chemistry"], useful: ["Biology"] },
-    grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "HL6 Mathematics + HL6 Physics or Chemistry; 39 typical" },
-    admissionTests: ["ESAT"],
+    requirements: { essential: ["Mathematics_Standard","Physics"], preferred: [], useful: ["Biology"] },
+    grades: { aLevels: "AAA", ib: 40, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "666 at HL" },
+    admissionTests: [],
     universityContext: {
       tier: "world-top-5",
       intlFriendly: true,
@@ -4297,14 +4297,14 @@ const courseVerification = {
   "uk-engineering-cambridge": { status: "verified", source: "https://www.undergraduate.study.cam.ac.uk/courses/engineering-ba-hons-meng", checkedDate: "2026-06-23", notes: "ENGAA discontinued → ESAT (cross-confirmed)." },
   "uk-economics-cambridge": { status: "partial", source: "https://www.undergraduate.study.cam.ac.uk/courses/economics-ba-hons", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ibHL [Mathematics_Standard]→[Mathematics_Advanced]; preferred [Mathematics_Advanced, Economics]→[Mathematics_Advanced]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-23, https://www.undergraduate.study.cam.ac.uk/courses/economics-ba-hons): A*AA→A*A*A; HL 766→776; IB 40→41 (41–42); ECAA discontinued, now TMUA (added)." },
   "uk-law-cambridge": { status: "verified", source: "https://www.undergraduate.study.cam.ac.uk/courses/law-ba-hons", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [History, English]→[]. EARLIER (2026-06-23, https://www.undergraduate.study.cam.ac.uk/courses/law-ba-hons): LNAT introduced for 2024 entry (added; cross-confirmed lnat.ac.uk). Typical offer A*AA (Sidney Sussex A*A*A); IB 41–42." },
-  "uk-medicine-imperial": { status: "verified", source: "https://www.imperial.ac.uk/study/courses/undergraduate/medicine/", checkedDate: "2026-06-23", notes: "AAA / IB 38 / UCAT confirmed. HL requirement is 6 in Chemistry + 6 in Biology." },
-  "uk-cs-imperial": { status: "verified", source: "https://www.imperial.ac.uk/study/courses/undergraduate/computing-meng/", checkedDate: "2026-06-23", notes: "Imperial discontinued MAT; Computing uses TMUA (cross-confirmed). A*AA / IB 39 confirmed." },
-  "uk-electrical-imperial": { status: "verified", source: "https://digital.ucas.com/coursedisplay/courses/5cee5224-879a-ed8f-3e36-fedd7a3c207d", checkedDate: "2026-06-28", notes: "Verified: A-level A*A*A (A* Maths + A* Physics + A) confirmed via UCAS + Imperial; IB 39 (HL Maths+Physics); ESAT required." },
-  "uk-mechanical-imperial": { status: "verified", source: "https://www.imperial.ac.uk/study/courses/undergraduate/2026/mechanical-engineering/", checkedDate: "2026-06-28", notes: "Verified: A-level A*A*A (A* Maths + A* Physics + A) via UCAS + Imperial; IB resolved to 40 with HL7 Maths + HL7 Physics (prior 39 corrected); ESAT required." },
-  "uk-chemical-imperial": { status: "verified", source: "https://www.imperial.ac.uk/study/courses/undergraduate/chemical-engineering/", checkedDate: "2026-06-28", notes: "Verified: A-level A*A*A (A* Chemistry + A* Maths + A) via Imperial + The Uni Guide; IB 39, HL7 Maths + HL7 Chemistry; ESAT required." },
-  "uk-physics-imperial": { status: "verified", source: "https://www.imperial.ac.uk/study/courses/undergraduate/physics-bsc/", checkedDate: "2026-06-28", notes: "Verified: A-level A*A*A (A* Maths + A* Physics + A) via Imperial + WhatUni; IB 40, HL Maths+Physics; ESAT required." },
-  "uk-maths-imperial": { status: "verified", source: "https://www.imperial.ac.uk/study/courses/undergraduate/mathematics-bsc/", checkedDate: "2026-06-28", notes: "Verified: A-level A*A*A (A* Maths + A* Further Maths + A) via Imperial + The Uni Guide; IB 39 incl HL7 Maths; TMUA required." },
-  "uk-bioengineering-imperial": { status: "verified", source: "https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/", checkedDate: "2026-06-28", notes: "Re-mapped from non-existent 'Bioengineering MEng' to Imperial's real Biomedical Engineering MEng. Verified: A-level AAA incl Maths+Physics; IB 38 min (39 typical), HL6 Maths + HL6 Physics or Chemistry; ESAT required. Gated on Maths+Physics, not Biology." },
+  "uk-medicine-imperial": { status: "verified", source: "https://www.imperial.ac.uk/study/courses/undergraduate/medicine/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels AAA→A*AA; ib 38→39; ibHLNote 666 at HL→6 and 7 in HL Biology/Chemistry; preferred [Mathematics_Standard]→[]. EARLIER (2026-06-23, https://www.imperial.ac.uk/study/courses/undergraduate/medicine/): AAA / IB 38 / UCAT confirmed. HL requirement is 6 in Chemistry + 6 in Biology." },
+  "uk-cs-imperial": { status: "partial", source: "https://www.imperial.ac.uk/study/courses/undergraduate/computing-meng/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels A*AA→A*A*A*; ib 39→42; ibHLNote 776 at HL→7 in HL Mathematics; 7 in another relevant HL subject. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-23, https://www.imperial.ac.uk/study/courses/undergraduate/computing-meng/): Imperial discontinued MAT; Computing uses TMUA (cross-confirmed). A*AA / IB 39 confirmed." },
+  "uk-electrical-imperial": { status: "partial", source: "https://www.imperial.ac.uk/study/courses/undergraduate/electrical-electronic-engineering-meng/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ib 39→41; ibHLNote 776 at HL→7 in HL Mathematics; 7 in HL Physics. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://digital.ucas.com/coursedisplay/courses/5cee5224-879a-ed8f-3e36-fedd7a3c207d): Verified: A-level A*A*A (A* Maths + A* Physics + A) confirmed via UCAS + Imperial; IB 39 (HL Maths+Physics); ESAT required." },
+  "uk-mechanical-imperial": { status: "verified", source: "https://www.imperial.ac.uk/study/courses/undergraduate/mechanical-engineering/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels A*A*A→A*A*A*; ibHLNote 776 at HL→7 in HL Mathematics; 7 in HL Physics; preferred [Mathematics_Advanced]→[]. EARLIER (2026-06-28, https://www.imperial.ac.uk/study/courses/undergraduate/2026/mechanical-engineering/): Verified: A-level A*A*A (A* Maths + A* Physics + A) via UCAS + Imperial; IB resolved to 40 with HL7 Maths + HL7 Physics (prior 39 corrected); ESAT required." },
+  "uk-chemical-imperial": { status: "partial", source: "https://www.imperial.ac.uk/study/courses/undergraduate/chemical-engineering/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ib 39→41. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.imperial.ac.uk/study/courses/undergraduate/chemical-engineering/): Verified: A-level A*A*A (A* Chemistry + A* Maths + A) via Imperial + The Uni Guide; IB 39, HL7 Maths + HL7 Chemistry; ESAT required." },
+  "uk-physics-imperial": { status: "partial", source: "https://www.imperial.ac.uk/study/courses/undergraduate/physics-bsc/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ib 40→42. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.imperial.ac.uk/study/courses/undergraduate/physics-bsc/): Verified: A-level A*A*A (A* Maths + A* Physics + A) via Imperial + WhatUni; IB 40, HL Maths+Physics; ESAT required." },
+  "uk-maths-imperial": { status: "partial", source: "https://www.imperial.ac.uk/study/courses/undergraduate/mathematics-bsc/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ib 39→40; ibHLNote 776 at HL→7 in HL Mathematics; 6 in another HL subject. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.imperial.ac.uk/study/courses/undergraduate/mathematics-bsc/): Verified: A-level A*A*A (A* Maths + A* Further Maths + A) via Imperial + The Uni Guide; IB 39 incl HL7 Maths; TMUA required." },
+  "uk-bioengineering-imperial": { status: "partial", source: "https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): admissionTests [ESAT]→[]; preferred [Chemistry]→[]; ib 38→40; ibHLNote HL6 Mathematics + HL6 Physics or Chemistry; 39 typical→666 at HL. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/): Re-mapped from non-existent 'Bioengineering MEng' to Imperial's real Biomedical Engineering MEng. Verified: A-level AAA incl Maths+Physics; IB 38 min (39 typical), HL6 Maths + HL6 Physics or Chemistry; ESAT required. Gated on Maths+Physics, not Biology." },
   "uk-economics-lse": { status: "verified", source: "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-economics", checkedDate: "2026-06-28", notes: "A*AA / IB 39 / 766 HL confirmed; TMUA mandatory for BSc Economics." },
   "uk-finance-lse": { status: "verified", source: "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-finance", checkedDate: "2026-06-28", notes: "A*AA / IB 38 / 766 HL confirmed. TMUA encouraged, not mandatory (no required test)." },
   "uk-accounting-lse": { status: "verified", source: "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-accounting-and-finance", checkedDate: "2026-06-28", notes: "A*AA→AAA (standard offer incl A in Maths; AAB contextual). IB 38 / 766 HL confirmed; no required test." },
