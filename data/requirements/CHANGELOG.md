@@ -27,3 +27,57 @@ Format:
   not carried across), every English-language entry and every
   other-requirements entry (no structured data existed).
 - A-Level and IB requirements deliberately not included (Phase 2).
+
+## 2026-10-19 — 2027 entry — A-Level and IB requirements added (Phase 2)
+
+- Added two qualification categories to `data/requirements/config.js` —
+  `aLevel` (A-Level requirements) and `ib` (IB requirements), `kind:
+  'qualification'` — and an entry for each of the 320 courses in
+  `data/requirements/2027.js`, with
+  `scripts/migrate-requirements-2027-qualifications.mjs`. Every Phase 1 entry
+  is unchanged. No web research; no value invented.
+- Values are the matching engine's own, from `data/courseRequirements.js`:
+  `grades.aLevels` → `typicalOffer`; `grades.ib` → `overallScore`;
+  `grades.ibHL` → Higher Level subjects; `grades.ibHLNote` → `detail`
+  (verbatim); `requirements.essential` / `.preferred` → required / preferred
+  subjects, named as A-Level / IB subjects. `npm run validate` now fails if
+  any of these disagree with the engine. Engine data unchanged.
+- Status, source and date from each course's verification record (as Phase 1
+  did for subject prerequisites). A-Level: 141 verified, 1 partial, 174 not
+  verified, 4 not applicable. IB: 198 verified, 7 partial, 111 not verified,
+  4 not applicable.
+- **Verified on an IB-applicants page**, so the IB row is verified (Phase 1
+  rows stay partial): `ca-cs-mcgill`, `ca-maths-mcgill`,
+  `ca-engineering-mcgill`, `ca-economics-mcgill`, `ca-cs-waterloo`,
+  `ca-mathematics-waterloo`, `ca-engineering-dalhousie`. Their A-Level rows
+  are not verified (the engine holds no A-Level offer for them).
+  `sg-engineering-sutd` was verified on a Singapore-Cambridge GCE A-Level page:
+  its IB row is partial, its A-Level row not verified (no UK A-Level offer held).
+- **Partial**: the 4 CUHK courses (partial records; A-Level only for
+  `hk-engineering-cuhk`, the one with an A-Level offer); SUTD IB; and the IB
+  rows of `ca-medicine-mcgill` and `ca-medicine-dalhousie`, whose records say
+  graduate-entry while the engine holds IB Higher Level subjects for them —
+  the conflict is noted and their A-Level rows are not verified, not "not applicable".
+- **Not applicable** (the record says the course itself is not undergraduate
+  entry, and no A-Level/IB data is held): `ca-law-utoronto`, `ca-law-ottawa`,
+  `ca-law-york`, `ca-law-uvic`. Not the US "pre-law track" courses
+  (`us-law-harvard`, `us-law-yale`, `us-law-georgetown`): they are
+  undergraduate degrees — their "Law is graduate-entry" note is about the law
+  school afterwards — so their A-Level / IB rows are not verified (Yale's
+  notes mention IB being accepted; flagged as a review hint).
+- **Not verified**: every course the engine holds no A-Level offer / IB data
+  for (all 100 US courses, most Singapore and Canadian ones).
+- **Withheld** (admitted-student figures are not requirements): the IB points
+  total and IB note of `hk-cs-hkust`, `hk-engineering-hkust`,
+  `hk-sciences-hkust`, `hk-maths-hkust` (25th percentile of recent admits) and
+  `hk-engineering-polyu`, `hk-nursing-polyu`, `hk-business-polyu`,
+  `hk-architecture-polyu`, `hk-cs-polyu` (typical admitted score); the IB note
+  only of `ca-cs-waterloo`, `ca-engineering-waterloo`,
+  `ca-mathematics-waterloo`, `ca-business-waterloo`, `ca-cs-sfu`,
+  `ca-business-sfu` (admitted averages), `ca-engineering-mcmaster`
+  (competitive estimate), `ca-engineering-calgary`, `ca-business-calgary`
+  (last year's finalization averages). The engine still reads these points
+  totals for matching — not changed here (matching output must stay identical).
+- The practical-endorsement, contextual-offer, TOK/EE/CAS and tests/interview
+  fields exist in the schema but are empty: the repo holds no structured data
+  for them.

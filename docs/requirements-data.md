@@ -34,7 +34,7 @@ an entry for **every** category in `config.categories`:
 
 | Field | Rule |
 |---|---|
-| `status` | `verified`, `partial` or `unverified`. |
+| `status` | `verified`, `partial`, `unverified` — or, for A-Level / IB only, `notApplicable`. |
 | `items` | The requirement as published, one statement per string. Verified/partial only. |
 | `none: true` | The official source was checked and lists nothing in this category. Use instead of `items`. |
 | `codes` | Machine codes — admissions test codes / subject tags. Cross-checked against `data/courseRequirements.js` (see below). |
@@ -47,12 +47,47 @@ An **unverified** entry may not carry `items`, `none`, `sources`, `lastVerified`
 or `codes` — it cannot look verified. Students see **Not verified — check the
 official course page**.
 
-Categories (Phase 1): SAT / ACT · English language · Admissions tests ·
-Subject prerequisites · Other qualifications (AP, Hong Kong DSE) · Other
-requirements (interviews, portfolios). A-Level and IB are **not** in Phase 1.
-They are added in Phase 2 as new categories in `config.categories` plus an
-entry per course — the panel, validator and report pick them up with no code
-change.
+Categories: SAT / ACT · English language · Admissions tests · Subject
+prerequisites · A-Level requirements · IB requirements · Other qualifications
+(AP, Hong Kong DSE) · Other requirements (interviews, portfolios).
+
+### A-Level and IB (qualification categories)
+
+`aLevel` and `ib` have `kind: 'qualification'` in the config. Their entries
+use structured fields instead of `items` / `none` / `codes`:
+
+```js
+"aLevel": {"status":"verified","accepted":"yes","typicalOffer":"A*AA",
+           "subjects":{"required":[{"name":"Chemistry","code":"Chemistry"},{"name":"Biology","code":"Biology"}],
+                       "preferred":[{"name":"Physics","code":"Physics"}]},
+           "sources":[{"url":"https://www.medsci.ox.ac.uk/…","label":"Official source"}],"lastVerified":"2026-06-23"},
+"ib":     {"status":"verified","accepted":"yes","overallScore":39,
+           "subjects":{"required":[…],"preferred":[…],"higherLevel":[{"name":"Chemistry","code":"Chemistry"},…]},
+           "detail":"766 at HL","sources":[…],"lastVerified":"2026-06-23"}
+```
+
+| Field | Rule |
+|---|---|
+| `accepted` | `yes` (verified/partial), `no` (notApplicable only), `unknown` (unverified only, optional). |
+| `typicalOffer` | A-Level grades exactly as `grades.aLevels` holds them. Shown as "Grades". |
+| `overallScore` | IB points, a whole number 1–45, exactly as `grades.ib`. Shown as "Overall score". |
+| `subjects` | Any of `required`, `preferred`, `excluded`, `higherLevel`, `standardLevel`; each a non-empty list of `{name, code}`. `name` is the qualification's own subject name; `code` is the engine's subject tag. Leave a group out when there are none. |
+| `detail` | Subject-grade detail verbatim from `grades.ibHLNote` (e.g. "766 at HL"). Shown as "Subject grades". |
+| `practicalEndorsement`, `contextualOffer`, `coreNote` (TOK / EE / CAS), `testsInterview` | Free text, only when the official source states it. None are populated yet — the repo holds no structured data for them. |
+| `withheld` | Values the engine holds that are deliberately **not shown** (`typicalOffer`, `overallScore`, `detail`) — e.g. an IB note that quotes admitted-student figures, which are not requirements. Needs a `note` saying why; the panel shows "Not shown — see note". |
+
+`notApplicable` means the official source was checked and the qualification
+is not an entry route (e.g. a graduate-entry law or medicine programme). It
+needs `accepted: "no"`, a source, a date and a `note`, and carries no values.
+A verified/partial entry that holds no grade shows "Not recorded" — absent
+data is never shown as a value.
+
+How the 2027 entries were made (`scripts/migrate-requirements-2027-qualifications.mjs`):
+values come only from the engine's structured fields; status, source and date
+come from the course's verification record (as Phase 1 did for subject
+prerequisites). A record verified only on one qualification route's page
+(an IB-applicants page, an A-Level page) keeps that qualification verified and
+makes the other partial. A course the engine holds nothing for is unverified.
 
 ## Checks
 
@@ -69,10 +104,18 @@ npm run check      # lint + typecheck + validate + test (what CI runs)
 - the current cycle has no record for a course, or a record misses a category;
 - a verified/partial entry has no source, no date, a malformed or future date,
   or neither `items` nor `none`; a partial entry has no `note`;
+- an A-Level / IB entry is missing, has no value (verified/partial), has a
+  malformed field (`overallScore` outside 1–45, an unknown subject group, a
+  subject without `name`/`code`), withholds a value without a note, or is
+  `notApplicable` without `accepted: "no"`, a source, a date and a note;
 - an unverified entry carries a value, source or date;
-- (current cycle) admissions tests or subject prerequisites disagree with
-  `data/courseRequirements.js`, which the matching engine still reads — update
-  both until Phase 2 moves the engine onto this data;
+- the config has no `aLevel` or `ib` category (the engine reads both);
+- (current cycle) admissions tests, subject prerequisites, or any A-Level / IB
+  value (offer, points, Higher Level subjects, IB note, required / preferred
+  subjects) disagrees with `data/courseRequirements.js`, which the matching
+  engine still reads — update both until the engine moves onto this data. A
+  withheld value must still exist in the engine; a `notApplicable` entry fails
+  while the engine holds an offer for that qualification;
 - `app.html` does not load the current cycle's file;
 - `docs/requirements-review.md` is out of date.
 
@@ -85,8 +128,9 @@ CI (`.github/workflows/checks.yml`) runs `npm run check` on every push and pull 
 2. Edit the course's line in `data/requirements/<current year>.js`: set
    `status`, `items` (or `none: true`), `sources`, `lastVerified` (today), and
    `note` if anything is unconfirmed. Remove any `recorded`.
-3. If you changed admissions tests or subject prerequisites, make the same
-   change in `data/courseRequirements.js`.
+3. If you changed admissions tests, subject prerequisites, or an A-Level / IB
+   value, make the same change in `data/courseRequirements.js` (and check the
+   matching results — the engine reads that file).
 4. Add an entry to `data/requirements/CHANGELOG.md`.
 5. `npm run report && npm run check`, then commit.
 6. Bump the `?v=` on the cycle file's `<script>` tag in `app.html` so browsers
@@ -94,15 +138,36 @@ CI (`.github/workflows/checks.yml`) runs `npm run check` on every push and pull 
 
 If you cannot verify something, leave it `unverified` — never fill it in.
 
+### Updating an A-Level or IB requirement
+
+1. Use the university's page for that qualification (A-Level / international
+   entry page, IB applicants page) or the course page — the official source only.
+2. Edit the course's `aLevel` or `ib` line: `typicalOffer` / `overallScore`
+   as published, the `subjects` groups with the qualification's own subject
+   names and the engine's tag as `code`, `detail` for subject grades, and the
+   optional practical-endorsement / contextual-offer / TOK-EE-CAS /
+   tests-interview fields only if the source states them. Set `status`,
+   `sources`, `lastVerified`, and `note` for anything unconfirmed.
+3. Make the same change in `data/courseRequirements.js` (`grades.aLevels`,
+   `grades.ib`, `grades.ibHL`, `grades.ibHLNote`, `requirements`), otherwise
+   `npm run validate` fails — and the matching results change with it.
+4. Admitted-student ranges and averages are **not** requirements: never put
+   them in `typicalOffer`, `overallScore` or `detail`. If the engine still
+   holds one, list the field in `withheld` with a note.
+5. Not an entry route (graduate-entry)? Use `notApplicable` with the reason.
+   Changelog, `npm run report && npm run check`, bump the cycle file's `?v=`.
+
 ## The annual update
 
 Requirements change every year. Each year (for UK entry, once universities
 publish the next year's course pages — typically spring):
 
 1. **Draft the new cycle** — `npm run new-cycle -- 2028`. This creates
-   `data/requirements/2028.js` with every entry reset to `unverified` (the
-   previous value kept as `recorded`) and registers 2028 in the config. The
-   site keeps showing the current cycle.
+   `data/requirements/2028.js` with every entry — A-Level and IB included, and
+   `notApplicable` ones too — reset to `unverified` (the previous value kept
+   as `recorded`, e.g. "A*AA; Required subjects: Chemistry (2027 entry,
+   verified 23 Jun 2026)") and registers 2028 in the config. The site keeps
+   showing the current cycle.
 2. **Verify** — work through `docs/requirements-review.md` (regenerate it with
    `npm run report`), re-checking every requirement against the official
    source, as in "Fixing a single requirement". Log each change in the changelog.

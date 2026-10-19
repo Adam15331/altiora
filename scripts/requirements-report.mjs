@@ -4,8 +4,9 @@
  * npm run report — writes docs/requirements-review.md: the central list
  * of every requirement that is NOT verified for the current cycle, every
  * partly-verified one (with what is unconfirmed), every value recorded
- * without a source, and reviewer hints mined from the existing verified
- * course notes (pointers only — nothing is transcribed automatically).
+ * without a source, every value the matching engine holds but the panel
+ * withholds, and reviewer hints mined from the existing verified course
+ * notes (pointers only — nothing is transcribed automatically).
  *
  * Generated: re-run after any data change. `npm run validate` fails if
  * the committed report is out of date.
@@ -24,7 +25,16 @@ const HINTS = [
   { category: 'englishLanguage',   re: /\b(IELTS|TOEFL|Duolingo|English language requirement|English requirement)\b/i, label: 'notes mention an English-language test' },
   { category: 'otherRequirements', re: /\b(interview(s|ed)?|portfolio|audition)\b/i, label: 'notes mention an interview / portfolio / audition' },
   { category: 'satAct',            re: /\b(SAT|ACT)\b/, label: 'notes mention SAT/ACT' },
+  { category: 'aLevel',            re: /\bA-?Levels?\b|\bGCE\b|\bGCEAL\b|\bA\*/i, label: 'notes mention A-Level grades' },
+  { category: 'ib',                re: /\bIB\b|International Baccalaureate|\bHL\b/, label: 'notes mention IB' },
 ];
+
+// Qualification rows that are not verified and have no note pointing at
+// an answer still get a hint: what the repo holds (nothing) for them.
+const NO_DATA_HINT = {
+  aLevel: 'A-Level: no offer held in the repo — check the university\'s A-Level / international entry page',
+  ib: 'IB: no points, Higher Level or IB note held in the repo — check the university\'s IB entry page',
+};
 
 /** Build the report markdown (pure, so validate can compare it). */
 export function buildReport() {
@@ -39,13 +49,15 @@ export function buildReport() {
   const unverified = [];
   const partial = [];
   const recorded = [];
+  const withheld = [];
   for (const c of courses) {
     const rec = cycle.courses[c.id] ?? {};
     const missing = [];
     for (const cat of cats) {
       const e = rec[cat.id];
       const st = e?.status ?? 'unverified';
-      (tally[cat.id] ??= { verified: 0, partial: 0, unverified: 0 })[st]++;
+      (tally[cat.id] ??= { verified: 0, partial: 0, unverified: 0, notApplicable: 0 })[st]++;
+      if (e?.withheld?.length) withheld.push({ c, cat, fields: e.withheld });
       if (st === 'unverified') {
         missing.push(cat.label);
         if (e?.recorded) recorded.push({ c, cat, value: e.recorded });
@@ -54,6 +66,12 @@ export function buildReport() {
     }
     const notes = `${c.verification?.notes ?? ''} ${c.notes ?? ''}`;
     const hints = HINTS.filter(h => (rec[h.category]?.status ?? 'unverified') === 'unverified' && h.re.test(notes)).map(h => h.label);
+    for (const [catId, hint] of Object.entries(NO_DATA_HINT)) {
+      const e = rec[catId];
+      if ((e?.status ?? 'unverified') !== 'unverified') continue;
+      if (e?.note) hints.push(`${catId === 'aLevel' ? 'A-Level' : 'IB'}: ${e.note}`);
+      else if (!hints.includes(HINTS.find(h => h.category === catId)?.label ?? '')) hints.push(hint);
+    }
     if (missing.length) unverified.push({ c, missing, hints });
   }
 
@@ -67,11 +85,11 @@ export function buildReport() {
   L.push('');
   L.push('## Coverage');
   L.push('');
-  L.push('| Category | Verified | Partly verified | Not verified |');
-  L.push('|---|---:|---:|---:|');
+  L.push('| Category | Verified | Partly verified | Not verified | Not applicable |');
+  L.push('|---|---:|---:|---:|---:|');
   for (const cat of cats) {
-    const t = tally[cat.id] ?? { verified: 0, partial: 0, unverified: 0 };
-    L.push(`| ${cat.label} | ${t.verified} | ${t.partial} | ${t.unverified} |`);
+    const t = tally[cat.id] ?? { verified: 0, partial: 0, unverified: 0, notApplicable: 0 };
+    L.push(`| ${cat.label} | ${t.verified} | ${t.partial} | ${t.unverified} | ${t.notApplicable} |`);
   }
   L.push('');
   L.push(`${courses.length} courses × ${cats.length} categories = ${courses.length * cats.length} requirement entries.`);
@@ -94,6 +112,16 @@ export function buildReport() {
   L.push('| Course | Category | Recorded value |');
   L.push('|---|---|---|');
   for (const r of recorded) L.push(`| \`${r.c.id}\` | ${r.cat.label} | ${md(r.value)} |`);
+  L.push('');
+
+  L.push('## Values withheld from the panel');
+  L.push('');
+  L.push('The matching engine holds these values, but they are not shown to students as requirements (the entry\'s');
+  L.push('note says why — e.g. an admitted-student figure). Replace each with the published requirement, or confirm none is published.');
+  L.push('');
+  L.push('| Course | Category | Withheld |');
+  L.push('|---|---|---|');
+  for (const w of withheld) L.push(`| \`${w.c.id}\` | ${w.cat.label} | ${w.fields.join(', ')} |`);
   L.push('');
 
   L.push('## Not verified, by course');

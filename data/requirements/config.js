@@ -7,10 +7,20 @@
  * The UI renders whatever this file and the cycle data files say — no
  * requirement value or category label is hard-coded in a component.
  *
- * Adding a category (e.g. a new qualification in a later phase) is:
+ * Adding a category (e.g. a new qualification) is:
  *   1. add it to `categories` below,
  *   2. add an entry for it to every course in each cycle file
  *      (`npm run validate` lists every course that is missing one).
+ *
+ * Two kinds of category:
+ *   'list'          — the requirement is a list of published statements
+ *                     (`items`, or `none: true`). The default.
+ *   'qualification' — requirements for applicants presenting one school
+ *                     qualification (A-Level, IB), as structured fields:
+ *                     `accepted`, `typicalOffer` / `overallScore`,
+ *                     `subjects`, `detail` … These mirror the values the
+ *                     matching engine reads from data/courseRequirements.js
+ *                     and `npm run validate` fails if the two disagree.
  *
  * Starting a new admissions year: `npm run new-cycle -- <year>`
  * (see docs/requirements-data.md).
@@ -20,11 +30,25 @@
  * ═══════════════════════════════════════════════════════════════ */
 
 /**
- * @typedef {'verified' | 'partial' | 'unverified'} VerificationStatus
+ * @typedef {'verified' | 'partial' | 'unverified' | 'notApplicable'} VerificationStatus
+ *   notApplicable — qualification categories only: the official source
+ *   was checked and this qualification is not an entry route (e.g. a
+ *   graduate-entry programme). Needs a source, a date and a note.
  *
  * @typedef {object} RequirementSource
  * @property {string} url     Official university / programme / test-provider page.
  * @property {string} [label] Short human label for the link.
+ *
+ * @typedef {object} SubjectRef
+ * @property {string} name   Subject as the qualification names it (e.g. "Further Mathematics").
+ * @property {string} code   Universal subject tag the matching engine uses (e.g. "Mathematics_Advanced").
+ *
+ * @typedef {object} QualificationSubjects   (every list optional; absent = none recorded)
+ * @property {SubjectRef[]} [required]
+ * @property {SubjectRef[]} [preferred]
+ * @property {SubjectRef[]} [excluded]       Subjects the source says do not count.
+ * @property {SubjectRef[]} [higherLevel]    IB: subjects required at Higher Level.
+ * @property {SubjectRef[]} [standardLevel]  IB: subjects required at Standard Level.
  *
  * @typedef {object} RequirementEntry
  * @property {VerificationStatus} status
@@ -36,6 +60,22 @@
  * @property {string} [note]             Caveat; required for partial.
  * @property {string} [recorded]         Unverified only: a value previously held WITHOUT a source,
  *                                       kept so a reviewer can confirm or correct it.
+ *
+ * Qualification categories only (verified / partial unless stated):
+ * @property {'yes' | 'no' | 'unknown'} [accepted]  Is the qualification an entry route?
+ *                                       'no' only with status notApplicable.
+ * @property {string} [typicalOffer]     A-Level grades as held, e.g. "A*AA".
+ * @property {number} [overallScore]     IB points total as held, e.g. 39.
+ * @property {QualificationSubjects} [subjects]
+ * @property {string} [detail]           Subject-grade detail as held, verbatim (e.g. "766 at HL").
+ * @property {string} [practicalEndorsement]  A-Level science practical endorsement.
+ * @property {string} [contextualOffer]  Contextual / adjusted offer.
+ * @property {string} [coreNote]         IB Theory of Knowledge / Extended Essay / CAS.
+ * @property {string} [testsInterview]   Qualification-specific test or interview note.
+ * @property {Array<'typicalOffer' | 'overallScore' | 'detail'>} [withheld]
+ *                                       Values the matching engine holds that the panel
+ *                                       deliberately does not show (e.g. an admitted-student
+ *                                       figure, which is not a requirement). Needs a note.
  *
  * @typedef {Record<string, RequirementEntry>} CourseRequirementRecord   keyed by category id
  *
@@ -49,6 +89,8 @@
  * @property {string} id
  * @property {string} label
  * @property {string} [hint]  What belongs in the category.
+ * @property {'list' | 'qualification'} [kind]  Default 'list'.
+ * @property {string} [scoreLabel]  Qualification categories: label for the grade field.
  *
  * @typedef {object} CycleInfo
  * @property {string} label
@@ -72,14 +114,16 @@
       '2027': { label: '2027 entry', applicationPeriod: '2026–27 application cycle' },
     },
 
-    // Phase 1 categories, in display order. Every course in every cycle
-    // file must carry an entry for each of these — even if only
-    // { status: 'unverified' }.
+    // Categories, in display order. Every course in every cycle file
+    // must carry an entry for each of these — even if only
+    // { status: 'unverified' }. A-Level and IB were added in Phase 2.
     categories: [
       { id: 'satAct',               label: 'SAT / ACT',             hint: 'Standardised test policy and any required scores' },
       { id: 'englishLanguage',      label: 'English language',      hint: 'IELTS, TOEFL, Duolingo or other proof of English' },
       { id: 'admissionsTests',      label: 'Admissions tests',      hint: 'Course-specific tests such as UCAT, LNAT, TMUA, STEP' },
       { id: 'subjectPrerequisites', label: 'Subject prerequisites', hint: 'Subjects the course requires or recommends' },
+      { id: 'aLevel',               label: 'A-Level requirements',  hint: 'UK GCE A-Level grades and subjects', kind: 'qualification', scoreLabel: 'Grades' },
+      { id: 'ib',                   label: 'IB requirements',       hint: 'IB Diploma points, Higher and Standard Level subjects', kind: 'qualification', scoreLabel: 'Overall score' },
       { id: 'otherQualifications',  label: 'Other qualifications',  hint: 'Advanced Placement (AP), Hong Kong DSE' },
       { id: 'otherRequirements',    label: 'Other requirements',    hint: 'Interviews, portfolios, auditions, written work' },
     ],

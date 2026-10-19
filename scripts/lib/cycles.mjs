@@ -1,6 +1,12 @@
 // @ts-check
 /* Pure helpers for starting a new admissions cycle. */
 
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+/** @type {typeof import('../../requirements-view.js')} */
+const view = require('../../requirements-view.js');
+
 /** @typedef {import('../../data/requirements/config.js').RequirementCycle} RequirementCycle */
 /** @typedef {import('../../data/requirements/config.js').RequirementEntry} RequirementEntry */
 
@@ -16,15 +22,19 @@ export function cycleInfo(year) {
 
 /**
  * Carry one entry into a new cycle: nothing stays verified (requirements
- * change yearly), but the previous value is kept as `recorded` so the
- * reviewer — and the student, clearly labelled — can see what it was.
+ * change yearly) — and nothing stays "not applicable" — but the previous
+ * value is kept as `recorded` so the reviewer — and the student, clearly
+ * labelled — can see what it was. Qualification entries (A-Level, IB)
+ * carry their structured fields as one line, e.g. "A*AA; Required
+ * subjects: Chemistry".
  * @param {RequirementEntry} e @param {string} fromLabel
  * @returns {RequirementEntry}
  */
 export function carryEntry(e, fromLabel) {
   if (!e || e.status === 'unverified') return e?.recorded ? { status: 'unverified', recorded: e.recorded } : { status: 'unverified' };
-  const value = e.none ? 'none listed' : (e.items ?? []).join('; ');
-  return { status: 'unverified', recorded: `${value} (${fromLabel}, verified ${fmt(/** @type {string} */ (e.lastVerified))})` };
+  const value = e.none ? 'none listed' : view.entryValue(e);
+  const checked = e.status === 'notApplicable' ? 'checked' : 'verified';
+  return { status: 'unverified', recorded: `${value} (${fromLabel}, ${checked} ${fmt(/** @type {string} */ (e.lastVerified))})` };
 }
 
 /**
