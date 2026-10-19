@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 94 | 1 | 225 | 0 |
-| English language | 94 | 0 | 226 | 0 |
+| SAT / ACT | 98 | 1 | 221 | 0 |
+| English language | 98 | 0 | 222 | 0 |
 | Admissions tests | 297 | 13 | 10 | 0 |
-| Subject prerequisites | 204 | 106 | 10 | 0 |
-| A-Level requirements | 216 | 16 | 84 | 4 |
-| IB requirements | 278 | 17 | 21 | 4 |
-| Other qualifications | 102 | 39 | 179 | 0 |
-| Other requirements | 95 | 1 | 224 | 0 |
+| Subject prerequisites | 200 | 110 | 10 | 0 |
+| A-Level requirements | 212 | 20 | 84 | 4 |
+| IB requirements | 274 | 21 | 21 | 4 |
+| Other qualifications | 106 | 39 | 175 | 0 |
+| Other requirements | 99 | 1 | 220 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -71,6 +71,18 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-law-birmingham` | Subject prerequisites | Official (2027 entry): AAA with no subject named (the contextual offer is “in any subjects except General Studies”). |
 | `uk-law-birmingham` | A-Level requirements | Official (2027 entry): AAA; General Studies not accepted. No required or preferred subjects are named. |
 | `uk-law-birmingham` | IB requirements | Official (2027 entry): 6,6,6 at Higher Level including 32 points overall. No preferred subjects are named. |
+| `uk-economics-exeter` | Subject prerequisites | Official (2027 entry): A-level Mathematics grade B required (Maths, Pure Maths or Further Maths accepted); no previous study of economics is required or assumed. |
+| `uk-economics-exeter` | A-Level requirements | Official (2027 entry): typical offer A*AA–AAA with A-level Mathematics grade B (Maths, Pure Maths or Further Maths). Exeter states no previous study of economics is required or assumed; no preferred subjects are named. |
+| `uk-economics-exeter` | IB requirements | Official (2027 entry): typical offer 38/766 – 36/666 with HL5 or SL6 in Mathematics (Analysis and Approaches or Applications and Interpretation); Maths Studies not accepted. Contextual: 34/665 – 32/655. |
+| `uk-law-exeter` | Subject prerequisites | Official (2027 entry): no required subjects (“n/a”) and no preferred subjects named. |
+| `uk-law-exeter` | A-Level requirements | Official (2027 entry): typical offer AAA; required subjects “n/a”. No preferred subjects are named. |
+| `uk-law-exeter` | IB requirements | Official (2027 entry): typical offer 36/666; required subjects “n/a”. Contextual: 32/655. No preferred subjects are named. |
+| `uk-cs-exeter` | Subject prerequisites | Official (2027 entry): A-level Mathematics grade B required (Maths, Pure Maths or Further Maths accepted); no preferred subject is named. |
+| `uk-cs-exeter` | A-Level requirements | Official (2027 entry): typical offer AAA–AAB with A-level Mathematics grade B (Maths, Pure Maths or Further Maths). No preferred subject is named. |
+| `uk-cs-exeter` | IB requirements | Official (2027 entry): typical offer 36/666 – 34/665 with HL 5 in Mathematics (Analysis and Approaches or Applications and Interpretation). Contextual: 32/655 – 30/555. |
+| `uk-psychology-exeter` | Subject prerequisites | Official (2027 entry): grade A in one science subject from Exeter’s accepted list (which includes Psychology and Maths) is required. |
+| `uk-psychology-exeter` | A-Level requirements | Official (2027 entry): typical offer AAA including grade A in a science subject from Exeter’s list (Biology/Human Biology, Chemistry, Computing, Design and Technology, Economics, Electronics, Environmental Science/Studies, Geography, Geology, Marine Science, Maths/Pure Maths/Further Maths, Physical Education, Physics, Psychology, Statistics and others). |
+| `uk-psychology-exeter` | IB requirements | Official (2027 entry): typical offer 36/666 with HL6 in a science subject from Exeter’s accepted list. Contextual: 32/655. |
 | `us-cs-mit` | Subject prerequisites | Official: MIT has no required high school classes. For students in an American curriculum it looks at math including calculus; science, including physics, chemistry and/or biology; and some challenging humanities, arts and social sciences courses, and recommends at least introductory coursework in physics, chemistry and biology if available. These are recommendations for all applicants, not major-specific. |
 | `us-engineering-mit` | Subject prerequisites | Official: MIT has no required high school classes. For students in an American curriculum it looks at math including calculus; science, including physics, chemistry and/or biology; and some challenging humanities, arts and social sciences courses, and recommends at least introductory coursework in physics, chemistry and biology if available. These are recommendations for all applicants, not major-specific. |
 | `us-mechanical-mit` | Subject prerequisites | Official: MIT has no required high school classes. For students in an American curriculum it looks at math including calculus; science, including physics, chemistry and/or biology; and some challenging humanities, arts and social sciences courses, and recommends at least introductory coursework in physics, chemistry and biology if available. These are recommendations for all applicants, not major-specific. |
@@ -280,6 +292,18 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `uk-law-birmingham` | Subject prerequisites | History and English are not named as preferred on the official page; data/courseRequirements.js holds preferred [History, English]. Owner decision. |
 | `uk-law-birmingham` | A-Level requirements | Offer agrees; History and English are not named as preferred; data/courseRequirements.js holds preferred [History, English]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
 | `uk-law-birmingham` | IB requirements | IB total differs (official 32 points, not 36) and History/English are not named as preferred; data/courseRequirements.js holds ib 36, preferred [History, English]. Owner decision. |
+| `uk-economics-exeter` | Subject prerequisites | Economics and Further Mathematics are not named as preferred; data/courseRequirements.js holds preferred [Economics, Mathematics_Advanced]. Owner decision. |
+| `uk-economics-exeter` | A-Level requirements | Offer A*AA is the top of Exeter’s published A*AA–AAA range and Mathematics is required (agree); Economics and Further Mathematics are not preferred (Exeter: no previous study of economics required); data/courseRequirements.js holds preferred [Economics, Mathematics_Advanced]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-economics-exeter` | IB requirements | Mathematics may be taken at SL (grade 6) instead of HL (grade 5), so HL Mathematics is not strictly required; Economics is not preferred; data/courseRequirements.js holds ibHL [Mathematics_Advanced], ibHLNote "…HL5 Mathematics required…", preferred [Economics, Mathematics_Advanced]. Owner decision. |
+| `uk-law-exeter` | Subject prerequisites | History and English are not named as preferred; data/courseRequirements.js holds preferred [History, English]. Owner decision. |
+| `uk-law-exeter` | A-Level requirements | Offer agrees; History and English are not named as preferred; data/courseRequirements.js holds preferred [History, English]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-law-exeter` | IB requirements | Score and HL grades agree; History and English are not named as preferred; data/courseRequirements.js holds preferred [History, English]. Owner decision. |
+| `uk-cs-exeter` | Subject prerequisites | Further Mathematics is not named as preferred; data/courseRequirements.js holds preferred [Mathematics_Advanced]. Owner decision. |
+| `uk-cs-exeter` | A-Level requirements | Offer AAA is the top of the published AAA–AAB range and Mathematics is required (agree); Further Mathematics is accepted for the Maths requirement but not named as preferred; data/courseRequirements.js holds preferred [Mathematics_Advanced]. Note the engine holds the TOP of the A-level range but the BOTTOM of the IB range (34/665). Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-cs-exeter` | IB requirements | 34/665 is the bottom of the published 36/666–34/665 range (the A-level row holds the top of its range); HL Mathematics is required rather than preferred. data/courseRequirements.js holds ib 34, ibHLNote "665 at HL", preferred [Mathematics_Advanced]. Owner decision. |
+| `uk-psychology-exeter` | Subject prerequisites | A science from the accepted list is required, and no subject is named as preferred; data/courseRequirements.js holds essential [] and preferred [Psychology, Mathematics_Standard]. Owner decision. |
+| `uk-psychology-exeter` | A-Level requirements | A science subject at grade A is required (Psychology and Maths are among the accepted sciences, not preferred subjects); data/courseRequirements.js holds essential [] and preferred [Psychology, Mathematics_Standard]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-psychology-exeter` | IB requirements | An HL6 science is required; data/courseRequirements.js holds ibHL [] and preferred [Psychology, Mathematics_Standard]. Owner decision. |
 | `us-cs-mit` | Subject prerequisites | Official source lists recommended high-school preparation (math including calculus; physics, chemistry and/or biology; challenging HASS courses), while stating no classes are required; data/courseRequirements.js holds none. Owner decision. |
 | `us-engineering-mit` | Subject prerequisites | Official source lists recommended high-school preparation (math including calculus; physics, chemistry and/or biology; challenging HASS courses), while stating no classes are required; data/courseRequirements.js holds none. Owner decision. |
 | `us-mechanical-mit` | Subject prerequisites | Official source lists recommended high-school preparation (math including calculus; physics, chemistry and/or biology; challenging HASS courses), while stating no classes are required; data/courseRequirements.js holds none. Owner decision. |
@@ -613,10 +637,6 @@ category — check the official source; never copy a hint in as a value.
 | `uk-economics-nottingham` | University of Nottingham | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-law-nottingham` | University of Nottingham | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-pharmacy-nottingham` | University of Nottingham | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-economics-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-law-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-cs-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-psychology-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `us-business-wharton` | University of Pennsylvania | Other qualifications | Other qualifications: Not verified: Penn’s Testing (https://admissions.upenn.edu/how-to-apply/preparing-your-application/testing) and Application Requirements pages do not say how AP scores are used in admission; the Pre-College Credits page (https://admissions.upenn.edu/how-to-apply/first-year-applicants/pre-college-credits) covers AP/IB/A-Level credit after enrolment only, which is not an admission requirement. |
 | `us-cs-penn` | University of Pennsylvania | Other qualifications | Other qualifications: Not verified: Penn’s Testing (https://admissions.upenn.edu/how-to-apply/preparing-your-application/testing) and Application Requirements pages do not say how AP scores are used in admission; the Pre-College Credits page (https://admissions.upenn.edu/how-to-apply/first-year-applicants/pre-college-credits) covers AP/IB/A-Level credit after enrolment only, which is not an admission requirement. |
 | `us-economics-penn` | University of Pennsylvania | Other qualifications | Other qualifications: Not verified: Penn’s Testing (https://admissions.upenn.edu/how-to-apply/preparing-your-application/testing) and Application Requirements pages do not say how AP scores are used in admission; the Pre-College Credits page (https://admissions.upenn.edu/how-to-apply/first-year-applicants/pre-college-credits) covers AP/IB/A-Level credit after enrolment only, which is not an admission requirement. |
