@@ -277,7 +277,7 @@ test('a not-applicable row says so with its own badge, and is left out of the ve
 });
 
 test('an A-Level / IB row with no data is "Not verified" and points at the official page', () => {
-  const r = row(panel(cycle.courses['us-cs-mit']), 'aLevel');
+  const r = row(panel(cycle.courses['sg-law-nus']), 'aLevel');
   assert.match(r, /reqs__badge--unverified">Not verified/);
   assert.match(r, /href="https:\/\/example\.ac\.uk\/course"/);
   assert.doesNotMatch(r, /reqs__facts/);
@@ -287,7 +287,7 @@ test('entryText gives one honest line for A-Level, IB and not-applicable rows', 
   assert.equal(view.entryText(cycle.courses['uk-medicine-oxford'].aLevel), 'A*AA; Required subjects: Chemistry, Biology; Preferred subjects: Physics (verified 23 Jun 2026)');
   assert.match(view.entryText(cycle.courses['uk-medicine-oxford'].ib), /^39 points; .*Higher Level: Chemistry, Biology; Details: 766 at HL \(verified 23 Jun 2026\)$/);
   assert.match(view.entryText(cycle.courses['ca-law-york'].aLevel), /^Not applicable — Graduate-entry programme.* \(checked \d+ [A-Z][a-z]{2} 2026\)$/);
-  assert.equal(view.entryText(cycle.courses['us-cs-mit'].ib), view.UNVERIFIED_TEXT);
+  assert.equal(view.entryText(cycle.courses['sg-law-nus'].ib), view.UNVERIFIED_TEXT);
 });
 
 test('A-Level / IB data is escaped', () => {
