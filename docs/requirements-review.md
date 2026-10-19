@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 43 | 0 | 277 | 0 |
-| English language | 43 | 0 | 277 | 0 |
+| SAT / ACT | 47 | 0 | 273 | 0 |
+| English language | 47 | 0 | 273 | 0 |
 | Admissions tests | 308 | 12 | 0 | 0 |
-| Subject prerequisites | 265 | 55 | 0 | 0 |
-| A-Level requirements | 177 | 8 | 131 | 4 |
-| IB requirements | 241 | 7 | 68 | 4 |
-| Other qualifications | 62 | 30 | 228 | 0 |
-| Other requirements | 43 | 0 | 277 | 0 |
+| Subject prerequisites | 261 | 59 | 0 | 0 |
+| A-Level requirements | 181 | 8 | 127 | 4 |
+| IB requirements | 245 | 7 | 64 | 4 |
+| Other qualifications | 66 | 30 | 224 | 0 |
+| Other requirements | 47 | 0 | 273 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -87,6 +87,10 @@ Shown with a "Partly verified" badge and the note below.
 | `us-maths-columbia` | Subject prerequisites | Official (Columbia College): no explicit unit requirements, but applicants must present evidence of preparation in the humanities, mathematics, social sciences, foreign languages and natural sciences. Columbia College strongly recommends four years of English literature and composition, four years of mathematics (unless already completed what is available), three to four years of history/social studies, three to four years of laboratory science and three to four years of one world language. Mathematics at least through pre-calculus is strongly advised wherever possible for students planning to become scientists, engineers, physicians or dentists. |
 | `us-economics-columbia` | Subject prerequisites | Official (Columbia College): no explicit unit requirements, but applicants must present evidence of preparation in the humanities, mathematics, social sciences, foreign languages and natural sciences. Columbia College strongly recommends four years of English literature and composition, four years of mathematics (unless already completed what is available), three to four years of history/social studies, three to four years of laboratory science and three to four years of one world language. Mathematics at least through pre-calculus is strongly advised wherever possible for students planning to become scientists, engineers, physicians or dentists. |
 | `us-engineering-columbia` | Subject prerequisites | Official (Columbia Engineering): no standardized course of study is prescribed, but Columbia Engineering strongly advises physics and calculus within its recommended preparation — four years of mathematics through calculus (unless already completed what is available), four years of laboratory science including one year of chemistry and one year of physics (preferably in the last two years), four years of English literature and composition, three to four years of history/social studies, and two to three years of a world language. |
+| `us-law-georgetown` | Subject prerequisites | Official: all applicants are expected to have completed four years of English, a minimum of two years of social studies, language study and mathematics, and one year of natural science. Government is in the College of Arts & Sciences (humanities/social sciences); Georgetown lists no extra preparation for it. |
+| `us-business-georgetown` | Subject prerequisites | Official: all applicants are expected to have completed four years of English, a minimum of two years of social studies, language study and mathematics, and one year of natural science. McDonough School of Business: students interested in business should complete a minimum of three years of math, through advanced algebra and trigonometry, as calculus is required of all students in the program; two years of natural science are recommended. |
+| `us-biomedical-jhu` | Subject prerequisites | Official: Hopkins does not require any specific courses; it recommends four years each of English, mathematics, foreign language, laboratory science and history/social science (recommendations only, not requirements). Hopkins’ admissions pages apply to all first-year applicants, including Whiting School of Engineering majors. |
+| `us-cs-jhu` | Subject prerequisites | Official: Hopkins does not require any specific courses; it recommends four years each of English, mathematics, foreign language, laboratory science and history/social science (recommendations only, not requirements). Hopkins’ admissions pages apply to all first-year applicants, including Whiting School of Engineering majors. |
 | `sg-engineering-sutd` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `sg-engineering-sutd` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `sg-engineering-sutd` | IB requirements | Confirmed on the university's page for A-Level-type applicants, not on a page for IB applicants — check it applies to IB. |
@@ -169,13 +173,9 @@ Shown to students only as "Previously recorded, not verified". Confirm or correc
 | `us-psychology-michigan` | SAT / ACT | Test-optional |
 | `us-business-nyu` | SAT / ACT | Test-optional |
 | `us-cs-nyu` | SAT / ACT | Test-optional |
-| `us-law-georgetown` | SAT / ACT | SAT/ACT required |
-| `us-business-georgetown` | SAT / ACT | SAT/ACT required |
 | `us-cs-duke` | SAT / ACT | Test-optional |
 | `us-maths-duke` | SAT / ACT | Test-optional |
 | `us-economics-duke` | SAT / ACT | Test-optional |
-| `us-biomedical-jhu` | SAT / ACT | SAT/ACT required |
-| `us-cs-jhu` | SAT / ACT | SAT/ACT required |
 | `us-economics-vanderbilt` | SAT / ACT | Test-optional |
 | `us-cs-vanderbilt` | SAT / ACT | Test-optional |
 | `us-business-notredame` | SAT / ACT | Test-optional |
@@ -242,6 +242,10 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `us-maths-columbia` | Subject prerequisites | Official source lists strongly recommended high-school preparation for Columbia College (English, mathematics, history/social studies, laboratory science, world language); data/courseRequirements.js holds none. Owner decision. |
 | `us-economics-columbia` | Subject prerequisites | Official source lists strongly recommended high-school preparation for Columbia College (English, mathematics, history/social studies, laboratory science, world language); data/courseRequirements.js holds none. Owner decision. |
 | `us-engineering-columbia` | Subject prerequisites | Official source lists strongly advised high-school preparation for Columbia Engineering (mathematics through calculus; laboratory science incl. one year each of chemistry and physics); data/courseRequirements.js holds none. Owner decision. |
+| `us-law-georgetown` | Subject prerequisites | Official source lists expected high-school coursework (4 years English; at least 2 years social studies, language and mathematics; 1 year natural science); data/courseRequirements.js holds none. Owner decision. |
+| `us-business-georgetown` | Subject prerequisites | Official source lists expected high-school coursework (all applicants) plus McDonough guidance (at least 3 years of math through advanced algebra and trigonometry; 2 years natural science recommended); data/courseRequirements.js holds none. Owner decision. |
+| `us-biomedical-jhu` | Subject prerequisites | Official source lists recommended (not required) high-school coursework (4 years each of English, mathematics, foreign language, laboratory science, history/social science); data/courseRequirements.js holds none. Owner decision. |
+| `us-cs-jhu` | Subject prerequisites | Official source lists recommended (not required) high-school coursework (4 years each of English, mathematics, foreign language, laboratory science, history/social science); data/courseRequirements.js holds none. Owner decision. |
 | `us-cs-northwestern` | Subject prerequisites | Official source lists recommended high-school coursework for McCormick (math 3.5–4 years, calculus preferred; lab science 3 years, chemistry and physics preferred; English 4 years); data/courseRequirements.js holds none. Owner decision. |
 | `us-economics-northwestern` | Subject prerequisites | Official source lists required high-school coursework for Weinberg (minimum 16 courses incl. English 4, maths 3, foreign language 2, lab science 2, history/social science 2); data/courseRequirements.js holds none. Owner decision. |
 | `us-engineering-northwestern` | Subject prerequisites | Official source lists recommended high-school coursework for McCormick (math 3.5–4 years, calculus preferred; lab science 3 years, chemistry and physics preferred; English 4 years); data/courseRequirements.js holds none. Owner decision. |
@@ -432,13 +436,9 @@ category — check the official source; never copy a hint in as a value.
 | `us-psychology-michigan` | University of Michigan | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-business-nyu` | New York University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; notes mention IB; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
 | `us-cs-nyu` | New York University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; notes mention IB; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
-| `us-law-georgetown` | Georgetown University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-business-georgetown` | Georgetown University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-cs-duke` | Duke University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-maths-duke` | Duke University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-economics-duke` | Duke University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-biomedical-jhu` | Johns Hopkins University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-cs-jhu` | Johns Hopkins University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `sg-cs-nus` | National University of Singapore | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention A-Level grades |
 | `sg-engineering-nus` | National University of Singapore | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
 | `sg-medicine-nus` | National University of Singapore | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention A-Level grades |
