@@ -3618,3 +3618,58 @@ Format:
 - `uk-politics-lse` · subjectPrerequisites: row partial → verified.
 - `uk-politics-lse` · aLevel: row partial → verified (owner flag kept).
 - `uk-politics-lse` · ib: row partial → verified (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Edinburgh
+
+- `uk-medicine-edinburgh` · engine `requirements.essential`: [Chemistry, Biology] → [Chemistry] (essential-remove). Source: https://study.ed.ac.uk/programmes/undergraduate/354-mbchb-medicine-6-year-programme/entry-requirements
+  > The grades you use to meet our entry requirements must include the following at A level: Chemistry one from Biology/Human Biology, Mathematics/Further Mathematics or Physics
+- `uk-medicine-edinburgh` · engine `requirements.preferred`: [Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://study.ed.ac.uk/programmes/undergraduate/354-mbchb-medicine-6-year-programme/entry-requirements
+  > The grades you use to meet our entry requirements must include the following at A level: Chemistry one from Biology/Human Biology, Mathematics/Further Mathematics or Physics
+- `uk-medicine-edinburgh` · engine `grades.ibHL`: [Chemistry, Biology] → [Chemistry] (ib-hl). Source: https://study.ed.ac.uk/programmes/undergraduate/354-mbchb-medicine-6-year-programme/entry-requirements
+  > The grades you use to meet our entry requirements must include the following at HL: Chemistry one from Biology, Mathematics or Physics.
+- `uk-medicine-edinburgh` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-medicine-edinburgh` · aLevel: row partial → partial (owner flag kept).
+- `uk-medicine-edinburgh` · ib: row partial → partial (owner flag kept).
+- `uk-cs-edinburgh` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://study.ed.ac.uk/programmes/undergraduate/57-computer-science/entry-requirements
+  > The grades you use to meet our entry requirements must include the following at A level: Mathematics at A
+- `uk-cs-edinburgh` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-cs-edinburgh` · aLevel: row partial → partial (owner flag kept).
+- `uk-cs-edinburgh` · ib: row partial → partial (owner flag kept).
+- `uk-engineering-edinburgh` · engine `requirements.essential`: [Mathematics_Standard, Physics] → [Mathematics_Standard] (essential-to-preferred). Source: https://study.ed.ac.uk/programmes/undergraduate/82-mechanical-engineering/entry-requirements
+  > Mathematics at B one of Physics, Biology, Chemistry, Computer Science/Computing, Design and Technology (excluding Food Technology) or Engineering at B Applicants with Physics preferred.
+- `uk-engineering-edinburgh` · engine `requirements.preferred`: [Mathematics_Advanced] → [Physics] (essential-to-preferred, preferred-remove-unlisted). Source: https://study.ed.ac.uk/programmes/undergraduate/82-mechanical-engineering/entry-requirements
+  > Mathematics at B one of Physics, Biology, Chemistry, Computer Science/Computing, Design and Technology (excluding Food Technology) or Engineering at B Applicants with Physics preferred.
+- `uk-engineering-edinburgh` · engine `grades.ibHL`: [Mathematics_Advanced, Physics] → [Mathematics_Advanced] (ib-hl). Source: https://study.ed.ac.uk/programmes/undergraduate/82-mechanical-engineering/entry-requirements
+  > Mathematics (Analysis and approaches only) at 5 one of Physics, Biology, Chemistry, Computer Science or Design Technology at 5 Applicants with Physics preferred.
+- `uk-engineering-edinburgh` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-engineering-edinburgh` · aLevel: row partial → partial (owner flag kept).
+- `uk-engineering-edinburgh` · ib: row partial → partial (owner flag kept).
+- `uk-economics-edinburgh` · engine `requirements.preferred`: [Mathematics_Advanced, Economics] → [] (preferred-remove-unlisted). Source: https://study.ed.ac.uk/programmes/undergraduate/122-economics/entry-requirements
+  > Mathematics at B or AS Mathematics at A
+- `uk-economics-edinburgh` · engine `grades.ibHL`: [Mathematics_Standard] → [] (ib-hl). Source: https://study.ed.ac.uk/programmes/undergraduate/122-economics/entry-requirements
+  > English at 5 Mathematics at 6 (if not at HL)
+- `uk-economics-edinburgh` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-economics-edinburgh` · aLevel: row partial → partial (owner flag kept).
+- `uk-economics-edinburgh` · ib: row partial → partial (owner flag kept).
+- `uk-law-edinburgh` · engine `requirements.preferred`: [History, English] → [English] (preferred-remove-unlisted). Source: https://study.ed.ac.uk/programmes/undergraduate/168-law-ordinary-and-honours/entry-requirements
+  > English Literature, English Language or combined English at B English Language and English Literature GCSE, both at A or 7, are accepted in place of A level English.
+- `uk-law-edinburgh` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-law-edinburgh` · aLevel: row partial → partial (owner flag kept).
+- `uk-law-edinburgh` · ib: row partial → partial (owner flag kept).
+- `uk-psychology-edinburgh` · engine `requirements.preferred`: [Psychology, Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://study.ed.ac.uk/programmes/undergraduate/370-psychology/entry-requirements
+  > Biology or Human Biology at B Chemistry at B Computer Science or equivalent at B Environmental Science at B Geography at B Geology at B Life and Health Science at B Mathematics at B Physics at B Psychology at B Statistics at B
+- `uk-psychology-edinburgh` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-psychology-edinburgh` · aLevel: row partial → partial (owner flag kept).
+- `uk-psychology-edinburgh` · ib: row partial → partial (owner flag kept).
+- `uk-architecture-edinburgh` · engine `requirements.preferred`: [Mathematics_Standard, Art_Design] → [] (preferred-remove-unlisted). Source: https://study.ed.ac.uk/programmes/undergraduate/120-architecture/entry-requirements
+  > no specific A level subjects required
+- `uk-architecture-edinburgh` · engine `grades.ibHL`: [Mathematics_Standard] → [] (ib-hl). Source: https://study.ed.ac.uk/programmes/undergraduate/120-architecture/entry-requirements
+  > no specific subjects required Your HLs can be in any subject.
+- `uk-architecture-edinburgh` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-architecture-edinburgh` · aLevel: row partial → partial (owner flag kept).
+- `uk-architecture-edinburgh` · ib: row partial → partial (owner flag kept).
+- `uk-maths-edinburgh` · engine `requirements.preferred`: [] → [Mathematics_Advanced] (preferred-add). Source: https://study.ed.ac.uk/programmes/undergraduate/55-mathematics/entry-requirements
+  > Mathematics at A* Applicants with Further Mathematics preferred.
+- `uk-maths-edinburgh` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-maths-edinburgh` · aLevel: row partial → partial (owner flag kept).
+- `uk-maths-edinburgh` · ib: row verified → verified (owner flag kept).
