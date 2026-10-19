@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 138 | 9 | 173 | 0 |
-| English language | 138 | 11 | 171 | 0 |
+| SAT / ACT | 143 | 9 | 168 | 0 |
+| English language | 144 | 11 | 165 | 0 |
 | Admissions tests | 293 | 17 | 10 | 0 |
-| Subject prerequisites | 160 | 150 | 10 | 0 |
-| A-Level requirements | 171 | 61 | 84 | 4 |
-| IB requirements | 232 | 63 | 21 | 4 |
-| Other qualifications | 134 | 47 | 139 | 0 |
-| Other requirements | 151 | 3 | 166 | 0 |
+| Subject prerequisites | 155 | 155 | 10 | 0 |
+| A-Level requirements | 166 | 66 | 84 | 4 |
+| IB requirements | 227 | 68 | 21 | 4 |
+| Other qualifications | 139 | 48 | 133 | 0 |
+| Other requirements | 157 | 3 | 160 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -211,6 +211,22 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-engineering-durham` | A-Level requirements | Official (2027 entry): A*AA including Mathematics and one of either Biology, Chemistry, Geology or Physics. |
 | `uk-engineering-durham` | IB requirements | Official (2027 entry): 37 with 766 in higher level subjects including Mathematics and one STEM subject (Biology, Chemistry or Physics). |
 | `uk-engineering-durham` | Other qualifications | Official (2027 entry): for a A*AA course, three AP exams at 5, 5, 5, or two AP exams at 5, 5 plus one additional qualification (SAT, ACT, honours course or dual-enrolment course). Two AP exams alone do not meet the requirement. Students at schools without AP may use honours courses with an overall GPA of 3.7. |
+| `uk-cs-bath` | Subject prerequisites | Official (2027 entry): A in Mathematics required. Further Mathematics appears only within the alternative-offer routes (A in AS Further Mathematics, or a fourth A level including Further Mathematics), not as a preferred subject. |
+| `uk-cs-bath` | A-Level requirements | Official (2027 entry): A*A*A including A in Mathematics — agrees with the stored offer. Not confirmed: Further Mathematics as a preferred subject. |
+| `uk-cs-bath` | IB requirements | Official (2027 entry): 36 points overall and 7, 7, 6 in three Higher Level subjects including 6 in either HL Mathematics; with SL Mathematics: Analysis & Approaches at 7, 36 with 7, 6, 6 or 7, 7, 5 at HL may be considered (SL Applications & Interpretations not accepted). |
+| `uk-maths-bath` | Other qualifications | Official (2027 entry): no AP requirement is published for this course yet — Bath says it is under review. Contact admissions@bath.ac.uk. |
+| `uk-economics-bath` | Subject prerequisites | Official (2027 entry): Mathematics required; the page names no preferred subjects. |
+| `uk-economics-bath` | A-Level requirements | Official (2027 entry): A*AA including Mathematics — agrees with the stored offer (alternative offer AAA or A*AB plus an extra). Not confirmed: the preferred Economics / Further Mathematics shown here. |
+| `uk-economics-bath` | IB requirements | Official (2027 entry): 36 points and 7, 6, 6 at HL including either HL Mathematics — agrees with the stored score and HL profile (SL Analysis & Approaches at 6 may be considered with 6, 6, 6 or 7, 6, 5 at HL). Not confirmed: the preferred Economics shown here. |
+| `uk-engineering-bath` | Subject prerequisites | Official (2027 entry): Mathematics and Physics required; the page names no preferred subjects. |
+| `uk-engineering-bath` | A-Level requirements | Official (2027 entry): A*A*A including A* in Mathematics and A in Physics — agrees with the stored offer (alternative A*AA or A*A*B plus an extra). Not confirmed: Further Mathematics as a preferred subject. |
+| `uk-engineering-bath` | IB requirements | Official (2027 entry): 36 points overall and 7, 7, 6 in three Higher Level subjects including 6 in Physics and 7 in either HL Mathematics. |
+| `uk-pharmacy-bath` | Subject prerequisites | Official (2027 entry): Chemistry and a second science or mathematics subject from a listed set are required; Biology and Mathematics are options in that set, not stated preferences. |
+| `uk-pharmacy-bath` | A-Level requirements | Official (2027 entry): AAB including Chemistry and one other science or mathematics subject — the AAB offer agrees; the second-subject requirement is not held by the engine (alternative offer ABB plus an extra). |
+| `uk-pharmacy-bath` | IB requirements | Official (2027 entry): 35 points and 6, 6, 5 at HL including Chemistry and a second science or mathematics course (either HL Mathematics, or Sports, Exercise and Health Sciences, accepted). Points and HL profile agree; HL Biology specifically is not required. |
+| `uk-accounting-bath` | Subject prerequisites | Official (2027 entry): A in Mathematics required; the page names no preferred subjects. |
+| `uk-accounting-bath` | A-Level requirements | Official (2027 entry): A*AA or A*A*B including A in Mathematics — agrees with the stored offer. Not confirmed: the preferred Economics / Further Mathematics shown here. |
+| `uk-accounting-bath` | IB requirements | Official (2027 entry): 36 points and 7, 6, 6 or 7, 7, 5 at HL including 6 in either HL Mathematics — agrees with the stored score and "766 at HL" (7, 7, 5 is also accepted). Not confirmed: the preferred Economics shown here. |
 | `uk-medicine-birmingham` | Subject prerequisites | Official (2027 entry): Chemistry plus a second science from Biology/Human Biology, Physics or Maths; no preference for the third A level. |
 | `uk-medicine-birmingham` | A-Level requirements | Official (2027 entry): standard offer AAA, including Chemistry and a second science from Biology/Human Biology, Physics or Maths; predicted minimum AAB. |
 | `uk-medicine-birmingham` | IB requirements | Official (2027 entry): 6,6,6 at Higher Level to include Chemistry plus a second science from Biology/Physics/Maths and one other approved subject; English, Biology and Mathematics at Standard Level if not taken at Higher Level; minimum 32 points. |
@@ -615,6 +631,24 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `uk-engineering-durham` | A-Level requirements | Typical offer and subjects differ: official A*AA with Mathematics + one of Biology/Chemistry/Geology/Physics; data/courseRequirements.js holds AAA with Physics required. Owner decision. contextualOffer and practicalEndorsement are display-only; the matcher does not apply them. |
 | `uk-engineering-durham` | IB requirements | IB differs: official 766 at HL with Mathematics + one of Biology/Chemistry/Physics; data/courseRequirements.js holds "666 at HL" and ibHL ["Mathematics_Advanced","Physics"]. Owner decision. |
 | `uk-engineering-durham` | Other qualifications | Durham’s course page requires three APs at 5,5,5 or two APs at 5,5 plus a third qualification for a A*AA course; data/courseRequirements.js holds "Advanced Placement: 2 AP exams". Owner decision. |
+| `uk-cs-bath` | Subject prerequisites | Preferred Further Mathematics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Mathematics_Advanced"]. Owner decision. |
+| `uk-cs-bath` | A-Level requirements | Preferred Further Mathematics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Mathematics_Advanced"]. Owner decision. contextualOffer is display-only; the matcher does not apply it. |
+| `uk-cs-bath` | IB requirements | IB HL profile differs: official 7, 7, 6 at HL; data/courseRequirements.js holds "766 at HL". Owner decision. |
+| `uk-maths-bath` | SAT / ACT | Re-check later: https://www.bath.ac.uk/courses/undergraduate-2027/mathematical-sciences/bsc-mathematics/ (AP/US requirements “under review” on 19 Oct 2026). Record any SAT/ACT statement for US-diploma applicants, with a verbatim snippet. |
+| `uk-maths-bath` | A-Level requirements | contextualOffer is display-only; the matcher does not apply it. |
+| `uk-maths-bath` | Other qualifications | Re-check later: https://www.bath.ac.uk/courses/undergraduate-2027/mathematical-sciences/bsc-mathematics/ — AP requirements “under review” on 19 Oct 2026. Record the published AP requirement, with a verbatim snippet. |
+| `uk-economics-bath` | Subject prerequisites | Preferred Economics / Further Mathematics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Economics","Mathematics_Advanced"]. Owner decision. |
+| `uk-economics-bath` | A-Level requirements | Preferred Economics / Further Mathematics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Economics","Mathematics_Advanced"]. Owner decision. contextualOffer is display-only; the matcher does not apply it. |
+| `uk-economics-bath` | IB requirements | Preferred Economics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Economics","Mathematics_Advanced"]. Owner decision. |
+| `uk-engineering-bath` | Subject prerequisites | Preferred Further Mathematics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Mathematics_Advanced"]. Owner decision. |
+| `uk-engineering-bath` | A-Level requirements | Preferred Further Mathematics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Mathematics_Advanced"]. Owner decision. contextualOffer is display-only; the matcher does not apply it. |
+| `uk-engineering-bath` | IB requirements | IB HL profile differs: official 7, 7, 6 at HL (7 in HL Mathematics, 6 in Physics); data/courseRequirements.js holds "666 at HL". Owner decision. |
+| `uk-pharmacy-bath` | Subject prerequisites | Required second subject (one of a listed set) is not held by the engine: data/courseRequirements.js holds essential ["Chemistry"], preferred ["Biology","Mathematics_Standard"]. Owner decision. |
+| `uk-pharmacy-bath` | A-Level requirements | Second science/mathematics subject required officially; data/courseRequirements.js holds essential ["Chemistry"] only. Owner decision. contextualOffer is display-only; the matcher does not apply it. |
+| `uk-pharmacy-bath` | IB requirements | IB HL subjects differ: official HL Chemistry + any second science or mathematics course; data/courseRequirements.js holds ibHL ["Chemistry","Biology"]. Owner decision. |
+| `uk-accounting-bath` | Subject prerequisites | Preferred Economics / Further Mathematics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Economics","Mathematics_Advanced"]. Owner decision. |
+| `uk-accounting-bath` | A-Level requirements | Preferred Economics / Further Mathematics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Economics","Mathematics_Advanced"]. Owner decision. contextualOffer is display-only; the matcher does not apply it. |
+| `uk-accounting-bath` | IB requirements | Preferred Economics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Economics","Mathematics_Advanced"]. Owner decision. |
 | `uk-medicine-birmingham` | Subject prerequisites | Biology is one option for the second science, not a requirement, and Maths is an alternative second science rather than preferred; data/courseRequirements.js holds essential [Chemistry, Biology], preferred [Mathematics_Standard]. Owner decision. |
 | `uk-medicine-birmingham` | A-Level requirements | Offer differs (official AAA, not A*AA) and the second science is any one of Biology/Human Biology, Physics or Maths (Biology not specifically required; no preferred subject); data/courseRequirements.js holds A*AA, essential [Chemistry, Biology], preferred [Mathematics_Standard]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
 | `uk-medicine-birmingham` | IB requirements | HL grades differ (official 666, not 766) and the second HL science is any of Biology/Physics/Maths; data/courseRequirements.js holds ibHLNote "766 at HL", ibHL [Chemistry, Biology]. Owner decision. |
@@ -903,12 +937,7 @@ category — check the official source; never copy a hint in as a value.
 | `uk-accounting-manchester` | University of Manchester | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-psychology-manchester` | University of Manchester | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-maths-manchester` | University of Manchester | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `uk-cs-bath` | University of Bath | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-maths-bath` | University of Bath | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-economics-bath` | University of Bath | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-engineering-bath` | University of Bath | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-pharmacy-bath` | University of Bath | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `uk-accounting-bath` | University of Bath | SAT / ACT, English language, Other qualifications, Other requirements |  |
+| `uk-maths-bath` | University of Bath | SAT / ACT | SAT / ACT: Not verified: Bath’s 2027 Mathematics page (https://www.bath.ac.uk/courses/undergraduate-2027/mathematical-sciences/bsc-mathematics/) says its typical Advanced Placement requirements for this course are under review and will be published soon, and states nothing about SAT/ACT for US-diploma applicants — check the official page. |
 | `uk-medicine-glasgow` | University of Glasgow | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-cs-glasgow` | University of Glasgow | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-law-glasgow` | University of Glasgow | SAT / ACT, English language, Other qualifications, Other requirements |  |
