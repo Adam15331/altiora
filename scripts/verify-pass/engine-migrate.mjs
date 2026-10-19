@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Usage: node scripts/verify-pass/engine-migrate.mjs <mapping.json> [--dry-run] [--skip-kinds=k1,k2] [--only=id1,id2]
+// Usage: node scripts/verify-pass/engine-migrate.mjs <mapping.json> [--dry-run] [--skip-kinds=k1,k2] [--only=id1,id2] [--changelog="<title>"]
 //
 // Applies a reviewed engine-migration mapping in lockstep:
 //   1. data/courseRequirements.js — the course's requirements.essential /
@@ -23,6 +23,7 @@ const args = process.argv.slice(2);
 const file = args.find(a => !a.startsWith('--'));
 const dry = args.includes('--dry-run');
 const skipKinds = new Set((args.find(a => a.startsWith('--skip-kinds=')) ?? '').split('=')[1]?.split(',').filter(Boolean) ?? []);
+const changelogTitle = (args.find(a => a.startsWith('--changelog=')) ?? '').slice('--changelog='.length);
 const only = new Set((args.find(a => a.startsWith('--only=')) ?? '').split('=')[1]?.split(',').filter(Boolean) ?? []);
 if (!file) { console.error('usage: engine-migrate.mjs <mapping.json> [--dry-run] [--skip-kinds=…] [--only=…]'); process.exit(2); }
 
@@ -39,6 +40,7 @@ const get = (course, field) => field.split('.').reduce((o, k) => o?.[k], course)
 const same = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
 const errors = [];
 const log = [];
+const entries = [];
 
 /** Rewrite one `key: value` inside a one-line object literal, adding it if absent. */
 function setProp(line, key, value, compact) {
@@ -72,13 +74,19 @@ for (const m of mapping) {
     if (!c.url || !c.quote) { errors.push(`${m.id}: ${c.field} change has no url/quote`); continue; }
     const [obj, key] = c.field.includes('.') ? c.field.split('.') : [null, c.field];
     const lineRe = new RegExp(`^    ${obj ?? key}: .*$`, 'm');
-    const line = block.match(lineRe)?.[0];
-    if (!line) { errors.push(`${m.id}: no ${obj ?? key} line`); continue; }
+    const raw = block.match(lineRe)?.[0];
+    if (!raw) { errors.push(`${m.id}: no ${obj ?? key} line`); continue; }
+    // Three legacy lines declare `ibHLNote: null , ibHLNote: "…"`; JS keeps
+    // the last, so dropping the dead null first changes nothing at runtime.
+    const line = raw.replace(/ibHLNote: null , (?=ibHLNote: )/, '');
+    block = block.replace(raw, line);
+    if (key && (line.match(new RegExp(`\\b${key}: `, 'g')) ?? []).length > 1) { errors.push(`${m.id}: ${c.field} is declared twice on its line`); continue; }
     const updated = obj
       ? setProp(line, key, c.new, line.includes('","') || obj === 'requirements')
       : line.replace(/\[[^\]]*\]/, `[${c.new.map(x => JSON.stringify(x)).join(', ')}]`);
     block = block.replace(line, updated);
     log.push(`${m.id} · ${c.field}: ${JSON.stringify(c.old)} → ${JSON.stringify(c.new)} (${c.kind})`);
+    entries.push(`- \`${m.id}\` · engine \`${c.field}\`: ${fmt(c.old)} → ${fmt(c.new)} (${[].concat(c.kind).join(', ')}). Source: ${c.url}\n  > ${c.quote}`);
   }
   src = src.slice(0, start) + block + src.slice(end);
 
@@ -103,14 +111,33 @@ for (const m of mapping) {
     if (!row) { errors.push(`${m.id} › ${cat}: no row`); continue; }
     const next = { ...row };
     if (p.status) next.status = p.status;
-    for (const [k, v] of Object.entries(p.set ?? {})) next[k] = v;
-    for (const k of p.unset ?? []) delete next[k];
+    for (const [k, v] of Object.entries(p.set ?? {})) setPath(next, k, v);
+    for (const k of p.unset ?? []) unsetPath(next, k);
     if ('note' in p) { if (p.note == null) delete next.note; else next.note = p.note; }
     if ('reviewFlag' in p) { if (p.reviewFlag == null) delete next.reviewFlag; else next.reviewFlag = p.reviewFlag; }
     if (/Official \(2027 entry\)/.test(next.note ?? '') && next.status === 'verified') errors.push(`${m.id} › ${cat}: verified but the note still reports a disagreement`);
-    if (!same(row, next)) log.push(`${m.id} › ${cat}: ${row.status} → ${next.status}`);
+    if (!same(row, next)) {
+      log.push(`${m.id} › ${cat}: ${row.status} → ${next.status}`);
+      entries.push(`- \`${m.id}\` · ${cat}: row ${row.status} → ${next.status}${next.reviewFlag ? ' (owner flag kept)' : ''}.`);
+    }
     cycle.courses[m.id][cat] = next;
   }
+}
+
+/** Set / delete a possibly dotted path ("subjects.preferred"); copies the objects it walks through. */
+function setPath(obj, key, value) {
+  const ks = key.split('.');
+  let o = obj;
+  for (const k of ks.slice(0, -1)) { o[k] = { ...(o[k] ?? {}) }; o = o[k]; }
+  o[ks.at(-1)] = value;
+}
+function unsetPath(obj, key) {
+  const ks = key.split('.');
+  let o = obj;
+  for (const k of ks.slice(0, -1)) { if (!o[k]) return; o[k] = { ...o[k] }; o = o[k]; }
+  delete o[ks.at(-1)];
+  // An emptied subjects group or object is dropped rather than left as [] / {}.
+  if (ks.length > 1 && Object.keys(o).length === 0) unsetPath(obj, ks.slice(0, -1).join('.'));
 }
 
 function fmt(v) { return Array.isArray(v) ? `[${v.join(', ')}]` : v == null ? 'none' : String(v); }
@@ -127,4 +154,9 @@ fs.writeFileSync(ENGINE_PATH, src);
 const cyc = fs.readFileSync(cyclePath(config.currentCycle), 'utf8');
 const header = (cyc.match(/^\/\* ═+\n([\s\S]*?)\n \* ═+ \*\//)?.[1] ?? '').split('\n').map(l => l.replace(/^ \* ?/, '')).join('\n');
 writeCycle(cycle, header);
+if (changelogTitle && entries.length) {
+  const label = config.cycles[config.currentCycle]?.label ?? config.currentCycle;
+  fs.appendFileSync(path.join(path.dirname(cyclePath(config.currentCycle)), 'CHANGELOG.md'),
+    `\n## ${date} — ${label} — ${changelogTitle}\n\n${entries.join('\n')}\n`);
+}
 console.log(`wrote ${log.length} change(s).`);

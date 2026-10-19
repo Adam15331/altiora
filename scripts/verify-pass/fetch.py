@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 """Fetch an official page for the verification pass.
 
-Usage: python3 -I scripts/verify-pass/fetch.py <url> [<url> ...]
+Usage: python3 -I scripts/verify-pass/fetch.py [--reader] <url> [<url> ...]
+
+--reader fetches the official page through the r.jina.ai text reader (for
+sites that return 403 to automated requests, e.g. www.ox.ac.uk and
+www.ucl.ac.uk). The text is saved under the OFFICIAL url's key, with a
+"VIA: r.jina.ai" header, so rows still cite the official page; every row
+quoted from such a copy must say so in its reviewFlag.
 
 Saves to $VERIFY_PAGES (default ./pages):
   <sha1(url)[:10]>.html  the raw response (or .pdf)
@@ -53,6 +59,18 @@ def key(url):
     return hashlib.sha1(url.encode()).hexdigest()[:10]
 
 
+def fetch_reader(url):
+    os.makedirs(PAGES, exist_ok=True)
+    r = subprocess.run(['curl', '-sS', '-L', '--max-time', '90', '-w', '\n%{http_code}', 'https://r.jina.ai/' + url],
+                       capture_output=True, text=True)
+    body, _, status = r.stdout.rpartition('\n')
+    lines = [re.sub(r'\s+', ' ', l).strip() for l in body.splitlines()]
+    lines = [l for l in lines if l]
+    with open(os.path.join(PAGES, key(url) + '.txt'), 'w') as f:
+        f.write(f'URL: {url}\nSTATUS: {status}\nVIA: r.jina.ai\n\n' + '\n'.join(lines) + '\n')
+    print(f'{status} {key(url)} {len(lines):5d} lines  {url}  (via r.jina.ai)')
+
+
 def fetch(url):
     os.makedirs(PAGES, exist_ok=True)
     k = key(url)
@@ -79,5 +97,6 @@ def fetch(url):
 
 
 if __name__ == '__main__':
-    for u in sys.argv[1:]:
-        fetch(u)
+    reader = '--reader' in sys.argv
+    for u in [a for a in sys.argv[1:] if a != '--reader']:
+        (fetch_reader if reader else fetch)(u)
