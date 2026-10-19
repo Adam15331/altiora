@@ -72,6 +72,7 @@ use structured fields instead of `items` / `none` / `codes`:
 |---|---|
 | `accepted` | `yes` (verified/partial), `no` (notApplicable only), `unknown` (unverified only, optional). |
 | `typicalOffer` | A-Level grades exactly as `grades.aLevels` holds them. Shown as "Grades". |
+| `ucasTariff` | A-Level rows: UCAS tariff points the course accepts instead of grades, exactly as published. Shown as "UCAS points". Display only — the engine does not read it. |
 | `overallScore` | IB points, a whole number 1–45, exactly as `grades.ib`. Shown as "Overall score". |
 | `subjects` | Any of `required`, `preferred`, `excluded`, `higherLevel`, `standardLevel`; each a non-empty list of `{name, code}`. `name` is the qualification's own subject name; `code` is the engine's subject tag. Leave a group out when there are none. |
 | `detail` | Detail as stated: for IB, verbatim from `grades.ibHLNote` (e.g. "766 at HL"); for a row checked on an official page where the engine holds none, the policy as the page states it (e.g. how IB scores are used). Shown as "Details". Cross-checked against `grades.ibHLNote` whenever the engine holds one. |

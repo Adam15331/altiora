@@ -3,6 +3,8 @@
  * data in, returns problems out — shared by `npm run validate` and the
  * unit tests. */
 
+import { apItem } from './engine-values.mjs';
+
 /** @typedef {import('../../data/requirements/config.js').RequirementsConfig} RequirementsConfig */
 /** @typedef {import('../../data/requirements/config.js').RequirementCycle} RequirementCycle */
 /** @typedef {import('../../data/requirements/config.js').RequirementEntry} RequirementEntry */
@@ -18,9 +20,9 @@ export const STATUSES = ['verified', 'partial', 'unverified', 'notApplicable'];
 const COMMON_KEYS = ['status', 'sources', 'lastVerified', 'note', 'recorded', 'sourceSnippet', 'reviewFlag'];
 const LIST_KEYS = ['items', 'none', 'codes'];
 // Qualification categories (A-Level, IB): structured fields, no items.
-const QUAL_VALUE_KEYS = ['typicalOffer', 'overallScore', 'subjects', 'detail', 'practicalEndorsement', 'contextualOffer', 'coreNote', 'testsInterview'];
+const QUAL_VALUE_KEYS = ['typicalOffer', 'ucasTariff', 'overallScore', 'subjects', 'detail', 'practicalEndorsement', 'contextualOffer', 'coreNote', 'testsInterview'];
 const QUAL_KEYS = ['accepted', 'withheld', ...QUAL_VALUE_KEYS];
-const QUAL_TEXT_KEYS = ['typicalOffer', 'detail', 'practicalEndorsement', 'contextualOffer', 'coreNote', 'testsInterview'];
+const QUAL_TEXT_KEYS = ['typicalOffer', 'ucasTariff', 'detail', 'practicalEndorsement', 'contextualOffer', 'coreNote', 'testsInterview'];
 export const SUBJECT_GROUPS = ['required', 'preferred', 'excluded', 'higherLevel', 'standardLevel'];
 const WITHHOLDABLE = ['typicalOffer', 'overallScore', 'detail'];
 const STALE_AFTER_DAYS = 548; // ~18 months: warn, don't fail — a re-check is due.
@@ -274,6 +276,13 @@ export function validateCycle(cycle, { config, courses, today }) {
         if (!sameSet(listed, engine)) {
           err(at(cid, 'subjectPrerequisites'), `subjects ${JSON.stringify(listed)} disagree with courseRequirements.js essential+preferred ${JSON.stringify(engine)} — update both`);
         }
+      }
+      // Other qualifications: where the engine holds an AP requirement it
+      // matches AP students on, the checked row must still show it.
+      const oq = rec.otherQualifications;
+      const engineAp = apItem(course);
+      if (engineAp && oq && oq.status !== 'unverified' && !(oq.items ?? []).includes(engineAp)) {
+        err(at(cid, 'otherQualifications'), `the engine's AP requirement ${JSON.stringify(engineAp)} is missing from items — keep it (mark the row partial and put the official value in the note) or update both`);
       }
       for (const q of /** @type {const} */ (['aLevel', 'ib'])) {
         const e = rec[q];
