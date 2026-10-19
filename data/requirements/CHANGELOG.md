@@ -4092,3 +4092,27 @@ Format:
 - `uk-law-birmingham` · subjectPrerequisites: row partial → verified.
 - `uk-law-birmingham` · aLevel: row partial → verified (owner flag kept).
 - `uk-law-birmingham` · ib: row partial → verified.
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Exeter
+
+- `uk-economics-exeter` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.exeter.ac.uk/undergraduate-degrees/bsc-economics/
+  > A-Level A*AA - AAA GCE A-Level Mathematics grade B. Candidates may offer GCE AL Maths, Pure Maths or Further Maths. … No previous study of economics is required or assumed.
+- `uk-economics-exeter` · engine `grades.ibHL`: [Mathematics_Advanced] → [] (ib-hl). Source: https://www.exeter.ac.uk/undergraduate-degrees/bsc-economics/
+  > HL5 or SL6 in Mathematics (Analysis and Approaches or Applications and Interpretations)
+- `uk-economics-exeter` · engine `grades.ibHLNote`: 766–666 at HL; HL5 Mathematics required (A&A or AI; Maths Studies not accepted) → 766–666 at HL; Mathematics HL5 or SL6 (A&A or AI; Maths Studies not accepted) (ib-note). Source: https://www.exeter.ac.uk/undergraduate-degrees/bsc-economics/
+  > IB 38/766 - 36/666 HL5 or SL6 in Mathematics (Analysis and Approaches or Applications and Interpretations). Maths Studies not accepted.
+- `uk-economics-exeter` · subjectPrerequisites: row partial → verified.
+- `uk-economics-exeter` · aLevel: row partial → partial (owner flag kept).
+- `uk-economics-exeter` · ib: row partial → partial (owner flag kept).
+- `uk-law-exeter` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-unlisted). Source: https://www.exeter.ac.uk/undergraduate-degrees/llb-law/
+  > A-Level AAA n/a IB 36/666 n/a
+- `uk-law-exeter` · subjectPrerequisites: row partial → verified.
+- `uk-law-exeter` · aLevel: row partial → verified (owner flag kept).
+- `uk-law-exeter` · ib: row partial → verified.
+- `uk-cs-exeter` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.exeter.ac.uk/undergraduate-degrees/bsc-computer-science/
+  > A-Level AAA - AAB GCE AL Maths grade B Candidates may offer GCE AL Maths, Pure Maths or Further Maths.
+- `uk-cs-exeter` · engine `grades.ibHL`: [Mathematics_Advanced] → [Mathematics_Standard] (ib-hl). Source: https://www.exeter.ac.uk/undergraduate-degrees/bsc-computer-science/
+  > HL 5 in Mathematics (Analysis and approaches or Applications and interpretations)
+- `uk-cs-exeter` · subjectPrerequisites: row partial → verified.
+- `uk-cs-exeter` · aLevel: row partial → partial (owner flag kept).
+- `uk-cs-exeter` · ib: row partial → partial (owner flag kept).

@@ -11,9 +11,9 @@
 | SAT / ACT | 169 | 18 | 133 | 0 |
 | English language | 179 | 11 | 130 | 0 |
 | Admissions tests | 280 | 30 | 10 | 0 |
-| Subject prerequisites | 155 | 155 | 10 | 0 |
-| A-Level requirements | 162 | 71 | 83 | 4 |
-| IB requirements | 217 | 78 | 21 | 4 |
+| Subject prerequisites | 158 | 152 | 10 | 0 |
+| A-Level requirements | 163 | 70 | 83 | 4 |
+| IB requirements | 218 | 77 | 21 | 4 |
 | Other qualifications | 162 | 51 | 107 | 0 |
 | Other requirements | 181 | 14 | 125 | 0 |
 
@@ -294,15 +294,10 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-engineering-birmingham` | Admissions tests | The page states the Mathematics Aptitude test only for applicants with an alternative to A-level Mathematics; it does not state outright that A-level applicants sit no test. |
 | `uk-engineering-birmingham` | A-Level requirements | BEng page (2027 entry): AAB to include A-level Mathematics; Further Mathematics and Physics are not required but are advantageous. The engine record covers BEng/MEng; the MEng offer is not in the cited source. |
 | `uk-engineering-birmingham` | IB requirements | BEng (2027 entry): 6,6,5 at Higher Level (including Mathematics) with 32 points overall; Physics is not required. The page does not say whether HL Mathematics: Applications and Interpretation is accepted. |
-| `uk-economics-exeter` | Subject prerequisites | Official (2027 entry): A-level Mathematics grade B required (Maths, Pure Maths or Further Maths accepted); no previous study of economics is required or assumed. |
-| `uk-economics-exeter` | A-Level requirements | Official (2027 entry): typical offer A*AA–AAA with A-level Mathematics grade B (Maths, Pure Maths or Further Maths). Exeter states no previous study of economics is required or assumed; no preferred subjects are named. |
-| `uk-economics-exeter` | IB requirements | Official (2027 entry): typical offer 38/766 – 36/666 with HL5 or SL6 in Mathematics (Analysis and Approaches or Applications and Interpretation); Maths Studies not accepted. Contextual: 34/665 – 32/655. |
-| `uk-law-exeter` | Subject prerequisites | Official (2027 entry): no required subjects (“n/a”) and no preferred subjects named. |
-| `uk-law-exeter` | A-Level requirements | Official (2027 entry): typical offer AAA; required subjects “n/a”. No preferred subjects are named. |
-| `uk-law-exeter` | IB requirements | Official (2027 entry): typical offer 36/666; required subjects “n/a”. Contextual: 32/655. No preferred subjects are named. |
-| `uk-cs-exeter` | Subject prerequisites | Official (2027 entry): A-level Mathematics grade B required (Maths, Pure Maths or Further Maths accepted); no preferred subject is named. |
-| `uk-cs-exeter` | A-Level requirements | Official (2027 entry): typical offer AAA–AAB with A-level Mathematics grade B (Maths, Pure Maths or Further Maths). No preferred subject is named. |
-| `uk-cs-exeter` | IB requirements | Official (2027 entry): typical offer 36/666 – 34/665 with HL 5 in Mathematics (Analysis and Approaches or Applications and Interpretation). Contextual: 32/655 – 30/555. |
+| `uk-economics-exeter` | A-Level requirements | Typical offer A*AA–AAA with A-level Mathematics grade B (Maths, Pure Maths or Further Maths); no previous study of economics is required or assumed. The offer held for matching (A*AA) is the top of the range. |
+| `uk-economics-exeter` | IB requirements | Typical offer 38/766 – 36/666 with HL5 or SL6 in Mathematics (Analysis and Approaches or Applications and Interpretation); Maths Studies not accepted. Contextual: 34/665 – 32/655. The score held for matching (38) is the top of the range. |
+| `uk-cs-exeter` | A-Level requirements | Typical offer AAA–AAB with A-level Mathematics grade B (Maths, Pure Maths or Further Maths). The offer held for matching (AAA) is the top of the range. |
+| `uk-cs-exeter` | IB requirements | Typical offer 36/666 – 34/665 with HL 5 in Mathematics (Analysis and Approaches or Applications and Interpretation). Contextual: 32/655 – 30/555. The score held for matching (34/665) is the bottom of the range. |
 | `uk-psychology-exeter` | Subject prerequisites | Official (2027 entry): grade A in one science subject from Exeter’s accepted list (which includes Psychology and Maths) is required. |
 | `uk-psychology-exeter` | A-Level requirements | Official (2027 entry): typical offer AAA including grade A in a science subject from Exeter’s list (Biology/Human Biology, Chemistry, Computing, Design and Technology, Economics, Electronics, Environmental Science/Studies, Geography, Geology, Marine Science, Maths/Pure Maths/Further Maths, Physical Education, Physics, Psychology, Statistics and others). |
 | `uk-psychology-exeter` | IB requirements | Official (2027 entry): typical offer 36/666 with HL6 in a science subject from Exeter’s accepted list. Contextual: 32/655. |
@@ -845,15 +840,11 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `uk-engineering-birmingham` | A-Level requirements | Offer AAB is the BEng offer; the engine record is labelled BEng/MEng (degreeLevel MEng) and the MEng offer is not confirmed by this source. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
 | `uk-engineering-birmingham` | IB requirements | The HL Mathematics course (A&A vs AI) is not specified; data/courseRequirements.js holds ibHL [Mathematics_Advanced] (A&A only). Only the BEng page is cited for a BEng/MEng record. Owner decision. |
 | `uk-law-birmingham` | A-Level requirements | Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
-| `uk-economics-exeter` | Subject prerequisites | Economics and Further Mathematics are not named as preferred; data/courseRequirements.js holds preferred [Economics, Mathematics_Advanced]. Owner decision. |
-| `uk-economics-exeter` | A-Level requirements | Offer A*AA is the top of Exeter’s published A*AA–AAA range and Mathematics is required (agree); Economics and Further Mathematics are not preferred (Exeter: no previous study of economics required); data/courseRequirements.js holds preferred [Economics, Mathematics_Advanced]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
-| `uk-economics-exeter` | IB requirements | Mathematics may be taken at SL (grade 6) instead of HL (grade 5), so HL Mathematics is not strictly required; Economics is not preferred; data/courseRequirements.js holds ibHL [Mathematics_Advanced], ibHLNote "…HL5 Mathematics required…", preferred [Economics, Mathematics_Advanced]. Owner decision. |
-| `uk-law-exeter` | Subject prerequisites | History and English are not named as preferred; data/courseRequirements.js holds preferred [History, English]. Owner decision. |
-| `uk-law-exeter` | A-Level requirements | Offer agrees; History and English are not named as preferred; data/courseRequirements.js holds preferred [History, English]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
-| `uk-law-exeter` | IB requirements | Score and HL grades agree; History and English are not named as preferred; data/courseRequirements.js holds preferred [History, English]. Owner decision. |
-| `uk-cs-exeter` | Subject prerequisites | Further Mathematics is not named as preferred; data/courseRequirements.js holds preferred [Mathematics_Advanced]. Owner decision. |
-| `uk-cs-exeter` | A-Level requirements | Offer AAA is the top of the published AAA–AAB range and Mathematics is required (agree); Further Mathematics is accepted for the Maths requirement but not named as preferred; data/courseRequirements.js holds preferred [Mathematics_Advanced]. Note the engine holds the TOP of the A-level range but the BOTTOM of the IB range (34/665). Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
-| `uk-cs-exeter` | IB requirements | 34/665 is the bottom of the published 36/666–34/665 range (the A-level row holds the top of its range); HL Mathematics is required rather than preferred. data/courseRequirements.js holds ib 34, ibHLNote "665 at HL", preferred [Mathematics_Advanced]. Owner decision. |
+| `uk-economics-exeter` | A-Level requirements | The A-level typical offer is a range (A*AA–AAA), not expressible; data/courseRequirements.js holds A*AA (top). Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-economics-exeter` | IB requirements | The IB typical offer is a range (38/766–36/666), not expressible; data/courseRequirements.js holds ib 38 (top). Owner decision. |
+| `uk-law-exeter` | A-Level requirements | Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-cs-exeter` | A-Level requirements | The A-level typical offer is a range (AAA–AAB), not expressible; data/courseRequirements.js holds AAA (top) while the IB holds the bottom of its range (34/665). Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-cs-exeter` | IB requirements | The IB typical offer is a range (36/666–34/665), not expressible; data/courseRequirements.js holds ib 34, ibHLNote "665 at HL" (bottom) while the A-level holds the top of its range. Owner decision. |
 | `uk-psychology-exeter` | Subject prerequisites | A science from the accepted list is required, and no subject is named as preferred; data/courseRequirements.js holds essential [] and preferred [Psychology, Mathematics_Standard]. Owner decision. |
 | `uk-psychology-exeter` | A-Level requirements | A science subject at grade A is required (Psychology and Maths are among the accepted sciences, not preferred subjects); data/courseRequirements.js holds essential [] and preferred [Psychology, Mathematics_Standard]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
 | `uk-psychology-exeter` | IB requirements | An HL6 science is required; data/courseRequirements.js holds ibHL [] and preferred [Psychology, Mathematics_Standard]. Owner decision. |

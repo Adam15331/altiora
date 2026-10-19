@@ -1501,8 +1501,8 @@ const courses = [
   {
     id: "uk-economics-exeter", name: "Economics BSc",
     university: "University of Exeter", country: "UK", degreeLevel: "BSc", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Statistics"] },
-    grades: { aLevels: "A*AA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: null , ibHLNote: "766–666 at HL; HL5 Mathematics required (A&A or AI; Maths Studies not accepted)" },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Statistics"] },
+    grades: { aLevels: "A*AA", ib: 38, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "766–666 at HL; Mathematics HL5 or SL6 (A&A or AI; Maths Studies not accepted)" },
     admissionTests: [],
     universityContext: {
       tier: "national-leading",
@@ -1514,7 +1514,7 @@ const courses = [
   {
     id: "uk-law-exeter", name: "Law LLB",
     university: "University of Exeter", country: "UK", degreeLevel: "LLB", category: "law",
-    requirements: { essential: [], preferred: ["History","English"], useful: ["Economics","Philosophy"] },
+    requirements: { essential: [], preferred: [], useful: ["Economics","Philosophy"] },
     grades: { aLevels: "AAA", ib: 36, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "666 at HL" },
     admissionTests: [],
     universityContext: {
@@ -1527,8 +1527,8 @@ const courses = [
   {
     id: "uk-cs-exeter", name: "Computer Science BSc",
     university: "University of Exeter", country: "UK", degreeLevel: "BSc", category: "cs",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "AAA", ib: 34, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL" },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Computer_Science","Physics"] },
+    grades: { aLevels: "AAA", ib: 34, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "665 at HL" },
     admissionTests: [],
     universityContext: {
       tier: "national-leading",
@@ -4424,9 +4424,9 @@ const courseVerification = {
   "uk-economics-birmingham": { status: "verified", source: "https://www.birmingham.ac.uk/study/undergraduate/subjects/economics-courses/economics-bsc", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Economics, Mathematics_Advanced]→[]. EARLIER (2026-06-28, https://www.birmingham.ac.uk/study/undergraduate/subjects/economics-courses/economics-bsc): AAB→AAA (A*AA/AAA incl Maths); IB 34→32 with 666 HL; no test." },
   "uk-engineering-birmingham": { status: "partial", source: "https://www.birmingham.ac.uk/study/undergraduate/subjects/mechanical-engineering-courses/mechanical-engineering-beng", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential [Mathematics_Standard, Physics]→[Mathematics_Standard]; preferred [Mathematics_Advanced]→[Mathematics_Advanced, Physics]; ibHL [Mathematics_Advanced, Physics]→[Mathematics_Advanced]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.birmingham.ac.uk/study/undergraduate/subjects/mechanical-engineering-courses/mechanical-engineering-beng): BEng AAB / IB 32 / 665 HL (incl Maths) / no test confirmed (stored matches BEng). MEng is AAA." },
   "uk-law-birmingham": { status: "verified", source: "https://www.birmingham.ac.uk/study/undergraduate/subjects/law-courses/law-llb", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [History, English]→[]; ib 36→32. EARLIER (2026-06-28, https://www.birmingham.ac.uk/study/undergraduate/subjects/law-courses/law-llb): AAA / IB 36 / 666 HL confirmed; no LNAT (the '32' floor is the university-wide policy minimum, not the Law offer)." },
-  "uk-economics-exeter": { status: "verified", source: "https://www.exeter.ac.uk/undergraduate-degrees/bsc-economics/", checkedDate: "2026-06-28", notes: "Verified: single-honours BSc Economics (L100) A-level A*AA with A-level Maths grade B required (Exeter + The Uni Guide + UCAS); IB 38–36 with HL5 Maths. Stored AAA corrected to A*AA." },
-  "uk-law-exeter": { status: "verified", source: "https://www.exeter.ac.uk/undergraduate-degrees/llb-law/", checkedDate: "2026-06-28", notes: "AAA / IB 36 / 666 HL / no test (no LNAT) confirmed across 3 queries." },
-  "uk-cs-exeter": { status: "verified", source: "https://www.exeter.ac.uk/undergraduate-degrees/bsc-computer-science/", checkedDate: "2026-06-28", notes: "AAB→AAA (Maths grade B required); IB 31→34 (Exeter quotes 36–34 range; stored 665 within range). No test." },
+  "uk-economics-exeter": { status: "partial", source: "https://www.exeter.ac.uk/undergraduate-degrees/bsc-economics/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Economics, Mathematics_Advanced]→[]; ibHL [Mathematics_Advanced]→[]; ibHLNote 766–666 at HL; HL5 Mathematics required (A&A or AI; Maths Studies not accepted)→766–666 at HL; Mathematics HL5 or SL6 (A&A or AI; Maths Studies not accepted). Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.exeter.ac.uk/undergraduate-degrees/bsc-economics/): Verified: single-honours BSc Economics (L100) A-level A*AA with A-level Maths grade B required (Exeter + The Uni Guide + UCAS); IB 38–36 with HL5 Maths. Stored AAA corrected to A*AA." },
+  "uk-law-exeter": { status: "verified", source: "https://www.exeter.ac.uk/undergraduate-degrees/llb-law/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [History, English]→[]. EARLIER (2026-06-28, https://www.exeter.ac.uk/undergraduate-degrees/llb-law/): AAA / IB 36 / 666 HL / no test (no LNAT) confirmed across 3 queries." },
+  "uk-cs-exeter": { status: "partial", source: "https://www.exeter.ac.uk/undergraduate-degrees/bsc-computer-science/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Advanced]→[]; ibHL [Mathematics_Advanced]→[Mathematics_Standard]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.exeter.ac.uk/undergraduate-degrees/bsc-computer-science/): AAB→AAA (Maths grade B required); IB 31→34 (Exeter quotes 36–34 range; stored 665 within range). No test." },
   "uk-psychology-exeter": { status: "verified", source: "https://www.exeter.ac.uk/undergraduate-degrees/bsc-psychology/", checkedDate: "2026-06-28", notes: "AAB→AAA (Science at A); IB 31→36 with 666 HL (HL6 in a Science). No test." },
   "uk-cs-standrews": { status: "partial", source: "https://www.st-andrews.ac.uk/subjects/computer-science/computer-science-bsc/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Advanced]→[]; ibHL [Mathematics_Advanced]→[Mathematics_Standard]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.st-andrews.ac.uk/subjects/computer-science/computer-science-bsc/): Verified: A-level AAA incl Maths; IB 38 standard (HL 666 incl HL6 Maths), minimum 36 (HL 655). Direct-second-year route is IB 39." },
   "uk-economics-standrews": { status: "partial", source: "https://www.st-andrews.ac.uk/subjects/economics/economics-ma/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential [Mathematics_Standard]→[]; preferred [Economics, Mathematics_Advanced]→[Mathematics_Standard]; preferred [Economics, Mathematics_Advanced]→[Mathematics_Standard]; preferred [Economics, Mathematics_Advanced]→[Mathematics_Standard]; ibHL [Mathematics_Standard]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.st-andrews.ac.uk/subjects/economics/economics-ma/): Verified: A-level AAA standard (minimum ABB); IB 38 standard (HL 666), minimum 36 (HL 655)." },
