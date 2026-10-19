@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 54 | 0 | 266 | 0 |
-| English language | 54 | 0 | 266 | 0 |
+| SAT / ACT | 58 | 0 | 262 | 0 |
+| English language | 58 | 0 | 262 | 0 |
 | Admissions tests | 308 | 12 | 0 | 0 |
-| Subject prerequisites | 254 | 66 | 0 | 0 |
-| A-Level requirements | 186 | 10 | 120 | 4 |
-| IB requirements | 250 | 9 | 57 | 4 |
-| Other qualifications | 73 | 30 | 217 | 0 |
-| Other requirements | 54 | 0 | 266 | 0 |
+| Subject prerequisites | 250 | 70 | 0 | 0 |
+| A-Level requirements | 190 | 10 | 116 | 4 |
+| IB requirements | 254 | 9 | 53 | 4 |
+| Other qualifications | 77 | 30 | 213 | 0 |
+| Other requirements | 58 | 0 | 262 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -136,6 +136,10 @@ Shown with a "Partly verified" badge and the note below.
 | `us-cs-vanderbilt` | IB requirements | Vanderbilt’s admissions pages say nothing about IB Diploma scores or predicted IB grades in admission; the IB 6/7 statement on the FAQ is about college credit after enrolling, not admission. |
 | `us-business-notredame` | Subject prerequisites | Official: required for all applicants — at least 16 high-school units, including 4 English, 3 mathematics (Algebra I, Algebra II, Geometry; 4 preferred), 2 of one foreign language (3–4 preferred), 2 science (4 preferred), 2 history/social science (3–4 preferred). Notre Dame’s Application Considerations page adds that business major intents “need 4 units [of mathematics], which should include Calculus” (listed under the coursework of its strongest applicants). |
 | `us-cs-notredame` | Subject prerequisites | Official: required for all applicants — at least 16 high-school units, including 4 English, 3 mathematics, 2 of one foreign language, 2 science, 2 history/social science. For intended majors in the College of Engineering (where Computer Science sits): 4 units of mathematics required, including Pre-Calculus or Calculus; a unit of Chemistry required; and a unit of Physics required for all Engineering majors. |
+| `us-cs-washu` | Subject prerequisites | Official: WashU does not require specific courses. Successful candidates’ transcripts often include 4 years of English, 4 of mathematics, 3–4 of laboratory science, 3–4 of history/social science and 2+ of one foreign language; engineering (the McKelvey School, where the CS B.S. sits) strongly recommends calculus and recommends chemistry and physics. |
+| `us-business-washu` | Subject prerequisites | Official: WashU does not require specific courses. Successful candidates’ transcripts often include 4 years of English, 4 of mathematics, 3–4 of laboratory science, 3–4 of history/social science and 2+ of one foreign language; business (Olin) strongly recommends calculus. |
+| `us-business-emory` | Subject prerequisites | Official (Oxford College catalog — applies to applicants to Oxford College, one of the two colleges first-year applicants can apply to): at least sixteen acceptable units; Oxford strongly recommends English 4, Mathematics (including Algebra II) 4, Foreign language 2, Social studies 3, Laboratory sciences 3. Emory’s admissions pages (apply.emory.edu) state no high-school course requirements or recommendations for Emory College applicants. |
+| `us-economics-emory` | Subject prerequisites | Official (Oxford College catalog — applies to applicants to Oxford College, one of the two colleges first-year applicants can apply to): at least sixteen acceptable units; Oxford strongly recommends English 4, Mathematics (including Algebra II) 4, Foreign language 2, Social studies 3, Laboratory sciences 3. Emory’s admissions pages (apply.emory.edu) state no high-school course requirements or recommendations for Emory College applicants. |
 | `ca-maths-mcgill` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-maths-mcgill` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-medicine-mcgill` | IB requirements | The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
@@ -184,10 +188,6 @@ Shown to students only as "Previously recorded, not verified". Confirm or correc
 | `us-psychology-michigan` | SAT / ACT | Test-optional |
 | `us-business-nyu` | SAT / ACT | Test-optional |
 | `us-cs-nyu` | SAT / ACT | Test-optional |
-| `us-cs-washu` | SAT / ACT | Test-optional |
-| `us-business-washu` | SAT / ACT | Test-optional |
-| `us-business-emory` | SAT / ACT | Test-optional |
-| `us-economics-emory` | SAT / ACT | Test-optional |
 | `us-cs-ucla` | SAT / ACT | Test-blind (scores not used) |
 | `us-engineering-ucla` | SAT / ACT | Test-blind (scores not used) |
 | `us-economics-ucla` | SAT / ACT | Test-blind (scores not used) |
@@ -274,6 +274,10 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `us-cs-vanderbilt` | Subject prerequisites | Official source lists recommended high-school coursework (4 English, 4 maths, 4 natural science, 2 foreign language, 2 social science/humanities); data/courseRequirements.js holds none. Owner decision. Check whether the School of Engineering calculus/physics/chemistry recommendation applies to the CS B.S. (College of Connected Computing). |
 | `us-business-notredame` | Subject prerequisites | Official source lists required high-school units (4 English, 3 maths, 2 foreign language, 2 science, 2 history/social science) and 4 maths incl. calculus for business intents; data/courseRequirements.js holds none. Owner decision. |
 | `us-cs-notredame` | Subject prerequisites | Official source lists required high-school units, plus 4 maths (incl. pre-calculus or calculus), chemistry and physics for College of Engineering intents; data/courseRequirements.js holds none. Owner decision. |
+| `us-cs-washu` | Subject prerequisites | Official source lists recommended coursework, including calculus (strongly recommended) and chemistry and physics (recommended) for Engineering; data/courseRequirements.js holds none. Owner decision. |
+| `us-business-washu` | Subject prerequisites | Official source lists recommended coursework, including calculus (strongly recommended) for Business; data/courseRequirements.js holds none. Owner decision. |
+| `us-business-emory` | Subject prerequisites | Official source (Oxford College catalog) lists 16 units and strongly recommended coursework (English 4, Maths incl. Algebra II 4, Foreign language 2, Social studies 3, Lab sciences 3); data/courseRequirements.js holds none. Owner decision. Emory College’s own coursework guidance was not found on apply.emory.edu. |
+| `us-economics-emory` | Subject prerequisites | Official source (Oxford College catalog) lists 16 units and strongly recommended coursework (English 4, Maths incl. Algebra II 4, Foreign language 2, Social studies 3, Lab sciences 3); data/courseRequirements.js holds none. Owner decision. Emory College’s own coursework guidance was not found on apply.emory.edu. |
 
 ## Values withheld from the panel
 
@@ -505,10 +509,6 @@ category — check the official source; never copy a hint in as a value.
 | `hk-law-cityu` | City University of Hong Kong | SAT / ACT, English language, Other requirements | notes mention an interview / portfolio / audition |
 | `hk-business-cityu` | City University of Hong Kong | SAT / ACT, English language, IB requirements, Other requirements | notes mention IB |
 | `hk-economics-cityu` | City University of Hong Kong | SAT / ACT, English language, IB requirements, Other requirements | notes mention IB |
-| `us-cs-washu` | Washington University in St. Louis | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-business-washu` | Washington University in St. Louis | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-business-emory` | Emory University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-economics-emory` | Emory University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-cs-ucla` | UCLA | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-engineering-ucla` | UCLA | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-economics-ucla` | UCLA | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
