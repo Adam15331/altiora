@@ -1436,8 +1436,8 @@ const courses = [
   {
     id: "uk-medicine-birmingham", name: "Medicine MBChB",
     university: "University of Birmingham", country: "UK", degreeLevel: "MBChB", category: "medicine",
-    requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
-    grades: { aLevels: "A*AA", ib: 32, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "766 at HL" },
+    requirements: { essential: ["Chemistry"], preferred: ["Biology","Mathematics_Standard"], useful: ["Physics"] },
+    grades: { aLevels: "AAA", ib: 32, sgALevels: null, hkDse: null, ibHL: ["Chemistry"], ibHLNote: "666 at HL incl Chemistry and a second science" },
     admissionTests: ["UCAT"],
     universityContext: {
       tier: "world-top-100",
@@ -1449,8 +1449,8 @@ const courses = [
   {
     id: "uk-cs-birmingham", name: "Computer Science BSc",
     university: "University of Birmingham", country: "UK", degreeLevel: "BSc", category: "cs",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "ABB", ib: 32, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "655 at HL" },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Computer_Science","Physics"] },
+    grades: { aLevels: "A*AA", ib: 32, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "766 at HL incl 6 in Maths" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -1462,7 +1462,7 @@ const courses = [
   {
     id: "uk-economics-birmingham", name: "Economics BSc",
     university: "University of Birmingham", country: "UK", degreeLevel: "BSc", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Statistics"] },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: "AAA", ib: 32, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "666 at HL" },
     admissionTests: [],
     universityContext: {
@@ -1475,8 +1475,8 @@ const courses = [
   {
     id: "uk-engineering-birmingham", name: "Mechanical Engineering BEng/MEng",
     university: "University of Birmingham", country: "UK", degreeLevel: "MEng", category: "engineering",
-    requirements: { essential: ["Mathematics_Standard","Physics"], preferred: ["Mathematics_Advanced"], useful: ["Chemistry"] },
-    grades: { aLevels: "AAB", ib: 32, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "665 at HL" },
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Physics"], useful: ["Chemistry"] },
+    grades: { aLevels: "AAB", ib: 32, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -1488,8 +1488,8 @@ const courses = [
   {
     id: "uk-law-birmingham", name: "Law LLB",
     university: "University of Birmingham", country: "UK", degreeLevel: "LLB", category: "law",
-    requirements: { essential: [], preferred: ["History","English"], useful: ["Economics","Philosophy"] },
-    grades: { aLevels: "AAA", ib: 36, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "666 at HL" },
+    requirements: { essential: [], preferred: [], useful: ["Economics","Philosophy"] },
+    grades: { aLevels: "AAA", ib: 32, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "666 at HL" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -4419,11 +4419,11 @@ const courseVerification = {
   "uk-economics-nottingham": { status: "verified", source: "https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Economics-BSc-Hons.html", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential [Mathematics_Standard]→[]; preferred [Economics, Mathematics_Advanced]→[]; ibHL [Mathematics_Standard]→[]. EARLIER (2026-06-28, https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/2026/Economics-BSc-Hons.html): Verified: headline A-level A*AA (AAA with A-level Maths); IB 36 standard (HL 766) or 34 with HL Maths. Stored AAB/34 corrected." },
   "uk-law-nottingham": { status: "verified", source: "https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/2026/Law-LLB-Hons.html", checkedDate: "2026-06-28", notes: "Verified: A-level AAA; IB 34 (666 in 3 HL). No Nottingham page lists LNAT as required. Stored IB 35 corrected to 34." },
   "uk-pharmacy-nottingham": { status: "partial", source: "https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Pharmacy-MPharm.html", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ibHL [Chemistry, Biology]→[Chemistry]; ibHLNote 666 at HL→66 in HL Chemistry and a second HL science. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/2026/Pharmacy-MPharm.html): Verified: A-level AAA incl Chemistry + second science (Bio/Maths/Physics); IB 34, HL 66 in Chemistry + second science." },
-  "uk-medicine-birmingham": { status: "verified", source: "https://www.birmingham.ac.uk/study/undergraduate/subjects/medicine-courses/medicine-and-surgery-mbchb", checkedDate: "2026-06-28", notes: "A*AA / IB 32 / 766 HL (Chemistry + a science) / UCAT confirmed." },
-  "uk-cs-birmingham": { status: "verified", source: "https://www.birmingham.ac.uk/study/undergraduate/subjects/computer-science-courses/computer-science-bsc", checkedDate: "2026-06-28", notes: "ABB (incl A in Maths) / 655 HL / no test confirmed; IB total 31→32 (min 32 overall)." },
-  "uk-economics-birmingham": { status: "verified", source: "https://www.birmingham.ac.uk/study/undergraduate/subjects/economics-courses/economics-bsc", checkedDate: "2026-06-28", notes: "AAB→AAA (A*AA/AAA incl Maths); IB 34→32 with 666 HL; no test." },
-  "uk-engineering-birmingham": { status: "verified", source: "https://www.birmingham.ac.uk/study/undergraduate/subjects/mechanical-engineering-courses/mechanical-engineering-beng", checkedDate: "2026-06-28", notes: "BEng AAB / IB 32 / 665 HL (incl Maths) / no test confirmed (stored matches BEng). MEng is AAA." },
-  "uk-law-birmingham": { status: "verified", source: "https://www.birmingham.ac.uk/study/undergraduate/subjects/law-courses/law-llb", checkedDate: "2026-06-28", notes: "AAA / IB 36 / 666 HL confirmed; no LNAT (the '32' floor is the university-wide policy minimum, not the Law offer)." },
+  "uk-medicine-birmingham": { status: "partial", source: "https://www.birmingham.ac.uk/about/college-of-medicine-and-health/birmingham-medical-school/applying-to-medicine/entry-requirements-medicine-and-surgery-five-year", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels A*AA→AAA; essential [Chemistry, Biology]→[Chemistry]; preferred [Mathematics_Standard]→[Biology, Mathematics_Standard]; ibHL [Chemistry, Biology]→[Chemistry]; ibHLNote 766 at HL→666 at HL incl Chemistry and a second science. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.birmingham.ac.uk/study/undergraduate/subjects/medicine-courses/medicine-and-surgery-mbchb): A*AA / IB 32 / 766 HL (Chemistry + a science) / UCAT confirmed." },
+  "uk-cs-birmingham": { status: "partial", source: "https://www.birmingham.ac.uk/study/undergraduate/subjects/computer-science-courses/computer-science-bsc", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels ABB→A*AA; preferred [Mathematics_Advanced]→[]; ibHLNote 655 at HL→766 at HL incl 6 in Maths. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.birmingham.ac.uk/study/undergraduate/subjects/computer-science-courses/computer-science-bsc): ABB (incl A in Maths) / 655 HL / no test confirmed; IB total 31→32 (min 32 overall)." },
+  "uk-economics-birmingham": { status: "verified", source: "https://www.birmingham.ac.uk/study/undergraduate/subjects/economics-courses/economics-bsc", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Economics, Mathematics_Advanced]→[]. EARLIER (2026-06-28, https://www.birmingham.ac.uk/study/undergraduate/subjects/economics-courses/economics-bsc): AAB→AAA (A*AA/AAA incl Maths); IB 34→32 with 666 HL; no test." },
+  "uk-engineering-birmingham": { status: "partial", source: "https://www.birmingham.ac.uk/study/undergraduate/subjects/mechanical-engineering-courses/mechanical-engineering-beng", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential [Mathematics_Standard, Physics]→[Mathematics_Standard]; preferred [Mathematics_Advanced]→[Mathematics_Advanced, Physics]; ibHL [Mathematics_Advanced, Physics]→[Mathematics_Advanced]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.birmingham.ac.uk/study/undergraduate/subjects/mechanical-engineering-courses/mechanical-engineering-beng): BEng AAB / IB 32 / 665 HL (incl Maths) / no test confirmed (stored matches BEng). MEng is AAA." },
+  "uk-law-birmingham": { status: "verified", source: "https://www.birmingham.ac.uk/study/undergraduate/subjects/law-courses/law-llb", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [History, English]→[]; ib 36→32. EARLIER (2026-06-28, https://www.birmingham.ac.uk/study/undergraduate/subjects/law-courses/law-llb): AAA / IB 36 / 666 HL confirmed; no LNAT (the '32' floor is the university-wide policy minimum, not the Law offer)." },
   "uk-economics-exeter": { status: "verified", source: "https://www.exeter.ac.uk/undergraduate-degrees/bsc-economics/", checkedDate: "2026-06-28", notes: "Verified: single-honours BSc Economics (L100) A-level A*AA with A-level Maths grade B required (Exeter + The Uni Guide + UCAS); IB 38–36 with HL5 Maths. Stored AAA corrected to A*AA." },
   "uk-law-exeter": { status: "verified", source: "https://www.exeter.ac.uk/undergraduate-degrees/llb-law/", checkedDate: "2026-06-28", notes: "AAA / IB 36 / 666 HL / no test (no LNAT) confirmed across 3 queries." },
   "uk-cs-exeter": { status: "verified", source: "https://www.exeter.ac.uk/undergraduate-degrees/bsc-computer-science/", checkedDate: "2026-06-28", notes: "AAB→AAA (Maths grade B required); IB 31→34 (Exeter quotes 36–34 range; stored 665 within range). No test." },

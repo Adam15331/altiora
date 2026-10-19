@@ -4046,3 +4046,49 @@ Format:
 - `uk-pharmacy-nottingham` · engine `grades.ibHLNote`: 666 at HL → 66 in HL Chemistry and a second HL science (ib-note). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Pharmacy-MPharm.html
   > IB Diploma 34 points overall with 6,6, in chemistry and a second science subject
 - `uk-pharmacy-nottingham` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Birmingham
+
+- `uk-medicine-birmingham` · engine `grades.aLevels`: A*AA → AAA (offer). Source: https://www.birmingham.ac.uk/about/college-of-medicine-and-health/birmingham-medical-school/applying-to-medicine/entry-requirements-medicine-and-surgery-five-year
+  > The standard offer is AAA, including Chemistry, and a second science from Biology/Human Biology, Physics or Maths.
+- `uk-medicine-birmingham` · engine `requirements.essential`: [Chemistry, Biology] → [Chemistry] (essential-to-preferred). Source: https://www.birmingham.ac.uk/about/college-of-medicine-and-health/birmingham-medical-school/applying-to-medicine/entry-requirements-medicine-and-surgery-five-year
+  > The standard offer is AAA, including Chemistry, and a second science from Biology/Human Biology, Physics or Maths.
+- `uk-medicine-birmingham` · engine `requirements.preferred`: [Mathematics_Standard] → [Biology, Mathematics_Standard] (essential-to-preferred). Source: https://www.birmingham.ac.uk/about/college-of-medicine-and-health/birmingham-medical-school/applying-to-medicine/entry-requirements-medicine-and-surgery-five-year
+  > The standard offer is AAA, including Chemistry, and a second science from Biology/Human Biology, Physics or Maths.
+- `uk-medicine-birmingham` · engine `grades.ibHL`: [Chemistry, Biology] → [Chemistry] (ib-hl). Source: https://www.birmingham.ac.uk/about/college-of-medicine-and-health/birmingham-medical-school/applying-to-medicine/entry-requirements-medicine-and-surgery-five-year
+  > Higher level: 6,6,6 to include Chemistry plus a second science from Biology/Physics/Maths and one other approved subject.
+- `uk-medicine-birmingham` · engine `grades.ibHLNote`: 766 at HL → 666 at HL incl Chemistry and a second science (ib-note). Source: https://www.birmingham.ac.uk/about/college-of-medicine-and-health/birmingham-medical-school/applying-to-medicine/entry-requirements-medicine-and-surgery-five-year
+  > Higher level: 6,6,6 to include Chemistry plus a second science from Biology/Physics/Maths
+- `uk-medicine-birmingham` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-medicine-birmingham` · aLevel: row partial → partial (owner flag kept).
+- `uk-medicine-birmingham` · ib: row partial → partial (owner flag kept).
+- `uk-cs-birmingham` · engine `grades.aLevels`: ABB → A*AA (offer). Source: https://www.birmingham.ac.uk/study/undergraduate/subjects/computer-science-courses/computer-science-bsc
+  > A*AA to include A-level Mathematics grade A.
+- `uk-cs-birmingham` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.birmingham.ac.uk/study/undergraduate/subjects/computer-science-courses/computer-science-bsc
+  > Number of A-levels required: 3. to include A-level Mathematics grade A.
+- `uk-cs-birmingham` · engine `grades.ibHLNote`: 655 at HL → 766 at HL incl 6 in Maths (ib-note). Source: https://www.birmingham.ac.uk/study/undergraduate/subjects/computer-science-courses/computer-science-bsc
+  > 7,6,6 at Higher Level to include 6 in Mathematics
+- `uk-cs-birmingham` · subjectPrerequisites: row partial → verified.
+- `uk-cs-birmingham` · aLevel: row partial → verified (owner flag kept).
+- `uk-cs-birmingham` · ib: row partial → partial (owner flag kept).
+- `uk-economics-birmingham` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.birmingham.ac.uk/study/undergraduate/subjects/economics-courses/economics-bsc
+  > AAA including Mathematics
+- `uk-economics-birmingham` · subjectPrerequisites: row partial → verified.
+- `uk-economics-birmingham` · aLevel: row partial → verified (owner flag kept).
+- `uk-economics-birmingham` · ib: row partial → verified.
+- `uk-engineering-birmingham` · engine `requirements.essential`: [Mathematics_Standard, Physics] → [Mathematics_Standard] (essential-to-preferred). Source: https://www.birmingham.ac.uk/study/undergraduate/subjects/mechanical-engineering-courses/mechanical-engineering-beng
+  > Further Mathematics and Physics are not required but are advantageous.
+- `uk-engineering-birmingham` · engine `requirements.preferred`: [Mathematics_Advanced] → [Mathematics_Advanced, Physics] (essential-to-preferred). Source: https://www.birmingham.ac.uk/study/undergraduate/subjects/mechanical-engineering-courses/mechanical-engineering-beng
+  > Further Mathematics and Physics are not required but are advantageous.
+- `uk-engineering-birmingham` · engine `grades.ibHL`: [Mathematics_Advanced, Physics] → [Mathematics_Advanced] (ib-hl). Source: https://www.birmingham.ac.uk/study/undergraduate/subjects/mechanical-engineering-courses/mechanical-engineering-beng
+  > 6,6,5 at Higher Level (including Mathematics) with 32 points overall.
+- `uk-engineering-birmingham` · subjectPrerequisites: row partial → verified.
+- `uk-engineering-birmingham` · aLevel: row partial → partial (owner flag kept).
+- `uk-engineering-birmingham` · ib: row partial → partial (owner flag kept).
+- `uk-law-birmingham` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-unlisted). Source: https://www.birmingham.ac.uk/study/undergraduate/subjects/law-courses/law-llb
+  > A Level AAA IB 6,6,6 including 32 points overall.
+- `uk-law-birmingham` · engine `grades.ib`: 36 → 32 (ib-score). Source: https://www.birmingham.ac.uk/study/undergraduate/subjects/law-courses/law-llb
+  > 6,6,6 including 32 points overall.
+- `uk-law-birmingham` · subjectPrerequisites: row partial → verified.
+- `uk-law-birmingham` · aLevel: row partial → verified (owner flag kept).
+- `uk-law-birmingham` · ib: row partial → verified.
