@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 28 | 0 | 292 | 0 |
-| English language | 28 | 0 | 292 | 0 |
+| SAT / ACT | 33 | 0 | 287 | 0 |
+| English language | 33 | 0 | 287 | 0 |
 | Admissions tests | 308 | 12 | 0 | 0 |
-| Subject prerequisites | 280 | 40 | 0 | 0 |
-| A-Level requirements | 165 | 5 | 146 | 4 |
-| IB requirements | 226 | 7 | 83 | 4 |
-| Other qualifications | 47 | 30 | 243 | 0 |
-| Other requirements | 28 | 0 | 292 | 0 |
+| Subject prerequisites | 275 | 45 | 0 | 0 |
+| A-Level requirements | 170 | 5 | 141 | 4 |
+| IB requirements | 231 | 7 | 78 | 4 |
+| Other qualifications | 52 | 30 | 238 | 0 |
+| Other requirements | 33 | 0 | 287 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -103,6 +103,11 @@ Shown with a "Partly verified" badge and the note below.
 | `hk-psychology-cuhk` | Admissions tests | The official source could only be partly confirmed for this course — check it before relying on this. |
 | `hk-psychology-cuhk` | Subject prerequisites | The official source could only be partly confirmed for this course — check it before relying on this. |
 | `hk-psychology-cuhk` | IB requirements | The official source could only be partly confirmed for this course — check it before relying on this. |
+| `us-cs-cornell` | Subject prerequisites | Official: Duffield College of Engineering requires, before high school graduation, 4 units of mathematics including one of calculus, 1 unit of physics and 1 unit of chemistry (a unit = one academic year); 1 unit of computer science and 1 unit of biology are recommended but not required. The Computer Science BS is affiliated with Duffield Engineering (the BA is through Arts & Sciences). |
+| `us-maths-cornell` | Subject prerequisites | Official: College of Arts & Sciences required courses — 4 units of English; 3 units of mathematics (including pre-calculus), an additional unit of advanced math recommended; 3 units of science, an additional unit of advanced science recommended; 3 units of one foreign language (heritage speakers or students who began the language before high school: at least the third level). This major is applied to through the College of Arts & Sciences. |
+| `us-engineering-cornell` | Subject prerequisites | Official: Duffield College of Engineering requires, before high school graduation, 4 units of mathematics including one of calculus, 1 unit of physics and 1 unit of chemistry (a unit = one academic year); 1 unit of computer science and 1 unit of biology are recommended but not required. |
+| `us-economics-cornell` | Subject prerequisites | Official: College of Arts & Sciences required courses — 4 units of English; 3 units of mathematics (including pre-calculus), an additional unit of advanced math recommended; 3 units of science, an additional unit of advanced science recommended; 3 units of one foreign language (heritage speakers or students who began the language before high school: at least the third level). This major is applied to through the College of Arts & Sciences. |
+| `us-business-cornell` | Subject prerequisites | Official: Dyson School (SC Johnson College of Business) applicants must have at least 16 total units of high school coursework, including 4 units of English; 4 units of mathematics (calculus required if offered at your school; advanced mathematics in grade 12 preferred to AP Statistics); 3 units of science including 1 unit of chemistry and 1 unit of biology (both required), an additional unit of science recommended. |
 | `ca-maths-mcgill` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-maths-mcgill` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-medicine-mcgill` | IB requirements | The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
@@ -166,11 +171,6 @@ Shown to students only as "Previously recorded, not verified". Confirm or correc
 | `us-cs-brown` | SAT / ACT | SAT/ACT required |
 | `us-maths-brown` | SAT / ACT | SAT/ACT required |
 | `us-economics-brown` | SAT / ACT | SAT/ACT required |
-| `us-cs-cornell` | SAT / ACT | SAT/ACT required |
-| `us-maths-cornell` | SAT / ACT | SAT/ACT required |
-| `us-engineering-cornell` | SAT / ACT | SAT/ACT required |
-| `us-economics-cornell` | SAT / ACT | SAT/ACT required |
-| `us-business-cornell` | SAT / ACT | SAT/ACT required |
 | `us-cs-rice` | SAT / ACT | SAT/ACT recommended |
 | `us-engineering-rice` | SAT / ACT | SAT/ACT recommended |
 | `us-economics-vanderbilt` | SAT / ACT | Test-optional |
@@ -239,6 +239,11 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `us-maths-columbia` | Subject prerequisites | Official source lists strongly recommended high-school preparation for Columbia College (English, mathematics, history/social studies, laboratory science, world language); data/courseRequirements.js holds none. Owner decision. |
 | `us-economics-columbia` | Subject prerequisites | Official source lists strongly recommended high-school preparation for Columbia College (English, mathematics, history/social studies, laboratory science, world language); data/courseRequirements.js holds none. Owner decision. |
 | `us-engineering-columbia` | Subject prerequisites | Official source lists strongly advised high-school preparation for Columbia Engineering (mathematics through calculus; laboratory science incl. one year each of chemistry and physics); data/courseRequirements.js holds none. Owner decision. |
+| `us-cs-cornell` | Subject prerequisites | Official source lists required high-school courses for Duffield Engineering (maths 4 units incl. calculus, physics 1, chemistry 1; computer science and biology recommended); data/courseRequirements.js holds none. Owner decision. |
+| `us-maths-cornell` | Subject prerequisites | Official source lists required high-school courses for the College of Arts & Sciences (English 4, maths 3 incl. pre-calculus, science 3, one foreign language 3); data/courseRequirements.js holds none. Owner decision. |
+| `us-engineering-cornell` | Subject prerequisites | Official source lists required high-school courses for Duffield Engineering (maths 4 units incl. calculus, physics 1, chemistry 1; computer science and biology recommended); data/courseRequirements.js holds none. Owner decision. |
+| `us-economics-cornell` | Subject prerequisites | Official source lists required high-school courses for the College of Arts & Sciences (English 4, maths 3 incl. pre-calculus, science 3, one foreign language 3); data/courseRequirements.js holds none. Owner decision. |
+| `us-business-cornell` | Subject prerequisites | Official source lists required high-school courses for the Dyson School (16 units incl. English 4, maths 4 with calculus if offered, science 3 incl. chemistry and biology); data/courseRequirements.js holds none. Owner decision. |
 
 ## Values withheld from the panel
 
@@ -485,11 +490,6 @@ category — check the official source; never copy a hint in as a value.
 | `us-cs-brown` | Brown University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-maths-brown` | Brown University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-economics-brown` | Brown University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-cs-cornell` | Cornell University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-maths-cornell` | Cornell University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-engineering-cornell` | Cornell University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-economics-cornell` | Cornell University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-business-cornell` | Cornell University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-cs-rice` | Rice University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-engineering-rice` | Rice University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-economics-vanderbilt` | Vanderbilt University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
