@@ -1306,8 +1306,8 @@ const courses = [
   {
     id: "uk-medicine-leeds", name: "Medicine MBChB",
     university: "University of Leeds", country: "UK", degreeLevel: "MBChB", category: "medicine",
-    requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
-    grades: { aLevels: "AAA", ib: 34, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "666 at HL" },
+    requirements: { essential: ["Chemistry","Biology"], preferred: [], useful: ["Physics"] },
+    grades: { aLevels: "AAA", ib: 36, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "666 at HL" },
     admissionTests: ["UCAT"],
     universityContext: {
       tier: "world-top-100",
@@ -1319,8 +1319,8 @@ const courses = [
   {
     id: "uk-cs-leeds", name: "Computer Science BSc",
     university: "University of Leeds", country: "UK", degreeLevel: "BSc", category: "cs",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "AAA", ib: 35, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "665 at HL"},
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Computer_Science","Physics"] },
+    grades: { aLevels: "AAA", ib: 35, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "18 at HL incl HL5 Maths (A&A) or HL6 Maths (AI)"},
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -1332,8 +1332,8 @@ const courses = [
   {
     id: "uk-engineering-leeds", name: "Civil Engineering BEng/MEng",
     university: "University of Leeds", country: "UK", degreeLevel: "MEng", category: "engineering",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Physics","Mathematics_Advanced"], useful: ["Chemistry"] },
-    grades: { aLevels: "AAA", ib: 35, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "18 at HL incl HL5 Mathematics (A&A); BEng AAB / MEng AAA" },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Chemistry"] },
+    grades: { aLevels: "AAA", ib: 35, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "18 at HL incl HL6 Maths (AI) or HL5 Maths (A&A)" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -1358,8 +1358,8 @@ const courses = [
   {
     id: "uk-economics-leeds", name: "Economics BSc",
     university: "University of Leeds", country: "UK", degreeLevel: "BSc", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Statistics"] },
-    grades: { aLevels: "AAB", ib: 35, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: null },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
+    grades: { aLevels: "AAA", ib: 35, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "17 at HL; Maths 5 at SL or 4 at HL" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -4437,11 +4437,11 @@ const courseVerification = {
   "uk-cs-glasgow": { status: "verified", source: "https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/G400", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Advanced]→[]. EARLIER (2026-06-28, https://www.gla.ac.uk/undergraduate/degrees/computingscience/): Verified (official): standard A-level AAA–ABB incl A-level Maths (faster route A*AA); IB 38 with HL 666 incl HL6 Maths (A&A). Stored AAB/IB33/HL665 corrected." },
   "uk-economics-glasgow": { status: "partial", source: "https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/L150", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Economics, Mathematics_Advanced]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.gla.ac.uk/undergraduate/degrees/economics/): Verified (official): A-level AAB–BBB incl A-level Maths + English/Humanities; IB 36 (HL 665). Stored IB 33 corrected to 36; A-level AAB matches range top." },
   "uk-engineering-glasgow": { status: "partial", source: "https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/H302", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Advanced]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.gla.ac.uk/undergraduate/degrees/mechanicalengineering/): Verified (official): MEng standard A-level AAA, IB 38 (HL 666 incl HL Maths + Physics); BEng is AAB. A*A*A is scholarship/excellence tier, not standard. Stored AAB/IB33/HL665 was the BEng/understated figure — updated to MEng standard." },
-  "uk-medicine-leeds": { status: "verified", source: "https://courses.leeds.ac.uk/5580/medicine-and-surgery-mbchb", checkedDate: "2026-06-28", notes: "AAA / IB 34 / UCAT confirmed (incl Chemistry & Biology at HL). Exact HL profile (666) not fully pinned but Chem+Bio at HL required." },
-  "uk-cs-leeds": { status: "verified", source: "https://courses.leeds.ac.uk/3260/computer-science-bsc", checkedDate: "2026-06-28", notes: "Verified: A-level AAA incl Maths; IB 35 with 18 at HL incl HL Maths at 5 (Leeds expresses HL as a points sum). Stored IB 34 was incorrect." },
-  "uk-engineering-leeds": { status: "verified", source: "https://courses.leeds.ac.uk/i445/civil-engineering-meng-beng", checkedDate: "2026-06-28", notes: "Verified via Leeds + UCAS + The Uni Guide: MEng A-level AAA incl Maths (BEng AAB incl A in Maths); IB 35 (18 at HL) incl HL5 Maths. HL Physics NOT required (corrected). Stored AAB/IB34/HL-Physics updated to MEng standard." },
+  "uk-medicine-leeds": { status: "verified", source: "https://courses.leeds.ac.uk/5580/medicine-and-surgery-mbchb", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ib 34→36; preferred [Mathematics_Standard]→[]. EARLIER (2026-06-28, https://courses.leeds.ac.uk/5580/medicine-and-surgery-mbchb): AAA / IB 34 / UCAT confirmed (incl Chemistry & Biology at HL). Exact HL profile (666) not fully pinned but Chem+Bio at HL required." },
+  "uk-cs-leeds": { status: "partial", source: "https://courses.leeds.ac.uk/3260/computer-science-bsc", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Advanced]→[]; ibHL [Mathematics_Advanced]→[Mathematics_Standard]; ibHLNote 665 at HL→18 at HL incl HL5 Maths (A&A) or HL6 Maths (AI). Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://courses.leeds.ac.uk/3260/computer-science-bsc): Verified: A-level AAA incl Maths; IB 35 with 18 at HL incl HL Maths at 5 (Leeds expresses HL as a points sum). Stored IB 34 was incorrect." },
+  "uk-engineering-leeds": { status: "partial", source: "https://courses.leeds.ac.uk/i445/civil-engineering-meng-beng", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Physics, Mathematics_Advanced]→[]; ibHL [Mathematics_Advanced]→[Mathematics_Standard]; ibHLNote 18 at HL incl HL5 Mathematics (A&A); BEng AAB / MEng AAA→18 at HL incl HL6 Maths (AI) or HL5 Maths (A&A). Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://courses.leeds.ac.uk/i445/civil-engineering-meng-beng): Verified via Leeds + UCAS + The Uni Guide: MEng A-level AAA incl Maths (BEng AAB incl A in Maths); IB 35 (18 at HL) incl HL5 Maths. HL Physics NOT required (corrected). Stored AAB/IB34/HL-Physics updated to MEng standard." },
   "uk-law-leeds": { status: "verified", source: "https://courses.leeds.ac.uk/3010/law-llb", checkedDate: "2026-06-28", notes: "AAA / no LNAT confirmed; IB 34→35 with HL 6,6,5 (two A-levels in traditional academic subjects)." },
-  "uk-economics-leeds": { status: "verified", source: "https://courses.leeds.ac.uk/f836/economics-bsc", checkedDate: "2026-06-28", notes: "Verified: A-level AAB; IB 35 with 16 at HL. Stored IB 31 was the university-wide minimum, not the course offer." },
+  "uk-economics-leeds": { status: "partial", source: "https://courses.leeds.ac.uk/f836/economics-bsc", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels AAB→AAA; essential [Mathematics_Standard]→[]; preferred [Economics, Mathematics_Advanced]→[]; ibHL [Mathematics_Standard]→[]; ibHLNote none→17 at HL; Maths 5 at SL or 4 at HL. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://courses.leeds.ac.uk/f836/economics-bsc): Verified: A-level AAB; IB 35 with 16 at HL. Stored IB 31 was the university-wide minimum, not the course offer." },
   "uk-medicine-manchester": { status: "partial", source: "https://www.manchester.ac.uk/study/undergraduate/courses/2027/01428/mbchb-medicine/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential [Chemistry, Biology]→[]; preferred [Mathematics_Standard]→[]; ib 37→36; ibHLNote 766 at HL→666 at HL; ibHL [Chemistry, Biology]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.manchester.ac.uk/study/undergraduate/courses/2026/01428/mbchb-medicine/): AAA / UCAT confirmed; IB 35→37 with HL 666→766." },
   "uk-engineering-manchester": { status: "verified", source: "https://www.manchester.ac.uk/study/undergraduate/courses/2026/03921/meng-mechanical-engineering/", checkedDate: "2026-06-28", notes: "A*A*A / IB 38 / 776 HL (Maths & Physics) / no test confirmed." },
   "uk-accounting-manchester": { status: "verified", source: "https://www.manchester.ac.uk/study/undergraduate/courses/2026/03520/bsc-management-accounting-and-finance/", checkedDate: "2026-06-28", notes: "AAA / IB 36 / 666 HL / no test confirmed." },

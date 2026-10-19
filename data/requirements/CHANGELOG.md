@@ -3966,3 +3966,44 @@ Format:
 - `uk-maths-standrews` · subjectPrerequisites: row partial → verified.
 - `uk-maths-standrews` · aLevel: row partial → verified (owner flag kept).
 - `uk-maths-standrews` · ib: row partial → verified (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Leeds
+
+- `uk-medicine-leeds` · engine `grades.ib`: 34 → 36 (ib-score). Source: https://courses.leeds.ac.uk/5580/medicine-and-surgery-mbchb
+  > Overall score of 36 points with a mark of 6 in 3 Higher Level subjects which must include Chemistry and Biology.
+- `uk-medicine-leeds` · engine `requirements.preferred`: [Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://courses.leeds.ac.uk/5580/medicine-and-surgery-mbchb
+  > A-level: AAA including Chemistry and Biology.
+- `uk-medicine-leeds` · subjectPrerequisites: row partial → verified.
+- `uk-medicine-leeds` · aLevel: row partial → verified (owner flag kept).
+- `uk-medicine-leeds` · ib: row partial → verified (owner flag kept).
+- `uk-cs-leeds` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://courses.leeds.ac.uk/3260/computer-science-bsc
+  > A-level: AAA including Mathematics.
+- `uk-cs-leeds` · engine `grades.ibHL`: [Mathematics_Advanced] → [Mathematics_Standard] (ib-hl). Source: https://courses.leeds.ac.uk/3260/computer-science-bsc
+  > to include 5 in HL Mathematics: Analysis and Approaches or 6 in HL Mathematics: Applications and Interpretation
+- `uk-cs-leeds` · engine `grades.ibHLNote`: 665 at HL → 18 at HL incl HL5 Maths (A&A) or HL6 Maths (AI) (ib-note). Source: https://courses.leeds.ac.uk/3260/computer-science-bsc
+  > 18 points at Higher level to include 5 in HL Mathematics: Analysis and Approaches or 6 in HL Mathematics: Applications and Interpretation.
+- `uk-cs-leeds` · subjectPrerequisites: row partial → verified.
+- `uk-cs-leeds` · aLevel: row partial → verified (owner flag kept).
+- `uk-cs-leeds` · ib: row partial → partial (owner flag kept).
+- `uk-engineering-leeds` · engine `requirements.preferred`: [Physics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://courses.leeds.ac.uk/i445/civil-engineering-meng-beng
+  > A-level: AAA including Mathematics.
+- `uk-engineering-leeds` · engine `grades.ibHL`: [Mathematics_Advanced] → [Mathematics_Standard] (ib-hl). Source: https://courses.leeds.ac.uk/i445/civil-engineering-meng-beng
+  > to include 6 points in Mathematics: Applications and Interpretation or 5 points in Mathematics: Analysis and Approaches
+- `uk-engineering-leeds` · engine `grades.ibHLNote`: 18 at HL incl HL5 Mathematics (A&A); BEng AAB / MEng AAA → 18 at HL incl HL6 Maths (AI) or HL5 Maths (A&A) (ib-note). Source: https://courses.leeds.ac.uk/i445/civil-engineering-meng-beng
+  > 18 points at higher level to include 6 points in Mathematics: Applications and Interpretation or 5 points in Mathematics: Analysis and Approaches.
+- `uk-engineering-leeds` · subjectPrerequisites: row partial → verified.
+- `uk-engineering-leeds` · aLevel: row partial → verified (owner flag kept).
+- `uk-engineering-leeds` · ib: row partial → partial (owner flag kept).
+- `uk-economics-leeds` · engine `grades.aLevels`: AAB → AAA (offer). Source: https://courses.leeds.ac.uk/f836/economics-bsc
+  > A-level: AAA
+- `uk-economics-leeds` · engine `requirements.essential`: [Mathematics_Standard] → [] (essential-remove). Source: https://courses.leeds.ac.uk/f836/economics-bsc
+  > A-level: AAA GCSE: Applicants must demonstrate a broad general education with acceptable levels of Literacy and Numeracy, including Mathematics grade A/7
+- `uk-economics-leeds` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://courses.leeds.ac.uk/f836/economics-bsc
+  > A-level: AAA GCSE: Applicants must demonstrate a broad general education with acceptable levels of Literacy and Numeracy, including Mathematics grade A/7
+- `uk-economics-leeds` · engine `grades.ibHL`: [Mathematics_Standard] → [] (ib-hl). Source: https://courses.leeds.ac.uk/f836/economics-bsc
+  > Plus Mathematics can be met via a 5 at Standard Level or a 4 at Higher Level.
+- `uk-economics-leeds` · engine `grades.ibHLNote`: none → 17 at HL; Maths 5 at SL or 4 at HL (ib-note). Source: https://courses.leeds.ac.uk/f836/economics-bsc
+  > 35 points overall with 17 points from Higher Level subjects. Plus Mathematics can be met via a 5 at Standard Level or a 4 at Higher Level.
+- `uk-economics-leeds` · subjectPrerequisites: row partial → verified (owner flag kept).
+- `uk-economics-leeds` · aLevel: row partial → verified (owner flag kept).
+- `uk-economics-leeds` · ib: row partial → partial (owner flag kept).
