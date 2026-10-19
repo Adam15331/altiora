@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 152 | 13 | 155 | 0 |
-| English language | 157 | 11 | 152 | 0 |
+| SAT / ACT | 157 | 13 | 150 | 0 |
+| English language | 162 | 11 | 147 | 0 |
 | Admissions tests | 292 | 18 | 10 | 0 |
-| Subject prerequisites | 144 | 166 | 10 | 0 |
-| A-Level requirements | 154 | 78 | 84 | 4 |
-| IB requirements | 217 | 78 | 21 | 4 |
-| Other qualifications | 146 | 53 | 121 | 0 |
-| Other requirements | 169 | 4 | 147 | 0 |
+| Subject prerequisites | 139 | 171 | 10 | 0 |
+| A-Level requirements | 149 | 83 | 84 | 4 |
+| IB requirements | 212 | 83 | 21 | 4 |
+| Other qualifications | 146 | 58 | 116 | 0 |
+| Other requirements | 173 | 5 | 142 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -271,6 +271,27 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-economics-leeds` | Subject prerequisites | Official (2027 entry): no required A-level subject; GCSE Mathematics grade A/7 is required. No preferred subjects are named. |
 | `uk-economics-leeds` | A-Level requirements | Official (2027 entry): AAA, no required A-level subject; GCSE Mathematics grade A/7 and English Language B/5 required. |
 | `uk-economics-leeds` | IB requirements | Official (2027 entry): 35 points with 17 from HL subjects; the Mathematics requirement can be met with 5 at Standard Level or 4 at Higher Level. |
+| `uk-medicine-nottingham` | Subject prerequisites | Partly verified: the official page does not state the preferred subject(s) held for matching (Mathematics_Standard). |
+| `uk-medicine-nottingham` | A-Level requirements | Predicted grades are not used in selection; offers are conditional on the grades. Three A levels must be passed in one sitting. Partly verified: the official page does not state the preferred subject(s) held for matching (Mathematics_Standard). |
+| `uk-medicine-nottingham` | IB requirements | Official (2027 entry): 34 points overall including HL6 in Biology and HL6 in Chemistry, or 6,6,6 in 3 HL Certificates with HL6 in Biology and Chemistry. The Diploma route does not set a grade for the third HL subject. |
+| `uk-medicine-nottingham` | Other qualifications | Nottingham publishes only a university-wide range for AP; the Medicine page points to the country page and states no course-specific AP grades or subjects. |
+| `uk-cs-nottingham` | Subject prerequisites | Official (2027 entry): no required A-level subject (a lower offer applies with an A in Computer Science); GCSE Mathematics grade B (5) required. |
+| `uk-cs-nottingham` | A-Level requirements | Official (2027 entry): AAA (AAB including A in Computer Science; ICT/IT do not qualify for the lower offer). No A-level subject is required; GCSE Mathematics grade B (5) is required. |
+| `uk-cs-nottingham` | IB requirements | Official (2027 entry): IBDP 34 points or 666 in 3 HL Certificates; with HL Computer Science, 32 points including HL6 Computer Science (or 665 in 3 HL Certificates incl HL6 Computer Science). No HL Mathematics requirement is stated. |
+| `uk-cs-nottingham` | Other qualifications | Nottingham publishes only a university-wide range for AP; the Computer Science page points to the country page and states no course-specific AP grades or subjects. |
+| `uk-economics-nottingham` | Subject prerequisites | Official (2027 entry): Mathematics is required at GCSE grade 7 (A) unless taken at A level; A-level Mathematics lowers the offer. No preferred subjects are named. |
+| `uk-economics-nottingham` | A-Level requirements | Official (2027 entry): A*AA / A*A*B, or AAA / A*AB including Mathematics; GCSE Mathematics grade 7 (A) unless taking it at A level. A-level Mathematics lowers the offer but is not required. |
+| `uk-economics-nottingham` | IB requirements | Official (2027 entry): IBDP 36 points or 766 in 3 HL Certificates; alternatively 34 points including HL Mathematics or 666 in 3 HL Certificates including Mathematics. HL Mathematics is not required at 36 points. |
+| `uk-economics-nottingham` | Other qualifications | Nottingham publishes only a university-wide range for AP; the Economics page points to the country page and states no course-specific AP grades or subjects. |
+| `uk-law-nottingham` | Subject prerequisites | Partly verified: the official page does not state the preferred subject(s) held for matching (History, English). |
+| `uk-law-nottingham` | A-Level requirements | No required subject. Combinations with more than one non-traditional or practical subject out of three (e.g. art, film studies, drama, media, sports studies) are not normally accepted. Partly verified: the official page does not state the preferred subject(s) held for matching (History, English). |
+| `uk-law-nottingham` | IB requirements | HL combinations with more than one non-traditional or practical subject (dance, film, music, theatre, visual arts) are not normally accepted. Partly verified: the official page does not state the preferred subject(s) held for matching (History, English). |
+| `uk-law-nottingham` | Other qualifications | Nottingham publishes only a university-wide range for AP; the Law page points to the country page and states no course-specific AP grades or subjects. |
+| `uk-law-nottingham` | Other requirements | The 2027-entry page still gives a decision date of 31 March 2026, so the selection timetable has not been updated for this cycle. |
+| `uk-pharmacy-nottingham` | Subject prerequisites | Official (2027 entry): Chemistry plus at least one further science from Biology, Maths, Further Maths or Physics (required). |
+| `uk-pharmacy-nottingham` | A-Level requirements | Official (2027 entry): AAA including Chemistry and at least one further science from Biology, Maths, Further Maths or Physics. The page mentions excluded subjects for the third A level but the list did not appear in the fetched page. |
+| `uk-pharmacy-nottingham` | IB requirements | Official (2027 entry): IB Diploma 34 points with 6,6 in Chemistry and a second science; or HL Certificates 6,6,6 including Chemistry and a second science. |
+| `uk-pharmacy-nottingham` | Other qualifications | Nottingham publishes only a university-wide range for AP; the Pharmacy page points to the country page and states no course-specific AP grades or subjects. |
 | `uk-medicine-birmingham` | Subject prerequisites | Official (2027 entry): Chemistry plus a second science from Biology/Human Biology, Physics or Maths; no preference for the third A level. |
 | `uk-medicine-birmingham` | A-Level requirements | Official (2027 entry): standard offer AAA, including Chemistry and a second science from Biology/Human Biology, Physics or Maths; predicted minimum AAB. |
 | `uk-medicine-birmingham` | IB requirements | Official (2027 entry): 6,6,6 at Higher Level to include Chemistry plus a second science from Biology/Physics/Maths and one other approved subject; English, Biology and Mathematics at Standard Level if not taken at Higher Level; minimum 32 points. |
@@ -727,6 +748,21 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `uk-economics-leeds` | Subject prerequisites | Mathematics is required at GCSE (A/7), not A-level, and no preferred subjects are named; data/courseRequirements.js holds essential [Mathematics_Standard], preferred [Economics, Mathematics_Advanced]. Owner decision. |
 | `uk-economics-leeds` | A-Level requirements | Offer differs (official AAA, not AAB) and A-level Mathematics is not required (GCSE Mathematics A/7); data/courseRequirements.js holds AAB, essential [Mathematics_Standard]. Owner decision. Contextual/alternative offers and excluded subjects are display-only; the matcher does not apply them. |
 | `uk-economics-leeds` | IB requirements | HL Mathematics is not required (5 at SL also meets it); data/courseRequirements.js holds ibHL [Mathematics_Standard]. Owner decision. |
+| `uk-medicine-nottingham` | Subject prerequisites | Mathematics is not named as a preferred subject on the 2027 page; data/courseRequirements.js holds preferred [Mathematics_Standard]. Owner decision. Official page does not name the engine’s preferred subject(s) [Mathematics_Standard] as preferred; data/courseRequirements.js holds them. Owner decision. |
+| `uk-medicine-nottingham` | A-Level requirements | Mathematics is not named as a preferred subject on the 2027 page; data/courseRequirements.js holds preferred [Mathematics_Standard]. Owner decision. Contextual/alternative offers and excluded subjects are display-only; the matcher does not apply them. Official page does not name the engine’s preferred subject(s) [Mathematics_Standard] as preferred; data/courseRequirements.js holds them. Owner decision. |
+| `uk-medicine-nottingham` | IB requirements | For the IB Diploma only HL6 Biology and HL6 Chemistry are specified (666 applies to the HL Certificates route); data/courseRequirements.js holds ibHLNote "666 at HL". Owner decision. |
+| `uk-cs-nottingham` | Subject prerequisites | A-level Mathematics is not required (GCSE Mathematics 5) and Further Mathematics is not named; data/courseRequirements.js holds essential [Mathematics_Standard], preferred [Mathematics_Advanced]. Owner decision. |
+| `uk-cs-nottingham` | A-Level requirements | Offer differs (official AAA, not A*AA) and A-level Mathematics is not required; data/courseRequirements.js holds A*AA, essential [Mathematics_Standard], preferred [Mathematics_Advanced]. Owner decision. Contextual/alternative offers and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-cs-nottingham` | IB requirements | IB score differs (official 34) and HL Mathematics is not required; data/courseRequirements.js holds ib 36, ibHL [Mathematics_Advanced]. Owner decision. |
+| `uk-economics-nottingham` | Subject prerequisites | A-level Mathematics is not required and no preferred subjects are named; data/courseRequirements.js holds essential [Mathematics_Standard], preferred [Economics, Mathematics_Advanced]. Owner decision. |
+| `uk-economics-nottingham` | A-Level requirements | A-level Mathematics is not required (it lowers the offer to AAA/A*AB); data/courseRequirements.js holds essential [Mathematics_Standard]. Owner decision. Contextual/alternative offers and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-economics-nottingham` | IB requirements | HL Mathematics is not required for the 36-point offer (it lowers the offer to 34); data/courseRequirements.js holds ibHL [Mathematics_Standard]. Owner decision. |
+| `uk-law-nottingham` | Subject prerequisites | History and English are not named as preferred subjects on the 2027 page; data/courseRequirements.js holds preferred [History, English]. Owner decision. Official page does not name the engine’s preferred subject(s) [History, English] as preferred; data/courseRequirements.js holds them. Owner decision. |
+| `uk-law-nottingham` | A-Level requirements | History and English are not named as preferred subjects on the 2027 page; data/courseRequirements.js holds preferred [History, English]. Owner decision. Contextual/alternative offers and excluded subjects are display-only; the matcher does not apply them. Official page does not name the engine’s preferred subject(s) [History, English] as preferred; data/courseRequirements.js holds them. Owner decision. |
+| `uk-law-nottingham` | IB requirements | Official page does not name the engine’s preferred subject(s) [History, English] as preferred; data/courseRequirements.js holds them. Owner decision. |
+| `uk-pharmacy-nottingham` | Subject prerequisites | A second science from the list is required; data/courseRequirements.js holds essential [Chemistry], preferred [Biology, Mathematics_Standard]. Owner decision. |
+| `uk-pharmacy-nottingham` | A-Level requirements | A second science (one of Biology, Maths, Further Maths or Physics) is required, not just preferred; data/courseRequirements.js holds essential [Chemistry], preferred [Biology, Mathematics_Standard]. Owner decision. Contextual/alternative offers and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-pharmacy-nottingham` | IB requirements | The second HL science may be any science (Biology is not specifically required) and the Diploma sets 6,6 in two HL sciences, not 666; data/courseRequirements.js holds ibHL [Chemistry, Biology], ibHLNote "666 at HL". Owner decision. |
 | `uk-medicine-birmingham` | Subject prerequisites | Biology is one option for the second science, not a requirement, and Maths is an alternative second science rather than preferred; data/courseRequirements.js holds essential [Chemistry, Biology], preferred [Mathematics_Standard]. Owner decision. |
 | `uk-medicine-birmingham` | A-Level requirements | Offer differs (official AAA, not A*AA) and the second science is any one of Biology/Human Biology, Physics or Maths (Biology not specifically required; no preferred subject); data/courseRequirements.js holds A*AA, essential [Chemistry, Biology], preferred [Mathematics_Standard]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
 | `uk-medicine-birmingham` | IB requirements | HL grades differ (official 666, not 766) and the second HL science is any of Biology/Physics/Maths; data/courseRequirements.js holds ibHLNote "766 at HL", ibHL [Chemistry, Biology]. Owner decision. |
@@ -1017,11 +1053,6 @@ category — check the official source; never copy a hint in as a value.
 | `uk-economics-standrews` | University of St Andrews | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-medicine-standrews` | University of St Andrews | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-maths-standrews` | University of St Andrews | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-medicine-nottingham` | University of Nottingham | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-cs-nottingham` | University of Nottingham | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-economics-nottingham` | University of Nottingham | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-law-nottingham` | University of Nottingham | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-pharmacy-nottingham` | University of Nottingham | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `us-business-wharton` | University of Pennsylvania | Other qualifications | Other qualifications: Not verified: Penn’s Testing (https://admissions.upenn.edu/how-to-apply/preparing-your-application/testing) and Application Requirements pages do not say how AP scores are used in admission; the Pre-College Credits page (https://admissions.upenn.edu/how-to-apply/first-year-applicants/pre-college-credits) covers AP/IB/A-Level credit after enrolment only, which is not an admission requirement. |
 | `us-cs-penn` | University of Pennsylvania | Other qualifications | Other qualifications: Not verified: Penn’s Testing (https://admissions.upenn.edu/how-to-apply/preparing-your-application/testing) and Application Requirements pages do not say how AP scores are used in admission; the Pre-College Credits page (https://admissions.upenn.edu/how-to-apply/first-year-applicants/pre-college-credits) covers AP/IB/A-Level credit after enrolment only, which is not an admission requirement. |
 | `us-economics-penn` | University of Pennsylvania | Other qualifications | Other qualifications: Not verified: Penn’s Testing (https://admissions.upenn.edu/how-to-apply/preparing-your-application/testing) and Application Requirements pages do not say how AP scores are used in admission; the Pre-College Credits page (https://admissions.upenn.edu/how-to-apply/first-year-applicants/pre-college-credits) covers AP/IB/A-Level credit after enrolment only, which is not an admission requirement. |
