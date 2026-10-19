@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 60 | 0 | 260 | 0 |
-| English language | 60 | 0 | 260 | 0 |
+| SAT / ACT | 64 | 0 | 256 | 0 |
+| English language | 64 | 0 | 256 | 0 |
 | Admissions tests | 308 | 12 | 0 | 0 |
-| Subject prerequisites | 248 | 72 | 0 | 0 |
-| A-Level requirements | 192 | 10 | 114 | 4 |
-| IB requirements | 254 | 11 | 51 | 4 |
-| Other qualifications | 77 | 32 | 211 | 0 |
-| Other requirements | 60 | 0 | 260 | 0 |
+| Subject prerequisites | 244 | 76 | 0 | 0 |
+| A-Level requirements | 196 | 10 | 110 | 4 |
+| IB requirements | 258 | 11 | 47 | 4 |
+| Other qualifications | 79 | 34 | 207 | 0 |
+| Other requirements | 64 | 0 | 256 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -146,6 +146,12 @@ Shown with a "Partly verified" badge and the note below.
 | `us-cs-usc` | Subject prerequisites | Official: C or better in at least three years of high-school mathematics, including Algebra II (all USC applicants). USC Viterbi adds that at least one year of Calculus is important preparation for all engineering or computer science majors (preparation advice, not stated as a requirement). |
 | `us-cs-usc` | IB requirements | Official: “We typically expect the full IB Diploma Programme, with strong academic performance (scores of 5-7 on all HL and SL exams) across all subjects.” |
 | `us-cs-usc` | Other qualifications | USC’s admissions pages checked (First-Year Students, International Students, Test Optional FAQ, What We Look For) do not say how AP scores are treated for other applicants; the recommendation above is stated only for home-schooled applicants. |
+| `us-cs-gatech` | Subject prerequisites | Official: the University System of Georgia requires minimum high-school courses of all first-time students graduating from a U.S. high school — English 4 units, Math 4 units, Science 4 units, Social Science 3 units, and Foreign Language or American Sign Language or Computer Science 2 units; students from outside the U.S. system must complete a curriculum deemed equivalent. No CS- or Mechanical Engineering-specific subject requirement is stated. |
+| `us-engineering-gatech` | Subject prerequisites | Official: the University System of Georgia requires minimum high-school courses of all first-time students graduating from a U.S. high school — English 4 units, Math 4 units, Science 4 units, Social Science 3 units, and Foreign Language or American Sign Language or Computer Science 2 units; students from outside the U.S. system must complete a curriculum deemed equivalent. No CS- or Mechanical Engineering-specific subject requirement is stated. |
+| `us-engineering-purdue` | Subject prerequisites | Official: minimum high-school coursework — Math 4 years, English 4 years, Lab science 3 years, Social studies 3 years, World language 2 years (can be different languages); may also be met through nonremedial college-level coursework. For engineering applicants, chemistry is expected; review places particular emphasis on calculus (if available), four years of laboratory sciences including biology, chemistry (expected) and physics (if available). |
+| `us-engineering-purdue` | Other qualifications | Purdue’s admissions pages checked (guide, first-year criteria, course requirements, international) do not say whether AP exam scores are used or can be self-reported for admission; AP/A-Level credit pages are about credit after enrolling. |
+| `us-cs-purdue` | Subject prerequisites | Official: minimum high-school coursework — Math 4 years, English 4 years, Lab science 3 years, Social studies 3 years, World language 2 years (can be different languages); may also be met through nonremedial college-level coursework. |
+| `us-cs-purdue` | Other qualifications | Purdue’s admissions pages checked (guide, first-year criteria, course requirements, international) do not say whether AP exam scores are used or can be self-reported for admission; AP/A-Level credit pages are about credit after enrolling. |
 | `ca-maths-mcgill` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-maths-mcgill` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-medicine-mcgill` | IB requirements | The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
@@ -199,15 +205,11 @@ Shown to students only as "Previously recorded, not verified". Confirm or correc
 | `us-economics-ucla` | SAT / ACT | Test-blind (scores not used) |
 | `us-maths-ucla` | SAT / ACT | Test-blind (scores not used) |
 | `us-psychology-ucla` | SAT / ACT | Test-blind (scores not used) |
-| `us-cs-gatech` | SAT / ACT | SAT/ACT required |
-| `us-engineering-gatech` | SAT / ACT | SAT/ACT required |
 | `us-business-uva` | SAT / ACT | Test-optional |
 | `us-cs-uva` | SAT / ACT | Test-optional |
 | `us-economics-uva` | SAT / ACT | Test-optional |
 | `us-cs-uiuc` | SAT / ACT | Test-optional |
 | `us-engineering-uiuc` | SAT / ACT | Test-optional |
-| `us-engineering-purdue` | SAT / ACT | SAT/ACT required |
-| `us-cs-purdue` | SAT / ACT | SAT/ACT required |
 | `us-business-unc` | SAT / ACT | Test-optional |
 | `us-economics-unc` | SAT / ACT | Test-optional |
 
@@ -286,6 +288,12 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `us-business-usc` | IB requirements | Official source states an IB score expectation (5–7 on all HL and SL exams); data/courseRequirements.js holds no IB data. Owner decision. |
 | `us-cs-usc` | Subject prerequisites | Official source states a minimum expectation of C or better in at least three years of high-school mathematics including Algebra II; data/courseRequirements.js holds none. Owner decision. Viterbi also describes a year of Calculus as important preparation for CS. |
 | `us-cs-usc` | IB requirements | Official source states an IB score expectation (5–7 on all HL and SL exams); data/courseRequirements.js holds no IB data. Owner decision. |
+| `us-cs-gatech` | Subject prerequisites | Official source lists USG minimum high-school course units (English 4, Math 4, Science 4, Social Science 3, Foreign Language/ASL/Computer Science 2); data/courseRequirements.js holds none. Owner decision. |
+| `us-engineering-gatech` | Subject prerequisites | Official source lists USG minimum high-school course units (English 4, Math 4, Science 4, Social Science 3, Foreign Language/ASL/Computer Science 2); data/courseRequirements.js holds none. Owner decision. |
+| `us-engineering-purdue` | SAT / ACT | data/courseRequirements.js records usAdmissions.test "required" for this course; the official policy is that Purdue “expects” SAT, ACT or CLT scores but allows applications without a test in exceptional cases. Owner decision — not changed here. |
+| `us-engineering-purdue` | Subject prerequisites | Official source lists minimum high-school coursework plus chemistry expected for engineering and emphasis on calculus and four years of lab science; data/courseRequirements.js holds none. Owner decision. |
+| `us-cs-purdue` | SAT / ACT | data/courseRequirements.js records usAdmissions.test "required" for this course; the official policy is that Purdue “expects” SAT, ACT or CLT scores but allows applications without a test in exceptional cases. Owner decision — not changed here. |
+| `us-cs-purdue` | Subject prerequisites | Official source lists minimum high-school coursework (Math 4, English 4, Lab science 3, Social studies 3, World language 2 years); data/courseRequirements.js holds none. Owner decision. |
 
 ## Values withheld from the panel
 
@@ -522,15 +530,11 @@ category — check the official source; never copy a hint in as a value.
 | `us-economics-ucla` | UCLA | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-maths-ucla` | UCLA | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-psychology-ucla` | UCLA | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-cs-gatech` | Georgia Tech | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-engineering-gatech` | Georgia Tech | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-business-uva` | University of Virginia | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-cs-uva` | University of Virginia | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-economics-uva` | University of Virginia | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-cs-uiuc` | University of Illinois Urbana-Champaign | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-engineering-uiuc` | University of Illinois Urbana-Champaign | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-engineering-purdue` | Purdue University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-cs-purdue` | Purdue University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-business-unc` | UNC Chapel Hill | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-economics-unc` | UNC Chapel Hill | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `ca-cs-utoronto` | University of Toronto | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
