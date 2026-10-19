@@ -977,7 +977,7 @@ const courses = [
     id: "uk-cs-bristol", name: "Computer Science BSc/MEng",
     university: "University of Bristol", country: "UK", degreeLevel: "MEng", category: "cs",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "A*AA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "766 at HL" },
+    grades: { aLevels: "A*AA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "18 at HL incl 7 in HL Mathematics (AA or AI)" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -989,7 +989,7 @@ const courses = [
   {
     id: "uk-economics-bristol", name: "Economics BSc",
     university: "University of Bristol", country: "UK", degreeLevel: "BSc", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Statistics"] },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: "A*AA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: null },
     admissionTests: [],
     universityContext: {
@@ -1002,8 +1002,8 @@ const courses = [
   {
     id: "uk-engineering-bristol", name: "Mechanical Engineering BEng/MEng",
     university: "University of Bristol", country: "UK", degreeLevel: "MEng", category: "engineering",
-    requirements: { essential: ["Mathematics_Standard","Physics"], preferred: ["Mathematics_Advanced"], useful: ["Chemistry"] },
-    grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "776 at HL" },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Chemistry"] },
+    grades: { aLevels: "A*AA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "18 at HL incl 7, 6 in HL Mathematics (AA or AI) and one of Physics, Chemistry or Computer Science" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -1015,7 +1015,7 @@ const courses = [
   {
     id: "uk-law-bristol", name: "Law LLB",
     university: "University of Bristol", country: "UK", degreeLevel: "LLB", category: "law",
-    requirements: { essential: [], preferred: ["History","English"], useful: ["Economics","Philosophy"] },
+    requirements: { essential: [], preferred: [], useful: ["Economics","Philosophy"] },
     grades: { aLevels: "A*AA", ib: 38, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: ["LNAT"],
     universityContext: {
@@ -1028,8 +1028,8 @@ const courses = [
   {
     id: "uk-medicine-bristol", name: "Medicine MBChB",
     university: "University of Bristol", country: "UK", degreeLevel: "MBChB", category: "medicine",
-    requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
-    grades: { aLevels: "AAA", ib: 36, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "666 at HL" },
+    requirements: { essential: ["Chemistry"], preferred: [], useful: ["Physics"] },
+    grades: { aLevels: "AAA", ib: 36, sgALevels: null, hkDse: null, ibHL: ["Chemistry"], ibHLNote: "18 at HL incl 6, 6 in HL Chemistry and one of Biology, Physics or Mathematics" },
     admissionTests: ["UCAT"],
     universityContext: {
       tier: "world-top-100",
@@ -4337,11 +4337,11 @@ const courseVerification = {
   "uk-law-durham": { status: "verified", source: "https://www.durham.ac.uk/study/courses/law-m101/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [History, English]→[]; ib 38→37; ibHLNote 666 at HL→766 at HL. EARLIER (2026-06-28, https://www.durham.ac.uk/study/courses/law-m101/): A*AA / IB 38 / 666 HL / LNAT all confirmed." },
   "uk-physics-durham": { status: "verified", source: "https://www.durham.ac.uk/study/courses/physics-f300/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Advanced]→[]; ibHL [Mathematics_Advanced, Chemistry]→[Mathematics_Advanced, Physics]. EARLIER (2026-06-28, https://www.durham.ac.uk/study/courses/physics-f300/): A*A*A / IB 38 / 776 HL (Maths AA + Physics) / no test confirmed." },
   "uk-engineering-durham": { status: "partial", source: "https://www.durham.ac.uk/study/courses/general-engineering-h100/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels AAA→A*AA; essential [Mathematics_Standard, Physics]→[Mathematics_Standard]; preferred [Mathematics_Advanced]→[]; ibHL [Mathematics_Advanced, Physics]→[Mathematics_Standard]; ibHLNote 666 at HL→766 at HL incl HL Mathematics and one of Biology, Chemistry or Physics. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.durham.ac.uk/study/courses/general-engineering-h100/): AAA / IB 37 confirmed; HL 665→666 (Maths + one STEM). No test." },
-  "uk-cs-bristol": { status: "verified", source: "https://www.bristol.ac.uk/study/undergraduate/2026/computer-science/bsc-computer-science/", checkedDate: "2026-06-28", notes: "A*AA (A* in Maths) / IB 38 / 766 HL (7 HL Maths) / no test confirmed." },
-  "uk-economics-bristol": { status: "verified", source: "https://www.bristol.ac.uk/study/undergraduate/2026/economics/bsc-economics/", checkedDate: "2026-06-28", notes: "Verified: standard offer A*AA incl Mathematics (contextual AAB); IB 38 (18 at HL) incl HL6 Maths. Stored AAA was the alternative/joint-honours wording." },
-  "uk-engineering-bristol": { status: "verified", source: "https://www.bristol.ac.uk/study/undergraduate/2026/mechanical-engineering/meng-mechanical-engineering/", checkedDate: "2026-06-28", notes: "AAA / IB 38 confirmed; HL 766→776 (7,6 Maths + a science)." },
-  "uk-law-bristol": { status: "verified", source: "https://www.bristol.ac.uk/study/undergraduate/2026/law/llb-law/", checkedDate: "2026-06-28", notes: "A*AA (or A*A*B) / IB 38 (18 at HL, no named HL subject) / LNAT confirmed." },
-  "uk-medicine-bristol": { status: "verified", source: "https://www.bristol.ac.uk/study/undergraduate/2027/medicine/mb-chb-medicine/", checkedDate: "2026-06-28", notes: "AAA / IB 36 / 666 HL (6,6 Chemistry + a science) / UCAT confirmed." },
+  "uk-cs-bristol": { status: "partial", source: "https://www.bristol.ac.uk/study/undergraduate/2027/computer-science/bsc-computer-science/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ibHL [Mathematics_Advanced]→[Mathematics_Standard]; ibHLNote 766 at HL→18 at HL incl 7 in HL Mathematics (AA or AI). Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.bristol.ac.uk/study/undergraduate/2026/computer-science/bsc-computer-science/): A*AA (A* in Maths) / IB 38 / 766 HL (7 HL Maths) / no test confirmed." },
+  "uk-economics-bristol": { status: "verified", source: "https://www.bristol.ac.uk/study/undergraduate/2027/economics/bsc-economics/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Economics, Mathematics_Advanced]→[]. EARLIER (2026-06-28, https://www.bristol.ac.uk/study/undergraduate/2026/economics/bsc-economics/): Verified: standard offer A*AA incl Mathematics (contextual AAB); IB 38 (18 at HL) incl HL6 Maths. Stored AAA was the alternative/joint-honours wording." },
+  "uk-engineering-bristol": { status: "partial", source: "https://www.bristol.ac.uk/study/undergraduate/2027/mechanical-engineering/meng-mechanical-engineering/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels AAA→A*AA; essential [Mathematics_Standard, Physics]→[Mathematics_Standard]; preferred [Mathematics_Advanced]→[]; ibHL [Mathematics_Advanced, Physics]→[Mathematics_Standard]; ibHLNote 776 at HL→18 at HL incl 7, 6 in HL Mathematics (AA or AI) and one of Physics, Chemistry or Computer Science. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.bristol.ac.uk/study/undergraduate/2026/mechanical-engineering/meng-mechanical-engineering/): AAA / IB 38 confirmed; HL 766→776 (7,6 Maths + a science)." },
+  "uk-law-bristol": { status: "verified", source: "https://www.bristol.ac.uk/study/undergraduate/2027/law/llb-law/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [History, English]→[]. EARLIER (2026-06-28, https://www.bristol.ac.uk/study/undergraduate/2026/law/llb-law/): A*AA (or A*A*B) / IB 38 (18 at HL, no named HL subject) / LNAT confirmed." },
+  "uk-medicine-bristol": { status: "partial", source: "https://www.bristol.ac.uk/study/undergraduate/2027/medicine/mb-chb-medicine/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential [Chemistry, Biology]→[Chemistry]; preferred [Mathematics_Standard]→[]; ibHL [Chemistry, Biology]→[Chemistry]; ibHLNote 666 at HL→18 at HL incl 6, 6 in HL Chemistry and one of Biology, Physics or Mathematics. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.bristol.ac.uk/study/undergraduate/2027/medicine/mb-chb-medicine/): AAA / IB 36 / 666 HL (6,6 Chemistry + a science) / UCAT confirmed." },
   "uk-cs-bath": { status: "verified", source: "https://www.bath.ac.uk/courses/undergraduate-2026/computer-science/bsc-computer-science/", checkedDate: "2026-06-28", notes: "AAA→A*A*A (incl A in Maths) for 2026; IB 36 / 766 HL confirmed; no test." },
   "uk-economics-bath": { status: "verified", source: "https://www.bath.ac.uk/courses/undergraduate-2026/economics/bsc-economics/", checkedDate: "2026-06-28", notes: "A*AA / IB 36 confirmed; added HL note 766 (HL Maths AA required); no test." },
   "uk-engineering-bath": { status: "verified", source: "https://www.bath.ac.uk/courses/undergraduate-2026/mechanical-engineering/beng-mechanical-engineering/", checkedDate: "2026-06-28", notes: "A*A*A / IB 36 confirmed; HL 655→666 (6 Physics + 6 HL Maths); no test." },

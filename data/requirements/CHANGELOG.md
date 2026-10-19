@@ -3826,3 +3826,45 @@ Format:
 - `uk-engineering-durham` · subjectPrerequisites: row partial → partial (owner flag kept).
 - `uk-engineering-durham` · aLevel: row partial → partial (owner flag kept).
 - `uk-engineering-durham` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Bristol
+
+- `uk-cs-bristol` · engine `grades.ibHL`: [Mathematics_Advanced] → [Mathematics_Standard] (ib-hl). Source: https://www.bristol.ac.uk/study/undergraduate/2027/computer-science/bsc-computer-science/
+  > 38 points overall with 18 at Higher Level, including 7 at Higher Level in Mathematics (either Analysis and Approaches or Applications and Interpretations)
+- `uk-cs-bristol` · engine `grades.ibHLNote`: 766 at HL → 18 at HL incl 7 in HL Mathematics (AA or AI) (ib-note). Source: https://www.bristol.ac.uk/study/undergraduate/2027/computer-science/bsc-computer-science/
+  > 38 points overall with 18 at Higher Level, including 7 at Higher Level in Mathematics (either Analysis and Approaches or Applications and Interpretations)
+- `uk-cs-bristol` · ib: row partial → partial (owner flag kept).
+- `uk-economics-bristol` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.bristol.ac.uk/study/undergraduate/2027/economics/bsc-economics/
+  > A*AA including Mathematics
+- `uk-economics-bristol` · subjectPrerequisites: row partial → verified.
+- `uk-economics-bristol` · aLevel: row partial → verified (owner flag kept).
+- `uk-economics-bristol` · ib: row partial → verified (owner flag kept).
+- `uk-engineering-bristol` · engine `grades.aLevels`: AAA → A*AA (offer). Source: https://www.bristol.ac.uk/study/undergraduate/2027/mechanical-engineering/meng-mechanical-engineering/
+  > A*AA including A*A (in any order) in Mathematics and any one of Further Mathematics, Physics, Chemistry, Biology or Computer Science.
+- `uk-engineering-bristol` · engine `requirements.essential`: [Mathematics_Standard, Physics] → [Mathematics_Standard] (essential-remove). Source: https://www.bristol.ac.uk/study/undergraduate/2027/mechanical-engineering/meng-mechanical-engineering/
+  > A*AA including A*A (in any order) in Mathematics and any one of Further Mathematics, Physics, Chemistry, Biology or Computer Science.
+- `uk-engineering-bristol` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.bristol.ac.uk/study/undergraduate/2027/mechanical-engineering/meng-mechanical-engineering/
+  > In the event of a large number of applications, preference may be given to applicants taking three subjects from the above list, including Mathematics
+- `uk-engineering-bristol` · engine `grades.ibHL`: [Mathematics_Advanced, Physics] → [Mathematics_Standard] (ib-hl). Source: https://www.bristol.ac.uk/study/undergraduate/2027/mechanical-engineering/meng-mechanical-engineering/
+  > 38 points overall with 18 at Higher Level, including 7, 6 (in any order) at Higher Level in Mathematics (either Analysis and Approaches or Applications and Interpretations) and any one of Physics, Chemistry or Computer Science.
+- `uk-engineering-bristol` · engine `grades.ibHLNote`: 776 at HL → 18 at HL incl 7, 6 in HL Mathematics (AA or AI) and one of Physics, Chemistry or Computer Science (ib-note). Source: https://www.bristol.ac.uk/study/undergraduate/2027/mechanical-engineering/meng-mechanical-engineering/
+  > 38 points overall with 18 at Higher Level, including 7, 6 (in any order) at Higher Level in Mathematics (either Analysis and Approaches or Applications and Interpretations) and any one of Physics, Chemistry or Computer Science.
+- `uk-engineering-bristol` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-engineering-bristol` · aLevel: row partial → partial (owner flag kept).
+- `uk-engineering-bristol` · ib: row partial → partial (owner flag kept).
+- `uk-law-bristol` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-unlisted). Source: https://www.bristol.ac.uk/study/undergraduate/2027/law/llb-law/
+  > A-level standard offer A*AA or A*A*B A-level contextual offer AAB
+- `uk-law-bristol` · subjectPrerequisites: row partial → verified.
+- `uk-law-bristol` · aLevel: row partial → verified (owner flag kept).
+- `uk-law-bristol` · ib: row partial → verified.
+- `uk-medicine-bristol` · engine `requirements.essential`: [Chemistry, Biology] → [Chemistry] (essential-remove). Source: https://www.bristol.ac.uk/study/undergraduate/2027/medicine/mb-chb-medicine/
+  > AAA including Chemistry and either Biology, Physics, Mathematics or Further Mathematics.
+- `uk-medicine-bristol` · engine `requirements.preferred`: [Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://www.bristol.ac.uk/study/undergraduate/2027/medicine/mb-chb-medicine/
+  > AAA including Chemistry and either Biology, Physics, Mathematics or Further Mathematics.
+- `uk-medicine-bristol` · engine `grades.ibHL`: [Chemistry, Biology] → [Chemistry] (ib-hl). Source: https://www.bristol.ac.uk/study/undergraduate/2027/medicine/mb-chb-medicine/
+  > 36 points overall with 18 at Higher Level, including 6, 6 at Higher Level in Chemistry and one of Biology, Physics or Mathematics
+- `uk-medicine-bristol` · engine `grades.ibHLNote`: 666 at HL → 18 at HL incl 6, 6 in HL Chemistry and one of Biology, Physics or Mathematics (ib-note). Source: https://www.bristol.ac.uk/study/undergraduate/2027/medicine/mb-chb-medicine/
+  > 36 points overall with 18 at Higher Level, including 6, 6 at Higher Level in Chemistry and one of Biology, Physics or Mathematics
+- `uk-medicine-bristol` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-medicine-bristol` · aLevel: row partial → partial (owner flag kept).
+- `uk-medicine-bristol` · ib: row partial → partial (owner flag kept).

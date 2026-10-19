@@ -11,9 +11,9 @@
 | SAT / ACT | 169 | 18 | 133 | 0 |
 | English language | 179 | 11 | 130 | 0 |
 | Admissions tests | 280 | 30 | 10 | 0 |
-| Subject prerequisites | 135 | 175 | 10 | 0 |
-| A-Level requirements | 143 | 90 | 83 | 4 |
-| IB requirements | 206 | 89 | 21 | 4 |
+| Subject prerequisites | 137 | 173 | 10 | 0 |
+| A-Level requirements | 145 | 88 | 83 | 4 |
+| IB requirements | 208 | 87 | 21 | 4 |
 | Other qualifications | 162 | 51 | 107 | 0 |
 | Other requirements | 181 | 14 | 125 | 0 |
 
@@ -220,23 +220,17 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-engineering-warwick` | English language | The band (A) is confirmed for 2027 entry on the course page; the test scores come from Warwick’s English Language Requirements page, which states them for September 2026 entry only (last updated 04 February 2026). 2027-entry scores not yet confirmed. |
 | `uk-engineering-warwick` | IB requirements | 38 to include 6,6,6 at HL including Mathematics (not restricted to Analysis and Approaches) and Physics. The contextual offer (36 including 6,6 in Mathematics and Physics) is not in this row's snippet. |
 | `uk-engineering-warwick` | Other qualifications | Warwick states its US entry requirements are under review for the 2027/28 cycle and should be used as a guide only. |
-| `uk-cs-bristol` | IB requirements | Official (2027 entry): 38 points overall with 18 at Higher Level, including 7 at Higher Level in Mathematics (either Analysis and Approaches or Applications and Interpretations). The stored "766 at HL" (19 HL points) is stricter than 18 at HL. |
+| `uk-cs-bristol` | IB requirements | 38 points with 18 at HL including 7 in HL Mathematics (either course). Not confirmed by this row's snippet: the preferred HL Mathematics entry (it mirrors the engine's Further Mathematics preference, which comes from the A-level Admissions Statement list). |
 | `uk-cs-bristol` | Other qualifications | Official (2027 entry): high-school diploma with GPA 3.2 minimum (3.4 for competitive courses) and three additional qualifications; AP tests count at a score of at least 4 (more commonly 5). Bristol does not say which courses count as competitive, and APs are one of several qualification types that can make up the three. |
-| `uk-economics-bristol` | Subject prerequisites | Official (2027 entry): Mathematics required; neither the course page nor the 2027 Admissions Statement names preferred subjects. |
-| `uk-economics-bristol` | A-Level requirements | Official (2027 entry): A*AA including Mathematics — agrees with the stored offer. Not confirmed: the preferred Economics / Further Mathematics shown here. |
-| `uk-economics-bristol` | IB requirements | Official (2027 entry): 38 points with 18 at HL including Mathematics — agrees with the stored score. Not confirmed: the preferred Economics shown here. |
 | `uk-economics-bristol` | Other qualifications | Official (2027 entry): high-school diploma with GPA 3.2 minimum (3.4 for competitive courses) and three additional qualifications; AP tests count at a score of at least 4 (more commonly 5). Bristol does not say which courses count as competitive, and APs are one of several qualification types that can make up the three. |
-| `uk-engineering-bristol` | Subject prerequisites | Official (2027 entry): Mathematics and any one of Further Mathematics, Physics, Chemistry, Biology or Computer Science — Physics specifically is not required. |
-| `uk-engineering-bristol` | A-Level requirements | Official (2027 entry): A*AA including A*A (in any order) in Mathematics and any one of Further Mathematics, Physics, Chemistry, Biology or Computer Science; contextual AAB. |
-| `uk-engineering-bristol` | IB requirements | Official (2027 entry): 38 points with 18 at Higher Level, including 7, 6 (in any order) at HL in Mathematics and any one of Physics, Chemistry or Computer Science. |
+| `uk-engineering-bristol` | Subject prerequisites | The second required subject is a one-of choice the engine cannot express; only Mathematics is coded. |
+| `uk-engineering-bristol` | A-Level requirements | A*AA including A*A (in any order) in Mathematics and any one of Further Mathematics, Physics, Chemistry, Biology or Computer Science; only Mathematics is coded (the second subject is a one-of choice). |
+| `uk-engineering-bristol` | IB requirements | 38 points with 18 at HL incl 7, 6 at HL in Mathematics and any one of Physics, Chemistry or Computer Science; only HL Mathematics is coded (the second HL subject is a one-of choice). |
 | `uk-engineering-bristol` | Other qualifications | Official (2027 entry): high-school diploma with GPA 3.2 minimum (3.4 for competitive courses) and three additional qualifications; AP tests count at a score of at least 4 (more commonly 5). Bristol does not say which courses count as competitive, and APs are one of several qualification types that can make up the three. |
-| `uk-law-bristol` | Subject prerequisites | Official (2027 entry): A*AA or A*A*B with no subject named; GCSE: no specific subjects required. Neither page names preferred subjects. |
-| `uk-law-bristol` | A-Level requirements | Official (2027 entry): A*AA or A*A*B — agrees with the stored offer. Not confirmed: the preferred History / English shown here. |
-| `uk-law-bristol` | IB requirements | Official (2027 entry): 38 points overall with 18 at Higher Level — agrees with the stored score. Not confirmed: the preferred History / English shown here. |
 | `uk-law-bristol` | Other qualifications | Official (2027 entry): high-school diploma with GPA 3.2 minimum (3.4 for competitive courses) and three additional qualifications; AP tests count at a score of at least 4 (more commonly 5). Bristol does not say which courses count as competitive, and APs are one of several qualification types that can make up the three. |
-| `uk-medicine-bristol` | Subject prerequisites | Official (2027 entry): Chemistry and either Biology, Physics, Mathematics or Further Mathematics — Biology specifically is not required. |
-| `uk-medicine-bristol` | A-Level requirements | Official (2027 entry): AAA including Chemistry and either Biology, Physics, Mathematics or Further Mathematics. The AAA offer agrees; Biology is one option, not a requirement. Graduates: 2:1 plus BBB at A-level with the same subjects. |
-| `uk-medicine-bristol` | IB requirements | Official (2027 entry): 36 points with 18 at Higher Level, including 6, 6 at HL in Chemistry and one of Biology, Physics or Mathematics. |
+| `uk-medicine-bristol` | Subject prerequisites | The second required subject is a one-of choice the engine cannot express; only Chemistry is coded. |
+| `uk-medicine-bristol` | A-Level requirements | AAA including Chemistry and either Biology, Physics, Mathematics or Further Mathematics; only Chemistry is coded (the second subject is a one-of choice). |
+| `uk-medicine-bristol` | IB requirements | 36 points with 18 at HL incl 6, 6 at HL in Chemistry and one of Biology, Physics or Mathematics; only HL Chemistry is coded. |
 | `uk-medicine-bristol` | Other qualifications | Official (2027 entry): high-school diploma with GPA 3.2 minimum (3.4 for competitive courses) and three additional qualifications; AP tests count at a score of at least 4 (more commonly 5). Bristol does not say which courses count as competitive, and APs are one of several qualification types that can make up the three. |
 | `uk-economics-durham` | Other qualifications | Official (2027 entry): for a A*AA course, three AP exams at 5, 5, 5, or two AP exams at 5, 5 plus one additional qualification (SAT, ACT, honours course or dual-enrolment course). Two AP exams alone do not meet the requirement. Students at schools without AP may use honours courses with an overall GPA of 3.7. |
 | `uk-cs-durham` | Other qualifications | Official (2027 entry): for a A*AA course, three AP exams at 5, 5, 5, or two AP exams at 5, 5 plus one additional qualification (SAT, ACT, honours course or dual-enrolment course). Two AP exams alone do not meet the requirement. Students at schools without AP may use honours courses with an overall GPA of 3.7. |
@@ -796,23 +790,20 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `uk-engineering-warwick` | A-Level requirements | Contextual offer is display-only — the matcher does not apply it. |
 | `uk-engineering-warwick` | IB requirements | The contextual offer needs a quoted source. Contextual offer is display-only — the matcher does not apply it. |
 | `uk-cs-bristol` | A-Level requirements | contextualOffer is display-only; the matcher does not apply it. |
-| `uk-cs-bristol` | IB requirements | IB HL total differs: official 18 at HL including 7 in HL Mathematics; data/courseRequirements.js holds "766 at HL". Owner decision. |
+| `uk-cs-bristol` | IB requirements | Preferred 'Mathematics at Higher Level' (engine preferred Mathematics_Advanced) has no IB-specific support in the snippet. Owner decision. |
 | `uk-cs-bristol` | Other qualifications | Bristol’s USA page sets GPA 3.2 minimum (3.4 for competitive courses) plus three additional qualifications, with APs at 4+ (more commonly 5); Computer Science requires AP Calculus BC at 5; data/courseRequirements.js holds "Advanced Placement: 3 AP exams at grades 4, 4, 4; Minimum GPA 3.2". Owner decision. |
-| `uk-economics-bristol` | Subject prerequisites | Preferred Economics / Further Mathematics not stated on the official 2027 pages; data/courseRequirements.js holds preferred ["Economics","Mathematics_Advanced"]. Owner decision. |
-| `uk-economics-bristol` | A-Level requirements | Preferred Economics / Further Mathematics not stated on the official 2027 pages; data/courseRequirements.js holds preferred ["Economics","Mathematics_Advanced"]. Owner decision. contextualOffer is display-only; the matcher does not apply it. |
-| `uk-economics-bristol` | IB requirements | Preferred Economics not stated on the official 2027 pages; data/courseRequirements.js holds preferred ["Economics","Mathematics_Advanced"]. Owner decision. |
+| `uk-economics-bristol` | A-Level requirements | contextualOffer is display-only; the matcher does not apply it. |
+| `uk-economics-bristol` | IB requirements | The SL Analysis and Approaches at 7 alternative is display-only; the engine's ibHL tag requires HL Mathematics. |
 | `uk-economics-bristol` | Other qualifications | Bristol’s USA page sets GPA 3.2 minimum (3.4 for competitive courses) plus three additional qualifications, with APs at 4+ (more commonly 5); Economics requires AP Calculus BC at 5; data/courseRequirements.js holds "Advanced Placement: 3 AP exams at grades 4, 4, 4; Minimum GPA 3.2". Owner decision. |
-| `uk-engineering-bristol` | Subject prerequisites | Required subjects differ: official Mathematics + one of Further Mathematics/Physics/Chemistry/Biology/Computer Science; data/courseRequirements.js holds essential ["Mathematics_Standard","Physics"]. Owner decision. |
-| `uk-engineering-bristol` | A-Level requirements | Typical offer and subjects differ: official A*AA with Mathematics + one of FM/Physics/Chemistry/Biology/CS; data/courseRequirements.js holds AAA with Physics required. Owner decision. contextualOffer is display-only; the matcher does not apply it. |
-| `uk-engineering-bristol` | IB requirements | IB differs: official 18 at HL with 7,6 in Mathematics + one of Physics/Chemistry/CS; data/courseRequirements.js holds "776 at HL" with HL Physics. Owner decision. |
+| `uk-engineering-bristol` | Subject prerequisites | One-of second subject (Further Mathematics/Physics/Chemistry/Biology/Computer Science) is display-only, not matched. Owner decision. |
+| `uk-engineering-bristol` | A-Level requirements | One-of second subject is display-only, not matched. Owner decision. contextualOffer is display-only; the matcher does not apply it. |
+| `uk-engineering-bristol` | IB requirements | One-of second HL subject (Physics/Chemistry/Computer Science) is display-only, not matched. Owner decision. |
 | `uk-engineering-bristol` | Other qualifications | Bristol’s USA page sets GPA 3.2 minimum (3.4 for competitive courses) plus three additional qualifications, with APs at 4+ (more commonly 5); Mechanical Engineering requires AP Calculus BC at 5; data/courseRequirements.js holds "Advanced Placement: 3 AP exams at grades 4, 4, 4; Minimum GPA 3.2". Owner decision. |
-| `uk-law-bristol` | Subject prerequisites | Preferred History / English not stated on the official 2027 pages; data/courseRequirements.js holds preferred ["History","English"]. Owner decision. |
-| `uk-law-bristol` | A-Level requirements | Preferred History / English not stated on the official 2027 pages; data/courseRequirements.js holds preferred ["History","English"]. Owner decision. contextualOffer is display-only; the matcher does not apply it. |
-| `uk-law-bristol` | IB requirements | Preferred History / English not stated on the official 2027 pages; data/courseRequirements.js holds preferred ["History","English"]. Owner decision. |
+| `uk-law-bristol` | A-Level requirements | contextualOffer is display-only; the matcher does not apply it. |
 | `uk-law-bristol` | Other qualifications | Bristol’s USA page sets GPA 3.2 minimum (3.4 for competitive courses) plus three additional qualifications, with APs at 4+ (more commonly 5); data/courseRequirements.js holds "Advanced Placement: 3 AP exams at grades 4, 4, 4; Minimum GPA 3.2". Owner decision. |
-| `uk-medicine-bristol` | Subject prerequisites | Required subjects differ: official Chemistry + one of Biology/Physics/Mathematics/Further Mathematics; data/courseRequirements.js holds essential ["Chemistry","Biology"], preferred ["Mathematics_Standard"]. Owner decision. |
-| `uk-medicine-bristol` | A-Level requirements | Required subjects differ: official Chemistry + one of Biology/Physics/Mathematics/Further Mathematics; data/courseRequirements.js holds essential ["Chemistry","Biology"]. Owner decision. contextualOffer is display-only; the matcher does not apply it. |
-| `uk-medicine-bristol` | IB requirements | IB HL subjects differ: official HL Chemistry + one of Biology/Physics/Mathematics; data/courseRequirements.js holds ibHL ["Chemistry","Biology"]. The "666 at HL" note matches 18 HL points in substance. Owner decision. |
+| `uk-medicine-bristol` | Subject prerequisites | One-of second subject (Biology/Physics/Mathematics/Further Mathematics) is display-only, not matched. Owner decision. |
+| `uk-medicine-bristol` | A-Level requirements | One-of second subject is display-only, not matched. Owner decision. contextualOffer is display-only; the matcher does not apply it. |
+| `uk-medicine-bristol` | IB requirements | One-of second HL subject (Biology/Physics/Mathematics) is display-only, not matched. Owner decision. |
 | `uk-medicine-bristol` | Other qualifications | Bristol’s USA page sets GPA 3.2 minimum (3.4 for competitive courses) plus three additional qualifications, with APs at 4+ (more commonly 5); data/courseRequirements.js holds "Advanced Placement: 3 AP exams at grades 4, 4, 4; Minimum GPA 3.2". Owner decision. |
 | `uk-economics-durham` | A-Level requirements | contextualOffer is display-only; the matcher does not apply it. |
 | `uk-economics-durham` | IB requirements | The SL Mathematics at 7 alternative is display-only; the engine's ibHL tag requires HL Mathematics. |
