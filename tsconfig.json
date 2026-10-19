@@ -24,6 +24,7 @@
     "scripts/requirements-report.mjs",
     "scripts/requirements-new-cycle.mjs",
     "scripts/migrate-requirements-2027.mjs",
+    "scripts/migrate-requirements-2027-qualifications.mjs",
     "tests/**/*.mjs"
   ]
 }

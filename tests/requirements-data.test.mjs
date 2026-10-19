@@ -1,7 +1,8 @@
 // @ts-check
 // Tests over the REAL data: the current cycle is complete and traceable,
-// Phase 1 scope holds (no A-Level / IB), the site loads the right files,
-// and the annual carry-forward produces a valid draft.
+// A-Level and IB are covered as qualification categories (Phase 2), the
+// site loads the right files, and the annual carry-forward produces a
+// valid draft.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -28,7 +29,7 @@ test('the current cycle validates with no errors', () => {
   assert.deepEqual(errors, []);
 });
 
-test('every course has every Phase 1 category', () => {
+test('every course has every category', () => {
   for (const c of courses) {
     for (const cat of config.categories) assert.ok(cycle.courses[c.id]?.[cat.id], `${c.id} › ${cat.id}`);
   }
@@ -37,21 +38,23 @@ test('every course has every Phase 1 category', () => {
 test('every verified or partial requirement has a source and a last-verified date', () => {
   for (const [id, rec] of Object.entries(cycle.courses)) {
     for (const [cat, e] of Object.entries(rec)) {
-      if (e.status === 'unverified') continue;
+      if (e.status === 'unverified') continue;   // includes A-Level / IB rows with no data
       assert.ok(e.sources?.length && /^https?:\/\//.test(e.sources[0].url), `${id} › ${cat}: source`);
       assert.match(e.lastVerified ?? '', /^\d{4}-\d{2}-\d{2}$/, `${id} › ${cat}: date`);
     }
   }
 });
 
-test('Phase 1 scope: no A-Level or IB category, label or row', () => {
-  const qual = /a-?level|\bib\b|baccalaureate/i;
-  for (const cat of config.categories) {
-    assert.doesNotMatch(cat.id, qual);
-    assert.doesNotMatch(cat.label, qual);
+test('Phase 2 scope: A-Level and IB are qualification categories shown in the one panel', () => {
+  const ids = config.categories.map(c => c.id);
+  for (const id of ['aLevel', 'ib']) {
+    assert.ok(ids.includes(id), `config has ${id}`);
+    assert.equal(config.categories.find(c => c.id === id)?.kind, 'qualification');
   }
-  const html = view.panelHtml({ record: cycle.courses[courses[0].id], categories: config.categories, cycleLabel: 'x' });
-  for (const m of html.matchAll(/<dt class="reqs__label">([^<]*)<\/dt>/g)) assert.doesNotMatch(m[1], qual);
+  const html = view.panelHtml({ record: cycle.courses['uk-medicine-oxford'], categories: config.categories, cycleLabel: 'x' });
+  const labels = [...html.matchAll(/<dt class="reqs__label">([^<]*)<\/dt>/g)].map(m => m[1]);
+  assert.deepEqual(labels, config.categories.map(c => c.label));
+  assert.equal((html.match(/<details class="reqs">/g) ?? []).length, 1, 'one panel, not a second one');
 });
 
 test('the site loads config, the current cycle and the renderer before main.js', () => {

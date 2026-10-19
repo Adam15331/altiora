@@ -6,16 +6,18 @@
 
 ## Coverage
 
-| Category | Verified | Partly verified | Not verified |
-|---|---:|---:|---:|
-| SAT / ACT | 0 | 0 | 320 |
-| English language | 0 | 0 | 320 |
-| Admissions tests | 308 | 12 | 0 |
-| Subject prerequisites | 308 | 12 | 0 |
-| Other qualifications | 19 | 30 | 271 |
-| Other requirements | 0 | 0 | 320 |
+| Category | Verified | Partly verified | Not verified | Not applicable |
+|---|---:|---:|---:|---:|
+| SAT / ACT | 0 | 0 | 320 | 0 |
+| English language | 0 | 0 | 320 | 0 |
+| Admissions tests | 308 | 12 | 0 | 0 |
+| Subject prerequisites | 308 | 12 | 0 | 0 |
+| A-Level requirements | 141 | 1 | 174 | 4 |
+| IB requirements | 198 | 7 | 111 | 4 |
+| Other qualifications | 19 | 30 | 271 | 0 |
+| Other requirements | 0 | 0 | 320 | 0 |
 
-320 courses × 6 categories = 1920 requirement entries.
+320 courses × 8 categories = 2560 requirement entries.
 
 ## Partly verified
 
@@ -55,16 +57,23 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-engineering-durham` | Other qualifications | Durham converts its A-Level requirement into an AP equivalent via a university equivalency table. Students at a school offering AP curriculum are expected to submit AP exams. Exams must be sat and submitted; the course grade is not accepted. Any subject-specific requirement must be evidenced with an AP exam. The equivalency table values are not yet captured. |
 | `sg-engineering-sutd` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `sg-engineering-sutd` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
+| `sg-engineering-sutd` | IB requirements | Confirmed on the university's page for A-Level-type applicants, not on a page for IB applicants — check it applies to IB. |
 | `hk-cs-cuhk` | Admissions tests | The official source could only be partly confirmed for this course — check it before relying on this. |
 | `hk-cs-cuhk` | Subject prerequisites | The official source could only be partly confirmed for this course — check it before relying on this. |
+| `hk-cs-cuhk` | IB requirements | The official source could only be partly confirmed for this course — check it before relying on this. |
 | `hk-engineering-cuhk` | Admissions tests | The official source could only be partly confirmed for this course — check it before relying on this. |
 | `hk-engineering-cuhk` | Subject prerequisites | The official source could only be partly confirmed for this course — check it before relying on this. |
+| `hk-engineering-cuhk` | A-Level requirements | The official source could only be partly confirmed for this course — check it before relying on this. |
+| `hk-engineering-cuhk` | IB requirements | The official source could only be partly confirmed for this course — check it before relying on this. |
 | `hk-economics-cuhk` | Admissions tests | The official source could only be partly confirmed for this course — check it before relying on this. |
 | `hk-economics-cuhk` | Subject prerequisites | The official source could only be partly confirmed for this course — check it before relying on this. |
+| `hk-economics-cuhk` | IB requirements | The official source could only be partly confirmed for this course — check it before relying on this. |
 | `hk-psychology-cuhk` | Admissions tests | The official source could only be partly confirmed for this course — check it before relying on this. |
 | `hk-psychology-cuhk` | Subject prerequisites | The official source could only be partly confirmed for this course — check it before relying on this. |
+| `hk-psychology-cuhk` | IB requirements | The official source could only be partly confirmed for this course — check it before relying on this. |
 | `ca-maths-mcgill` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-maths-mcgill` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
+| `ca-medicine-mcgill` | IB requirements | The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
 | `ca-cs-mcgill` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-cs-mcgill` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-engineering-mcgill` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
@@ -75,6 +84,7 @@ Shown with a "Partly verified" badge and the note below.
 | `ca-cs-waterloo` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-mathematics-waterloo` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-mathematics-waterloo` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
+| `ca-medicine-dalhousie` | IB requirements | The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
 | `ca-engineering-dalhousie` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-engineering-dalhousie` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 
@@ -186,6 +196,32 @@ Shown to students only as "Previously recorded, not verified". Confirm or correc
 | `us-business-unc` | SAT / ACT | Test-optional |
 | `us-economics-unc` | SAT / ACT | Test-optional |
 
+## Values withheld from the panel
+
+The matching engine holds these values, but they are not shown to students as requirements (the entry's
+note says why — e.g. an admitted-student figure). Replace each with the published requirement, or confirm none is published.
+
+| Course | Category | Withheld |
+|---|---|---|
+| `hk-cs-hkust` | IB requirements | overallScore, detail |
+| `hk-engineering-hkust` | IB requirements | overallScore, detail |
+| `hk-sciences-hkust` | IB requirements | overallScore, detail |
+| `hk-maths-hkust` | IB requirements | overallScore, detail |
+| `hk-engineering-polyu` | IB requirements | overallScore, detail |
+| `hk-nursing-polyu` | IB requirements | overallScore, detail |
+| `hk-business-polyu` | IB requirements | overallScore, detail |
+| `hk-architecture-polyu` | IB requirements | overallScore, detail |
+| `hk-cs-polyu` | IB requirements | overallScore, detail |
+| `ca-cs-waterloo` | IB requirements | detail |
+| `ca-engineering-waterloo` | IB requirements | detail |
+| `ca-mathematics-waterloo` | IB requirements | detail |
+| `ca-business-waterloo` | IB requirements | detail |
+| `ca-engineering-mcmaster` | IB requirements | detail |
+| `ca-cs-sfu` | IB requirements | detail |
+| `ca-business-sfu` | IB requirements | detail |
+| `ca-engineering-calgary` | IB requirements | detail |
+| `ca-business-calgary` | IB requirements | detail |
+
 ## Not verified, by course
 
 Hints point at wording in the course's existing source notes that may answer an unverified
@@ -241,7 +277,7 @@ category — check the official source; never copy a hint in as a value.
 | `uk-law-edinburgh` | University of Edinburgh | SAT / ACT, English language, Other requirements |  |
 | `uk-psychology-edinburgh` | University of Edinburgh | SAT / ACT, English language, Other requirements |  |
 | `uk-architecture-edinburgh` | University of Edinburgh | SAT / ACT, English language, Other requirements | notes mention an interview / portfolio / audition |
-| `uk-maths-edinburgh` | University of Edinburgh | SAT / ACT, English language, Other requirements |  |
+| `uk-maths-edinburgh` | University of Edinburgh | SAT / ACT, English language, A-Level requirements, Other requirements | notes mention A-Level grades |
 | `uk-medicine-kcl` | King's College London | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-law-kcl` | King's College London | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-cs-kcl` | King's College London | SAT / ACT, English language, Other qualifications, Other requirements |  |
@@ -308,106 +344,106 @@ category — check the official source; never copy a hint in as a value.
 | `uk-law-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-cs-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-psychology-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `us-cs-mit` | MIT | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-engineering-mit` | MIT | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-mechanical-mit` | MIT | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-physics-mit` | MIT | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-economics-mit` | MIT | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-maths-mit` | MIT | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-stanford` | Stanford University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-engineering-stanford` | Stanford University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-economics-stanford` | Stanford University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-maths-stanford` | Stanford University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `us-psychology-stanford` | Stanford University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `us-cs-harvard` | Harvard University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-economics-harvard` | Harvard University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-law-harvard` | Harvard University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-biology-harvard` | Harvard University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-maths-harvard` | Harvard University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-princeton` | Princeton University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-engineering-princeton` | Princeton University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-economics-princeton` | Princeton University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-maths-princeton` | Princeton University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-yale` | Yale University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-economics-yale` | Yale University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-law-yale` | Yale University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-biology-yale` | Yale University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-columbia` | Columbia University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-maths-columbia` | Columbia University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `us-economics-columbia` | Columbia University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-engineering-columbia` | Columbia University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-business-wharton` | University of Pennsylvania | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-penn` | University of Pennsylvania | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-economics-penn` | University of Pennsylvania | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-caltech` | Caltech | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-physics-caltech` | Caltech | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-engineering-caltech` | Caltech | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-maths-caltech` | Caltech | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `us-cs-cmu` | Carnegie Mellon University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-engineering-cmu` | Carnegie Mellon University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-business-cmu` | Carnegie Mellon University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-maths-cmu` | Carnegie Mellon University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `us-cs-berkeley` | UC Berkeley | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-engineering-berkeley` | UC Berkeley | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-economics-berkeley` | UC Berkeley | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-business-berkeley` | UC Berkeley | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-maths-berkeley` | UC Berkeley | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `us-cs-michigan` | University of Michigan | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-engineering-michigan` | University of Michigan | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-business-michigan` | University of Michigan | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-economics-michigan` | University of Michigan | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-maths-michigan` | University of Michigan | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `us-psychology-michigan` | University of Michigan | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `us-business-nyu` | New York University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-nyu` | New York University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-law-georgetown` | Georgetown University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-business-georgetown` | Georgetown University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-duke` | Duke University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-maths-duke` | Duke University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `us-economics-duke` | Duke University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-biomedical-jhu` | Johns Hopkins University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-jhu` | Johns Hopkins University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `sg-cs-nus` | National University of Singapore | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `sg-engineering-nus` | National University of Singapore | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `sg-medicine-nus` | National University of Singapore | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `sg-psychology-nus` | National University of Singapore | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `sg-law-nus` | National University of Singapore | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an English-language test; notes mention an interview / portfolio / audition; notes mention SAT/ACT |
-| `sg-economics-nus` | National University of Singapore | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `sg-business-nus` | National University of Singapore | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `sg-sciences-nus` | National University of Singapore | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `sg-maths-nus` | National University of Singapore | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `sg-pharmacy-nus` | National University of Singapore | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `sg-cs-ntu` | Nanyang Technological University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `sg-maths-ntu` | Nanyang Technological University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `sg-engineering-ntu` | Nanyang Technological University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `sg-business-ntu` | Nanyang Technological University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `sg-medicine-ntu` | Nanyang Technological University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `sg-economics-ntu` | Nanyang Technological University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `sg-architecture-ntu` | Nanyang Technological University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `sg-law-smu` | Singapore Management University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `sg-business-smu` | Singapore Management University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `sg-economics-smu` | Singapore Management University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `sg-cs-smu` | Singapore Management University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `sg-engineering-sutd` | Singapore University of Technology & Design | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `sg-architecture-sutd` | Singapore University of Technology & Design | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `hk-medicine-hku` | University of Hong Kong | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
+| `us-cs-mit` | MIT | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-engineering-mit` | MIT | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-mechanical-mit` | MIT | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-physics-mit` | MIT | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-economics-mit` | MIT | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-maths-mit` | MIT | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-stanford` | Stanford University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-engineering-stanford` | Stanford University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-economics-stanford` | Stanford University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-maths-stanford` | Stanford University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-psychology-stanford` | Stanford University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-harvard` | Harvard University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-economics-harvard` | Harvard University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-law-harvard` | Harvard University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-biology-harvard` | Harvard University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-maths-harvard` | Harvard University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-princeton` | Princeton University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-engineering-princeton` | Princeton University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-economics-princeton` | Princeton University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-maths-princeton` | Princeton University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-yale` | Yale University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; notes mention IB; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `us-economics-yale` | Yale University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; notes mention IB; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `us-law-yale` | Yale University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; notes mention IB; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `us-biology-yale` | Yale University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; notes mention IB; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `us-cs-columbia` | Columbia University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-maths-columbia` | Columbia University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-economics-columbia` | Columbia University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-engineering-columbia` | Columbia University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-business-wharton` | University of Pennsylvania | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-penn` | University of Pennsylvania | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-economics-penn` | University of Pennsylvania | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-caltech` | Caltech | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-physics-caltech` | Caltech | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-engineering-caltech` | Caltech | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-maths-caltech` | Caltech | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-cmu` | Carnegie Mellon University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-engineering-cmu` | Carnegie Mellon University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-business-cmu` | Carnegie Mellon University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-maths-cmu` | Carnegie Mellon University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-berkeley` | UC Berkeley | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-engineering-berkeley` | UC Berkeley | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-economics-berkeley` | UC Berkeley | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-business-berkeley` | UC Berkeley | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-maths-berkeley` | UC Berkeley | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-michigan` | University of Michigan | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-engineering-michigan` | University of Michigan | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-business-michigan` | University of Michigan | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-economics-michigan` | University of Michigan | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-maths-michigan` | University of Michigan | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-psychology-michigan` | University of Michigan | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-business-nyu` | New York University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; notes mention IB; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `us-cs-nyu` | New York University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; notes mention IB; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `us-law-georgetown` | Georgetown University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-business-georgetown` | Georgetown University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-duke` | Duke University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-maths-duke` | Duke University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-economics-duke` | Duke University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-biomedical-jhu` | Johns Hopkins University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-jhu` | Johns Hopkins University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `sg-cs-nus` | National University of Singapore | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention A-Level grades |
+| `sg-engineering-nus` | National University of Singapore | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `sg-medicine-nus` | National University of Singapore | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention A-Level grades |
+| `sg-psychology-nus` | National University of Singapore | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `sg-law-nus` | National University of Singapore | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention an English-language test; notes mention an interview / portfolio / audition; notes mention SAT/ACT; notes mention A-Level grades; notes mention IB |
+| `sg-economics-nus` | National University of Singapore | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `sg-business-nus` | National University of Singapore | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `sg-sciences-nus` | National University of Singapore | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `sg-maths-nus` | National University of Singapore | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `sg-pharmacy-nus` | National University of Singapore | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `sg-cs-ntu` | Nanyang Technological University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `sg-maths-ntu` | Nanyang Technological University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `sg-engineering-ntu` | Nanyang Technological University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `sg-business-ntu` | Nanyang Technological University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `sg-medicine-ntu` | Nanyang Technological University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention A-Level grades |
+| `sg-economics-ntu` | Nanyang Technological University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `sg-architecture-ntu` | Nanyang Technological University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention A-Level grades |
+| `sg-law-smu` | Singapore Management University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention A-Level grades; notes mention IB |
+| `sg-business-smu` | Singapore Management University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention A-Level grades; notes mention IB |
+| `sg-economics-smu` | Singapore Management University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention A-Level grades |
+| `sg-cs-smu` | Singapore Management University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention A-Level grades |
+| `sg-engineering-sutd` | Singapore University of Technology & Design | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention A-Level grades |
+| `sg-architecture-sutd` | Singapore University of Technology & Design | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention A-Level grades |
+| `hk-medicine-hku` | University of Hong Kong | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
 | `hk-cs-hku` | University of Hong Kong | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `hk-maths-hku` | University of Hong Kong | SAT / ACT, English language, Other qualifications, Other requirements |  |
+| `hk-maths-hku` | University of Hong Kong | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `hk-engineering-hku` | University of Hong Kong | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `hk-law-hku` | University of Hong Kong | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
 | `hk-economics-hku` | University of Hong Kong | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
 | `hk-business-hku` | University of Hong Kong | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `hk-architecture-hku` | University of Hong Kong | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
+| `hk-architecture-hku` | University of Hong Kong | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
 | `hk-pharmacy-hku` | University of Hong Kong | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
 | `hk-psychology-hku` | University of Hong Kong | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `hk-medicine-cuhk` | Chinese University of Hong Kong | SAT / ACT, English language, Other requirements | notes mention an interview / portfolio / audition |
-| `hk-cs-cuhk` | Chinese University of Hong Kong | SAT / ACT, English language, Other qualifications, Other requirements |  |
+| `hk-medicine-cuhk` | Chinese University of Hong Kong | SAT / ACT, English language, A-Level requirements, Other requirements | notes mention an interview / portfolio / audition; notes mention A-Level grades |
+| `hk-cs-cuhk` | Chinese University of Hong Kong | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
 | `hk-engineering-cuhk` | Chinese University of Hong Kong | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `hk-economics-cuhk` | Chinese University of Hong Kong | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `hk-law-cuhk` | Chinese University of Hong Kong | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an English-language test; notes mention an interview / portfolio / audition |
-| `hk-business-cuhk` | Chinese University of Hong Kong | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `hk-psychology-cuhk` | Chinese University of Hong Kong | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `hk-architecture-cuhk` | Chinese University of Hong Kong | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
+| `hk-economics-cuhk` | Chinese University of Hong Kong | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `hk-law-cuhk` | Chinese University of Hong Kong | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an English-language test; notes mention an interview / portfolio / audition; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `hk-business-cuhk` | Chinese University of Hong Kong | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `hk-psychology-cuhk` | Chinese University of Hong Kong | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `hk-architecture-cuhk` | Chinese University of Hong Kong | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
 | `hk-cs-hkust` | HKUST | SAT / ACT, English language, Other requirements | notes mention an English-language test |
 | `hk-engineering-hkust` | HKUST | SAT / ACT, English language, Other requirements |  |
 | `hk-economics-hkust` | HKUST | SAT / ACT, English language, Other requirements | notes mention an interview / portfolio / audition |
@@ -420,96 +456,96 @@ category — check the official source; never copy a hint in as a value.
 | `hk-business-polyu` | Hong Kong Polytechnic University | SAT / ACT, English language, Other requirements |  |
 | `hk-architecture-polyu` | Hong Kong Polytechnic University | SAT / ACT, English language, Other requirements | notes mention an interview / portfolio / audition |
 | `hk-cs-polyu` | Hong Kong Polytechnic University | SAT / ACT, English language, Other requirements | notes mention an interview / portfolio / audition |
-| `hk-cs-cityu` | City University of Hong Kong | SAT / ACT, English language, Other requirements | notes mention an English-language test |
-| `hk-engineering-cityu` | City University of Hong Kong | SAT / ACT, English language, Other requirements |  |
+| `hk-cs-cityu` | City University of Hong Kong | SAT / ACT, English language, IB requirements, Other requirements | notes mention an English-language test; notes mention IB |
+| `hk-engineering-cityu` | City University of Hong Kong | SAT / ACT, English language, IB requirements, Other requirements | notes mention IB |
 | `hk-law-cityu` | City University of Hong Kong | SAT / ACT, English language, Other requirements | notes mention an interview / portfolio / audition |
-| `hk-business-cityu` | City University of Hong Kong | SAT / ACT, English language, Other requirements |  |
-| `hk-economics-cityu` | City University of Hong Kong | SAT / ACT, English language, Other requirements |  |
-| `us-cs-northwestern` | Northwestern University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-economics-northwestern` | Northwestern University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-engineering-northwestern` | Northwestern University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-dartmouth` | Dartmouth College | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-economics-dartmouth` | Dartmouth College | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-brown` | Brown University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-maths-brown` | Brown University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `us-economics-brown` | Brown University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-cornell` | Cornell University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-maths-cornell` | Cornell University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `us-engineering-cornell` | Cornell University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-economics-cornell` | Cornell University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-business-cornell` | Cornell University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-rice` | Rice University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-engineering-rice` | Rice University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-economics-vanderbilt` | Vanderbilt University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-vanderbilt` | Vanderbilt University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-business-notredame` | University of Notre Dame | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-notredame` | University of Notre Dame | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-washu` | Washington University in St. Louis | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-business-washu` | Washington University in St. Louis | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-business-emory` | Emory University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-economics-emory` | Emory University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-ucla` | UCLA | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-engineering-ucla` | UCLA | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-economics-ucla` | UCLA | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-maths-ucla` | UCLA | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `us-psychology-ucla` | UCLA | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `us-business-usc` | University of Southern California | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-usc` | University of Southern California | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-gatech` | Georgia Tech | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-engineering-gatech` | Georgia Tech | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-business-uva` | University of Virginia | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-uva` | University of Virginia | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-economics-uva` | University of Virginia | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-uiuc` | University of Illinois Urbana-Champaign | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-engineering-uiuc` | University of Illinois Urbana-Champaign | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-engineering-purdue` | Purdue University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-cs-purdue` | Purdue University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-business-unc` | UNC Chapel Hill | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `us-economics-unc` | UNC Chapel Hill | SAT / ACT, English language, Other qualifications, Other requirements | notes mention SAT/ACT |
-| `ca-cs-utoronto` | University of Toronto | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-maths-toronto` | University of Toronto | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-maths-ubc` | University of British Columbia | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-maths-mcgill` | McGill University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-engineering-utoronto` | University of Toronto | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-medicine-utoronto` | University of Toronto | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-economics-utoronto` | University of Toronto | SAT / ACT, English language, Other qualifications, Other requirements |  |
+| `hk-business-cityu` | City University of Hong Kong | SAT / ACT, English language, IB requirements, Other requirements | notes mention IB |
+| `hk-economics-cityu` | City University of Hong Kong | SAT / ACT, English language, IB requirements, Other requirements | notes mention IB |
+| `us-cs-northwestern` | Northwestern University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-economics-northwestern` | Northwestern University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-engineering-northwestern` | Northwestern University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-dartmouth` | Dartmouth College | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-economics-dartmouth` | Dartmouth College | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-brown` | Brown University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-maths-brown` | Brown University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-economics-brown` | Brown University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-cornell` | Cornell University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-maths-cornell` | Cornell University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-engineering-cornell` | Cornell University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-economics-cornell` | Cornell University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-business-cornell` | Cornell University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-rice` | Rice University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-engineering-rice` | Rice University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-economics-vanderbilt` | Vanderbilt University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-vanderbilt` | Vanderbilt University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-business-notredame` | University of Notre Dame | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-notredame` | University of Notre Dame | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-washu` | Washington University in St. Louis | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-business-washu` | Washington University in St. Louis | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-business-emory` | Emory University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-economics-emory` | Emory University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-ucla` | UCLA | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-engineering-ucla` | UCLA | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-economics-ucla` | UCLA | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-maths-ucla` | UCLA | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-psychology-ucla` | UCLA | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-business-usc` | University of Southern California | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-usc` | University of Southern California | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-gatech` | Georgia Tech | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-engineering-gatech` | Georgia Tech | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-business-uva` | University of Virginia | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-uva` | University of Virginia | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-economics-uva` | University of Virginia | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-uiuc` | University of Illinois Urbana-Champaign | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-engineering-uiuc` | University of Illinois Urbana-Champaign | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-engineering-purdue` | Purdue University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-cs-purdue` | Purdue University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-business-unc` | UNC Chapel Hill | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-economics-unc` | UNC Chapel Hill | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `ca-cs-utoronto` | University of Toronto | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `ca-maths-toronto` | University of Toronto | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `ca-maths-ubc` | University of British Columbia | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `ca-maths-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `ca-engineering-utoronto` | University of Toronto | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `ca-medicine-utoronto` | University of Toronto | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `ca-economics-utoronto` | University of Toronto | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
 | `ca-law-utoronto` | University of Toronto | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-medicine-mcgill` | McGill University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-cs-mcgill` | McGill University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-engineering-mcgill` | McGill University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-economics-mcgill` | McGill University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-law-mcgill` | McGill University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-cs-ubc` | University of British Columbia | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-engineering-ubc` | University of British Columbia | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-business-ubc` | University of British Columbia | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `ca-economics-ubc` | University of British Columbia | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-cs-waterloo` | University of Waterloo | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-engineering-waterloo` | University of Waterloo | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `ca-mathematics-waterloo` | University of Waterloo | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-business-waterloo` | University of Waterloo | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-medicine-mcmaster` | McMaster University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-engineering-mcmaster` | McMaster University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-cs-mcmaster` | McMaster University | SAT / ACT, English language, Other qualifications, Other requirements |  |
+| `ca-medicine-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
+| `ca-cs-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `ca-engineering-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `ca-economics-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `ca-law-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention IB; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `ca-cs-ubc` | University of British Columbia | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `ca-engineering-ubc` | University of British Columbia | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `ca-business-ubc` | University of British Columbia | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention A-Level grades |
+| `ca-economics-ubc` | University of British Columbia | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `ca-cs-waterloo` | University of Waterloo | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `ca-engineering-waterloo` | University of Waterloo | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `ca-mathematics-waterloo` | University of Waterloo | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `ca-business-waterloo` | University of Waterloo | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `ca-medicine-mcmaster` | McMaster University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `ca-engineering-mcmaster` | McMaster University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `ca-cs-mcmaster` | McMaster University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
 | `ca-business-western` | Western University | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `ca-cs-western` | Western University | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `ca-medicine-western` | Western University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `ca-business-queens` | Queen's University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-engineering-queens` | Queen's University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
-| `ca-economics-queens` | Queen's University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-engineering-alberta` | University of Alberta | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-cs-alberta` | University of Alberta | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-business-alberta` | University of Alberta | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-cs-sfu` | Simon Fraser University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-business-sfu` | Simon Fraser University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-engineering-calgary` | University of Calgary | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-business-calgary` | University of Calgary | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
+| `ca-business-queens` | Queen's University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `ca-engineering-queens` | Queen's University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `ca-economics-queens` | Queen's University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `ca-engineering-alberta` | University of Alberta | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `ca-cs-alberta` | University of Alberta | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `ca-business-alberta` | University of Alberta | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `ca-cs-sfu` | Simon Fraser University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `ca-business-sfu` | Simon Fraser University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `ca-engineering-calgary` | University of Calgary | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `ca-business-calgary` | University of Calgary | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention A-Level grades |
 | `ca-law-ottawa` | University of Ottawa | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-cs-ottawa` | University of Ottawa | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-medicine-dalhousie` | Dalhousie University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-engineering-dalhousie` | Dalhousie University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-business-concordia` | Concordia University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-cs-concordia` | Concordia University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-business-york` | York University | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention SAT/ACT |
+| `ca-cs-ottawa` | University of Ottawa | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `ca-medicine-dalhousie` | Dalhousie University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
+| `ca-engineering-dalhousie` | Dalhousie University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
+| `ca-business-concordia` | Concordia University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `ca-cs-concordia` | Concordia University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `ca-business-york` | York University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
 | `ca-law-york` | York University | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `ca-law-uvic` | University of Victoria | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-cs-uvic` | University of Victoria | SAT / ACT, English language, Other qualifications, Other requirements |  |
+| `ca-cs-uvic` | University of Victoria | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
