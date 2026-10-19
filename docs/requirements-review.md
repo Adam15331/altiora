@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 24 | 0 | 296 | 0 |
-| English language | 24 | 0 | 296 | 0 |
+| SAT / ACT | 28 | 0 | 292 | 0 |
+| English language | 28 | 0 | 292 | 0 |
 | Admissions tests | 308 | 12 | 0 | 0 |
-| Subject prerequisites | 284 | 36 | 0 | 0 |
-| A-Level requirements | 161 | 5 | 150 | 4 |
-| IB requirements | 222 | 7 | 87 | 4 |
-| Other qualifications | 43 | 30 | 247 | 0 |
-| Other requirements | 24 | 0 | 296 | 0 |
+| Subject prerequisites | 280 | 40 | 0 | 0 |
+| A-Level requirements | 165 | 5 | 146 | 4 |
+| IB requirements | 226 | 7 | 83 | 4 |
+| Other qualifications | 47 | 30 | 243 | 0 |
+| Other requirements | 28 | 0 | 292 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -83,6 +83,10 @@ Shown with a "Partly verified" badge and the note below.
 | `us-law-yale` | A-Level requirements | Yale’s pages do not mention A-Levels by name — this row applies Yale’s statement on international leaving exams. |
 | `us-biology-yale` | Subject prerequisites | Official: Yale has no required secondary-school courses, but advises taking courses each year in English, science, math, the social sciences and foreign language. This applies to all Yale College applicants, whatever the intended major. |
 | `us-biology-yale` | A-Level requirements | Yale’s pages do not mention A-Levels by name — this row applies Yale’s statement on international leaving exams. |
+| `us-cs-columbia` | Subject prerequisites | Official (Columbia Engineering): no standardized course of study is prescribed, but Columbia Engineering strongly advises physics and calculus within its recommended preparation — four years of mathematics through calculus (unless already completed what is available), four years of laboratory science including one year of chemistry and one year of physics (preferably in the last two years), four years of English literature and composition, three to four years of history/social studies, and two to three years of a world language. |
+| `us-maths-columbia` | Subject prerequisites | Official (Columbia College): no explicit unit requirements, but applicants must present evidence of preparation in the humanities, mathematics, social sciences, foreign languages and natural sciences. Columbia College strongly recommends four years of English literature and composition, four years of mathematics (unless already completed what is available), three to four years of history/social studies, three to four years of laboratory science and three to four years of one world language. Mathematics at least through pre-calculus is strongly advised wherever possible for students planning to become scientists, engineers, physicians or dentists. |
+| `us-economics-columbia` | Subject prerequisites | Official (Columbia College): no explicit unit requirements, but applicants must present evidence of preparation in the humanities, mathematics, social sciences, foreign languages and natural sciences. Columbia College strongly recommends four years of English literature and composition, four years of mathematics (unless already completed what is available), three to four years of history/social studies, three to four years of laboratory science and three to four years of one world language. Mathematics at least through pre-calculus is strongly advised wherever possible for students planning to become scientists, engineers, physicians or dentists. |
+| `us-engineering-columbia` | Subject prerequisites | Official (Columbia Engineering): no standardized course of study is prescribed, but Columbia Engineering strongly advises physics and calculus within its recommended preparation — four years of mathematics through calculus (unless already completed what is available), four years of laboratory science including one year of chemistry and one year of physics (preferably in the last two years), four years of English literature and composition, three to four years of history/social studies, and two to three years of a world language. |
 | `sg-engineering-sutd` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `sg-engineering-sutd` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `sg-engineering-sutd` | IB requirements | Confirmed on the university's page for A-Level-type applicants, not on a page for IB applicants — check it applies to IB. |
@@ -123,10 +127,6 @@ Shown to students only as "Previously recorded, not verified". Confirm or correc
 
 | Course | Category | Recorded value |
 |---|---|---|
-| `us-cs-columbia` | SAT / ACT | Test-optional |
-| `us-maths-columbia` | SAT / ACT | Test-optional |
-| `us-economics-columbia` | SAT / ACT | Test-optional |
-| `us-engineering-columbia` | SAT / ACT | Test-optional |
 | `us-business-wharton` | SAT / ACT | SAT/ACT required |
 | `us-cs-penn` | SAT / ACT | SAT/ACT required |
 | `us-economics-penn` | SAT / ACT | SAT/ACT required |
@@ -235,6 +235,10 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `us-law-yale` | Subject prerequisites | Official source lists advised high-school subjects (English, science, math, social sciences, foreign language), while stating none are required; data/courseRequirements.js holds none. Owner decision. |
 | `us-biology-yale` | SAT / ACT | data/courseRequirements.js still records usAdmissions.test "flexible" (test-flexible) for this course; Yale now requires the ACT or SAT. Owner decision — not changed here. |
 | `us-biology-yale` | Subject prerequisites | Official source lists advised high-school subjects (English, science, math, social sciences, foreign language), while stating none are required; data/courseRequirements.js holds none. Owner decision. |
+| `us-cs-columbia` | Subject prerequisites | Official source lists strongly advised high-school preparation for Columbia Engineering (mathematics through calculus; laboratory science incl. one year each of chemistry and physics); data/courseRequirements.js holds none. Owner decision. |
+| `us-maths-columbia` | Subject prerequisites | Official source lists strongly recommended high-school preparation for Columbia College (English, mathematics, history/social studies, laboratory science, world language); data/courseRequirements.js holds none. Owner decision. |
+| `us-economics-columbia` | Subject prerequisites | Official source lists strongly recommended high-school preparation for Columbia College (English, mathematics, history/social studies, laboratory science, world language); data/courseRequirements.js holds none. Owner decision. |
+| `us-engineering-columbia` | Subject prerequisites | Official source lists strongly advised high-school preparation for Columbia Engineering (mathematics through calculus; laboratory science incl. one year each of chemistry and physics); data/courseRequirements.js holds none. Owner decision. |
 
 ## Values withheld from the panel
 
@@ -384,10 +388,6 @@ category — check the official source; never copy a hint in as a value.
 | `uk-law-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-cs-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-psychology-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `us-cs-columbia` | Columbia University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-maths-columbia` | Columbia University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-economics-columbia` | Columbia University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-engineering-columbia` | Columbia University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-business-wharton` | University of Pennsylvania | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-cs-penn` | University of Pennsylvania | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-economics-penn` | University of Pennsylvania | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
