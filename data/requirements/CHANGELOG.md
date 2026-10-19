@@ -3747,3 +3747,30 @@ Format:
 - `uk-psychology-manchester` · subjectPrerequisites: row partial → partial (owner flag kept).
 - `uk-psychology-manchester` · aLevel: row partial → partial (owner flag kept).
 - `uk-psychology-manchester` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Warwick
+
+- `uk-economics-warwick` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-stated). Source: https://warwick.ac.uk/study/undergraduate/courses/bsc-economics/
+  > Further Maths and Economics are not essential, although they are accepted subject choices for a student considering Economics at degree level. We treat them as any other strong A level subject: they have no special status.
+- `uk-economics-warwick` · subjectPrerequisites: row partial → verified.
+- `uk-economics-warwick` · aLevel: row partial → partial (owner flag kept).
+- `uk-economics-warwick` · ib: row partial → partial (owner flag kept).
+- `uk-law-warwick` · engine `grades.aLevels`: AAA → A*AA (offer). Source: https://warwick.ac.uk/study/undergraduate/courses/llb-law/
+  > A level typical offer A*AA
+- `uk-law-warwick` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-unlisted). Source: https://warwick.ac.uk/study/undergraduate/courses/llb-law/
+  > A level typical offer A*AA You will also need grade 4/C in GCSE Mathematics and grade 6/B in GCSE English Language.
+- `uk-law-warwick` · subjectPrerequisites: row partial → verified.
+- `uk-law-warwick` · aLevel: row partial → verified (owner flag kept).
+- `uk-law-warwick` · ib: row partial → verified (owner flag kept).
+- `uk-accounting-warwick` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.wbs.ac.uk/courses/undergraduate/accounting-and-finance/requirements/
+  > A levels: A*AA including A in Maths.
+- `uk-accounting-warwick` · subjectPrerequisites: row partial → verified.
+- `uk-accounting-warwick` · aLevel: row partial → partial (owner flag kept).
+- `uk-accounting-warwick` · ib: row partial → partial (owner flag kept).
+- `uk-engineering-warwick` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://warwick.ac.uk/study/undergraduate/courses/meng-engineering/
+  > A level typical offer A*AA to include Mathematics and Physics.
+- `uk-engineering-warwick` · engine `grades.ibHL`: [Mathematics_Advanced, Physics] → [Mathematics_Standard, Physics] (ib-hl). Source: https://warwick.ac.uk/study/undergraduate/courses/meng-engineering/
+  > International Baccalaureate (IB) typical offer 38 to include 6,6,6 in three subjects at Higher Level including Mathematics and Physics.
+- `uk-engineering-warwick` · subjectPrerequisites: row partial → verified.
+- `uk-engineering-warwick` · aLevel: row partial → verified (owner flag kept).
+- `uk-engineering-warwick` · ib: row partial → partial (owner flag kept).

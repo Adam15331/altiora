@@ -11,9 +11,9 @@
 | SAT / ACT | 169 | 18 | 133 | 0 |
 | English language | 179 | 11 | 130 | 0 |
 | Admissions tests | 280 | 30 | 10 | 0 |
-| Subject prerequisites | 127 | 183 | 10 | 0 |
-| A-Level requirements | 137 | 96 | 83 | 4 |
-| IB requirements | 201 | 94 | 21 | 4 |
+| Subject prerequisites | 131 | 179 | 10 | 0 |
+| A-Level requirements | 139 | 94 | 83 | 4 |
+| IB requirements | 202 | 93 | 21 | 4 |
 | Other qualifications | 162 | 51 | 107 | 0 |
 | Other requirements | 181 | 14 | 125 | 0 |
 
@@ -196,9 +196,8 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-economics-warwick` | SAT / ACT | Warwick states its US entry requirements are under review for the 2027/28 cycle and should be used as a guide only. |
 | `uk-economics-warwick` | English language | The band (C) is confirmed for 2027 entry on the course page; the test scores come from Warwick’s English Language Requirements page, which states them for September 2026 entry only (last updated 04 February 2026). 2027-entry scores not yet confirmed. |
 | `uk-economics-warwick` | Admissions tests | Official (2027 entry): TMUA optional; high scorers considered for a reduced AAA offer. Warwick’s admissions-tests page says the Economics TMUA requirements are under review for 2027 entry. |
-| `uk-economics-warwick` | Subject prerequisites | Official (2027 entry): A-level Mathematics required; Further Maths and Economics have no special status. |
-| `uk-economics-warwick` | A-Level requirements | Official (2027 entry): A*AA including A in Mathematics (contextual AAB); Further Maths has no special status. The offer and required subject agree. Top TMUA scorers may receive a reduced AAA offer. |
-| `uk-economics-warwick` | IB requirements | Official (2027 entry): 38 including 6 in HL Mathematics (AA or AI) — score and HL requirement agree; no preferred subjects are stated. |
+| `uk-economics-warwick` | A-Level requirements | A*AA including A in Mathematics (contextual AAB); Further Maths has no special status. Top TMUA scorers may receive a reduced AAA offer. “Only the top three grades are considered” (in detail) is not in this row's snippet. |
+| `uk-economics-warwick` | IB requirements | 38 including 6 in HL Mathematics (AA or AI). The contextual offer (34 including 6 in HL Mathematics) is not in this row's snippet. |
 | `uk-economics-warwick` | Other qualifications | Warwick states its US entry requirements are under review for the 2027/28 cycle and should be used as a guide only. |
 | `uk-maths-warwick` | SAT / ACT | Warwick states its US entry requirements are under review for the 2027/28 cycle and should be used as a guide only. |
 | `uk-maths-warwick` | English language | The band (A) is confirmed for 2027 entry on the course page; the test scores come from Warwick’s English Language Requirements page, which states them for September 2026 entry only (last updated 04 February 2026). 2027-entry scores not yet confirmed. |
@@ -212,20 +211,14 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-cs-warwick` | Other qualifications | Warwick states its US entry requirements are under review for the 2027/28 cycle and should be used as a guide only. |
 | `uk-law-warwick` | SAT / ACT | Warwick states its US entry requirements are under review for the 2027/28 cycle and should be used as a guide only. |
 | `uk-law-warwick` | English language | The band (C) is confirmed for 2027 entry on the course page; the test scores come from Warwick’s English Language Requirements page, which states them for September 2026 entry only (last updated 04 February 2026). 2027-entry scores not yet confirmed. |
-| `uk-law-warwick` | Subject prerequisites | Official (2027 entry): no required or preferred A-level subjects are stated; GCSE Mathematics 4/C and GCSE English Language 6/B are required. |
-| `uk-law-warwick` | A-Level requirements | Official (2027 entry): A*AA (contextual AAB); no preferred subjects stated. |
-| `uk-law-warwick` | IB requirements | Official (2027 entry): 38 (contextual 34) — the score agrees; no preferred subjects stated. |
 | `uk-law-warwick` | Other qualifications | Warwick states its US entry requirements are under review for the 2027/28 cycle and should be used as a guide only. |
 | `uk-accounting-warwick` | SAT / ACT | Warwick states its US entry requirements are under review for the 2027/28 cycle and should be used as a guide only. |
-| `uk-accounting-warwick` | Subject prerequisites | Official (2027 entry): A in Mathematics required; no preferred subjects are stated. |
-| `uk-accounting-warwick` | A-Level requirements | Official (2027 entry): A*AA including A in Maths (contextual AAB) — offer and required subject agree; no preferred subjects stated. |
-| `uk-accounting-warwick` | IB requirements | Official (2027 entry): 38 to include 6 in HL Mathematics (AA or AI) — score and HL requirement agree; no preferred subjects stated. |
+| `uk-accounting-warwick` | A-Level requirements | A*AA including A in Maths (contextual AAB); no preferred subjects named. The rule that Statistics, Economics, Accounting or Finance do not meet the Mathematics requirement (in detail) is quoted in the subject-prerequisites row (WBS page), not in this row's snippet. |
+| `uk-accounting-warwick` | IB requirements | 38 to include 6 in HL Mathematics (AA or AI). The contextual offer (34 including 6 in HL Mathematics) is not in this row's snippet. |
 | `uk-accounting-warwick` | Other qualifications | Warwick states its US entry requirements are under review for the 2027/28 cycle and should be used as a guide only. |
 | `uk-engineering-warwick` | SAT / ACT | Warwick states its US entry requirements are under review for the 2027/28 cycle and should be used as a guide only. |
 | `uk-engineering-warwick` | English language | The band (A) is confirmed for 2027 entry on the course page; the test scores come from Warwick’s English Language Requirements page, which states them for September 2026 entry only (last updated 04 February 2026). 2027-entry scores not yet confirmed. |
-| `uk-engineering-warwick` | Subject prerequisites | Official (2027 entry): A*AA to include Mathematics and Physics (applicants with one of the two may be considered); Further Mathematics is not named as preferred. |
-| `uk-engineering-warwick` | A-Level requirements | Official (2027 entry): A*AA to include Mathematics and Physics (contextual AAA) — offer and required subjects agree; Further Mathematics is not named as preferred. |
-| `uk-engineering-warwick` | IB requirements | Official (2027 entry): 38 to include 6,6,6 at Higher Level including Mathematics and Physics — score and HL profile agree. Warwick does not restrict HL Mathematics to Analysis and Approaches, and names no preferred subject. |
+| `uk-engineering-warwick` | IB requirements | 38 to include 6,6,6 at HL including Mathematics (not restricted to Analysis and Approaches) and Physics. The contextual offer (36 including 6,6 in Mathematics and Physics) is not in this row's snippet. |
 | `uk-engineering-warwick` | Other qualifications | Warwick states its US entry requirements are under review for the 2027/28 cycle and should be used as a guide only. |
 | `uk-cs-bristol` | IB requirements | Official (2027 entry): 38 points overall with 18 at Higher Level, including 7 at Higher Level in Mathematics (either Analysis and Approaches or Applications and Interpretations). The stored "766 at HL" (19 HL points) is stricter than 18 at HL. |
 | `uk-cs-bristol` | Other qualifications | Official (2027 entry): high-school diploma with GPA 3.2 minimum (3.4 for competitive courses) and three additional qualifications; AP tests count at a score of at least 4 (more commonly 5). Bristol does not say which courses count as competitive, and APs are one of several qualification types that can make up the three. |
@@ -797,9 +790,8 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `uk-maths-manchester` | Subject prerequisites | Further Mathematics is stated as preferred; data/courseRequirements.js holds preferred []. Owner decision. |
 | `uk-maths-manchester` | A-Level requirements | The page states Further Mathematics is preferred; data/courseRequirements.js holds preferred []. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
 | `uk-economics-warwick` | Admissions tests | Optional TMUA with a reduced-offer relation is published; data/courseRequirements.js holds admissionTests [] and no admissionTestRelations. Owner decision (re-check once Warwick publishes the 2027 review outcome). |
-| `uk-economics-warwick` | Subject prerequisites | Preferred subject differs: Warwick gives Further Maths no special status; data/courseRequirements.js holds requirements.preferred ["Mathematics_Advanced"]. Owner decision. |
-| `uk-economics-warwick` | A-Level requirements | Preferred subject differs: Warwick gives Further Maths no special status; data/courseRequirements.js holds requirements.preferred ["Mathematics_Advanced"]. Owner decision. Contextual offer is display-only — the matcher does not apply it. |
-| `uk-economics-warwick` | IB requirements | Preferred subject not stated by Warwick; data/courseRequirements.js holds requirements.preferred ["Mathematics_Advanced"]. Owner decision. Contextual offer is display-only — the matcher does not apply it. |
+| `uk-economics-warwick` | A-Level requirements | The top-three-grades rule needs a quoted source. Contextual offer is display-only — the matcher does not apply it. |
+| `uk-economics-warwick` | IB requirements | The contextual offer needs a quoted source. Contextual offer is display-only — the matcher does not apply it. |
 | `uk-maths-warwick` | A-Level requirements | Contextual offer is display-only — the matcher does not apply it. |
 | `uk-maths-warwick` | IB requirements | Contextual offer is display-only — the matcher does not apply it. |
 | `uk-maths-durham` | A-Level requirements | contextualOffer and practicalEndorsement are display-only; the matcher does not apply them. |
@@ -809,15 +801,12 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `uk-maths-bristol` | Other qualifications | Bristol’s USA page sets GPA 3.2 minimum (3.4 for competitive courses) plus three additional qualifications, with APs at 4+ (more commonly 5); Mathematics requires AP Calculus BC at 5; data/courseRequirements.js holds "Advanced Placement: 3 AP exams at grades 4, 4, 4; Minimum GPA 3.2". Owner decision. |
 | `uk-cs-warwick` | A-Level requirements | Contextual offer is display-only — the matcher does not apply it. |
 | `uk-cs-warwick` | IB requirements | Contextual offer is display-only — the matcher does not apply it. |
-| `uk-law-warwick` | Subject prerequisites | Preferred subjects not stated by Warwick; data/courseRequirements.js holds requirements.preferred ["History","English"]. Owner decision. |
-| `uk-law-warwick` | A-Level requirements | A-level offer differs: Warwick’s 2027 typical offer is A*AA; data/courseRequirements.js holds grades.aLevels "AAA". Preferred History/English not stated; engine holds ["History","English"]. Owner decision. |
-| `uk-law-warwick` | IB requirements | Preferred subjects not stated by Warwick; data/courseRequirements.js holds requirements.preferred ["History","English"]. Owner decision. Contextual offer is display-only — the matcher does not apply it. |
-| `uk-accounting-warwick` | Subject prerequisites | Preferred subjects not stated by Warwick; data/courseRequirements.js holds requirements.preferred ["Economics","Mathematics_Advanced"]. Owner decision. |
-| `uk-accounting-warwick` | A-Level requirements | Preferred subjects not stated by Warwick; data/courseRequirements.js holds requirements.preferred ["Economics","Mathematics_Advanced"]. Owner decision. Contextual offer is display-only — the matcher does not apply it. |
-| `uk-accounting-warwick` | IB requirements | Preferred subjects not stated by Warwick; data/courseRequirements.js holds requirements.preferred ["Economics","Mathematics_Advanced"]. Owner decision. Contextual offer is display-only — the matcher does not apply it. |
-| `uk-engineering-warwick` | Subject prerequisites | Preferred subject not stated by Warwick; data/courseRequirements.js holds requirements.preferred ["Mathematics_Advanced"]. Owner decision. |
-| `uk-engineering-warwick` | A-Level requirements | Preferred subject not stated by Warwick; data/courseRequirements.js holds requirements.preferred ["Mathematics_Advanced"]. Owner decision. Contextual offer is display-only — the matcher does not apply it. |
-| `uk-engineering-warwick` | IB requirements | Preferred subject not stated (engine holds ["Mathematics_Advanced"]); Warwick says HL "Mathematics" without restricting to Analysis and Approaches, while data/courseRequirements.js holds grades.ibHL ["Mathematics_Advanced","Physics"]. Owner decision. Contextual offer is display-only — the matcher does not apply it. |
+| `uk-law-warwick` | A-Level requirements | Contextual offer is display-only — the matcher does not apply it. |
+| `uk-law-warwick` | IB requirements | Contextual offer is display-only — the matcher does not apply it. |
+| `uk-accounting-warwick` | A-Level requirements | The detail sentence needs quoting in this row's snippet to verify. Contextual offer is display-only — the matcher does not apply it. |
+| `uk-accounting-warwick` | IB requirements | The contextual offer needs a quoted source. Contextual offer is display-only — the matcher does not apply it. |
+| `uk-engineering-warwick` | A-Level requirements | Contextual offer is display-only — the matcher does not apply it. |
+| `uk-engineering-warwick` | IB requirements | The contextual offer needs a quoted source. Contextual offer is display-only — the matcher does not apply it. |
 | `uk-cs-bristol` | A-Level requirements | contextualOffer is display-only; the matcher does not apply it. |
 | `uk-cs-bristol` | IB requirements | IB HL total differs: official 18 at HL including 7 in HL Mathematics; data/courseRequirements.js holds "766 at HL". Owner decision. |
 | `uk-cs-bristol` | Other qualifications | Bristol’s USA page sets GPA 3.2 minimum (3.4 for competitive courses) plus three additional qualifications, with APs at 4+ (more commonly 5); Computer Science requires AP Calculus BC at 5; data/courseRequirements.js holds "Advanced Placement: 3 AP exams at grades 4, 4, 4; Minimum GPA 3.2". Owner decision. |
