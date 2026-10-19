@@ -4007,3 +4007,42 @@ Format:
 - `uk-economics-leeds` · subjectPrerequisites: row partial → verified (owner flag kept).
 - `uk-economics-leeds` · aLevel: row partial → verified (owner flag kept).
 - `uk-economics-leeds` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Nottingham
+
+- `uk-medicine-nottingham` · engine `requirements.preferred`: [Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Medicine-BMBS.html
+  > AAA: must include biology (or human biology) and chemistry.
+- `uk-medicine-nottingham` · engine `grades.ibHLNote`: 666 at HL → HL6 Biology and HL6 Chemistry (ib-note). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Medicine-BMBS.html
+  > 34 points overall including HL6 in biology, HL6 in chemistry
+- `uk-medicine-nottingham` · subjectPrerequisites: row partial → verified.
+- `uk-medicine-nottingham` · aLevel: row partial → verified (owner flag kept).
+- `uk-medicine-nottingham` · ib: row partial → verified.
+- `uk-cs-nottingham` · engine `grades.aLevels`: A*AA → AAA (offer). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Computer-Science-BSc-Hons.html
+  > AAA (AAB including A in computer science)
+- `uk-cs-nottingham` · engine `requirements.essential`: [Mathematics_Standard] → [] (essential-remove). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Computer-Science-BSc-Hons.html
+  > AAA (AAB including A in computer science) A level ICT or IT do not qualify for the lower level. … GCSE maths at grade B (5)
+- `uk-cs-nottingham` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Computer-Science-BSc-Hons.html
+  > AAA (AAB including A in computer science) A level ICT or IT do not qualify for the lower level. … GCSE maths at grade B (5)
+- `uk-cs-nottingham` · engine `grades.ib`: 36 → 34 (ib-score). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Computer-Science-BSc-Hons.html
+  > IBDP 34 points overall or 666 in 3 Higher Level Certificates.
+- `uk-cs-nottingham` · engine `grades.ibHL`: [Mathematics_Advanced] → [] (ib-hl). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Computer-Science-BSc-Hons.html
+  > IBDP 34 points overall or 666 in 3 Higher Level Certificates.
+- `uk-cs-nottingham` · engine `grades.ibHLNote`: 666 at HL → none (ib-note). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Computer-Science-BSc-Hons.html
+  > IBDP 34 points overall or 666 in 3 Higher Level Certificates.
+- `uk-cs-nottingham` · subjectPrerequisites: row partial → verified (owner flag kept).
+- `uk-cs-nottingham` · aLevel: row partial → verified (owner flag kept).
+- `uk-cs-nottingham` · ib: row partial → verified (owner flag kept).
+- `uk-economics-nottingham` · engine `requirements.essential`: [Mathematics_Standard] → [] (essential-remove). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Economics-BSc-Hons.html
+  > A*AA / A*A*B (AAA / A*AB including mathematics) … Maths grade 7 (A) or above, unless taking it at A level
+- `uk-economics-nottingham` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Economics-BSc-Hons.html
+  > A*AA / A*A*B (AAA / A*AB including mathematics) … Maths grade 7 (A) or above, unless taking it at A level
+- `uk-economics-nottingham` · engine `grades.ibHL`: [Mathematics_Standard] → [] (ib-hl). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Economics-BSc-Hons.html
+  > IBDP 36 points overall or 766 in 3 Higher Level Certificates.
+- `uk-economics-nottingham` · subjectPrerequisites: row partial → verified (owner flag kept).
+- `uk-economics-nottingham` · aLevel: row partial → verified (owner flag kept).
+- `uk-economics-nottingham` · ib: row partial → verified (owner flag kept).
+- `uk-pharmacy-nottingham` · engine `grades.ibHL`: [Chemistry, Biology] → [Chemistry] (ib-hl). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Pharmacy-MPharm.html
+  > IB Diploma 34 points overall with 6,6, in chemistry and a second science subject
+- `uk-pharmacy-nottingham` · engine `grades.ibHLNote`: 666 at HL → 66 in HL Chemistry and a second HL science (ib-note). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Pharmacy-MPharm.html
+  > IB Diploma 34 points overall with 6,6, in chemistry and a second science subject
+- `uk-pharmacy-nottingham` · ib: row partial → partial (owner flag kept).

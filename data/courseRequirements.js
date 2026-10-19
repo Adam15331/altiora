@@ -1371,8 +1371,8 @@ const courses = [
   {
     id: "uk-medicine-nottingham", name: "Medicine BMedSci/BM BS",
     university: "University of Nottingham", country: "UK", degreeLevel: "BM BS", category: "medicine",
-    requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
-    grades: { aLevels: "AAA", ib: 34, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "666 at HL" },
+    requirements: { essential: ["Chemistry","Biology"], preferred: [], useful: ["Physics"] },
+    grades: { aLevels: "AAA", ib: 34, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "HL6 Biology and HL6 Chemistry" },
     admissionTests: ["UCAT"],
     universityContext: {
       tier: "world-top-100",
@@ -1384,8 +1384,8 @@ const courses = [
   {
     id: "uk-cs-nottingham", name: "Computer Science BSc",
     university: "University of Nottingham", country: "UK", degreeLevel: "BSc", category: "cs",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "A*AA", ib: 36, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "666 at HL" },
+    requirements: { essential: [], preferred: [], useful: ["Computer_Science","Physics"] },
+    grades: { aLevels: "AAA", ib: 34, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -1397,8 +1397,8 @@ const courses = [
   {
     id: "uk-economics-nottingham", name: "Economics BSc",
     university: "University of Nottingham", country: "UK", degreeLevel: "BSc", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Statistics"] },
-    grades: { aLevels: "A*AA", ib: 36, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: null },
+    requirements: { essential: [], preferred: [], useful: ["Statistics"] },
+    grades: { aLevels: "A*AA", ib: 36, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -1424,7 +1424,7 @@ const courses = [
     id: "uk-pharmacy-nottingham", name: "Pharmacy MPharm",
     university: "University of Nottingham", country: "UK", degreeLevel: "MPharm", category: "medicine",
     requirements: { essential: ["Chemistry"], preferred: ["Biology","Mathematics_Standard"], useful: ["Physics"] },
-    grades: { aLevels: "AAA", ib: 34, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "666 at HL" },
+    grades: { aLevels: "AAA", ib: 34, sgALevels: null, hkDse: null, ibHL: ["Chemistry"], ibHLNote: "66 in HL Chemistry and a second HL science" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -4414,11 +4414,11 @@ const courseVerification = {
   "us-engineering-cornell": { status: "verified", source: "https://admissions.cornell.edu/policies/standardized-testing-policy", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test required (reinstated for fall 2026 entry, all colleges). Indicative middle-50%: SAT 1510–1560, ACT 33–35 (CDS 2024-25; stored SAT corrected). Course existence & naming verified against official source." },
   "us-economics-cornell": { status: "verified", source: "https://admissions.cornell.edu/policies/standardized-testing-policy", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test required (reinstated for fall 2026 entry, all colleges). Indicative middle-50%: SAT 1510–1560, ACT 33–35 (CDS 2024-25; stored SAT corrected). Course existence & naming verified against official source." },
   "us-business-cornell": { status: "verified", source: "https://admissions.cornell.edu/policies/standardized-testing-policy", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test required (reinstated for fall 2026 entry, all colleges). Indicative middle-50%: SAT 1510–1560, ACT 33–35 (CDS 2024-25; stored SAT corrected). Course existence & naming verified against official source. Re-mapped from misnamed 'Business Administration'; Cornell's business BS is AEM (Dyson); Hotel Admin (Nolan) is a separate degree." },
-  "uk-medicine-nottingham": { status: "verified", source: "https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/2026/Medicine-BMBS.html", checkedDate: "2026-06-28", notes: "Verified: A-level AAA incl Biology + Chemistry; IB 34, HL 666 incl HL6 Biology + HL6 Chemistry; UCAT normally required." },
-  "uk-cs-nottingham": { status: "verified", source: "https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/2026/Computer-Science-BSc-Hons.html", checkedDate: "2026-06-28", notes: "Verified: headline A-level A*AA (AAA with A in Computer Science); IB 36 standard (HL 766) or 34 with HL6 Computer Science. Stored AAA/34/HL-Maths corrected." },
-  "uk-economics-nottingham": { status: "verified", source: "https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/2026/Economics-BSc-Hons.html", checkedDate: "2026-06-28", notes: "Verified: headline A-level A*AA (AAA with A-level Maths); IB 36 standard (HL 766) or 34 with HL Maths. Stored AAB/34 corrected." },
+  "uk-medicine-nottingham": { status: "verified", source: "https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Medicine-BMBS.html", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Standard]→[]; ibHLNote 666 at HL→HL6 Biology and HL6 Chemistry. EARLIER (2026-06-28, https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/2026/Medicine-BMBS.html): Verified: A-level AAA incl Biology + Chemistry; IB 34, HL 666 incl HL6 Biology + HL6 Chemistry; UCAT normally required." },
+  "uk-cs-nottingham": { status: "verified", source: "https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Computer-Science-BSc-Hons.html", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels A*AA→AAA; essential [Mathematics_Standard]→[]; preferred [Mathematics_Advanced]→[]; ib 36→34; ibHL [Mathematics_Advanced]→[]; ibHLNote 666 at HL→none. EARLIER (2026-06-28, https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/2026/Computer-Science-BSc-Hons.html): Verified: headline A-level A*AA (AAA with A in Computer Science); IB 36 standard (HL 766) or 34 with HL6 Computer Science. Stored AAA/34/HL-Maths corrected." },
+  "uk-economics-nottingham": { status: "verified", source: "https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Economics-BSc-Hons.html", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential [Mathematics_Standard]→[]; preferred [Economics, Mathematics_Advanced]→[]; ibHL [Mathematics_Standard]→[]. EARLIER (2026-06-28, https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/2026/Economics-BSc-Hons.html): Verified: headline A-level A*AA (AAA with A-level Maths); IB 36 standard (HL 766) or 34 with HL Maths. Stored AAB/34 corrected." },
   "uk-law-nottingham": { status: "verified", source: "https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/2026/Law-LLB-Hons.html", checkedDate: "2026-06-28", notes: "Verified: A-level AAA; IB 34 (666 in 3 HL). No Nottingham page lists LNAT as required. Stored IB 35 corrected to 34." },
-  "uk-pharmacy-nottingham": { status: "verified", source: "https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/2026/Pharmacy-MPharm.html", checkedDate: "2026-06-28", notes: "Verified: A-level AAA incl Chemistry + second science (Bio/Maths/Physics); IB 34, HL 66 in Chemistry + second science." },
+  "uk-pharmacy-nottingham": { status: "partial", source: "https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Pharmacy-MPharm.html", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ibHL [Chemistry, Biology]→[Chemistry]; ibHLNote 666 at HL→66 in HL Chemistry and a second HL science. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/2026/Pharmacy-MPharm.html): Verified: A-level AAA incl Chemistry + second science (Bio/Maths/Physics); IB 34, HL 66 in Chemistry + second science." },
   "uk-medicine-birmingham": { status: "verified", source: "https://www.birmingham.ac.uk/study/undergraduate/subjects/medicine-courses/medicine-and-surgery-mbchb", checkedDate: "2026-06-28", notes: "A*AA / IB 32 / 766 HL (Chemistry + a science) / UCAT confirmed." },
   "uk-cs-birmingham": { status: "verified", source: "https://www.birmingham.ac.uk/study/undergraduate/subjects/computer-science-courses/computer-science-bsc", checkedDate: "2026-06-28", notes: "ABB (incl A in Maths) / 655 HL / no test confirmed; IB total 31→32 (min 32 overall)." },
   "uk-economics-birmingham": { status: "verified", source: "https://www.birmingham.ac.uk/study/undergraduate/subjects/economics-courses/economics-bsc", checkedDate: "2026-06-28", notes: "AAB→AAA (A*AA/AAA incl Maths); IB 34→32 with 666 HL; no test." },
