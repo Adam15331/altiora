@@ -754,8 +754,8 @@ const courses = [
   {
     id: "uk-medicine-manchester", name: "Medicine MBChB",
     university: "University of Manchester", country: "UK", degreeLevel: "MBChB", category: "medicine",
-    requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
-    grades: { aLevels: "AAA", ib: 37, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "766 at HL" },
+    requirements: { essential: [], preferred: [], useful: ["Physics"] },
+    grades: { aLevels: "AAA", ib: 36, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "666 at HL" },
     admissionTests: ["UCAT"],
     universityContext: {
       tier: "world-top-50",
@@ -767,8 +767,8 @@ const courses = [
   {
     id: "uk-cs-manchester", name: "Computer Science BSc/MEng",
     university: "University of Manchester", country: "UK", degreeLevel: "MEng", category: "cs",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "A*A*A", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "776 at HL" },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Computer_Science","Physics"] },
+    grades: { aLevels: "A*AA", ib: 37, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "7 in HL Mathematics: Analysis and Approaches; 66 in two other HL subjects" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-50",
@@ -807,7 +807,7 @@ const courses = [
     id: "uk-law-manchester", name: "Law LLB",
     university: "University of Manchester", country: "UK", degreeLevel: "LLB", category: "law",
     requirements: { essential: [], preferred: ["History","English"], useful: ["Economics","Philosophy"] },
-    grades: { aLevels: "AAA", ib: 37, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "766 at HL" },
+    grades: { aLevels: "A*AA", ib: 37, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "766 at HL" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-50",
@@ -832,7 +832,7 @@ const courses = [
   {
     id: "uk-psychology-manchester", name: "Psychology BSc",
     university: "University of Manchester", country: "UK", degreeLevel: "BSc", category: "psychology",
-    requirements: { essential: [], preferred: ["Psychology","Mathematics_Standard"], useful: ["Biology","Chemistry"] },
+    requirements: { essential: [], preferred: [], useful: ["Biology","Chemistry"] },
     grades: { aLevels: "AAA", ib: 36, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "666 at HL" },
     admissionTests: [],
     universityContext: {
@@ -4442,13 +4442,13 @@ const courseVerification = {
   "uk-engineering-leeds": { status: "verified", source: "https://courses.leeds.ac.uk/i445/civil-engineering-meng-beng", checkedDate: "2026-06-28", notes: "Verified via Leeds + UCAS + The Uni Guide: MEng A-level AAA incl Maths (BEng AAB incl A in Maths); IB 35 (18 at HL) incl HL5 Maths. HL Physics NOT required (corrected). Stored AAB/IB34/HL-Physics updated to MEng standard." },
   "uk-law-leeds": { status: "verified", source: "https://courses.leeds.ac.uk/3010/law-llb", checkedDate: "2026-06-28", notes: "AAA / no LNAT confirmed; IB 34→35 with HL 6,6,5 (two A-levels in traditional academic subjects)." },
   "uk-economics-leeds": { status: "verified", source: "https://courses.leeds.ac.uk/f836/economics-bsc", checkedDate: "2026-06-28", notes: "Verified: A-level AAB; IB 35 with 16 at HL. Stored IB 31 was the university-wide minimum, not the course offer." },
-  "uk-medicine-manchester": { status: "verified", source: "https://www.manchester.ac.uk/study/undergraduate/courses/2026/01428/mbchb-medicine/", checkedDate: "2026-06-28", notes: "AAA / UCAT confirmed; IB 35→37 with HL 666→766." },
+  "uk-medicine-manchester": { status: "partial", source: "https://www.manchester.ac.uk/study/undergraduate/courses/2027/01428/mbchb-medicine/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential [Chemistry, Biology]→[]; preferred [Mathematics_Standard]→[]; ib 37→36; ibHLNote 766 at HL→666 at HL; ibHL [Chemistry, Biology]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.manchester.ac.uk/study/undergraduate/courses/2026/01428/mbchb-medicine/): AAA / UCAT confirmed; IB 35→37 with HL 666→766." },
   "uk-engineering-manchester": { status: "verified", source: "https://www.manchester.ac.uk/study/undergraduate/courses/2026/03921/meng-mechanical-engineering/", checkedDate: "2026-06-28", notes: "A*A*A / IB 38 / 776 HL (Maths & Physics) / no test confirmed." },
   "uk-accounting-manchester": { status: "verified", source: "https://www.manchester.ac.uk/study/undergraduate/courses/2026/03520/bsc-management-accounting-and-finance/", checkedDate: "2026-06-28", notes: "AAA / IB 36 / 666 HL / no test confirmed." },
-  "uk-psychology-manchester": { status: "verified", source: "https://www.manchester.ac.uk/study/undergraduate/courses/2026/00653/bsc-psychology/", checkedDate: "2026-06-28", notes: "AAA / IB 36 / 666 HL (incl a science/Maths/Psychology) / no test confirmed." },
-  "uk-cs-manchester": { status: "verified", source: "https://www.manchester.ac.uk/study/undergraduate/courses/2026/00560/bsc-computer-science/", checkedDate: "2026-06-28", notes: "AAA→A*A*A (A* in Maths); IB 35→38 with HL 665→776 (7 HL Maths AA); no test." },
+  "uk-psychology-manchester": { status: "partial", source: "https://www.manchester.ac.uk/study/undergraduate/courses/2027/00653/bsc-psychology/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Psychology, Mathematics_Standard]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.manchester.ac.uk/study/undergraduate/courses/2026/00653/bsc-psychology/): AAA / IB 36 / 666 HL (incl a science/Maths/Psychology) / no test confirmed." },
+  "uk-cs-manchester": { status: "partial", source: "https://www.manchester.ac.uk/study/undergraduate/courses/2027/00560/bsc-computer-science/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels A*A*A→A*AA; preferred [Mathematics_Advanced]→[]; ib 38→37; ibHLNote 776 at HL→7 in HL Mathematics: Analysis and Approaches; 66 in two other HL subjects. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.manchester.ac.uk/study/undergraduate/courses/2026/00560/bsc-computer-science/): AAA→A*A*A (A* in Maths); IB 35→38 with HL 665→776 (7 HL Maths AA); no test." },
   "uk-economics-manchester": { status: "verified", source: "https://www.manchester.ac.uk/study/undergraduate/courses/2026/10224/bsc-economics/", checkedDate: "2026-06-28", notes: "AAB→AAA (incl Maths); IB 32→36 with 666 HL; no test." },
-  "uk-law-manchester": { status: "verified", source: "https://www.manchester.ac.uk/study/undergraduate/courses/2026/12446/llb-law/", checkedDate: "2026-06-28", notes: "AAA / no LNAT confirmed; IB 35→37 with HL 766." },
+  "uk-law-manchester": { status: "partial", source: "https://www.manchester.ac.uk/study/undergraduate/courses/2027/12446/llb-law/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels AAA→A*AA. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.manchester.ac.uk/study/undergraduate/courses/2026/12446/llb-law/): AAA / no LNAT confirmed; IB 35→37 with HL 766." },
   "sg-medicine-nus": { status: "verified", source: "https://medicine.nus.edu.sg/prospective-students/nus-medicine-pre-requisites/", checkedDate: "2026-07-03", notes: "Degree confirmed as Bachelor of Medicine and Bachelor of Surgery (MBBS), Yong Loo Lin School of Medicine. UCAT VERIFIED: UCAT (UK or ANZ) is required ONLY for applicants presenting international qualifications or IB forecast results (from 2023 onwards); Singapore-Cambridge A-Level / poly / NUS High applicants do NOT sit UCAT. BMAT is no longer accepted. All applicants submit a portfolio; shortlisted candidates sit the Focused Skills Assessment (FSA), an in-person MMI-style interview; the online Situational Judgement Test is discontinued from 2026. Subject prerequisites: good H2 pass in Chemistry AND H2 pass in Biology or Physics (IB: HL Chemistry and HL Biology or Physics) - stored tags list Biology as essential but officially it is Biology OR Physics. IGP indicative A-Level profile AAA/A at 10th and 90th percentiles (AY2025/26). No IB score profile published." },
   "sg-law-nus": { status: "verified", source: "https://law1a.nus.edu.sg/admissions/4_yrs_llb_prog.html", checkedDate: "2026-07-03", notes: "Confirmed as the 4-year LLB (Bachelor of Laws) programme, intake around 240. IGP indicative A-Level profile is AAA/A at BOTH 10th and 90th percentiles (AY2025/26; unchanged for at least 5 years). Selection: shortlisted candidates sit a written test and a panel interview. English requirement: at least B in H1 General Paper; from AY2026 H2 Knowledge & Inquiry no longer substitutes for GP (counted as a content subject instead); SAT EBRW 700 alternative exists. NUS publishes no IB score profile." },
   "sg-cs-nus": { status: "verified", source: "https://www.nus.edu.sg/oam/admissions/indicative-grade-profile", checkedDate: "2026-07-03", notes: "Degree is the Bachelor of Computing (Computer Science), BComp(CS), not a BSc. IGP (indicative, 10th percentile of Singapore-Cambridge A-Level admits, latest published table AY2025/26) is AAA/A at BOTH 10th and 90th percentiles - confirmed across two independent searches; from AY2026/27 NUS moves to a revised 70-point UAS using 3 H2 grades, and CS remains at the maximum profile. NUS explicitly states the IB/NUS High applicant sample is too small to publish an IB grade profile, so no IB total exists - confirmed from the official IGP page text. Official A-Level subject prerequisite (OAM h1-h2-sdp.pdf, Dec 2025) is 'H2 pass in Computing, Mathematics, Further Mathematics or Physics; or a good pass in H1 Mathematics' - the stored note 'H2 Maths required' is too strong. No selection test or interview for CS." },

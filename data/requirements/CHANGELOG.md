@@ -3712,3 +3712,38 @@ Format:
 - `uk-psychology-kcl` · subjectPrerequisites: row partial → partial (owner flag kept).
 - `uk-psychology-kcl` · aLevel: row partial → partial (owner flag kept).
 - `uk-psychology-kcl` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Manchester
+
+- `uk-medicine-manchester` · engine `requirements.essential`: [Chemistry, Biology] → [] (essential-remove). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/01428/mbchb-medicine/
+  > AAA, including in: Biology/Human Biology or Chemistry; and One of the following subjects from Chemistry; Biology/Human Biology; Physics; Psychology; Mathematics or Further Mathematics.
+- `uk-medicine-manchester` · engine `requirements.preferred`: [Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/01428/mbchb-medicine/
+  > AAA, including in: Biology/Human Biology or Chemistry; and One of the following subjects from Chemistry; Biology/Human Biology; Physics; Psychology; Mathematics or Further Mathematics.
+- `uk-medicine-manchester` · engine `grades.ib`: 37 → 36 (ib-score). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/01428/mbchb-medicine/
+  > 36 points overall. 6,6,6, in Higher Level subjects.
+- `uk-medicine-manchester` · engine `grades.ibHLNote`: 766 at HL → 666 at HL (ib-note). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/01428/mbchb-medicine/
+  > 36 points overall. 6,6,6, in Higher Level subjects.
+- `uk-medicine-manchester` · engine `grades.ibHL`: [Chemistry, Biology] → [] (ib-hl). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/01428/mbchb-medicine/
+  > Major subjects must include Chemistry or Biology, plus another science (one from Chemistry, Biology, Physics, Psychology or Mathematics) and one further subject at Higher Level.
+- `uk-medicine-manchester` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-medicine-manchester` · aLevel: row partial → partial (owner flag kept).
+- `uk-medicine-manchester` · ib: row partial → partial (owner flag kept).
+- `uk-cs-manchester` · engine `grades.aLevels`: A*A*A → A*AA (offer). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/00560/bsc-computer-science/
+  > Typical A-level offer: A*AA including specific subjects
+- `uk-cs-manchester` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/00560/bsc-computer-science/
+  > A*AA including A* in Mathematics, and a minimum of one science subject from the following list: Computer Science, Further Mathematics, Biology, Chemistry, or Physics.
+- `uk-cs-manchester` · engine `grades.ib`: 38 → 37 (ib-score). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/00560/bsc-computer-science/
+  > 37 points overall with 7,6,6 in Higher Level subjects, including 7 in Mathematics: Analysis and Approaches.
+- `uk-cs-manchester` · engine `grades.ibHLNote`: 776 at HL → 7 in HL Mathematics: Analysis and Approaches; 66 in two other HL subjects (ib-note). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/00560/bsc-computer-science/
+  > 37 points overall with 7,6,6 in Higher Level subjects, including 7 in Mathematics: Analysis and Approaches.
+- `uk-cs-manchester` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-cs-manchester` · aLevel: row partial → partial (owner flag kept).
+- `uk-cs-manchester` · ib: row partial → partial (owner flag kept).
+- `uk-law-manchester` · engine `grades.aLevels`: AAA → A*AA (offer). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/12446/llb-law/
+  > Typical A-level offer: A*AA
+- `uk-law-manchester` · aLevel: row partial → partial (owner flag kept).
+- `uk-psychology-manchester` · engine `requirements.preferred`: [Psychology, Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/00653/bsc-psychology/
+  > AAA including one or more of: Psychology, Biology, Human Biology, Chemistry, Physics, Statistics, Mathematics or Further Mathematics.
+- `uk-psychology-manchester` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-psychology-manchester` · aLevel: row partial → partial (owner flag kept).
+- `uk-psychology-manchester` · ib: row partial → partial (owner flag kept).
