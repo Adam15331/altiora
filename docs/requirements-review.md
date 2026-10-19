@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 64 | 0 | 256 | 0 |
-| English language | 64 | 0 | 256 | 0 |
+| SAT / ACT | 68 | 0 | 252 | 0 |
+| English language | 68 | 0 | 252 | 0 |
 | Admissions tests | 308 | 12 | 0 | 0 |
-| Subject prerequisites | 244 | 76 | 0 | 0 |
-| A-Level requirements | 196 | 10 | 110 | 4 |
-| IB requirements | 258 | 11 | 47 | 4 |
-| Other qualifications | 79 | 34 | 207 | 0 |
-| Other requirements | 64 | 0 | 256 | 0 |
+| Subject prerequisites | 240 | 80 | 0 | 0 |
+| A-Level requirements | 200 | 10 | 106 | 4 |
+| IB requirements | 262 | 11 | 43 | 4 |
+| Other qualifications | 83 | 34 | 203 | 0 |
+| Other requirements | 68 | 0 | 252 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -148,10 +148,14 @@ Shown with a "Partly verified" badge and the note below.
 | `us-cs-usc` | Other qualifications | USC’s admissions pages checked (First-Year Students, International Students, Test Optional FAQ, What We Look For) do not say how AP scores are treated for other applicants; the recommendation above is stated only for home-schooled applicants. |
 | `us-cs-gatech` | Subject prerequisites | Official: the University System of Georgia requires minimum high-school courses of all first-time students graduating from a U.S. high school — English 4 units, Math 4 units, Science 4 units, Social Science 3 units, and Foreign Language or American Sign Language or Computer Science 2 units; students from outside the U.S. system must complete a curriculum deemed equivalent. No CS- or Mechanical Engineering-specific subject requirement is stated. |
 | `us-engineering-gatech` | Subject prerequisites | Official: the University System of Georgia requires minimum high-school courses of all first-time students graduating from a U.S. high school — English 4 units, Math 4 units, Science 4 units, Social Science 3 units, and Foreign Language or American Sign Language or Computer Science 2 units; students from outside the U.S. system must complete a curriculum deemed equivalent. No CS- or Mechanical Engineering-specific subject requirement is stated. |
+| `us-cs-uiuc` | Subject prerequisites | Official: required high-school courses — English 4 years; Math at least 3.5 years including trigonometry or higher for all Grainger College of Engineering majors (4 years recommended); Social Science 2 years (4 recommended); Lab Sciences 2 years (4 recommended); Language other than English 2 years (4 recommended); Flexible academic units 2 years (4+ recommended). Grainger also focuses on proficiency in math and science. |
+| `us-engineering-uiuc` | Subject prerequisites | Official: required high-school courses — English 4 years; Math at least 3.5 years including trigonometry or higher for all Grainger College of Engineering majors (4 years recommended); Social Science 2 years (4 recommended); Lab Sciences 2 years (4 recommended); Language other than English 2 years (4 recommended); Flexible academic units 2 years (4+ recommended). Grainger also focuses on proficiency in math and science. |
 | `us-engineering-purdue` | Subject prerequisites | Official: minimum high-school coursework — Math 4 years, English 4 years, Lab science 3 years, Social studies 3 years, World language 2 years (can be different languages); may also be met through nonremedial college-level coursework. For engineering applicants, chemistry is expected; review places particular emphasis on calculus (if available), four years of laboratory sciences including biology, chemistry (expected) and physics (if available). |
 | `us-engineering-purdue` | Other qualifications | Purdue’s admissions pages checked (guide, first-year criteria, course requirements, international) do not say whether AP exam scores are used or can be self-reported for admission; AP/A-Level credit pages are about credit after enrolling. |
 | `us-cs-purdue` | Subject prerequisites | Official: minimum high-school coursework — Math 4 years, English 4 years, Lab science 3 years, Social studies 3 years, World language 2 years (can be different languages); may also be met through nonremedial college-level coursework. |
 | `us-cs-purdue` | Other qualifications | Purdue’s admissions pages checked (guide, first-year criteria, course requirements, international) do not say whether AP exam scores are used or can be self-reported for admission; AP/A-Level credit pages are about credit after enrolling. |
+| `us-business-unc` | Subject prerequisites | Official: UNC System minimum high-school coursework to be eligible to apply — 4 units English; 4 units college-preparatory mathematics (e.g. algebra I and II, geometry and one unit beyond algebra II); 3 units science (one life/biological, one physical, one laboratory course); 2 units social science (one in U.S. history); 2 additional units of English, mathematics, science, social studies, world languages or computer science. Two sequential world language courses are recommended. Applicants who lack units may still apply and explain their circumstances. No major-specific high-school subjects are stated. |
+| `us-economics-unc` | Subject prerequisites | Official: UNC System minimum high-school coursework to be eligible to apply — 4 units English; 4 units college-preparatory mathematics (e.g. algebra I and II, geometry and one unit beyond algebra II); 3 units science (one life/biological, one physical, one laboratory course); 2 units social science (one in U.S. history); 2 additional units of English, mathematics, science, social studies, world languages or computer science. Two sequential world language courses are recommended. Applicants who lack units may still apply and explain their circumstances. No major-specific high-school subjects are stated. |
 | `ca-maths-mcgill` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-maths-mcgill` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-medicine-mcgill` | IB requirements | The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
@@ -208,10 +212,6 @@ Shown to students only as "Previously recorded, not verified". Confirm or correc
 | `us-business-uva` | SAT / ACT | Test-optional |
 | `us-cs-uva` | SAT / ACT | Test-optional |
 | `us-economics-uva` | SAT / ACT | Test-optional |
-| `us-cs-uiuc` | SAT / ACT | Test-optional |
-| `us-engineering-uiuc` | SAT / ACT | Test-optional |
-| `us-business-unc` | SAT / ACT | Test-optional |
-| `us-economics-unc` | SAT / ACT | Test-optional |
 
 ## Flags for the data owner
 
@@ -290,10 +290,16 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `us-cs-usc` | IB requirements | Official source states an IB score expectation (5–7 on all HL and SL exams); data/courseRequirements.js holds no IB data. Owner decision. |
 | `us-cs-gatech` | Subject prerequisites | Official source lists USG minimum high-school course units (English 4, Math 4, Science 4, Social Science 3, Foreign Language/ASL/Computer Science 2); data/courseRequirements.js holds none. Owner decision. |
 | `us-engineering-gatech` | Subject prerequisites | Official source lists USG minimum high-school course units (English 4, Math 4, Science 4, Social Science 3, Foreign Language/ASL/Computer Science 2); data/courseRequirements.js holds none. Owner decision. |
+| `us-cs-uiuc` | Subject prerequisites | Official source lists required high-school course units, including at least 3.5 years of math with trigonometry or higher for Grainger engineering majors; data/courseRequirements.js holds none. Owner decision. |
+| `us-engineering-uiuc` | Subject prerequisites | Official source lists required high-school course units, including at least 3.5 years of math with trigonometry or higher for Grainger engineering majors; data/courseRequirements.js holds none. Owner decision. |
 | `us-engineering-purdue` | SAT / ACT | data/courseRequirements.js records usAdmissions.test "required" for this course; the official policy is that Purdue “expects” SAT, ACT or CLT scores but allows applications without a test in exceptional cases. Owner decision — not changed here. |
 | `us-engineering-purdue` | Subject prerequisites | Official source lists minimum high-school coursework plus chemistry expected for engineering and emphasis on calculus and four years of lab science; data/courseRequirements.js holds none. Owner decision. |
 | `us-cs-purdue` | SAT / ACT | data/courseRequirements.js records usAdmissions.test "required" for this course; the official policy is that Purdue “expects” SAT, ACT or CLT scores but allows applications without a test in exceptional cases. Owner decision — not changed here. |
 | `us-cs-purdue` | Subject prerequisites | Official source lists minimum high-school coursework (Math 4, English 4, Lab science 3, Social studies 3, World language 2 years); data/courseRequirements.js holds none. Owner decision. |
+| `us-business-unc` | SAT / ACT | data/courseRequirements.js records usAdmissions.test "optional" for this course; the official policy is test-optional only for applicants with a weighted GPA of 2.8+ (ACT 17+/SAT 930+ required below that). Owner decision — not changed here. |
+| `us-business-unc` | Subject prerequisites | Official source lists UNC System minimum high-school course units (English 4, Math 4, Science 3, Social science 2, plus 2 additional); data/courseRequirements.js holds none. Owner decision. |
+| `us-economics-unc` | SAT / ACT | data/courseRequirements.js records usAdmissions.test "optional" for this course; the official policy is test-optional only for applicants with a weighted GPA of 2.8+ (ACT 17+/SAT 930+ required below that). Owner decision — not changed here. |
+| `us-economics-unc` | Subject prerequisites | Official source lists UNC System minimum high-school course units (English 4, Math 4, Science 3, Social science 2, plus 2 additional); data/courseRequirements.js holds none. Owner decision. |
 
 ## Values withheld from the panel
 
@@ -533,10 +539,6 @@ category — check the official source; never copy a hint in as a value.
 | `us-business-uva` | University of Virginia | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-cs-uva` | University of Virginia | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-economics-uva` | University of Virginia | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-cs-uiuc` | University of Illinois Urbana-Champaign | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-engineering-uiuc` | University of Illinois Urbana-Champaign | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-business-unc` | UNC Chapel Hill | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-economics-unc` | UNC Chapel Hill | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `ca-cs-utoronto` | University of Toronto | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
 | `ca-maths-toronto` | University of Toronto | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `ca-maths-ubc` | University of British Columbia | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
