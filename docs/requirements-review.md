@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 4 | 0 | 316 | 0 |
-| English language | 4 | 0 | 316 | 0 |
+| SAT / ACT | 10 | 0 | 310 | 0 |
+| English language | 10 | 0 | 310 | 0 |
 | Admissions tests | 308 | 12 | 0 | 0 |
-| Subject prerequisites | 304 | 16 | 0 | 0 |
-| A-Level requirements | 141 | 5 | 170 | 4 |
-| IB requirements | 202 | 7 | 107 | 4 |
-| Other qualifications | 23 | 30 | 267 | 0 |
-| Other requirements | 4 | 0 | 316 | 0 |
+| Subject prerequisites | 298 | 22 | 0 | 0 |
+| A-Level requirements | 147 | 5 | 164 | 4 |
+| IB requirements | 208 | 7 | 101 | 4 |
+| Other qualifications | 29 | 30 | 261 | 0 |
+| Other requirements | 10 | 0 | 310 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -55,6 +55,12 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-law-durham` | Other qualifications | Durham converts its A-Level requirement into an AP equivalent via a university equivalency table. Students at a school offering AP curriculum are expected to submit AP exams. Exams must be sat and submitted; the course grade is not accepted. Any subject-specific requirement must be evidenced with an AP exam. The equivalency table values are not yet captured. |
 | `uk-physics-durham` | Other qualifications | Durham converts its A-Level requirement into an AP equivalent via a university equivalency table. Students at a school offering AP curriculum are expected to submit AP exams. Exams must be sat and submitted; the course grade is not accepted. Any subject-specific requirement must be evidenced with an AP exam. The equivalency table values are not yet captured. |
 | `uk-engineering-durham` | Other qualifications | Durham converts its A-Level requirement into an AP equivalent via a university equivalency table. Students at a school offering AP curriculum are expected to submit AP exams. Exams must be sat and submitted; the course grade is not accepted. Any subject-specific requirement must be evidenced with an AP exam. The equivalency table values are not yet captured. |
+| `us-cs-mit` | Subject prerequisites | Official: MIT has no required high school classes. For students in an American curriculum it looks at math including calculus; science, including physics, chemistry and/or biology; and some challenging humanities, arts and social sciences courses, and recommends at least introductory coursework in physics, chemistry and biology if available. These are recommendations for all applicants, not major-specific. |
+| `us-engineering-mit` | Subject prerequisites | Official: MIT has no required high school classes. For students in an American curriculum it looks at math including calculus; science, including physics, chemistry and/or biology; and some challenging humanities, arts and social sciences courses, and recommends at least introductory coursework in physics, chemistry and biology if available. These are recommendations for all applicants, not major-specific. |
+| `us-mechanical-mit` | Subject prerequisites | Official: MIT has no required high school classes. For students in an American curriculum it looks at math including calculus; science, including physics, chemistry and/or biology; and some challenging humanities, arts and social sciences courses, and recommends at least introductory coursework in physics, chemistry and biology if available. These are recommendations for all applicants, not major-specific. |
+| `us-physics-mit` | Subject prerequisites | Official: MIT has no required high school classes. For students in an American curriculum it looks at math including calculus; science, including physics, chemistry and/or biology; and some challenging humanities, arts and social sciences courses, and recommends at least introductory coursework in physics, chemistry and biology if available. These are recommendations for all applicants, not major-specific. |
+| `us-economics-mit` | Subject prerequisites | Official: MIT has no required high school classes. For students in an American curriculum it looks at math including calculus; science, including physics, chemistry and/or biology; and some challenging humanities, arts and social sciences courses, and recommends at least introductory coursework in physics, chemistry and biology if available. These are recommendations for all applicants, not major-specific. |
+| `us-maths-mit` | Subject prerequisites | Official: MIT has no required high school classes. For students in an American curriculum it looks at math including calculus; science, including physics, chemistry and/or biology; and some challenging humanities, arts and social sciences courses, and recommends at least introductory coursework in physics, chemistry and biology if available. These are recommendations for all applicants, not major-specific. |
 | `us-cs-yale` | Subject prerequisites | Official: Yale has no required secondary-school courses, but advises taking courses each year in English, science, math, the social sciences and foreign language. This applies to all Yale College applicants, whatever the intended major. |
 | `us-cs-yale` | A-Level requirements | Yale’s pages do not mention A-Levels by name — this row applies Yale’s statement on international leaving exams. |
 | `us-economics-yale` | Subject prerequisites | Official: Yale has no required secondary-school courses, but advises taking courses each year in English, science, math, the social sciences and foreign language. This applies to all Yale College applicants, whatever the intended major. |
@@ -103,12 +109,6 @@ Shown to students only as "Previously recorded, not verified". Confirm or correc
 
 | Course | Category | Recorded value |
 |---|---|---|
-| `us-cs-mit` | SAT / ACT | SAT/ACT required |
-| `us-engineering-mit` | SAT / ACT | SAT/ACT required |
-| `us-mechanical-mit` | SAT / ACT | SAT/ACT required |
-| `us-physics-mit` | SAT / ACT | SAT/ACT required |
-| `us-economics-mit` | SAT / ACT | SAT/ACT required |
-| `us-maths-mit` | SAT / ACT | SAT/ACT required |
 | `us-cs-stanford` | SAT / ACT | SAT/ACT required |
 | `us-engineering-stanford` | SAT / ACT | SAT/ACT required |
 | `us-economics-stanford` | SAT / ACT | SAT/ACT required |
@@ -207,6 +207,12 @@ still holds a value a verified official source contradicts. Not shown in the pan
 
 | Course | Category | Flag |
 |---|---|---|
+| `us-cs-mit` | Subject prerequisites | Official source lists recommended high-school preparation (math including calculus; physics, chemistry and/or biology; challenging HASS courses), while stating no classes are required; data/courseRequirements.js holds none. Owner decision. |
+| `us-engineering-mit` | Subject prerequisites | Official source lists recommended high-school preparation (math including calculus; physics, chemistry and/or biology; challenging HASS courses), while stating no classes are required; data/courseRequirements.js holds none. Owner decision. |
+| `us-mechanical-mit` | Subject prerequisites | Official source lists recommended high-school preparation (math including calculus; physics, chemistry and/or biology; challenging HASS courses), while stating no classes are required; data/courseRequirements.js holds none. Owner decision. |
+| `us-physics-mit` | Subject prerequisites | Official source lists recommended high-school preparation (math including calculus; physics, chemistry and/or biology; challenging HASS courses), while stating no classes are required; data/courseRequirements.js holds none. Owner decision. |
+| `us-economics-mit` | Subject prerequisites | Official source lists recommended high-school preparation (math including calculus; physics, chemistry and/or biology; challenging HASS courses), while stating no classes are required; data/courseRequirements.js holds none. Owner decision. |
+| `us-maths-mit` | Subject prerequisites | Official source lists recommended high-school preparation (math including calculus; physics, chemistry and/or biology; challenging HASS courses), while stating no classes are required; data/courseRequirements.js holds none. Owner decision. |
 | `us-cs-yale` | SAT / ACT | data/courseRequirements.js still records usAdmissions.test "flexible" (test-flexible) for this course; Yale now requires the ACT or SAT. Owner decision — not changed here. |
 | `us-cs-yale` | Subject prerequisites | Official source lists advised high-school subjects (English, science, math, social sciences, foreign language), while stating none are required; data/courseRequirements.js holds none. Owner decision. |
 | `us-economics-yale` | SAT / ACT | data/courseRequirements.js still records usAdmissions.test "flexible" (test-flexible) for this course; Yale now requires the ACT or SAT. Owner decision — not changed here. |
@@ -364,12 +370,6 @@ category — check the official source; never copy a hint in as a value.
 | `uk-law-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-cs-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-psychology-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `us-cs-mit` | MIT | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-engineering-mit` | MIT | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-mechanical-mit` | MIT | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-physics-mit` | MIT | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-economics-mit` | MIT | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-maths-mit` | MIT | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-cs-stanford` | Stanford University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-engineering-stanford` | Stanford University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-economics-stanford` | Stanford University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
