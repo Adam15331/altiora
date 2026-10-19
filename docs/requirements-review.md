@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 89 | 1 | 230 | 0 |
-| English language | 89 | 0 | 231 | 0 |
-| Admissions tests | 298 | 12 | 10 | 0 |
-| Subject prerequisites | 209 | 101 | 10 | 0 |
-| A-Level requirements | 221 | 11 | 84 | 4 |
-| IB requirements | 283 | 12 | 21 | 4 |
-| Other qualifications | 97 | 39 | 184 | 0 |
-| Other requirements | 90 | 1 | 229 | 0 |
+| SAT / ACT | 94 | 1 | 225 | 0 |
+| English language | 94 | 0 | 226 | 0 |
+| Admissions tests | 297 | 13 | 10 | 0 |
+| Subject prerequisites | 204 | 106 | 10 | 0 |
+| A-Level requirements | 216 | 16 | 84 | 4 |
+| IB requirements | 278 | 17 | 21 | 4 |
+| Other qualifications | 102 | 39 | 179 | 0 |
+| Other requirements | 95 | 1 | 224 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -55,6 +55,22 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-law-durham` | Other qualifications | Durham converts its A-Level requirement into an AP equivalent via a university equivalency table. Students at a school offering AP curriculum are expected to submit AP exams. Exams must be sat and submitted; the course grade is not accepted. Any subject-specific requirement must be evidenced with an AP exam. The equivalency table values are not yet captured. |
 | `uk-physics-durham` | Other qualifications | Durham converts its A-Level requirement into an AP equivalent via a university equivalency table. Students at a school offering AP curriculum are expected to submit AP exams. Exams must be sat and submitted; the course grade is not accepted. Any subject-specific requirement must be evidenced with an AP exam. The equivalency table values are not yet captured. |
 | `uk-engineering-durham` | Other qualifications | Durham converts its A-Level requirement into an AP equivalent via a university equivalency table. Students at a school offering AP curriculum are expected to submit AP exams. Exams must be sat and submitted; the course grade is not accepted. Any subject-specific requirement must be evidenced with an AP exam. The equivalency table values are not yet captured. |
+| `uk-medicine-birmingham` | Subject prerequisites | Official (2027 entry): Chemistry plus a second science from Biology/Human Biology, Physics or Maths; no preference for the third A level. |
+| `uk-medicine-birmingham` | A-Level requirements | Official (2027 entry): standard offer AAA, including Chemistry and a second science from Biology/Human Biology, Physics or Maths; predicted minimum AAB. |
+| `uk-medicine-birmingham` | IB requirements | Official (2027 entry): 6,6,6 at Higher Level to include Chemistry plus a second science from Biology/Physics/Maths and one other approved subject; English, Biology and Mathematics at Standard Level if not taken at Higher Level; minimum 32 points. |
+| `uk-cs-birmingham` | Subject prerequisites | Official (2027 entry): three A levels including A-level Mathematics grade A; no preferred subject is named. |
+| `uk-cs-birmingham` | A-Level requirements | Official (2027 entry): A*AA to include A-level Mathematics grade A. No preferred subject is named. |
+| `uk-cs-birmingham` | IB requirements | Official (2027 entry): 7,6,6 at Higher Level to include 6 in Mathematics, minimum 32 points overall, and 5 in Standard Level English. |
+| `uk-economics-birmingham` | Subject prerequisites | Official (2027 entry): AAA including Mathematics; no preferred subjects are named. |
+| `uk-economics-birmingham` | A-Level requirements | Official (2027 entry): AAA including Mathematics; General Studies, Critical Thinking and Use of Maths excluded. The page names no preferred subjects. |
+| `uk-economics-birmingham` | IB requirements | Official (2027 entry): 6,6,6 including Mathematics; Birmingham’s general IB policy gives a minimum of 32 points overall for an AAA-equivalent offer. No preferred subjects are named. |
+| `uk-engineering-birmingham` | Admissions tests | The page states the Mathematics Aptitude test only for applicants with an alternative to A-level Mathematics; it does not state outright that A-level applicants sit no test. |
+| `uk-engineering-birmingham` | Subject prerequisites | Official (2027 entry): A-level Mathematics required; Further Mathematics and Physics are not required but are advantageous. |
+| `uk-engineering-birmingham` | A-Level requirements | Official (2027 entry, BEng): AAB to include A-level Mathematics; Further Mathematics and Physics are not required but are advantageous. (The MEng page asks for AAA.) |
+| `uk-engineering-birmingham` | IB requirements | Official (2027 entry, BEng): 6,6,5 at Higher Level (including Mathematics) with 32 points overall. Physics is not required. |
+| `uk-law-birmingham` | Subject prerequisites | Official (2027 entry): AAA with no subject named (the contextual offer is “in any subjects except General Studies”). |
+| `uk-law-birmingham` | A-Level requirements | Official (2027 entry): AAA; General Studies not accepted. No required or preferred subjects are named. |
+| `uk-law-birmingham` | IB requirements | Official (2027 entry): 6,6,6 at Higher Level including 32 points overall. No preferred subjects are named. |
 | `us-cs-mit` | Subject prerequisites | Official: MIT has no required high school classes. For students in an American curriculum it looks at math including calculus; science, including physics, chemistry and/or biology; and some challenging humanities, arts and social sciences courses, and recommends at least introductory coursework in physics, chemistry and biology if available. These are recommendations for all applicants, not major-specific. |
 | `us-engineering-mit` | Subject prerequisites | Official: MIT has no required high school classes. For students in an American curriculum it looks at math including calculus; science, including physics, chemistry and/or biology; and some challenging humanities, arts and social sciences courses, and recommends at least introductory coursework in physics, chemistry and biology if available. These are recommendations for all applicants, not major-specific. |
 | `us-mechanical-mit` | Subject prerequisites | Official: MIT has no required high school classes. For students in an American curriculum it looks at math including calculus; science, including physics, chemistry and/or biology; and some challenging humanities, arts and social sciences courses, and recommends at least introductory coursework in physics, chemistry and biology if available. These are recommendations for all applicants, not major-specific. |
@@ -248,6 +264,22 @@ still holds a value a verified official source contradicts. Not shown in the pan
 
 | Course | Category | Flag |
 |---|---|---|
+| `uk-medicine-birmingham` | Subject prerequisites | Biology is one option for the second science, not a requirement, and Maths is an alternative second science rather than preferred; data/courseRequirements.js holds essential [Chemistry, Biology], preferred [Mathematics_Standard]. Owner decision. |
+| `uk-medicine-birmingham` | A-Level requirements | Offer differs (official AAA, not A*AA) and the second science is any one of Biology/Human Biology, Physics or Maths (Biology not specifically required; no preferred subject); data/courseRequirements.js holds A*AA, essential [Chemistry, Biology], preferred [Mathematics_Standard]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-medicine-birmingham` | IB requirements | HL grades differ (official 666, not 766) and the second HL science is any of Biology/Physics/Maths; data/courseRequirements.js holds ibHLNote "766 at HL", ibHL [Chemistry, Biology]. Owner decision. |
+| `uk-medicine-birmingham` | Other qualifications | Two official Birmingham pages word the US Medicine subject rule differently (USA page: Biology and Chemistry; Medicine 2027 page: Chemistry plus Biology/Physics/Maths). Re-check if either page changes. |
+| `uk-cs-birmingham` | Subject prerequisites | Further Mathematics is not named as preferred on the official page; data/courseRequirements.js holds preferred [Mathematics_Advanced]. Owner decision. |
+| `uk-cs-birmingham` | A-Level requirements | Offer differs (official A*AA, not ABB) and Further Mathematics is not named as preferred; data/courseRequirements.js holds ABB, preferred [Mathematics_Advanced]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-cs-birmingham` | IB requirements | HL grades differ (official 766, not 655); data/courseRequirements.js holds ibHLNote "655 at HL". Owner decision. |
+| `uk-economics-birmingham` | Subject prerequisites | Economics and Further Mathematics are not named as preferred on the official page; data/courseRequirements.js holds preferred [Economics, Mathematics_Advanced]. Owner decision. |
+| `uk-economics-birmingham` | A-Level requirements | Offer and required Mathematics agree; Economics and Further Mathematics are not named as preferred; data/courseRequirements.js holds preferred [Economics, Mathematics_Advanced]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-economics-birmingham` | IB requirements | Score, HL grades and HL Mathematics agree; Economics and HL Mathematics are not named as preferred; data/courseRequirements.js holds preferred [Economics, Mathematics_Advanced]. Owner decision. |
+| `uk-engineering-birmingham` | Subject prerequisites | Physics is advantageous, not required; data/courseRequirements.js holds essential [Mathematics_Standard, Physics]. Owner decision. |
+| `uk-engineering-birmingham` | A-Level requirements | Physics is not required (official: “not required but advantageous”); data/courseRequirements.js holds essential [Mathematics_Standard, Physics]. Offer AAB matches the BEng page; the MEng is AAA. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-engineering-birmingham` | IB requirements | HL Physics is not required; data/courseRequirements.js holds ibHL [Mathematics_Advanced, Physics] and essential Physics. Owner decision. |
+| `uk-law-birmingham` | Subject prerequisites | History and English are not named as preferred on the official page; data/courseRequirements.js holds preferred [History, English]. Owner decision. |
+| `uk-law-birmingham` | A-Level requirements | Offer agrees; History and English are not named as preferred; data/courseRequirements.js holds preferred [History, English]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-law-birmingham` | IB requirements | IB total differs (official 32 points, not 36) and History/English are not named as preferred; data/courseRequirements.js holds ib 36, preferred [History, English]. Owner decision. |
 | `us-cs-mit` | Subject prerequisites | Official source lists recommended high-school preparation (math including calculus; physics, chemistry and/or biology; challenging HASS courses), while stating no classes are required; data/courseRequirements.js holds none. Owner decision. |
 | `us-engineering-mit` | Subject prerequisites | Official source lists recommended high-school preparation (math including calculus; physics, chemistry and/or biology; challenging HASS courses), while stating no classes are required; data/courseRequirements.js holds none. Owner decision. |
 | `us-mechanical-mit` | Subject prerequisites | Official source lists recommended high-school preparation (math including calculus; physics, chemistry and/or biology; challenging HASS courses), while stating no classes are required; data/courseRequirements.js holds none. Owner decision. |
@@ -581,11 +613,6 @@ category — check the official source; never copy a hint in as a value.
 | `uk-economics-nottingham` | University of Nottingham | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-law-nottingham` | University of Nottingham | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-pharmacy-nottingham` | University of Nottingham | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-medicine-birmingham` | University of Birmingham | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-cs-birmingham` | University of Birmingham | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-economics-birmingham` | University of Birmingham | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-engineering-birmingham` | University of Birmingham | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-law-birmingham` | University of Birmingham | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-economics-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-law-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-cs-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
