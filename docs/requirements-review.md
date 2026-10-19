@@ -14,7 +14,7 @@
 | Subject prerequisites | 115 | 195 | 10 | 0 |
 | A-Level requirements | 126 | 107 | 83 | 4 |
 | IB requirements | 191 | 104 | 21 | 4 |
-| Other qualifications | 161 | 52 | 107 | 0 |
+| Other qualifications | 162 | 51 | 107 | 0 |
 | Other requirements | 181 | 14 | 125 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
@@ -215,7 +215,6 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-economics-manchester` | Subject prerequisites | Partly verified: the official page does not state the preferred subject(s) held for matching (Economics, Mathematics_Advanced). |
 | `uk-economics-manchester` | A-Level requirements | Preference is given to applicants studying two subjects from a published list that includes Economics and Mathematics; Mathematics, Further Mathematics and a native language together are not accepted. Partly verified: the official page does not state the preferred subject(s) held for matching (Economics, Mathematics_Advanced). |
 | `uk-economics-manchester` | IB requirements | Partly verified: the official page does not state the preferred subject(s) held for matching (Economics, Mathematics_Advanced). |
-| `uk-economics-manchester` | Other qualifications | The page says subject-specific AP requirements are “detailed below as per 2023 entry”, but none are shown, so the AP needed for the Mathematics requirement is not stated. |
 | `uk-law-manchester` | A-Level requirements | Official (2027 entry): A*AA, including at least one subject from a published list (which includes History and English Literature), with preference for applicants studying two. |
 | `uk-accounting-manchester` | Subject prerequisites | Official (2027 entry): no required A-level subject; preferred subjects include Accounting, Business Studies, Economics, Mathematics/Further Mathematics and others; GCSE/IGCSE Mathematics grade 6/B required. |
 | `uk-accounting-manchester` | A-Level requirements | Official (2027 entry): AAA with no required A-level subject; applicants may be prioritised by the number of preferred subjects (list includes Economics and Mathematics/Further Mathematics). Mathematics is required only at GCSE/IGCSE grade 6/B. |
