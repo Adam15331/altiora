@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 15 | 0 | 305 | 0 |
-| English language | 15 | 0 | 305 | 0 |
+| SAT / ACT | 20 | 0 | 300 | 0 |
+| English language | 20 | 0 | 300 | 0 |
 | Admissions tests | 308 | 12 | 0 | 0 |
-| Subject prerequisites | 293 | 27 | 0 | 0 |
-| A-Level requirements | 152 | 5 | 159 | 4 |
-| IB requirements | 213 | 7 | 96 | 4 |
-| Other qualifications | 34 | 30 | 256 | 0 |
-| Other requirements | 15 | 0 | 305 | 0 |
+| Subject prerequisites | 288 | 32 | 0 | 0 |
+| A-Level requirements | 157 | 5 | 154 | 4 |
+| IB requirements | 218 | 7 | 91 | 4 |
+| Other qualifications | 39 | 30 | 251 | 0 |
+| Other requirements | 20 | 0 | 300 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -66,6 +66,11 @@ Shown with a "Partly verified" badge and the note below.
 | `us-economics-stanford` | Subject prerequisites | Official: Stanford has no required courses for admission. Its recommended high-school curriculum (stated as recommendations, not requirements) is English four years; mathematics four years, including calculus; history/social studies at least three years; science at least three years; world language at least three years of the same language. Applies to all applicants, not major-specific. |
 | `us-maths-stanford` | Subject prerequisites | Official: Stanford has no required courses for admission. Its recommended high-school curriculum (stated as recommendations, not requirements) is English four years; mathematics four years, including calculus; history/social studies at least three years; science at least three years; world language at least three years of the same language. Applies to all applicants, not major-specific. |
 | `us-psychology-stanford` | Subject prerequisites | Official: Stanford has no required courses for admission. Its recommended high-school curriculum (stated as recommendations, not requirements) is English four years; mathematics four years, including calculus; history/social studies at least three years; science at least three years; world language at least three years of the same language. Applies to all applicants, not major-specific. |
+| `us-cs-harvard` | Subject prerequisites | Official: Harvard recommends (not requires) four years of English, four years of a single foreign language, at least two (preferably three) years of history, four years of mathematics, and four years of science (physics, chemistry and biology, preferably one at an advanced level). No specific math course is required and calculus is not a requirement for admission; students intending to study engineering, computer science, physics, mathematics or statistics may benefit from taking calculus. These recommendations apply to all applicants. |
+| `us-economics-harvard` | Subject prerequisites | Official: Harvard recommends (not requires) four years of English, four years of a single foreign language, at least two (preferably three) years of history, four years of mathematics, and four years of science (physics, chemistry and biology, preferably one at an advanced level). No specific math course is required and calculus is not a requirement for admission; students intending to study engineering, computer science, physics, mathematics or statistics may benefit from taking calculus. These recommendations apply to all applicants. |
+| `us-law-harvard` | Subject prerequisites | Official: Harvard recommends (not requires) four years of English, four years of a single foreign language, at least two (preferably three) years of history, four years of mathematics, and four years of science (physics, chemistry and biology, preferably one at an advanced level). No specific math course is required and calculus is not a requirement for admission; students intending to study engineering, computer science, physics, mathematics or statistics may benefit from taking calculus. These recommendations apply to all applicants. |
+| `us-biology-harvard` | Subject prerequisites | Official: Harvard recommends (not requires) four years of English, four years of a single foreign language, at least two (preferably three) years of history, four years of mathematics, and four years of science (physics, chemistry and biology, preferably one at an advanced level). No specific math course is required and calculus is not a requirement for admission; students intending to study engineering, computer science, physics, mathematics or statistics may benefit from taking calculus. These recommendations apply to all applicants. |
+| `us-maths-harvard` | Subject prerequisites | Official: Harvard recommends (not requires) four years of English, four years of a single foreign language, at least two (preferably three) years of history, four years of mathematics, and four years of science (physics, chemistry and biology, preferably one at an advanced level). No specific math course is required and calculus is not a requirement for admission; students intending to study engineering, computer science, physics, mathematics or statistics may benefit from taking calculus. These recommendations apply to all applicants. |
 | `us-cs-yale` | Subject prerequisites | Official: Yale has no required secondary-school courses, but advises taking courses each year in English, science, math, the social sciences and foreign language. This applies to all Yale College applicants, whatever the intended major. |
 | `us-cs-yale` | A-Level requirements | Yale’s pages do not mention A-Levels by name — this row applies Yale’s statement on international leaving exams. |
 | `us-economics-yale` | Subject prerequisites | Official: Yale has no required secondary-school courses, but advises taking courses each year in English, science, math, the social sciences and foreign language. This applies to all Yale College applicants, whatever the intended major. |
@@ -114,11 +119,6 @@ Shown to students only as "Previously recorded, not verified". Confirm or correc
 
 | Course | Category | Recorded value |
 |---|---|---|
-| `us-cs-harvard` | SAT / ACT | SAT/ACT required |
-| `us-economics-harvard` | SAT / ACT | SAT/ACT required |
-| `us-law-harvard` | SAT / ACT | SAT/ACT required |
-| `us-biology-harvard` | SAT / ACT | SAT/ACT required |
-| `us-maths-harvard` | SAT / ACT | SAT/ACT required |
 | `us-cs-princeton` | SAT / ACT | Test-optional |
 | `us-engineering-princeton` | SAT / ACT | Test-optional |
 | `us-economics-princeton` | SAT / ACT | Test-optional |
@@ -218,6 +218,11 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `us-economics-stanford` | Subject prerequisites | Official source lists a recommended high-school curriculum (incl. four years of math including calculus, three+ years of science); data/courseRequirements.js holds none. Owner decision. |
 | `us-maths-stanford` | Subject prerequisites | Official source lists a recommended high-school curriculum (incl. four years of math including calculus, three+ years of science); data/courseRequirements.js holds none. Owner decision. |
 | `us-psychology-stanford` | Subject prerequisites | Official source lists a recommended high-school curriculum (incl. four years of math including calculus, three+ years of science); data/courseRequirements.js holds none. Owner decision. |
+| `us-cs-harvard` | Subject prerequisites | Official source lists recommended high-school subjects (English, foreign language, history, math, science); data/courseRequirements.js holds none. Owner decision. |
+| `us-economics-harvard` | Subject prerequisites | Official source lists recommended high-school subjects (English, foreign language, history, math, science); data/courseRequirements.js holds none. Owner decision. |
+| `us-law-harvard` | Subject prerequisites | Official source lists recommended high-school subjects (English, foreign language, history, math, science); data/courseRequirements.js holds none. Owner decision. |
+| `us-biology-harvard` | Subject prerequisites | Official source lists recommended high-school subjects (English, foreign language, history, math, science); data/courseRequirements.js holds none. Owner decision. |
+| `us-maths-harvard` | Subject prerequisites | Official source lists recommended high-school subjects (English, foreign language, history, math, science); data/courseRequirements.js holds none. Owner decision. |
 | `us-cs-yale` | SAT / ACT | data/courseRequirements.js still records usAdmissions.test "flexible" (test-flexible) for this course; Yale now requires the ACT or SAT. Owner decision — not changed here. |
 | `us-cs-yale` | Subject prerequisites | Official source lists advised high-school subjects (English, science, math, social sciences, foreign language), while stating none are required; data/courseRequirements.js holds none. Owner decision. |
 | `us-economics-yale` | SAT / ACT | data/courseRequirements.js still records usAdmissions.test "flexible" (test-flexible) for this course; Yale now requires the ACT or SAT. Owner decision — not changed here. |
@@ -375,11 +380,6 @@ category — check the official source; never copy a hint in as a value.
 | `uk-law-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-cs-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-psychology-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `us-cs-harvard` | Harvard University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-economics-harvard` | Harvard University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-law-harvard` | Harvard University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-biology-harvard` | Harvard University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-maths-harvard` | Harvard University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-cs-princeton` | Princeton University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-engineering-princeton` | Princeton University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-economics-princeton` | Princeton University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
