@@ -5522,9 +5522,10 @@ button.plan-combo-tag--drop:focus-visible {
 
 /* ═══════════════════════════════════════════════════════════════
  * ENTRY REQUIREMENTS PANEL (requirements-view.js)
- * One row per requirement category, each with its verification status,
- * last-verified date and source. Hairlines and tints only — no left
- * borders, no shadows. Stacks to one column on phones.
+ * One card per requirement category, its left edge and faint tint keyed
+ * to the verification status; the badge, date and source sit in a
+ * divided footer. Cards stack to one column on phones and in narrow
+ * course cards, two columns where the panel is wide.
  * ═══════════════════════════════════════════════════════════════ */
 .reqs {
   margin-top: var(--space-3);
@@ -5570,49 +5571,81 @@ button.plan-combo-tag--drop:focus-visible {
   color: var(--ce-ink-60);
   font-variant-numeric: tabular-nums;
 }
-.reqs__list { margin: var(--space-2) 0 0; }
-.reqs__row {
+.reqs__list {
+  margin: var(--space-2) 0 0;
   display: grid;
-  grid-template-columns: minmax(8.5rem, 11rem) minmax(0, 1fr);
-  gap: 4px 16px;
-  padding: 10px 0;
-  border-top: var(--ce-hairline);
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
 }
-.reqs__row:first-child { border-top: none; padding-top: 2px; }
+/* One card per category: a status-coloured left edge and a faint tint of
+ * the same hue. The badge in the footer states the status in words, so
+ * colour is never the only signal. */
+.reqs__row {
+  --reqs-edge: var(--ce-ink-30);
+  --reqs-tint: var(--ce-surface);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: var(--ce-hairline);
+  border-left: 4px solid var(--reqs-edge);
+  border-radius: 6px;
+  background: var(--ce-surface);
+  background: linear-gradient(var(--reqs-tint), var(--reqs-tint)), var(--ce-surface);
+  overflow: hidden;
+}
+.reqs__row--verified      { --reqs-edge: var(--ce-status-strong);   --reqs-tint: var(--ce-sage-tint); }
+.reqs__row--partial       { --reqs-edge: var(--ce-status-possible); --reqs-tint: var(--ce-accent-tint); }
+.reqs__row--unverified    { --reqs-edge: var(--ce-status-reach);    --reqs-tint: rgba(31,26,23,0.035); }
+.reqs__row--notApplicable { --reqs-edge: var(--ce-lavender);        --reqs-tint: var(--ce-lavender-tint); }
 .reqs__label {
   margin: 0;
-  padding-top: 2px;
+  padding: 10px 12px 4px;
+  font-family: var(--ce-font-mono);
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
-  letter-spacing: .05em;
+  letter-spacing: .06em;
   text-transform: uppercase;
   line-height: var(--leading-snug);
-  color: var(--ce-ink-60);
+  color: var(--ce-ink);
 }
 .reqs__value {
   margin: 0;
   min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
   font-size: var(--text-sm);
-  line-height: var(--leading-snug);
+  line-height: var(--leading-body);
   color: var(--ce-ink);
   overflow-wrap: anywhere;
 }
-.reqs__items { margin: 0; padding: 0; list-style: none; }
-.reqs__items li + li { margin-top: 3px; }
+.reqs__body { flex: 1 1 auto; padding: 2px 12px 10px; }
+/* Requirement items: real bullets; a "Label:" lead-in in bold; a value
+ * that lists several things becomes a nested list. */
+.reqs__items { margin: 0; padding: 0 0 0 1.1em; list-style: disc; }
+.reqs__items > li + li { margin-top: 4px; }
+.reqs__items li::marker { color: var(--reqs-edge); }
+.reqs__item-label { font-weight: var(--weight-semibold); }
+.reqs__sublist { margin: 3px 0 0; padding: 0 0 0 1.1em; list-style: circle; }
+.reqs__sublist > li + li { margin-top: 2px; }
 .reqs__text { margin: 0; }
-.reqs__text--muted { color: var(--ce-ink-60); margin-top: 6px; }
+.reqs__text--muted { color: var(--color-text-secondary); }
+/* Footer: status badge, date and sources, set apart by a rule and a tint. */
 .reqs__meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 4px 10px;
-  margin: 6px 0 0;
+  margin: 0;
+  padding: 8px 12px;
+  border-top: var(--ce-hairline);
+  background: rgba(31,26,23,0.035);
   font-size: var(--text-xs);
-  color: var(--ce-ink-60);
+  line-height: var(--leading-snug);
+  color: var(--color-text-secondary);
 }
-.reqs__row--unverified .reqs__meta { margin-top: 0; }
 .reqs__date { font-variant-numeric: tabular-nums; }
-.reqs__sources { display: inline-flex; flex-wrap: wrap; gap: 4px 8px; }
+.reqs__sources { display: inline-flex; flex-wrap: wrap; gap: 4px 8px; min-width: 0; }
 .reqs__link {
   color: var(--color-cat-cs);
   text-decoration: underline;
@@ -5638,9 +5671,9 @@ button.plan-combo-tag--drop:focus-visible {
 .reqs__badge--partial::before    { content: '◐'; }
 .reqs__badge--unverified::before { content: '!'; font-weight: var(--weight-black); }
 .reqs__badge--notApplicable::before { content: '–'; }
-/* A-Level / IB rows: the qualification's structured fields as a compact
- * label/value list inside the row's value cell. */
-.reqs__facts { margin: 0; display: grid; gap: 4px; }
+/* A-Level / IB cards: the qualification's structured fields as label/value
+ * pairs. */
+.reqs__facts { margin: 0; display: grid; gap: 6px; }
 .reqs__fact {
   display: grid;
   grid-template-columns: minmax(7rem, 9rem) minmax(0, 1fr);
@@ -5648,30 +5681,34 @@ button.plan-combo-tag--drop:focus-visible {
 }
 .reqs__fact dt {
   margin: 0;
-  padding-top: 1px;
+  padding-top: 2px;
   font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
-  color: var(--ce-ink-60);
+  color: var(--color-text-secondary);
 }
 .reqs__fact dd { margin: 0; min-width: 0; }
-.reqs__fact .reqs__fact-empty { color: var(--ce-ink-60); font-style: italic; }
+.reqs__fact .reqs__fact-empty { color: var(--color-text-secondary); font-style: italic; }
 .reqs__recorded,
 .reqs__note {
-  margin: 6px 0 0;
+  margin: 8px 0 0;
   font-size: var(--text-xs);
   line-height: var(--leading-snug);
-  color: var(--ce-ink-60);
+  color: var(--color-text-secondary);
+}
+.reqs__note {
+  padding-left: 8px;
+  border-left: 2px solid var(--ce-hairline-color);
 }
 .reqs__recorded { font-style: italic; }
 .reqs__foot {
   margin: var(--space-2) 0 0;
   font-size: var(--text-xs);
-  color: var(--ce-ink-60);
+  color: var(--color-text-secondary);
 }
-/* Cards sit in narrow grid columns even on desktop: stack label over value
- * whenever the panel itself is narrow. */
-@container (max-width: 480px) {
-  .reqs__row { grid-template-columns: minmax(0, 1fr); }
+/* The panel sits in narrow course cards and in wide views: lay the cards
+ * out by the PANEL's width — two columns when there is room, otherwise one. */
+@container (min-width: 640px) {
+  .reqs__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @container (max-width: 340px) {
   .reqs__fact { grid-template-columns: minmax(0, 1fr); }

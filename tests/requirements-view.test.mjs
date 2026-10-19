@@ -82,3 +82,20 @@ test('entryText gives one honest line per entry', () => {
   assert.equal(view.entryText(record.satAct), view.UNVERIFIED_TEXT);
   assert.equal(view.entryText(undefined), view.UNVERIFIED_TEXT);
 });
+
+test('each category is a status card: list items with label lead-ins, footer after the note', () => {
+  /** @type {any} */
+  const english = { status: 'verified', items: ['Required if English is not your first language', 'Minimum scores: IELTS 7.5; TOEFL iBT 102 (taken before Jan 2026; 5 after); Duolingo <135>'], sources: [{ url: 'https://example.edu/eng', label: 'English' }], lastVerified: '2026-10-19', note: 'Official results only.' };
+  const html = view.panelHtml({ record: { englishLanguage: english }, categories: [{ id: 'englishLanguage', label: 'English language' }], cycleLabel: '2027 entry' });
+  assert.match(html, /class="reqs__row reqs__row--verified"/);
+  assert.match(html, /<li>Required if English is not your first language<\/li>/);
+  assert.match(html, /<span class="reqs__item-label">Minimum scores:<\/span><ul class="reqs__sublist">/);
+  // Split only on top-level "; " — the parenthesised one stays whole — and escaped.
+  const subs = [...html.matchAll(/<ul class="reqs__sublist">(.*?)<\/ul>/gs)][0][1].match(/<li>.*?<\/li>/g);
+  assert.deepEqual(subs, ['<li>IELTS 7.5</li>', '<li>TOEFL iBT 102 (taken before Jan 2026; 5 after)</li>', '<li>Duolingo &lt;135&gt;</li>']);
+  // The note sits in the card body; badge, date and source are the card's footer.
+  assert.ok(html.indexOf('reqs__note') < html.indexOf('class="reqs__meta"'));
+  assert.match(html, /<div class="reqs__meta"><span class="reqs__badge reqs__badge--verified">Verified<\/span><span class="reqs__date">19 Oct 2026<\/span>/);
+  // The one-line text (CSV / copy) is unchanged by the card layout.
+  assert.equal(view.entryText(/** @type {any} */ (english)), 'Required if English is not your first language; Minimum scores: IELTS 7.5; TOEFL iBT 102 (taken before Jan 2026; 5 after); Duolingo <135> (verified 19 Oct 2026)');
+});

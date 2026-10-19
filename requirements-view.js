@@ -3,8 +3,9 @@
  * Altiora — requirements-view.js
  *
  * Renders a course's admissions requirements for the current cycle as
- * a structured panel (one row per category, each with its verification
- * status, last-verified date and source links). Qualification
+ * a structured panel: one card per category, tinted by its verification
+ * status, with the requirement as a list and a footer carrying the
+ * status badge, last-verified date and source links. Qualification
  * categories (A-Level, IB) render their structured fields — grades or
  * points, subjects, detail — as a small definition list in the row. Pure: data in, HTML
  * out — no requirement value or category label lives here; they come
@@ -74,10 +75,41 @@
       `<a class="reqs__link" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.label || 'Source')}</a>`).join(' · ');
   }
 
-  /** Badge, date and sources for a checked entry. @param {RequirementEntry} entry */
+  /** Card footer: badge, date and sources for a checked entry. @param {RequirementEntry} entry */
   function metaHtml(entry) {
     const sources = sourcesHtml(entry);
-    return `<p class="reqs__meta">${badgeHtml(entry.status)}<span class="reqs__date">${esc(formatDate(entry.lastVerified ?? ''))}</span>${sources ? `<span class="reqs__sources">${sources}</span>` : ''}</p>`;
+    return `<div class="reqs__meta">${badgeHtml(entry.status)}<span class="reqs__date">${esc(formatDate(entry.lastVerified ?? ''))}</span>${sources ? `<span class="reqs__sources">${sources}</span>` : ''}</div>`;
+  }
+
+  /** Split on "; " outside parentheses, so "(min 720 RW; 650 M)" stays whole. @param {string} s */
+  function splitTopLevel(s) {
+    const parts = [];
+    let depth = 0, start = 0;
+    for (let i = 0; i < s.length; i++) {
+      const ch = s[i];
+      if (ch === '(') depth++;
+      else if (ch === ')') depth = Math.max(0, depth - 1);
+      else if (ch === ';' && s[i + 1] === ' ' && depth === 0) { parts.push(s.slice(start, i)); start = i + 2; }
+    }
+    parts.push(s.slice(start));
+    return parts.map(x => x.trim()).filter(Boolean);
+  }
+
+  /**
+   * One requirement item. Presentation only — the words are the data's:
+   * a short "Label: value" item shows its label in bold, and a value that
+   * lists several things ("IELTS 7.5; TOEFL 102; …") becomes a sub-list.
+   * @param {string} item
+   */
+  function itemHtml(item) {
+    const m = /^([^:;()]{2,48}): (.+)$/s.exec(item);
+    if (!m) return `<li>${esc(item)}</li>`;
+    const [, label, value] = m;
+    const parts = splitTopLevel(value);
+    const body = parts.length > 1
+      ? `<ul class="reqs__sublist">${parts.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`
+      : ` ${esc(value)}`;
+    return `<li><span class="reqs__item-label">${esc(label)}:</span>${body}</li>`;
   }
 
   /** @param {string} label @param {string} valueHtml @param {boolean} [muted] */
@@ -121,36 +153,35 @@
    */
   function rowHtml(category, entry, fallbackUrl) {
     const status = entry?.status ?? 'unverified';
-    let body;
+    const note = entry?.note ? `<p class="reqs__note">${esc(entry.note)}</p>` : '';
+    let content, footer;
     if (!entry || status === 'unverified') {
       const check = fallbackUrl && isUrl(fallbackUrl)
         ? `Check the <a class="reqs__link" href="${esc(fallbackUrl)}" target="_blank" rel="noopener noreferrer">official course page</a>.`
         : 'Check with the university.';
-      body = `
-        <p class="reqs__meta">${badgeHtml('unverified')}</p>
-        <p class="reqs__text reqs__text--muted">${check}</p>
-        ${entry?.recorded ? `<p class="reqs__recorded">Previously recorded, not verified: ${esc(entry.recorded)}</p>` : ''}
-        ${entry?.note ? `<p class="reqs__note">${esc(entry.note)}</p>` : ''}`;
+      content = `
+          <p class="reqs__text reqs__text--muted">${check}</p>
+          ${entry?.recorded ? `<p class="reqs__recorded">Previously recorded, not verified: ${esc(entry.recorded)}</p>` : ''}`;
+      footer = `<div class="reqs__meta">${badgeHtml('unverified')}</div>`;
     } else if (status === 'notApplicable') {
-      body = `
-        <p class="reqs__text">${NOT_APPLICABLE_TEXT}</p>
-        ${metaHtml(entry)}
-        ${entry.note ? `<p class="reqs__note">${esc(entry.note)}</p>` : ''}`;
+      content = `<p class="reqs__text">${NOT_APPLICABLE_TEXT}</p>`;
+      footer = metaHtml(entry);
     } else {
-      const value = category.kind === 'qualification'
+      content = category.kind === 'qualification'
         ? qualificationFactsHtml(category, entry)
         : entry.none
           ? `<p class="reqs__text">${NONE_TEXT}</p>`
-          : `<ul class="reqs__items">${(entry.items ?? []).map(i => `<li>${esc(i)}</li>`).join('')}</ul>`;
-      body = `
-        ${value}
-        ${metaHtml(entry)}
-        ${entry.note ? `<p class="reqs__note">${esc(entry.note)}</p>` : ''}`;
+          : `<ul class="reqs__items">${(entry.items ?? []).map(itemHtml).join('')}</ul>`;
+      footer = metaHtml(entry);
     }
     return `
       <div class="reqs__row reqs__row--${esc(status)}" data-req-category="${esc(category.id)}">
         <dt class="reqs__label">${esc(category.label)}</dt>
-        <dd class="reqs__value">${body}</dd>
+        <dd class="reqs__value">
+          <div class="reqs__body">${content}
+          ${note}</div>
+          ${footer}
+        </dd>
       </div>`;
   }
 
