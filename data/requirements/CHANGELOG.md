@@ -3494,3 +3494,39 @@ Format:
 - `uk-economics-manchester` · Other qualifications: partly verified: Advanced Placement (US High School Diploma applicants, university-wide guide): AAA is typically met by three APs at 5,5,5 (or dual-enrolment/college-level classes) in separate subjects including any subject requirements, plus the High School Diploma with GPA 3.0 (2026-10-19) → **verified: Advanced Placement (USA High School Diploma applicants): three APs at 5,5,5 including AP Calculus BC at 5 for BSc Economics; Plus the USA High School Diploma with a minimum cumulative GPA of 3.0/4.0, including grade B in English Language and Mathematics (2026-10-19)**.
   Source: https://www.socialsciences.manchester.ac.uk/study/international-students/country-specific-information/americas/ (accessed 2026-10-19) — “The minimum entry requirements for admission to our undergraduate courses are listed by country below. … These entry requirements are a guide only and the details may vary depending on your personal circumstances, the content of your application and the course you are applying for. … AAA: USA High School Diploma with a minimum cumulative GPA of 3.0/4.0 including grade B in English Language and Mathematics and 555 in 3 AP's. For BSc Economics we require 5 in Calculus BC AP.”
   Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/10224/bsc-economics/ (accessed 2026-10-19) — “Typical A-level offer: AAA including Mathematics … We also accept a number of qualifications from around the globe. For further information please see our country-specific information”
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Cambridge
+
+- `uk-medicine-cambridge` · engine `requirements.essential`: [Chemistry, Biology] → [Chemistry] (essential-to-preferred). Source: https://www.undergraduate.study.cam.ac.uk/courses/medicine-mb-bchir
+  > Chemistry one or two other science or mathematics subject from: Mathematics Biology or Human Biology Physics Further Mathematics
+- `uk-medicine-cambridge` · engine `requirements.preferred`: [Physics] → [Physics, Biology] (essential-to-preferred). Source: https://www.undergraduate.study.cam.ac.uk/courses/medicine-mb-bchir
+  > Chemistry one or two other science or mathematics subject from: Mathematics Biology or Human Biology Physics Further Mathematics
+- `uk-medicine-cambridge` · engine `grades.ibHL`: [Chemistry, Biology, Mathematics_Standard] → [Chemistry] (ib-hl). Source: https://www.undergraduate.study.cam.ac.uk/courses/medicine-mb-bchir
+  > IB Higher Levels (or the equivalent) in: Chemistry one or two other science or mathematics subject from
+- `uk-medicine-cambridge` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-medicine-cambridge` · aLevel: row partial → partial (owner flag kept).
+- `uk-medicine-cambridge` · ib: row partial → partial (owner flag kept).
+- `uk-maths-cambridge` · engine `admissionTests`: [STEP] → [TMUA, STEP] (test-add). Source: https://www.undergraduate.study.cam.ac.uk/courses/mathematics-ba-hons-mmath
+  > All applicants for Mathematics are required to take the Test of Mathematics for University Admission (TMUA)
+- `uk-maths-cambridge` · admissionsTests: row partial → verified.
+- `uk-naturalsciences-cambridge` · engine `requirements.essential`: [Chemistry] → [Mathematics_Standard] (preferred-to-essential). Source: https://www.undergraduate.study.cam.ac.uk/courses/natural-sciences-ba-hons-msci
+  > Mathematics 2 other science or mathematics subjects (Biology, Chemistry, Physics, and, for A level only, Further Mathematics)
+- `uk-naturalsciences-cambridge` · engine `requirements.preferred`: [Mathematics_Standard, Physics] → [Physics, Chemistry] (essential-to-preferred). Source: https://www.undergraduate.study.cam.ac.uk/courses/natural-sciences-ba-hons-msci
+  > Mathematics 2 other science or mathematics subjects (Biology, Chemistry, Physics, and, for A level only, Further Mathematics)
+- `uk-naturalsciences-cambridge` · engine `grades.ibHL`: [Mathematics_Advanced, Chemistry] → [Mathematics_Advanced] (ib-hl). Source: https://www.undergraduate.study.cam.ac.uk/courses/natural-sciences-ba-hons-msci
+  > you will need A levels/IB Higher Levels (or the equivalent) in: Mathematics 2 other science or mathematics subjects
+- `uk-naturalsciences-cambridge` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-naturalsciences-cambridge` · aLevel: row partial → partial (owner flag kept).
+- `uk-naturalsciences-cambridge` · ib: row partial → partial (owner flag kept).
+- `uk-economics-cambridge` · engine `grades.ibHL`: [Mathematics_Standard] → [Mathematics_Advanced] (ib-hl). Source: https://www.undergraduate.study.cam.ac.uk/courses/economics-ba-hons
+  > If you’re studying IB, we ask for Analysis and Approaches for this course.
+- `uk-economics-cambridge` · engine `requirements.preferred`: [Mathematics_Advanced, Economics] → [Mathematics_Advanced] (preferred-remove-unlisted). Source: https://www.undergraduate.study.cam.ac.uk/courses/economics-ba-hons
+  > To apply to any of our Colleges for Economics, you will need an A level/IB Higher Level (or the equivalent) in: Mathematics
+- `uk-economics-cambridge` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-economics-cambridge` · aLevel: row partial → partial (owner flag kept).
+- `uk-economics-cambridge` · ib: row partial → verified.
+- `uk-law-cambridge` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-stated). Source: https://www.undergraduate.study.cam.ac.uk/courses/law-ba-hons
+  > Although these are common subject combinations, this doesn't mean they're favoured.
+- `uk-law-cambridge` · subjectPrerequisites: row partial → verified.
+- `uk-law-cambridge` · aLevel: row partial → verified.
+- `uk-law-cambridge` · ib: row partial → verified.

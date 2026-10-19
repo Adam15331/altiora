@@ -165,8 +165,8 @@ const courses = [
   {
     id: "uk-medicine-cambridge", name: "Medicine MBBChir",
     university: "University of Cambridge", country: "UK", degreeLevel: "MBBChir", category: "medicine",
-    requirements: { essential: ["Chemistry","Biology"], preferred: ["Physics"], useful: ["Mathematics_Standard"] },
-    grades: { aLevels: "A*A*A", ib: 41, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology", "Mathematics_Standard"], ibHLNote: "776 at HL" },
+    requirements: { essential: ["Chemistry"], preferred: ["Physics","Biology"], useful: ["Mathematics_Standard"] },
+    grades: { aLevels: "A*A*A", ib: 41, sgALevels: null, hkDse: null, ibHL: ["Chemistry"], ibHLNote: "776 at HL" },
     admissionTests: ["UCAT"],
     universityContext: {
       tier: "world-top-10",
@@ -193,7 +193,7 @@ const courses = [
     university: "University of Cambridge", country: "UK", degreeLevel: "MMath", category: "mathematics",
     requirements: { essential: ["Mathematics_Standard","Mathematics_Advanced"], preferred: [], useful: ["Physics"] },
     grades: { aLevels: "A*A*A", ib: 41, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "776 at HL" },
-    admissionTests: ["STEP"],
+    admissionTests: ["TMUA", "STEP"],
     universityContext: {
       tier: "world-top-10",
       intlFriendly: true,
@@ -204,8 +204,8 @@ const courses = [
   {
     id: "uk-naturalsciences-cambridge", name: "Natural Sciences BA/MSci",
     university: "University of Cambridge", country: "UK", degreeLevel: "MSci", category: "sciences",
-    requirements: { essential: ["Chemistry"], preferred: ["Mathematics_Standard","Physics"], useful: ["Biology"] },
-    grades: { aLevels: "A*A*A", ib: 41, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Chemistry"], ibHLNote: "776 at HL" },
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Physics","Chemistry"], useful: ["Biology"] },
+    grades: { aLevels: "A*A*A", ib: 41, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "776 at HL" },
     admissionTests: ["ESAT"],
     universityContext: {
       tier: "world-top-10",
@@ -230,8 +230,8 @@ const courses = [
   {
     id: "uk-economics-cambridge", name: "Economics BA",
     university: "University of Cambridge", country: "UK", degreeLevel: "BA", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
-    grades: { aLevels: "A*A*A", ib: 41, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "776 at HL" },
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Statistics"] },
+    grades: { aLevels: "A*A*A", ib: 41, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "776 at HL" },
     admissionTests: ["TMUA"],
     universityContext: {
       tier: "world-top-10",
@@ -243,7 +243,7 @@ const courses = [
   {
     id: "uk-law-cambridge", name: "Law LLB",
     university: "University of Cambridge", country: "UK", degreeLevel: "LLB", category: "law",
-    requirements: { essential: [], preferred: ["History","English"], useful: ["Philosophy","Economics"] },
+    requirements: { essential: [], preferred: [], useful: ["Philosophy","Economics"] },
     grades: { aLevels: "A*AA", ib: 41, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: ["LNAT"],
     universityContext: {
@@ -4290,13 +4290,13 @@ const courseVerification = {
   "uk-biochemistry-oxford": { status: "verified", source: "https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/biochemistry-molecular-and-cellular", checkedDate: "2026-06-23", notes: "A*AA / IB 39 / no admissions test confirmed; HL 776→766 (7 in Chemistry)." },
   "uk-economics-oxford": { status: "verified", source: "https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/economics-and-management", checkedDate: "2026-06-23", notes: "AAA→A*AA (incl Maths); TSA→TARA for 2026; HL 766→666." },
   "uk-history-oxford": { status: "verified", source: "https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/history", checkedDate: "2026-06-23", notes: "AAA / IB 38 confirmed. HAT not run for History for 2025–26 entry — no admissions test currently (cycle-specific; recheck each cycle)." },
-  "uk-medicine-cambridge": { status: "verified", source: "https://www.undergraduate.study.cam.ac.uk/courses/medicine-mb-bchir", checkedDate: "2026-06-23", notes: "A*AA→A*A*A; IB published as 41–42 (stored 41); UCAT confirmed. A* usually in Chemistry." },
+  "uk-medicine-cambridge": { status: "partial", source: "https://www.undergraduate.study.cam.ac.uk/courses/medicine-mb-bchir", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential [Chemistry, Biology]→[Chemistry]; preferred [Physics]→[Physics, Biology]; ibHL [Chemistry, Biology, Mathematics_Standard]→[Chemistry]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-23, https://www.undergraduate.study.cam.ac.uk/courses/medicine-mb-bchir): A*AA→A*A*A; IB published as 41–42 (stored 41); UCAT confirmed. A* usually in Chemistry." },
   "uk-cs-cambridge": { status: "verified", source: "https://www.undergraduate.study.cam.ac.uk/courses/computer-science-ba-hons-meng", checkedDate: "2026-06-23", notes: "Cambridge CS uses TMUA (added). A*A*A / IB 41–42 confirmed." },
-  "uk-maths-cambridge": { status: "verified", source: "https://www.undergraduate.study.cam.ac.uk/courses/mathematics-ba-hons-mmath", checkedDate: "2026-06-23", notes: "A*A*A / STEP / IB 41–42 confirmed (no change)." },
-  "uk-naturalsciences-cambridge": { status: "verified", source: "https://www.undergraduate.study.cam.ac.uk/courses/natural-sciences-ba-hons-msci", checkedDate: "2026-06-23", notes: "NSAA discontinued → ESAT (cross-confirmed)." },
+  "uk-maths-cambridge": { status: "verified", source: "https://www.undergraduate.study.cam.ac.uk/courses/mathematics-ba-hons-mmath", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): admissionTests [STEP]→[TMUA, STEP]. EARLIER (2026-06-23, https://www.undergraduate.study.cam.ac.uk/courses/mathematics-ba-hons-mmath): A*A*A / STEP / IB 41–42 confirmed (no change)." },
+  "uk-naturalsciences-cambridge": { status: "partial", source: "https://www.undergraduate.study.cam.ac.uk/courses/natural-sciences-ba-hons-msci", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential [Chemistry]→[Mathematics_Standard]; preferred [Mathematics_Standard, Physics]→[Physics, Chemistry]; ibHL [Mathematics_Advanced, Chemistry]→[Mathematics_Advanced]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-23, https://www.undergraduate.study.cam.ac.uk/courses/natural-sciences-ba-hons-msci): NSAA discontinued → ESAT (cross-confirmed)." },
   "uk-engineering-cambridge": { status: "verified", source: "https://www.undergraduate.study.cam.ac.uk/courses/engineering-ba-hons-meng", checkedDate: "2026-06-23", notes: "ENGAA discontinued → ESAT (cross-confirmed)." },
-  "uk-economics-cambridge": { status: "verified", source: "https://www.undergraduate.study.cam.ac.uk/courses/economics-ba-hons", checkedDate: "2026-06-23", notes: "A*AA→A*A*A; HL 766→776; IB 40→41 (41–42); ECAA discontinued, now TMUA (added)." },
-  "uk-law-cambridge": { status: "verified", source: "https://www.undergraduate.study.cam.ac.uk/courses/law-ba-hons", checkedDate: "2026-06-23", notes: "LNAT introduced for 2024 entry (added; cross-confirmed lnat.ac.uk). Typical offer A*AA (Sidney Sussex A*A*A); IB 41–42." },
+  "uk-economics-cambridge": { status: "partial", source: "https://www.undergraduate.study.cam.ac.uk/courses/economics-ba-hons", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ibHL [Mathematics_Standard]→[Mathematics_Advanced]; preferred [Mathematics_Advanced, Economics]→[Mathematics_Advanced]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-23, https://www.undergraduate.study.cam.ac.uk/courses/economics-ba-hons): A*AA→A*A*A; HL 766→776; IB 40→41 (41–42); ECAA discontinued, now TMUA (added)." },
+  "uk-law-cambridge": { status: "verified", source: "https://www.undergraduate.study.cam.ac.uk/courses/law-ba-hons", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [History, English]→[]. EARLIER (2026-06-23, https://www.undergraduate.study.cam.ac.uk/courses/law-ba-hons): LNAT introduced for 2024 entry (added; cross-confirmed lnat.ac.uk). Typical offer A*AA (Sidney Sussex A*A*A); IB 41–42." },
   "uk-medicine-imperial": { status: "verified", source: "https://www.imperial.ac.uk/study/courses/undergraduate/medicine/", checkedDate: "2026-06-23", notes: "AAA / IB 38 / UCAT confirmed. HL requirement is 6 in Chemistry + 6 in Biology." },
   "uk-cs-imperial": { status: "verified", source: "https://www.imperial.ac.uk/study/courses/undergraduate/computing-meng/", checkedDate: "2026-06-23", notes: "Imperial discontinued MAT; Computing uses TMUA (cross-confirmed). A*AA / IB 39 confirmed." },
   "uk-electrical-imperial": { status: "verified", source: "https://digital.ucas.com/coursedisplay/courses/5cee5224-879a-ed8f-3e36-fedd7a3c207d", checkedDate: "2026-06-28", notes: "Verified: A-level A*A*A (A* Maths + A* Physics + A) confirmed via UCAS + Imperial; IB 39 (HL Maths+Physics); ESAT required." },
