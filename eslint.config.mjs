@@ -21,6 +21,11 @@ export default [
     languageOptions: { ecmaVersion: 2022, sourceType: 'script', globals: { ...globals.browser, module: 'writable' } },
   },
   {
+    // Playwright scripts: code passed to page.evaluate runs in the browser.
+    files: ['scripts/verify-pass/matching/*.mjs'],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
+  },
+  {
     rules: {
       'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       eqeqeq: ['error', 'smart'],

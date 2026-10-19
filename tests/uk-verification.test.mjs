@@ -77,3 +77,21 @@ test('no admitted-student figure is stated as a UK requirement', () => {
     for (const v of [...(e.items ?? []), e.typicalOffer ?? '', e.ucasTariff ?? '', e.detail ?? '']) assert.doesNotMatch(v, figure, `${id} › ${cat}: ${v}`);
   }
 });
+
+test('noSubjectRequirements: only on courses whose verified, quoted row states no required subjects', () => {
+  const flagged = courses.filter(c => c.noSubjectRequirements);
+  assert.deepEqual(flagged.map(c => c.id).sort(), ['uk-law-cambridge', 'uk-law-exeter', 'uk-law-kcl', 'uk-law-lse', 'uk-law-oxford', 'uk-nursing-kcl']);
+  const id = 'uk-law-cambridge';
+  const course = /** @type {any} */ (courses.find(c => c.id === id));
+  const ok = validateCycle(cycle, { config, courses, today: TODAY }).filter(p => p.level === 'error');
+  assert.deepEqual(ok, []);
+  // A flag next to a required subject, or without a verified row, fails.
+  const withSubject = courses.map(c => c.id === id ? { ...course, requirements: { ...course.requirements, essential: ['History'] } } : c);
+  const unverified = { ...cycle, courses: { ...cycle.courses, [id]: { ...cycle.courses[id], subjectPrerequisites: { status: 'unverified', note: 'x' } } } };
+  /** @type {[any, any[]][]} */
+  const cases = [[cycle, withSubject], [unverified, courses]];
+  for (const [cyc, cs] of cases) {
+    const errs = validateCycle(cyc, { config, courses: cs, today: TODAY }).filter(p => p.level === 'error').map(p => p.message).join();
+    assert.match(errs, /noSubjectRequirements needs/);
+  }
+});

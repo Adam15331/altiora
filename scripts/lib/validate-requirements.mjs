@@ -277,6 +277,14 @@ export function validateCycle(cycle, { config, courses, today }) {
           err(at(cid, 'subjectPrerequisites'), `subjects ${JSON.stringify(listed)} disagree with courseRequirements.js essential+preferred ${JSON.stringify(engine)} — update both`);
         }
       }
+      // noSubjectRequirements exempts a course from the field-relevance
+      // guard, so it needs a verified, quoted statement of no required subjects.
+      if (course.noSubjectRequirements != null) {
+        const ok = course.noSubjectRequirements === true
+          && !(course.requirements?.essential ?? []).length && !(course.requirements?.preferred ?? []).length
+          && subj?.status === 'verified' && !!subj.sourceSnippet;
+        if (!ok) err(at(cid, 'subjectPrerequisites'), 'noSubjectRequirements needs true, empty essential/preferred and a verified, quoted subjectPrerequisites row');
+      }
       // Other qualifications: where the engine holds an AP requirement it
       // matches AP students on, the checked row must still show it.
       const oq = rec.otherQualifications;

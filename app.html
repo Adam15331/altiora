@@ -15,12 +15,9 @@
   <meta name="twitter:card" content="summary" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- Type: ONE family (Hanken Grotesk) for all text. The second link is the
-       logo wordmark only — subset to the letters A L T I O R. -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&text=ALTIORA&display=swap" />
-  <link rel="stylesheet" href="tokens.css?v=10" />
-  <link rel="stylesheet" href="styles.css?v=99" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
+  <link rel="stylesheet" href="tokens.css?v=11" />
+  <link rel="stylesheet" href="styles.css?v=100" />
   <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "48e78fd025b74d35921517dcb99a87ed"}'></script><!-- End Cloudflare Web Analytics -->
 </head>
 <body>
@@ -542,7 +539,7 @@
 
   <!-- Data layer must be loaded before main.js -->
   <script src="data/qualificationMappings.js?v=3"></script>
-  <script src="data/courseRequirements.js?v=32"></script>
+  <script src="data/courseRequirements.js?v=33"></script>
   <script src="data/university-profiles.js?v=2"></script>
   <script src="data/admissionTestInfo.js?v=3"></script>
   <script src="data/fieldProfiles.js?v=2"></script>
@@ -550,10 +547,10 @@
   <!-- Admissions requirements: central config, the CURRENT cycle's data
        (npm run new-cycle rewrites this path), and the shared renderer. -->
   <script src="data/requirements/config.js?v=4"></script>
-  <script src="data/requirements/2027.js?v=3"></script>
+  <script src="data/requirements/2027.js?v=4"></script>
   <script src="requirements-view.js?v=5"></script>
   <script src="state.js?v=18"></script>
-  <script src="main.js?v=117"></script>
+  <script src="main.js?v=118"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);

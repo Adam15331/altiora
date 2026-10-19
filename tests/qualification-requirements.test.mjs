@@ -17,6 +17,14 @@ const byId = new Map(courses.map(c => [c.id, c]));
 const cycle = loadCycle('2027');
 const TODAY = '2026-10-19';
 const SRC = [{ url: 'https://www.example.ac.uk/course', label: 'Official source' }];
+// A frozen copy of uk-medicine-oxford's A-Level and IB rows as verified on
+// 23 Jun 2026: the rendering tests below need fixed values, while the real
+// rows keep moving as the verification pass re-checks them.
+/** @type {any} */
+const MED_OX = {
+  aLevel: {"status": "verified", "accepted": "yes", "typicalOffer": "A*AA", "subjects": {"required": [{"name": "Chemistry", "code": "Chemistry"}, {"name": "Biology", "code": "Biology"}], "preferred": [{"name": "Physics", "code": "Physics"}]}, "sources": [{"url": "https://www.medsci.ox.ac.uk/study/medicine/pre-clinical/requirements", "label": "Official source"}], "lastVerified": "2026-06-23"},
+  ib: {"status": "verified", "accepted": "yes", "overallScore": 39, "subjects": {"required": [{"name": "Chemistry", "code": "Chemistry"}, {"name": "Biology", "code": "Biology"}], "preferred": [{"name": "Physics", "code": "Physics"}], "higherLevel": [{"name": "Chemistry", "code": "Chemistry"}, {"name": "Biology", "code": "Biology"}]}, "detail": "766 at HL", "sources": [{"url": "https://www.medsci.ox.ac.uk/study/medicine/pre-clinical/requirements", "label": "Official source"}], "lastVerified": "2026-06-23"},
+};
 
 /** Copy of an object without one key. @param {any} o @param {string} k */
 const omit = (o, k) => Object.fromEntries(Object.entries(o).filter(([key]) => key !== k));
@@ -222,7 +230,7 @@ test('the validator fails a course with no A-Level or IB entry, and a config wit
 });
 
 test('new cycle: A-Level, IB and not-applicable rows draft as unverified, keeping the old value', () => {
-  const al = carryEntry(cycle.courses['uk-medicine-oxford'].aLevel, '2027 entry');
+  const al = carryEntry(MED_OX.aLevel, '2027 entry');
   assert.deepEqual(Object.keys(al), ['status', 'recorded']);
   assert.equal(al.status, 'unverified');
   assert.match(al.recorded ?? '', /^A\*AA; Required subjects: Chemistry, Biology; Preferred subjects: Physics \(2027 entry, verified 23 Jun 2026\)$/);
@@ -240,7 +248,7 @@ const panel = record => view.panelHtml({ record, categories: qualCats, cycleLabe
 const row = (html, cat) => html.split(`data-req-category="${cat}"`)[1].split('data-req-category')[0];
 
 test('an A-Level row shows grades and subjects as a definition list, with badge, date and source', () => {
-  const r = row(panel(cycle.courses['uk-medicine-oxford']), 'aLevel');
+  const r = row(panel(MED_OX), 'aLevel');
   assert.match(r, /<dl class="reqs__facts">/);
   assert.match(r, /<dt>Grades<\/dt><dd>A\*AA<\/dd>/);
   assert.match(r, /<dt>Required subjects<\/dt><dd>Chemistry, Biology<\/dd>/);
@@ -251,7 +259,7 @@ test('an A-Level row shows grades and subjects as a definition list, with badge,
 });
 
 test('an IB row shows the overall score, Higher Level subjects and subject grades', () => {
-  const r = row(panel(cycle.courses['uk-medicine-oxford']), 'ib');
+  const r = row(panel(MED_OX), 'ib');
   assert.match(r, /<dt>Overall score<\/dt><dd>39 points<\/dd>/);
   assert.match(r, /<dt>Higher Level<\/dt><dd>Chemistry, Biology<\/dd>/);
   assert.match(r, /<dt>Details<\/dt><dd>766 at HL<\/dd>/);
@@ -273,7 +281,7 @@ test('a not-applicable row says so with its own badge, and is left out of the ve
   assert.match(row(html, 'aLevel'), /reqs__badge--notApplicable">Not applicable/);
   assert.match(row(html, 'aLevel'), /Graduate-entry programme/);
   assert.match(html, /0 of 0 verified/);
-  assert.match(panel(cycle.courses['uk-medicine-oxford']), /2 of 2 verified/);
+  assert.match(panel(MED_OX), /2 of 2 verified/);
 });
 
 test('an A-Level / IB row with no data is "Not verified" and points at the official page', () => {
@@ -284,8 +292,8 @@ test('an A-Level / IB row with no data is "Not verified" and points at the offic
 });
 
 test('entryText gives one honest line for A-Level, IB and not-applicable rows', () => {
-  assert.equal(view.entryText(cycle.courses['uk-medicine-oxford'].aLevel), 'A*AA; Required subjects: Chemistry, Biology; Preferred subjects: Physics (verified 23 Jun 2026)');
-  assert.match(view.entryText(cycle.courses['uk-medicine-oxford'].ib), /^39 points; .*Higher Level: Chemistry, Biology; Details: 766 at HL \(verified 23 Jun 2026\)$/);
+  assert.equal(view.entryText(MED_OX.aLevel), 'A*AA; Required subjects: Chemistry, Biology; Preferred subjects: Physics (verified 23 Jun 2026)');
+  assert.match(view.entryText(MED_OX.ib), /^39 points; .*Higher Level: Chemistry, Biology; Details: 766 at HL \(verified 23 Jun 2026\)$/);
   assert.match(view.entryText(cycle.courses['ca-law-york'].aLevel), /^Not applicable — Graduate-entry programme.* \(checked \d+ [A-Z][a-z]{2} 2026\)$/);
   assert.equal(view.entryText(cycle.courses['sg-law-nus'].ib), view.UNVERIFIED_TEXT);
 });

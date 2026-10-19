@@ -3467,3 +3467,1313 @@ Format:
 - `uk-maths-ucl` · Other requirements: not verified → **not verified**.
   Not verified: University College London’s pages could not be opened for checking on 19 Oct 2026 — check the official page.
   **Owner flag:** Re-check in a browser: https://www.ucl.ac.uk/maths/study/bscmsci-mathematics/admissions (HTTP 403 to automated checks on 2026-10-19; all www.ucl.ac.uk pages tried returned 403). Record interviews, admissions assessments, portfolios or other selection requirements, with a verbatim snippet.
+
+## 2026-10-19 — 2027 entry — UK verification pass: University of Glasgow — Medicine US route (sweep)
+
+- `uk-medicine-glasgow` · SAT / ACT: not verified → **partly verified: For United States school leavers (Medicine MBChB): SAT minimum 1280 plus two APs at grade 5, including all required subjects (Chemistry, Biology and one of Maths or Physics); ACT is also accepted with two APs at grade 5 including all required subjects; ACT Maths does not count as the required Maths. The page prints the ACT minimum as “1280”, which is not an ACT score, so no ACT minimum is shown here; SAT/ACT not required on the AP-only route: at least three APs, all at grade 5, including the required subjects (2026-10-19)**.
+  Source: https://www.gla.ac.uk/schools/medicine/mus/admissions/internationalentryrequirements/ (accessed 2026-10-19) — “Country specific school leaver qualifications Required subjects: Chemistry, Biology and one of either Maths orPhysics … United States Advanced Placement SAT ACT Minimum 3 AP with minimum grade 5 in all subjects, to include required subjects Minimum score of 1280 PLUS 2 AP at grade 5. to include all required subjects Minimum score of 1280 PLUS 2 AP at grade 5. to include all required subjects. We will not consider ACT Maths as meeting required Maths”
+  **Owner flag:** Glasgow’s Medical School page lists the ACT minimum as “Minimum score of 1280 PLUS 2 AP at grade 5”, apparently copied from the SAT line. Confirm the ACT minimum with med-sch-admissions@glasgow.ac.uk or a later version of https://www.gla.ac.uk/schools/medicine/mus/admissions/internationalentryrequirements/.
+- `uk-medicine-glasgow` · Other qualifications: not verified → **verified: Advanced Placement, AP-only route (United States school leavers): at least three APs, all at grade 5, including the required subjects (Chemistry, Biology and one of Maths or Physics); SAT/ACT route: two APs at grade 5, including all required subjects, alongside SAT 1280 (or the ACT, see SAT/ACT) (2026-10-19)**.
+  Source: https://www.gla.ac.uk/schools/medicine/mus/admissions/internationalentryrequirements/ (accessed 2026-10-19) — “Country specific school leaver qualifications Required subjects: Chemistry, Biology and one of either Maths orPhysics … United States Advanced Placement SAT ACT Minimum 3 AP with minimum grade 5 in all subjects, to include required subjects Minimum score of 1280 PLUS 2 AP at grade 5. to include all required subjects Minimum score of 1280 PLUS 2 AP at grade 5. to include all required subjects. We will not consider ACT Maths as meeting required Maths”
+
+## 2026-10-19 — 2027 entry — UK verification pass: King's College London — US route for Medicine and CS (sweep)
+
+- `uk-medicine-kcl` · SAT / ACT: partly verified: For applicants with a US high-school diploma, Route 1 (offer level A*AA): three APs at 5 (or permitted Honors/Dual Enrolment classes, IB Higher Levels or A-levels) plus ACT 29 or SAT 1380 (minimum 620 Maths, 650 Reading and Writing); Route 2 needs no SAT/ACT: five APs at 55554; SAT subject tests and ACT/SAT superscores are not considered (2026-10-19) → **verified: For applicants with a US high-school diploma, Route 1 (offer level A*AA): three APs at 5 (or permitted Honors/Dual Enrolment classes, IB Higher Levels or A-levels) plus ACT 29 or SAT 1380 (minimum 620 Maths, 650 Reading and Writing); Route 2 needs no SAT/ACT: five APs at 55554; SAT subject tests and ACT/SAT superscores are not considered (2026-10-19)**.
+  Source: https://www.kcl.ac.uk/study/undergraduate/how-to-apply/entry-requirements (accessed 2026-10-19) — “Applicants with US high school qualifications can meet our entry requirements through a combination of APs, Honors or Dual Enrolment Classes*, SATs and ACTs listed below. … Requirement: You must take one option from column(i) (ii) (iii) and (iv) of Route 1. Alternatively, take Route 2. … A*AA AP at 5 AP at 5 AP at 5 Act at 29 55554 in five APs Honors or Dual Enrolment Class at A+ Honors or Dual Enrolment Class at A/A- Honors or Dual Enrolment Class at A/A- 1380 in the SAT with a minimum of 620 in Maths and 650 in Reading and Writing”
+- `uk-medicine-kcl` · Other qualifications: partly verified: For applicants with a US high-school diploma: five APs at 55554 (Route 2), or three APs at 5 combined with the ACT/SAT (Route 1); Biology and Chemistry at grade A → AP Biology and AP Chemistry at 5; AP exams must be taken (AP classes alone do not count); AP Research and AP Seminar are not accepted (2026-10-19) → **verified: For applicants with a US high-school diploma: five APs at 55554 (Route 2), or three APs at 5 combined with the ACT/SAT (Route 1); Biology and Chemistry at grade A → AP Biology and AP Chemistry at 5; AP exams must be taken (AP classes alone do not count); AP Research and AP Seminar are not accepted (2026-10-19)**.
+  Source: https://www.kcl.ac.uk/study/undergraduate/how-to-apply/entry-requirements (accessed 2026-10-19) — “A*AA AP at 5 AP at 5 AP at 5 Act at 29 55554 in five APs Honors or Dual Enrolment Class at A+ Honors or Dual Enrolment Class at A/A- Honors or Dual Enrolment Class at A/A- 1380 in the SAT with a minimum of 620 in Maths and 650 in Reading and Writing … A Achieve 5 in the required AP subject test … for courses with a Mathematics subject requirement, applicants will need to complete AP Calculus BC to meet the subject requirement. … AP Research and AP Seminar are not accepted.”
+- `uk-cs-kcl` · SAT / ACT: partly verified: For applicants with a US high-school diploma, Route 1 (offer level A*A*A): three APs at 5 (or permitted Honors/Dual Enrolment classes, IB Higher Levels or A-levels) plus ACT 30 or SAT 1410 (minimum 620 Maths, 650 Reading and Writing); Route 2 needs no SAT/ACT: five APs at 55555; SAT subject tests and ACT/SAT superscores are not considered (2026-10-19) → **verified: For applicants with a US high-school diploma, Route 1 (offer level A*A*A): three APs at 5 (or permitted Honors/Dual Enrolment classes, IB Higher Levels or A-levels) plus ACT 30 or SAT 1410 (minimum 620 Maths, 650 Reading and Writing); Route 2 needs no SAT/ACT: five APs at 55555; SAT subject tests and ACT/SAT superscores are not considered (2026-10-19)**.
+  Source: https://www.kcl.ac.uk/study/undergraduate/how-to-apply/entry-requirements (accessed 2026-10-19) — “Applicants with US high school qualifications can meet our entry requirements through a combination of APs, Honors or Dual Enrolment Classes*, SATs and ACTs listed below. … Requirement: You must take one option from column(i) (ii) (iii) and (iv) of Route 1. Alternatively, take Route 2. … A*A*A AP at 5 AP at 5 AP at 5 ACT at 30 55555 in five APs Honors or Dual Enrolment Class at A+ Honors or Dual Enrolment Class at A+ Honors or Dual Enrolment Class at A/A- 1410 in the SAT with a minimum of 620 in Maths and 650 in Reading and Writing”
+  **Owner flag:** Shown at King’s standard A*A*A level; data/courseRequirements.js holds AAA (A-Level row is partial with an owner-decision flag).
+- `uk-cs-kcl` · Other qualifications: partly verified: For applicants with a US high-school diploma: five APs at 55555 (Route 2), or three APs at 5 combined with the ACT/SAT (Route 1); Mathematics/Further Mathematics at grade A → AP Calculus BC at 5; AP exams must be taken (AP classes alone do not count); AP Research and AP Seminar are not accepted (2026-10-19) → **verified: For applicants with a US high-school diploma: five APs at 55555 (Route 2), or three APs at 5 combined with the ACT/SAT (Route 1); Mathematics/Further Mathematics at grade A → AP Calculus BC at 5; AP exams must be taken (AP classes alone do not count); AP Research and AP Seminar are not accepted (2026-10-19)**.
+  Source: https://www.kcl.ac.uk/study/undergraduate/how-to-apply/entry-requirements (accessed 2026-10-19) — “A*A*A AP at 5 AP at 5 AP at 5 ACT at 30 55555 in five APs Honors or Dual Enrolment Class at A+ Honors or Dual Enrolment Class at A+ Honors or Dual Enrolment Class at A/A- 1410 in the SAT with a minimum of 620 in Maths and 650 in Reading and Writing … A Achieve 5 in the required AP subject test … for courses with a Mathematics subject requirement, applicants will need to complete AP Calculus BC to meet the subject requirement. … AP Research and AP Seminar are not accepted.”
+  **Owner flag:** Shown at King’s standard A*A*A level; data/courseRequirements.js holds AAA (A-Level row is partial with an owner-decision flag).
+
+## 2026-10-19 — 2027 entry — UK verification pass: University of Manchester — Economics AP route (sweep)
+
+- `uk-economics-manchester` · Other qualifications: partly verified: Advanced Placement (US High School Diploma applicants, university-wide guide): AAA is typically met by three APs at 5,5,5 (or dual-enrolment/college-level classes) in separate subjects including any subject requirements, plus the High School Diploma with GPA 3.0 (2026-10-19) → **verified: Advanced Placement (USA High School Diploma applicants): three APs at 5,5,5 including AP Calculus BC at 5 for BSc Economics; Plus the USA High School Diploma with a minimum cumulative GPA of 3.0/4.0, including grade B in English Language and Mathematics (2026-10-19)**.
+  Source: https://www.socialsciences.manchester.ac.uk/study/international-students/country-specific-information/americas/ (accessed 2026-10-19) — “The minimum entry requirements for admission to our undergraduate courses are listed by country below. … These entry requirements are a guide only and the details may vary depending on your personal circumstances, the content of your application and the course you are applying for. … AAA: USA High School Diploma with a minimum cumulative GPA of 3.0/4.0 including grade B in English Language and Mathematics and 555 in 3 AP's. For BSc Economics we require 5 in Calculus BC AP.”
+  Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/10224/bsc-economics/ (accessed 2026-10-19) — “Typical A-level offer: AAA including Mathematics … We also accept a number of qualifications from around the globe. For further information please see our country-specific information”
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Cambridge
+
+- `uk-medicine-cambridge` · engine `requirements.essential`: [Chemistry, Biology] → [Chemistry] (essential-to-preferred). Source: https://www.undergraduate.study.cam.ac.uk/courses/medicine-mb-bchir
+  > Chemistry one or two other science or mathematics subject from: Mathematics Biology or Human Biology Physics Further Mathematics
+- `uk-medicine-cambridge` · engine `requirements.preferred`: [Physics] → [Physics, Biology] (essential-to-preferred). Source: https://www.undergraduate.study.cam.ac.uk/courses/medicine-mb-bchir
+  > Chemistry one or two other science or mathematics subject from: Mathematics Biology or Human Biology Physics Further Mathematics
+- `uk-medicine-cambridge` · engine `grades.ibHL`: [Chemistry, Biology, Mathematics_Standard] → [Chemistry] (ib-hl). Source: https://www.undergraduate.study.cam.ac.uk/courses/medicine-mb-bchir
+  > IB Higher Levels (or the equivalent) in: Chemistry one or two other science or mathematics subject from
+- `uk-medicine-cambridge` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-medicine-cambridge` · aLevel: row partial → partial (owner flag kept).
+- `uk-medicine-cambridge` · ib: row partial → partial (owner flag kept).
+- `uk-maths-cambridge` · engine `admissionTests`: [STEP] → [TMUA, STEP] (test-add). Source: https://www.undergraduate.study.cam.ac.uk/courses/mathematics-ba-hons-mmath
+  > All applicants for Mathematics are required to take the Test of Mathematics for University Admission (TMUA)
+- `uk-maths-cambridge` · admissionsTests: row partial → verified.
+- `uk-naturalsciences-cambridge` · engine `requirements.essential`: [Chemistry] → [Mathematics_Standard] (preferred-to-essential). Source: https://www.undergraduate.study.cam.ac.uk/courses/natural-sciences-ba-hons-msci
+  > Mathematics 2 other science or mathematics subjects (Biology, Chemistry, Physics, and, for A level only, Further Mathematics)
+- `uk-naturalsciences-cambridge` · engine `requirements.preferred`: [Mathematics_Standard, Physics] → [Physics, Chemistry] (essential-to-preferred). Source: https://www.undergraduate.study.cam.ac.uk/courses/natural-sciences-ba-hons-msci
+  > Mathematics 2 other science or mathematics subjects (Biology, Chemistry, Physics, and, for A level only, Further Mathematics)
+- `uk-naturalsciences-cambridge` · engine `grades.ibHL`: [Mathematics_Advanced, Chemistry] → [Mathematics_Advanced] (ib-hl). Source: https://www.undergraduate.study.cam.ac.uk/courses/natural-sciences-ba-hons-msci
+  > you will need A levels/IB Higher Levels (or the equivalent) in: Mathematics 2 other science or mathematics subjects
+- `uk-naturalsciences-cambridge` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-naturalsciences-cambridge` · aLevel: row partial → partial (owner flag kept).
+- `uk-naturalsciences-cambridge` · ib: row partial → partial (owner flag kept).
+- `uk-economics-cambridge` · engine `grades.ibHL`: [Mathematics_Standard] → [Mathematics_Advanced] (ib-hl). Source: https://www.undergraduate.study.cam.ac.uk/courses/economics-ba-hons
+  > If you’re studying IB, we ask for Analysis and Approaches for this course.
+- `uk-economics-cambridge` · engine `requirements.preferred`: [Mathematics_Advanced, Economics] → [Mathematics_Advanced] (preferred-remove-unlisted). Source: https://www.undergraduate.study.cam.ac.uk/courses/economics-ba-hons
+  > To apply to any of our Colleges for Economics, you will need an A level/IB Higher Level (or the equivalent) in: Mathematics
+- `uk-economics-cambridge` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-economics-cambridge` · aLevel: row partial → partial (owner flag kept).
+- `uk-economics-cambridge` · ib: row partial → verified.
+- `uk-law-cambridge` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-stated). Source: https://www.undergraduate.study.cam.ac.uk/courses/law-ba-hons
+  > Although these are common subject combinations, this doesn't mean they're favoured.
+- `uk-law-cambridge` · subjectPrerequisites: row partial → verified.
+- `uk-law-cambridge` · aLevel: row partial → verified.
+- `uk-law-cambridge` · ib: row partial → verified.
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: Imperial College London
+
+- `uk-medicine-imperial` · engine `grades.aLevels`: AAA → A*AA (offer). Source: https://www.imperial.ac.uk/study/courses/undergraduate/medicine/
+  > Typical offer A*AA (A* in Biology or Chemistry)
+- `uk-medicine-imperial` · engine `grades.ib`: 38 → 39 (ib-score). Source: https://www.imperial.ac.uk/study/courses/undergraduate/medicine/
+  > Typical offer 39 points
+- `uk-medicine-imperial` · engine `grades.ibHLNote`: 666 at HL → 6 and 7 in HL Biology/Chemistry (ib-note). Source: https://www.imperial.ac.uk/study/courses/undergraduate/medicine/
+  > Typical offer 39 points To include: 6, 7 in Biology/Chemistry at higher level
+- `uk-medicine-imperial` · engine `requirements.preferred`: [Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://www.imperial.ac.uk/study/courses/undergraduate/medicine/
+  > A* and A in Biology and Chemistry (A* in either)
+- `uk-medicine-imperial` · subjectPrerequisites: row partial → verified.
+- `uk-medicine-imperial` · aLevel: row partial → verified (owner flag kept).
+- `uk-medicine-imperial` · ib: row partial → verified.
+- `uk-cs-imperial` · engine `grades.aLevels`: A*AA → A*A*A* (offer). Source: https://www.imperial.ac.uk/study/courses/undergraduate/computing-meng/
+  > Typical offer A*A*A* (applicants studying three A-levels)
+- `uk-cs-imperial` · engine `grades.ib`: 39 → 42 (ib-score). Source: https://www.imperial.ac.uk/study/courses/undergraduate/computing-meng/
+  > Typical offer 42 points
+- `uk-cs-imperial` · engine `grades.ibHLNote`: 776 at HL → 7 in HL Mathematics; 7 in another relevant HL subject (ib-note). Source: https://www.imperial.ac.uk/study/courses/undergraduate/computing-meng/
+  > 7 in Mathematics at higher level 7 in another relevant subject at higher level
+- `uk-cs-imperial` · aLevel: row partial → verified (owner flag kept).
+- `uk-cs-imperial` · ib: row partial → partial (owner flag kept).
+- `uk-electrical-imperial` · engine `grades.ib`: 39 → 41 (ib-score). Source: https://www.imperial.ac.uk/study/courses/undergraduate/electrical-electronic-engineering-meng/
+  > Typical offer 41 points
+- `uk-electrical-imperial` · engine `grades.ibHLNote`: 776 at HL → 7 in HL Mathematics; 7 in HL Physics (ib-note). Source: https://www.imperial.ac.uk/study/courses/undergraduate/electrical-electronic-engineering-meng/
+  > 7 in Mathematics at higher level 7 in Physics at higher level
+- `uk-electrical-imperial` · ib: row partial → partial (owner flag kept).
+- `uk-mechanical-imperial` · engine `grades.aLevels`: A*A*A → A*A*A* (offer). Source: https://www.imperial.ac.uk/study/courses/undergraduate/mechanical-engineering/
+  > Typical offer A*A*A* (applicants studying three A-levels)
+- `uk-mechanical-imperial` · engine `grades.ibHLNote`: 776 at HL → 7 in HL Mathematics; 7 in HL Physics (ib-note). Source: https://www.imperial.ac.uk/study/courses/undergraduate/mechanical-engineering/
+  > Typical offer 40 points To include: 7 in Mathematics at higher level 7 in Physics at higher level
+- `uk-mechanical-imperial` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.imperial.ac.uk/study/courses/undergraduate/mechanical-engineering/
+  > A* in Mathematics A/A* in Physics (A* is required if applying with three A-levels. At least an A is required if applying with four A-levels) A in a third and/or fourth subject
+- `uk-mechanical-imperial` · subjectPrerequisites: row partial → verified.
+- `uk-mechanical-imperial` · aLevel: row partial → verified (owner flag kept).
+- `uk-mechanical-imperial` · ib: row partial → verified.
+- `uk-chemical-imperial` · engine `grades.ib`: 39 → 41 (ib-score). Source: https://www.imperial.ac.uk/study/courses/undergraduate/chemical-engineering/
+  > Typical offer 41 points
+- `uk-chemical-imperial` · ib: row partial → partial (owner flag kept).
+- `uk-physics-imperial` · engine `grades.ib`: 40 → 42 (ib-score). Source: https://www.imperial.ac.uk/study/courses/undergraduate/physics-bsc/
+  > Typical offer 42 points
+- `uk-physics-imperial` · ib: row partial → partial (owner flag kept).
+- `uk-maths-imperial` · engine `grades.ib`: 39 → 40 (ib-score). Source: https://www.imperial.ac.uk/study/courses/undergraduate/mathematics-bsc/
+  > Typical offer 40 points
+- `uk-maths-imperial` · engine `grades.ibHLNote`: 776 at HL → 7 in HL Mathematics; 6 in another HL subject (ib-note). Source: https://www.imperial.ac.uk/study/courses/undergraduate/mathematics-bsc/
+  > 7 in Mathematics at higher level 6 in another subject at higher level
+- `uk-maths-imperial` · ib: row partial → partial (owner flag kept).
+- `uk-bioengineering-imperial` · engine `admissionTests`: [ESAT] → [] (test-remove). Source: https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/
+  > This department does not use a test as part of its selection process.
+- `uk-bioengineering-imperial` · engine `requirements.preferred`: [Chemistry] → [] (preferred-remove-unlisted). Source: https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/
+  > A* in Mathematics A in Physics A in a third subject
+- `uk-bioengineering-imperial` · engine `grades.ib`: 38 → 40 (ib-score). Source: https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/
+  > Typical offer 40 points
+- `uk-bioengineering-imperial` · engine `grades.ibHLNote`: HL6 Mathematics + HL6 Physics or Chemistry; 39 typical → 666 at HL (ib-note). Source: https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/
+  > 6 in Mathematics at higher level 6 in Physics at higher level 6 in a third subject at higher level
+- `uk-bioengineering-imperial` · admissionsTests: row partial → verified.
+- `uk-bioengineering-imperial` · subjectPrerequisites: row partial → verified.
+- `uk-bioengineering-imperial` · aLevel: row partial → partial (owner flag kept).
+- `uk-bioengineering-imperial` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: London School of Economics
+
+- `uk-finance-lse` · engine `grades.ib`: 38 → 39 (ib-score). Source: https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-finance
+  > IB Diploma 39 points overall. 766 in higher level subjects, including 7 in Mathematics
+- `uk-finance-lse` · ib: row partial → verified (owner flag kept).
+- `uk-accounting-lse` · engine `grades.aLevels`: AAA → A*AA (offer). Source: https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-accounting-and-finance
+  > A-levels A*AA with A in Mathematics
+- `uk-accounting-lse` · engine `grades.ib`: 38 → 39 (ib-score). Source: https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-accounting-and-finance
+  > IB Diploma 39 points overall. 766 in higher level subjects, including 6 in higher level Mathematics
+- `uk-accounting-lse` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-accounting-and-finance
+  > Further Mathematics is not required
+- `uk-accounting-lse` · subjectPrerequisites: row partial → verified.
+- `uk-accounting-lse` · aLevel: row partial → verified (owner flag kept).
+- `uk-accounting-lse` · ib: row partial → verified (owner flag kept).
+- `uk-law-lse` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-unlisted). Source: https://www.lse.ac.uk/study-at-lse/undergraduate/llb-bachelor-of-laws
+  > There is no set subject combination.
+- `uk-law-lse` · engine `grades.ib`: 38 → 39 (ib-score). Source: https://www.lse.ac.uk/study-at-lse/undergraduate/llb-bachelor-of-laws
+  > IB Diploma 39 points overall. 766 in higher level subjects
+- `uk-law-lse` · subjectPrerequisites: row partial → verified.
+- `uk-law-lse` · aLevel: row partial → verified (owner flag kept).
+- `uk-law-lse` · ib: row partial → verified (owner flag kept).
+- `uk-politics-lse` · engine `requirements.essential`: [] → [Mathematics_Standard] (preferred-to-essential). Source: https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-politics-and-economics
+  > There is no set subject combination, although A-level Mathematics (or equivalent) is required.
+- `uk-politics-lse` · engine `requirements.preferred`: [Mathematics_Standard, Economics] → [] (preferred-to-essential). Source: https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-politics-and-economics
+  > There is no set subject combination, although A-level Mathematics (or equivalent) is required.
+- `uk-politics-lse` · subjectPrerequisites: row partial → verified.
+- `uk-politics-lse` · aLevel: row partial → verified (owner flag kept).
+- `uk-politics-lse` · ib: row partial → verified (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Edinburgh
+
+- `uk-medicine-edinburgh` · engine `requirements.essential`: [Chemistry, Biology] → [Chemistry] (essential-remove). Source: https://study.ed.ac.uk/programmes/undergraduate/354-mbchb-medicine-6-year-programme/entry-requirements
+  > The grades you use to meet our entry requirements must include the following at A level: Chemistry one from Biology/Human Biology, Mathematics/Further Mathematics or Physics
+- `uk-medicine-edinburgh` · engine `requirements.preferred`: [Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://study.ed.ac.uk/programmes/undergraduate/354-mbchb-medicine-6-year-programme/entry-requirements
+  > The grades you use to meet our entry requirements must include the following at A level: Chemistry one from Biology/Human Biology, Mathematics/Further Mathematics or Physics
+- `uk-medicine-edinburgh` · engine `grades.ibHL`: [Chemistry, Biology] → [Chemistry] (ib-hl). Source: https://study.ed.ac.uk/programmes/undergraduate/354-mbchb-medicine-6-year-programme/entry-requirements
+  > The grades you use to meet our entry requirements must include the following at HL: Chemistry one from Biology, Mathematics or Physics.
+- `uk-medicine-edinburgh` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-medicine-edinburgh` · aLevel: row partial → partial (owner flag kept).
+- `uk-medicine-edinburgh` · ib: row partial → partial (owner flag kept).
+- `uk-cs-edinburgh` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://study.ed.ac.uk/programmes/undergraduate/57-computer-science/entry-requirements
+  > The grades you use to meet our entry requirements must include the following at A level: Mathematics at A
+- `uk-cs-edinburgh` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-cs-edinburgh` · aLevel: row partial → partial (owner flag kept).
+- `uk-cs-edinburgh` · ib: row partial → partial (owner flag kept).
+- `uk-engineering-edinburgh` · engine `requirements.essential`: [Mathematics_Standard, Physics] → [Mathematics_Standard] (essential-to-preferred). Source: https://study.ed.ac.uk/programmes/undergraduate/82-mechanical-engineering/entry-requirements
+  > Mathematics at B one of Physics, Biology, Chemistry, Computer Science/Computing, Design and Technology (excluding Food Technology) or Engineering at B Applicants with Physics preferred.
+- `uk-engineering-edinburgh` · engine `requirements.preferred`: [Mathematics_Advanced] → [Physics] (essential-to-preferred, preferred-remove-unlisted). Source: https://study.ed.ac.uk/programmes/undergraduate/82-mechanical-engineering/entry-requirements
+  > Mathematics at B one of Physics, Biology, Chemistry, Computer Science/Computing, Design and Technology (excluding Food Technology) or Engineering at B Applicants with Physics preferred.
+- `uk-engineering-edinburgh` · engine `grades.ibHL`: [Mathematics_Advanced, Physics] → [Mathematics_Advanced] (ib-hl). Source: https://study.ed.ac.uk/programmes/undergraduate/82-mechanical-engineering/entry-requirements
+  > Mathematics (Analysis and approaches only) at 5 one of Physics, Biology, Chemistry, Computer Science or Design Technology at 5 Applicants with Physics preferred.
+- `uk-engineering-edinburgh` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-engineering-edinburgh` · aLevel: row partial → partial (owner flag kept).
+- `uk-engineering-edinburgh` · ib: row partial → partial (owner flag kept).
+- `uk-economics-edinburgh` · engine `requirements.preferred`: [Mathematics_Advanced, Economics] → [] (preferred-remove-unlisted). Source: https://study.ed.ac.uk/programmes/undergraduate/122-economics/entry-requirements
+  > Mathematics at B or AS Mathematics at A
+- `uk-economics-edinburgh` · engine `grades.ibHL`: [Mathematics_Standard] → [] (ib-hl). Source: https://study.ed.ac.uk/programmes/undergraduate/122-economics/entry-requirements
+  > English at 5 Mathematics at 6 (if not at HL)
+- `uk-economics-edinburgh` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-economics-edinburgh` · aLevel: row partial → partial (owner flag kept).
+- `uk-economics-edinburgh` · ib: row partial → partial (owner flag kept).
+- `uk-law-edinburgh` · engine `requirements.preferred`: [History, English] → [English] (preferred-remove-unlisted). Source: https://study.ed.ac.uk/programmes/undergraduate/168-law-ordinary-and-honours/entry-requirements
+  > English Literature, English Language or combined English at B English Language and English Literature GCSE, both at A or 7, are accepted in place of A level English.
+- `uk-law-edinburgh` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-law-edinburgh` · aLevel: row partial → partial (owner flag kept).
+- `uk-law-edinburgh` · ib: row partial → partial (owner flag kept).
+- `uk-psychology-edinburgh` · engine `requirements.preferred`: [Psychology, Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://study.ed.ac.uk/programmes/undergraduate/370-psychology/entry-requirements
+  > Biology or Human Biology at B Chemistry at B Computer Science or equivalent at B Environmental Science at B Geography at B Geology at B Life and Health Science at B Mathematics at B Physics at B Psychology at B Statistics at B
+- `uk-psychology-edinburgh` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-psychology-edinburgh` · aLevel: row partial → partial (owner flag kept).
+- `uk-psychology-edinburgh` · ib: row partial → partial (owner flag kept).
+- `uk-architecture-edinburgh` · engine `requirements.preferred`: [Mathematics_Standard, Art_Design] → [] (preferred-remove-unlisted). Source: https://study.ed.ac.uk/programmes/undergraduate/120-architecture/entry-requirements
+  > no specific A level subjects required
+- `uk-architecture-edinburgh` · engine `grades.ibHL`: [Mathematics_Standard] → [] (ib-hl). Source: https://study.ed.ac.uk/programmes/undergraduate/120-architecture/entry-requirements
+  > no specific subjects required Your HLs can be in any subject.
+- `uk-architecture-edinburgh` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-architecture-edinburgh` · aLevel: row partial → partial (owner flag kept).
+- `uk-architecture-edinburgh` · ib: row partial → partial (owner flag kept).
+- `uk-maths-edinburgh` · engine `requirements.preferred`: [] → [Mathematics_Advanced] (preferred-add). Source: https://study.ed.ac.uk/programmes/undergraduate/55-mathematics/entry-requirements
+  > Mathematics at A* Applicants with Further Mathematics preferred.
+- `uk-maths-edinburgh` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-maths-edinburgh` · aLevel: row partial → partial (owner flag kept).
+- `uk-maths-edinburgh` · ib: row verified → verified (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: King's College London
+
+- `uk-medicine-kcl` · engine `requirements.preferred`: [Mathematics_Standard] → [] (preferred-remove-stated). Source: https://www.kcl.ac.uk/study/undergraduate/courses/medicine-mbbs/requirements
+  > Preferred subjects: No preferred subjects
+- `uk-medicine-kcl` · engine `grades.ibHLNote`: 666 at HL → 6 in HL Biology and HL Chemistry (ib-note). Source: https://www.kcl.ac.uk/study/undergraduate/courses/medicine-mbbs/requirements
+  > Must include grade 6 in Higher Level Biology and Higher Level Chemistry.
+- `uk-medicine-kcl` · subjectPrerequisites: row partial → verified.
+- `uk-medicine-kcl` · aLevel: row partial → verified (owner flag kept).
+- `uk-medicine-kcl` · ib: row partial → verified (owner flag kept).
+- `uk-law-kcl` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-stated). Source: https://www.kcl.ac.uk/study/undergraduate/courses/law-llb/requirements
+  > Required subjects: None Preferred subjects: None
+- `uk-law-kcl` · subjectPrerequisites: row partial → verified.
+- `uk-law-kcl` · aLevel: row partial → verified (owner flag kept).
+- `uk-law-kcl` · ib: row partial → verified (owner flag kept).
+- `uk-cs-kcl` · engine `grades.aLevels`: AAA → A*A*A (offer). Source: https://www.kcl.ac.uk/study/undergraduate/courses/computer-science-bsc/requirements
+  > A-Levels Required grades: A*A*A
+- `uk-cs-kcl` · engine `requirements.preferred`: [Mathematics_Advanced] → [Computer_Science] (preferred-remove-unlisted, preferred-add). Source: https://www.kcl.ac.uk/study/undergraduate/courses/computer-science-bsc/requirements
+  > Preferred subjects: Computing, Computer Science.
+- `uk-cs-kcl` · subjectPrerequisites: row partial → verified.
+- `uk-cs-kcl` · aLevel: row partial → partial (owner flag kept).
+- `uk-cs-kcl` · ib: row partial → partial (owner flag kept).
+- `uk-economics-kcl` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-stated). Source: https://www.kcl.ac.uk/study/undergraduate/courses/economics-bsc/requirements
+  > Preferred subjects: No preferred subjects
+- `uk-economics-kcl` · subjectPrerequisites: row partial → verified.
+- `uk-economics-kcl` · aLevel: row partial → verified (owner flag kept).
+- `uk-economics-kcl` · ib: row partial → partial (owner flag kept).
+- `uk-nursing-kcl` · engine `requirements.essential`: [Biology] → [] (essential-remove). Source: https://www.kcl.ac.uk/study/undergraduate/courses/nursing-with-registration-as-an-adult-nurse-bsc/requirements
+  > Required subjects: No subject requirements
+- `uk-nursing-kcl` · engine `requirements.preferred`: [Chemistry, Psychology] → [] (preferred-remove-stated). Source: https://www.kcl.ac.uk/study/undergraduate/courses/nursing-with-registration-as-an-adult-nurse-bsc/requirements
+  > Preferred subjects: No preferred subjects
+- `uk-nursing-kcl` · subjectPrerequisites: row partial → verified.
+- `uk-nursing-kcl` · aLevel: row partial → verified (owner flag kept).
+- `uk-nursing-kcl` · ib: row partial → partial (owner flag kept).
+- `uk-psychology-kcl` · engine `requirements.preferred`: [Psychology, Mathematics_Standard] → [] (preferred-remove-stated). Source: https://www.kcl.ac.uk/study/undergraduate/courses/psychology-bsc/requirements
+  > Preferred subjects: Not specified
+- `uk-psychology-kcl` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-psychology-kcl` · aLevel: row partial → partial (owner flag kept).
+- `uk-psychology-kcl` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Manchester
+
+- `uk-medicine-manchester` · engine `requirements.essential`: [Chemistry, Biology] → [] (essential-remove). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/01428/mbchb-medicine/
+  > AAA, including in: Biology/Human Biology or Chemistry; and One of the following subjects from Chemistry; Biology/Human Biology; Physics; Psychology; Mathematics or Further Mathematics.
+- `uk-medicine-manchester` · engine `requirements.preferred`: [Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/01428/mbchb-medicine/
+  > AAA, including in: Biology/Human Biology or Chemistry; and One of the following subjects from Chemistry; Biology/Human Biology; Physics; Psychology; Mathematics or Further Mathematics.
+- `uk-medicine-manchester` · engine `grades.ib`: 37 → 36 (ib-score). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/01428/mbchb-medicine/
+  > 36 points overall. 6,6,6, in Higher Level subjects.
+- `uk-medicine-manchester` · engine `grades.ibHLNote`: 766 at HL → 666 at HL (ib-note). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/01428/mbchb-medicine/
+  > 36 points overall. 6,6,6, in Higher Level subjects.
+- `uk-medicine-manchester` · engine `grades.ibHL`: [Chemistry, Biology] → [] (ib-hl). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/01428/mbchb-medicine/
+  > Major subjects must include Chemistry or Biology, plus another science (one from Chemistry, Biology, Physics, Psychology or Mathematics) and one further subject at Higher Level.
+- `uk-medicine-manchester` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-medicine-manchester` · aLevel: row partial → partial (owner flag kept).
+- `uk-medicine-manchester` · ib: row partial → partial (owner flag kept).
+- `uk-cs-manchester` · engine `grades.aLevels`: A*A*A → A*AA (offer). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/00560/bsc-computer-science/
+  > Typical A-level offer: A*AA including specific subjects
+- `uk-cs-manchester` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/00560/bsc-computer-science/
+  > A*AA including A* in Mathematics, and a minimum of one science subject from the following list: Computer Science, Further Mathematics, Biology, Chemistry, or Physics.
+- `uk-cs-manchester` · engine `grades.ib`: 38 → 37 (ib-score). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/00560/bsc-computer-science/
+  > 37 points overall with 7,6,6 in Higher Level subjects, including 7 in Mathematics: Analysis and Approaches.
+- `uk-cs-manchester` · engine `grades.ibHLNote`: 776 at HL → 7 in HL Mathematics: Analysis and Approaches; 66 in two other HL subjects (ib-note). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/00560/bsc-computer-science/
+  > 37 points overall with 7,6,6 in Higher Level subjects, including 7 in Mathematics: Analysis and Approaches.
+- `uk-cs-manchester` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-cs-manchester` · aLevel: row partial → partial (owner flag kept).
+- `uk-cs-manchester` · ib: row partial → partial (owner flag kept).
+- `uk-law-manchester` · engine `grades.aLevels`: AAA → A*AA (offer). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/12446/llb-law/
+  > Typical A-level offer: A*AA
+- `uk-law-manchester` · aLevel: row partial → partial (owner flag kept).
+- `uk-psychology-manchester` · engine `requirements.preferred`: [Psychology, Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://www.manchester.ac.uk/study/undergraduate/courses/2027/00653/bsc-psychology/
+  > AAA including one or more of: Psychology, Biology, Human Biology, Chemistry, Physics, Statistics, Mathematics or Further Mathematics.
+- `uk-psychology-manchester` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-psychology-manchester` · aLevel: row partial → partial (owner flag kept).
+- `uk-psychology-manchester` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Warwick
+
+- `uk-economics-warwick` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-stated). Source: https://warwick.ac.uk/study/undergraduate/courses/bsc-economics/
+  > Further Maths and Economics are not essential, although they are accepted subject choices for a student considering Economics at degree level. We treat them as any other strong A level subject: they have no special status.
+- `uk-economics-warwick` · subjectPrerequisites: row partial → verified.
+- `uk-economics-warwick` · aLevel: row partial → partial (owner flag kept).
+- `uk-economics-warwick` · ib: row partial → partial (owner flag kept).
+- `uk-law-warwick` · engine `grades.aLevels`: AAA → A*AA (offer). Source: https://warwick.ac.uk/study/undergraduate/courses/llb-law/
+  > A level typical offer A*AA
+- `uk-law-warwick` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-unlisted). Source: https://warwick.ac.uk/study/undergraduate/courses/llb-law/
+  > A level typical offer A*AA You will also need grade 4/C in GCSE Mathematics and grade 6/B in GCSE English Language.
+- `uk-law-warwick` · subjectPrerequisites: row partial → verified.
+- `uk-law-warwick` · aLevel: row partial → verified (owner flag kept).
+- `uk-law-warwick` · ib: row partial → verified (owner flag kept).
+- `uk-accounting-warwick` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.wbs.ac.uk/courses/undergraduate/accounting-and-finance/requirements/
+  > A levels: A*AA including A in Maths.
+- `uk-accounting-warwick` · subjectPrerequisites: row partial → verified.
+- `uk-accounting-warwick` · aLevel: row partial → partial (owner flag kept).
+- `uk-accounting-warwick` · ib: row partial → partial (owner flag kept).
+- `uk-engineering-warwick` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://warwick.ac.uk/study/undergraduate/courses/meng-engineering/
+  > A level typical offer A*AA to include Mathematics and Physics.
+- `uk-engineering-warwick` · engine `grades.ibHL`: [Mathematics_Advanced, Physics] → [Mathematics_Standard, Physics] (ib-hl). Source: https://warwick.ac.uk/study/undergraduate/courses/meng-engineering/
+  > International Baccalaureate (IB) typical offer 38 to include 6,6,6 in three subjects at Higher Level including Mathematics and Physics.
+- `uk-engineering-warwick` · subjectPrerequisites: row partial → verified.
+- `uk-engineering-warwick` · aLevel: row partial → verified (owner flag kept).
+- `uk-engineering-warwick` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: Durham University
+
+- `uk-economics-durham` · engine `grades.aLevels`: AAA → A*AA (offer). Source: https://www.durham.ac.uk/business/courses/economics-l100/
+  > A*AA including Mathematics.
+- `uk-economics-durham` · engine `requirements.preferred`: [Mathematics_Advanced, Economics] → [] (preferred-remove-stated). Source: https://www.durham.ac.uk/business/courses/economics-l100/
+  > You do not need to have studied Economics at A-Level to apply for this programme.
+- `uk-economics-durham` · engine `requirements.preferred`: [Mathematics_Advanced, Economics] → [] (preferred-remove-unlisted). Source: https://www.durham.ac.uk/business/courses/economics-l100/
+  > A*AA including Mathematics.
+- `uk-economics-durham` · engine `grades.ib`: 38 → 37 (ib-score). Source: https://www.durham.ac.uk/business/courses/economics-l100/
+  > 37 with 766 in higher level subjects, including Mathematics.
+- `uk-economics-durham` · engine `grades.ibHLNote`: 666 at HL → 766 at HL (ib-note). Source: https://www.durham.ac.uk/business/courses/economics-l100/
+  > 37 with 766 in higher level subjects, including Mathematics.
+- `uk-economics-durham` · subjectPrerequisites: row partial → verified.
+- `uk-economics-durham` · aLevel: row partial → verified (owner flag kept).
+- `uk-economics-durham` · ib: row partial → verified (owner flag kept).
+- `uk-cs-durham` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.durham.ac.uk/study/courses/computer-science-g400/
+  > A*AA including A in Mathematics.
+- `uk-cs-durham` · engine `grades.ibHL`: [Mathematics_Advanced] → [Mathematics_Standard] (ib-hl). Source: https://www.durham.ac.uk/study/courses/computer-science-g400/
+  > 37 with 766 in higher level subjects, including Mathematics.
+- `uk-cs-durham` · subjectPrerequisites: row partial → verified.
+- `uk-cs-durham` · aLevel: row partial → verified (owner flag kept).
+- `uk-cs-durham` · ib: row partial → verified.
+- `uk-law-durham` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-unlisted). Source: https://www.durham.ac.uk/study/courses/law-m101/
+  > Entry requirements A*AA Contextual offer Contextual offer AAB
+- `uk-law-durham` · engine `grades.ib`: 38 → 37 (ib-score). Source: https://www.durham.ac.uk/study/courses/law-m101/
+  > 37 with 766 in higher level subjects.
+- `uk-law-durham` · engine `grades.ibHLNote`: 666 at HL → 766 at HL (ib-note). Source: https://www.durham.ac.uk/study/courses/law-m101/
+  > 37 with 766 in higher level subjects.
+- `uk-law-durham` · subjectPrerequisites: row partial → verified.
+- `uk-law-durham` · aLevel: row partial → verified (owner flag kept).
+- `uk-law-durham` · ib: row partial → verified.
+- `uk-physics-durham` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.durham.ac.uk/study/courses/physics-f300/
+  > A*A*A including Mathematics and Physics.
+- `uk-physics-durham` · engine `grades.ibHL`: [Mathematics_Advanced, Chemistry] → [Mathematics_Advanced, Physics] (ib-hl). Source: https://www.durham.ac.uk/study/courses/physics-f300/
+  > 38 with 776 in higher level subjects, including Mathematics (maths analysis & approaches) and Physics.
+- `uk-physics-durham` · subjectPrerequisites: row partial → verified.
+- `uk-physics-durham` · aLevel: row partial → verified (owner flag kept).
+- `uk-physics-durham` · ib: row partial → verified.
+- `uk-engineering-durham` · engine `grades.aLevels`: AAA → A*AA (offer). Source: https://www.durham.ac.uk/study/courses/general-engineering-h100/
+  > A*AA including Mathematics and one of either Biology, Chemistry, Geology or Physics.
+- `uk-engineering-durham` · engine `requirements.essential`: [Mathematics_Standard, Physics] → [Mathematics_Standard] (essential-remove). Source: https://www.durham.ac.uk/study/courses/general-engineering-h100/
+  > A*AA including Mathematics and one of either Biology, Chemistry, Geology or Physics.
+- `uk-engineering-durham` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.durham.ac.uk/study/courses/general-engineering-h100/
+  > A*AA including Mathematics and one of either Biology, Chemistry, Geology or Physics.
+- `uk-engineering-durham` · engine `grades.ibHL`: [Mathematics_Advanced, Physics] → [Mathematics_Standard] (ib-hl). Source: https://www.durham.ac.uk/study/courses/general-engineering-h100/
+  > 37 with 766 in higher level subjects including Mathematics and one STEM subject (Biology, Chemistry or Physics).
+- `uk-engineering-durham` · engine `grades.ibHLNote`: 666 at HL → 766 at HL incl HL Mathematics and one of Biology, Chemistry or Physics (ib-note). Source: https://www.durham.ac.uk/study/courses/general-engineering-h100/
+  > 37 with 766 in higher level subjects including Mathematics and one STEM subject (Biology, Chemistry or Physics).
+- `uk-engineering-durham` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-engineering-durham` · aLevel: row partial → partial (owner flag kept).
+- `uk-engineering-durham` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Bristol
+
+- `uk-cs-bristol` · engine `grades.ibHL`: [Mathematics_Advanced] → [Mathematics_Standard] (ib-hl). Source: https://www.bristol.ac.uk/study/undergraduate/2027/computer-science/bsc-computer-science/
+  > 38 points overall with 18 at Higher Level, including 7 at Higher Level in Mathematics (either Analysis and Approaches or Applications and Interpretations)
+- `uk-cs-bristol` · engine `grades.ibHLNote`: 766 at HL → 18 at HL incl 7 in HL Mathematics (AA or AI) (ib-note). Source: https://www.bristol.ac.uk/study/undergraduate/2027/computer-science/bsc-computer-science/
+  > 38 points overall with 18 at Higher Level, including 7 at Higher Level in Mathematics (either Analysis and Approaches or Applications and Interpretations)
+- `uk-cs-bristol` · ib: row partial → partial (owner flag kept).
+- `uk-economics-bristol` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.bristol.ac.uk/study/undergraduate/2027/economics/bsc-economics/
+  > A*AA including Mathematics
+- `uk-economics-bristol` · subjectPrerequisites: row partial → verified.
+- `uk-economics-bristol` · aLevel: row partial → verified (owner flag kept).
+- `uk-economics-bristol` · ib: row partial → verified (owner flag kept).
+- `uk-engineering-bristol` · engine `grades.aLevels`: AAA → A*AA (offer). Source: https://www.bristol.ac.uk/study/undergraduate/2027/mechanical-engineering/meng-mechanical-engineering/
+  > A*AA including A*A (in any order) in Mathematics and any one of Further Mathematics, Physics, Chemistry, Biology or Computer Science.
+- `uk-engineering-bristol` · engine `requirements.essential`: [Mathematics_Standard, Physics] → [Mathematics_Standard] (essential-remove). Source: https://www.bristol.ac.uk/study/undergraduate/2027/mechanical-engineering/meng-mechanical-engineering/
+  > A*AA including A*A (in any order) in Mathematics and any one of Further Mathematics, Physics, Chemistry, Biology or Computer Science.
+- `uk-engineering-bristol` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.bristol.ac.uk/study/undergraduate/2027/mechanical-engineering/meng-mechanical-engineering/
+  > In the event of a large number of applications, preference may be given to applicants taking three subjects from the above list, including Mathematics
+- `uk-engineering-bristol` · engine `grades.ibHL`: [Mathematics_Advanced, Physics] → [Mathematics_Standard] (ib-hl). Source: https://www.bristol.ac.uk/study/undergraduate/2027/mechanical-engineering/meng-mechanical-engineering/
+  > 38 points overall with 18 at Higher Level, including 7, 6 (in any order) at Higher Level in Mathematics (either Analysis and Approaches or Applications and Interpretations) and any one of Physics, Chemistry or Computer Science.
+- `uk-engineering-bristol` · engine `grades.ibHLNote`: 776 at HL → 18 at HL incl 7, 6 in HL Mathematics (AA or AI) and one of Physics, Chemistry or Computer Science (ib-note). Source: https://www.bristol.ac.uk/study/undergraduate/2027/mechanical-engineering/meng-mechanical-engineering/
+  > 38 points overall with 18 at Higher Level, including 7, 6 (in any order) at Higher Level in Mathematics (either Analysis and Approaches or Applications and Interpretations) and any one of Physics, Chemistry or Computer Science.
+- `uk-engineering-bristol` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-engineering-bristol` · aLevel: row partial → partial (owner flag kept).
+- `uk-engineering-bristol` · ib: row partial → partial (owner flag kept).
+- `uk-law-bristol` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-unlisted). Source: https://www.bristol.ac.uk/study/undergraduate/2027/law/llb-law/
+  > A-level standard offer A*AA or A*A*B A-level contextual offer AAB
+- `uk-law-bristol` · subjectPrerequisites: row partial → verified.
+- `uk-law-bristol` · aLevel: row partial → verified (owner flag kept).
+- `uk-law-bristol` · ib: row partial → verified.
+- `uk-medicine-bristol` · engine `requirements.essential`: [Chemistry, Biology] → [Chemistry] (essential-remove). Source: https://www.bristol.ac.uk/study/undergraduate/2027/medicine/mb-chb-medicine/
+  > AAA including Chemistry and either Biology, Physics, Mathematics or Further Mathematics.
+- `uk-medicine-bristol` · engine `requirements.preferred`: [Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://www.bristol.ac.uk/study/undergraduate/2027/medicine/mb-chb-medicine/
+  > AAA including Chemistry and either Biology, Physics, Mathematics or Further Mathematics.
+- `uk-medicine-bristol` · engine `grades.ibHL`: [Chemistry, Biology] → [Chemistry] (ib-hl). Source: https://www.bristol.ac.uk/study/undergraduate/2027/medicine/mb-chb-medicine/
+  > 36 points overall with 18 at Higher Level, including 6, 6 at Higher Level in Chemistry and one of Biology, Physics or Mathematics
+- `uk-medicine-bristol` · engine `grades.ibHLNote`: 666 at HL → 18 at HL incl 6, 6 in HL Chemistry and one of Biology, Physics or Mathematics (ib-note). Source: https://www.bristol.ac.uk/study/undergraduate/2027/medicine/mb-chb-medicine/
+  > 36 points overall with 18 at Higher Level, including 6, 6 at Higher Level in Chemistry and one of Biology, Physics or Mathematics
+- `uk-medicine-bristol` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-medicine-bristol` · aLevel: row partial → partial (owner flag kept).
+- `uk-medicine-bristol` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Bath
+
+- `uk-cs-bath` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.bath.ac.uk/courses/undergraduate-2027/computer-science/bsc-computer-science/
+  > A*A*A in three A levels including A in Mathematics.
+- `uk-cs-bath` · engine `grades.ibHL`: [Mathematics_Advanced] → [Mathematics_Standard] (ib-hl). Source: https://www.bath.ac.uk/courses/undergraduate-2027/computer-science/bsc-computer-science/
+  > 36 points overall and 7, 7, 6 in three Higher Level subjects including 6 in either HL Mathematics.
+- `uk-cs-bath` · engine `grades.ibHLNote`: 766 at HL → 776 at HL incl 6 in HL Mathematics (AA or AI) (ib-note). Source: https://www.bath.ac.uk/courses/undergraduate-2027/computer-science/bsc-computer-science/
+  > 36 points overall and 7, 7, 6 in three Higher Level subjects including 6 in either HL Mathematics.
+- `uk-cs-bath` · subjectPrerequisites: row partial → verified.
+- `uk-cs-bath` · aLevel: row partial → verified (owner flag kept).
+- `uk-cs-bath` · ib: row partial → partial (owner flag kept).
+- `uk-economics-bath` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.bath.ac.uk/courses/undergraduate-2027/economics/bsc-economics/
+  > A*AA in three A levels including Mathematics.
+- `uk-economics-bath` · subjectPrerequisites: row partial → verified.
+- `uk-economics-bath` · aLevel: row partial → verified (owner flag kept).
+- `uk-economics-bath` · ib: row partial → partial (owner flag kept).
+- `uk-engineering-bath` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.bath.ac.uk/courses/undergraduate-2027/mechanical-engineering/beng-mechanical-engineering/
+  > A*A*A in three A levels including A* in Mathematics and A in Physics
+- `uk-engineering-bath` · engine `grades.ibHL`: [Mathematics_Advanced, Physics] → [Mathematics_Standard, Physics] (ib-hl). Source: https://www.bath.ac.uk/courses/undergraduate-2027/mechanical-engineering/beng-mechanical-engineering/
+  > 36 points overall and 7, 7, 6 in three Higher Level subjects including 6 in Physics and 7 in either HL Mathematics.
+- `uk-engineering-bath` · engine `grades.ibHLNote`: 666 at HL → 776 at HL incl 7 in HL Mathematics (AA or AI) and 6 in HL Physics (ib-note). Source: https://www.bath.ac.uk/courses/undergraduate-2027/mechanical-engineering/beng-mechanical-engineering/
+  > 36 points overall and 7, 7, 6 in three Higher Level subjects including 6 in Physics and 7 in either HL Mathematics.
+- `uk-engineering-bath` · subjectPrerequisites: row partial → verified.
+- `uk-engineering-bath` · aLevel: row partial → verified (owner flag kept).
+- `uk-engineering-bath` · ib: row partial → verified.
+- `uk-pharmacy-bath` · engine `requirements.preferred`: [Biology, Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://www.bath.ac.uk/courses/undergraduate-2027/pharmacy/mpharm-pharmacy/
+  > You will need a strong performance in Chemistry and a second science or mathematics subject as part of your entry qualifications.
+- `uk-pharmacy-bath` · engine `grades.ibHL`: [Chemistry, Biology] → [Chemistry] (ib-hl). Source: https://www.bath.ac.uk/courses/undergraduate-2027/pharmacy/mpharm-pharmacy/
+  > 35 points overall and 6, 6, 5 in three Higher Level subjects including Chemistry and a second science or mathematics course.
+- `uk-pharmacy-bath` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-pharmacy-bath` · aLevel: row partial → partial (owner flag kept).
+- `uk-pharmacy-bath` · ib: row partial → partial (owner flag kept).
+- `uk-accounting-bath` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.bath.ac.uk/courses/undergraduate-2027/accounting-and-finance/bsc-accounting-and-finance/
+  > A*AA or A*A*B in three A levels including A in Mathematics.
+- `uk-accounting-bath` · subjectPrerequisites: row partial → verified.
+- `uk-accounting-bath` · aLevel: row partial → verified (owner flag kept).
+- `uk-accounting-bath` · ib: row partial → verified.
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Glasgow
+
+- `uk-medicine-glasgow` · engine `requirements.preferred`: [Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://www.gla.ac.uk/undergraduate/degrees/medicine/
+  > International A-level Standard Entry Requirements AAA Additional requirements: A-levels Chemistry, Biology and one of either Physics or Mathematics.
+- `uk-medicine-glasgow` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-medicine-glasgow` · aLevel: row partial → partial (owner flag kept).
+- `uk-medicine-glasgow` · ib: row partial → verified (owner flag kept).
+- `uk-cs-glasgow` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/G400
+  > Additional Requirement: A-level Mathematics at A
+- `uk-cs-glasgow` · subjectPrerequisites: row partial → verified.
+- `uk-cs-glasgow` · aLevel: row partial → verified (owner flag kept).
+- `uk-cs-glasgow` · ib: row verified → verified.
+- `uk-law-glasgow` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-unlisted). Source: https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/M100
+  > Additional Requirement: A-level Humanities at A
+- `uk-law-glasgow` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-law-glasgow` · aLevel: row partial → partial (owner flag kept).
+- `uk-law-glasgow` · ib: row partial → partial (owner flag kept).
+- `uk-economics-glasgow` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/L150
+  > Additional Requirement: A-level English or Humanities at A/B Additional Requirement: A-level Mathematics at B
+- `uk-economics-glasgow` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-economics-glasgow` · aLevel: row partial → partial (owner flag kept).
+- `uk-economics-glasgow` · ib: row partial → partial (owner flag kept).
+- `uk-engineering-glasgow` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/H302
+  > Additional Requirement: A-level Mathematics at A Additional Requirement: A-level Physics or A-level Design & Technology (3D or Product Design only) at A
+- `uk-engineering-glasgow` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-engineering-glasgow` · aLevel: row partial → partial (owner flag kept).
+- `uk-engineering-glasgow` · ib: row verified → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of St Andrews
+
+- `uk-cs-standrews` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.st-andrews.ac.uk/subjects/computer-science/computer-science-bsc/
+  > AAA, including A in Mathematics and a pass in one of the following: Biology Chemistry Computing Science Further Mathematics Geology Geography Physics Psychology
+- `uk-cs-standrews` · engine `grades.ibHL`: [Mathematics_Advanced] → [Mathematics_Standard] (ib-hl). Source: https://www.st-andrews.ac.uk/subjects/computer-science/computer-science-bsc/
+  > 38 (HL 6,6,6), including HL6 in Mathematics
+- `uk-cs-standrews` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-cs-standrews` · aLevel: row partial → partial (owner flag kept).
+- `uk-cs-standrews` · ib: row partial → partial (owner flag kept).
+- `uk-economics-standrews` · engine `requirements.essential`: [Mathematics_Standard] → [] (essential-to-preferred). Source: https://www.st-andrews.ac.uk/subjects/economics/economics-ma/
+  > No previous experience in this subject is required, but advanced school mathematics is an advantage, and an ability to learn mathematical skills is essential.
+- `uk-economics-standrews` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [Mathematics_Standard] (essential-to-preferred). Source: https://www.st-andrews.ac.uk/subjects/economics/economics-ma/
+  > No previous experience in this subject is required, but advanced school mathematics is an advantage, and an ability to learn mathematical skills is essential.
+- `uk-economics-standrews` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [Mathematics_Standard] (preferred-remove-stated). Source: https://www.st-andrews.ac.uk/subjects/economics/economics-ma/
+  > No previous experience in this subject is required, but advanced school mathematics is an advantage, and an ability to learn mathematical skills is essential.
+- `uk-economics-standrews` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [Mathematics_Standard] (preferred-remove-unlisted). Source: https://www.st-andrews.ac.uk/subjects/economics/economics-ma/
+  > No previous experience in this subject is required, but advanced school mathematics is an advantage, and an ability to learn mathematical skills is essential.
+- `uk-economics-standrews` · engine `grades.ibHL`: [Mathematics_Standard] → [] (ib-hl). Source: https://www.st-andrews.ac.uk/subjects/economics/economics-ma/
+  > IB points Standard entry grades: 38 (HL 6,6,6) Minimum entry grades: 36 (HL 6,5,5)
+- `uk-economics-standrews` · subjectPrerequisites: row partial → verified.
+- `uk-economics-standrews` · aLevel: row partial → verified (owner flag kept).
+- `uk-economics-standrews` · ib: row partial → partial (owner flag kept).
+- `uk-maths-standrews` · engine `grades.aLevels`: AAA → A*A*A (offer). Source: https://www.st-andrews.ac.uk/subjects/mathematics/mathematics-bsc/
+  > Standard entry grades: A*A*A, including A* in Mathematics.
+- `uk-maths-standrews` · engine `requirements.essential`: [Mathematics_Standard, Mathematics_Advanced] → [Mathematics_Standard] (essential-remove). Source: https://www.st-andrews.ac.uk/subjects/mathematics/mathematics-bsc/
+  > Yes, applicants are expected to have studied Mathematics at SQA Higher, GCE A-Level, or equivalent. Typical successful applicants will have studied Mathematics at SQA Advanced Higher, Further Mathematics at GCE A-level, or equivalent.
+- `uk-maths-standrews` · engine `grades.ibHL`: [Mathematics_Advanced] → [Mathematics_Standard] (ib-hl). Source: https://www.st-andrews.ac.uk/subjects/mathematics/mathematics-bsc/
+  > 38 (HL 6,6,6), including HL6 in Mathematics.
+- `uk-maths-standrews` · subjectPrerequisites: row partial → verified.
+- `uk-maths-standrews` · aLevel: row partial → verified (owner flag kept).
+- `uk-maths-standrews` · ib: row partial → verified (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Leeds
+
+- `uk-medicine-leeds` · engine `grades.ib`: 34 → 36 (ib-score). Source: https://courses.leeds.ac.uk/5580/medicine-and-surgery-mbchb
+  > Overall score of 36 points with a mark of 6 in 3 Higher Level subjects which must include Chemistry and Biology.
+- `uk-medicine-leeds` · engine `requirements.preferred`: [Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://courses.leeds.ac.uk/5580/medicine-and-surgery-mbchb
+  > A-level: AAA including Chemistry and Biology.
+- `uk-medicine-leeds` · subjectPrerequisites: row partial → verified.
+- `uk-medicine-leeds` · aLevel: row partial → verified (owner flag kept).
+- `uk-medicine-leeds` · ib: row partial → verified (owner flag kept).
+- `uk-cs-leeds` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://courses.leeds.ac.uk/3260/computer-science-bsc
+  > A-level: AAA including Mathematics.
+- `uk-cs-leeds` · engine `grades.ibHL`: [Mathematics_Advanced] → [Mathematics_Standard] (ib-hl). Source: https://courses.leeds.ac.uk/3260/computer-science-bsc
+  > to include 5 in HL Mathematics: Analysis and Approaches or 6 in HL Mathematics: Applications and Interpretation
+- `uk-cs-leeds` · engine `grades.ibHLNote`: 665 at HL → 18 at HL incl HL5 Maths (A&A) or HL6 Maths (AI) (ib-note). Source: https://courses.leeds.ac.uk/3260/computer-science-bsc
+  > 18 points at Higher level to include 5 in HL Mathematics: Analysis and Approaches or 6 in HL Mathematics: Applications and Interpretation.
+- `uk-cs-leeds` · subjectPrerequisites: row partial → verified.
+- `uk-cs-leeds` · aLevel: row partial → verified (owner flag kept).
+- `uk-cs-leeds` · ib: row partial → partial (owner flag kept).
+- `uk-engineering-leeds` · engine `requirements.preferred`: [Physics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://courses.leeds.ac.uk/i445/civil-engineering-meng-beng
+  > A-level: AAA including Mathematics.
+- `uk-engineering-leeds` · engine `grades.ibHL`: [Mathematics_Advanced] → [Mathematics_Standard] (ib-hl). Source: https://courses.leeds.ac.uk/i445/civil-engineering-meng-beng
+  > to include 6 points in Mathematics: Applications and Interpretation or 5 points in Mathematics: Analysis and Approaches
+- `uk-engineering-leeds` · engine `grades.ibHLNote`: 18 at HL incl HL5 Mathematics (A&A); BEng AAB / MEng AAA → 18 at HL incl HL6 Maths (AI) or HL5 Maths (A&A) (ib-note). Source: https://courses.leeds.ac.uk/i445/civil-engineering-meng-beng
+  > 18 points at higher level to include 6 points in Mathematics: Applications and Interpretation or 5 points in Mathematics: Analysis and Approaches.
+- `uk-engineering-leeds` · subjectPrerequisites: row partial → verified.
+- `uk-engineering-leeds` · aLevel: row partial → verified (owner flag kept).
+- `uk-engineering-leeds` · ib: row partial → partial (owner flag kept).
+- `uk-economics-leeds` · engine `grades.aLevels`: AAB → AAA (offer). Source: https://courses.leeds.ac.uk/f836/economics-bsc
+  > A-level: AAA
+- `uk-economics-leeds` · engine `requirements.essential`: [Mathematics_Standard] → [] (essential-remove). Source: https://courses.leeds.ac.uk/f836/economics-bsc
+  > A-level: AAA GCSE: Applicants must demonstrate a broad general education with acceptable levels of Literacy and Numeracy, including Mathematics grade A/7
+- `uk-economics-leeds` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://courses.leeds.ac.uk/f836/economics-bsc
+  > A-level: AAA GCSE: Applicants must demonstrate a broad general education with acceptable levels of Literacy and Numeracy, including Mathematics grade A/7
+- `uk-economics-leeds` · engine `grades.ibHL`: [Mathematics_Standard] → [] (ib-hl). Source: https://courses.leeds.ac.uk/f836/economics-bsc
+  > Plus Mathematics can be met via a 5 at Standard Level or a 4 at Higher Level.
+- `uk-economics-leeds` · engine `grades.ibHLNote`: none → 17 at HL; Maths 5 at SL or 4 at HL (ib-note). Source: https://courses.leeds.ac.uk/f836/economics-bsc
+  > 35 points overall with 17 points from Higher Level subjects. Plus Mathematics can be met via a 5 at Standard Level or a 4 at Higher Level.
+- `uk-economics-leeds` · subjectPrerequisites: row partial → verified (owner flag kept).
+- `uk-economics-leeds` · aLevel: row partial → verified (owner flag kept).
+- `uk-economics-leeds` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Nottingham
+
+- `uk-medicine-nottingham` · engine `requirements.preferred`: [Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Medicine-BMBS.html
+  > AAA: must include biology (or human biology) and chemistry.
+- `uk-medicine-nottingham` · engine `grades.ibHLNote`: 666 at HL → HL6 Biology and HL6 Chemistry (ib-note). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Medicine-BMBS.html
+  > 34 points overall including HL6 in biology, HL6 in chemistry
+- `uk-medicine-nottingham` · subjectPrerequisites: row partial → verified.
+- `uk-medicine-nottingham` · aLevel: row partial → verified (owner flag kept).
+- `uk-medicine-nottingham` · ib: row partial → verified.
+- `uk-cs-nottingham` · engine `grades.aLevels`: A*AA → AAA (offer). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Computer-Science-BSc-Hons.html
+  > AAA (AAB including A in computer science)
+- `uk-cs-nottingham` · engine `requirements.essential`: [Mathematics_Standard] → [] (essential-remove). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Computer-Science-BSc-Hons.html
+  > AAA (AAB including A in computer science) A level ICT or IT do not qualify for the lower level. … GCSE maths at grade B (5)
+- `uk-cs-nottingham` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Computer-Science-BSc-Hons.html
+  > AAA (AAB including A in computer science) A level ICT or IT do not qualify for the lower level. … GCSE maths at grade B (5)
+- `uk-cs-nottingham` · engine `grades.ib`: 36 → 34 (ib-score). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Computer-Science-BSc-Hons.html
+  > IBDP 34 points overall or 666 in 3 Higher Level Certificates.
+- `uk-cs-nottingham` · engine `grades.ibHL`: [Mathematics_Advanced] → [] (ib-hl). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Computer-Science-BSc-Hons.html
+  > IBDP 34 points overall or 666 in 3 Higher Level Certificates.
+- `uk-cs-nottingham` · engine `grades.ibHLNote`: 666 at HL → none (ib-note). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Computer-Science-BSc-Hons.html
+  > IBDP 34 points overall or 666 in 3 Higher Level Certificates.
+- `uk-cs-nottingham` · subjectPrerequisites: row partial → verified (owner flag kept).
+- `uk-cs-nottingham` · aLevel: row partial → verified (owner flag kept).
+- `uk-cs-nottingham` · ib: row partial → verified (owner flag kept).
+- `uk-economics-nottingham` · engine `requirements.essential`: [Mathematics_Standard] → [] (essential-remove). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Economics-BSc-Hons.html
+  > A*AA / A*A*B (AAA / A*AB including mathematics) … Maths grade 7 (A) or above, unless taking it at A level
+- `uk-economics-nottingham` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Economics-BSc-Hons.html
+  > A*AA / A*A*B (AAA / A*AB including mathematics) … Maths grade 7 (A) or above, unless taking it at A level
+- `uk-economics-nottingham` · engine `grades.ibHL`: [Mathematics_Standard] → [] (ib-hl). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Economics-BSc-Hons.html
+  > IBDP 36 points overall or 766 in 3 Higher Level Certificates.
+- `uk-economics-nottingham` · subjectPrerequisites: row partial → verified (owner flag kept).
+- `uk-economics-nottingham` · aLevel: row partial → verified (owner flag kept).
+- `uk-economics-nottingham` · ib: row partial → verified (owner flag kept).
+- `uk-pharmacy-nottingham` · engine `grades.ibHL`: [Chemistry, Biology] → [Chemistry] (ib-hl). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Pharmacy-MPharm.html
+  > IB Diploma 34 points overall with 6,6, in chemistry and a second science subject
+- `uk-pharmacy-nottingham` · engine `grades.ibHLNote`: 666 at HL → 66 in HL Chemistry and a second HL science (ib-note). Source: https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Pharmacy-MPharm.html
+  > IB Diploma 34 points overall with 6,6, in chemistry and a second science subject
+- `uk-pharmacy-nottingham` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Birmingham
+
+- `uk-medicine-birmingham` · engine `grades.aLevels`: A*AA → AAA (offer). Source: https://www.birmingham.ac.uk/about/college-of-medicine-and-health/birmingham-medical-school/applying-to-medicine/entry-requirements-medicine-and-surgery-five-year
+  > The standard offer is AAA, including Chemistry, and a second science from Biology/Human Biology, Physics or Maths.
+- `uk-medicine-birmingham` · engine `requirements.essential`: [Chemistry, Biology] → [Chemistry] (essential-to-preferred). Source: https://www.birmingham.ac.uk/about/college-of-medicine-and-health/birmingham-medical-school/applying-to-medicine/entry-requirements-medicine-and-surgery-five-year
+  > The standard offer is AAA, including Chemistry, and a second science from Biology/Human Biology, Physics or Maths.
+- `uk-medicine-birmingham` · engine `requirements.preferred`: [Mathematics_Standard] → [Biology, Mathematics_Standard] (essential-to-preferred). Source: https://www.birmingham.ac.uk/about/college-of-medicine-and-health/birmingham-medical-school/applying-to-medicine/entry-requirements-medicine-and-surgery-five-year
+  > The standard offer is AAA, including Chemistry, and a second science from Biology/Human Biology, Physics or Maths.
+- `uk-medicine-birmingham` · engine `grades.ibHL`: [Chemistry, Biology] → [Chemistry] (ib-hl). Source: https://www.birmingham.ac.uk/about/college-of-medicine-and-health/birmingham-medical-school/applying-to-medicine/entry-requirements-medicine-and-surgery-five-year
+  > Higher level: 6,6,6 to include Chemistry plus a second science from Biology/Physics/Maths and one other approved subject.
+- `uk-medicine-birmingham` · engine `grades.ibHLNote`: 766 at HL → 666 at HL incl Chemistry and a second science (ib-note). Source: https://www.birmingham.ac.uk/about/college-of-medicine-and-health/birmingham-medical-school/applying-to-medicine/entry-requirements-medicine-and-surgery-five-year
+  > Higher level: 6,6,6 to include Chemistry plus a second science from Biology/Physics/Maths
+- `uk-medicine-birmingham` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-medicine-birmingham` · aLevel: row partial → partial (owner flag kept).
+- `uk-medicine-birmingham` · ib: row partial → partial (owner flag kept).
+- `uk-cs-birmingham` · engine `grades.aLevels`: ABB → A*AA (offer). Source: https://www.birmingham.ac.uk/study/undergraduate/subjects/computer-science-courses/computer-science-bsc
+  > A*AA to include A-level Mathematics grade A.
+- `uk-cs-birmingham` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.birmingham.ac.uk/study/undergraduate/subjects/computer-science-courses/computer-science-bsc
+  > Number of A-levels required: 3. to include A-level Mathematics grade A.
+- `uk-cs-birmingham` · engine `grades.ibHLNote`: 655 at HL → 766 at HL incl 6 in Maths (ib-note). Source: https://www.birmingham.ac.uk/study/undergraduate/subjects/computer-science-courses/computer-science-bsc
+  > 7,6,6 at Higher Level to include 6 in Mathematics
+- `uk-cs-birmingham` · subjectPrerequisites: row partial → verified.
+- `uk-cs-birmingham` · aLevel: row partial → verified (owner flag kept).
+- `uk-cs-birmingham` · ib: row partial → partial (owner flag kept).
+- `uk-economics-birmingham` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.birmingham.ac.uk/study/undergraduate/subjects/economics-courses/economics-bsc
+  > AAA including Mathematics
+- `uk-economics-birmingham` · subjectPrerequisites: row partial → verified.
+- `uk-economics-birmingham` · aLevel: row partial → verified (owner flag kept).
+- `uk-economics-birmingham` · ib: row partial → verified.
+- `uk-engineering-birmingham` · engine `requirements.essential`: [Mathematics_Standard, Physics] → [Mathematics_Standard] (essential-to-preferred). Source: https://www.birmingham.ac.uk/study/undergraduate/subjects/mechanical-engineering-courses/mechanical-engineering-beng
+  > Further Mathematics and Physics are not required but are advantageous.
+- `uk-engineering-birmingham` · engine `requirements.preferred`: [Mathematics_Advanced] → [Mathematics_Advanced, Physics] (essential-to-preferred). Source: https://www.birmingham.ac.uk/study/undergraduate/subjects/mechanical-engineering-courses/mechanical-engineering-beng
+  > Further Mathematics and Physics are not required but are advantageous.
+- `uk-engineering-birmingham` · engine `grades.ibHL`: [Mathematics_Advanced, Physics] → [Mathematics_Advanced] (ib-hl). Source: https://www.birmingham.ac.uk/study/undergraduate/subjects/mechanical-engineering-courses/mechanical-engineering-beng
+  > 6,6,5 at Higher Level (including Mathematics) with 32 points overall.
+- `uk-engineering-birmingham` · subjectPrerequisites: row partial → verified.
+- `uk-engineering-birmingham` · aLevel: row partial → partial (owner flag kept).
+- `uk-engineering-birmingham` · ib: row partial → partial (owner flag kept).
+- `uk-law-birmingham` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-unlisted). Source: https://www.birmingham.ac.uk/study/undergraduate/subjects/law-courses/law-llb
+  > A Level AAA IB 6,6,6 including 32 points overall.
+- `uk-law-birmingham` · engine `grades.ib`: 36 → 32 (ib-score). Source: https://www.birmingham.ac.uk/study/undergraduate/subjects/law-courses/law-llb
+  > 6,6,6 including 32 points overall.
+- `uk-law-birmingham` · subjectPrerequisites: row partial → verified.
+- `uk-law-birmingham` · aLevel: row partial → verified (owner flag kept).
+- `uk-law-birmingham` · ib: row partial → verified.
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Exeter
+
+- `uk-economics-exeter` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.exeter.ac.uk/undergraduate-degrees/bsc-economics/
+  > A-Level A*AA - AAA GCE A-Level Mathematics grade B. Candidates may offer GCE AL Maths, Pure Maths or Further Maths. … No previous study of economics is required or assumed.
+- `uk-economics-exeter` · engine `grades.ibHL`: [Mathematics_Advanced] → [] (ib-hl). Source: https://www.exeter.ac.uk/undergraduate-degrees/bsc-economics/
+  > HL5 or SL6 in Mathematics (Analysis and Approaches or Applications and Interpretations)
+- `uk-economics-exeter` · engine `grades.ibHLNote`: 766–666 at HL; HL5 Mathematics required (A&A or AI; Maths Studies not accepted) → 766–666 at HL; Mathematics HL5 or SL6 (A&A or AI; Maths Studies not accepted) (ib-note). Source: https://www.exeter.ac.uk/undergraduate-degrees/bsc-economics/
+  > IB 38/766 - 36/666 HL5 or SL6 in Mathematics (Analysis and Approaches or Applications and Interpretations). Maths Studies not accepted.
+- `uk-economics-exeter` · subjectPrerequisites: row partial → verified.
+- `uk-economics-exeter` · aLevel: row partial → partial (owner flag kept).
+- `uk-economics-exeter` · ib: row partial → partial (owner flag kept).
+- `uk-law-exeter` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-unlisted). Source: https://www.exeter.ac.uk/undergraduate-degrees/llb-law/
+  > A-Level AAA n/a IB 36/666 n/a
+- `uk-law-exeter` · subjectPrerequisites: row partial → verified.
+- `uk-law-exeter` · aLevel: row partial → verified (owner flag kept).
+- `uk-law-exeter` · ib: row partial → verified.
+- `uk-cs-exeter` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.exeter.ac.uk/undergraduate-degrees/bsc-computer-science/
+  > A-Level AAA - AAB GCE AL Maths grade B Candidates may offer GCE AL Maths, Pure Maths or Further Maths.
+- `uk-cs-exeter` · engine `grades.ibHL`: [Mathematics_Advanced] → [Mathematics_Standard] (ib-hl). Source: https://www.exeter.ac.uk/undergraduate-degrees/bsc-computer-science/
+  > HL 5 in Mathematics (Analysis and approaches or Applications and interpretations)
+- `uk-cs-exeter` · subjectPrerequisites: row partial → verified.
+- `uk-cs-exeter` · aLevel: row partial → partial (owner flag kept).
+- `uk-cs-exeter` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — University of Oxford — live course pages via text reader (www.ox.ac.uk returns 403 to direct requests)
+
+- `uk-medicine-oxford` · SAT / ACT: unverified → verified: For applicants with US qualifications (Oxford’s A*AA level): three APs at grade 5 (including any subjects the course requires) plus ACT 32+ or SAT 1470+ — or four APs at grade 5 with no SAT/ACT; Optional ACT/SAT essay not required; No superscoring: SAT sections from one sitting; ACT Highest Full Battery score only.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications (checked 2026-10-19).
+  > Advanced Placement (AP) qualifications, with the following grades: … For courses requiring A*AA: … Either Four APs at grade 5 (including any subjects required for the course you are applying to) OR Three APs at grade 5 (including any subjects required for the course you are applying to) … a score of 32 or above in the ACT … 1470 or above (out of 1600) in the SAT. We do not require the optional essay for either the ACT or the SAT. … your SAT Total Score for the SAT Evidence-based Reading and Writing, and SAT Math sections must be from the same session; we will not consider scores from multiple sessions ('superscoring'). This also applies to scores for the ACT, so we will only consider the ‘Highest Full Battery’ score, and not the ACT Superscore.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications.
+- `uk-medicine-oxford` · English language: unverified → verified: Higher level English language requirement (all Oxford courses); IELTS (Academic recommended; IELTS Online not accepted): 7.5 overall, minimum 7.0 per component; TOEFL iBT: 110 overall (Listening 22, Reading 24, Speaking 25, Writing 24) — only tests taken up to and including 20 January 2026 are accepted; PTE Academic: 76 overall, minimum 66 in Speaking, Listening, Reading and Writing; C1 Advanced / C2 Proficiency: 191 overall, minimum 185 per component; Oxford Test of English (Advanced): 165, minimum 155 per component; All component scores from a single test session (no superscoring); Not needed if English is your first language and you have always been a resident and citizen of a majority English-speaking country recognised by UKVI.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine, https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas (checked 2026-10-19).
+  > If your first language is English and you have always been a resident and citizen of a majority English-speaking country recognised by UK Visas and Immigration (UKVI), you do not need to demonstrate your level of English. … All courses now require the higher level of ability in English.
+  > We recommend that you take the IELTS Academic option. … we are not able to accept IELTS Online. … 7.5 | Minimum 7.0 per component … TOEFL tests taken up to and including 20 January 2026 are accepted. … Changes to the TOEFL iBT test were introduced on 21 January 2026 and are currently under review by the University. | 110 | Minimum component scores: * Listening: 22 * Reading: 24 * Speaking: 25 * Writing: 24 … 191 | Minimum 185 per component … 76 | Minimum 66 in Speaking, Listening, Reading and Writing. … 165 | Minimum 155 per component … To meet the English language requirements for your offer to the University you must, where applicable, receive all qualifying test component scores (Reading, Writing, Listening and Speaking) from the same session
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine and https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas.
+- `uk-medicine-oxford` · Admissions tests: verified: UCAT — required → verified: UCAT (University Clinical Aptitude Test) — required for all applicants; test window 13 July – 24 September 2026.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine (checked 2026-10-19).
+  > UCAT | 13 July – 24 September 2026 … All applicants must take the[University Clinical Aptitude Test (UCAT)](https://www.ucat.ac.uk/)as part of their application.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine.
+- `uk-medicine-oxford` · Subject prerequisites: verified: Required: Chemistry, Biology; Preferred: Physics → partial: Required: Chemistry and at least one of Biology, Physics, Mathematics or Further Mathematics (grade A or above at A-level); Recommended: further subjects in Biology, Physics, Mathematics or Further Mathematics.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine (checked 2026-10-19).
+  > Applicants are required to achieve at least a grade A in both Chemistry and at least one of Biology, Physics, Mathematics or Further Mathematics. … Required | Chemistry and at least one of Biology, Physics, Mathematics or Further Mathematics. … Recommended | Further subjects in Biology, Physics, Mathematics or Further Mathematics. … If a practical component forms part of any of your science A‐levels used to meet your offer, we expect you to pass it.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine. Official page requires Chemistry plus at least one of Biology, Physics, Mathematics or Further Mathematics (IB: Chemistry and at least one of Biology, Physics or Mathematics at HL); data/courseRequirements.js holds Chemistry + Biology as essential, Physics as preferred and ibHL Chemistry + Biology. Owner decision.
+- `uk-medicine-oxford` · A-Level requirements: verified: A*AA → partial: A*AA.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine (checked 2026-10-19).
+  > A*AA in three A-levels (excluding Critical Thinking and Thinking Skills) taken in the same academic year. Applicants are required to achieve at least a grade A in both Chemistry and at least one of Biology, Physics, Mathematics or Further Mathematics. … Required | Chemistry and at least one of Biology, Physics, Mathematics or Further Mathematics. … Recommended | Further subjects in Biology, Physics, Mathematics or Further Mathematics. … If a practical component forms part of any of your science A‐levels used to meet your offer, we expect you to pass it.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine. Official page requires Chemistry plus at least one of Biology, Physics, Mathematics or Further Mathematics (IB: Chemistry and at least one of Biology, Physics or Mathematics at HL); data/courseRequirements.js holds Chemistry + Biology as essential, Physics as preferred and ibHL Chemistry + Biology. Owner decision. Excluded subjects are display-only — the matcher does not apply them.
+- `uk-medicine-oxford` · IB requirements: verified: 39 points; 766 at HL → partial: 39 points; 766 at HL.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine (checked 2026-10-19).
+  > 39 (including core points) with 766 at HL. Applicants are required to take Chemistry and at least one of Biology, Physics or Mathematics to Higher Level. … Recommended | Further subjects in Biology, Physics, Mathematics or Further Mathematics.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine. Official page requires Chemistry plus at least one of Biology, Physics, Mathematics or Further Mathematics (IB: Chemistry and at least one of Biology, Physics or Mathematics at HL); data/courseRequirements.js holds Chemistry + Biology as essential, Physics as preferred and ibHL Chemistry + Biology. Owner decision.
+- `uk-medicine-oxford` · Other qualifications: unverified → verified: Advanced Placement: four APs at grade 5, or three APs at grade 5 plus ACT 32+ or SAT 1470+ (Oxford’s A*AA level); the APs must include any subjects the course requires; AP Calculus AB and BC cannot count as two separate subjects; Not accepted: associate degrees, CLEP, GED, dual enrolment.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications (checked 2026-10-19).
+  > Advanced Placement (AP) qualifications, with the following grades: … For courses requiring A*AA: … Either Four APs at grade 5 (including any subjects required for the course you are applying to) OR Three APs at grade 5 (including any subjects required for the course you are applying to) … a score of 32 or above in the ACT … 1470 or above (out of 1600) in the SAT. We do not require the optional essay for either the ACT or the SAT. … Please note that Calculus AB and Calculus BC cannot be counted as two separate subjects for the purposes of meeting your offer … Associate degrees College Level Examination Programs (CLEPs) GED (General Education Development) Dual enrolment
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications.
+- `uk-medicine-oxford` · Other requirements: unverified → verified: Shortlisted candidates (around 425 a year) are invited to at least one online interview, expected in December; Must be 18 by 1 November of the year the course starts; Satisfactory DBS check; immunisation status (Department of Health) and GMC Fitness to Practise conditions apply; International fee-status medical students are capped at 14 a year (A100 and A101 combined); Graduates may apply for the standard course on the same terms as school-leavers.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine (checked 2026-10-19).
+  > Shortlisted candidates will be invited to at least one online interview. Interviews are expected to take place in December … only around 425 applicants are shortlisted for interview each year. … For Oxford this quota is currently a maximum of 14 per year across both the standard entry A100 and A101 graduate-entry/accelerated Medicine courses. … Oxford conforms to the UK Department of Health’s requirements regarding immunisation status and the GMC’s conditions on Fitness to Practise, and a satisfactory Disclosure and Barring Service check. … Note that students must have reached their 18th birthday by 1 November in the year they intend to start the course. … Graduates are in open competition with school-leavers, and need to fulfil the same entrance requirements.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine.
+- `uk-cs-oxford` · English language: partial: Applicants whose first language is not English must meet the University of Oxford’s English language requirements → verified: Higher level English language requirement (all Oxford courses); IELTS (Academic recommended; IELTS Online not accepted): 7.5 overall, minimum 7.0 per component; TOEFL iBT: 110 overall (Listening 22, Reading 24, Speaking 25, Writing 24) — only tests taken up to and including 20 January 2026 are accepted; PTE Academic: 76 overall, minimum 66 in Speaking, Listening, Reading and Writing; C1 Advanced / C2 Proficiency: 191 overall, minimum 185 per component; Oxford Test of English (Advanced): 165, minimum 155 per component; All component scores from a single test session (no superscoring); Not needed if English is your first language and you have always been a resident and citizen of a majority English-speaking country recognised by UKVI.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/computer-science, https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas (checked 2026-10-19).
+  > If your first language is English and you have always been a resident and citizen of a majority English-speaking country recognised by UK Visas and Immigration (UKVI), you do not need to demonstrate your level of English. … All courses now require the higher level of ability in English.
+  > We recommend that you take the IELTS Academic option. … we are not able to accept IELTS Online. … 7.5 | Minimum 7.0 per component … TOEFL tests taken up to and including 20 January 2026 are accepted. … Changes to the TOEFL iBT test were introduced on 21 January 2026 and are currently under review by the University. | 110 | Minimum component scores: * Listening: 22 * Reading: 24 * Speaking: 25 * Writing: 24 … 191 | Minimum 185 per component … 76 | Minimum 66 in Speaking, Listening, Reading and Writing. … 165 | Minimum 155 per component … To meet the English language requirements for your offer to the University you must, where applicable, receive all qualifying test component scores (Reading, Writing, Listening and Speaking) from the same session
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/computer-science and https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas.
+- `uk-maths-oxford` · English language: partial: Applicants whose first language is not English must meet the University of Oxford’s English language requirements → verified: Higher level English language requirement (all Oxford courses); IELTS (Academic recommended; IELTS Online not accepted): 7.5 overall, minimum 7.0 per component; TOEFL iBT: 110 overall (Listening 22, Reading 24, Speaking 25, Writing 24) — only tests taken up to and including 20 January 2026 are accepted; PTE Academic: 76 overall, minimum 66 in Speaking, Listening, Reading and Writing; C1 Advanced / C2 Proficiency: 191 overall, minimum 185 per component; Oxford Test of English (Advanced): 165, minimum 155 per component; All component scores from a single test session (no superscoring); Not needed if English is your first language and you have always been a resident and citizen of a majority English-speaking country recognised by UKVI.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/mathematics, https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas (checked 2026-10-19).
+  > If your first language is English and you have always been a resident and citizen of a majority English-speaking country recognised by UK Visas and Immigration (UKVI), you do not need to demonstrate your level of English. … All courses now require the higher level of ability in English.
+  > We recommend that you take the IELTS Academic option. … we are not able to accept IELTS Online. … 7.5 | Minimum 7.0 per component … TOEFL tests taken up to and including 20 January 2026 are accepted. … Changes to the TOEFL iBT test were introduced on 21 January 2026 and are currently under review by the University. | 110 | Minimum component scores: * Listening: 22 * Reading: 24 * Speaking: 25 * Writing: 24 … 191 | Minimum 185 per component … 76 | Minimum 66 in Speaking, Listening, Reading and Writing. … 165 | Minimum 155 per component … To meet the English language requirements for your offer to the University you must, where applicable, receive all qualifying test component scores (Reading, Writing, Listening and Speaking) from the same session
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/mathematics and https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas.
+- `uk-physics-oxford` · SAT / ACT: unverified → verified: For applicants with US qualifications (Oxford’s A*AA level): three APs at grade 5 (including any subjects the course requires) plus ACT 32+ or SAT 1470+ — or four APs at grade 5 with no SAT/ACT; Optional ACT/SAT essay not required; No superscoring: SAT sections from one sitting; ACT Highest Full Battery score only.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications (checked 2026-10-19).
+  > Advanced Placement (AP) qualifications, with the following grades: … For courses requiring A*AA: … Either Four APs at grade 5 (including any subjects required for the course you are applying to) OR Three APs at grade 5 (including any subjects required for the course you are applying to) … a score of 32 or above in the ACT … 1470 or above (out of 1600) in the SAT. We do not require the optional essay for either the ACT or the SAT. … your SAT Total Score for the SAT Evidence-based Reading and Writing, and SAT Math sections must be from the same session; we will not consider scores from multiple sessions ('superscoring'). This also applies to scores for the ACT, so we will only consider the ‘Highest Full Battery’ score, and not the ACT Superscore.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications.
+- `uk-physics-oxford` · English language: unverified → verified: Higher level English language requirement (all Oxford courses); IELTS (Academic recommended; IELTS Online not accepted): 7.5 overall, minimum 7.0 per component; TOEFL iBT: 110 overall (Listening 22, Reading 24, Speaking 25, Writing 24) — only tests taken up to and including 20 January 2026 are accepted; PTE Academic: 76 overall, minimum 66 in Speaking, Listening, Reading and Writing; C1 Advanced / C2 Proficiency: 191 overall, minimum 185 per component; Oxford Test of English (Advanced): 165, minimum 155 per component; All component scores from a single test session (no superscoring); Not needed if English is your first language and you have always been a resident and citizen of a majority English-speaking country recognised by UKVI.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/physics, https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas (checked 2026-10-19).
+  > If your first language is English and you have always been a resident and citizen of a majority English-speaking country recognised by UK Visas and Immigration (UKVI), you do not need to demonstrate your level of English. … All courses now require the higher level of ability in English.
+  > We recommend that you take the IELTS Academic option. … we are not able to accept IELTS Online. … 7.5 | Minimum 7.0 per component … TOEFL tests taken up to and including 20 January 2026 are accepted. … Changes to the TOEFL iBT test were introduced on 21 January 2026 and are currently under review by the University. | 110 | Minimum component scores: * Listening: 22 * Reading: 24 * Speaking: 25 * Writing: 24 … 191 | Minimum 185 per component … 76 | Minimum 66 in Speaking, Listening, Reading and Writing. … 165 | Minimum 155 per component … To meet the English language requirements for your offer to the University you must, where applicable, receive all qualifying test component scores (Reading, Writing, Listening and Speaking) from the same session
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/physics and https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas.
+- `uk-physics-oxford` · Other qualifications: unverified → verified: Advanced Placement: four APs at grade 5, or three APs at grade 5 plus ACT 32+ or SAT 1470+ (Oxford’s A*AA level); the APs must include any subjects the course requires; AP Calculus AB and BC cannot count as two separate subjects; Mathematics is required: take AP Calculus BC if you can (Calculus AB is accepted if BC is unavailable); AP Pre-Calculus does not meet the Mathematics requirement; Physics C: Mechanics + Physics C: Electricity and Magnetism (and certain Physics 1/2 combinations) may count as two separate APs; Not accepted: associate degrees, CLEP, GED, dual enrolment.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications (checked 2026-10-19).
+  > Advanced Placement (AP) qualifications, with the following grades: … For courses requiring A*AA: … Either Four APs at grade 5 (including any subjects required for the course you are applying to) OR Three APs at grade 5 (including any subjects required for the course you are applying to) … a score of 32 or above in the ACT … 1470 or above (out of 1600) in the SAT. We do not require the optional essay for either the ACT or the SAT. … Please note that Calculus AB and Calculus BC cannot be counted as two separate subjects for the purposes of meeting your offer … If you are applying for a course that requires Mathematics you should take Calculus BC if you are able to do so. However, courses will accept Calculus AB if you are unable to take Calculus BC. … AP Pre-Calculus may not be used to fulfil the mathematics requirement for courses specifying this in their offer … The following combinations of Physics courses can be counted as two separate qualifications for the purposes of meeting your offer: … Associate degrees College Level Examination Programs (CLEPs) GED (General Education Development) Dual enrolment
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications.
+- `uk-ppe-oxford` · SAT / ACT: unverified → verified: For applicants with US qualifications (Oxford’s AAA level): three APs at grade 5 (including any subjects the course requires) plus ACT 31+ or SAT 1460+ — or four APs at grade 5 with no SAT/ACT; Optional ACT/SAT essay not required; No superscoring: SAT sections from one sitting; ACT Highest Full Battery score only.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications (checked 2026-10-19).
+  > Advanced Placement (AP) qualifications, with the following grades: … For courses requiring AAA: … Either Four APs at grade 5 (including any subjects required for the course you are applying to) OR Three APs at grade 5 (including any subjects required for the course you are applying to) … a score of 31 or above in the ACT … 1460 or above (out of 1600) in the SAT. We do not require the optional essay for either the ACT or the SAT. … your SAT Total Score for the SAT Evidence-based Reading and Writing, and SAT Math sections must be from the same session; we will not consider scores from multiple sessions ('superscoring'). This also applies to scores for the ACT, so we will only consider the ‘Highest Full Battery’ score, and not the ACT Superscore.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications.
+- `uk-ppe-oxford` · English language: partial: Applicants whose first language is not English must meet the University of Oxford’s English language requirements → verified: Higher level English language requirement (all Oxford courses); IELTS (Academic recommended; IELTS Online not accepted): 7.5 overall, minimum 7.0 per component; TOEFL iBT: 110 overall (Listening 22, Reading 24, Speaking 25, Writing 24) — only tests taken up to and including 20 January 2026 are accepted; PTE Academic: 76 overall, minimum 66 in Speaking, Listening, Reading and Writing; C1 Advanced / C2 Proficiency: 191 overall, minimum 185 per component; Oxford Test of English (Advanced): 165, minimum 155 per component; All component scores from a single test session (no superscoring); Not needed if English is your first language and you have always been a resident and citizen of a majority English-speaking country recognised by UKVI.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics, https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas (checked 2026-10-19).
+  > If your first language is English and you have always been a resident and citizen of a majority English-speaking country recognised by UK Visas and Immigration (UKVI), you do not need to demonstrate your level of English. … All courses now require the higher level of ability in English.
+  > We recommend that you take the IELTS Academic option. … we are not able to accept IELTS Online. … 7.5 | Minimum 7.0 per component … TOEFL tests taken up to and including 20 January 2026 are accepted. … Changes to the TOEFL iBT test were introduced on 21 January 2026 and are currently under review by the University. | 110 | Minimum component scores: * Listening: 22 * Reading: 24 * Speaking: 25 * Writing: 24 … 191 | Minimum 185 per component … 76 | Minimum 66 in Speaking, Listening, Reading and Writing. … 165 | Minimum 155 per component … To meet the English language requirements for your offer to the University you must, where applicable, receive all qualifying test component scores (Reading, Writing, Listening and Speaking) from the same session
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics and https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas.
+- `uk-ppe-oxford` · Subject prerequisites: partial: Required: Mathematics; Preferred: Economics → partial: No required subjects; Recommended: Mathematics (A-level, Advanced Higher, IB Higher Level or equivalent); No prior study of Philosophy, Politics or Economics needed; History can be a useful background.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics (checked 2026-10-19).
+  > Required | Not applicable … Recommended | It is recommended for applicants to have studied Mathematics to A-level, Advanced Higher, Higher Level in the IB or another equivalent.* *Although a background in Mathematics is not an essential requirement for admission, it is recommended. … Relevant | You may apply for PPE having done any combination of subjects at school; it is not necessary to have studied Politics, Philosophy or Economics. History can provide a useful background, but is not essential.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics. Official course page lists no required subject and recommends Mathematics; data/courseRequirements.js holds Mathematics as essential (HL Mathematics in ibHL) and Economics as preferred, and IB 38 / “666 at HL”. Owner decision.
+- `uk-ppe-oxford` · A-Level requirements: partial: AAA → partial: AAA.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics (checked 2026-10-19).
+  > A-levels | AAA | … Required | Not applicable … Recommended | It is recommended for applicants to have studied Mathematics to A-level, Advanced Higher, Higher Level in the IB or another equivalent.* *Although a background in Mathematics is not an essential requirement for admission, it is recommended. … Relevant | You may apply for PPE having done any combination of subjects at school; it is not necessary to have studied Politics, Philosophy or Economics. History can provide a useful background, but is not essential.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics. Official course page lists no required subject and recommends Mathematics; data/courseRequirements.js holds Mathematics as essential (HL Mathematics in ibHL) and Economics as preferred, and IB 38 / “666 at HL”. Owner decision.
+- `uk-ppe-oxford` · IB requirements: partial: 38 points; 666 at HL → partial: 38 points; 666 at HL.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics (checked 2026-10-19).
+  > International Baccalaureate (IB) | 39 (including core points) with 766 at HL | … Required | Not applicable … Recommended | It is recommended for applicants to have studied Mathematics to A-level, Advanced Higher, Higher Level in the IB or another equivalent.* *Although a background in Mathematics is not an essential requirement for admission, it is recommended. … Relevant | You may apply for PPE having done any combination of subjects at school; it is not necessary to have studied Politics, Philosophy or Economics. History can provide a useful background, but is not essential.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics. Official course page lists no required subject and recommends Mathematics; data/courseRequirements.js holds Mathematics as essential (HL Mathematics in ibHL) and Economics as preferred, and IB 38 / “666 at HL”. Owner decision.
+- `uk-ppe-oxford` · Other qualifications: unverified → verified: Advanced Placement: four APs at grade 5, or three APs at grade 5 plus ACT 31+ or SAT 1460+ (Oxford’s AAA level); the APs must include any subjects the course requires; AP Calculus AB and BC cannot count as two separate subjects; Not accepted: associate degrees, CLEP, GED, dual enrolment.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications (checked 2026-10-19).
+  > Advanced Placement (AP) qualifications, with the following grades: … For courses requiring AAA: … Either Four APs at grade 5 (including any subjects required for the course you are applying to) OR Three APs at grade 5 (including any subjects required for the course you are applying to) … a score of 31 or above in the ACT … 1460 or above (out of 1600) in the SAT. We do not require the optional essay for either the ACT or the SAT. … Please note that Calculus AB and Calculus BC cannot be counted as two separate subjects for the purposes of meeting your offer … Associate degrees College Level Examination Programs (CLEPs) GED (General Education Development) Dual enrolment
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications.
+- `uk-ppe-oxford` · Other requirements: partial: Shortlisting for interview uses exam results, school reports, personal statement and the TARA; applicants who do not take the TARA will not normally be shortlisted; Interviews for shortlisted applicants → verified: TARA required, all three modules (Critical Thinking, Problem Solving, Writing Task); Shortlisting uses past and predicted exam results, school reports, personal statement and the TARA; applicants who do not take the TARA will not normally be shortlisted; Shortlisted candidates are invited to at least one online interview, expected in December; No written work required.
+  Source: https://www.ppe.ox.ac.uk/interviews, https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics (checked 2026-10-19).
+  > We only interview those who have a realistic chance of getting in, when judged by past and predicted exam results, school reports, personal statements and the pre-interview test. Applicants who do not take the pre-interview test will not normally be shortlisted for interview.
+  > All Oxford applicants must take **all three** modules (Critical Thinking, Problem Solving and the Writing Task). … You do not need to submit any written work as part of an application for this course. … Shortlisted candidates will be invited to at least one online interview. Interviews are expected to take place in December
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics.
+- `uk-engineering-oxford` · SAT / ACT: unverified → verified: For applicants with US qualifications (Oxford’s A*A*A level): three APs at grade 5 (including any subjects the course requires) plus ACT 33+ or SAT 1480+ — or four APs at grade 5 with no SAT/ACT; Optional ACT/SAT essay not required; No superscoring: SAT sections from one sitting; ACT Highest Full Battery score only.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications (checked 2026-10-19).
+  > Advanced Placement (AP) qualifications, with the following grades: … For courses requiring A*A*A: … Either Four APs at grade 5 (including any subjects required for the course you are applying to) OR Three APs at grade 5 (including any subjects required for the course you are applying to) … a score of 33 or above in the ACT … 1480 or above (out of 1600) in the SAT. We do not require the optional essay for either the ACT or the SAT. … your SAT Total Score for the SAT Evidence-based Reading and Writing, and SAT Math sections must be from the same session; we will not consider scores from multiple sessions ('superscoring'). This also applies to scores for the ACT, so we will only consider the ‘Highest Full Battery’ score, and not the ACT Superscore.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications.
+- `uk-engineering-oxford` · English language: partial: Applicants whose first language is not English must meet the University of Oxford’s English language requirements → verified: Higher level English language requirement (all Oxford courses); IELTS (Academic recommended; IELTS Online not accepted): 7.5 overall, minimum 7.0 per component; TOEFL iBT: 110 overall (Listening 22, Reading 24, Speaking 25, Writing 24) — only tests taken up to and including 20 January 2026 are accepted; PTE Academic: 76 overall, minimum 66 in Speaking, Listening, Reading and Writing; C1 Advanced / C2 Proficiency: 191 overall, minimum 185 per component; Oxford Test of English (Advanced): 165, minimum 155 per component; All component scores from a single test session (no superscoring); Not needed if English is your first language and you have always been a resident and citizen of a majority English-speaking country recognised by UKVI.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/engineering-science, https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas (checked 2026-10-19).
+  > If your first language is English and you have always been a resident and citizen of a majority English-speaking country recognised by UK Visas and Immigration (UKVI), you do not need to demonstrate your level of English. … All courses now require the higher level of ability in English.
+  > We recommend that you take the IELTS Academic option. … we are not able to accept IELTS Online. … 7.5 | Minimum 7.0 per component … TOEFL tests taken up to and including 20 January 2026 are accepted. … Changes to the TOEFL iBT test were introduced on 21 January 2026 and are currently under review by the University. | 110 | Minimum component scores: * Listening: 22 * Reading: 24 * Speaking: 25 * Writing: 24 … 191 | Minimum 185 per component … 76 | Minimum 66 in Speaking, Listening, Reading and Writing. … 165 | Minimum 155 per component … To meet the English language requirements for your offer to the University you must, where applicable, receive all qualifying test component scores (Reading, Writing, Listening and Speaking) from the same session
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/engineering-science and https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas.
+- `uk-engineering-oxford` · Subject prerequisites: partial: Required: Mathematics and Physics; Further Mathematics: may carry one of the A*s; third subject otherwise free (maths or science ideal) → verified: Required: Mathematics and Physics (A-level, Advanced Higher, IB Higher Level or equivalent); Preferred: Further Mathematics (helpful, not required; may carry one of the A*s).
+  Source: https://eng.ox.ac.uk/study/undergraduate/applications/entry-requirements, https://eng.ox.ac.uk/study/undergraduate/common-questions/, https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/engineering-science (checked 2026-10-19).
+  > A*A*A, including Mathematics and Physics. The A*s must be in Mathematics, Physics or Further Mathematics.
+  > Our standard offer is A*A*A (with the A*s in Maths, Further Maths or Physics). It doesn't matter what your third subject is, but most people choose a subject which would be useful in studying engineering - something maths or science based would be ideal.
+  > A*A*A to include Mathematics and Physics. The A*s must be in Mathematics, Physics or Further Mathematics … Required | Candidates are expected to have Physics and Mathematics to A-level, Advanced Higher, Higher Level in the IB or any other equivalent. … Relevant | Further Mathematics can be helpful to students in completing this course, although it is not required for admission. … If a practical component forms part of any of your science A‐levels used to meet your offer, we expect you to pass it.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/engineering-science.
+- `uk-engineering-oxford` · A-Level requirements: partial: A*A*A → verified: A*A*A.
+  Source: https://eng.ox.ac.uk/study/undergraduate/applications/entry-requirements, https://eng.ox.ac.uk/study/undergraduate/common-questions/, https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/engineering-science (checked 2026-10-19).
+  > A*A*A, including Mathematics and Physics. The A*s must be in Mathematics, Physics or Further Mathematics.
+  > Our standard offer is A*A*A (with the A*s in Maths, Further Maths or Physics). It doesn't matter what your third subject is, but most people choose a subject which would be useful in studying engineering - something maths or science based would be ideal.
+  > A*A*A to include Mathematics and Physics. The A*s must be in Mathematics, Physics or Further Mathematics … Required | Candidates are expected to have Physics and Mathematics to A-level, Advanced Higher, Higher Level in the IB or any other equivalent. … Relevant | Further Mathematics can be helpful to students in completing this course, although it is not required for admission. … If a practical component forms part of any of your science A‐levels used to meet your offer, we expect you to pass it. … For candidates who are predicted A*AA, serious consideration will be given to extenuating circumstances
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/engineering-science.
+- `uk-engineering-oxford` · Other qualifications: unverified → verified: Advanced Placement: four APs at grade 5, or three APs at grade 5 plus ACT 33+ or SAT 1480+ (Oxford’s A*A*A level); the APs must include any subjects the course requires; AP Calculus AB and BC cannot count as two separate subjects; Mathematics is required: take AP Calculus BC if you can (Calculus AB is accepted if BC is unavailable); AP Pre-Calculus does not meet the Mathematics requirement; Physics C: Mechanics + Physics C: Electricity and Magnetism (and certain Physics 1/2 combinations) may count as two separate APs; Not accepted: associate degrees, CLEP, GED, dual enrolment.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications (checked 2026-10-19).
+  > Advanced Placement (AP) qualifications, with the following grades: … For courses requiring A*A*A: … Either Four APs at grade 5 (including any subjects required for the course you are applying to) OR Three APs at grade 5 (including any subjects required for the course you are applying to) … a score of 33 or above in the ACT … 1480 or above (out of 1600) in the SAT. We do not require the optional essay for either the ACT or the SAT. … Please note that Calculus AB and Calculus BC cannot be counted as two separate subjects for the purposes of meeting your offer … If you are applying for a course that requires Mathematics you should take Calculus BC if you are able to do so. However, courses will accept Calculus AB if you are unable to take Calculus BC. … AP Pre-Calculus may not be used to fulfil the mathematics requirement for courses specifying this in their offer … The following combinations of Physics courses can be counted as two separate qualifications for the purposes of meeting your offer: … Associate degrees College Level Examination Programs (CLEPs) GED (General Education Development) Dual enrolment
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications.
+- `uk-law-oxford` · SAT / ACT: unverified → verified: For applicants with US qualifications (Oxford’s AAA level): three APs at grade 5 (including any subjects the course requires) plus ACT 31+ or SAT 1460+ — or four APs at grade 5 with no SAT/ACT; Optional ACT/SAT essay not required; No superscoring: SAT sections from one sitting; ACT Highest Full Battery score only.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications (checked 2026-10-19).
+  > Advanced Placement (AP) qualifications, with the following grades: … For courses requiring AAA: … Either Four APs at grade 5 (including any subjects required for the course you are applying to) OR Three APs at grade 5 (including any subjects required for the course you are applying to) … a score of 31 or above in the ACT … 1460 or above (out of 1600) in the SAT. We do not require the optional essay for either the ACT or the SAT. … your SAT Total Score for the SAT Evidence-based Reading and Writing, and SAT Math sections must be from the same session; we will not consider scores from multiple sessions ('superscoring'). This also applies to scores for the ACT, so we will only consider the ‘Highest Full Battery’ score, and not the ACT Superscore.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications.
+- `uk-law-oxford` · English language: partial: Applicants whose first language is not English must meet the University of Oxford’s English language requirements → verified: Higher level English language requirement (all Oxford courses); IELTS (Academic recommended; IELTS Online not accepted): 7.5 overall, minimum 7.0 per component; TOEFL iBT: 110 overall (Listening 22, Reading 24, Speaking 25, Writing 24) — only tests taken up to and including 20 January 2026 are accepted; PTE Academic: 76 overall, minimum 66 in Speaking, Listening, Reading and Writing; C1 Advanced / C2 Proficiency: 191 overall, minimum 185 per component; Oxford Test of English (Advanced): 165, minimum 155 per component; All component scores from a single test session (no superscoring); Not needed if English is your first language and you have always been a resident and citizen of a majority English-speaking country recognised by UKVI.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/law-jurisprudence, https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas (checked 2026-10-19).
+  > If your first language is English and you have always been a resident and citizen of a majority English-speaking country recognised by UK Visas and Immigration (UKVI), you do not need to demonstrate your level of English. … All courses now require the higher level of ability in English.
+  > We recommend that you take the IELTS Academic option. … we are not able to accept IELTS Online. … 7.5 | Minimum 7.0 per component … TOEFL tests taken up to and including 20 January 2026 are accepted. … Changes to the TOEFL iBT test were introduced on 21 January 2026 and are currently under review by the University. | 110 | Minimum component scores: * Listening: 22 * Reading: 24 * Speaking: 25 * Writing: 24 … 191 | Minimum 185 per component … 76 | Minimum 66 in Speaking, Listening, Reading and Writing. … 165 | Minimum 155 per component … To meet the English language requirements for your offer to the University you must, where applicable, receive all qualifying test component scores (Reading, Writing, Listening and Speaking) from the same session
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/law-jurisprudence and https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas.
+- `uk-law-oxford` · Other qualifications: unverified → verified: Advanced Placement: four APs at grade 5, or three APs at grade 5 plus ACT 31+ or SAT 1460+ (Oxford’s AAA level); the APs must include any subjects the course requires; AP Calculus AB and BC cannot count as two separate subjects; Not accepted: associate degrees, CLEP, GED, dual enrolment.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications (checked 2026-10-19).
+  > Advanced Placement (AP) qualifications, with the following grades: … For courses requiring AAA: … Either Four APs at grade 5 (including any subjects required for the course you are applying to) OR Three APs at grade 5 (including any subjects required for the course you are applying to) … a score of 31 or above in the ACT … 1460 or above (out of 1600) in the SAT. We do not require the optional essay for either the ACT or the SAT. … Please note that Calculus AB and Calculus BC cannot be counted as two separate subjects for the purposes of meeting your offer … Associate degrees College Level Examination Programs (CLEPs) GED (General Education Development) Dual enrolment
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications.
+- `uk-biochemistry-oxford` · English language: partial: Applicants whose first language is not English must meet the University of Oxford’s English language requirements → verified: Higher level English language requirement (all Oxford courses); IELTS (Academic recommended; IELTS Online not accepted): 7.5 overall, minimum 7.0 per component; TOEFL iBT: 110 overall (Listening 22, Reading 24, Speaking 25, Writing 24) — only tests taken up to and including 20 January 2026 are accepted; PTE Academic: 76 overall, minimum 66 in Speaking, Listening, Reading and Writing; C1 Advanced / C2 Proficiency: 191 overall, minimum 185 per component; Oxford Test of English (Advanced): 165, minimum 155 per component; All component scores from a single test session (no superscoring); Not needed if English is your first language and you have always been a resident and citizen of a majority English-speaking country recognised by UKVI.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/biochemistry-molecular-and-cellular, https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas (checked 2026-10-19).
+  > If your first language is English and you have always been a resident and citizen of a majority English-speaking country recognised by UK Visas and Immigration (UKVI), you do not need to demonstrate your level of English. … All courses now require the higher level of ability in English.
+  > We recommend that you take the IELTS Academic option. … we are not able to accept IELTS Online. … 7.5 | Minimum 7.0 per component … TOEFL tests taken up to and including 20 January 2026 are accepted. … Changes to the TOEFL iBT test were introduced on 21 January 2026 and are currently under review by the University. | 110 | Minimum component scores: * Listening: 22 * Reading: 24 * Speaking: 25 * Writing: 24 … 191 | Minimum 185 per component … 76 | Minimum 66 in Speaking, Listening, Reading and Writing. … 165 | Minimum 155 per component … To meet the English language requirements for your offer to the University you must, where applicable, receive all qualifying test component scores (Reading, Writing, Listening and Speaking) from the same session
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/biochemistry-molecular-and-cellular and https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas.
+- `uk-economics-oxford` · SAT / ACT: unverified → verified: For applicants with US qualifications (Oxford’s A*AA level): three APs at grade 5 (including any subjects the course requires) plus ACT 32+ or SAT 1470+ — or four APs at grade 5 with no SAT/ACT; Optional ACT/SAT essay not required; No superscoring: SAT sections from one sitting; ACT Highest Full Battery score only.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications (checked 2026-10-19).
+  > Advanced Placement (AP) qualifications, with the following grades: … For courses requiring A*AA: … Either Four APs at grade 5 (including any subjects required for the course you are applying to) OR Three APs at grade 5 (including any subjects required for the course you are applying to) … a score of 32 or above in the ACT … 1470 or above (out of 1600) in the SAT. We do not require the optional essay for either the ACT or the SAT. … your SAT Total Score for the SAT Evidence-based Reading and Writing, and SAT Math sections must be from the same session; we will not consider scores from multiple sessions ('superscoring'). This also applies to scores for the ACT, so we will only consider the ‘Highest Full Battery’ score, and not the ACT Superscore.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications.
+- `uk-economics-oxford` · English language: unverified → verified: Higher level English language requirement (all Oxford courses); IELTS (Academic recommended; IELTS Online not accepted): 7.5 overall, minimum 7.0 per component; TOEFL iBT: 110 overall (Listening 22, Reading 24, Speaking 25, Writing 24) — only tests taken up to and including 20 January 2026 are accepted; PTE Academic: 76 overall, minimum 66 in Speaking, Listening, Reading and Writing; C1 Advanced / C2 Proficiency: 191 overall, minimum 185 per component; Oxford Test of English (Advanced): 165, minimum 155 per component; All component scores from a single test session (no superscoring); Not needed if English is your first language and you have always been a resident and citizen of a majority English-speaking country recognised by UKVI.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/economics-and-management, https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas (checked 2026-10-19).
+  > If your first language is English and you have always been a resident and citizen of a majority English-speaking country recognised by UK Visas and Immigration (UKVI), you do not need to demonstrate your level of English. … All courses now require the higher level of ability in English.
+  > We recommend that you take the IELTS Academic option. … we are not able to accept IELTS Online. … 7.5 | Minimum 7.0 per component … TOEFL tests taken up to and including 20 January 2026 are accepted. … Changes to the TOEFL iBT test were introduced on 21 January 2026 and are currently under review by the University. | 110 | Minimum component scores: * Listening: 22 * Reading: 24 * Speaking: 25 * Writing: 24 … 191 | Minimum 185 per component … 76 | Minimum 66 in Speaking, Listening, Reading and Writing. … 165 | Minimum 155 per component … To meet the English language requirements for your offer to the University you must, where applicable, receive all qualifying test component scores (Reading, Writing, Listening and Speaking) from the same session
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/economics-and-management and https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas.
+- `uk-economics-oxford` · Admissions tests: partial: TARA (Test of Academic Reasoning for Admissions) → verified: TARA (Test of Academic Reasoning for Admissions) — required for all applicants; test dates 12–16 October 2026; Oxford-only Economics and Management applicants need not complete the Writing Task module.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/economics-and-management (checked 2026-10-19).
+  > TARA | 12-16 October 2026 … All applicants must take the **Test of Academic Reasoning for Admissions (TARA)** as part of their application. … However, candidates applying only to Oxford for Economics and Management, and … do not need to complete the Writing Task module.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/economics-and-management.
+- `uk-economics-oxford` · Other qualifications: unverified → verified: Advanced Placement: four APs at grade 5, or three APs at grade 5 plus ACT 32+ or SAT 1470+ (Oxford’s A*AA level); the APs must include any subjects the course requires; AP Calculus AB and BC cannot count as two separate subjects; Mathematics is required: take AP Calculus BC if you can (Calculus AB is accepted if BC is unavailable); AP Pre-Calculus does not meet the Mathematics requirement; Not accepted: associate degrees, CLEP, GED, dual enrolment.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications (checked 2026-10-19).
+  > Advanced Placement (AP) qualifications, with the following grades: … For courses requiring A*AA: … Either Four APs at grade 5 (including any subjects required for the course you are applying to) OR Three APs at grade 5 (including any subjects required for the course you are applying to) … a score of 32 or above in the ACT … 1470 or above (out of 1600) in the SAT. We do not require the optional essay for either the ACT or the SAT. … Please note that Calculus AB and Calculus BC cannot be counted as two separate subjects for the purposes of meeting your offer … If you are applying for a course that requires Mathematics you should take Calculus BC if you are able to do so. However, courses will accept Calculus AB if you are unable to take Calculus BC. … AP Pre-Calculus may not be used to fulfil the mathematics requirement for courses specifying this in their offer … Associate degrees College Level Examination Programs (CLEPs) GED (General Education Development) Dual enrolment
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications.
+- `uk-history-oxford` · SAT / ACT: unverified → verified: For applicants with US qualifications (Oxford’s AAA level): three APs at grade 5 (including any subjects the course requires) plus ACT 31+ or SAT 1460+ — or four APs at grade 5 with no SAT/ACT; Optional ACT/SAT essay not required; No superscoring: SAT sections from one sitting; ACT Highest Full Battery score only.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications (checked 2026-10-19).
+  > Advanced Placement (AP) qualifications, with the following grades: … For courses requiring AAA: … Either Four APs at grade 5 (including any subjects required for the course you are applying to) OR Three APs at grade 5 (including any subjects required for the course you are applying to) … a score of 31 or above in the ACT … 1460 or above (out of 1600) in the SAT. We do not require the optional essay for either the ACT or the SAT. … your SAT Total Score for the SAT Evidence-based Reading and Writing, and SAT Math sections must be from the same session; we will not consider scores from multiple sessions ('superscoring'). This also applies to scores for the ACT, so we will only consider the ‘Highest Full Battery’ score, and not the ACT Superscore.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications.
+- `uk-history-oxford` · English language: unverified → verified: Higher level English language requirement (all Oxford courses); IELTS (Academic recommended; IELTS Online not accepted): 7.5 overall, minimum 7.0 per component; TOEFL iBT: 110 overall (Listening 22, Reading 24, Speaking 25, Writing 24) — only tests taken up to and including 20 January 2026 are accepted; PTE Academic: 76 overall, minimum 66 in Speaking, Listening, Reading and Writing; C1 Advanced / C2 Proficiency: 191 overall, minimum 185 per component; Oxford Test of English (Advanced): 165, minimum 155 per component; All component scores from a single test session (no superscoring); Not needed if English is your first language and you have always been a resident and citizen of a majority English-speaking country recognised by UKVI.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/history, https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas (checked 2026-10-19).
+  > If your first language is English and you have always been a resident and citizen of a majority English-speaking country recognised by UK Visas and Immigration (UKVI), you do not need to demonstrate your level of English. … All courses now require the higher level of ability in English.
+  > We recommend that you take the IELTS Academic option. … we are not able to accept IELTS Online. … 7.5 | Minimum 7.0 per component … TOEFL tests taken up to and including 20 January 2026 are accepted. … Changes to the TOEFL iBT test were introduced on 21 January 2026 and are currently under review by the University. | 110 | Minimum component scores: * Listening: 22 * Reading: 24 * Speaking: 25 * Writing: 24 … 191 | Minimum 185 per component … 76 | Minimum 66 in Speaking, Listening, Reading and Writing. … 165 | Minimum 155 per component … To meet the English language requirements for your offer to the University you must, where applicable, receive all qualifying test component scores (Reading, Writing, Listening and Speaking) from the same session
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/history and https://www.ox.ac.uk/admissions/undergraduate/applying/for-international-students/english-language-requirements-visas.
+- `uk-history-oxford` · Subject prerequisites: partial: No required subjects; History strongly advised (not an absolute requirement); other subjects do not matter → partial: No required subjects; History highly recommended (strongly advised, not an absolute requirement); other subjects do not matter.
+  Source: https://www.history.ox.ac.uk/making-application, https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/history (checked 2026-10-19).
+  > You are strongly advised to take history as one of your subjects, but it is not an absolute requirement. … As long as you have sufficient history experience, it really doesn’t matter what other subjects you take.
+  > Required | Not applicable … Recommended | It is highly recommended for applicants to have History to A-level, Advanced Higher, Higher Level in the IB or another equivalent.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/history. Official pages recommend History but do not name English; data/courseRequirements.js holds preferred [History, English]. Owner decision.
+- `uk-history-oxford` · A-Level requirements: partial: AAA → partial: AAA.
+  Source: https://www.history.ox.ac.uk/making-application, https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/history (checked 2026-10-19).
+  > The offer for all history courses is: 3 As at A Level … You are strongly advised to take history as one of your subjects, but it is not an absolute requirement. … As long as you have sufficient history experience, it really doesn’t matter what other subjects you take.
+  > A-levels | AAA | … Required | Not applicable … Recommended | It is highly recommended for applicants to have History to A-level, Advanced Higher, Higher Level in the IB or another equivalent.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/history. Official pages recommend History but do not name English; data/courseRequirements.js holds preferred [History, English]. Owner decision.
+- `uk-history-oxford` · IB requirements: partial: 38 points; 666 at HL → partial: 38 points; 666 at HL.
+  Source: https://www.history.ox.ac.uk/making-application, https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/history (checked 2026-10-19).
+  > 38 at International Baccalaureate (including core points) with 666 at HL
+  > International Baccalaureate (IB) | 38 (including core points) with 666 at HL | … Required | Not applicable … Recommended | It is highly recommended for applicants to have History to A-level, Advanced Higher, Higher Level in the IB or another equivalent.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/history. Official pages recommend History but do not name English; data/courseRequirements.js holds preferred [History, English]. Owner decision.
+- `uk-history-oxford` · Other qualifications: unverified → verified: Advanced Placement: four APs at grade 5, or three APs at grade 5 plus ACT 31+ or SAT 1460+ (Oxford’s AAA level); the APs must include any subjects the course requires; AP Calculus AB and BC cannot count as two separate subjects; Not accepted: associate degrees, CLEP, GED, dual enrolment.
+  Source: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications (checked 2026-10-19).
+  > Advanced Placement (AP) qualifications, with the following grades: … For courses requiring AAA: … Either Four APs at grade 5 (including any subjects required for the course you are applying to) OR Three APs at grade 5 (including any subjects required for the course you are applying to) … a score of 31 or above in the ACT … 1460 or above (out of 1600) in the SAT. We do not require the optional essay for either the ACT or the SAT. … Please note that Calculus AB and Calculus BC cannot be counted as two separate subjects for the purposes of meeting your offer … Associate degrees College Level Examination Programs (CLEPs) GED (General Education Development) Dual enrolment
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/admissions-requirements/international-qualifications.
+- `uk-history-oxford` · Other requirements: partial: Written work: a piece of historical writing with a signed cover sheet; Interviews for shortlisted applicants (online); some colleges set a short passage to read before interview → verified: Written work: one argument-driven history essay from normal school work (max 2,000 words) with a signed certificate — deadline 10 November 2026; No admissions test; Shortlisted candidates are invited to at least one online interview, expected in December; they may discuss their written work and personal statement and be asked to read and discuss a short passage.
+  Source: https://www.history.ox.ac.uk/making-application, https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/history (checked 2026-10-19).
+  > We use your written work to help assess your reasoning, language and writing skills. … The work must be accompanied by a cover sheet, that is also signed by a member of staff at your school/college … The interview is designed to assess your academic potential. … Following a university-wide vote, all interviews will be on-line. … Some colleges may require you to read a short passage of historical writing just before your interview, which they will ask you to discuss as part of the interview process.
+  > One argument-driven essay on a historical topic, written as part of your normal school or college work. … The essay should be a **maximum of 2000 words**. … Written work must be accompanied by a signed certificate (confirmed by the school or college) stating the circumstances under which the work was written. … Deadline | 10 November 2026 … Shortlisted candidates will be invited to at least one online interview. Interviews are expected to take place in December … If you are shortlisted, you may be asked to discuss your submitted written work and personal statement during interview. Applicants may also be asked to read and talk about a short passage as part of the interview.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/history.
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Oxford
+
+- `uk-maths-oxford` · engine `requirements.essential`: [Mathematics_Standard, Mathematics_Advanced] → [Mathematics_Standard] (essential-to-preferred). Source: https://www.maths.ox.ac.uk/study-here/undergraduate-study/our-offer
+  > A-level Mathematics is required, and we highly recommend A-level Further Maths
+- `uk-maths-oxford` · engine `requirements.preferred`: [] → [Mathematics_Advanced] (essential-to-preferred). Source: https://www.maths.ox.ac.uk/study-here/undergraduate-study/our-offer
+  > A-level Mathematics is required, and we highly recommend A-level Further Maths
+- `uk-maths-oxford` · subjectPrerequisites: row partial → verified.
+- `uk-maths-oxford` · aLevel: row partial → verified (owner flag kept).
+- `uk-maths-oxford` · ib: row verified → verified.
+- `uk-physics-oxford` · engine `grades.ibHL`: [Mathematics_Advanced, Chemistry] → [Mathematics_Advanced, Physics] (ib-hl). Source: https://www.physics.ox.ac.uk/study/undergraduates/how-apply
+  > Candidates are expected to have Physics and Mathematics to A-level, Advanced Higher, Higher Level in the IB or equivalent.
+- `uk-physics-oxford` · ib: row partial → partial (owner flag kept).
+- `uk-law-oxford` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-stated). Source: https://www.law.ox.ac.uk/admissions/undergraduate/undergraduate-admissions-faqs-ba-jurisprudence
+  > Otherwise your choice of subjects is your own
+- `uk-law-oxford` · subjectPrerequisites: row partial → verified.
+- `uk-law-oxford` · aLevel: row partial → verified (owner flag kept).
+- `uk-law-oxford` · ib: row partial → verified.
+- `uk-biochemistry-oxford` · engine `requirements.essential`: [Chemistry, Biology] → [Chemistry] (essential-to-preferred). Source: https://www.bioch.ox.ac.uk/undergraduate-admissions
+  > Biology beyond GCSE or the equivalent can be helpful to students in completing the course, although not required for admission.
+- `uk-biochemistry-oxford` · engine `requirements.preferred`: [Mathematics_Standard] → [Mathematics_Standard, Biology] (essential-to-preferred). Source: https://www.bioch.ox.ac.uk/undergraduate-admissions
+  > Biology beyond GCSE or the equivalent can be helpful to students in completing the course, although not required for admission.
+- `uk-biochemistry-oxford` · engine `grades.ibHL`: [Mathematics_Advanced, Chemistry] → [Chemistry] (ib-hl). Source: https://www.bioch.ox.ac.uk/undergraduate-admissions
+  > with 7 in HL chemistry and 6 in two other relevant subjects
+- `uk-biochemistry-oxford` · engine `grades.ibHLNote`: 766 at HL → 7 in HL Chemistry; 6 in two other relevant subjects (ib-note). Source: https://www.bioch.ox.ac.uk/undergraduate-admissions
+  > with 7 in HL chemistry and 6 in two other relevant subjects
+- `uk-biochemistry-oxford` · subjectPrerequisites: row partial → verified.
+- `uk-biochemistry-oxford` · aLevel: row partial → partial (owner flag kept).
+- `uk-biochemistry-oxford` · ib: row partial → verified.
+- `uk-economics-oxford` · engine `grades.ib`: 38 → 39 (ib-score). Source: https://www.economics.ox.ac.uk/undergraduate-admissions-criteria
+  > IB:39 (including core points) with 766 at HL
+- `uk-economics-oxford` · engine `grades.ibHLNote`: 666 at HL → 766 at HL (ib-note). Source: https://www.economics.ox.ac.uk/undergraduate-admissions-criteria
+  > IB:39 (including core points) with 766 at HL
+- `uk-economics-oxford` · engine `requirements.preferred`: [Mathematics_Advanced, Economics] → [] (preferred-remove-unlisted). Source: https://www.economics.ox.ac.uk/undergraduate-admissions-criteria
+  > Candidates are required to have Mathematics to A-level (A* or A grade), Advanced Higher (A grade), Higher Level in the IB (score 6 or 7) or another equivalent.
+- `uk-economics-oxford` · subjectPrerequisites: row partial → verified.
+- `uk-economics-oxford` · aLevel: row partial → verified.
+- `uk-economics-oxford` · ib: row partial → verified.
+- `uk-medicine-oxford` · engine `requirements.essential`: [Chemistry, Biology] → [Chemistry] (essential-to-preferred). Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine
+  > Required | Chemistry and at least one of Biology, Physics, Mathematics or Further Mathematics.
+- `uk-medicine-oxford` · engine `requirements.preferred`: [Physics] → [Biology, Physics] (essential-to-preferred). Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine
+  > Recommended | Further subjects in Biology, Physics, Mathematics or Further Mathematics.
+- `uk-medicine-oxford` · engine `grades.ibHL`: [Chemistry, Biology] → [Chemistry] (ib-hl). Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine
+  > Applicants are required to take Chemistry and at least one of Biology, Physics or Mathematics to Higher Level.
+- `uk-medicine-oxford` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-medicine-oxford` · aLevel: row partial → partial (owner flag kept).
+- `uk-medicine-oxford` · ib: row partial → partial (owner flag kept).
+- `uk-ppe-oxford` · engine `grades.ib`: 38 → 39 (ib-score). Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics
+  > 39 (including core points) with 766 at HL
+- `uk-ppe-oxford` · engine `grades.ibHLNote`: 666 at HL → 766 at HL (ib-note). Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics
+  > 39 (including core points) with 766 at HL
+- `uk-ppe-oxford` · engine `grades.ibHL`: [Mathematics_Standard] → [] (ib-hl). Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics
+  > Although a background in Mathematics is not an essential requirement for admission, it is recommended.
+- `uk-ppe-oxford` · engine `requirements.essential`: [Mathematics_Standard] → [] (essential-to-preferred). Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics
+  > Although a background in Mathematics is not an essential requirement for admission, it is recommended.
+- `uk-ppe-oxford` · engine `requirements.preferred`: [Economics] → [Mathematics_Standard] (essential-to-preferred). Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics
+  > Although a background in Mathematics is not an essential requirement for admission, it is recommended. … Relevant | You may apply for PPE having done any combination of subjects at school; it is not necessary to have studied Politics, Philosophy or Economics.
+- `uk-ppe-oxford` · subjectPrerequisites: row partial → verified (owner flag kept).
+- `uk-ppe-oxford` · aLevel: row partial → verified (owner flag kept).
+- `uk-ppe-oxford` · ib: row partial → verified (owner flag kept).
+- `uk-history-oxford` · engine `requirements.preferred`: [History, English] → [History] (preferred-remove-unlisted). Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/history
+  > Recommended | It is highly recommended for applicants to have History to A-level, Advanced Higher, Higher Level in the IB or another equivalent.
+- `uk-history-oxford` · subjectPrerequisites: row partial → verified (owner flag kept).
+- `uk-history-oxford` · aLevel: row partial → verified (owner flag kept).
+- `uk-history-oxford` · ib: row partial → verified (owner flag kept).
+
+## 2026-10-19 — 2027 entry — University College London — 2027-entry course pages via text reader (www.ucl.ac.uk returns 403 to direct requests)
+
+- `uk-medicine-ucl` · SAT / ACT: unverified → partial: For applicants with a US high-school diploma, UCL’s A*AA-band equivalency: 5,5 in two APs plus SAT 1470 or ACT 33 (taken in the final three years of high school) with the High School Graduation Diploma — or 5,5,5,5,4 in five APs with no SAT/ACT; Not confirmed for Medicine: the Medical School considers international qualifications only where the prospectus indicates them, and its list of other accepted qualifications does not include US qualifications.
+  Source: https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2027-entry, https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US (checked 2026-10-19).
+  > Please note that we do not consider international qualifications unless otherwise indicated on the … For detail of the entry requirements for other acceptable entry qualifications, as listed below, please visit the
+  > 5,5 in two distinctive AP subjects, plus a combined score of 1470 in the SAT or a composite score of 33 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … 5,5,5,5,4 in five distinctive AP subjects, taken in the final three years of high school.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2027-entry and https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US. Whether UCL Medicine accepts US qualifications (APs with or without SAT/ACT) is unclear: check the Medicine course page’s international selector for the United States in a browser.
+- `uk-medicine-ucl` · Other qualifications: partial: Advanced Placement: accepted — see note → partial: Advanced Placement: accepted — see note; UCL’s A*AA-band US equivalency: 5,5,5,5,4 in five APs, or 5,5 in two APs plus SAT 1470/ACT 33 with the High School Graduation Diploma — not confirmed for Medicine.
+  Source: https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2027-entry, https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US (checked 2026-10-19).
+  > Please note that we do not consider international qualifications unless otherwise indicated on the … For detail of the entry requirements for other acceptable entry qualifications, as listed below, please visit the
+  > 5,5,5,5,4 in five distinctive AP subjects, taken in the final three years of high school. … 5,5 in two distinctive AP subjects, plus a combined score of 1470 in the SAT or a composite score of 33 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2027-entry and https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US. Owner decision: whether APs are accepted for Medicine. The engine’s AP requirement (apRequirement, source https://www.ucl.ac.uk/prospective-students/international/united-states-america-your-questions-answered — now 404) is kept.
+- `uk-medicine-ucl` · English language: unverified → verified: UCL English language Level 4; IELTS Academic: 7.5 overall with at least 7.0 in each component; TOEFL iBT (tests from 21 January 2026): 5.5 overall and 5.0 in each skill; earlier tests: 109 overall with 27/30 in reading and writing and 23/30 in speaking and listening; PTE Academic: 80 overall with at least 76 in each communicative skill; Not needed by nationals of UCL’s listed majority English-speaking countries (including the USA); for September 2027 entry a test must be taken on or after 1 September 2025.
+  Source: https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2027-entry, https://www.ucl.ac.uk/study/prospective-students/undergraduate/how-apply/english-language-requirements (checked 2026-10-19).
+  > The **“Level 4”** grade must be achieved in each case.
+  > You do not need to prove your level of English language proficiency if you are a national of one of the following countries: … * USA … For entry in September 2027, this means a test must have been sat on or after 1 September 2025. … **Level 4:** Overall score of 7.5 and a minimum of 7.0 in each component … **Level 4:** Overall score of 5.5 and 5.0 in reading, writing, speaking and listening … **Level 4**: Overall score of 109 with 27/30 in reading and writing and 23/30 in speaking and listening … **Level 4**: Overall score of 80 with a minimum of 76 in each Communicative Skill
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2027-entry and https://www.ucl.ac.uk/study/prospective-students/undergraduate/how-apply/english-language-requirements.
+- `uk-medicine-ucl` · Admissions tests: partial: UCAT — required → verified: UCAT — required; taken in the year of application.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/medicine-mbbs-bsc (checked 2026-10-19).
+  > Students applying for Medicine must take the University Clinical Aptitude Test in the year of application.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/medicine-mbbs-bsc.
+- `uk-medicine-ucl` · Subject prerequisites: partial: Required: Chemistry, Biology; Preferred: Mathematics → partial: Required: Chemistry, Biology (A*A, either order); Preferred (as recorded): Mathematics.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/medicine-mbbs-bsc, https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2027-entry (checked 2026-10-19).
+  > Subjects Biology and Chemistry required with either at grade A*
+  > **Chemistry**and **Biology** must be studied at A-level. The third subject is the student’s own choice and can be any subject other than General Studies or Critical Thinking.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/medicine-mbbs-bsc and https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2027-entry. Preferred subject not confirmed: the official pages do not list Mathematics as preferred; data/courseRequirements.js holds preferred Mathematics_Standard. Owner decision.
+- `uk-medicine-ucl` · A-Level requirements: partial: A*AA → partial: A*AA.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/medicine-mbbs-bsc, https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2027-entry (checked 2026-10-19).
+  > Grades A*AA Subjects Biology and Chemistry required with either at grade A* … Grades AAB Subjects Biology and Chemistry required at grade A … This course does not accept resits.
+  > We require three A-levels studied at the same time (which must be completed within two years). … Our standard conditional offer will be grades **A*AA** to include A*A in Chemistry and Biology, either order. … The third subject is the student’s own choice and can be any subject other than General Studies or Critical Thinking.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/medicine-mbbs-bsc and https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2027-entry. Mathematics is not listed as preferred; data/courseRequirements.js holds preferred Mathematics_Standard. Owner decision. Excluded subjects and the contextual offer are display-only; the matcher does not apply them.
+- `uk-medicine-ucl` · IB requirements: partial: 39 points; 766 at HL → partial: 39 points; 766 at HL.
+  Source: https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2027-entry (checked 2026-10-19).
+  > Candidates taking the International Baccalaureate Diploma (IB) must offer three subjects including **Chemistry and Biology** at **Higher Level**, plus three subjects at Standard Level. … Our standard conditional offer will be 39 points out of 45 overall. The grades for the three Higher subjects must make up at least 19 points and must include Biology and Chemistry, with scores 6 and 7, either order. Scores below 5 in any subject are not acceptable.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2027-entry. Mathematics is not listed as preferred; data/courseRequirements.js holds preferred Mathematics_Standard. Owner decision.
+- `uk-medicine-ucl` · Other requirements: unverified → verified: Multiple mini interviews (MMIs), held between December and March; Reflections on work experience may be assessed at interview; a small selection of candidates may be asked for evidence of it; GCSE (or equivalent) English Language and Mathematics at grade B/6; Resits are not accepted (including restarting Year 12); DBS check (Post Office ID verification about £15; the check itself is paid for by the Medical School).
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/medicine-mbbs-bsc, https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2027-entry (checked 2026-10-19).
+  > We currently use multiple mini interviews(MMIs) as part of our selection procedure. These take place between December and March. … Your reflections on what you learnt from your work experience may be assessed at interview and we may request that a small selection of candidates provide evidence of the work experience that they have done. … When applying for your DBS check, you will need Post Office ID verification (approx. £15). The cost of the check itself is covered by the Medical School
+  > All candidates must offer GCSE (or IGCSE, O-level, IB or EB equivalent) at **grade B/6** or above in both **English Language** and **Mathematics**. … We do not accept qualification re-sits, including re-starting Year 12.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/medicine-mbbs-bsc and https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2027-entry.
+- `uk-cs-ucl` · SAT / ACT: unverified → verified: For applicants with a US high-school diploma (UCL’s A*A*A band, this course’s offer): 5,5 in two APs plus SAT 1500 or ACT 34, taken in the final three years of high school, with the High School Graduation Diploma; Alternatively 5,5,5,5,5 in five APs (taken in the final three years of high school), with no SAT/ACT.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-bsc, https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_a_star_a/US (checked 2026-10-19).
+  > Grades A*A*A Subjects A* in either Mathematics or Further Mathematics required.
+  > 5,5 in two distinctive AP subjects, plus a combined score of 1500 in the SAT or a composite score of 34 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … 5,5,5,5,5 in five distinctive AP subjects, taken in the final three years of high school.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-bsc and https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_a_star_a/US. Shown at UCL’s A*A*A band (the official 2027 offer); data/courseRequirements.js holds A*AA (A-Level row is partial with an owner-decision flag).
+- `uk-cs-ucl` · Other qualifications: partial: Advanced Placement: accepted — see note → verified: Advanced Placement: accepted — see note; Advanced Placement (UCL’s A*A*A band): 5,5,5,5,5 in five APs, or 5,5 in two APs plus SAT 1500 or ACT 34 with the High School Graduation Diploma; Subject requirements carry over: an A* or A subject needs a 5 in the relevant full-year AP (a B needs a 4); where Mathematics or Physics is required, specific AP subjects are asked for; AP scores must be verified and sent to UCL by the College Board.
+  Source: https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_a_star_a/US (checked 2026-10-19).
+  > 5,5,5,5,5 in five distinctive AP subjects, taken in the final three years of high school. … 5,5 in two distinctive AP subjects, plus a combined score of 1500 in the SAT or a composite score of 34 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … Where A* is required at A Level, 5 will be required in the relevant full-year AP subject; for A, 5 will be required; and for B, 4 will be required. Where Mathematics or Physics is required, applicants will be asked to present specific AP subjects. … AP exam scores must be verified by the College Board and sent to UCL through the College Board directly.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_a_star_a/US. Shown at UCL’s A*A*A band (the official 2027 offer); data/courseRequirements.js holds A*AA (A-Level row is partial with an owner-decision flag).
+- `uk-cs-ucl` · English language: unverified → verified: UCL English language Level 1; IELTS Academic: 6.5 overall with at least 6.0 in each component; TOEFL iBT (tests from 21 January 2026): 4.5 overall and 4.0 in each skill; earlier tests: 92 overall with 24/30 in reading and writing and 20/30 in speaking and listening; PTE Academic: 70 overall with at least 62 in each communicative skill; Not needed by nationals of UCL’s listed majority English-speaking countries (including the USA); for September 2027 entry a test must be taken on or after 1 September 2025.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-meng, https://www.ucl.ac.uk/study/prospective-students/undergraduate/how-apply/english-language-requirements (checked 2026-10-19).
+  > The English language level for this programme is: **Level 1**
+  > You do not need to prove your level of English language proficiency if you are a national of one of the following countries: … * USA … For entry in September 2027, this means a test must have been sat on or after 1 September 2025. … **Level 1:**Overall score of 6.5 and a minimum of 6.0 in each component … **Level 1:** Overall score of 4.5 and 4.0 in reading, writing, speaking and listening … **Level 1**: Overall score of 92 with 24/30 in reading and writing and 20/30 in speaking and listening … **Level 1**: Overall score of 70 with a minimum of 62 in each Communicative Skill
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-meng and https://www.ucl.ac.uk/study/prospective-students/undergraduate/how-apply/english-language-requirements.
+- `uk-cs-ucl` · Admissions tests: verified: TARA — required → verified: TARA (Test of Academic Reasoning for Admissions) — required for all applicants for 2027/28 entry; sit it in October 2026 or January 2027.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-bsc, https://www.ucl.ac.uk/engineering/computer-science/study/undergraduate/tara-admissions-test-computer-science-courses (checked 2026-10-19).
+  > For admission in 2027/28, alongside the UCAS application, UCL will require all applicants to sit the TARA (Test of Academic Reasoning for Admissions)
+  > There are two exam periods for the TARA, one in October 2026 and one in January 2027. For applications to UCL Computer Science, you can sit the TARA in either October or January.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-bsc and https://www.ucl.ac.uk/engineering/computer-science/study/undergraduate/tara-admissions-test-computer-science-courses.
+- `uk-cs-ucl` · Subject prerequisites: verified: Required: Mathematics; Preferred: Advanced mathematics → partial: Required: A* in Mathematics or Further Mathematics; Preferred (as recorded): Further Mathematics / HL Mathematics: Analysis and Approaches.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-bsc, https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-meng (checked 2026-10-19).
+  > Subjects A* in either Mathematics or Further Mathematics required.
+  > The course will accept either ‘Mathematics: Analysis and Approaches’ or ‘Mathematics: Applications and Interpretation’ at higher level. ‘Mathematics: Analysis and Approaches’ is preferred.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-bsc and https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-meng. Further Mathematics is not named as a preferred A-level; data/courseRequirements.js holds preferred Mathematics_Advanced (supported only by the IB preference for Analysis and Approaches). Owner decision.
+- `uk-cs-ucl` · A-Level requirements: verified: A*AA → partial: A*AA.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-bsc, https://www.ucl.ac.uk/engineering/computer-science/study/undergraduate/tara-admissions-test-computer-science-courses (checked 2026-10-19).
+  > Grades A*A*A Subjects A* in either Mathematics or Further Mathematics required. … Grades A*AB
+  > While our entry requirements are set at A* A* A at A-level, with an A* in Mathematics or Further Mathematics for all programmes
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-bsc and https://www.ucl.ac.uk/engineering/computer-science/study/undergraduate/tara-admissions-test-computer-science-courses. Offer differs: official A*A*A; data/courseRequirements.js holds A*AA. Further Mathematics is not named as preferred (engine preferred Mathematics_Advanced). Owner decision. The contextual offer is display-only; the matcher does not apply it.
+- `uk-cs-ucl` · IB requirements: verified: 39 points; 776 at HL → partial: 39 points; 776 at HL.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-meng (checked 2026-10-19).
+  > Points 40 Subjects A total of 20 points in three higher level subjects including Grade 7 in Mathematics. The course will accept either ‘Mathematics: Analysis and Approaches’ or ‘Mathematics: Applications and Interpretation’ at higher level. ‘Mathematics: Analysis and Approaches’ is preferred. … Points 38 Subjects A total of 18 points in three higher level subjects including Grade 7 in Mathematics, with no higher level score below 5.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-meng. IB differs: official 40 points with 20 at HL including 7 in Mathematics (AA or AI accepted); data/courseRequirements.js holds 39, "776 at HL" and ibHL Mathematics_Advanced (AA only). Owner decision. The contextual offer is display-only.
+- `uk-cs-ucl` · Other requirements: unverified → verified: TARA required (see Admissions tests); results are considered alongside A-level grades and the personal statement in a holistic review; Applications are assessed by a central UCL team against the published entry criteria; non-standard qualifications are referred to the Computer Science admissions tutor; Offer holders are invited to an offer-holder open day (in person or online).
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-bsc, https://www.ucl.ac.uk/engineering/computer-science/study/undergraduate/tara-admissions-test-computer-science-courses (checked 2026-10-19).
+  > The UCAS application is assessed by a central UCL team against the published entry criteria. Applicants with non-standard qualifications are referred onto the Computer Science Admissions Tutor for review. … Once an offer has been made, applicants are invited to attend an Offer-holder Open Day in person or virtual
+  > The TARA will be considered alongside your A-Level grades and UCAS Personal Statement as part of a holistic admissions review.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-bsc and https://www.ucl.ac.uk/engineering/computer-science/study/undergraduate/tara-admissions-test-computer-science-courses.
+- `uk-engineering-ucl` · SAT / ACT: unverified → verified: For applicants with a US high-school diploma (UCL’s A*AA band, this course’s offer): 5,5 in two APs plus SAT 1470 or ACT 33, taken in the final three years of high school, with the High School Graduation Diploma; Alternatively 5,5,5,5,4 in five APs (taken in the final three years of high school), with no SAT/ACT.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng, https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US (checked 2026-10-19).
+  > Grades A*AA Subjects Mathematics and Physics required.
+  > 5,5 in two distinctive AP subjects, plus a combined score of 1470 in the SAT or a composite score of 33 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … 5,5,5,5,4 in five distinctive AP subjects, taken in the final three years of high school.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng and https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US.
+- `uk-engineering-ucl` · Other qualifications: partial: Advanced Placement: accepted — see note → verified: Advanced Placement: accepted — see note; Advanced Placement (UCL’s A*AA band): 5,5,5,5,4 in five APs, or 5,5 in two APs plus SAT 1470 or ACT 33 with the High School Graduation Diploma; Subject requirements carry over: an A* or A subject needs a 5 in the relevant full-year AP (a B needs a 4); where Mathematics or Physics is required, specific AP subjects are asked for; AP scores must be verified and sent to UCL by the College Board.
+  Source: https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US (checked 2026-10-19).
+  > 5,5,5,5,4 in five distinctive AP subjects, taken in the final three years of high school. … 5,5 in two distinctive AP subjects, plus a combined score of 1470 in the SAT or a composite score of 33 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … Where A* is required at A Level, 5 will be required in the relevant full-year AP subject; for A, 5 will be required; and for B, 4 will be required. Where Mathematics or Physics is required, applicants will be asked to present specific AP subjects. … AP exam scores must be verified by the College Board and sent to UCL through the College Board directly.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US.
+- `uk-engineering-ucl` · English language: unverified → verified: UCL English language Level 1; IELTS Academic: 6.5 overall with at least 6.0 in each component; TOEFL iBT (tests from 21 January 2026): 4.5 overall and 4.0 in each skill; earlier tests: 92 overall with 24/30 in reading and writing and 20/30 in speaking and listening; PTE Academic: 70 overall with at least 62 in each communicative skill; Not needed by nationals of UCL’s listed majority English-speaking countries (including the USA); for September 2027 entry a test must be taken on or after 1 September 2025.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng, https://www.ucl.ac.uk/study/prospective-students/undergraduate/how-apply/english-language-requirements (checked 2026-10-19).
+  > The English language level for this programme is: **Level 1**
+  > You do not need to prove your level of English language proficiency if you are a national of one of the following countries: … * USA … For entry in September 2027, this means a test must have been sat on or after 1 September 2025. … **Level 1:**Overall score of 6.5 and a minimum of 6.0 in each component … **Level 1:** Overall score of 4.5 and 4.0 in reading, writing, speaking and listening … **Level 1**: Overall score of 92 with 24/30 in reading and writing and 20/30 in speaking and listening … **Level 1**: Overall score of 70 with a minimum of 62 in each Communicative Skill
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng and https://www.ucl.ac.uk/study/prospective-students/undergraduate/how-apply/english-language-requirements.
+- `uk-engineering-ucl` · Admissions tests: partial: None listed → partial: TARA (Test of Academic Reasoning for Admissions) — required for all applicants in the 2027 cycle (official); not yet held by the matcher.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng (checked 2026-10-19).
+  > For the 2027 cycle, alongside the UCAS application, UCL will require all applicants to the above programme to sit the TARA (The Test of Academic Reasoning for Admissions) run by University Admissions Tests UK.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng. Test differs: official TARA required for 2027 entry; data/courseRequirements.js admissionTests is []. Owner decision.
+- `uk-engineering-ucl` · Subject prerequisites: partial: Required: Mathematics, Physics; Preferred: Advanced mathematics → partial: Required: Mathematics and Physics (A* in one of them); Preferred third subject (official, in order): Design and Technology, Engineering, Economics, Geography, Chemistry, Biology — not essential; Preferred (as recorded): Further Mathematics.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng (checked 2026-10-19).
+  > Subjects Mathematics and Physics required. A* must be in one of the required subjects. Design and Technology, Engineering, Economics, Geography, Chemistry and Biology preferred as a third subject (in that order), but not essential.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng. Preferred subjects differ: the page does not name Further Mathematics (engine preferred Mathematics_Advanced); its preferred third subjects are not held by the engine. Owner decision.
+- `uk-engineering-ucl` · A-Level requirements: partial: A*AA → partial: A*AA.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng (checked 2026-10-19).
+  > Grades A*AA Subjects Mathematics and Physics required. A* must be in one of the required subjects. Design and Technology, Engineering, Economics, Geography, Chemistry and Biology preferred as a third subject (in that order), but not essential. … Grades A*AB
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng. Preferred subjects differ (Further Mathematics not named; official preferred third subjects not held by the engine). Owner decision. The contextual offer is display-only; the matcher does not apply it.
+- `uk-engineering-ucl` · IB requirements: partial: 39 points; 19 points across 3 HL incl 7,6 in Maths & Physics; no HL below 5 → partial: 39 points; 19 points across 3 HL incl 7,6 in Maths & Physics; no HL below 5.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng (checked 2026-10-19).
+  > Points 39 Subjects A total of 19 points in three higher level subjects including 7, 6 required in Mathematics and Physics in any order, with no higher level score below 5. The course will accept either ‘Mathematics: Analysis and Approaches’ or ‘Mathematics: Applications and Interpretation’ at higher level. Higher level Design and Technology, Engineering, Economics, Geography, Chemistry and Biology preferred as third subject (in that order). … Points 38
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng. HL Mathematics differs: AA or AI accepted; data/courseRequirements.js holds ibHL Mathematics_Advanced (AA only) and preferred Mathematics_Advanced, which the page does not name. Owner decision. The contextual offer is display-only.
+- `uk-engineering-ucl` · Other requirements: unverified → verified: TARA required in the 2027 cycle (see Admissions tests); Offer holders can visit the department (and MechSpace) or join a virtual offer-holder day; ATAS clearance may be required for applicants needing a time-limited UK visa (confirmed with an offer).
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng (checked 2026-10-19).
+  > If you are offered a place on the course, you will have the chance to visit our department, UCL’s Bloomsbury Campus, and MechSpace, or to participate in a virtual offer-holder day before accepting your offer. … If you are intending to apply for a time-limited visa to complete your UCL studies (for example, Student visa, Skilled worker visa, PBS dependant visa) you may be required to obtain … This will be confirmed to you if you obtain an offer of a place.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng.
+- `uk-economics-ucl` · SAT / ACT: unverified → verified: For applicants with a US high-school diploma (UCL’s A*AA band, this course’s offer): 5,5 in two APs plus SAT 1470 or ACT 33, taken in the final three years of high school, with the High School Graduation Diploma; Alternatively 5,5,5,5,4 in five APs (taken in the final three years of high school), with no SAT/ACT.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ, https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US (checked 2026-10-19).
+  > Grades A*AA Subjects A* in Mathematics required.
+  > 5,5 in two distinctive AP subjects, plus a combined score of 1470 in the SAT or a composite score of 33 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … 5,5,5,5,4 in five distinctive AP subjects, taken in the final three years of high school.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ and https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US.
+- `uk-economics-ucl` · Other qualifications: partial: Advanced Placement: accepted — see note → verified: Advanced Placement: accepted — see note; Advanced Placement (UCL’s A*AA band): 5,5,5,5,4 in five APs, or 5,5 in two APs plus SAT 1470 or ACT 33 with the High School Graduation Diploma; Subject requirements carry over: an A* or A subject needs a 5 in the relevant full-year AP (a B needs a 4); where Mathematics or Physics is required, specific AP subjects are asked for; AP scores must be verified and sent to UCL by the College Board.
+  Source: https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US (checked 2026-10-19).
+  > 5,5,5,5,4 in five distinctive AP subjects, taken in the final three years of high school. … 5,5 in two distinctive AP subjects, plus a combined score of 1470 in the SAT or a composite score of 33 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … Where A* is required at A Level, 5 will be required in the relevant full-year AP subject; for A, 5 will be required; and for B, 4 will be required. Where Mathematics or Physics is required, applicants will be asked to present specific AP subjects. … AP exam scores must be verified by the College Board and sent to UCL through the College Board directly.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US.
+- `uk-economics-ucl` · English language: unverified → verified: UCL English language Level 2; IELTS Academic: 7.0 overall with at least 6.5 in each component; TOEFL iBT (tests from 21 January 2026): 5.0 overall and 4.5 in each skill; earlier tests: 96 overall with 24/30 in reading and writing and 22/30 in speaking and listening; PTE Academic: 76 overall with at least 70 in each communicative skill; Not needed by nationals of UCL’s listed majority English-speaking countries (including the USA); for September 2027 entry a test must be taken on or after 1 September 2025.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ, https://www.ucl.ac.uk/study/prospective-students/undergraduate/how-apply/english-language-requirements (checked 2026-10-19).
+  > The English language level for this programme is: **Level 2**
+  > You do not need to prove your level of English language proficiency if you are a national of one of the following countries: … * USA … For entry in September 2027, this means a test must have been sat on or after 1 September 2025. … **Level 2:** Overall score of 7.0 and a minimum of 6.5 in each component … **Level 2:** Overall score of 5.0 and 4.5 in reading, writing, speaking and listening … **Level 2**: Overall score of 96 with 24/30 in reading and writing and 22/30 in speaking and listening … **Level 2**: Overall score of 76 with a minimum of 70 in each Communicative Skill
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ and https://www.ucl.ac.uk/study/prospective-students/undergraduate/how-apply/english-language-requirements.
+- `uk-economics-ucl` · Admissions tests: partial: TMUA — required → verified: TMUA (Test of Mathematics for University Admission) — required for all applicants in the 2027 cycle.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ (checked 2026-10-19).
+  > For the 2027 cycle, alongside the UCAS application, UCL will require all applicants to the above programme to sit the TMUA (Test of Mathematics for University Admission) run by University Admissions Tests UK.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ.
+- `uk-economics-ucl` · Subject prerequisites: partial: Required: Mathematics; Preferred: Advanced mathematics, Economics → partial: Required: Mathematics at A*; Preferred (as recorded): Further Mathematics, Economics.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ (checked 2026-10-19).
+  > Subjects A* in Mathematics required.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ. Preferred subjects not confirmed: the official page names none; data/courseRequirements.js holds preferred Mathematics_Advanced and Economics. Owner decision.
+- `uk-economics-ucl` · A-Level requirements: partial: A*AA → partial: A*AA.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ (checked 2026-10-19).
+  > Grades A*AA Subjects A* in Mathematics required. … Grades A*AB … This course does not accept resits.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ. Preferred subjects not confirmed (engine preferred Mathematics_Advanced, Economics). Owner decision. The contextual offer is display-only; the matcher does not apply it.
+- `uk-economics-ucl` · IB requirements: partial: 38 points; 766 at HL → partial: 38 points; 766 at HL.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ (checked 2026-10-19).
+  > Points 39 Subjects A total of 19 points in three higher level subjects including grade 7 in Mathematics with no higher level score below 5. The course will accept either ‘Mathematics: Analysis and Approaches’ or ‘Mathematics: Applications and Interpretation’ at higher level. … Points 38 Subjects A Score 18 in three higher level subjects including 7 in Mathematics, with no higher level score below 5.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ. IB score differs: official 39 (38 is the contextual offer); data/courseRequirements.js holds 38. Preferred subjects not named (engine preferred Mathematics_Advanced, Economics). Owner decision. The contextual offer is display-only.
+- `uk-economics-ucl` · Other requirements: unverified → verified: TMUA required (see Admissions tests); Applications are assessed on academic performance, TMUA score and the personal statement; Resits are not accepted.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ (checked 2026-10-19).
+  > Applications are assessed on strong academic performance, TMUA score, and a personal statement that demonstrates the capacity to learn independently and to thrive within a research-oriented course. … This course does not accept resits.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ.
+- `uk-law-ucl` · SAT / ACT: unverified → verified: For applicants with a US high-school diploma (UCL’s A*AA band, this course’s offer): 5,5 in two APs plus SAT 1470 or ACT 33, taken in the final three years of high school, with the High School Graduation Diploma; Alternatively 5,5,5,5,4 in five APs (taken in the final three years of high school), with no SAT/ACT.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/law-llb, https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US (checked 2026-10-19).
+  > Grades A*AA GCSEs English Language and Mathematics at grade B or 6
+  > 5,5 in two distinctive AP subjects, plus a combined score of 1470 in the SAT or a composite score of 33 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … 5,5,5,5,4 in five distinctive AP subjects, taken in the final three years of high school.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/law-llb and https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US.
+- `uk-law-ucl` · Other qualifications: partial: Advanced Placement: accepted — see note → verified: Advanced Placement: accepted — see note; Advanced Placement (UCL’s A*AA band): 5,5,5,5,4 in five APs, or 5,5 in two APs plus SAT 1470 or ACT 33 with the High School Graduation Diploma; Subject requirements carry over: an A* or A subject needs a 5 in the relevant full-year AP (a B needs a 4); where Mathematics or Physics is required, specific AP subjects are asked for; AP scores must be verified and sent to UCL by the College Board.
+  Source: https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US (checked 2026-10-19).
+  > 5,5,5,5,4 in five distinctive AP subjects, taken in the final three years of high school. … 5,5 in two distinctive AP subjects, plus a combined score of 1470 in the SAT or a composite score of 33 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … Where A* is required at A Level, 5 will be required in the relevant full-year AP subject; for A, 5 will be required; and for B, 4 will be required. Where Mathematics or Physics is required, applicants will be asked to present specific AP subjects. … AP exam scores must be verified by the College Board and sent to UCL through the College Board directly.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US.
+- `uk-law-ucl` · English language: unverified → verified: UCL English language Level 4; IELTS Academic: 7.5 overall with at least 7.0 in each component; TOEFL iBT (tests from 21 January 2026): 5.5 overall and 5.0 in each skill; earlier tests: 109 overall with 27/30 in reading and writing and 23/30 in speaking and listening; PTE Academic: 80 overall with at least 76 in each communicative skill; Not needed by nationals of UCL’s listed majority English-speaking countries (including the USA); for September 2027 entry a test must be taken on or after 1 September 2025.
+  Source: https://www.ucl.ac.uk/laws/study/bachelor-laws-llb/applying-and-entry-requirements, https://www.ucl.ac.uk/study/prospective-students/undergraduate/how-apply/english-language-requirements (checked 2026-10-19).
+  > UCL Laws requires applicants to demonstrate a[Level 4](https://www.ucl.ac.uk/prospective-students/undergraduate/how-apply/english-language-requirements)in English in addition to all other requirements detailed by UCL.
+  > You do not need to prove your level of English language proficiency if you are a national of one of the following countries: … * USA … For entry in September 2027, this means a test must have been sat on or after 1 September 2025. … **Level 4:** Overall score of 7.5 and a minimum of 7.0 in each component … **Level 4:** Overall score of 5.5 and 5.0 in reading, writing, speaking and listening … **Level 4**: Overall score of 109 with 27/30 in reading and writing and 23/30 in speaking and listening … **Level 4**: Overall score of 80 with a minimum of 76 in each Communicative Skill
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/laws/study/bachelor-laws-llb/applying-and-entry-requirements and https://www.ucl.ac.uk/study/prospective-students/undergraduate/how-apply/english-language-requirements.
+- `uk-law-ucl` · Admissions tests: verified: LNAT — required → verified: LNAT (National Admissions Test for Law) — required; must be taken no later than 31 December 2026.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/law-llb, https://www.ucl.ac.uk/laws/study/bachelor-laws-llb/applying-and-entry-requirements (checked 2026-10-19).
+  > All students applying for Law programmes must take the Law National Aptitude Test (LNAT) before their application will be considered.
+  > All applicants to undergraduate degree programmes at UCL Laws must take the LNAT alongside the UCAS application. You must take the test**no later than**31 December 2026.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/law-llb and https://www.ucl.ac.uk/laws/study/bachelor-laws-llb/applying-and-entry-requirements.
+- `uk-law-ucl` · Subject prerequisites: verified: Preferred: History, English → partial: No required subjects; Preferred (as recorded): History, English Literature.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/law-llb (checked 2026-10-19).
+  > Grades A*AA GCSEs English Language and Mathematics at grade B or 6
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/law-llb. Preferred subjects not confirmed: the official page names none; data/courseRequirements.js holds preferred History and English. Owner decision.
+- `uk-law-ucl` · A-Level requirements: verified: A*AA → partial: A*AA.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/law-llb, https://www.ucl.ac.uk/laws/study/bachelor-laws-llb/applying-and-entry-requirements (checked 2026-10-19).
+  > Grades A*AA GCSEs English Language and Mathematics at grade B or 6 … Grades AAB … This course does not accept resits.
+  > A-levels (or equivalent) must be completed in the same sitting. A*AA awarded over two different years, for example, AA in one year and an additional A* the following year, will not satisfy our entry requirements.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/law-llb and https://www.ucl.ac.uk/laws/study/bachelor-laws-llb/applying-and-entry-requirements. Preferred subjects not confirmed (engine preferred History, English). Owner decision. The contextual offer is display-only; the matcher does not apply it.
+- `uk-law-ucl` · IB requirements: verified: 39 points; 766 at HL → unverified.
+  Owner flag: Re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/law-llb (IB Diploma tab; the reader’s text copy omits it; www.ucl.ac.uk returns HTTP 403 to automated requests). The page’s HTML, seen through the reader, appears to give 39 points with “A total of 19 points in three higher level subjects, with no higher level score below 5” (contextual 36 / 17) and no subjects — confirm and record with a verbatim snippet. data/courseRequirements.js holds 39, "766 at HL" and preferred History/English.
+- `uk-law-ucl` · Other requirements: unverified → verified: Assessed on the UCAS application and the LNAT (multiple-choice score and essay); knowledge of law is not required; UCL Laws UCAS deadline: 13 January 2027, 18:00 UK time; LNAT by 31 December 2026; A-levels must be completed in the same sitting; resits not accepted unless the first attempt was affected by extenuating circumstances; GCSE English Language and Mathematics at grade B/6.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/law-llb, https://www.ucl.ac.uk/laws/study/bachelor-laws-llb/applying-and-entry-requirements (checked 2026-10-19).
+  > Candidates will be assessed through their UCAS applications and the National Admissions Test for Law LNAT. … Although your proven academic achievements are important, a knowledge of law is not required. … GCSEs English Language and Mathematics at grade B or 6
+  > To apply to UCL Laws you must submit your UCAS application by **13 January 2027 at 18:00 UK time** … A-levels (or equivalent) must be completed in the same sitting. … We are unable to accept A-level (or equivalent) resits (including re-starting year 12) unless your first attempt was impacted by extenuating circumstances. … If you have applied to one of our LLB Law with a European Legal System degree courses, and we are considering making an offer to you, we will invite you to attend an interview
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/law-llb and https://www.ucl.ac.uk/laws/study/bachelor-laws-llb/applying-and-entry-requirements.
+- `uk-architecture-ucl` · SAT / ACT: unverified → verified: For applicants with a US high-school diploma (UCL’s AAB band, this course’s offer): 5,4 in two APs plus SAT 1440 or ACT 32, taken in the final three years of high school, with the High School Graduation Diploma; Alternatively 5,5,5 in three APs (taken in the final three years of high school), with no SAT/ACT.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/architecture-bsc, https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/aab/US (checked 2026-10-19).
+  > Grades AAB Subjects Comprehensive portfolio of creative work required upon invitation, at application stage.
+  > 5,4 in two distinctive AP subjects, plus a combined score of 1440 in the SAT or a composite score of 32 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … 5,5,5 in three distinctive AP subjects, taken in the final three years of high school.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/architecture-bsc and https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/aab/US.
+- `uk-architecture-ucl` · Other qualifications: partial: Advanced Placement: accepted — see note → verified: Advanced Placement: accepted — see note; Advanced Placement (UCL’s AAB band): 5,5,5 in three APs, or 5,4 in two APs plus SAT 1440 or ACT 32 with the High School Graduation Diploma; Subject requirements carry over: an A* or A subject needs a 5 in the relevant full-year AP (a B needs a 4); where Mathematics or Physics is required, specific AP subjects are asked for; AP scores must be verified and sent to UCL by the College Board.
+  Source: https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/aab/US (checked 2026-10-19).
+  > 5,5,5 in three distinctive AP subjects, taken in the final three years of high school. … 5,4 in two distinctive AP subjects, plus a combined score of 1440 in the SAT or a composite score of 32 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … Where A* is required at A Level, 5 will be required in the relevant full-year AP subject; for A, 5 will be required; and for B, 4 will be required. Where Mathematics or Physics is required, applicants will be asked to present specific AP subjects. … AP exam scores must be verified by the College Board and sent to UCL through the College Board directly.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/aab/US.
+- `uk-architecture-ucl` · English language: unverified → unverified.
+  Owner flag: Re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/architecture-bsc (English language requirements section; the reader’s text copy omits it). The page’s HTML, seen through the reader, appears to give “Level 1” — confirm, then record the Level 1 IELTS/TOEFL/PTE scores from https://www.ucl.ac.uk/study/prospective-students/undergraduate/how-apply/english-language-requirements with verbatim snippets.
+- `uk-architecture-ucl` · Admissions tests: partial: None listed → verified: None listed.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/architecture-bsc (checked 2026-10-19).
+  > Grades AAB Subjects Comprehensive portfolio of creative work required upon invitation, at application stage. GCSEs English Language and Mathematics at grade C or 4
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/architecture-bsc.
+- `uk-architecture-ucl` · Subject prerequisites: partial: Preferred: Mathematics, Art & Design → partial: No required subjects (portfolio of creative work required on invitation); Preferred (as recorded): Mathematics, Art and Design.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/architecture-bsc (checked 2026-10-19).
+  > Grades AAB Subjects Comprehensive portfolio of creative work required upon invitation, at application stage. GCSEs English Language and Mathematics at grade C or 4
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/architecture-bsc. Preferred subjects not confirmed: the official page names none; data/courseRequirements.js holds preferred Mathematics_Standard and Art_Design. Owner decision.
+- `uk-architecture-ucl` · A-Level requirements: partial: AAB → partial: AAB.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/architecture-bsc (checked 2026-10-19).
+  > Grades AAB Subjects Comprehensive portfolio of creative work required upon invitation, at application stage. … Grades BBC
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/architecture-bsc. Preferred subjects not confirmed (engine preferred Mathematics_Standard, Art_Design). Owner decision. The contextual offer is display-only; the matcher does not apply it.
+- `uk-architecture-ucl` · IB requirements: partial: 36 points; 17 points across three HL subjects; no specific subject required → partial: 36 points; 17 points across three HL subjects; no specific subject required.
+  Source: https://www.ucl.ac.uk/prospective-students/undergraduate/degrees/architecture-bsc-2026 (checked 2026-06-28).
+  Owner flag: Re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/architecture-bsc (IB Diploma tab; the reader’s text copy omits it). The page’s HTML, seen through the reader, appears to give 36 points with “A total of 17 points in three higher level subjects, with no higher level score below 5. No specific subjects are required” (contextual 30 / 15) — confirm and record with a verbatim snippet. The engine’s preferred Mathematics/Art and Design are not named on the 2027 page. Owner decision.
+- `uk-architecture-ucl` · Other requirements: unverified → verified: Comprehensive portfolio of creative work: UCL requests a digital portfolio once you meet (or are likely to meet) the entry requirements — do not send it unless asked; You may then be invited to an online interview (Zoom).
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/architecture-bsc (checked 2026-10-19).
+  > Once we have established that you meet or are likely to meet our entry requirements, we will contact you to request a digital portfolio of your design or creative work, giving you instructions on how to prepare this. Please do not send this unless requested to do so. This need not be included in your initial application. You may then be invited to interview. If so, this will be conducted online using Zoom.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/architecture-bsc.
+- `uk-biomedical-ucl` · SAT / ACT: unverified → verified: For applicants with a US high-school diploma (UCL’s AAA band, this course’s offer): 5,5 in two APs plus SAT 1440 or ACT 32, taken in the final three years of high school, with the High School Graduation Diploma; Alternatively 5,5,5,5 in four APs (taken in the final three years of high school), with no SAT/ACT.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc, https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/aaa/US (checked 2026-10-19).
+  > Grades AAA Subjects Biology and Chemistry required, plus Mathematics preferred.
+  > 5,5 in two distinctive AP subjects, plus a combined score of 1440 in the SAT or a composite score of 32 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … 5,5,5,5 in four distinctive AP subjects, taken in the final three years of high school.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc and https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/aaa/US. Shown at UCL’s AAA band (the official 2027 offer); data/courseRequirements.js holds AAB (A-Level row is partial with an owner-decision flag).
+- `uk-biomedical-ucl` · Other qualifications: partial: Advanced Placement: accepted — see note → verified: Advanced Placement: accepted — see note; Advanced Placement (UCL’s AAA band): 5,5,5,5 in four APs, or 5,5 in two APs plus SAT 1440 or ACT 32 with the High School Graduation Diploma; Subject requirements carry over: an A* or A subject needs a 5 in the relevant full-year AP (a B needs a 4); where Mathematics or Physics is required, specific AP subjects are asked for; AP scores must be verified and sent to UCL by the College Board.
+  Source: https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/aaa/US (checked 2026-10-19).
+  > 5,5,5,5 in four distinctive AP subjects, taken in the final three years of high school. … 5,5 in two distinctive AP subjects, plus a combined score of 1440 in the SAT or a composite score of 32 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … Where A* is required at A Level, 5 will be required in the relevant full-year AP subject; for A, 5 will be required; and for B, 4 will be required. Where Mathematics or Physics is required, applicants will be asked to present specific AP subjects. … AP exam scores must be verified by the College Board and sent to UCL through the College Board directly.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/aaa/US. Shown at UCL’s AAA band (the official 2027 offer); data/courseRequirements.js holds AAB (A-Level row is partial with an owner-decision flag).
+- `uk-biomedical-ucl` · English language: unverified → verified: UCL English language Level 4; IELTS Academic: 7.5 overall with at least 7.0 in each component; TOEFL iBT (tests from 21 January 2026): 5.5 overall and 5.0 in each skill; earlier tests: 109 overall with 27/30 in reading and writing and 23/30 in speaking and listening; PTE Academic: 80 overall with at least 76 in each communicative skill; Not needed by nationals of UCL’s listed majority English-speaking countries (including the USA); for September 2027 entry a test must be taken on or after 1 September 2025.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc, https://www.ucl.ac.uk/study/prospective-students/undergraduate/how-apply/english-language-requirements (checked 2026-10-19).
+  > The English language level for this programme is: **Level 4**
+  > You do not need to prove your level of English language proficiency if you are a national of one of the following countries: … * USA … For entry in September 2027, this means a test must have been sat on or after 1 September 2025. … **Level 4:** Overall score of 7.5 and a minimum of 7.0 in each component … **Level 4:** Overall score of 5.5 and 5.0 in reading, writing, speaking and listening … **Level 4**: Overall score of 109 with 27/30 in reading and writing and 23/30 in speaking and listening … **Level 4**: Overall score of 80 with a minimum of 76 in each Communicative Skill
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc and https://www.ucl.ac.uk/study/prospective-students/undergraduate/how-apply/english-language-requirements.
+- `uk-biomedical-ucl` · Admissions tests: partial: None listed → verified: None listed.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc (checked 2026-10-19).
+  > Grades AAA Subjects Biology and Chemistry required, plus Mathematics preferred. … GCSEs English Language and Mathematics at grade B or 6
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc.
+- `uk-biomedical-ucl` · Subject prerequisites: partial: Required: Biology, Chemistry; Preferred: Mathematics → verified: Required: Biology, Chemistry; Preferred: Mathematics.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc (checked 2026-10-19).
+  > Subjects Biology and Chemistry required, plus Mathematics preferred.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc.
+- `uk-biomedical-ucl` · A-Level requirements: partial: AAB → partial: AAB.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc (checked 2026-10-19).
+  > Grades AAA Subjects Biology and Chemistry required, plus Mathematics preferred. … Grades AAB Subjects AA in Biology and Chemistry required, plus Mathematics preferred.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc. Offer differs: official AAA; data/courseRequirements.js holds AAB (the official contextual offer). Owner decision. The contextual offer is display-only; the matcher does not apply it.
+- `uk-biomedical-ucl` · IB requirements: partial: 36 points; 666 at HL → partial: 36 points; 666 at HL.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc (checked 2026-10-19).
+  > Points 38 Subjects A total of 18 points in three higher level subjects to include 6 in both Biology and Chemistry, plus Mathematics preferred, with no higher level score below 5. … Points 36 Subjects A total of 17 points in three higher level subjects including 6 in both Biology and Chemistry required, plus Mathematics preferred.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc. IB score differs: official 38 (36 is the contextual offer); data/courseRequirements.js holds 36 and "666 at HL". Owner decision. The contextual offer is display-only.
+- `uk-biomedical-ucl` · Other requirements: unverified → verified: Offer holders are invited to an offer-holder event (talks, tours, possibly a laboratory visit).
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc (checked 2026-10-19).
+  > If we have made you an offer, you will be invited to attend an offer-holder event. This may include talks from staff about the course and the department. It could also include a research presentation, tours of UCL and the department, and a visit to a laboratory facility.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc.
+- `uk-psychology-ucl` · SAT / ACT: unverified → verified: For applicants with a US high-school diploma (UCL’s A*AA band, this course’s offer): 5,5 in two APs plus SAT 1470 or ACT 33, taken in the final three years of high school, with the High School Graduation Diploma; Alternatively 5,5,5,5,4 in five APs (taken in the final three years of high school), with no SAT/ACT.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/psychology-bsc, https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US (checked 2026-10-19).
+  > Grades A*AA Subjects A*A from two of the following subjects: Biology, Chemistry, Mathematics, Physics and Psychology
+  > 5,5 in two distinctive AP subjects, plus a combined score of 1470 in the SAT or a composite score of 33 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … 5,5,5,5,4 in five distinctive AP subjects, taken in the final three years of high school.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/psychology-bsc and https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US.
+- `uk-psychology-ucl` · Other qualifications: partial: Advanced Placement: accepted — see note → verified: Advanced Placement: accepted — see note; Advanced Placement (UCL’s A*AA band): 5,5,5,5,4 in five APs, or 5,5 in two APs plus SAT 1470 or ACT 33 with the High School Graduation Diploma; Subject requirements carry over: an A* or A subject needs a 5 in the relevant full-year AP (a B needs a 4); where Mathematics or Physics is required, specific AP subjects are asked for; AP scores must be verified and sent to UCL by the College Board.
+  Source: https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US (checked 2026-10-19).
+  > 5,5,5,5,4 in five distinctive AP subjects, taken in the final three years of high school. … 5,5 in two distinctive AP subjects, plus a combined score of 1470 in the SAT or a composite score of 33 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … Where A* is required at A Level, 5 will be required in the relevant full-year AP subject; for A, 5 will be required; and for B, 4 will be required. Where Mathematics or Physics is required, applicants will be asked to present specific AP subjects. … AP exam scores must be verified by the College Board and sent to UCL through the College Board directly.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_aa/US.
+- `uk-psychology-ucl` · English language: unverified → unverified.
+  Owner flag: Re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/psychology-bsc (English language requirements section; the reader’s text copy omits it). The page’s HTML, seen through the reader, appears to give “Level 3” — confirm, then record the Level 3 IELTS/TOEFL/PTE scores from https://www.ucl.ac.uk/study/prospective-students/undergraduate/how-apply/english-language-requirements with verbatim snippets.
+- `uk-psychology-ucl` · Admissions tests: partial: None listed → verified: None listed.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/psychology-bsc (checked 2026-10-19).
+  > Grades A*AA Subjects A*A from two of the following subjects: Biology, Chemistry, Mathematics, Physics and Psychology GCSEs English Language, Mathematics and Two Sciences (Double Award acceptable) at grade B or 6
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/psychology-bsc.
+- `uk-psychology-ucl` · Subject prerequisites: partial: Preferred: Psychology, Mathematics → partial: Required: A*A in two of Biology, Chemistry, Mathematics, Physics and Psychology; Preferred (as recorded): Psychology, Mathematics.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/psychology-bsc (checked 2026-10-19).
+  > Subjects A*A from two of the following subjects: Biology, Chemistry, Mathematics, Physics and Psychology
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/psychology-bsc. Subject rule not expressible: A*A from two of Biology, Chemistry, Mathematics, Physics, Psychology; data/courseRequirements.js holds preferred Psychology and Mathematics_Standard. Owner decision.
+- `uk-psychology-ucl` · A-Level requirements: partial: A*AA → partial: A*AA.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/psychology-bsc (checked 2026-10-19).
+  > Grades A*AA Subjects A*A from two of the following subjects: Biology, Chemistry, Mathematics, Physics and Psychology … Grades A*AC
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/psychology-bsc. Subject rule not expressible (two from a list); engine preferred Psychology, Mathematics_Standard. Owner decision. The contextual offer is display-only; the matcher does not apply it.
+- `uk-psychology-ucl` · IB requirements: partial: 39 points; 766 at HL → partial: 39 points; 766 at HL.
+  Source: https://www.ucl.ac.uk/prospective-students/undergraduate/degrees/psychology-bsc-2026 (checked 2026-06-28).
+  Owner flag: Re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/psychology-bsc (IB Diploma tab; the reader’s text copy omits it). The page’s HTML, seen through the reader, appears to give 39 points with “A total of 19 points in three higher level subjects to include grade 7 and 6 in two subjects from Biology, Chemistry, Mathematics, Physics or Psychology, with no higher level score below 5” (contextual 36 / 17) — confirm and record with a verbatim snippet.
+- `uk-psychology-ucl` · Other requirements: unverified → verified: GCSE English Language, Mathematics and two sciences (Double Award acceptable) at grade B/6; Offer holders are invited to an offer-holder open day (online or in person).
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/psychology-bsc (checked 2026-10-19).
+  > GCSEs English Language, Mathematics and Two Sciences (Double Award acceptable) at grade B or 6 … All applicants who are offered a place on the course will be invited to attend an offer holder open day.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/psychology-bsc.
+- `uk-pharmacy-ucl` · SAT / ACT: unverified → verified: For applicants with a US high-school diploma (UCL’s AAB band, this course’s offer): 5,4 in two APs plus SAT 1440 or ACT 32, taken in the final three years of high school, with the High School Graduation Diploma; Alternatively 5,5,5 in three APs (taken in the final three years of high school), with no SAT/ACT.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/pharmacy-mpharm, https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/aab/US (checked 2026-10-19).
+  > Grades AAB Subjects Chemistry and either Biology, Mathematics or Physics required.
+  > 5,4 in two distinctive AP subjects, plus a combined score of 1440 in the SAT or a composite score of 32 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … 5,5,5 in three distinctive AP subjects, taken in the final three years of high school.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/pharmacy-mpharm and https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/aab/US.
+- `uk-pharmacy-ucl` · Other qualifications: partial: Advanced Placement: accepted — see note → verified: Advanced Placement: accepted — see note; Advanced Placement (UCL’s AAB band): 5,5,5 in three APs, or 5,4 in two APs plus SAT 1440 or ACT 32 with the High School Graduation Diploma; Subject requirements carry over: an A* or A subject needs a 5 in the relevant full-year AP (a B needs a 4); where Mathematics or Physics is required, specific AP subjects are asked for; AP scores must be verified and sent to UCL by the College Board.
+  Source: https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/aab/US (checked 2026-10-19).
+  > 5,5,5 in three distinctive AP subjects, taken in the final three years of high school. … 5,4 in two distinctive AP subjects, plus a combined score of 1440 in the SAT or a composite score of 32 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … Where A* is required at A Level, 5 will be required in the relevant full-year AP subject; for A, 5 will be required; and for B, 4 will be required. Where Mathematics or Physics is required, applicants will be asked to present specific AP subjects. … AP exam scores must be verified by the College Board and sent to UCL through the College Board directly.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/aab/US.
+- `uk-pharmacy-ucl` · English language: unverified → unverified.
+  Owner flag: Re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/pharmacy-mpharm (English language requirements section; the reader’s text copy omits it). The page’s HTML, seen through the reader, appears to give “Level 3” — confirm, then record the Level 3 IELTS/TOEFL/PTE scores from https://www.ucl.ac.uk/study/prospective-students/undergraduate/how-apply/english-language-requirements with verbatim snippets.
+- `uk-pharmacy-ucl` · Admissions tests: partial: None listed → verified: UCL School of Pharmacy values-based test for all applicants (numeracy, communication and scenario questions), followed by interview for successful applicants; usually December–April.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/pharmacy-mpharm, https://www.ucl.ac.uk/pharmacy/study/master-pharmacy-mpharm/applications-mpharm-pharmacy (checked 2026-10-19).
+  > Interviews and tests are usually held from December to April.
+  > All applicants will be required to take a test designed to evaluate your ability to meet our values. Successful applicants will then be invited to an interview. Questions in both the test and the interview will be based around our values and will look at numeracy and communication skills
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/pharmacy-mpharm and https://www.ucl.ac.uk/pharmacy/study/master-pharmacy-mpharm/applications-mpharm-pharmacy.
+- `uk-pharmacy-ucl` · Subject prerequisites: partial: Required: Chemistry; Preferred: Biology, Mathematics → partial: Required: Chemistry, plus one of Biology, Mathematics or Physics; Preferred (as recorded): Biology, Mathematics.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/pharmacy-mpharm (checked 2026-10-19).
+  > Subjects Chemistry and either Biology, Mathematics or Physics required.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/pharmacy-mpharm. Subject rule not expressible: Chemistry and either Biology, Mathematics or Physics; data/courseRequirements.js holds Chemistry essential, Biology and Mathematics_Standard preferred. Owner decision.
+- `uk-pharmacy-ucl` · A-Level requirements: partial: AAB → partial: AAB.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/pharmacy-mpharm (checked 2026-10-19).
+  > Grades AAB Subjects Chemistry and either Biology, Mathematics or Physics required. … Grades BBB
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/pharmacy-mpharm. Subject rule not expressible (one of Biology, Mathematics or Physics); engine preferred Biology, Mathematics_Standard. Owner decision. The contextual offer is display-only; the matcher does not apply it.
+- `uk-pharmacy-ucl` · IB requirements: partial: 36 points; 665 at HL → partial: 36 points; 665 at HL.
+  Source: https://www.ucl.ac.uk/prospective-students/undergraduate/degrees/pharmacy-mpharm-2026 (checked 2026-06-28).
+  Owner flag: Re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/pharmacy-mpharm (IB Diploma tab; the reader’s text copy omits it). The page’s HTML, seen through the reader, appears to give 36 points with “A total of 17 points in three higher level subjects including Chemistry and one subject from Biology, Mathematics or Physics, with no higher level score below 5” (contextual 32 / 15) — confirm and record with a verbatim snippet. data/courseRequirements.js holds ibHL Chemistry + Biology and "665 at HL".
+- `uk-pharmacy-ucl` · Other requirements: unverified → verified: Values-based test and interview, usually December–April; Occupational Health and enhanced DBS checks before starting; GPhC fitness-to-practise requirements apply; GCSE English Language and Mathematics at grade B/6.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/pharmacy-mpharm, https://www.ucl.ac.uk/pharmacy/study/master-pharmacy-mpharm/applications-mpharm-pharmacy (checked 2026-10-19).
+  > GCSEs English Language at grade B or 6 and Mathematics at grade B or 6 … Interviews and tests are usually held from December to April. … Successful applicants are required to pass Occupational Health and Disclosure and Barring Service (DBS) enhanced checks before starting the course.
+  > UCL has a responsibility to ensure that all of our students meet the fitness to practise requirements of the General Pharmaceutical Council (GPhC) and so all students will be required to undertake a health screening and an enhanced DBS (Disclosure and Barring) check before they start their studies at UCL.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/pharmacy-mpharm and https://www.ucl.ac.uk/pharmacy/study/master-pharmacy-mpharm/applications-mpharm-pharmacy.
+- `uk-maths-ucl` · SAT / ACT: unverified → verified: For applicants with a US high-school diploma (UCL’s A*A*A band, this course’s offer): 5,5 in two APs plus SAT 1500 or ACT 34, taken in the final three years of high school, with the High School Graduation Diploma; Alternatively 5,5,5,5,5 in five APs (taken in the final three years of high school), with no SAT/ACT.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mathematics-bsc, https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_a_star_a/US (checked 2026-10-19).
+  > Grades A*A*A Subjects A*A*A with A*A* in Mathematics and Further Mathematics
+  > 5,5 in two distinctive AP subjects, plus a combined score of 1500 in the SAT or a composite score of 34 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … 5,5,5,5,5 in five distinctive AP subjects, taken in the final three years of high school.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mathematics-bsc and https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_a_star_a/US.
+- `uk-maths-ucl` · Other qualifications: partial: Advanced Placement: accepted — see note → verified: Advanced Placement: accepted — see note; Advanced Placement (UCL’s A*A*A band): 5,5,5,5,5 in five APs, or 5,5 in two APs plus SAT 1500 or ACT 34 with the High School Graduation Diploma; Subject requirements carry over: an A* or A subject needs a 5 in the relevant full-year AP (a B needs a 4); where Mathematics or Physics is required, specific AP subjects are asked for; AP scores must be verified and sent to UCL by the College Board.
+  Source: https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_a_star_a/US (checked 2026-10-19).
+  > 5,5,5,5,5 in five distinctive AP subjects, taken in the final three years of high school. … 5,5 in two distinctive AP subjects, plus a combined score of 1500 in the SAT or a composite score of 34 in ACT taken in the final three years of high school. The successful completion of the High School Graduation Diploma also required. … Where A* is required at A Level, 5 will be required in the relevant full-year AP subject; for A, 5 will be required; and for B, 4 will be required. Where Mathematics or Physics is required, applicants will be asked to present specific AP subjects. … AP exam scores must be verified by the College Board and sent to UCL through the College Board directly.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospectus/international-equivalency/undergraduate/2027/a_star_a_star_a/US.
+- `uk-maths-ucl` · English language: unverified → unverified.
+  Owner flag: Re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mathematics-bsc (English language requirements section; the reader’s text copy omits it). The page’s HTML, seen through the reader, appears to give “Level 1” — confirm, then record the Level 1 IELTS/TOEFL/PTE scores from https://www.ucl.ac.uk/study/prospective-students/undergraduate/how-apply/english-language-requirements with verbatim snippets.
+- `uk-maths-ucl` · Admissions tests: verified: STEP — required → partial: STEP — not required for the standard A*A*A offer; a grade 2 in any STEP paper (or a Distinction in the Mathematics AEA) is part of the alternative A*AA route.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mathematics-bsc (checked 2026-10-19).
+  > A*A*A with A*A* in Mathematics and Further Mathematics; or A*AA with A*A in Mathematics and Further Mathematics, in any order, together with a 2 in any STEP Paper or a Distinction in the Mathematics AEA. Biology, Chemistry, Computer Science, Economics, English Language, English Literature, Physics and Statistics preferred.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mathematics-bsc. Test differs: STEP is optional (alternative offer route); data/courseRequirements.js holds admissionTests ["STEP"]. Owner decision.
+- `uk-maths-ucl` · Subject prerequisites: verified: Required: Mathematics, Advanced mathematics → partial: Required: Mathematics and Further Mathematics (A*A*, or A*A with STEP 2 / AEA Distinction); Preferred third subject (official): Biology, Chemistry, Computer Science, Economics, English Language, English Literature, Physics or Statistics.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mathematics-bsc (checked 2026-10-19).
+  > A*A*A with A*A* in Mathematics and Further Mathematics; or A*AA with A*A in Mathematics and Further Mathematics, in any order, together with a 2 in any STEP Paper or a Distinction in the Mathematics AEA. Biology, Chemistry, Computer Science, Economics, English Language, English Literature, Physics and Statistics preferred.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mathematics-bsc. Preferred subjects differ: the official preferred list is not held (engine preferred []). Owner decision.
+- `uk-maths-ucl` · A-Level requirements: verified: A*A*A → partial: A*A*A.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mathematics-bsc (checked 2026-10-19).
+  > Grades A*A*A Subjects A*A*A with A*A* in Mathematics and Further Mathematics; or A*AA with A*A in Mathematics and Further Mathematics, in any order, together with a 2 in any STEP Paper or a Distinction in the Mathematics AEA. Biology, Chemistry, Computer Science, Economics, English Language, English Literature, Physics and Statistics preferred. … Grades A*A*C … This course does not accept resits typically.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mathematics-bsc. Preferred subjects not held by the engine (preferred []). Owner decision. The STEP/AEA route and the contextual offer are display-only; the matcher does not apply them.
+- `uk-maths-ucl` · IB requirements: verified: 40 points; 776 at HL → partial: 40 points; 776 at HL.
+  Source: https://www.ucl.ac.uk/maths/study/bscmsci-mathematics/admissions (checked 2026-10-19).
+  > **IB Diploma:**G107, G100, G1LC, G1L1, G1NF, G1N2, G1TX, G1T9, GGC3, GG13: 39-40 points with a score of 20 points in three higher level subjects to include grade 7 in Mathematics or 19 points in three higher level subjects including 7 in Mathematics and a 2 in any STEP paper or a distinction in Mathematics AEA
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/maths/study/bscmsci-mathematics/admissions. The department page is undated and gives a 39–40 range; confirm on the 2027 course page’s IB tab (https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mathematics-bsc), whose HTML, seen through the reader, appears to give 40 points with 20 at HL including 7 in Mathematics (HL Mathematics: Analysis and Approaches only).
+- `uk-maths-ucl` · Other requirements: unverified → verified: Resits are typically not accepted; one resit of Further Mathematics may be considered where grade A was first achieved early alongside GCSE or AS study; Deferred entry for the Year in Industry scheme is supported.
+  Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mathematics-bsc (checked 2026-10-19).
+  > This course does not accept resits typically. A resit is a second or subsequent attempt to improve a qualification outcome, for which you already hold an award. Applicants who are resitting Further Mathematics having already achieved grade A at an accelerated rate alongside GCSE or AS level study, may be considered if resitting once alongside their current A level study. … The department supports the Year in Industry scheme, which involves deferring entry for a year to gain valuable work experience.
+  Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mathematics-bsc.
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University College London
+
+- `uk-medicine-ucl` · engine `requirements.preferred`: [Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2027-entry
+  > The third subject is the student’s own choice and can be any subject other than General Studies or Critical Thinking.
+- `uk-medicine-ucl` · subjectPrerequisites: row partial → verified (owner flag kept).
+- `uk-medicine-ucl` · aLevel: row partial → verified (owner flag kept).
+- `uk-medicine-ucl` · ib: row partial → verified (owner flag kept).
+- `uk-cs-ucl` · engine `grades.aLevels`: A*AA → A*A*A (offer). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-bsc
+  > Grades A*A*A Subjects A* in either Mathematics or Further Mathematics required.
+- `uk-cs-ucl` · engine `grades.ib`: 39 → 40 (ib-score). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-meng
+  > Points 40 Subjects A total of 20 points in three higher level subjects including Grade 7 in Mathematics.
+- `uk-cs-ucl` · engine `grades.ibHL`: [Mathematics_Advanced] → [Mathematics_Standard] (ib-hl). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-meng
+  > The course will accept either ‘Mathematics: Analysis and Approaches’ or ‘Mathematics: Applications and Interpretation’ at higher level.
+- `uk-cs-ucl` · engine `grades.ibHLNote`: 776 at HL → 20 at HL incl 7 in HL Mathematics (AA preferred; AI accepted) (ib-note). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-meng
+  > Points 40 Subjects A total of 20 points in three higher level subjects including Grade 7 in Mathematics.
+- `uk-cs-ucl` · aLevel: row partial → partial (owner flag kept).
+- `uk-cs-ucl` · ib: row partial → verified (owner flag kept).
+- `uk-cs-ucl` · satAct: row verified → verified (owner flag kept).
+- `uk-cs-ucl` · otherQualifications: row verified → verified (owner flag kept).
+- `uk-engineering-ucl` · engine `admissionTests`: [] → [TARA] (test-add). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng
+  > For the 2027 cycle, alongside the UCAS application, UCL will require all applicants to the above programme to sit the TARA (The Test of Academic Reasoning for Admissions) run by University Admissions Tests UK.
+- `uk-engineering-ucl` · engine `grades.ibHL`: [Mathematics_Advanced, Physics] → [Mathematics_Standard, Physics] (ib-hl). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng
+  > The course will accept either ‘Mathematics: Analysis and Approaches’ or ‘Mathematics: Applications and Interpretation’ at higher level.
+- `uk-engineering-ucl` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng
+  > Design and Technology, Engineering, Economics, Geography, Chemistry and Biology preferred as a third subject (in that order), but not essential.
+- `uk-engineering-ucl` · admissionsTests: row partial → verified (owner flag kept).
+- `uk-engineering-ucl` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-engineering-ucl` · aLevel: row partial → partial (owner flag kept).
+- `uk-engineering-ucl` · ib: row partial → partial (owner flag kept).
+- `uk-economics-ucl` · engine `grades.ib`: 38 → 39 (ib-score). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ
+  > Points 39 Subjects A total of 19 points in three higher level subjects including grade 7 in Mathematics with no higher level score below 5.
+- `uk-economics-ucl` · engine `grades.ibHLNote`: 766 at HL → 19 at HL incl 7 in HL Mathematics (AA or AI); no HL below 5 (ib-note). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ
+  > Points 39 Subjects A total of 19 points in three higher level subjects including grade 7 in Mathematics with no higher level score below 5.
+- `uk-economics-ucl` · engine `requirements.preferred`: [Mathematics_Advanced, Economics] → [] (preferred-remove-unlisted). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ
+  > Subjects A* in Mathematics required.
+- `uk-economics-ucl` · subjectPrerequisites: row partial → verified (owner flag kept).
+- `uk-economics-ucl` · aLevel: row partial → verified (owner flag kept).
+- `uk-economics-ucl` · ib: row partial → verified (owner flag kept).
+- `uk-law-ucl` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-unlisted). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/law-llb
+  > Grades A*AA GCSEs English Language and Mathematics at grade B or 6
+- `uk-law-ucl` · subjectPrerequisites: row partial → verified (owner flag kept).
+- `uk-law-ucl` · aLevel: row partial → verified (owner flag kept).
+- `uk-biomedical-ucl` · engine `grades.aLevels`: AAB → AAA (offer). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc
+  > Grades AAA Subjects Biology and Chemistry required, plus Mathematics preferred.
+- `uk-biomedical-ucl` · engine `grades.ib`: 36 → 38 (ib-score). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc
+  > Points 38 Subjects A total of 18 points in three higher level subjects to include 6 in both Biology and Chemistry, plus Mathematics preferred, with no higher level score below 5.
+- `uk-biomedical-ucl` · engine `grades.ibHLNote`: 666 at HL → 18 at HL incl 6 in Biology and Chemistry; no HL below 5 (ib-note). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc
+  > Points 38 Subjects A total of 18 points in three higher level subjects to include 6 in both Biology and Chemistry, plus Mathematics preferred, with no higher level score below 5.
+- `uk-biomedical-ucl` · aLevel: row partial → verified (owner flag kept).
+- `uk-biomedical-ucl` · ib: row partial → verified (owner flag kept).
+- `uk-biomedical-ucl` · satAct: row verified → verified (owner flag kept).
+- `uk-biomedical-ucl` · otherQualifications: row verified → verified (owner flag kept).
+- `uk-maths-ucl` · engine `admissionTests`: [STEP] → [] (test-remove). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mathematics-bsc
+  > A*A*A with A*A* in Mathematics and Further Mathematics; or A*AA with A*A in Mathematics and Further Mathematics, in any order, together with a 2 in any STEP Paper or a Distinction in the Mathematics AEA.
+- `uk-maths-ucl` · admissionsTests: row partial → verified (owner flag kept).
+- `uk-maths-ucl` · subjectPrerequisites: row partial → verified (owner flag kept).
+- `uk-maths-ucl` · aLevel: row partial → verified (owner flag kept).
+- `uk-maths-ucl` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Owner decision: Imperial Biomedical Engineering offer
+
+- `uk-bioengineering-imperial` · engine `grades.aLevels`: AAA → A*AA (offer). Source: https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/
+  > A*AA To include: A* in Mathematics A in Physics A in a third subject
+- `uk-bioengineering-imperial` · aLevel: row partial → verified (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Owner decision: where A-Level and IB subject requirements differ, the engine follows A-Level (IB note added)
+
+- `uk-medicine-glasgow` · engine `requirements.essential`: [Chemistry, Biology] → [Chemistry] (essential-remove). Source: https://www.gla.ac.uk/undergraduate/degrees/medicine/
+  > UK A-level Standard Entry Requirements AAA Additional requirements: A-levels Chemistry and one of either Biology, Physics or Mathematics.
+- `uk-medicine-glasgow` · subjectPrerequisites: row partial → partial.
+- `uk-medicine-glasgow` · aLevel: row partial → partial (owner flag kept).
+- `uk-medicine-glasgow` · ib: row verified → verified (owner flag kept).
+- `uk-medicine-birmingham` · ib: row partial → partial (owner flag kept).
+- `uk-economics-leeds` · ib: row partial → partial (owner flag kept).
