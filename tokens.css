@@ -3,12 +3,13 @@
  * Import this before styles.css.
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap');
-
-/* Confident Editorial type (Bricolage Grotesque + Space Mono + Hanken Grotesk)
- * is loaded via <link> in the HTML <head> — a <link> is more reliable than an
- * @import buried in CSS. Clash Display was dropped: Fontshare is not reliably
- * reachable, whereas Google Fonts (Bricolage Grotesque) is. */
+/* TYPE SYSTEM — ONE family. Hanken Grotesk (a modern, highly legible
+ * grotesque) carries every role: headings, body, labels, buttons and data.
+ * Hierarchy comes from size, weight, case and tracking — not from mixing
+ * typefaces. It is loaded via <link> in each page's <head>; the stack falls
+ * back to the platform UI font if the web font cannot load.
+ * (Bricolage Grotesque is loaded separately, subset to the six letters of
+ * the logo wordmark only — it is part of the logo, not the type system.) */
 
 :root {
   /* ── Base palette ──────────────────────────────────── */
@@ -17,14 +18,15 @@
   --color-border:         #DFE1E8;
   --color-text-primary:   #16151A;
   --color-text-secondary: #52515A;
-  --color-text-tertiary:  #8C8B96;
+  --color-text-tertiary:  #6B6A72;   /* 4.8:1 on the canvas (was #8C8B96, 3.0:1 — failed WCAG AA) */
 
   /* ── Category accent colours ───────────────────────── */
-  --color-cat-medicine:        #E03E3E;
+  /* Darkened where needed so text in a category colour passes WCAG AA (4.5:1). */
+  --color-cat-medicine:        #C42B2B;
   --color-cat-medicine-bg:     #FBE4E4;
-  --color-cat-cs:              #0F7DDB;
+  --color-cat-cs:              #0B6BBF;
   --color-cat-cs-bg:           #E7F3FC;
-  --color-cat-engineering:     #D9730D;
+  --color-cat-engineering:     #A3530B;
   --color-cat-engineering-bg:  #FAEEE0;
   --color-cat-economics:       #0F7957;
   --color-cat-economics-bg:    #E5F3EE;
@@ -34,11 +36,11 @@
   --color-cat-business-bg:     #F5E0EE;
   --color-cat-sciences:        #2B6CB0;
   --color-cat-sciences-bg:     #E4EDF7;
-  --color-cat-mathematics:     #E03E3E;
+  --color-cat-mathematics:     #C42B2B;
   --color-cat-mathematics-bg:  #FBE4E4;
   --color-cat-psychology:      #0F7957;
   --color-cat-psychology-bg:   #E5F3EE;
-  --color-cat-architecture:    #D9730D;
+  --color-cat-architecture:    #A3530B;
   --color-cat-architecture-bg: #FAEEE0;
 
   /* ── Match state colours ────────────────────────────── */
@@ -52,10 +54,13 @@
   --color-match-grade-bg:    #EEEEF2;
 
   /* ── Typography ─────────────────────────────────────── */
-  --font-display: 'Lora', Georgia, serif;
-  --font-sans:    'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+  --font-family-base: 'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  /* Every legacy role token resolves to the one family. */
+  --font-display: var(--font-family-base);
+  --font-sans:    var(--font-family-base);
+  --font-mono:    var(--font-family-base);
 
+  /* Type scale — 12px is the floor for any text. */
   --text-xs:         0.75rem;
   --text-sm:         0.875rem;
   --text-base:       1rem;
@@ -64,6 +69,16 @@
   --text-2xl:        1.875rem;
   --text-display:    3.5rem;
   --text-display-xl: 5.5rem;
+
+  --leading-tight: 1.2;   /* headings */
+  --leading-snug:  1.4;   /* labels, compact UI */
+  --leading-body:  1.6;   /* paragraphs */
+
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+  --weight-black:    800;
 
   /* ── Spacing ─────────────────────────────────────────── */
   --space-1:  4px;
@@ -98,18 +113,21 @@
    * tokens to propagate the language to other screens later.
    * ═══════════════════════════════════════════════════════════ */
 
-  /* Type roles */
-  --ce-font-display: 'Bricolage Grotesque', 'Hanken Grotesk', system-ui, sans-serif; /* headings, course names */
-  --ce-font-mono:    'Space Mono', ui-monospace, monospace;                          /* labels, metadata, badges, buttons */
-  --ce-font-body:    'Hanken Grotesk', system-ui, sans-serif;                        /* descriptions, paragraphs */
+  /* Type roles — all one family. The role names are kept so existing
+   * rules keep working; "mono" now means the LABEL role (small caps-style
+   * uppercase metadata), set in the same sans with tracking, not a
+   * monospaced/typewriter face. */
+  --ce-font-display: var(--font-family-base);  /* headings, course names */
+  --ce-font-mono:    var(--font-family-base);  /* labels, metadata, badges, buttons */
+  --ce-font-body:    var(--font-family-base);  /* descriptions, paragraphs */
 
   /* Palette */
   --ce-bg:        #F5F4EF;             /* warm off-white canvas */
   --ce-surface:   #FBFAF6;             /* card fill, a touch lighter than bg */
   --ce-ink:       #1F1A17;             /* warm near-black */
   --ce-accent:    #F2D64B;             /* butter yellow — primary action / highlight */
-  --ce-ink-60:    rgba(31,26,23,0.60); /* muted text */
-  --ce-ink-30:    rgba(31,26,23,0.30); /* faint text / default accent */
+  --ce-ink-60:    rgba(31,26,23,0.66); /* muted text — named for its role; alpha .66 = 5.3:1, passes WCAG AA (.60 did not) */
+  --ce-ink-30:    rgba(31,26,23,0.30); /* decorative only (rules, separators, borders) — 1.9:1, never for text */
   --ce-hairline-color: rgba(31,26,23,0.12);
   --ce-hairline: 1px solid var(--ce-hairline-color);
 
@@ -138,7 +156,7 @@
 
   /* Match status — clean, intentional, legible on the warm bg (not neon) */
   --ce-status-strong:   #1E7A40;  /* clear confident green */
-  --ce-status-possible: #9A6700;  /* clean amber/gold (was murky ochre) */
+  --ce-status-possible: #8A5C00;  /* clean amber/gold — 5.3:1 (was #9A6700, 4.4:1) */
   --ce-status-reach:    #B24632;  /* clear clay / terracotta */
   --ce-status-grade:    #6B5E54;  /* muted ink */
 

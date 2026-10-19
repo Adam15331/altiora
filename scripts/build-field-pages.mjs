@@ -70,7 +70,9 @@ const lockup = pick(/<span class="nav__logo">([\s\S]*?)<\/span>\s*<span class="n
 const analytics = pick(/<!-- Cloudflare Web Analytics -->[\s\S]*?<!-- End Cloudflare Web Analytics -->/, 'the analytics snippet');
 const stylesV = pick(/styles\.css\?v=(\d+)/, 'styles.css version');
 const tokensV = pick(/tokens\.css\?v=(\d+)/, 'tokens.css version');
-const fontsHref = pick(/<link rel="stylesheet" href="(https:\/\/fonts\.googleapis\.com[^"]+)"/, 'the font stylesheet');
+// Every web-font stylesheet app.html loads (the body family + the logo subset).
+const fontHrefs = [...appHtml.matchAll(/<link rel="stylesheet" href="(https:\/\/fonts\.googleapis\.com[^"]+)"/g)].map(m => m[1]);
+if (!fontHrefs.length) throw new Error('Could not find the font stylesheet(s) in app.html.');
 
 /* ── Meta description: whole sentences from the profile's first paragraph,
  *    up to ~160 characters. Sentence boundaries only — never a rewrite. ── */
@@ -145,7 +147,7 @@ function pageHtml(key, fp) {
   <meta name="twitter:card" content="summary" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="${fontsHref}" />
+${fontHrefs.map(h => `  <link rel="stylesheet" href="${h}" />`).join('\n')}
   <link rel="stylesheet" href="../tokens.css?v=${tokensV}" />
   <link rel="stylesheet" href="../styles.css?v=${stylesV}" />
   ${analytics}

@@ -15,10 +15,12 @@
   <meta name="twitter:card" content="summary" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- Confident Editorial type — loaded via <link> (reliable) not @import -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
-  <link rel="stylesheet" href="tokens.css?v=9" />
-  <link rel="stylesheet" href="styles.css?v=92" />
+  <!-- Type: ONE family (Hanken Grotesk) for all text. The second link is the
+       logo wordmark only — subset to the letters A L T I O R. -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&text=ALTIORA&display=swap" />
+  <link rel="stylesheet" href="tokens.css?v=10" />
+  <link rel="stylesheet" href="styles.css?v=98" />
   <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "48e78fd025b74d35921517dcb99a87ed"}'></script><!-- End Cloudflare Web Analytics -->
 </head>
 <body>
@@ -529,7 +531,7 @@
 
   <!-- ── Footer ──────────────────────────────────────────────── -->
   <footer>
-    <p>Covers UK, US, Canada, Singapore &amp; Hong Kong &middot; 320 courses &middot; Subject matching only &mdash; always verify with the university directly.</p>
+    <p>Covers UK, US, Canada, Singapore &amp; Hong Kong &middot; 320 courses &middot; <span data-requirements-cycle>Requirements for the current admissions cycle</span> &middot; Subject matching only &mdash; always verify with the university directly.</p>
     <p class="footer-meta">
       <a href="mailto:support@usealtiora.com?subject=Altiora%20issue%20report">Report an issue</a>
     </p>
@@ -545,8 +547,13 @@
   <script src="data/admissionTestInfo.js?v=3"></script>
   <script src="data/fieldProfiles.js?v=2"></script>
   <!-- State layer — single source of truth for the journey/stage flow -->
+  <!-- Admissions requirements: central config, the CURRENT cycle's data
+       (npm run new-cycle rewrites this path), and the shared renderer. -->
+  <script src="data/requirements/config.js?v=1"></script>
+  <script src="data/requirements/2027.js?v=1"></script>
+  <script src="requirements-view.js?v=2"></script>
   <script src="state.js?v=18"></script>
-  <script src="main.js?v=114"></script>
+  <script src="main.js?v=117"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);

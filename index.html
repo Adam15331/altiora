@@ -31,8 +31,9 @@
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "48e78fd025b74d35921517dcb99a87ed"}'></script><!-- End Cloudflare Web Analytics -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
-<link rel="stylesheet" href="tokens.css?v=9">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&text=ALTIORA&display=swap"><!-- logo wordmark only -->
+<link rel="stylesheet" href="tokens.css?v=10">
 <style>
 /* ═══ Confident Editorial — same tokens as the app (tokens.css) ═══
    Palette used on this page, all from --ce-*:
@@ -48,12 +49,13 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 a { color: inherit; text-decoration: none; }
+button, input, select, textarea { font-family: inherit; }
 .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
 
 /* mono functional layer */
 .mono {
   font-family: var(--ce-font-mono);
-  font-size: 11px;
+  font-size: var(--text-xs);
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -74,11 +76,11 @@ a { color: inherit; text-decoration: none; }
 .nav__logo svg rect { transition: width var(--t-base); }
 .nav__logo:hover svg rect, .nav__logo:focus-visible svg rect { width: 360px; }
 .nav__links { display: flex; align-items: center; gap: 22px; list-style: none; }
-.nav__links a { font-family: var(--ce-font-mono); font-size: 12px; letter-spacing: .04em; color: var(--ce-ink-60); }
+.nav__links a { font-family: var(--ce-font-mono); font-size: var(--text-xs); letter-spacing: .04em; color: var(--ce-ink-60); }
 .nav__links a:hover { color: var(--ce-ink); }
 .btn {
   display: inline-block;
-  font-family: var(--ce-font-mono); font-size: 13px; font-weight: 700; letter-spacing: .03em;
+  font-family: var(--ce-font-mono); font-size: var(--text-sm); font-weight: 700; letter-spacing: .03em;
   background: var(--ce-accent); color: var(--ce-ink);
   border: 1px solid var(--ce-ink);
   border-radius: var(--ce-radius-pill);
@@ -89,7 +91,7 @@ a { color: inherit; text-decoration: none; }
 /* Buttons don't inherit the body line-height that <a> pills get — pin it so
    the About button and the Start link render the same height. */
 button.btn { line-height: 1.6; font-family: var(--ce-font-mono); }
-.btn--nav { padding: 7px 16px; font-size: 12px; }
+.btn--nav { padding: 7px 16px; font-size: var(--text-xs); }
 /* About credit pill: the Start button's own classes (.btn.btn--nav), so fill
    and geometry can never drift apart. Panel: canvas, hairline, no shadow,
    anchored beneath the pill; clamps to the viewport at narrow widths. */
@@ -108,17 +110,17 @@ button.btn { line-height: 1.6; font-family: var(--ce-font-mono); }
 }
 .about-panel.open { display: block; }
 @media (hover: hover) and (pointer: fine) { .about-wrap:hover .about-panel { display: block; } }
-.about-panel p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--ce-ink); padding-right: 14px; }
+.about-panel p { margin: 0; font-size: var(--text-sm); line-height: 1.55; color: var(--ce-ink); padding-right: 14px; }
 /* The credit is a footnote, not a second claim: hairline rule, mono, muted. */
 .about-panel p.about-panel__credit {
   margin-top: 14px; padding: 12px 0 0;
   border-top: var(--ce-hairline);
-  font-family: var(--ce-font-mono); font-size: 11px; letter-spacing: .02em;
+  font-family: var(--ce-font-mono); font-size: var(--text-xs); letter-spacing: .02em;
   color: var(--ce-ink-60);
 }
 .about-panel__close {
   position: absolute; top: 8px; right: 10px; background: none; border: none;
-  font-size: 16px; line-height: 1; color: var(--ce-ink-60); cursor: pointer; padding: 4px;
+  font-size: var(--text-base); line-height: 1; color: var(--ce-ink-60); cursor: pointer; padding: 4px;
 }
 
 /* ─── Hero ─── */
@@ -133,7 +135,7 @@ h1 {
   margin-bottom: 20px;
 }
 .hero__sub { font-size: 1.06rem; color: var(--ce-ink-60); max-width: 54ch; margin-bottom: 26px; }
-.hero__ctaline { margin-top: 10px; font-family: var(--ce-font-mono); font-size: 11px; letter-spacing: .04em; color: var(--ce-ink-30); }
+.hero__ctaline { margin-top: 10px; font-family: var(--ce-font-mono); font-size: var(--text-xs); letter-spacing: .04em; color: var(--ce-ink-60); }
 
 /* Hero demo — subjects only, the app's REAL no-grade labels. No grades exist
    anywhere in this mock, so no grade-language may appear either. */
@@ -142,10 +144,10 @@ h1 {
   border: var(--ce-hairline);
   padding: 18px;
 }
-.demo__label { color: var(--ce-ink-30); margin-bottom: 12px; }
+.demo__label { color: var(--ce-ink-60); margin-bottom: 12px; }
 .demo__chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
 .demo__chip {
-  font-family: var(--ce-font-mono); font-size: 11px; letter-spacing: .02em;
+  font-family: var(--ce-font-mono); font-size: var(--text-xs); letter-spacing: .02em;
   border: 1px solid var(--ce-ink);
   border-radius: var(--ce-radius-pill);
   padding: 4px 12px;
@@ -159,11 +161,11 @@ h1 {
 .demo__course { min-width: 0; }
 .demo__name { font-family: var(--ce-font-display); font-weight: 700; font-size: .95rem; display: block; }
 .demo__uni { font-size: .8rem; color: var(--ce-ink-60); }
-.demo__verdict { font-family: var(--ce-font-mono); font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+.demo__verdict { font-family: var(--ce-font-mono); font-size: var(--text-xs); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
 .demo__verdict--fit    { color: var(--ce-status-strong); }
 .demo__verdict--partly { color: var(--ce-status-possible); }
 .demo__verdict--not    { color: var(--ce-status-reach); }
-.demo__foot { margin-top: 12px; font-size: .78rem; color: var(--ce-ink-30); line-height: 1.5; }
+.demo__foot { margin-top: 12px; font-size: .78rem; color: var(--ce-ink-60); line-height: 1.5; }
 
 /* ─── Sections ─── */
 section { padding: 64px 0; border-bottom: var(--ce-hairline); }
@@ -194,7 +196,7 @@ h2 {
 .step__desc { font-size: .93rem; color: var(--ce-ink-60); }
 .step__example {
   display: inline-block; margin-top: 12px;
-  font-family: var(--ce-font-mono); font-size: 11px; letter-spacing: .02em;
+  font-family: var(--ce-font-mono); font-size: var(--text-xs); letter-spacing: .02em;
   color: var(--ce-ink);
   background: var(--ce-accent-tint);
   padding: 3px 10px;
@@ -215,8 +217,8 @@ h2 {
 .foot-cta h2 { margin-bottom: 22px; }
 .foot-cta .small {
   margin-top: 26px;
-  font-family: var(--ce-font-mono); font-size: 11px; letter-spacing: .05em;
-  color: var(--ce-ink-30);
+  font-family: var(--ce-font-mono); font-size: var(--text-xs); letter-spacing: .05em;
+  color: var(--ce-ink-60);
 }
 .foot-cta .small .dot { padding: 0 6px; }
 
