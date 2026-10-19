@@ -1254,8 +1254,8 @@ const courses = [
   {
     id: "uk-cs-standrews", name: "Computer Science BSc",
     university: "University of St Andrews", country: "UK", degreeLevel: "BSc", category: "cs",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "666 at HL" },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Computer_Science","Physics"] },
+    grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "666 at HL" },
     admissionTests: [],
     universityContext: {
       tier: "national-leading",
@@ -1267,8 +1267,8 @@ const courses = [
   {
     id: "uk-economics-standrews", name: "Economics MA",
     university: "University of St Andrews", country: "UK", degreeLevel: "MA", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Statistics"] },
-    grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: null },
+    requirements: { essential: [], preferred: ["Mathematics_Standard"], useful: ["Statistics"] },
+    grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     universityContext: {
       tier: "national-leading",
@@ -1293,8 +1293,8 @@ const courses = [
   {
     id: "uk-maths-standrews", name: "Mathematics BSc/MMath",
     university: "University of St Andrews", country: "UK", degreeLevel: "MMath", category: "mathematics",
-    requirements: { essential: ["Mathematics_Standard","Mathematics_Advanced"], preferred: [], useful: ["Physics","Statistics"] },
-    grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "666 at HL" },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Physics","Statistics"] },
+    grades: { aLevels: "A*A*A", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "666 at HL" },
     admissionTests: [],
     universityContext: {
       tier: "national-leading",
@@ -4428,10 +4428,10 @@ const courseVerification = {
   "uk-law-exeter": { status: "verified", source: "https://www.exeter.ac.uk/undergraduate-degrees/llb-law/", checkedDate: "2026-06-28", notes: "AAA / IB 36 / 666 HL / no test (no LNAT) confirmed across 3 queries." },
   "uk-cs-exeter": { status: "verified", source: "https://www.exeter.ac.uk/undergraduate-degrees/bsc-computer-science/", checkedDate: "2026-06-28", notes: "AAB→AAA (Maths grade B required); IB 31→34 (Exeter quotes 36–34 range; stored 665 within range). No test." },
   "uk-psychology-exeter": { status: "verified", source: "https://www.exeter.ac.uk/undergraduate-degrees/bsc-psychology/", checkedDate: "2026-06-28", notes: "AAB→AAA (Science at A); IB 31→36 with 666 HL (HL6 in a Science). No test." },
-  "uk-cs-standrews": { status: "verified", source: "https://www.st-andrews.ac.uk/subjects/computer-science/computer-science-bsc/", checkedDate: "2026-06-28", notes: "Verified: A-level AAA incl Maths; IB 38 standard (HL 666 incl HL6 Maths), minimum 36 (HL 655). Direct-second-year route is IB 39." },
-  "uk-economics-standrews": { status: "verified", source: "https://www.st-andrews.ac.uk/subjects/economics/economics-ma/", checkedDate: "2026-06-28", notes: "Verified: A-level AAA standard (minimum ABB); IB 38 standard (HL 666), minimum 36 (HL 655)." },
+  "uk-cs-standrews": { status: "partial", source: "https://www.st-andrews.ac.uk/subjects/computer-science/computer-science-bsc/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Advanced]→[]; ibHL [Mathematics_Advanced]→[Mathematics_Standard]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.st-andrews.ac.uk/subjects/computer-science/computer-science-bsc/): Verified: A-level AAA incl Maths; IB 38 standard (HL 666 incl HL6 Maths), minimum 36 (HL 655). Direct-second-year route is IB 39." },
+  "uk-economics-standrews": { status: "partial", source: "https://www.st-andrews.ac.uk/subjects/economics/economics-ma/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential [Mathematics_Standard]→[]; preferred [Economics, Mathematics_Advanced]→[Mathematics_Standard]; preferred [Economics, Mathematics_Advanced]→[Mathematics_Standard]; preferred [Economics, Mathematics_Advanced]→[Mathematics_Standard]; ibHL [Mathematics_Standard]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.st-andrews.ac.uk/subjects/economics/economics-ma/): Verified: A-level AAA standard (minimum ABB); IB 38 standard (HL 666), minimum 36 (HL 655)." },
   "uk-medicine-standrews": { status: "verified", source: "https://www.st-andrews.ac.uk/subjects/medicine/medicine-bsc-a100/entry-requirements/academic-requirements/", checkedDate: "2026-06-28", notes: "Verified: A-level AAA (min AAB) incl Chemistry + one of Bio/Maths/Physics; IB 38, HL 666 incl HL Chemistry + one of Bio/Maths/Physics; UCAT required (not LNAT)." },
-  "uk-maths-standrews": { status: "verified", source: "https://www.st-andrews.ac.uk/subjects/mathematics/mathematics-bsc/", checkedDate: "2026-06-28", notes: "Verified: A-level AAA incl Maths (BSc); MMath top offer A*A*A incl A* Maths + A Further Maths; IB 38 (HL 666 incl HL6 Maths), minimum 36." },
+  "uk-maths-standrews": { status: "verified", source: "https://www.st-andrews.ac.uk/subjects/mathematics/mathematics-bsc/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels AAA→A*A*A; essential [Mathematics_Standard, Mathematics_Advanced]→[Mathematics_Standard]; ibHL [Mathematics_Advanced]→[Mathematics_Standard]. EARLIER (2026-06-28, https://www.st-andrews.ac.uk/subjects/mathematics/mathematics-bsc/): Verified: A-level AAA incl Maths (BSc); MMath top offer A*A*A incl A* Maths + A Further Maths; IB 38 (HL 666 incl HL6 Maths), minimum 36." },
   "uk-medicine-glasgow": { status: "partial", source: "https://www.gla.ac.uk/undergraduate/degrees/medicine/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Standard]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.medschools.ac.uk/courses/glasgow-medicine-a100/): Verified: A-level AAA, HL Chemistry+Biology, UCAT confirmed officially; IB 38 with HL 666 corroborated across Medical Schools Council (semi-official) + 2 further sources (Glasgow embeds totals in on-page tables)." },
   "uk-law-glasgow": { status: "partial", source: "https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/M100", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [History, English]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.thecompleteuniversityguide.co.uk/courses/details/common-law-llb/57013998): Verified: A-level AAA, LNAT confirmed; IB 38 with HL 666 corroborated across Complete University Guide + gotouniversity (min 34 = 655). Glasgow embeds numeric totals in on-page tables not surfaced in search." },
   "uk-cs-glasgow": { status: "verified", source: "https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/G400", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Advanced]→[]. EARLIER (2026-06-28, https://www.gla.ac.uk/undergraduate/degrees/computingscience/): Verified (official): standard A-level AAA–ABB incl A-level Maths (faster route A*AA); IB 38 with HL 666 incl HL6 Maths (A&A). Stored AAB/IB33/HL665 corrected." },

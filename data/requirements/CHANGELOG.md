@@ -3934,3 +3934,35 @@ Format:
 - `uk-engineering-glasgow` · subjectPrerequisites: row partial → partial (owner flag kept).
 - `uk-engineering-glasgow` · aLevel: row partial → partial (owner flag kept).
 - `uk-engineering-glasgow` · ib: row verified → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of St Andrews
+
+- `uk-cs-standrews` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.st-andrews.ac.uk/subjects/computer-science/computer-science-bsc/
+  > AAA, including A in Mathematics and a pass in one of the following: Biology Chemistry Computing Science Further Mathematics Geology Geography Physics Psychology
+- `uk-cs-standrews` · engine `grades.ibHL`: [Mathematics_Advanced] → [Mathematics_Standard] (ib-hl). Source: https://www.st-andrews.ac.uk/subjects/computer-science/computer-science-bsc/
+  > 38 (HL 6,6,6), including HL6 in Mathematics
+- `uk-cs-standrews` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-cs-standrews` · aLevel: row partial → partial (owner flag kept).
+- `uk-cs-standrews` · ib: row partial → partial (owner flag kept).
+- `uk-economics-standrews` · engine `requirements.essential`: [Mathematics_Standard] → [] (essential-to-preferred). Source: https://www.st-andrews.ac.uk/subjects/economics/economics-ma/
+  > No previous experience in this subject is required, but advanced school mathematics is an advantage, and an ability to learn mathematical skills is essential.
+- `uk-economics-standrews` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [Mathematics_Standard] (essential-to-preferred). Source: https://www.st-andrews.ac.uk/subjects/economics/economics-ma/
+  > No previous experience in this subject is required, but advanced school mathematics is an advantage, and an ability to learn mathematical skills is essential.
+- `uk-economics-standrews` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [Mathematics_Standard] (preferred-remove-stated). Source: https://www.st-andrews.ac.uk/subjects/economics/economics-ma/
+  > No previous experience in this subject is required, but advanced school mathematics is an advantage, and an ability to learn mathematical skills is essential.
+- `uk-economics-standrews` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [Mathematics_Standard] (preferred-remove-unlisted). Source: https://www.st-andrews.ac.uk/subjects/economics/economics-ma/
+  > No previous experience in this subject is required, but advanced school mathematics is an advantage, and an ability to learn mathematical skills is essential.
+- `uk-economics-standrews` · engine `grades.ibHL`: [Mathematics_Standard] → [] (ib-hl). Source: https://www.st-andrews.ac.uk/subjects/economics/economics-ma/
+  > IB points Standard entry grades: 38 (HL 6,6,6) Minimum entry grades: 36 (HL 6,5,5)
+- `uk-economics-standrews` · subjectPrerequisites: row partial → verified.
+- `uk-economics-standrews` · aLevel: row partial → verified (owner flag kept).
+- `uk-economics-standrews` · ib: row partial → partial (owner flag kept).
+- `uk-maths-standrews` · engine `grades.aLevels`: AAA → A*A*A (offer). Source: https://www.st-andrews.ac.uk/subjects/mathematics/mathematics-bsc/
+  > Standard entry grades: A*A*A, including A* in Mathematics.
+- `uk-maths-standrews` · engine `requirements.essential`: [Mathematics_Standard, Mathematics_Advanced] → [Mathematics_Standard] (essential-remove). Source: https://www.st-andrews.ac.uk/subjects/mathematics/mathematics-bsc/
+  > Yes, applicants are expected to have studied Mathematics at SQA Higher, GCE A-Level, or equivalent. Typical successful applicants will have studied Mathematics at SQA Advanced Higher, Further Mathematics at GCE A-level, or equivalent.
+- `uk-maths-standrews` · engine `grades.ibHL`: [Mathematics_Advanced] → [Mathematics_Standard] (ib-hl). Source: https://www.st-andrews.ac.uk/subjects/mathematics/mathematics-bsc/
+  > 38 (HL 6,6,6), including HL6 in Mathematics.
+- `uk-maths-standrews` · subjectPrerequisites: row partial → verified.
+- `uk-maths-standrews` · aLevel: row partial → verified (owner flag kept).
+- `uk-maths-standrews` · ib: row partial → verified (owner flag kept).
