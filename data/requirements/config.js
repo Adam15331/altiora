@@ -74,6 +74,8 @@
  * @property {'yes' | 'no' | 'unknown'} [accepted]  Is the qualification an entry route?
  *                                       'no' only with status notApplicable.
  * @property {string} [typicalOffer]     A-Level grades as held, e.g. "A*AA".
+ * @property {string} [ucasTariff]       A-Level: UCAS tariff points the course accepts instead of
+ *                                       grades, as published (display only — the engine does not read it).
  * @property {number} [overallScore]     IB points total as held, e.g. 39.
  * @property {QualificationSubjects} [subjects]
  * @property {string} [detail]           Subject-grade detail as held, verbatim (e.g. "766 at HL").

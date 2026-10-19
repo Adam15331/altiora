@@ -52,6 +52,7 @@
   ];
   /** @type {Array<[keyof RequirementEntry, string]>} */
   const TEXT_FACTS = [
+    ['ucasTariff', 'UCAS points'],
     ['detail', 'Details'],
     ['practicalEndorsement', 'Practical endorsement'],
     ['contextualOffer', 'Contextual offer'],

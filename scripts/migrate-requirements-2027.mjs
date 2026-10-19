@@ -29,6 +29,7 @@
 
 import fs from 'node:fs';
 import { loadConfig, loadCourses, cyclePath, writeCycle } from './lib/requirements-io.mjs';
+import { apItem } from './lib/engine-values.mjs';
 
 const CYCLE = '2027';
 
@@ -111,31 +112,12 @@ function subjectPrerequisites(course) {
   return entry(base, { items, codes: [...ess, ...pref] });
 }
 
-/** @param {any} r  an AP requirement object (or one alternative route) */
-function apLines(r) {
-  const lines = [];
-  if (r.count != null) {
-    lines.push(Array.isArray(r.grades) && r.grades.length
-      ? `${r.count} AP exams at grades ${r.grades.join(', ')}`
-      : `${r.count} AP exams`);
-  }
-  if (r.gpaMin != null) lines.push(`Minimum GPA ${r.gpaMin}`);
-  if (Array.isArray(r.mustInclude) && r.mustInclude.length) lines.push(`Must include ${r.mustInclude.join(' and ')}`);
-  if (Array.isArray(r.mustIncludeOneOf)) for (const set of r.mustIncludeOneOf) lines.push(`Must include one of ${set.join(' or ')}`);
-  if (Array.isArray(r.excluded) && r.excluded.length) lines.push(`Not counted: ${r.excluded.join(', ')}`);
-  return lines;
-}
-
 function otherQualifications(course) {
   const parts = [];
   const ap = course.apRequirement;
-  if (ap && (ap.sourceStatus === 'verified' || ap.sourceStatus === 'partial') && ap.source && ap.checkedDate) {
-    const lines = apLines(ap);
-    (ap.alternativeRoutes ?? []).forEach((/** @type {any} */ route, /** @type {number} */ i) => {
-      const r = apLines(route);
-      if (r.length) lines.push(`Alternative route ${i + 1}: ${r.join('; ')}`);
-    });
-    const items = lines.length ? [`Advanced Placement: ${lines.join('; ')}`] : ['Advanced Placement: accepted — see note'];
+  const item = apItem(course);
+  if (ap && item) {
+    const items = [item];
     parts.push({
       status: ap.sourceStatus, items,
       sources: [{ url: ap.source, label: 'University AP guidance' }],
