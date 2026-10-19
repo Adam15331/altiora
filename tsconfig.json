@@ -1,0 +1,29 @@
+{
+  // Type-checks the JSDoc-typed modules added for the requirements data
+  // model and its tooling. The legacy browser files (main.js, state.js and
+  // the large data files) are plain JS and are syntax-checked by
+  // `npm run lint` instead.
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022", "DOM"],
+    "types": ["node"],
+    "skipLibCheck": true
+  },
+  "include": [
+    "data/requirements/config.js",
+    "requirements-view.js",
+    "scripts/lib/**/*.mjs",
+    "scripts/validate-requirements.mjs",
+    "scripts/requirements-report.mjs",
+    "scripts/requirements-new-cycle.mjs",
+    "scripts/migrate-requirements-2027.mjs",
+    "tests/**/*.mjs"
+  ]
+}

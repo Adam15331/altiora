@@ -4091,7 +4091,10 @@ function exportShortlistToCSV() {
   const saved = AltioraState.getShortlist().map(id => courses.find(c => c.id === id)).filter(Boolean);
   if (!saved.length) { showToast('No saved courses to export'); return; }
 
-  const headers = ['Course Name', 'University', 'Country', 'Degree Level', 'Category', 'Admission Tests', 'Typical Grades'];
+  const reqCats = requirementsConfig()?.categories ?? [];
+  const reqCycle = currentRequirementsCycle();
+  const headers = ['Course Name', 'University', 'Country', 'Degree Level', 'Category', 'Admission Tests', 'Typical Grades',
+    ...(reqCycle ? ['Requirements cycle'] : []), ...reqCats.map(cat => cat.label)];
   const cell = v => {
     const s = String(v ?? '');
     return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
@@ -4102,11 +4105,6 @@ function exportShortlistToCSV() {
     if (typeof c.grades?.ib === 'number') parts.push(`IB ${c.grades.ib}`);
     if (c.grades?.sgALevels) parts.push(`SG ${c.grades.sgALevels}`);
     if (c.grades?.hkDse) parts.push(`DSE ${c.grades.hkDse}`);
-    // US: holistic, no grade cutoff — give the indicative admitted range.
-    if (c.country === 'US' && c.usAdmissions) {
-      const r = usAdmitRange(c.usAdmissions);
-      parts.push(r ? `${r} (indicative)` : usAdmitPolicyLabel(c.usAdmissions.test));
-    }
     return parts.join('; ');
   };
 
@@ -4118,6 +4116,8 @@ function exportShortlistToCSV() {
     CATEGORY_LABEL_MAP[c.category] ?? c.category,
     Array.isArray(c.admissionTests) ? c.admissionTests.join('; ') : '',
     gradesOf(c),
+    ...(reqCycle ? [reqCycle.label] : []),
+    ...reqCats.map(cat => requirementText(c, cat.id)),
   ].map(cell).join(','));
 
   // Leading BOM so Excel reads UTF-8 (and the ≈/£ etc.) correctly.
@@ -4196,10 +4196,11 @@ function renderShortlist() {
     group.className = 'results-group';
     const header = document.createElement('h2');
     header.className = 'results-group__header';
-    header.innerHTML = `${COUNTRY_FLAGS[country] ?? ''} ${esc(COUNTRY_LABELS[country] ?? country)} <span style="font-weight:400;opacity:.65">(${list.length})</span>`;
+    header.innerHTML = `${COUNTRY_FLAGS[country] ?? ''} ${esc(COUNTRY_LABELS[country] ?? country)} <span class="results-group__count">(${list.length})</span>`;
     group.appendChild(header);
     const grid = document.createElement('div');
     grid.className = 'results-group__grid';
+    grid.setAttribute('role', 'list');
     list.forEach(c => grid.appendChild(buildShortlistCard(c, studentTags, hasSubjects)));
     group.appendChild(grid);
     wrap.appendChild(group);
@@ -4727,6 +4728,7 @@ function buildShortlistCard(course, studentTags, hasSubjects) {
     ${(course.verification?.status ?? 'unverified') !== 'verified'
       ? `<p class="card-unverified">⚠ Requirements not yet verified — confirm with the university.</p>`
       : ''}
+    ${cardRequirementsHtml(course)}
     ${cardMoreHtml(course)}
   `;
   card.querySelector('.remove-btn').addEventListener('click', e => {
@@ -5965,11 +5967,12 @@ function buildGroup(status, headerText, items, startIndex, collapsed = false) {
   header.className   = `results-group__header results-group__header--${status}`;
   // `?? ''` guards against any status without a mapped icon — a missing key
   // must render nothing, never the literal string "undefined".
-  header.innerHTML   = `${groupIcons[status] ?? ''} ${headerText} <span style="font-weight:400;opacity:.65">(${items.length})</span>`;
+  header.innerHTML   = `${groupIcons[status] ?? ''} ${headerText} <span class="results-group__count">(${items.length})</span>`;
   section.appendChild(header);
 
   const cardsDiv = document.createElement('div');
   cardsDiv.className = 'results-group__grid';
+  cardsDiv.setAttribute('role', 'list');
 
   items.forEach(({ course, result }, i) => {
     const card = buildCheckCard(course, result);
@@ -6005,26 +6008,58 @@ function buildGroup(status, headerText, items, startIndex, collapsed = false) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
- * SHARED CARD DETAIL — "More about this course" expander + compact
- * US test line. Used by every surface that renders course cards
- * (Check, shortlist, Course Finder), so all inherit both.
+ * ADMISSIONS REQUIREMENTS — read from the central, cycle-tagged data in
+ * data/requirements/ (config.js + <cycle>.js) and rendered by
+ * requirements-view.js. Nothing here holds a requirement value: the
+ * yearly update is a data edit, never a UI edit.
+ * ═══════════════════════════════════════════════════════════════ */
+
+function requirementsConfig() {
+  return (typeof AltioraRequirementsConfig !== 'undefined') ? AltioraRequirementsConfig : null;
+}
+function currentRequirementsCycle() {
+  const cfg = requirementsConfig();
+  return cfg ? { id: cfg.currentCycle, label: cfg.cycles[cfg.currentCycle]?.label ?? `${cfg.currentCycle} entry` } : null;
+}
+function courseRequirementsRecord(course) {
+  const cfg = requirementsConfig();
+  if (!cfg || typeof AltioraRequirementCycles === 'undefined' || typeof AltioraRequirementsView === 'undefined') return null;
+  return AltioraRequirementsView.recordFor(AltioraRequirementCycles, cfg.currentCycle, course.id);
+}
+// The official course page an unverified row should send the student to —
+// only when the stored source is a live URL (link-health sweep: unswept = ok).
+function courseOfficialUrl(course) {
+  const src = course.verification?.source;
+  const ok = (course.verification?.sourceStatus ?? 'ok') === 'ok';
+  return (typeof src === 'string' && /^https?:\/\//i.test(src) && ok) ? src : null;
+}
+// The structured "Entry requirements · 2027 entry" panel, shared by every
+// card surface (Check, Shortlist, Course Finder).
+function cardRequirementsHtml(course) {
+  const cfg = requirementsConfig();
+  const cycle = currentRequirementsCycle();
+  if (!cfg || !cycle || typeof AltioraRequirementsView === 'undefined') return '';
+  return AltioraRequirementsView.panelHtml({
+    record: courseRequirementsRecord(course),
+    categories: cfg.categories,
+    cycleLabel: cycle.label,
+    fallbackUrl: courseOfficialUrl(course),
+  });
+}
+// One category as plain text (CSV export, copy-to-clipboard).
+function requirementText(course, categoryId) {
+  if (typeof AltioraRequirementsView === 'undefined') return '';
+  return AltioraRequirementsView.entryText(courseRequirementsRecord(course)?.[categoryId]);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * SHARED CARD DETAIL — "More about this course" expander. Used by every
+ * surface that renders course cards (Check, shortlist, Course Finder).
  * ═══════════════════════════════════════════════════════════════ */
 
 const CARD_CHEVRON_ICON  = `<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg>`;
 const CARD_EXTERNAL_ICON = `<svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4h5v5M15 4l-7 7M9 5H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-4"/></svg>`;
 
-// Compact per-card US test line — carries ONLY what varies by card: the
-// policy variant and the indicative range when published. The generic
-// holistic explainer lives once in the expander below, not boxed on every
-// card. Honest absences render honestly ("no published range").
-const US_TEST_SHORT = {
-  required:    'SAT/ACT required',
-  optional:    'Test-optional',
-  flexible:    'Test-flexible',
-  recommended: 'SAT/ACT recommended',
-  varies:      'SAT/ACT required for some schools',
-  blind:       'Test-blind',
-};
 // Grade requirement line: a pill only when the string reads like a grade
 // token ("A*AA", "39"); sentence-length requirement text (HK/SG/CA "IGP
 // 10th percentile…" / "General minimum: 3 AL passes…") renders as a plain
@@ -6035,22 +6070,6 @@ function gradeLineHtml(gradeStr, sys) {
   const text = sys === 'IB' ? `${gradeStr} IB points` : String(gradeStr);
   const isShort = String(gradeStr).length <= 10;
   return `<div class="card-grades${isShort ? '' : ' card-grades--long'}">${esc(text)}</div>`;
-}
-
-function usTestLineHtml(course) {
-  if (course.country !== 'US' || !course.usAdmissions) return '';
-  const a = course.usAdmissions;
-  const parts = [US_TEST_SHORT[a.test] ?? a.test];
-  if (a.test === 'blind') {
-    parts.push('scores not used');
-  } else {
-    const range = [];
-    if (a.sat) range.push(`SAT ${a.sat}`);
-    if (a.act) range.push(`ACT ${a.act}`);
-    if (range.length) parts.push(...range, 'indicative');
-    else parts.push('no published range');
-  }
-  return `<div class="card-us-test">🇺🇸 ${parts.map(esc).join(' · ')}</div>`;
 }
 
 // The expandable detail state: "learn more" built ONLY from content we
@@ -6081,7 +6100,7 @@ function cardMoreHtml(course) {
 
   // 3. The generic US explainer — stated once here for those who want it.
   if (course.country === 'US' && course.usAdmissions) {
-    sections.push(`<p class="card-more__us">🇺🇸 US admissions is holistic — there is no fixed grade cutoff. Published SAT/ACT figures are the middle 50% of admitted students: indicative, never a cutoff.</p>`);
+    sections.push(`<p class="card-more__us">🇺🇸 US admissions is holistic — there is no fixed grade cutoff.</p>`);
   }
 
   // 4. University info (unified here from the old "About this university").
@@ -6226,9 +6245,9 @@ function buildCheckCard(course, result) {
     }
   }
 
-  // ── US admissions: one compact per-card line (usTestLineHtml). The old
-  // repeated "Holistic admissions" box carried no per-card information; the
-  // generic explainer now lives once in the card's expanded detail state.
+  // ── US admissions: SAT/ACT policy lives in the card's "Entry
+  // requirements" panel (cardRequirementsHtml), with its verification
+  // status; the generic holistic explainer lives once in "More about".
 
   // ── IB HL chips ───────────────────────────────────────────────
   let ibHlHtml = '';
@@ -6313,7 +6332,6 @@ function buildCheckCard(course, result) {
     ${(status === 'grey' && result.gradeGap) ? `<p class="card-grade-gap">⚠️ ${esc(gradeGapText(result.gradeGap))}</p>` : ''}
     ${status === 'unconfirmed' ? `<p class="card-grade-unconfirmed">◔ Your subjects fit, but this course doesn't publish a grade requirement we can compare with your predicted grade — so we can't confirm it's a match. Check the university's official page.</p>` : ''}
     ${fieldCoreHtml}
-    ${usTestLineHtml(course)}
     ${ibHlHtml}
     ${tests.length ? `
       <div class="card-admission-tests">
@@ -6322,6 +6340,7 @@ function buildCheckCard(course, result) {
     ${apNoteHtml}
     ${unverifiedHtml}
     ${footerHtml}
+    ${cardRequirementsHtml(course)}
     ${cardMoreHtml(course)}
   `;
   wireSaveButton(card);
@@ -6441,6 +6460,7 @@ function buildReverseCard(course) {
         </div>`).join('')}
     </div>
     ${reverseCompareHtml(course)}
+    ${cardRequirementsHtml(course)}
     ${cardMoreHtml(course)}
     <div class="reverse-card-footer">
       ${saveButtonHtml(course.id)}
@@ -6538,24 +6558,6 @@ function showManualCopyBox(card, text) {
   box.select();
 }
 
-// US holistic-admissions helpers (shared by copy-text and CSV export).
-function usAdmitPolicyLabel(test) {
-  return {
-    required:    'SAT/ACT required',
-    optional:    'test-optional',
-    flexible:    'test-flexible (SAT/ACT/AP/IB)',
-    recommended: 'SAT/ACT recommended',
-    varies:      'SAT/ACT required for some schools',
-    blind:       'test-blind (scores not used)',
-  }[test] ?? test;
-}
-function usAdmitRange(a) {
-  const p = [];
-  if (a.sat) p.push(`SAT ${a.sat}`);
-  if (a.act) p.push(`ACT ${a.act}`);
-  return p.join(', ');
-}
-
 /**
  * Build a plain-text representation of a course's requirements,
  * with tags translated to the active reverse system.
@@ -6572,15 +6574,13 @@ function buildRequirementsText(course) {
     ? 'Recommended for competitive applicants:'
     : 'Required:';
 
-  // US admissions context: holistic with no grade cutoff — surface the
-  // current test policy and indicative admitted SAT/ACT range as a guide.
-  let usAdmitLines = [];
-  if (course.country === 'US' && course.usAdmissions) {
-    const a = course.usAdmissions;
-    const r = usAdmitRange(a);
-    usAdmitLines = ['', `Admissions: holistic, no fixed cutoff — ${usAdmitPolicyLabel(a.test)}.`,
-      ...(r ? [`Typical admitted range (indicative, not a cutoff): ${r}.`] : [])];
-  }
+  // Every Phase-1 requirement category, from the central cycle data, each
+  // with its verification status — never an unsourced figure.
+  const reqCycle = currentRequirementsCycle();
+  const reqLines = reqCycle
+    ? ['', `Entry requirements (${reqCycle.label}):`,
+       ...(requirementsConfig()?.categories ?? []).map(cat => `${cat.label}: ${requirementText(course, cat.id)}`)]
+    : [];
 
   const lines = [
     `${course.name}`,
@@ -6589,7 +6589,7 @@ function buildRequirementsText(course) {
     `${essentialLabel} ${essential.length ? fmt(essential) : 'None specified'}`,
     ...(preferred.length ? [`Preferred: ${fmt(preferred)}`] : []),
     ...(useful.length    ? [`Useful:    ${fmt(useful)}`]    : []),
-    ...usAdmitLines,
+    ...reqLines,
     ...(course.notes     ? ['', `Notes: ${course.notes}`]   : []),
   ];
 
@@ -8292,6 +8292,12 @@ function logEvent(eventName, properties = {}) {
  * ═══════════════════════════════════════════════════════════════ */
 
 function init() {
+  // The admissions cycle the requirements data describes, stated once in
+  // the footer (and on every card's requirements panel).
+  const reqCycle = currentRequirementsCycle();
+  document.querySelectorAll('[data-requirements-cycle]').forEach(el => {
+    if (reqCycle) el.textContent = `Requirements shown for ${reqCycle.label}`;
+  });
   if (dataLoadError) {
     const main = document.querySelector('main');
     if (main) {
