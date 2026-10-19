@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 50 | 0 | 270 | 0 |
-| English language | 50 | 0 | 270 | 0 |
+| SAT / ACT | 54 | 0 | 266 | 0 |
+| English language | 54 | 0 | 266 | 0 |
 | Admissions tests | 308 | 12 | 0 | 0 |
-| Subject prerequisites | 258 | 62 | 0 | 0 |
-| A-Level requirements | 184 | 8 | 124 | 4 |
-| IB requirements | 248 | 7 | 61 | 4 |
-| Other qualifications | 69 | 30 | 221 | 0 |
-| Other requirements | 50 | 0 | 270 | 0 |
+| Subject prerequisites | 254 | 66 | 0 | 0 |
+| A-Level requirements | 186 | 10 | 120 | 4 |
+| IB requirements | 250 | 9 | 57 | 4 |
+| Other qualifications | 73 | 30 | 217 | 0 |
+| Other requirements | 54 | 0 | 266 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -128,6 +128,14 @@ Shown with a "Partly verified" badge and the note below.
 | `us-business-cornell` | Subject prerequisites | Official: Dyson School (SC Johnson College of Business) applicants must have at least 16 total units of high school coursework, including 4 units of English; 4 units of mathematics (calculus required if offered at your school; advanced mathematics in grade 12 preferred to AP Statistics); 3 units of science including 1 unit of chemistry and 1 unit of biology (both required), an additional unit of science recommended. |
 | `us-cs-rice` | Subject prerequisites | Official: At a minimum, students must complete 16 credits — English 4, social studies 2, mathematics 3, laboratory science 2, one foreign language 2, plus 3 additional credits in these areas. At a minimum, the natural science and engineering divisions require trigonometry or pre-calculus, and both chemistry and physics (a second year of chemistry or biology may substitute for physics). Students on an international curriculum without a foreign-language option (e.g. GCE/A-levels) are exempt from the foreign-language requirement. Computer Science is in Rice Engineering and Computing; Rice admits students to the university as a whole, not to the CS programme. |
 | `us-engineering-rice` | Subject prerequisites | Official: At a minimum, students must complete 16 credits — English 4, social studies 2, mathematics 3, laboratory science 2, one foreign language 2, plus 3 additional credits in these areas. At a minimum, the natural science and engineering divisions require trigonometry or pre-calculus, and both chemistry and physics (a second year of chemistry or biology may substitute for physics). Students on an international curriculum without a foreign-language option (e.g. GCE/A-levels) are exempt from the foreign-language requirement. Computer Science is in Rice Engineering and Computing; Rice admits students to the university as a whole, not to the CS programme. |
+| `us-economics-vanderbilt` | Subject prerequisites | Official: Vanderbilt has no minimum coursework requirements; recommended coursework is 4 units of English, 4 of mathematics, 4 of natural science, 2 of foreign language, 2 of social science/humanities, plus 4 additional units in these or other academic areas. Applies to all Vanderbilt first-year applicants. |
+| `us-economics-vanderbilt` | A-Level requirements | Vanderbilt’s admissions pages do not mention A-Levels by name — this row applies its general statement on leaving exams. (A-Level credit after enrolment is a catalog matter, not admission.) |
+| `us-economics-vanderbilt` | IB requirements | Vanderbilt’s admissions pages say nothing about IB Diploma scores or predicted IB grades in admission; the IB 6/7 statement on the FAQ is about college credit after enrolling, not admission. |
+| `us-cs-vanderbilt` | Subject prerequisites | Official: Vanderbilt has no minimum coursework requirements; recommended coursework is 4 units of English, 4 of mathematics, 4 of natural science, 2 of foreign language, 2 of social science/humanities, plus 4 additional units. Vanderbilt also highly recommends calculus, calculus-based physics and chemistry for School of Engineering applicants; the Computer Science B.S. is now listed under the College of Connected Computing, and no page says whether that recommendation applies to it. |
+| `us-cs-vanderbilt` | A-Level requirements | Vanderbilt’s admissions pages do not mention A-Levels by name — this row applies its general statement on leaving exams. (A-Level credit after enrolment is a catalog matter, not admission.) |
+| `us-cs-vanderbilt` | IB requirements | Vanderbilt’s admissions pages say nothing about IB Diploma scores or predicted IB grades in admission; the IB 6/7 statement on the FAQ is about college credit after enrolling, not admission. |
+| `us-business-notredame` | Subject prerequisites | Official: required for all applicants — at least 16 high-school units, including 4 English, 3 mathematics (Algebra I, Algebra II, Geometry; 4 preferred), 2 of one foreign language (3–4 preferred), 2 science (4 preferred), 2 history/social science (3–4 preferred). Notre Dame’s Application Considerations page adds that business major intents “need 4 units [of mathematics], which should include Calculus” (listed under the coursework of its strongest applicants). |
+| `us-cs-notredame` | Subject prerequisites | Official: required for all applicants — at least 16 high-school units, including 4 English, 3 mathematics, 2 of one foreign language, 2 science, 2 history/social science. For intended majors in the College of Engineering (where Computer Science sits): 4 units of mathematics required, including Pre-Calculus or Calculus; a unit of Chemistry required; and a unit of Physics required for all Engineering majors. |
 | `ca-maths-mcgill` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-maths-mcgill` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-medicine-mcgill` | IB requirements | The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
@@ -176,10 +184,6 @@ Shown to students only as "Previously recorded, not verified". Confirm or correc
 | `us-psychology-michigan` | SAT / ACT | Test-optional |
 | `us-business-nyu` | SAT / ACT | Test-optional |
 | `us-cs-nyu` | SAT / ACT | Test-optional |
-| `us-economics-vanderbilt` | SAT / ACT | Test-optional |
-| `us-cs-vanderbilt` | SAT / ACT | Test-optional |
-| `us-business-notredame` | SAT / ACT | Test-optional |
-| `us-cs-notredame` | SAT / ACT | Test-optional |
 | `us-cs-washu` | SAT / ACT | Test-optional |
 | `us-business-washu` | SAT / ACT | Test-optional |
 | `us-business-emory` | SAT / ACT | Test-optional |
@@ -266,6 +270,10 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `us-business-cornell` | Subject prerequisites | Official source lists required high-school courses for the Dyson School (16 units incl. English 4, maths 4 with calculus if offered, science 3 incl. chemistry and biology); data/courseRequirements.js holds none. Owner decision. |
 | `us-cs-rice` | Subject prerequisites | Official source lists required high-school courses (16 credits incl. English 4, maths 3, lab science 2, foreign language 2; natural science and engineering divisions also require trigonometry or pre-calculus, chemistry and physics); data/courseRequirements.js holds none. Owner decision. |
 | `us-engineering-rice` | Subject prerequisites | Official source lists required high-school courses (16 credits incl. English 4, maths 3, lab science 2, foreign language 2; natural science and engineering divisions also require trigonometry or pre-calculus, chemistry and physics); data/courseRequirements.js holds none. Owner decision. |
+| `us-economics-vanderbilt` | Subject prerequisites | Official source lists recommended high-school coursework (4 English, 4 maths, 4 natural science, 2 foreign language, 2 social science/humanities); data/courseRequirements.js holds none. Owner decision. |
+| `us-cs-vanderbilt` | Subject prerequisites | Official source lists recommended high-school coursework (4 English, 4 maths, 4 natural science, 2 foreign language, 2 social science/humanities); data/courseRequirements.js holds none. Owner decision. Check whether the School of Engineering calculus/physics/chemistry recommendation applies to the CS B.S. (College of Connected Computing). |
+| `us-business-notredame` | Subject prerequisites | Official source lists required high-school units (4 English, 3 maths, 2 foreign language, 2 science, 2 history/social science) and 4 maths incl. calculus for business intents; data/courseRequirements.js holds none. Owner decision. |
+| `us-cs-notredame` | Subject prerequisites | Official source lists required high-school units, plus 4 maths (incl. pre-calculus or calculus), chemistry and physics for College of Engineering intents; data/courseRequirements.js holds none. Owner decision. |
 
 ## Values withheld from the panel
 
@@ -497,10 +505,6 @@ category — check the official source; never copy a hint in as a value.
 | `hk-law-cityu` | City University of Hong Kong | SAT / ACT, English language, Other requirements | notes mention an interview / portfolio / audition |
 | `hk-business-cityu` | City University of Hong Kong | SAT / ACT, English language, IB requirements, Other requirements | notes mention IB |
 | `hk-economics-cityu` | City University of Hong Kong | SAT / ACT, English language, IB requirements, Other requirements | notes mention IB |
-| `us-economics-vanderbilt` | Vanderbilt University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-cs-vanderbilt` | Vanderbilt University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-business-notredame` | University of Notre Dame | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-cs-notredame` | University of Notre Dame | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-cs-washu` | Washington University in St. Louis | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-business-washu` | Washington University in St. Louis | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-business-emory` | Emory University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
