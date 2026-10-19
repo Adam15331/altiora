@@ -3906,3 +3906,31 @@ Format:
 - `uk-accounting-bath` · subjectPrerequisites: row partial → verified.
 - `uk-accounting-bath` · aLevel: row partial → verified (owner flag kept).
 - `uk-accounting-bath` · ib: row partial → verified.
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Glasgow
+
+- `uk-medicine-glasgow` · engine `requirements.preferred`: [Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://www.gla.ac.uk/undergraduate/degrees/medicine/
+  > International A-level Standard Entry Requirements AAA Additional requirements: A-levels Chemistry, Biology and one of either Physics or Mathematics.
+- `uk-medicine-glasgow` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-medicine-glasgow` · aLevel: row partial → partial (owner flag kept).
+- `uk-medicine-glasgow` · ib: row partial → verified (owner flag kept).
+- `uk-cs-glasgow` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/G400
+  > Additional Requirement: A-level Mathematics at A
+- `uk-cs-glasgow` · subjectPrerequisites: row partial → verified.
+- `uk-cs-glasgow` · aLevel: row partial → verified (owner flag kept).
+- `uk-cs-glasgow` · ib: row verified → verified.
+- `uk-law-glasgow` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-unlisted). Source: https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/M100
+  > Additional Requirement: A-level Humanities at A
+- `uk-law-glasgow` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-law-glasgow` · aLevel: row partial → partial (owner flag kept).
+- `uk-law-glasgow` · ib: row partial → partial (owner flag kept).
+- `uk-economics-glasgow` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/L150
+  > Additional Requirement: A-level English or Humanities at A/B Additional Requirement: A-level Mathematics at B
+- `uk-economics-glasgow` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-economics-glasgow` · aLevel: row partial → partial (owner flag kept).
+- `uk-economics-glasgow` · ib: row partial → partial (owner flag kept).
+- `uk-engineering-glasgow` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/H302
+  > Additional Requirement: A-level Mathematics at A Additional Requirement: A-level Physics or A-level Design & Technology (3D or Product Design only) at A
+- `uk-engineering-glasgow` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-engineering-glasgow` · aLevel: row partial → partial (owner flag kept).
+- `uk-engineering-glasgow` · ib: row verified → partial (owner flag kept).

@@ -1189,7 +1189,7 @@ const courses = [
   {
     id: "uk-medicine-glasgow", name: "Medicine MBChB",
     university: "University of Glasgow", country: "UK", degreeLevel: "MBChB", category: "medicine",
-    requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
+    requirements: { essential: ["Chemistry","Biology"], preferred: [], useful: ["Physics"] },
     grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "666 at HL" },
     admissionTests: ["UCAT"],
     universityContext: {
@@ -1202,7 +1202,7 @@ const courses = [
   {
     id: "uk-cs-glasgow", name: "Computing Science BSc",
     university: "University of Glasgow", country: "UK", degreeLevel: "BSc", category: "cs",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Computer_Science","Physics"] },
     grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "666 at HL incl HL6 Mathematics (Analysis & Approaches)"},
     admissionTests: [],
     universityContext: {
@@ -1215,7 +1215,7 @@ const courses = [
   {
     id: "uk-law-glasgow", name: "Law LLB",
     university: "University of Glasgow", country: "UK", degreeLevel: "LLB", category: "law",
-    requirements: { essential: [], preferred: ["History","English"], useful: ["Economics","Philosophy"] },
+    requirements: { essential: [], preferred: [], useful: ["Economics","Philosophy"] },
     grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: ["LNAT"],
     universityContext: {
@@ -1228,7 +1228,7 @@ const courses = [
   {
     id: "uk-economics-glasgow", name: "Economics MA",
     university: "University of Glasgow", country: "UK", degreeLevel: "MA", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Statistics"] },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: "AAB", ib: 36, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: null , ibHLNote: "665 at HL incl HL Mathematics + Humanities/English" },
     admissionTests: [],
     universityContext: {
@@ -1241,7 +1241,7 @@ const courses = [
   {
     id: "uk-engineering-glasgow", name: "Engineering (Mechanical) BEng/MEng",
     university: "University of Glasgow", country: "UK", degreeLevel: "MEng", category: "engineering",
-    requirements: { essential: ["Mathematics_Standard","Physics"], preferred: ["Mathematics_Advanced"], useful: ["Chemistry"] },
+    requirements: { essential: ["Mathematics_Standard","Physics"], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "666 at HL incl HL Maths (A&A) + Physics (BEng standard AAB)" },
     admissionTests: [],
     universityContext: {
@@ -4432,11 +4432,11 @@ const courseVerification = {
   "uk-economics-standrews": { status: "verified", source: "https://www.st-andrews.ac.uk/subjects/economics/economics-ma/", checkedDate: "2026-06-28", notes: "Verified: A-level AAA standard (minimum ABB); IB 38 standard (HL 666), minimum 36 (HL 655)." },
   "uk-medicine-standrews": { status: "verified", source: "https://www.st-andrews.ac.uk/subjects/medicine/medicine-bsc-a100/entry-requirements/academic-requirements/", checkedDate: "2026-06-28", notes: "Verified: A-level AAA (min AAB) incl Chemistry + one of Bio/Maths/Physics; IB 38, HL 666 incl HL Chemistry + one of Bio/Maths/Physics; UCAT required (not LNAT)." },
   "uk-maths-standrews": { status: "verified", source: "https://www.st-andrews.ac.uk/subjects/mathematics/mathematics-bsc/", checkedDate: "2026-06-28", notes: "Verified: A-level AAA incl Maths (BSc); MMath top offer A*A*A incl A* Maths + A Further Maths; IB 38 (HL 666 incl HL6 Maths), minimum 36." },
-  "uk-medicine-glasgow": { status: "verified", source: "https://www.medschools.ac.uk/courses/glasgow-medicine-a100/", checkedDate: "2026-06-28", notes: "Verified: A-level AAA, HL Chemistry+Biology, UCAT confirmed officially; IB 38 with HL 666 corroborated across Medical Schools Council (semi-official) + 2 further sources (Glasgow embeds totals in on-page tables)." },
-  "uk-law-glasgow": { status: "verified", source: "https://www.thecompleteuniversityguide.co.uk/courses/details/common-law-llb/57013998", checkedDate: "2026-06-28", notes: "Verified: A-level AAA, LNAT confirmed; IB 38 with HL 666 corroborated across Complete University Guide + gotouniversity (min 34 = 655). Glasgow embeds numeric totals in on-page tables not surfaced in search." },
-  "uk-cs-glasgow": { status: "verified", source: "https://www.gla.ac.uk/undergraduate/degrees/computingscience/", checkedDate: "2026-06-28", notes: "Verified (official): standard A-level AAA–ABB incl A-level Maths (faster route A*AA); IB 38 with HL 666 incl HL6 Maths (A&A). Stored AAB/IB33/HL665 corrected." },
-  "uk-economics-glasgow": { status: "verified", source: "https://www.gla.ac.uk/undergraduate/degrees/economics/", checkedDate: "2026-06-28", notes: "Verified (official): A-level AAB–BBB incl A-level Maths + English/Humanities; IB 36 (HL 665). Stored IB 33 corrected to 36; A-level AAB matches range top." },
-  "uk-engineering-glasgow": { status: "verified", source: "https://www.gla.ac.uk/undergraduate/degrees/mechanicalengineering/", checkedDate: "2026-06-28", notes: "Verified (official): MEng standard A-level AAA, IB 38 (HL 666 incl HL Maths + Physics); BEng is AAB. A*A*A is scholarship/excellence tier, not standard. Stored AAB/IB33/HL665 was the BEng/understated figure — updated to MEng standard." },
+  "uk-medicine-glasgow": { status: "partial", source: "https://www.gla.ac.uk/undergraduate/degrees/medicine/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Standard]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.medschools.ac.uk/courses/glasgow-medicine-a100/): Verified: A-level AAA, HL Chemistry+Biology, UCAT confirmed officially; IB 38 with HL 666 corroborated across Medical Schools Council (semi-official) + 2 further sources (Glasgow embeds totals in on-page tables)." },
+  "uk-law-glasgow": { status: "partial", source: "https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/M100", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [History, English]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.thecompleteuniversityguide.co.uk/courses/details/common-law-llb/57013998): Verified: A-level AAA, LNAT confirmed; IB 38 with HL 666 corroborated across Complete University Guide + gotouniversity (min 34 = 655). Glasgow embeds numeric totals in on-page tables not surfaced in search." },
+  "uk-cs-glasgow": { status: "verified", source: "https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/G400", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Advanced]→[]. EARLIER (2026-06-28, https://www.gla.ac.uk/undergraduate/degrees/computingscience/): Verified (official): standard A-level AAA–ABB incl A-level Maths (faster route A*AA); IB 38 with HL 666 incl HL6 Maths (A&A). Stored AAB/IB33/HL665 corrected." },
+  "uk-economics-glasgow": { status: "partial", source: "https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/L150", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Economics, Mathematics_Advanced]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.gla.ac.uk/undergraduate/degrees/economics/): Verified (official): A-level AAB–BBB incl A-level Maths + English/Humanities; IB 36 (HL 665). Stored IB 33 corrected to 36; A-level AAB matches range top." },
+  "uk-engineering-glasgow": { status: "partial", source: "https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/H302", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Advanced]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.gla.ac.uk/undergraduate/degrees/mechanicalengineering/): Verified (official): MEng standard A-level AAA, IB 38 (HL 666 incl HL Maths + Physics); BEng is AAB. A*A*A is scholarship/excellence tier, not standard. Stored AAB/IB33/HL665 was the BEng/understated figure — updated to MEng standard." },
   "uk-medicine-leeds": { status: "verified", source: "https://courses.leeds.ac.uk/5580/medicine-and-surgery-mbchb", checkedDate: "2026-06-28", notes: "AAA / IB 34 / UCAT confirmed (incl Chemistry & Biology at HL). Exact HL profile (666) not fully pinned but Chem+Bio at HL required." },
   "uk-cs-leeds": { status: "verified", source: "https://courses.leeds.ac.uk/3260/computer-science-bsc", checkedDate: "2026-06-28", notes: "Verified: A-level AAA incl Maths; IB 35 with 18 at HL incl HL Maths at 5 (Leeds expresses HL as a points sum). Stored IB 34 was incorrect." },
   "uk-engineering-leeds": { status: "verified", source: "https://courses.leeds.ac.uk/i445/civil-engineering-meng-beng", checkedDate: "2026-06-28", notes: "Verified via Leeds + UCAS + The Uni Guide: MEng A-level AAA incl Maths (BEng AAB incl A in Maths); IB 35 (18 at HL) incl HL5 Maths. HL Physics NOT required (corrected). Stored AAB/IB34/HL-Physics updated to MEng standard." },
