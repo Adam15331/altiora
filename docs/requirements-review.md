@@ -8,13 +8,13 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 167 | 20 | 133 | 0 |
+| SAT / ACT | 169 | 18 | 133 | 0 |
 | English language | 179 | 11 | 130 | 0 |
 | Admissions tests | 278 | 32 | 10 | 0 |
 | Subject prerequisites | 115 | 195 | 10 | 0 |
 | A-Level requirements | 126 | 107 | 83 | 4 |
 | IB requirements | 191 | 104 | 21 | 4 |
-| Other qualifications | 159 | 54 | 107 | 0 |
+| Other qualifications | 161 | 52 | 107 | 0 |
 | Other requirements | 181 | 14 | 125 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
@@ -184,19 +184,15 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-maths-edinburgh` | Subject prerequisites | Official (2027 entry): Mathematics at A* required; Further Mathematics preferred. |
 | `uk-maths-edinburgh` | A-Level requirements | Official (2027 entry): standard entry requirement from A*A*A* to A*AB in one set of exams, including Mathematics at A* (no more than two academic years before entry); Further Mathematics preferred; GCSE English at C or 4. No typical offer is shown because the matching engine stores no A-Level offer for this course (by owner policy, published ranges are not stored as offers). Edinburgh describes its standard entry requirements as the grades most applicants needed to receive an offer in recent years; offers may be made above or below them, and never below the widening-access minimum. |
 | `uk-maths-edinburgh` | Other requirements | Partly verified: Edinburgh’s interviews, tests and portfolios page still refers to the UCAT “in 2025” (the previous cycle). |
-| `uk-medicine-kcl` | SAT / ACT | King’s general US-qualification table (undated, current). The Medicine page’s country selector loads by script and could not be read, so it is not confirmed that every Route 1 combination is accepted for Medicine. |
 | `uk-medicine-kcl` | Subject prerequisites | Official (2027 entry): Required A-level grade A in Chemistry and Biology; preferred subjects: no preferred subjects. |
 | `uk-medicine-kcl` | A-Level requirements | Official (2027 entry): A*AA including grade A in Biology and Chemistry; no preferred subjects. King’s makes no contextual offers for this programme. The A*AA offer and required subjects agree. |
 | `uk-medicine-kcl` | IB requirements | Official (2027 entry): 38 points overall or an aggregate score of 19 from three Higher Levels; must include grade 6 in Higher Level Biology and Higher Level Chemistry. King’s does not state "666"; no preferred subjects are listed. |
-| `uk-medicine-kcl` | Other qualifications | King’s general US-qualification table (undated, current). The Medicine page’s country selector loads by script and could not be read, so it is not confirmed that every Route 1 combination is accepted for Medicine. |
 | `uk-law-kcl` | Subject prerequisites | Official (2027 entry): required subjects: none; preferred subjects: none. |
 | `uk-law-kcl` | A-Level requirements | Official (2027 entry): A*AA (contextual AAB); no required or preferred subjects. The A*AA offer agrees. |
 | `uk-law-kcl` | IB requirements | Official (2027 entry): 38 points overall or 19 from three Higher Levels (contextual 35 or 17); no preferred subjects. The score agrees. |
-| `uk-cs-kcl` | SAT / ACT | Shown at the A*A*A level of King’s published 2027 offer; data/courseRequirements.js holds AAA for this course (see the A-Level row). |
 | `uk-cs-kcl` | Subject prerequisites | Official (2027 entry): required grade A in Mathematics or Further Mathematics; preferred subjects Computing, Computer Science. |
 | `uk-cs-kcl` | A-Level requirements | Official (2027 entry): A*A*A including grade A in Mathematics or Further Mathematics (AAA is the contextual offer); preferred subjects Computing, Computer Science. |
 | `uk-cs-kcl` | IB requirements | Official (2027 entry): 39 points overall or 20 from three Higher Levels, including 6 in HL Mathematics: Analysis & Approaches — score and HL requirement agree; King’s preferred subjects are Computing/Computer Science. |
-| `uk-cs-kcl` | Other qualifications | Shown at the A*A*A level of King’s published 2027 offer; data/courseRequirements.js holds AAA for this course (see the A-Level row). |
 | `uk-economics-kcl` | Subject prerequisites | Official (2027 entry): required grade A in Mathematics; no preferred subjects. |
 | `uk-economics-kcl` | A-Level requirements | Official (2027 entry): A*AA including grade A in Mathematics (contextual AAB); no preferred subjects. The offer and required subject agree. |
 | `uk-economics-kcl` | IB requirements | Official (2027 entry): 38 points overall or 19 from three Higher Levels, including 6 in HL Mathematics (AA or AI) — score and HL requirement agree; no preferred subjects. |
@@ -822,9 +818,11 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `uk-law-kcl` | Subject prerequisites | Preferred subjects differ: King’s lists none; data/courseRequirements.js holds requirements.preferred ["History","English"]. Owner decision. |
 | `uk-law-kcl` | A-Level requirements | Preferred subjects differ: King’s lists none; data/courseRequirements.js holds requirements.preferred ["History","English"]. Owner decision. Excluded subjects, practical endorsement and contextual offer are display-only — the matcher does not apply them. |
 | `uk-law-kcl` | IB requirements | Preferred subjects differ: King’s lists none; data/courseRequirements.js holds requirements.preferred ["History","English"]. Owner decision. Contextual offer is display-only. |
+| `uk-cs-kcl` | SAT / ACT | Shown at King’s standard A*A*A level; data/courseRequirements.js holds AAA (A-Level row is partial with an owner-decision flag). |
 | `uk-cs-kcl` | Subject prerequisites | Preferred subjects differ: King’s prefers Computing/Computer Science; data/courseRequirements.js holds requirements.preferred ["Mathematics_Advanced"]. Owner decision. |
 | `uk-cs-kcl` | A-Level requirements | A-level offer differs: King’s standard offer is A*A*A (AAA is the contextual offer); data/courseRequirements.js holds grades.aLevels "AAA". Preferred subjects differ (Computing/Computer Science vs engine ["Mathematics_Advanced"]). Owner decision. Excluded subjects, practical endorsement and contextual offer are display-only — the matcher does not apply them. |
 | `uk-cs-kcl` | IB requirements | Preferred subjects differ: King’s prefers Computing/Computer Science; data/courseRequirements.js holds requirements.preferred ["Mathematics_Advanced"]. Owner decision. |
+| `uk-cs-kcl` | Other qualifications | Shown at King’s standard A*A*A level; data/courseRequirements.js holds AAA (A-Level row is partial with an owner-decision flag). |
 | `uk-economics-kcl` | Subject prerequisites | Preferred subjects differ: King’s lists none; data/courseRequirements.js holds requirements.preferred ["Economics","Mathematics_Advanced"]. Owner decision. |
 | `uk-economics-kcl` | A-Level requirements | Preferred subjects differ: King’s lists none; data/courseRequirements.js holds requirements.preferred ["Economics","Mathematics_Advanced"]. Owner decision. Excluded subjects, practical endorsement and contextual offer are display-only — the matcher does not apply them. |
 | `uk-economics-kcl` | IB requirements | Preferred subjects differ: King’s lists none; data/courseRequirements.js holds requirements.preferred ["Economics","Mathematics_Advanced"]. Owner decision. Contextual offer is display-only. |
