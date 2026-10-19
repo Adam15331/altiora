@@ -11,7 +11,7 @@
 | SAT / ACT | 4 | 0 | 316 | 0 |
 | English language | 4 | 0 | 316 | 0 |
 | Admissions tests | 308 | 12 | 0 | 0 |
-| Subject prerequisites | 308 | 12 | 0 | 0 |
+| Subject prerequisites | 304 | 16 | 0 | 0 |
 | A-Level requirements | 141 | 5 | 170 | 4 |
 | IB requirements | 202 | 7 | 107 | 4 |
 | Other qualifications | 23 | 30 | 267 | 0 |
@@ -55,9 +55,13 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-law-durham` | Other qualifications | Durham converts its A-Level requirement into an AP equivalent via a university equivalency table. Students at a school offering AP curriculum are expected to submit AP exams. Exams must be sat and submitted; the course grade is not accepted. Any subject-specific requirement must be evidenced with an AP exam. The equivalency table values are not yet captured. |
 | `uk-physics-durham` | Other qualifications | Durham converts its A-Level requirement into an AP equivalent via a university equivalency table. Students at a school offering AP curriculum are expected to submit AP exams. Exams must be sat and submitted; the course grade is not accepted. Any subject-specific requirement must be evidenced with an AP exam. The equivalency table values are not yet captured. |
 | `uk-engineering-durham` | Other qualifications | Durham converts its A-Level requirement into an AP equivalent via a university equivalency table. Students at a school offering AP curriculum are expected to submit AP exams. Exams must be sat and submitted; the course grade is not accepted. Any subject-specific requirement must be evidenced with an AP exam. The equivalency table values are not yet captured. |
+| `us-cs-yale` | Subject prerequisites | Official: Yale has no required secondary-school courses, but advises taking courses each year in English, science, math, the social sciences and foreign language. This applies to all Yale College applicants, whatever the intended major. |
 | `us-cs-yale` | A-Level requirements | Yale’s pages do not mention A-Levels by name — this row applies Yale’s statement on international leaving exams. |
+| `us-economics-yale` | Subject prerequisites | Official: Yale has no required secondary-school courses, but advises taking courses each year in English, science, math, the social sciences and foreign language. This applies to all Yale College applicants, whatever the intended major. |
 | `us-economics-yale` | A-Level requirements | Yale’s pages do not mention A-Levels by name — this row applies Yale’s statement on international leaving exams. |
+| `us-law-yale` | Subject prerequisites | Official: Yale has no required secondary-school courses, but advises taking courses each year in English, science, math, the social sciences and foreign language. This applies to all Yale College applicants, whatever the intended major. |
 | `us-law-yale` | A-Level requirements | Yale’s pages do not mention A-Levels by name — this row applies Yale’s statement on international leaving exams. |
+| `us-biology-yale` | Subject prerequisites | Official: Yale has no required secondary-school courses, but advises taking courses each year in English, science, math, the social sciences and foreign language. This applies to all Yale College applicants, whatever the intended major. |
 | `us-biology-yale` | A-Level requirements | Yale’s pages do not mention A-Levels by name — this row applies Yale’s statement on international leaving exams. |
 | `sg-engineering-sutd` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `sg-engineering-sutd` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
@@ -204,9 +208,13 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | Course | Category | Flag |
 |---|---|---|
 | `us-cs-yale` | SAT / ACT | data/courseRequirements.js still records usAdmissions.test "flexible" (test-flexible) for this course; Yale now requires the ACT or SAT. Owner decision — not changed here. |
+| `us-cs-yale` | Subject prerequisites | Official source lists advised high-school subjects (English, science, math, social sciences, foreign language), while stating none are required; data/courseRequirements.js holds none. Owner decision. |
 | `us-economics-yale` | SAT / ACT | data/courseRequirements.js still records usAdmissions.test "flexible" (test-flexible) for this course; Yale now requires the ACT or SAT. Owner decision — not changed here. |
+| `us-economics-yale` | Subject prerequisites | Official source lists advised high-school subjects (English, science, math, social sciences, foreign language), while stating none are required; data/courseRequirements.js holds none. Owner decision. |
 | `us-law-yale` | SAT / ACT | data/courseRequirements.js still records usAdmissions.test "flexible" (test-flexible) for this course; Yale now requires the ACT or SAT. Owner decision — not changed here. |
+| `us-law-yale` | Subject prerequisites | Official source lists advised high-school subjects (English, science, math, social sciences, foreign language), while stating none are required; data/courseRequirements.js holds none. Owner decision. |
 | `us-biology-yale` | SAT / ACT | data/courseRequirements.js still records usAdmissions.test "flexible" (test-flexible) for this course; Yale now requires the ACT or SAT. Owner decision — not changed here. |
+| `us-biology-yale` | Subject prerequisites | Official source lists advised high-school subjects (English, science, math, social sciences, foreign language), while stating none are required; data/courseRequirements.js holds none. Owner decision. |
 
 ## Values withheld from the panel
 

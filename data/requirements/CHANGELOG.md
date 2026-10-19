@@ -125,3 +125,9 @@ Format:
 - `us-cs-yale`, `us-economics-yale`, `us-law-yale`, `us-biology-yale` · Other requirements: not verified → **verified: Interviews: by invitation only; not required; Supplementary arts portfolio (music, visual art, film, dance) or STEM research: optional (2026-10-19)**.
   Source: https://admissions.yale.edu/interviews (accessed 2026-10-19) — “Alumni volunteers and current Yale students conduct evaluative interviews, by invitation only. … Interviews are not required, and many successful applicants are not interviewed.”
   Source: https://admissions.yale.edu/supplementary (accessed 2026-10-19) — “First-year and transfer applicants may supplement their application with an arts portfolio or academic research.”
+
+## 2026-10-19 — 2027 entry — US verification pass: Yale University — subject prerequisites aligned with the other schools
+
+- `us-cs-yale`, `us-economics-yale`, `us-law-yale`, `us-biology-yale` · Subject prerequisites: verified: none listed (2026-10-19) → **partly verified: Not used in Altiora’s matching yet — see the note for the official guidance (2026-10-19)**.
+  Source: https://admissions.yale.edu/course-selection (accessed 2026-10-19) — “Yale does not prescribe a set of secondary school courses that are required for admission. … Generally speaking, you should try to take courses each year in English, science, math, the social sciences, and foreign language.”
+  **Owner flag:** Official source lists advised high-school subjects (English, science, math, social sciences, foreign language), while stating none are required; data/courseRequirements.js holds none. Owner decision.
