@@ -676,8 +676,8 @@ const courses = [
   {
     id: "uk-medicine-kcl", name: "Medicine MBBS",
     university: "King's College London", country: "UK", degreeLevel: "MBBS", category: "medicine",
-    requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
-    grades: { aLevels: "A*AA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "666 at HL" },
+    requirements: { essential: ["Chemistry","Biology"], preferred: [], useful: ["Physics"] },
+    grades: { aLevels: "A*AA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "6 in HL Biology and HL Chemistry" },
     admissionTests: ["UCAT"],
     universityContext: {
       tier: "world-top-50",
@@ -689,7 +689,7 @@ const courses = [
   {
     id: "uk-law-kcl", name: "Law LLB",
     university: "King's College London", country: "UK", degreeLevel: "LLB", category: "law",
-    requirements: { essential: [], preferred: ["History","English"], useful: ["Economics","Philosophy"] },
+    requirements: { essential: [], preferred: [], useful: ["Economics","Philosophy"] },
     grades: { aLevels: "A*AA", ib: 38, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: ["LNAT"],
     universityContext: {
@@ -702,8 +702,8 @@ const courses = [
   {
     id: "uk-cs-kcl", name: "Computer Science BSc",
     university: "King's College London", country: "UK", degreeLevel: "BSc", category: "cs",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "AAA", ib: 39, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "6 in HL Mathematics" },
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Computer_Science"], useful: ["Computer_Science","Physics"] },
+    grades: { aLevels: "A*A*A", ib: 39, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "6 in HL Mathematics" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-50",
@@ -715,7 +715,7 @@ const courses = [
   {
     id: "uk-economics-kcl", name: "Economics BSc",
     university: "King's College London", country: "UK", degreeLevel: "BSc", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Statistics"] },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: "A*AA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: null },
     admissionTests: [],
     universityContext: {
@@ -728,7 +728,7 @@ const courses = [
   {
     id: "uk-nursing-kcl", name: "Nursing BSc",
     university: "King's College London", country: "UK", degreeLevel: "BSc", category: "medicine",
-    requirements: { essential: ["Biology"], preferred: ["Chemistry","Psychology"], useful: ["Mathematics_Standard"] },
+    requirements: { essential: [], preferred: [], useful: ["Mathematics_Standard"] },
     grades: { aLevels: "BBC", ib: 31, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     universityContext: {
@@ -741,7 +741,7 @@ const courses = [
   {
     id: "uk-psychology-kcl", name: "Psychology BSc",
     university: "King's College London", country: "UK", degreeLevel: "BSc", category: "psychology",
-    requirements: { essential: [], preferred: ["Psychology","Mathematics_Standard"], useful: ["Biology","Chemistry"] },
+    requirements: { essential: [], preferred: [], useful: ["Biology","Chemistry"] },
     grades: { aLevels: "A*AA", ib: 38, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     universityContext: {
@@ -4354,12 +4354,12 @@ const courseVerification = {
   "uk-law-edinburgh": { status: "partial", source: "https://study.ed.ac.uk/programmes/undergraduate/168-law-ordinary-and-honours/entry-requirements", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [History, English]→[English]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://study.ed.ac.uk/programmes/undergraduate/168-law-ordinary-and-honours/entry-requirements): AAA→A*AA; IB 35→39 with 666 HL; no LNAT (no test) confirmed." },
   "uk-psychology-edinburgh": { status: "partial", source: "https://study.ed.ac.uk/programmes/undergraduate/370-psychology/entry-requirements", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Psychology, Mathematics_Standard]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://study.ed.ac.uk/programmes/undergraduate/370-psychology/entry-requirements): A*AA / IB 39 / 666 HL / no test all confirmed (match stored)." },
   "uk-architecture-edinburgh": { status: "partial", source: "https://study.ed.ac.uk/programmes/undergraduate/120-architecture/entry-requirements", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Standard, Art_Design]→[]; ibHL [Mathematics_Standard]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://study.ed.ac.uk/programmes/undergraduate/120-architecture/entry-requirements): AAB/33→A*AA/39 with 666 HL; no test (artistic-ability evidence required). UG degree is Architecture BA/MA (Hons), not MArch." },
-  "uk-medicine-kcl": { status: "verified", source: "https://www.kcl.ac.uk/study/undergraduate/courses/medicine-mbbs/requirements", checkedDate: "2026-06-28", notes: "A*AA (A in Bio & Chem) / IB 38 (incl TOK/EE) / 666 HL (Bio & Chem at 6) / UCAT all confirmed." },
-  "uk-law-kcl": { status: "verified", source: "https://www.kcl.ac.uk/study/undergraduate/courses/law-llb/requirements", checkedDate: "2026-06-28", notes: "Verified: A-level A*AA (no specific subjects) confirmed via KCL + The Uni Guide + Complete University Guide; IB 38 standard (35 contextual); LNAT required." },
-  "uk-cs-kcl": { status: "verified", source: "https://www.kcl.ac.uk/study/undergraduate/courses/computer-science-bsc/requirements", checkedDate: "2026-06-28", notes: "AAA / IB 39 (incl TOK/EE) confirmed; added HL note (grade 6 in HL Maths/Further Maths). No test." },
-  "uk-economics-kcl": { status: "verified", source: "https://www.kcl.ac.uk/study/undergraduate/courses/economics-bsc/requirements", checkedDate: "2026-06-28", notes: "Verified: A-level A*AA incl A in Mathematics (KCL + The Uni Guide; every result returned A*AA, none AAB — stored AAB corrected); IB 38, HL6 Maths." },
-  "uk-nursing-kcl": { status: "verified", source: "https://www.kcl.ac.uk/study/undergraduate/courses/nursing-with-registration-as-an-adult-nurse-bsc/requirements", checkedDate: "2026-06-28", notes: "BBC confirmed; IB 30→31. Interview required; no admissions test." },
-  "uk-psychology-kcl": { status: "verified", source: "https://www.kcl.ac.uk/study/undergraduate/courses/psychology-bsc/requirements", checkedDate: "2026-06-28", notes: "Verified: IB 38 and 'A in one of Biology/Chemistry/Maths/Physics/Psychology' (HL6) confirmed officially. Headline A-level A*AA inferred from KCL's standard-offer pattern (cf. Law/Economics A*AA) + aggregator summaries + KCL's 'contextual up to 2 grades lower' note (AAB = contextual); not from a clean official snippet (KCL tables don't render in search). Stored AAB (contextual) corrected to A*AA." },
+  "uk-medicine-kcl": { status: "verified", source: "https://www.kcl.ac.uk/study/undergraduate/courses/medicine-mbbs/requirements", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Standard]→[]; ibHLNote 666 at HL→6 in HL Biology and HL Chemistry. EARLIER (2026-06-28, https://www.kcl.ac.uk/study/undergraduate/courses/medicine-mbbs/requirements): A*AA (A in Bio & Chem) / IB 38 (incl TOK/EE) / 666 HL (Bio & Chem at 6) / UCAT all confirmed." },
+  "uk-law-kcl": { status: "verified", source: "https://www.kcl.ac.uk/study/undergraduate/courses/law-llb/requirements", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [History, English]→[]. EARLIER (2026-06-28, https://www.kcl.ac.uk/study/undergraduate/courses/law-llb/requirements): Verified: A-level A*AA (no specific subjects) confirmed via KCL + The Uni Guide + Complete University Guide; IB 38 standard (35 contextual); LNAT required." },
+  "uk-cs-kcl": { status: "partial", source: "https://www.kcl.ac.uk/study/undergraduate/courses/computer-science-bsc/requirements", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels AAA→A*A*A; preferred [Mathematics_Advanced]→[Computer_Science]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.kcl.ac.uk/study/undergraduate/courses/computer-science-bsc/requirements): AAA / IB 39 (incl TOK/EE) confirmed; added HL note (grade 6 in HL Maths/Further Maths). No test." },
+  "uk-economics-kcl": { status: "partial", source: "https://www.kcl.ac.uk/study/undergraduate/courses/economics-bsc/requirements", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Economics, Mathematics_Advanced]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.kcl.ac.uk/study/undergraduate/courses/economics-bsc/requirements): Verified: A-level A*AA incl A in Mathematics (KCL + The Uni Guide; every result returned A*AA, none AAB — stored AAB corrected); IB 38, HL6 Maths." },
+  "uk-nursing-kcl": { status: "partial", source: "https://www.kcl.ac.uk/study/undergraduate/courses/nursing-with-registration-as-an-adult-nurse-bsc/requirements", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential [Biology]→[]; preferred [Chemistry, Psychology]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.kcl.ac.uk/study/undergraduate/courses/nursing-with-registration-as-an-adult-nurse-bsc/requirements): BBC confirmed; IB 30→31. Interview required; no admissions test." },
+  "uk-psychology-kcl": { status: "partial", source: "https://www.kcl.ac.uk/study/undergraduate/courses/psychology-bsc/requirements", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Psychology, Mathematics_Standard]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.kcl.ac.uk/study/undergraduate/courses/psychology-bsc/requirements): Verified: IB 38 and 'A in one of Biology/Chemistry/Maths/Physics/Psychology' (HL6) confirmed officially. Headline A-level A*AA inferred from KCL's standard-offer pattern (cf. Law/Economics A*AA) + aggregator summaries + KCL's 'contextual up to 2 grades lower' note (AAB = contextual); not from a clean official snippet (KCL tables don't render in search). Stored AAB (contextual) corrected to A*AA." },
   "us-cs-mit": { status: "verified", source: "https://mitadmissions.org/apply/process/stats/", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test required (reinstated). Indicative admitted middle-50%: SAT 1520–1570, ACT 35–36 (MIT stats / CDS 2024-25; indicative, not a cutoff). Course existence & naming verified against official source." },
   "us-engineering-mit": { status: "verified", source: "https://mitadmissions.org/apply/process/stats/", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test required (reinstated). Indicative admitted middle-50%: SAT 1520–1570, ACT 35–36 (MIT stats / CDS 2024-25; indicative, not a cutoff). Course existence & naming verified against official source. Course 6-2 (EECS) was renumbered to 6-5 'Electrical Engineering with Computing' as of Fall 2024." },
   "us-mechanical-mit": { status: "verified", source: "https://mitadmissions.org/apply/process/stats/", checkedDate: "2026-06-28", notes: "Holistic admissions — no published grade/subject cutoff. Test required (reinstated). Indicative admitted middle-50%: SAT 1520–1570, ACT 35–36 (MIT stats / CDS 2024-25; indicative, not a cutoff). Course existence & naming verified against official source." },

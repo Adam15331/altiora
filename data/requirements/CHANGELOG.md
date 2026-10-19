@@ -3673,3 +3673,42 @@ Format:
 - `uk-maths-edinburgh` · subjectPrerequisites: row partial → partial (owner flag kept).
 - `uk-maths-edinburgh` · aLevel: row partial → partial (owner flag kept).
 - `uk-maths-edinburgh` · ib: row verified → verified (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: King's College London
+
+- `uk-medicine-kcl` · engine `requirements.preferred`: [Mathematics_Standard] → [] (preferred-remove-stated). Source: https://www.kcl.ac.uk/study/undergraduate/courses/medicine-mbbs/requirements
+  > Preferred subjects: No preferred subjects
+- `uk-medicine-kcl` · engine `grades.ibHLNote`: 666 at HL → 6 in HL Biology and HL Chemistry (ib-note). Source: https://www.kcl.ac.uk/study/undergraduate/courses/medicine-mbbs/requirements
+  > Must include grade 6 in Higher Level Biology and Higher Level Chemistry.
+- `uk-medicine-kcl` · subjectPrerequisites: row partial → verified.
+- `uk-medicine-kcl` · aLevel: row partial → verified (owner flag kept).
+- `uk-medicine-kcl` · ib: row partial → verified (owner flag kept).
+- `uk-law-kcl` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-stated). Source: https://www.kcl.ac.uk/study/undergraduate/courses/law-llb/requirements
+  > Required subjects: None Preferred subjects: None
+- `uk-law-kcl` · subjectPrerequisites: row partial → verified.
+- `uk-law-kcl` · aLevel: row partial → verified (owner flag kept).
+- `uk-law-kcl` · ib: row partial → verified (owner flag kept).
+- `uk-cs-kcl` · engine `grades.aLevels`: AAA → A*A*A (offer). Source: https://www.kcl.ac.uk/study/undergraduate/courses/computer-science-bsc/requirements
+  > A-Levels Required grades: A*A*A
+- `uk-cs-kcl` · engine `requirements.preferred`: [Mathematics_Advanced] → [Computer_Science] (preferred-remove-unlisted, preferred-add). Source: https://www.kcl.ac.uk/study/undergraduate/courses/computer-science-bsc/requirements
+  > Preferred subjects: Computing, Computer Science.
+- `uk-cs-kcl` · subjectPrerequisites: row partial → verified.
+- `uk-cs-kcl` · aLevel: row partial → partial (owner flag kept).
+- `uk-cs-kcl` · ib: row partial → partial (owner flag kept).
+- `uk-economics-kcl` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-stated). Source: https://www.kcl.ac.uk/study/undergraduate/courses/economics-bsc/requirements
+  > Preferred subjects: No preferred subjects
+- `uk-economics-kcl` · subjectPrerequisites: row partial → verified.
+- `uk-economics-kcl` · aLevel: row partial → verified (owner flag kept).
+- `uk-economics-kcl` · ib: row partial → partial (owner flag kept).
+- `uk-nursing-kcl` · engine `requirements.essential`: [Biology] → [] (essential-remove). Source: https://www.kcl.ac.uk/study/undergraduate/courses/nursing-with-registration-as-an-adult-nurse-bsc/requirements
+  > Required subjects: No subject requirements
+- `uk-nursing-kcl` · engine `requirements.preferred`: [Chemistry, Psychology] → [] (preferred-remove-stated). Source: https://www.kcl.ac.uk/study/undergraduate/courses/nursing-with-registration-as-an-adult-nurse-bsc/requirements
+  > Preferred subjects: No preferred subjects
+- `uk-nursing-kcl` · subjectPrerequisites: row partial → verified.
+- `uk-nursing-kcl` · aLevel: row partial → verified (owner flag kept).
+- `uk-nursing-kcl` · ib: row partial → partial (owner flag kept).
+- `uk-psychology-kcl` · engine `requirements.preferred`: [Psychology, Mathematics_Standard] → [] (preferred-remove-stated). Source: https://www.kcl.ac.uk/study/undergraduate/courses/psychology-bsc/requirements
+  > Preferred subjects: Not specified
+- `uk-psychology-kcl` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-psychology-kcl` · aLevel: row partial → partial (owner flag kept).
+- `uk-psychology-kcl` · ib: row partial → partial (owner flag kept).
