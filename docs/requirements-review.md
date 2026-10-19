@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 116 | 1 | 203 | 0 |
-| English language | 113 | 6 | 201 | 0 |
+| SAT / ACT | 122 | 1 | 197 | 0 |
+| English language | 119 | 6 | 195 | 0 |
 | Admissions tests | 294 | 16 | 10 | 0 |
-| Subject prerequisites | 183 | 127 | 10 | 0 |
-| A-Level requirements | 194 | 38 | 84 | 4 |
-| IB requirements | 256 | 39 | 21 | 4 |
-| Other qualifications | 124 | 39 | 157 | 0 |
-| Other requirements | 121 | 3 | 196 | 0 |
+| Subject prerequisites | 180 | 130 | 10 | 0 |
+| A-Level requirements | 191 | 41 | 84 | 4 |
+| IB requirements | 252 | 43 | 21 | 4 |
+| Other qualifications | 130 | 39 | 151 | 0 |
+| Other requirements | 127 | 3 | 190 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -89,6 +89,16 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-bioengineering-imperial` | Subject prerequisites | Official (2027 entry): Mathematics (A*) and Physics (A) are required; the third subject is open. The page does not list Chemistry as preferred. |
 | `uk-bioengineering-imperial` | A-Level requirements | Official (2027 entry): minimum entry standard A*AA (A* in Mathematics, A in Physics, A in a third subject); typical offer A*AA – A*A*A. Under the department’s contextual admissions scheme, applicants predicted AAA in the relevant subjects are guaranteed an interview. The page does not list Chemistry as preferred. |
 | `uk-bioengineering-imperial` | IB requirements | Official (2027 entry): minimum entry standard 39 points including 6 in Mathematics, 6 in Physics and 6 in a third subject at higher level; typical offer 40 points. Physics HL is required, not “Physics or Chemistry”. |
+| `uk-finance-lse` | IB requirements | Official (2027 entry): 39 points overall. 766 in higher level subjects, including 7 in Mathematics. (38 points is LSE’s contextual offer.) |
+| `uk-accounting-lse` | Subject prerequisites | Official (2027 entry): A-level Mathematics is essential; there are no set subject combinations, traditional academic subjects (including A-level Accounting) are preferred; Further Mathematics is not required. Economics is not named as preferred. |
+| `uk-accounting-lse` | A-Level requirements | Official (2027 entry): A*AA with A in Mathematics (AAA with A in Mathematics is the contextual offer). No preference for Economics or Further Mathematics is stated. |
+| `uk-accounting-lse` | IB requirements | Official (2027 entry): 39 points overall. 766 in higher level subjects, including 6 in higher level Mathematics. (38 points with 666 is the contextual offer.) |
+| `uk-law-lse` | Subject prerequisites | Official (2027 entry): there is no set subject combination; LSE expects a high level of literacy in post-16 subject choices and does not name History or English. |
+| `uk-law-lse` | A-Level requirements | Official (2027 entry): A*AA (contextual offer AAB) with no set subject combination — the A*AA offer agrees; the History/English preference is not stated by LSE. |
+| `uk-law-lse` | IB requirements | Official (2027 entry): 39 points overall. 766 in higher level subjects (contextual: 37 points, 666). No preferred subjects are stated. |
+| `uk-politics-lse` | Subject prerequisites | Official (2027 entry): A-level Mathematics (or equivalent) is required; Economics is only listed among typical subject choices. |
+| `uk-politics-lse` | A-Level requirements | Official (2027 entry): AAA, including Mathematics (contextual AAB including A in Mathematics). The AAA offer agrees; Mathematics is required, not preferred. |
+| `uk-politics-lse` | IB requirements | Official (2027 entry): 38 points overall, including 766 at higher level, including Mathematics — score and HL profile agree; Mathematics is required (engine lists it as preferred). |
 | `uk-medicine-ucl` | Other qualifications | UCL accepts AP exams for direct entry. Requirements are tiered against the A-Level equivalent for each course, with alternative routes trading AP count against SAT or ACT. The tier table is not yet captured. |
 | `uk-cs-ucl` | Other qualifications | UCL accepts AP exams for direct entry. Requirements are tiered against the A-Level equivalent for each course, with alternative routes trading AP count against SAT or ACT. The tier table is not yet captured. |
 | `uk-engineering-ucl` | Other qualifications | UCL accepts AP exams for direct entry. Requirements are tiered against the A-Level equivalent for each course, with alternative routes trading AP count against SAT or ACT. The tier table is not yet captured. |
@@ -429,6 +439,21 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `uk-bioengineering-imperial` | Subject prerequisites | Preferred subject not confirmed: the official page does not list Chemistry as preferred; data/courseRequirements.js holds preferred Chemistry. Owner decision. |
 | `uk-bioengineering-imperial` | A-Level requirements | Offer differs: official minimum A*AA, typical A*AA – A*A*A; data/courseRequirements.js holds AAA (AAA appears on the page only as the contextual-scheme threshold for a guaranteed interview). Chemistry is not listed as preferred (engine preferred Chemistry). Owner decision. Excluded subjects and the practical endorsement are display-only; the matcher does not apply them. |
 | `uk-bioengineering-imperial` | IB requirements | IB differs: official minimum 39 (HL 6 Mathematics, 6 Physics, 6 third subject), typical 40; data/courseRequirements.js holds 38 and "HL6 Mathematics + HL6 Physics or Chemistry; 39 typical". Owner decision. |
+| `uk-economics-lse` | A-Level requirements | Contextual offer is display-only — the matcher does not apply it. |
+| `uk-economics-lse` | IB requirements | Contextual offer is display-only — the matcher does not apply it. |
+| `uk-finance-lse` | A-Level requirements | Contextual offer is display-only — the matcher does not apply it. |
+| `uk-finance-lse` | IB requirements | IB overall score differs: LSE’s standard offer is 39 (38 is the contextual offer); data/courseRequirements.js holds grades.ib 38. Owner decision. |
+| `uk-accounting-lse` | Subject prerequisites | Preferred subjects differ: LSE names no preference for Economics or Further Mathematics; data/courseRequirements.js holds requirements.preferred ["Economics","Mathematics_Advanced"]. Owner decision. |
+| `uk-accounting-lse` | A-Level requirements | A-level offer differs: LSE’s standard offer is A*AA with A in Mathematics (AAA is the contextual offer); data/courseRequirements.js holds grades.aLevels "AAA". Preferred Economics/Further Mathematics not stated by LSE; engine holds ["Economics","Mathematics_Advanced"]. Owner decision. |
+| `uk-accounting-lse` | IB requirements | IB overall score differs: LSE’s standard offer is 39 (38 is the contextual offer); data/courseRequirements.js holds grades.ib 38. Owner decision. |
+| `uk-law-lse` | Subject prerequisites | Preferred subjects differ: LSE names no preferred subjects; data/courseRequirements.js holds requirements.preferred ["History","English"]. Owner decision. |
+| `uk-law-lse` | A-Level requirements | Preferred subjects differ: LSE names no preferred subjects; data/courseRequirements.js holds requirements.preferred ["History","English"]. Owner decision. |
+| `uk-law-lse` | IB requirements | IB overall score differs: LSE’s standard offer is 39 (contextual 37); data/courseRequirements.js holds grades.ib 38. Preferred History/English not stated; engine holds ["History","English"]. Owner decision. |
+| `uk-politics-lse` | Subject prerequisites | Subject requirement differs: LSE requires A-level Mathematics; data/courseRequirements.js holds Mathematics_Standard as preferred (requirements.essential []) and Economics as preferred. Owner decision. |
+| `uk-politics-lse` | A-Level requirements | Required subject missing: LSE requires A-level Mathematics; data/courseRequirements.js holds requirements.essential [] and preferred ["Mathematics_Standard","Economics"]. Owner decision. |
+| `uk-politics-lse` | IB requirements | Required subject missing: LSE requires Mathematics; data/courseRequirements.js holds requirements.essential [] and preferred ["Mathematics_Standard","Economics"]. Owner decision. |
+| `uk-management-lse` | A-Level requirements | Contextual offer is display-only — the matcher does not apply it. |
+| `uk-management-lse` | IB requirements | Contextual offer is display-only — the matcher does not apply it. |
 | `uk-medicine-birmingham` | Subject prerequisites | Biology is one option for the second science, not a requirement, and Maths is an alternative second science rather than preferred; data/courseRequirements.js holds essential [Chemistry, Biology], preferred [Mathematics_Standard]. Owner decision. |
 | `uk-medicine-birmingham` | A-Level requirements | Offer differs (official AAA, not A*AA) and the second science is any one of Biology/Human Biology, Physics or Maths (Biology not specifically required; no preferred subject); data/courseRequirements.js holds A*AA, essential [Chemistry, Biology], preferred [Mathematics_Standard]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
 | `uk-medicine-birmingham` | IB requirements | HL grades differ (official 666, not 766) and the second HL science is any of Biology/Physics/Maths; data/courseRequirements.js holds ibHLNote "766 at HL", ibHL [Chemistry, Biology]. Owner decision. |
@@ -691,12 +716,6 @@ category — check the official source; never copy a hint in as a value.
 | `uk-law-oxford` | University of Oxford | SAT / ACT, Other qualifications | SAT / ACT: Not verified: University of Oxford’s pages could not be opened for checking on 19 Oct 2026 — check the official page.; Other qualifications: Not verified: University of Oxford’s pages could not be opened for checking on 19 Oct 2026 — check the official page. |
 | `uk-economics-oxford` | University of Oxford | SAT / ACT, English language, Other qualifications | SAT / ACT: Not verified: University of Oxford’s pages could not be opened for checking on 19 Oct 2026 — check the official page.; English language: Not verified: University of Oxford’s pages could not be opened for checking on 19 Oct 2026 — check the official page.; Other qualifications: Not verified: University of Oxford’s pages could not be opened for checking on 19 Oct 2026 — check the official page. |
 | `uk-history-oxford` | University of Oxford | SAT / ACT, English language, Other qualifications | SAT / ACT: Not verified: University of Oxford’s pages could not be opened for checking on 19 Oct 2026 — check the official page.; English language: Not verified: University of Oxford’s pages could not be opened for checking on 19 Oct 2026 — check the official page.; Other qualifications: Not verified: University of Oxford’s pages could not be opened for checking on 19 Oct 2026 — check the official page. |
-| `uk-economics-lse` | London School of Economics | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-finance-lse` | London School of Economics | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-accounting-lse` | London School of Economics | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-law-lse` | London School of Economics | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-politics-lse` | London School of Economics | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-management-lse` | London School of Economics | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-medicine-ucl` | University College London | SAT / ACT, English language, Other requirements |  |
 | `uk-cs-ucl` | University College London | SAT / ACT, English language, Other requirements |  |
 | `uk-engineering-ucl` | University College London | SAT / ACT, English language, Other requirements |  |
