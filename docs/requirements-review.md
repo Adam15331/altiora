@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 75 | 0 | 245 | 0 |
-| English language | 75 | 0 | 245 | 0 |
+| SAT / ACT | 79 | 0 | 241 | 0 |
+| English language | 79 | 0 | 241 | 0 |
 | Admissions tests | 308 | 12 | 0 | 0 |
-| Subject prerequisites | 234 | 86 | 0 | 0 |
-| A-Level requirements | 207 | 10 | 99 | 4 |
-| IB requirements | 269 | 11 | 36 | 4 |
-| Other qualifications | 83 | 38 | 199 | 0 |
-| Other requirements | 75 | 0 | 245 | 0 |
+| Subject prerequisites | 230 | 90 | 0 | 0 |
+| A-Level requirements | 211 | 10 | 95 | 4 |
+| IB requirements | 273 | 11 | 32 | 4 |
+| Other qualifications | 87 | 38 | 195 | 0 |
+| Other requirements | 79 | 0 | 241 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -97,6 +97,10 @@ Shown with a "Partly verified" badge and the note below.
 | `us-engineering-caltech` | Other qualifications | Partly verified: the AP/IB substitution page still refers to “in-coming fall 2026 first-year applicants” in places, so the substitution rule is not confirmed for fall 2027 entry. The AP/IB reporting rule is on the undated testing page. |
 | `us-maths-caltech` | Subject prerequisites | Official: to prepare for the core curriculum, students must demonstrate mastery in four years of math including one year of calculus, one year of physics, one year of chemistry, four years of English, and two years of history and/or social sciences (3+ recommended); one year of biology is recommended. Where calculus, chemistry or physics is unavailable, Caltech accepts set AP/IB scores or a Schoolhouse.world course challenge instead. These apply to all first-year applicants — Caltech admits to the Institute and students declare a major at the end of the first year. |
 | `us-maths-caltech` | Other qualifications | Partly verified: the AP/IB substitution page still refers to “in-coming fall 2026 first-year applicants” in places, so the substitution rule is not confirmed for fall 2027 entry. The AP/IB reporting rule is on the undated testing page. |
+| `us-cs-cmu` | Subject prerequisites | Official (School of Computer Science high school course requirements): 4 years English; 4 years mathematics (at least algebra, geometry, trigonometry, analytic geometry, elementary functions/pre-calculus, and preferably calculus — advanced math, especially calculus, strongly encouraged); 1 year physics; 2 years of chemistry, biology or computer science; 2 years foreign language; 3 electives. |
+| `us-engineering-cmu` | Subject prerequisites | Official (College of Engineering high school course requirements): 4 years English; 4 years mathematics (at least algebra, geometry, trigonometry, analytic geometry, elementary functions/pre-calculus, and preferably calculus — advanced math, especially calculus, strongly encouraged); 1 year chemistry; 1 year physics; 1 year biology; 2 years foreign language; 3 electives. |
+| `us-business-cmu` | Subject prerequisites | Official (Tepper School of Business high school course requirements): 4 years English; 4 years mathematics (at least algebra, geometry, trigonometry, analytic geometry, elementary functions/pre-calculus, and preferably calculus — advanced math, especially calculus, encouraged); 1 year chemistry; 1 year physics; 1 year biology; 2 years foreign language; 3 electives. |
+| `us-maths-cmu` | Subject prerequisites | Official (Mellon College of Science high school course requirements): 4 years English; 4 years mathematics (at least algebra, geometry, trigonometry, analytic geometry, elementary functions/pre-calculus, and preferably calculus — advanced math, especially calculus, strongly encouraged); 1 year chemistry; 1 year physics; 1 year biology; 2 years foreign language; 3 electives. |
 | `us-law-georgetown` | Subject prerequisites | Official: all applicants are expected to have completed four years of English, a minimum of two years of social studies, language study and mathematics, and one year of natural science. Government is in the College of Arts & Sciences (humanities/social sciences); Georgetown lists no extra preparation for it. |
 | `us-business-georgetown` | Subject prerequisites | Official: all applicants are expected to have completed four years of English, a minimum of two years of social studies, language study and mathematics, and one year of natural science. McDonough School of Business: students interested in business should complete a minimum of three years of math, through advanced algebra and trigonometry, as calculus is required of all students in the program; two years of natural science are recommended. |
 | `us-cs-duke` | Subject prerequisites | Official: Duke recommends four years of English and at least three years of mathematics, natural sciences, world language and social studies (recommended, not required). The Pratt-only calculus requirement does not apply: this course is in Trinity College of Arts & Sciences. |
@@ -190,10 +194,6 @@ Shown to students only as "Previously recorded, not verified". Confirm or correc
 
 | Course | Category | Recorded value |
 |---|---|---|
-| `us-cs-cmu` | SAT / ACT | SAT/ACT required for some schools |
-| `us-engineering-cmu` | SAT / ACT | SAT/ACT required for some schools |
-| `us-business-cmu` | SAT / ACT | SAT/ACT required for some schools |
-| `us-maths-cmu` | SAT / ACT | SAT/ACT required for some schools |
 | `us-cs-berkeley` | SAT / ACT | Test-blind (scores not used) |
 | `us-engineering-berkeley` | SAT / ACT | Test-blind (scores not used) |
 | `us-economics-berkeley` | SAT / ACT | Test-blind (scores not used) |
@@ -269,6 +269,14 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `us-maths-caltech` | Subject prerequisites | Official source lists required high-school math (incl. calculus), physics, chemistry, English and history/social sciences; data/courseRequirements.js holds none. Owner decision. |
 | `us-maths-caltech` | A-Level requirements | Official source requires A-Level Maths for A-Level students; data/courseRequirements.js holds no A-Level subject requirement. Owner decision. |
 | `us-maths-caltech` | IB requirements | Official source requires IB Higher Level Math for IB students; data/courseRequirements.js holds no IB HL requirement (ibHL is empty). Owner decision. |
+| `us-cs-cmu` | SAT / ACT | data/courseRequirements.js records usAdmissions.test "varies" for this course; the official policy for the School of Computer Science is SAT or ACT required. Owner decision — not changed here. |
+| `us-cs-cmu` | Subject prerequisites | Official source lists School of Computer Science high-school course requirements (4 years English…); data/courseRequirements.js holds none. Owner decision. |
+| `us-engineering-cmu` | SAT / ACT | data/courseRequirements.js records usAdmissions.test "varies" for this course; the official policy for the College of Engineering is test flexible (a test result is required, chosen from SAT, ACT, IB, AP, Cambridge A-Level or French Baccalaureate). Owner decision — not changed here. |
+| `us-engineering-cmu` | Subject prerequisites | Official source lists College of Engineering high-school course requirements (4 years English…); data/courseRequirements.js holds none. Owner decision. |
+| `us-business-cmu` | SAT / ACT | data/courseRequirements.js records usAdmissions.test "varies" for this course; the official policy for the Tepper School of Business is test flexible (a test result is required, chosen from SAT, ACT, IB, AP, Cambridge A-Level or French Baccalaureate). Owner decision — not changed here. |
+| `us-business-cmu` | Subject prerequisites | Official source lists Tepper School of Business high-school course requirements (4 years English…); data/courseRequirements.js holds none. Owner decision. |
+| `us-maths-cmu` | SAT / ACT | data/courseRequirements.js records usAdmissions.test "varies" for this course; the official policy for the Mellon College of Science is test flexible (a test result is required, chosen from SAT, ACT, IB, AP, Cambridge A-Level or French Baccalaureate). Owner decision — not changed here. |
+| `us-maths-cmu` | Subject prerequisites | Official source lists Mellon College of Science high-school course requirements (4 years English…); data/courseRequirements.js holds none. Owner decision. |
 | `us-law-georgetown` | Subject prerequisites | Official source lists expected high-school coursework (4 years English; at least 2 years social studies, language and mathematics; 1 year natural science); data/courseRequirements.js holds none. Owner decision. |
 | `us-business-georgetown` | Subject prerequisites | Official source lists expected high-school coursework (all applicants) plus McDonough guidance (at least 3 years of math through advanced algebra and trigonometry; 2 years natural science recommended); data/courseRequirements.js holds none. Owner decision. |
 | `us-cs-duke` | Subject prerequisites | Official source lists recommended high-school coursework (4 years English; at least 3 years each of mathematics, natural sciences, world language, social studies); data/courseRequirements.js holds none. Owner decision. |
@@ -469,10 +477,6 @@ category — check the official source; never copy a hint in as a value.
 | `us-business-wharton` | University of Pennsylvania | Other qualifications | Other qualifications: Not verified: Penn’s Testing (https://admissions.upenn.edu/how-to-apply/preparing-your-application/testing) and Application Requirements pages do not say how AP scores are used in admission; the Pre-College Credits page (https://admissions.upenn.edu/how-to-apply/first-year-applicants/pre-college-credits) covers AP/IB/A-Level credit after enrolment only, which is not an admission requirement. |
 | `us-cs-penn` | University of Pennsylvania | Other qualifications | Other qualifications: Not verified: Penn’s Testing (https://admissions.upenn.edu/how-to-apply/preparing-your-application/testing) and Application Requirements pages do not say how AP scores are used in admission; the Pre-College Credits page (https://admissions.upenn.edu/how-to-apply/first-year-applicants/pre-college-credits) covers AP/IB/A-Level credit after enrolment only, which is not an admission requirement. |
 | `us-economics-penn` | University of Pennsylvania | Other qualifications | Other qualifications: Not verified: Penn’s Testing (https://admissions.upenn.edu/how-to-apply/preparing-your-application/testing) and Application Requirements pages do not say how AP scores are used in admission; the Pre-College Credits page (https://admissions.upenn.edu/how-to-apply/first-year-applicants/pre-college-credits) covers AP/IB/A-Level credit after enrolment only, which is not an admission requirement. |
-| `us-cs-cmu` | Carnegie Mellon University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-engineering-cmu` | Carnegie Mellon University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-business-cmu` | Carnegie Mellon University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-maths-cmu` | Carnegie Mellon University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-cs-berkeley` | UC Berkeley | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-engineering-berkeley` | UC Berkeley | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-economics-berkeley` | UC Berkeley | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
