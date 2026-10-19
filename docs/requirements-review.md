@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 33 | 0 | 287 | 0 |
-| English language | 33 | 0 | 287 | 0 |
+| SAT / ACT | 36 | 0 | 284 | 0 |
+| English language | 36 | 0 | 284 | 0 |
 | Admissions tests | 308 | 12 | 0 | 0 |
-| Subject prerequisites | 275 | 45 | 0 | 0 |
-| A-Level requirements | 170 | 5 | 141 | 4 |
-| IB requirements | 231 | 7 | 78 | 4 |
-| Other qualifications | 52 | 30 | 238 | 0 |
-| Other requirements | 33 | 0 | 287 | 0 |
+| Subject prerequisites | 272 | 48 | 0 | 0 |
+| A-Level requirements | 170 | 8 | 138 | 4 |
+| IB requirements | 234 | 7 | 75 | 4 |
+| Other qualifications | 55 | 30 | 235 | 0 |
+| Other requirements | 36 | 0 | 284 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -103,6 +103,12 @@ Shown with a "Partly verified" badge and the note below.
 | `hk-psychology-cuhk` | Admissions tests | The official source could only be partly confirmed for this course — check it before relying on this. |
 | `hk-psychology-cuhk` | Subject prerequisites | The official source could only be partly confirmed for this course — check it before relying on this. |
 | `hk-psychology-cuhk` | IB requirements | The official source could only be partly confirmed for this course — check it before relying on this. |
+| `us-cs-northwestern` | Subject prerequisites | Official: The McCormick School of Engineering and Applied Science encourages strong preparation in mathematics and science. Recommended coursework: English 4 full-year courses; laboratory science at least 3 full-year courses (chemistry and physics preferred); mathematics 3.5–4 full-year courses (calculus preferred, if available; the minimum includes 2 full-year courses of algebra, 1 of plane geometry and 1 semester of trigonometry); 5–6 additional full-year courses including foreign language, history and social sciences. These are recommendations, not requirements. The Computer Science BS is offered by McCormick (the BA is through Weinberg). |
+| `us-cs-northwestern` | A-Level requirements | Northwestern’s admissions pages do not name A-Levels — this row applies its general statement on external exam scores. |
+| `us-economics-northwestern` | Subject prerequisites | Official: Weinberg College of Arts and Sciences requires entering students to complete a minimum of 16 courses: English 4 full-year courses; one foreign language at least 2 full-year courses; history and social science at least 2; laboratory science at least 2; mathematics at least 3; plus 1–3 additional full-year courses in those areas. |
+| `us-economics-northwestern` | A-Level requirements | Northwestern’s admissions pages do not name A-Levels — this row applies its general statement on external exam scores. |
+| `us-engineering-northwestern` | Subject prerequisites | Official: The McCormick School of Engineering and Applied Science encourages strong preparation in mathematics and science. Recommended coursework: English 4 full-year courses; laboratory science at least 3 full-year courses (chemistry and physics preferred); mathematics 3.5–4 full-year courses (calculus preferred, if available; the minimum includes 2 full-year courses of algebra, 1 of plane geometry and 1 semester of trigonometry); 5–6 additional full-year courses including foreign language, history and social sciences. These are recommendations, not requirements. The Computer Science BS is offered by McCormick (the BA is through Weinberg). |
+| `us-engineering-northwestern` | A-Level requirements | Northwestern’s admissions pages do not name A-Levels — this row applies its general statement on external exam scores. |
 | `us-cs-cornell` | Subject prerequisites | Official: Duffield College of Engineering requires, before high school graduation, 4 units of mathematics including one of calculus, 1 unit of physics and 1 unit of chemistry (a unit = one academic year); 1 unit of computer science and 1 unit of biology are recommended but not required. The Computer Science BS is affiliated with Duffield Engineering (the BA is through Arts & Sciences). |
 | `us-maths-cornell` | Subject prerequisites | Official: College of Arts & Sciences required courses — 4 units of English; 3 units of mathematics (including pre-calculus), an additional unit of advanced math recommended; 3 units of science, an additional unit of advanced science recommended; 3 units of one foreign language (heritage speakers or students who began the language before high school: at least the third level). This major is applied to through the College of Arts & Sciences. |
 | `us-engineering-cornell` | Subject prerequisites | Official: Duffield College of Engineering requires, before high school graduation, 4 units of mathematics including one of calculus, 1 unit of physics and 1 unit of chemistry (a unit = one academic year); 1 unit of computer science and 1 unit of biology are recommended but not required. |
@@ -163,9 +169,6 @@ Shown to students only as "Previously recorded, not verified". Confirm or correc
 | `us-economics-duke` | SAT / ACT | Test-optional |
 | `us-biomedical-jhu` | SAT / ACT | SAT/ACT required |
 | `us-cs-jhu` | SAT / ACT | SAT/ACT required |
-| `us-cs-northwestern` | SAT / ACT | Test-optional |
-| `us-economics-northwestern` | SAT / ACT | Test-optional |
-| `us-engineering-northwestern` | SAT / ACT | Test-optional |
 | `us-cs-dartmouth` | SAT / ACT | SAT/ACT required |
 | `us-economics-dartmouth` | SAT / ACT | SAT/ACT required |
 | `us-cs-brown` | SAT / ACT | SAT/ACT required |
@@ -239,6 +242,9 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `us-maths-columbia` | Subject prerequisites | Official source lists strongly recommended high-school preparation for Columbia College (English, mathematics, history/social studies, laboratory science, world language); data/courseRequirements.js holds none. Owner decision. |
 | `us-economics-columbia` | Subject prerequisites | Official source lists strongly recommended high-school preparation for Columbia College (English, mathematics, history/social studies, laboratory science, world language); data/courseRequirements.js holds none. Owner decision. |
 | `us-engineering-columbia` | Subject prerequisites | Official source lists strongly advised high-school preparation for Columbia Engineering (mathematics through calculus; laboratory science incl. one year each of chemistry and physics); data/courseRequirements.js holds none. Owner decision. |
+| `us-cs-northwestern` | Subject prerequisites | Official source lists recommended high-school coursework for McCormick (math 3.5–4 years, calculus preferred; lab science 3 years, chemistry and physics preferred; English 4 years); data/courseRequirements.js holds none. Owner decision. |
+| `us-economics-northwestern` | Subject prerequisites | Official source lists required high-school coursework for Weinberg (minimum 16 courses incl. English 4, maths 3, foreign language 2, lab science 2, history/social science 2); data/courseRequirements.js holds none. Owner decision. |
+| `us-engineering-northwestern` | Subject prerequisites | Official source lists recommended high-school coursework for McCormick (math 3.5–4 years, calculus preferred; lab science 3 years, chemistry and physics preferred; English 4 years); data/courseRequirements.js holds none. Owner decision. |
 | `us-cs-cornell` | Subject prerequisites | Official source lists required high-school courses for Duffield Engineering (maths 4 units incl. calculus, physics 1, chemistry 1; computer science and biology recommended); data/courseRequirements.js holds none. Owner decision. |
 | `us-maths-cornell` | Subject prerequisites | Official source lists required high-school courses for the College of Arts & Sciences (English 4, maths 3 incl. pre-calculus, science 3, one foreign language 3); data/courseRequirements.js holds none. Owner decision. |
 | `us-engineering-cornell` | Subject prerequisites | Official source lists required high-school courses for Duffield Engineering (maths 4 units incl. calculus, physics 1, chemistry 1; computer science and biology recommended); data/courseRequirements.js holds none. Owner decision. |
@@ -482,9 +488,6 @@ category — check the official source; never copy a hint in as a value.
 | `hk-law-cityu` | City University of Hong Kong | SAT / ACT, English language, Other requirements | notes mention an interview / portfolio / audition |
 | `hk-business-cityu` | City University of Hong Kong | SAT / ACT, English language, IB requirements, Other requirements | notes mention IB |
 | `hk-economics-cityu` | City University of Hong Kong | SAT / ACT, English language, IB requirements, Other requirements | notes mention IB |
-| `us-cs-northwestern` | Northwestern University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-economics-northwestern` | Northwestern University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-engineering-northwestern` | Northwestern University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-cs-dartmouth` | Dartmouth College | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-economics-dartmouth` | Dartmouth College | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-cs-brown` | Brown University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
