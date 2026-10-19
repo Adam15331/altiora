@@ -1256,7 +1256,12 @@ main     { flex: 1; padding: var(--pad); }
   /* Stack stage cards on mobile */
   .stage-cards { grid-template-columns: 1fr; }
   .stage-bar { flex-direction: column; align-items: flex-start; }
+  /* Keep each toolbar row to the screen width: rows stretch instead of
+     sizing to their content, so the wider Space Mono labels wrap within
+     the 375px viewport rather than scrolling the page sideways. */
+  .stage-bar > .stage-bar__row { align-self: stretch; min-width: 0; }
   .stage-tool-nav { width: 100%; overflow-x: auto; }
+  .stage-bar__collections { flex-wrap: wrap; }
   .shortlist-link { margin-left: 0; }
   .fields-nav { margin-left: 0; }
   .fields-menu { left: 0; right: auto; }   /* button is left-aligned on mobile */

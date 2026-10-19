@@ -54,11 +54,11 @@
   --color-match-grade-bg:    #EEEEF2;
 
   /* ── Typography ─────────────────────────────────────── */
-  --font-family-base: 'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  /* Every legacy role token resolves to the one family. */
-  --font-display: var(--font-family-base);
-  --font-sans:    var(--font-family-base);
-  --font-mono:    var(--font-family-base);
+  /* Original pre-Phase-1 type families, restored 2026-10-19 at the owner's
+   * request (the Phase 1 size floor, contrast and focus fixes are unchanged). */
+  --font-display: 'Lora', Georgia, serif;
+  --font-sans:    'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
 
   /* Type scale — 12px is the floor for any text. */
   --text-xs:         0.75rem;
@@ -113,13 +113,11 @@
    * tokens to propagate the language to other screens later.
    * ═══════════════════════════════════════════════════════════ */
 
-  /* Type roles — all one family. The role names are kept so existing
-   * rules keep working; "mono" now means the LABEL role (small caps-style
-   * uppercase metadata), set in the same sans with tracking, not a
-   * monospaced/typewriter face. */
-  --ce-font-display: var(--font-family-base);  /* headings, course names */
-  --ce-font-mono:    var(--font-family-base);  /* labels, metadata, badges, buttons */
-  --ce-font-body:    var(--font-family-base);  /* descriptions, paragraphs */
+  /* Type roles — the original "typewriter" system: Bricolage for display,
+   * Space Mono for labels/metadata/badges/buttons, Hanken for body text. */
+  --ce-font-display: 'Bricolage Grotesque', 'Hanken Grotesk', system-ui, sans-serif; /* headings, course names */
+  --ce-font-mono:    'Space Mono', ui-monospace, monospace;                          /* labels, metadata, badges, buttons */
+  --ce-font-body:    'Hanken Grotesk', system-ui, sans-serif;                        /* descriptions, paragraphs */
 
   /* Palette */
   --ce-bg:        #F5F4EF;             /* warm off-white canvas */

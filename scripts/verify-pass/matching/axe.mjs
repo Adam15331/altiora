@@ -16,11 +16,13 @@ let total = 0;
 for (const width of [1280, 375]) for (const [name, url, mode] of PAGES) for (const open of [false, true]) {
   const ctx = await browser.newContext({ reducedMotion: 'reduce', viewport: { width, height: 900 } });
   const page = await ctx.newPage();
-  await page.route(/fonts\.googleapis|fonts\.gstatic|cloudflareinsights/, r => r.abort());
+  // FONTS=1 loads the real web fonts (for overflow checks with their metrics).
+  await page.route(process.env.FONTS ? /cloudflareinsights/ : /fonts\.googleapis|fonts\.gstatic|cloudflareinsights/, r => r.abort());
   await page.addInitScript(s => { localStorage.setItem('altiora_state_v1', s); }, JSON.stringify(st));
   await page.goto(`http://localhost:${port}${url}`);
   if (mode) await page.evaluate(m => switchMode(m), mode);
   await page.waitForTimeout(2500);
+  const fonts = process.env.FONTS ? await page.evaluate(async () => { await document.fonts.ready; return [...new Set([...document.fonts].filter(f => f.status === 'loaded').map(f => f.family.replace(/"/g, '')))].join('/'); }) : '';
   if (open) await page.evaluate(() => document.querySelectorAll('details').forEach(d => { d.open = true; }));
   await page.addScriptTag({ content: AXE });
   const res = await page.evaluate(async () => (await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa'] } })).violations.map(v => `${v.id} (${v.nodes.length})`));
@@ -30,7 +32,7 @@ for (const width of [1280, 375]) for (const [name, url, mode] of PAGES) for (con
     return { overflow, min };
   });
   total += res.length;
-  console.log(`${width}px ${name}${open ? ' (all panels open)' : ''}: ${res.length ? res.join(', ') : '0 violations'}; overflow=${extra.overflow}; minText=${extra.min}px`);
+  console.log(`${width}px ${name}${open ? ' (all panels open)' : ''}: ${res.length ? res.join(', ') : '0 violations'}; overflow=${extra.overflow}; minText=${extra.min}px${fonts ? `; fonts=${fonts}` : ''}`);
   await ctx.close();
 }
 console.log('TOTAL violations:', total);
