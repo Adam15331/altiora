@@ -4702,3 +4702,62 @@ Format:
   Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mathematics-bsc (checked 2026-10-19).
   > This course does not accept resits typically. A resit is a second or subsequent attempt to improve a qualification outcome, for which you already hold an award. Applicants who are resitting Further Mathematics having already achieved grade A at an accelerated rate alongside GCSE or AS level study, may be considered if resitting once alongside their current A level study. … The department supports the Year in Industry scheme, which involves deferring entry for a year to gain valuable work experience.
   Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ucl.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mathematics-bsc.
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University College London
+
+- `uk-medicine-ucl` · engine `requirements.preferred`: [Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2027-entry
+  > The third subject is the student’s own choice and can be any subject other than General Studies or Critical Thinking.
+- `uk-medicine-ucl` · subjectPrerequisites: row partial → verified (owner flag kept).
+- `uk-medicine-ucl` · aLevel: row partial → verified (owner flag kept).
+- `uk-medicine-ucl` · ib: row partial → verified (owner flag kept).
+- `uk-cs-ucl` · engine `grades.aLevels`: A*AA → A*A*A (offer). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-bsc
+  > Grades A*A*A Subjects A* in either Mathematics or Further Mathematics required.
+- `uk-cs-ucl` · engine `grades.ib`: 39 → 40 (ib-score). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-meng
+  > Points 40 Subjects A total of 20 points in three higher level subjects including Grade 7 in Mathematics.
+- `uk-cs-ucl` · engine `grades.ibHL`: [Mathematics_Advanced] → [Mathematics_Standard] (ib-hl). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-meng
+  > The course will accept either ‘Mathematics: Analysis and Approaches’ or ‘Mathematics: Applications and Interpretation’ at higher level.
+- `uk-cs-ucl` · engine `grades.ibHLNote`: 776 at HL → 20 at HL incl 7 in HL Mathematics (AA preferred; AI accepted) (ib-note). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/computer-science-meng
+  > Points 40 Subjects A total of 20 points in three higher level subjects including Grade 7 in Mathematics.
+- `uk-cs-ucl` · aLevel: row partial → partial (owner flag kept).
+- `uk-cs-ucl` · ib: row partial → verified (owner flag kept).
+- `uk-cs-ucl` · satAct: row verified → verified (owner flag kept).
+- `uk-cs-ucl` · otherQualifications: row verified → verified (owner flag kept).
+- `uk-engineering-ucl` · engine `admissionTests`: [] → [TARA] (test-add). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng
+  > For the 2027 cycle, alongside the UCAS application, UCL will require all applicants to the above programme to sit the TARA (The Test of Academic Reasoning for Admissions) run by University Admissions Tests UK.
+- `uk-engineering-ucl` · engine `grades.ibHL`: [Mathematics_Advanced, Physics] → [Mathematics_Standard, Physics] (ib-hl). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng
+  > The course will accept either ‘Mathematics: Analysis and Approaches’ or ‘Mathematics: Applications and Interpretation’ at higher level.
+- `uk-engineering-ucl` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mechanical-engineering-meng
+  > Design and Technology, Engineering, Economics, Geography, Chemistry and Biology preferred as a third subject (in that order), but not essential.
+- `uk-engineering-ucl` · admissionsTests: row partial → verified (owner flag kept).
+- `uk-engineering-ucl` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-engineering-ucl` · aLevel: row partial → partial (owner flag kept).
+- `uk-engineering-ucl` · ib: row partial → partial (owner flag kept).
+- `uk-economics-ucl` · engine `grades.ib`: 38 → 39 (ib-score). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ
+  > Points 39 Subjects A total of 19 points in three higher level subjects including grade 7 in Mathematics with no higher level score below 5.
+- `uk-economics-ucl` · engine `grades.ibHLNote`: 766 at HL → 19 at HL incl 7 in HL Mathematics (AA or AI); no HL below 5 (ib-note). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ
+  > Points 39 Subjects A total of 19 points in three higher level subjects including grade 7 in Mathematics with no higher level score below 5.
+- `uk-economics-ucl` · engine `requirements.preferred`: [Mathematics_Advanced, Economics] → [] (preferred-remove-unlisted). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/economics-bsc-econ
+  > Subjects A* in Mathematics required.
+- `uk-economics-ucl` · subjectPrerequisites: row partial → verified (owner flag kept).
+- `uk-economics-ucl` · aLevel: row partial → verified (owner flag kept).
+- `uk-economics-ucl` · ib: row partial → verified (owner flag kept).
+- `uk-law-ucl` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-unlisted). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/law-llb
+  > Grades A*AA GCSEs English Language and Mathematics at grade B or 6
+- `uk-law-ucl` · subjectPrerequisites: row partial → verified (owner flag kept).
+- `uk-law-ucl` · aLevel: row partial → verified (owner flag kept).
+- `uk-biomedical-ucl` · engine `grades.aLevels`: AAB → AAA (offer). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc
+  > Grades AAA Subjects Biology and Chemistry required, plus Mathematics preferred.
+- `uk-biomedical-ucl` · engine `grades.ib`: 36 → 38 (ib-score). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc
+  > Points 38 Subjects A total of 18 points in three higher level subjects to include 6 in both Biology and Chemistry, plus Mathematics preferred, with no higher level score below 5.
+- `uk-biomedical-ucl` · engine `grades.ibHLNote`: 666 at HL → 18 at HL incl 6 in Biology and Chemistry; no HL below 5 (ib-note). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/biomedical-sciences-bsc
+  > Points 38 Subjects A total of 18 points in three higher level subjects to include 6 in both Biology and Chemistry, plus Mathematics preferred, with no higher level score below 5.
+- `uk-biomedical-ucl` · aLevel: row partial → verified (owner flag kept).
+- `uk-biomedical-ucl` · ib: row partial → verified (owner flag kept).
+- `uk-biomedical-ucl` · satAct: row verified → verified (owner flag kept).
+- `uk-biomedical-ucl` · otherQualifications: row verified → verified (owner flag kept).
+- `uk-maths-ucl` · engine `admissionTests`: [STEP] → [] (test-remove). Source: https://www.ucl.ac.uk/study/prospective-students/undergraduate/courses/mathematics-bsc
+  > A*A*A with A*A* in Mathematics and Further Mathematics; or A*AA with A*A in Mathematics and Further Mathematics, in any order, together with a 2 in any STEP Paper or a Distinction in the Mathematics AEA.
+- `uk-maths-ucl` · admissionsTests: row partial → verified (owner flag kept).
+- `uk-maths-ucl` · subjectPrerequisites: row partial → verified (owner flag kept).
+- `uk-maths-ucl` · aLevel: row partial → verified (owner flag kept).
+- `uk-maths-ucl` · ib: row partial → partial (owner flag kept).
