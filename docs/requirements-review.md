@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 143 | 9 | 168 | 0 |
-| English language | 144 | 11 | 165 | 0 |
+| SAT / ACT | 147 | 13 | 160 | 0 |
+| English language | 152 | 11 | 157 | 0 |
 | Admissions tests | 293 | 17 | 10 | 0 |
-| Subject prerequisites | 155 | 155 | 10 | 0 |
-| A-Level requirements | 166 | 66 | 84 | 4 |
-| IB requirements | 227 | 68 | 21 | 4 |
-| Other qualifications | 139 | 48 | 133 | 0 |
-| Other requirements | 157 | 3 | 160 | 0 |
+| Subject prerequisites | 149 | 161 | 10 | 0 |
+| A-Level requirements | 159 | 73 | 84 | 4 |
+| IB requirements | 222 | 73 | 21 | 4 |
+| Other qualifications | 142 | 52 | 126 | 0 |
+| Other requirements | 164 | 4 | 152 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -139,6 +139,33 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-psychology-kcl` | Subject prerequisites | Official (2027 entry): required grade A in one of Biology, Chemistry, Mathematics, Physics or Psychology; preferred subjects not specified; GCSE Mathematics grade 6/B. |
 | `uk-psychology-kcl` | A-Level requirements | Official (2027 entry): A*AA including grade A in one of Biology, Chemistry, Mathematics, Physics or Psychology (contextual AAB). The A*AA offer agrees. |
 | `uk-psychology-kcl` | IB requirements | Official (2027 entry): 38 points overall or 19 from three Higher Levels, including 6 at HL in one of Biology, Chemistry, Mathematics, Physics or Psychology. The score agrees. |
+| `uk-medicine-manchester` | SAT / ACT | University-wide guidance only; the Medicine course page says country-specific information is general only, that specific entry requirements may be different for Medicine, and asks applicants to contact ug.medicine@manchester.ac.uk. |
+| `uk-medicine-manchester` | Subject prerequisites | Official (2027 entry): Biology/Human Biology or Chemistry, plus one of Chemistry, Biology/Human Biology, Physics, Psychology, Mathematics or Further Mathematics; no preference for the third subject. |
+| `uk-medicine-manchester` | A-Level requirements | Official (2027 entry): AAA, including Biology/Human Biology or Chemistry, and one of Chemistry, Biology/Human Biology, Physics, Psychology, Mathematics or Further Mathematics. |
+| `uk-medicine-manchester` | IB requirements | Official (2027 entry): 36 points overall, 6,6,6 in Higher Level subjects; HL subjects must include Chemistry or Biology, plus another science (one of Chemistry, Biology, Physics, Psychology or Mathematics) and one further subject. |
+| `uk-medicine-manchester` | Other qualifications | The AP equivalence is Manchester’s general table; the Medicine page says its specific requirements may differ and gives no AP subjects. |
+| `uk-cs-manchester` | SAT / ACT | University-wide guidance only; the course page points to the Department of Computer Science’s country page, which is published for September 2026 entry and lists a High School Diploma plus APs, with no SAT/ACT. |
+| `uk-cs-manchester` | Subject prerequisites | Official (2027 entry): Mathematics plus at least one science from Computer Science, Further Mathematics, Biology, Chemistry or Physics — Further Mathematics is one option, not a stated preference. |
+| `uk-cs-manchester` | A-Level requirements | Official (2027 entry): A*AA including A* in Mathematics, and at least one science from Computer Science, Further Mathematics, Biology, Chemistry or Physics. |
+| `uk-cs-manchester` | IB requirements | Official (2027 entry): 37 points overall with 7,6,6 at HL, including 7 in HL Mathematics: Analysis and Approaches (the only maths accepted), and at least one HL science. |
+| `uk-cs-manchester` | Other qualifications | The department’s country page states these requirements are for September 2026 entry; not yet confirmed for 2027 entry. |
+| `uk-economics-manchester` | Subject prerequisites | Partly verified: the official page does not state the preferred subject(s) held for matching (Economics, Mathematics_Advanced). |
+| `uk-economics-manchester` | A-Level requirements | Preference is given to applicants studying two subjects from a published list that includes Economics and Mathematics; Mathematics, Further Mathematics and a native language together are not accepted. Partly verified: the official page does not state the preferred subject(s) held for matching (Economics, Mathematics_Advanced). |
+| `uk-economics-manchester` | IB requirements | Partly verified: the official page does not state the preferred subject(s) held for matching (Economics, Mathematics_Advanced). |
+| `uk-economics-manchester` | Other qualifications | The page says subject-specific AP requirements are “detailed below as per 2023 entry”, but none are shown, so the AP needed for the Mathematics requirement is not stated. |
+| `uk-law-manchester` | A-Level requirements | Official (2027 entry): A*AA, including at least one subject from a published list (which includes History and English Literature), with preference for applicants studying two. |
+| `uk-accounting-manchester` | Subject prerequisites | Official (2027 entry): no required A-level subject; preferred subjects include Accounting, Business Studies, Economics, Mathematics/Further Mathematics and others; GCSE/IGCSE Mathematics grade 6/B required. |
+| `uk-accounting-manchester` | A-Level requirements | Official (2027 entry): AAA with no required A-level subject; applicants may be prioritised by the number of preferred subjects (list includes Economics and Mathematics/Further Mathematics). Mathematics is required only at GCSE/IGCSE grade 6/B. |
+| `uk-accounting-manchester` | IB requirements | Official (2027 entry): 36 points overall, 6,6,6 in Higher Level subjects — no HL subject is specified. |
+| `uk-psychology-manchester` | SAT / ACT | University-wide guidance only; the Psychology course page says country-specific information is general only, that specific entry requirements may be different for BSc Psychology, and asks applicants to contact ug.psychology@manchester.ac.uk. |
+| `uk-psychology-manchester` | Subject prerequisites | Official (2027 entry): one or more of Psychology, Biology, Human Biology, Chemistry, Physics, Statistics, Mathematics or Further Mathematics is required. |
+| `uk-psychology-manchester` | A-Level requirements | Official (2027 entry): AAA including one or more of Psychology, Biology, Human Biology, Chemistry, Physics, Statistics, Mathematics or Further Mathematics. Only one performance-based A-level is accepted. |
+| `uk-psychology-manchester` | IB requirements | Official (2027 entry): 36 points, 6,6,6 at HL, one of which must be Chemistry, Biology, Physics, Psychology or Mathematics (AA or AI). |
+| `uk-maths-manchester` | SAT / ACT | University-wide guidance only; the course page points to the Department of Mathematics’ country page, which is published for September 2026 entry and lists a High School Diploma plus APs, with no SAT/ACT. |
+| `uk-maths-manchester` | Subject prerequisites | Partly verified: the official page names a preferred subject that is not held for matching (see the owner flag). |
+| `uk-maths-manchester` | A-Level requirements | The A* may be in Mathematics or Further Mathematics. Further Mathematics is preferred but not essential; when taken it is included in the offer. Partly verified: the official page names a preferred subject that is not held for matching (see the owner flag). |
+| `uk-maths-manchester` | Other qualifications | The department’s country page states these requirements are for September 2026 entry; not yet confirmed for 2027 entry. |
+| `uk-maths-manchester` | Other requirements | The 2027-entry page’s interview statement still refers to “September 2026 entry”. |
 | `uk-economics-warwick` | SAT / ACT | Warwick states its US entry requirements are under review for the 2027/28 cycle and should be used as a guide only. |
 | `uk-economics-warwick` | English language | The band (C) is confirmed for 2027 entry on the course page; the test scores come from Warwick’s English Language Requirements page, which states them for September 2026 entry only (last updated 04 February 2026). 2027-entry scores not yet confirmed. |
 | `uk-economics-warwick` | Admissions tests | Official (2027 entry): TMUA optional; high scorers considered for a reduced AAA offer. Warwick’s admissions-tests page says the Economics TMUA requirements are under review for 2027 entry. |
@@ -570,6 +597,25 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `uk-psychology-kcl` | Subject prerequisites | Subject requirement differs: King’s requires an A in one of Biology/Chemistry/Mathematics/Physics/Psychology; data/courseRequirements.js holds requirements.essential [] and preferred ["Psychology","Mathematics_Standard"]. Owner decision. |
 | `uk-psychology-kcl` | A-Level requirements | Required one-of subject group not held: data/courseRequirements.js holds requirements.essential [] and preferred ["Psychology","Mathematics_Standard"]. Owner decision. Excluded subjects, practical endorsement and contextual offer are display-only — the matcher does not apply them. |
 | `uk-psychology-kcl` | IB requirements | HL requirement not held: King’s requires 6 at HL in one of Biology/Chemistry/Mathematics/Physics/Psychology; data/courseRequirements.js holds grades.ibHL [] and requirements.essential []. Owner decision. Contextual offer is display-only. |
+| `uk-medicine-manchester` | Subject prerequisites | Only one of Chemistry/Biology is required, with a second science from a list, and Mathematics is not a stated preference; data/courseRequirements.js holds essential [Chemistry, Biology], preferred [Mathematics_Standard]. Owner decision. |
+| `uk-medicine-manchester` | A-Level requirements | Required subjects differ (official: Biology or Chemistry, plus a second science from a list; no preferred subject); data/courseRequirements.js holds essential [Chemistry, Biology], preferred [Mathematics_Standard]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-medicine-manchester` | IB requirements | IB score and HL profile differ (official 36 points, 666 at HL, Chemistry OR Biology plus a second science); data/courseRequirements.js holds ib 37, ibHLNote "766 at HL", ibHL [Chemistry, Biology]. Owner decision. |
+| `uk-cs-manchester` | Subject prerequisites | A second subject from a science list is required; data/courseRequirements.js holds essential [Mathematics_Standard], preferred [Mathematics_Advanced]. Owner decision. |
+| `uk-cs-manchester` | A-Level requirements | Offer differs (official A*AA, not A*A*A) and one science from a list is required; data/courseRequirements.js holds A*A*A, essential [Mathematics_Standard], preferred [Mathematics_Advanced]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-cs-manchester` | IB requirements | IB score and HL profile differ (official 37 points, 766 at HL); data/courseRequirements.js holds ib 38, ibHLNote "776 at HL". Owner decision. |
+| `uk-economics-manchester` | Subject prerequisites | Further Mathematics is not named as a preferred subject on the 2027 page; data/courseRequirements.js holds preferred [Economics, Mathematics_Advanced]. Owner decision. Official page does not name the engine’s preferred subject(s) [Economics, Mathematics_Advanced] as preferred; data/courseRequirements.js holds them. Owner decision. |
+| `uk-economics-manchester` | A-Level requirements | Further Mathematics is not named as a preferred subject on the 2027 page (Economics is on the preference list); data/courseRequirements.js holds preferred [Economics, Mathematics_Advanced]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. Official page does not name the engine’s preferred subject(s) [Economics, Mathematics_Advanced] as preferred; data/courseRequirements.js holds them. Owner decision. |
+| `uk-economics-manchester` | IB requirements | Official page does not name the engine’s preferred subject(s) [Economics, Mathematics_Advanced] as preferred; data/courseRequirements.js holds them. Owner decision. |
+| `uk-engineering-manchester` | A-Level requirements | Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-law-manchester` | A-Level requirements | Offer differs (official A*AA, not AAA); data/courseRequirements.js holds AAA. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-accounting-manchester` | Subject prerequisites | Mathematics is required only at GCSE level, not A-level; data/courseRequirements.js holds essential [Mathematics_Standard]. Owner decision. |
+| `uk-accounting-manchester` | A-Level requirements | A-level Mathematics is not required (GCSE/IGCSE Mathematics grade 6/B only); data/courseRequirements.js holds essential [Mathematics_Standard]. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-accounting-manchester` | IB requirements | HL Mathematics is not required; data/courseRequirements.js holds ibHL [Mathematics_Standard] and Mathematics as essential. Owner decision. |
+| `uk-psychology-manchester` | Subject prerequisites | A subject from the listed group is required, not just preferred; data/courseRequirements.js holds essential [], preferred [Psychology, Mathematics_Standard]. Owner decision. |
+| `uk-psychology-manchester` | A-Level requirements | One subject from a science/maths/psychology list is required; data/courseRequirements.js holds no essential subject (preferred [Psychology, Mathematics_Standard]). Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
+| `uk-psychology-manchester` | IB requirements | One HL subject from a science/maths/psychology list is required; data/courseRequirements.js holds ibHL []. Owner decision. |
+| `uk-maths-manchester` | Subject prerequisites | Further Mathematics is stated as preferred; data/courseRequirements.js holds preferred []. Owner decision. |
+| `uk-maths-manchester` | A-Level requirements | The page states Further Mathematics is preferred; data/courseRequirements.js holds preferred []. Owner decision. Contextual offer and excluded subjects are display-only; the matcher does not apply them. |
 | `uk-economics-warwick` | Admissions tests | Optional TMUA with a reduced-offer relation is published; data/courseRequirements.js holds admissionTests [] and no admissionTestRelations. Owner decision (re-check once Warwick publishes the 2027 review outcome). |
 | `uk-economics-warwick` | Subject prerequisites | Preferred subject differs: Warwick gives Further Maths no special status; data/courseRequirements.js holds requirements.preferred ["Mathematics_Advanced"]. Owner decision. |
 | `uk-economics-warwick` | A-Level requirements | Preferred subject differs: Warwick gives Further Maths no special status; data/courseRequirements.js holds requirements.preferred ["Mathematics_Advanced"]. Owner decision. Contextual offer is display-only — the matcher does not apply it. |
@@ -929,14 +975,6 @@ category — check the official source; never copy a hint in as a value.
 | `uk-psychology-edinburgh` | University of Edinburgh | SAT / ACT, English language, Other requirements |  |
 | `uk-architecture-edinburgh` | University of Edinburgh | SAT / ACT, English language, Other requirements | notes mention an interview / portfolio / audition |
 | `uk-maths-edinburgh` | University of Edinburgh | SAT / ACT, English language, A-Level requirements, Other requirements | notes mention A-Level grades |
-| `uk-medicine-manchester` | University of Manchester | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-cs-manchester` | University of Manchester | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-economics-manchester` | University of Manchester | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-engineering-manchester` | University of Manchester | SAT / ACT, English language, Other requirements |  |
-| `uk-law-manchester` | University of Manchester | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-accounting-manchester` | University of Manchester | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-psychology-manchester` | University of Manchester | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-maths-manchester` | University of Manchester | SAT / ACT, English language, Other qualifications, Other requirements | notes mention an interview / portfolio / audition |
 | `uk-maths-bath` | University of Bath | SAT / ACT | SAT / ACT: Not verified: Bath’s 2027 Mathematics page (https://www.bath.ac.uk/courses/undergraduate-2027/mathematical-sciences/bsc-mathematics/) says its typical Advanced Placement requirements for this course are under review and will be published soon, and states nothing about SAT/ACT for US-diploma applicants — check the official page. |
 | `uk-medicine-glasgow` | University of Glasgow | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-cs-glasgow` | University of Glasgow | SAT / ACT, English language, Other qualifications, Other requirements |  |
