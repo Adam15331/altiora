@@ -50,6 +50,7 @@ export function buildReport() {
   const partial = [];
   const recorded = [];
   const withheld = [];
+  const flags = [];
   for (const c of courses) {
     const rec = cycle.courses[c.id] ?? {};
     const missing = [];
@@ -58,6 +59,7 @@ export function buildReport() {
       const st = e?.status ?? 'unverified';
       (tally[cat.id] ??= { verified: 0, partial: 0, unverified: 0, notApplicable: 0 })[st]++;
       if (e?.withheld?.length) withheld.push({ c, cat, fields: e.withheld });
+      if (e?.reviewFlag) flags.push({ c, cat, flag: e.reviewFlag });
       if (st === 'unverified') {
         missing.push(cat.label);
         if (e?.recorded) recorded.push({ c, cat, value: e.recorded });
@@ -66,11 +68,16 @@ export function buildReport() {
     }
     const notes = `${c.verification?.notes ?? ''} ${c.notes ?? ''}`;
     const hints = HINTS.filter(h => (rec[h.category]?.status ?? 'unverified') === 'unverified' && h.re.test(notes)).map(h => h.label);
+    // An unverified entry's own note is the most specific review item
+    // (e.g. which official URL was tried and what it returned).
+    for (const cat of cats) {
+      const e = rec[cat.id];
+      if ((e?.status ?? 'unverified') === 'unverified' && e?.note) hints.push(`${cat.label}: ${e.note}`);
+    }
     for (const [catId, hint] of Object.entries(NO_DATA_HINT)) {
       const e = rec[catId];
-      if ((e?.status ?? 'unverified') !== 'unverified') continue;
-      if (e?.note) hints.push(`${catId === 'aLevel' ? 'A-Level' : 'IB'}: ${e.note}`);
-      else if (!hints.includes(HINTS.find(h => h.category === catId)?.label ?? '')) hints.push(hint);
+      if ((e?.status ?? 'unverified') !== 'unverified' || e?.note) continue;
+      if (!hints.includes(HINTS.find(h => h.category === catId)?.label ?? '')) hints.push(hint);
     }
     if (missing.length) unverified.push({ c, missing, hints });
   }
@@ -112,6 +119,16 @@ export function buildReport() {
   L.push('| Course | Category | Recorded value |');
   L.push('|---|---|---|');
   for (const r of recorded) L.push(`| \`${r.c.id}\` | ${r.cat.label} | ${md(r.value)} |`);
+  L.push('');
+
+  L.push('## Flags for the data owner');
+  L.push('');
+  L.push('Decisions an entry raises that are not for students — e.g. the matching engine (`data/courseRequirements.js`)');
+  L.push('still holds a value a verified official source contradicts. Not shown in the panel.');
+  L.push('');
+  L.push('| Course | Category | Flag |');
+  L.push('|---|---|---|');
+  for (const f of flags) L.push(`| \`${f.c.id}\` | ${f.cat.label} | ${md(f.flag)} |`);
   L.push('');
 
   L.push('## Values withheld from the panel');

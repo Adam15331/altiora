@@ -60,6 +60,15 @@
  * @property {string} [note]             Caveat; required for partial.
  * @property {string} [recorded]         Unverified only: a value previously held WITHOUT a source,
  *                                       kept so a reviewer can confirm or correct it.
+ * @property {string | string[]} [sourceSnippet]  Verbatim quote (1–2 sentences) from the source
+ *                                       that supports the value, so it can be audited without
+ *                                       re-researching. An array gives one quote per source, in
+ *                                       `sources` order. Required on checked entries (verified,
+ *                                       partial, notApplicable) last verified on or after
+ *                                       `snippetsRequiredFrom`. `lastVerified` is the access date.
+ * @property {string} [reviewFlag]       For the data owner, not shown to students: a decision
+ *                                       this entry raises (e.g. the matching engine still holds
+ *                                       a value the source contradicts). Listed in the review report.
  *
  * Qualification categories only (verified / partial unless stated):
  * @property {'yes' | 'no' | 'unknown'} [accepted]  Is the qualification an entry route?
@@ -98,6 +107,8 @@
  *
  * @typedef {object} RequirementsConfig
  * @property {string} currentCycle
+ * @property {string} [snippetsRequiredFrom]  ISO date: checked entries last verified on or after
+ *                                            it must carry a `sourceSnippet`.
  * @property {Record<string, CycleInfo>} cycles
  * @property {RequirementCategory[]} categories
  */
@@ -107,6 +118,10 @@
   const config = {
     // The cycle the site shows. Changed by `npm run new-cycle`.
     currentCycle: '2027',
+
+    // From this date every newly checked entry quotes its source
+    // (`sourceSnippet`). Entries checked earlier predate the rule.
+    snippetsRequiredFrom: '2026-10-19',
 
     // Every cycle that has a data file in data/requirements/<id>.js.
     // Old cycles stay here (and on disk) for reference.

@@ -57,11 +57,17 @@ test('every A-Level offer and IB score the engine holds is surfaced, or explicit
   }
 });
 
+// Rows checked in the US verification pass (on or after snippetsRequiredFrom)
+// come from official pages with quoted snippets — see us-verification.test.mjs.
+// The migration rules below apply to every other row.
+/** @param {any} e */
+const fromPass = e => (e.lastVerified ?? '') >= /** @type {string} */ (config.snippetsRequiredFrom);
+
 test('a row is verified only on a verified course record, with that record\'s source and date', () => {
   for (const c of courses) {
     for (const cat of ['aLevel', 'ib']) {
       const e = cycle.courses[c.id][cat];
-      if (e.status === 'unverified') continue;
+      if (e.status === 'unverified' || fromPass(e)) continue;
       assert.equal(e.sources?.[0]?.url, c.verification.source, `${c.id} › ${cat}`);
       assert.equal(e.lastVerified, c.verification.checkedDate, `${c.id} › ${cat}`);
       if (c.verification.status === 'partial') assert.notEqual(e.status, 'verified', `${c.id} › ${cat}`);
@@ -89,7 +95,7 @@ test('graduate-entry courses are not applicable — unless the engine holds data
   // Undergraduate "pre-law track" degrees: their "Law is graduate-entry" note
   // is about the law school afterwards, so A-Level / IB are not "not applicable".
   for (const id of ['us-law-harvard', 'us-law-yale', 'us-law-georgetown']) {
-    for (const cat of ['aLevel', 'ib']) assert.equal(cycle.courses[id][cat].status, 'unverified', `${id} › ${cat}`);
+    for (const cat of ['aLevel', 'ib']) assert.notEqual(cycle.courses[id][cat].status, 'notApplicable', `${id} › ${cat}`);
   }
   // The record says graduate-entry but the engine holds IB Higher Level subjects:
   // the conflict is shown, nothing is marked not applicable.
@@ -114,11 +120,13 @@ test('no admitted-student figure is shown as an A-Level or IB requirement', () =
   }
 });
 
-test('nothing is marked accepted without data: rows with no engine data are unverified', () => {
+test('nothing is marked accepted without data: rows with no engine data are unverified, unless checked on an official page', () => {
   for (const c of courses) {
-    const g = c.grades;
-    if (!g.aLevels) assert.ok(['unverified', 'notApplicable'].includes(cycle.courses[c.id].aLevel.status), c.id);
-    if (g.ib == null && !(g.ibHL ?? []).length && !g.ibHLNote) assert.ok(['unverified', 'notApplicable'].includes(cycle.courses[c.id].ib.status), c.id);
+    const g = c.grades, a = cycle.courses[c.id].aLevel, ib = cycle.courses[c.id].ib;
+    if (!g.aLevels && !fromPass(a)) assert.ok(['unverified', 'notApplicable'].includes(a.status), c.id);
+    if (g.ib == null && !(g.ibHL ?? []).length && !g.ibHLNote && !fromPass(ib)) assert.ok(['unverified', 'notApplicable'].includes(ib.status), c.id);
+    // A pass row never claims acceptance the source does not state outright.
+    for (const e of [a, ib]) if (fromPass(e) && e.status !== 'unverified') assert.ok(e.sourceSnippet, c.id);
   }
 });
 
@@ -246,7 +254,7 @@ test('an IB row shows the overall score, Higher Level subjects and subject grade
   const r = row(panel(cycle.courses['uk-medicine-oxford']), 'ib');
   assert.match(r, /<dt>Overall score<\/dt><dd>39 points<\/dd>/);
   assert.match(r, /<dt>Higher Level<\/dt><dd>Chemistry, Biology<\/dd>/);
-  assert.match(r, /<dt>Subject grades<\/dt><dd>766 at HL<\/dd>/);
+  assert.match(r, /<dt>Details<\/dt><dd>766 at HL<\/dd>/);
 });
 
 test('a missing score reads "Not recorded"; a withheld one reads "Not shown" with the reason', () => {
@@ -254,7 +262,7 @@ test('a missing score reads "Not recorded"; a withheld one reads "Not shown" wit
   assert.match(mcgill, /<dt>Overall score<\/dt><dd class="reqs__fact-empty">Not recorded<\/dd>/);
   const hkust = row(panel(cycle.courses['hk-cs-hkust']), 'ib');
   assert.match(hkust, /<dt>Overall score<\/dt><dd class="reqs__fact-empty">Not shown — see note<\/dd>/);
-  assert.match(hkust, /<dt>Subject grades<\/dt><dd class="reqs__fact-empty">Not shown — see note<\/dd>/);
+  assert.match(hkust, /<dt>Details<\/dt><dd class="reqs__fact-empty">Not shown — see note<\/dd>/);
   assert.match(hkust, /admitted-student figures/);
   assert.doesNotMatch(hkust, /percentile/);
 });
@@ -277,7 +285,7 @@ test('an A-Level / IB row with no data is "Not verified" and points at the offic
 
 test('entryText gives one honest line for A-Level, IB and not-applicable rows', () => {
   assert.equal(view.entryText(cycle.courses['uk-medicine-oxford'].aLevel), 'A*AA; Required subjects: Chemistry, Biology; Preferred subjects: Physics (verified 23 Jun 2026)');
-  assert.match(view.entryText(cycle.courses['uk-medicine-oxford'].ib), /^39 points; .*Higher Level: Chemistry, Biology; Subject grades: 766 at HL \(verified 23 Jun 2026\)$/);
+  assert.match(view.entryText(cycle.courses['uk-medicine-oxford'].ib), /^39 points; .*Higher Level: Chemistry, Biology; Details: 766 at HL \(verified 23 Jun 2026\)$/);
   assert.match(view.entryText(cycle.courses['ca-law-york'].aLevel), /^Not applicable — Graduate-entry programme.* \(checked \d+ [A-Z][a-z]{2} 2026\)$/);
   assert.equal(view.entryText(cycle.courses['us-cs-mit'].ib), view.UNVERIFIED_TEXT);
 });
