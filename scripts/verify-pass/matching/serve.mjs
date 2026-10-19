@@ -1,6 +1,7 @@
 import http from 'node:http'; import fs from 'node:fs'; import path from 'node:path';
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.json': 'application/json', '.xml': 'application/xml', '.txt': 'text/plain' };
-export function serve(root, port) {
+export function serve(rootArg, port) {
+  const root = path.resolve(rootArg);
   const s = http.createServer((req, res) => {
     let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
     if (p.endsWith('/')) p += 'index.html';

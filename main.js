@@ -1190,7 +1190,9 @@ function classify(course, userTags) {
   // on subjects (base GREEN). A course with no hard subject requirements must
   // still require the field's CORE subjects before counting as a STRONG match
   // — otherwise holistic/empty-requirement courses (e.g. US) match everyone.
-  if (status === 'green') {
+  // Exempt: the official page states no specific subjects are required
+  // (course.noSubjectRequirements — sourced, enforced by npm run validate).
+  if (status === 'green' && !course.noSubjectRequirements) {
     const fr = fieldRelevance(course.category, userTags);
     if (fr && fr.satisfied < fr.total) {
       // None of the field's core subjects → weak (not a match); some but not

@@ -104,13 +104,14 @@ in that script.
 
 | Fixture | Before (`origin/main` e968250) | After | Greens before → after |
 |---|---|---|---|
-| UK (Maths, Further Maths, Physics, Chemistry; all A*) | `7296a258` | `cee5feaa` | 61 → 83 |
-| IB (Maths AA HL, Physics HL, Chemistry HL; 38) | `d7abbbfa` | `1e3c07b3` | 0 → 0 |
-| SG (H2 Maths, Physics, Chemistry; all A) | `d4bd83ef` | `3087bac6` | 4 → 4 |
-| HK (Maths, M2, Physics, Chemistry; all 5**) | `a8942995` | `ab527866` | 0 → 0 |
+| UK (Maths, Further Maths, Physics, Chemistry; all A*) | `7296a258` | `b5c18b49` | 61 → 89 |
+| IB (Maths AA HL, Physics HL, Chemistry HL; 38) | `d7abbbfa` | `2053b636` | 0 → 0 |
+| SG (H2 Maths, Physics, Chemistry; all A) | `d4bd83ef` | `f82af7c1` | 4 → 4 |
+| HK (Maths, M2, Physics, Chemistry; all 5**) | `a8942995` | `155292e7` | 0 → 0 |
 | US_AP (nine APs; all 5; Grade 11) | `0db9ce18` | `0db9ce18` | 7 → 7 |
 
-US_AP is unchanged because no US course was touched.
+US_AP is unchanged because no US course was touched. The "After" column
+includes the three owner decisions below.
 
 ## Match shifts per course — SYNTHETIC profiles
 
@@ -128,16 +129,16 @@ were:
 
 | Change | Cells |
 |---|---:|
-| amber → green | 488 |
-| amber → red | 279 |
-| grey → red | 156 |
-| red → amber | 153 |
-| red → grey | 91 |
-| amber → grey | 75 |
-| green → grey | 25 |
+| amber → green | 555 |
+| amber → red | 169 |
+| red → amber | 165 |
+| red → grey | 94 |
+| grey → red | 91 |
+| amber → grey | 79 |
+| red → green | 31 |
+| green → grey | 26 |
 | grey → amber | 9 |
 | grey → green | 7 |
-| red → green | 6 |
 | green → amber | 2 |
 
 | Course | Profiles changed (of 50) | Transitions (count) |
@@ -147,7 +148,7 @@ were:
 | `uk-accounting-warwick` | 15 | amber→green (15) |
 | `uk-architecture-edinburgh` | 25 | amber→green (15), amber→red (5), grey→red (5) |
 | `uk-biochemistry-oxford` | 10 | red→amber (5), red→grey (5) |
-| `uk-bioengineering-imperial` | 6 | amber→green (4), amber→grey (2) |
+| `uk-bioengineering-imperial` | 7 | green→grey (1), amber→green (3), amber→grey (3) |
 | `uk-biomedical-ucl` | 2 | green→grey (1), amber→grey (1) |
 | `uk-chemical-imperial` | 2 | amber→grey (2) |
 | `uk-cs-bath` | 2 | amber→green (2) |
@@ -192,14 +193,14 @@ were:
 | `uk-history-oxford` | 4 | amber→green (4) |
 | `uk-law-birmingham` | 40 | amber→red (28), grey→red (7), amber→green (4), grey→amber (1) |
 | `uk-law-bristol` | 38 | amber→red (21), grey→red (14), amber→green (3) |
-| `uk-law-cambridge` | 38 | amber→red (15), grey→red (20), amber→green (3) |
+| `uk-law-cambridge` | 15 | amber→green (15) |
 | `uk-law-durham` | 38 | amber→red (21), grey→red (14), amber→green (3) |
-| `uk-law-exeter` | 39 | amber→red (28), grey→red (7), amber→green (4) |
+| `uk-law-exeter` | 20 | amber→green (20) |
 | `uk-law-glasgow` | 39 | amber→red (25), grey→red (10), amber→green (4) |
-| `uk-law-kcl` | 38 | amber→red (21), grey→red (14), amber→green (3) |
-| `uk-law-lse` | 39 | amber→red (21), grey→red (14), amber→green (3), amber→grey (1) |
+| `uk-law-kcl` | 15 | amber→green (15) |
+| `uk-law-lse` | 19 | amber→green (15), amber→grey (4) |
 | `uk-law-manchester` | 6 | amber→grey (5), green→grey (1) |
-| `uk-law-oxford` | 39 | amber→red (25), grey→red (10), amber→green (4) |
+| `uk-law-oxford` | 20 | amber→green (20) |
 | `uk-law-ucl` | 38 | amber→red (18), grey→red (17), amber→green (3) |
 | `uk-law-warwick` | 40 | amber→red (25), grey→red (10), amber→green (3), amber→grey (1), green→grey (1) |
 | `uk-maths-oxford` | 20 | red→amber (8), red→grey (12) |
@@ -209,12 +210,13 @@ were:
 | `uk-medicine-bristol` | 10 | red→amber (8), red→grey (2) |
 | `uk-medicine-cambridge` | 10 | red→amber (3), red→grey (7) |
 | `uk-medicine-edinburgh` | 10 | red→amber (7), red→grey (3) |
+| `uk-medicine-glasgow` | 10 | red→amber (7), red→grey (3) |
 | `uk-medicine-imperial` | 2 | green→grey (1), amber→grey (1) |
 | `uk-medicine-leeds` | 1 | amber→grey (1) |
 | `uk-medicine-manchester` | 11 | red→amber (8), red→grey (2), grey→amber (1) |
 | `uk-medicine-oxford` | 10 | red→amber (5), red→grey (5) |
 | `uk-naturalsciences-cambridge` | 20 | red→amber (7), red→grey (13) |
-| `uk-nursing-kcl` | 15 | amber→green (5), red→amber (10) |
+| `uk-nursing-kcl` | 45 | amber→green (5), red→green (25), red→amber (15) |
 | `uk-physics-durham` | 2 | amber→green (2) |
 | `uk-physics-imperial` | 2 | amber→grey (2) |
 | `uk-politics-lse` | 26 | amber→green (16), amber→red (7), grey→red (3) |
@@ -223,41 +225,50 @@ were:
 | `uk-psychology-kcl` | 25 | amber→green (15), amber→red (6), grey→red (4) |
 | `uk-psychology-manchester` | 30 | amber→green (20), amber→red (8), grey→red (2) |
 
-## Engine-design note for the owner: removing stand-in preferred subjects exposes the field-core guard
+## Owner decisions applied (19 Oct 2026)
 
-`classify()` in `main.js` runs its field-relevance guard only when a course
-would otherwise be **green**. A course with any missing preferred subject
-stops at amber first.
+1. **Courses with no subject requirements are exempt from the field-core guard.**
+   - **The problem.** `classify()` in `main.js` runs a field-relevance guard
+     when a course would be green, and demotes a student with none of the
+     field's core subjects to red. Removing stand-in preferred subjects
+     exposed courses that require no subjects to this guard. For example, a
+     science-only profile got red for Cambridge Law, where before it got
+     amber.
+   - **The fix.** A course whose official page explicitly states that no
+     specific subjects are required now carries
+     `noSubjectRequirements: true` in `data/courseRequirements.js`, and the
+     guard skips it.
+   - **Where it applies.** The validator allows the flag only with empty
+     essential/preferred and a verified, quoted subjectPrerequisites row.
+     It is set on six courses:
 
-Before the migration, many courses held stand-in preferred subjects that
-their page does not name (e.g. History and English for Law). A student
-without those subjects therefore got **amber**, and the guard never ran.
-With the stand-ins removed, the same student reaches green, and the guard
-then demotes them. A student with **none** of the field's core subjects
-goes to **red** ("weak — not a match").
+     | Course | Official wording |
+     |---|---|
+     | `uk-law-oxford` | "your choice of subjects is your own" |
+     | `uk-law-cambridge` | "We don't ask for any specific subjects" |
+     | `uk-law-lse` | "There is no set subject combination" |
+     | `uk-law-kcl` | "Required subjects: None" |
+     | `uk-nursing-kcl` | "No subject requirements" |
+     | `uk-law-exeter` | required subjects "n/a" |
 
-Example: Cambridge Law officially requires no particular subjects. In
-the synthetic grid, a Maths/Chemistry/Biology A-Level profile used to get
-amber there and now gets red, because none of its subjects are in the law
-core group (English, History, Politics, Philosophy, Sociology).
-
-The migration did not change `main.js`. The owner should decide whether a
-course whose page states "no subject requirements" should be exempt from
-the guard, or capped at amber instead of red. That is a matching-logic
-change, separate from this data migration.
+   - **Not flagged.** Courses whose pages are silent on subjects (UCL,
+     Warwick, Bristol and Durham Law). Birmingham Law, whose "any subjects"
+     refers to the contextual offer. Edinburgh Architecture, which requires
+     evidence of artistic ability. US holistic courses, which the guard
+     exists for.
+2. **`uk-bioengineering-imperial`:** the engine A-Level offer is now A\*AA,
+   the official minimum and the lower end of the typical-offer range
+   A\*AA–A\*A\*A.
+3. **Where A-Level and IB subject requirements differ, the engine follows
+   A-Level.** The IB row's note now starts "IB route differs from A-Level:".
+   - `uk-medicine-glasgow`: essential is now Chemistry, the UK A-Level route.
+     IB applicants still need Biology at HL, which `grades.ibHL` applies in
+     matching.
+   - `uk-medicine-birmingham` and `uk-economics-leeds`: the engine was
+     already in A-Level shape; only the IB note was added.
 
 ## Owner flags raised by the migration
 
-- `uk-bioengineering-imperial`: the official offer is a range starting at
-  A\*AA, and the engine keeps AAA, which is below it.
-- `uk-economics-leeds`, `uk-medicine-birmingham`, `uk-medicine-glasgow`:
-  the A-Level and IB routes require different subjects, but the engine's
-  essential list is shared across systems.
-  - Leeds Economics and Birmingham Medicine: the IB-only requirement is
-    display-only.
-  - Glasgow Medicine: the engine keeps Biology essential, which the
-    international A-Level and IB routes require, but the UK A-Level route
-    does not.
 - `uk-medicine-manchester`: the essential list is now empty (the page
   requires "Biology or Chemistry" plus another science, a one-of rule).
   The medicine field-core guard still checks Chemistry and Biology.

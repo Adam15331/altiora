@@ -25,6 +25,14 @@
  *   Absent field or absent test code hydrates as "required" — the strict,
  *   fail-safe default. Set "optional-lower-offer" ONLY where the verified
  *   source states the test lowers the offer rather than being required.
+ *
+ * ADDITIVE — noSubjectRequirements (optional, true only):
+ *   The course's official page explicitly states that no specific subjects
+ *   are required (not merely silent). essential and preferred must be empty,
+ *   and the current cycle's subjectPrerequisites row must be verified and
+ *   quote that statement (enforced by npm run validate). Exempts the course
+ *   from the field-relevance guard in classify(): a student is not demoted
+ *   for lacking the field's usual core subjects when the course asks for none.
  */
 
 const courses = [
@@ -114,6 +122,7 @@ const courses = [
     id: "uk-law-oxford", name: "Law (Jurisprudence) BA",
     university: "University of Oxford", country: "UK", degreeLevel: "BA", category: "law",
     requirements: { essential: [], preferred: [], useful: ["Philosophy"] },
+    noSubjectRequirements: true,
     grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "666 at HL" },
     admissionTests: ["LNAT"],
     universityContext: {
@@ -244,6 +253,7 @@ const courses = [
     id: "uk-law-cambridge", name: "Law LLB",
     university: "University of Cambridge", country: "UK", degreeLevel: "LLB", category: "law",
     requirements: { essential: [], preferred: [], useful: ["Philosophy","Economics"] },
+    noSubjectRequirements: true,
     grades: { aLevels: "A*AA", ib: 41, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: ["LNAT"],
     universityContext: {
@@ -348,7 +358,7 @@ const courses = [
     id: "uk-bioengineering-imperial", name: "Biomedical Engineering MEng",
     university: "Imperial College London", country: "UK", degreeLevel: "MEng", category: "engineering",
     requirements: { essential: ["Mathematics_Standard","Physics"], preferred: [], useful: ["Biology"] },
-    grades: { aLevels: "AAA", ib: 40, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "666 at HL" },
+    grades: { aLevels: "A*AA", ib: 40, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "666 at HL" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-5",
@@ -400,6 +410,7 @@ const courses = [
     id: "uk-law-lse", name: "Law LLB",
     university: "London School of Economics", country: "UK", degreeLevel: "LLB", category: "law",
     requirements: { essential: [], preferred: [], useful: ["Economics","Politics"] },
+    noSubjectRequirements: true,
     grades: { aLevels: "A*AA", ib: 39, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "766 at HL" },
     admissionTests: ["LNAT"],
     universityContext: {
@@ -690,6 +701,7 @@ const courses = [
     id: "uk-law-kcl", name: "Law LLB",
     university: "King's College London", country: "UK", degreeLevel: "LLB", category: "law",
     requirements: { essential: [], preferred: [], useful: ["Economics","Philosophy"] },
+    noSubjectRequirements: true,
     grades: { aLevels: "A*AA", ib: 38, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: ["LNAT"],
     universityContext: {
@@ -729,6 +741,7 @@ const courses = [
     id: "uk-nursing-kcl", name: "Nursing BSc",
     university: "King's College London", country: "UK", degreeLevel: "BSc", category: "medicine",
     requirements: { essential: [], preferred: [], useful: ["Mathematics_Standard"] },
+    noSubjectRequirements: true,
     grades: { aLevels: "BBC", ib: 31, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     universityContext: {
@@ -1189,7 +1202,7 @@ const courses = [
   {
     id: "uk-medicine-glasgow", name: "Medicine MBChB",
     university: "University of Glasgow", country: "UK", degreeLevel: "MBChB", category: "medicine",
-    requirements: { essential: ["Chemistry","Biology"], preferred: [], useful: ["Physics"] },
+    requirements: { essential: ["Chemistry"], preferred: [], useful: ["Physics"] },
     grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "666 at HL" },
     admissionTests: ["UCAT"],
     universityContext: {
@@ -1515,6 +1528,7 @@ const courses = [
     id: "uk-law-exeter", name: "Law LLB",
     university: "University of Exeter", country: "UK", degreeLevel: "LLB", category: "law",
     requirements: { essential: [], preferred: [], useful: ["Economics","Philosophy"] },
+    noSubjectRequirements: true,
     grades: { aLevels: "AAA", ib: 36, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "666 at HL" },
     admissionTests: [],
     universityContext: {
@@ -4304,7 +4318,7 @@ const courseVerification = {
   "uk-chemical-imperial": { status: "partial", source: "https://www.imperial.ac.uk/study/courses/undergraduate/chemical-engineering/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ib 39→41. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.imperial.ac.uk/study/courses/undergraduate/chemical-engineering/): Verified: A-level A*A*A (A* Chemistry + A* Maths + A) via Imperial + The Uni Guide; IB 39, HL7 Maths + HL7 Chemistry; ESAT required." },
   "uk-physics-imperial": { status: "partial", source: "https://www.imperial.ac.uk/study/courses/undergraduate/physics-bsc/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ib 40→42. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.imperial.ac.uk/study/courses/undergraduate/physics-bsc/): Verified: A-level A*A*A (A* Maths + A* Physics + A) via Imperial + WhatUni; IB 40, HL Maths+Physics; ESAT required." },
   "uk-maths-imperial": { status: "partial", source: "https://www.imperial.ac.uk/study/courses/undergraduate/mathematics-bsc/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ib 39→40; ibHLNote 776 at HL→7 in HL Mathematics; 6 in another HL subject. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.imperial.ac.uk/study/courses/undergraduate/mathematics-bsc/): Verified: A-level A*A*A (A* Maths + A* Further Maths + A) via Imperial + The Uni Guide; IB 39 incl HL7 Maths; TMUA required." },
-  "uk-bioengineering-imperial": { status: "partial", source: "https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): admissionTests [ESAT]→[]; preferred [Chemistry]→[]; ib 38→40; ibHLNote HL6 Mathematics + HL6 Physics or Chemistry; 39 typical→666 at HL. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/): Re-mapped from non-existent 'Bioengineering MEng' to Imperial's real Biomedical Engineering MEng. Verified: A-level AAA incl Maths+Physics; IB 38 min (39 typical), HL6 Maths + HL6 Physics or Chemistry; ESAT required. Gated on Maths+Physics, not Biology." },
+  "uk-bioengineering-imperial": { status: "partial", source: "https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels AAA→A*AA. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-10-19, https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/): 2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): admissionTests [ESAT]→[]; preferred [Chemistry]→[]; ib 38→40; ibHLNote HL6 Mathematics + HL6 Physics or Chemistry; 39 typical→666 at HL. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/): Re-mapped from non-existent 'Bioengineering MEng' to Imperial's real Biomedical Engineering MEng. Verified: A-level AAA incl Maths+Physics; IB 38 min (39 typical), HL6 Maths + HL6 Physics or Chemistry; ESAT required. Gated on Maths+Physics, not Biology." },
   "uk-economics-lse": { status: "verified", source: "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-economics", checkedDate: "2026-06-28", notes: "A*AA / IB 39 / 766 HL confirmed; TMUA mandatory for BSc Economics." },
   "uk-finance-lse": { status: "verified", source: "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-finance", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ib 38→39. EARLIER (2026-06-28, https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-finance): A*AA / IB 38 / 766 HL confirmed. TMUA encouraged, not mandatory (no required test)." },
   "uk-accounting-lse": { status: "verified", source: "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-accounting-and-finance", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels AAA→A*AA; ib 38→39; preferred [Economics, Mathematics_Advanced]→[]. EARLIER (2026-06-28, https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-accounting-and-finance): A*AA→AAA (standard offer incl A in Maths; AAB contextual). IB 38 / 766 HL confirmed; no required test." },
@@ -4432,7 +4446,7 @@ const courseVerification = {
   "uk-economics-standrews": { status: "partial", source: "https://www.st-andrews.ac.uk/subjects/economics/economics-ma/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential [Mathematics_Standard]→[]; preferred [Economics, Mathematics_Advanced]→[Mathematics_Standard]; preferred [Economics, Mathematics_Advanced]→[Mathematics_Standard]; preferred [Economics, Mathematics_Advanced]→[Mathematics_Standard]; ibHL [Mathematics_Standard]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.st-andrews.ac.uk/subjects/economics/economics-ma/): Verified: A-level AAA standard (minimum ABB); IB 38 standard (HL 666), minimum 36 (HL 655)." },
   "uk-medicine-standrews": { status: "verified", source: "https://www.st-andrews.ac.uk/subjects/medicine/medicine-bsc-a100/entry-requirements/academic-requirements/", checkedDate: "2026-06-28", notes: "Verified: A-level AAA (min AAB) incl Chemistry + one of Bio/Maths/Physics; IB 38, HL 666 incl HL Chemistry + one of Bio/Maths/Physics; UCAT required (not LNAT)." },
   "uk-maths-standrews": { status: "verified", source: "https://www.st-andrews.ac.uk/subjects/mathematics/mathematics-bsc/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels AAA→A*A*A; essential [Mathematics_Standard, Mathematics_Advanced]→[Mathematics_Standard]; ibHL [Mathematics_Advanced]→[Mathematics_Standard]. EARLIER (2026-06-28, https://www.st-andrews.ac.uk/subjects/mathematics/mathematics-bsc/): Verified: A-level AAA incl Maths (BSc); MMath top offer A*A*A incl A* Maths + A Further Maths; IB 38 (HL 666 incl HL6 Maths), minimum 36." },
-  "uk-medicine-glasgow": { status: "partial", source: "https://www.gla.ac.uk/undergraduate/degrees/medicine/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Standard]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.medschools.ac.uk/courses/glasgow-medicine-a100/): Verified: A-level AAA, HL Chemistry+Biology, UCAT confirmed officially; IB 38 with HL 666 corroborated across Medical Schools Council (semi-official) + 2 further sources (Glasgow embeds totals in on-page tables)." },
+  "uk-medicine-glasgow": { status: "partial", source: "https://www.gla.ac.uk/undergraduate/degrees/medicine/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential [Chemistry, Biology]→[Chemistry]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-10-19, https://www.gla.ac.uk/undergraduate/degrees/medicine/): 2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Standard]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.medschools.ac.uk/courses/glasgow-medicine-a100/): Verified: A-level AAA, HL Chemistry+Biology, UCAT confirmed officially; IB 38 with HL 666 corroborated across Medical Schools Council (semi-official) + 2 further sources (Glasgow embeds totals in on-page tables)." },
   "uk-law-glasgow": { status: "partial", source: "https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/M100", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [History, English]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.thecompleteuniversityguide.co.uk/courses/details/common-law-llb/57013998): Verified: A-level AAA, LNAT confirmed; IB 38 with HL 666 corroborated across Complete University Guide + gotouniversity (min 34 = 655). Glasgow embeds numeric totals in on-page tables not surfaced in search." },
   "uk-cs-glasgow": { status: "verified", source: "https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/G400", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Advanced]→[]. EARLIER (2026-06-28, https://www.gla.ac.uk/undergraduate/degrees/computingscience/): Verified (official): standard A-level AAA–ABB incl A-level Maths (faster route A*AA); IB 38 with HL 666 incl HL6 Maths (A&A). Stored AAB/IB33/HL665 corrected." },
   "uk-economics-glasgow": { status: "partial", source: "https://www.gla.ac.uk/feeds/apex/ugEntryRequirements/253/L150", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Economics, Mathematics_Advanced]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.gla.ac.uk/undergraduate/degrees/economics/): Verified (official): A-level AAB–BBB incl A-level Maths + English/Humanities; IB 36 (HL 665). Stored IB 33 corrected to 36; A-level AAB matches range top." },

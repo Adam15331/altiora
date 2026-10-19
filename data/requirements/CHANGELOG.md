@@ -4761,3 +4761,19 @@ Format:
 - `uk-maths-ucl` · subjectPrerequisites: row partial → verified (owner flag kept).
 - `uk-maths-ucl` · aLevel: row partial → verified (owner flag kept).
 - `uk-maths-ucl` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Owner decision: Imperial Biomedical Engineering offer
+
+- `uk-bioengineering-imperial` · engine `grades.aLevels`: AAA → A*AA (offer). Source: https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/
+  > A*AA To include: A* in Mathematics A in Physics A in a third subject
+- `uk-bioengineering-imperial` · aLevel: row partial → verified (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Owner decision: where A-Level and IB subject requirements differ, the engine follows A-Level (IB note added)
+
+- `uk-medicine-glasgow` · engine `requirements.essential`: [Chemistry, Biology] → [Chemistry] (essential-remove). Source: https://www.gla.ac.uk/undergraduate/degrees/medicine/
+  > UK A-level Standard Entry Requirements AAA Additional requirements: A-levels Chemistry and one of either Biology, Physics or Mathematics.
+- `uk-medicine-glasgow` · subjectPrerequisites: row partial → partial.
+- `uk-medicine-glasgow` · aLevel: row partial → partial (owner flag kept).
+- `uk-medicine-glasgow` · ib: row verified → verified (owner flag kept).
+- `uk-medicine-birmingham` · ib: row partial → partial (owner flag kept).
+- `uk-economics-leeds` · ib: row partial → partial (owner flag kept).

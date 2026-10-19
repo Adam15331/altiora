@@ -8813,5 +8813,108 @@
    ],
    "reason": "A list of preferred third subjects is a choice; seven preferred tags would make green unreachable."
   }
+ },
+ {
+  "id": "uk-bioengineering-imperial",
+  "changes": [
+   {
+    "field": "grades.aLevels",
+    "old": "AAA",
+    "new": "A*AA",
+    "kind": "offer",
+    "category": "aLevel",
+    "url": "https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/",
+    "quote": "A*AA To include: A* in Mathematics A in Physics A in a third subject",
+    "ownerDecision": "2026-10-19: use the official minimum entry standard, A*AA"
+   }
+  ],
+  "rows": {
+   "aLevel": {
+    "status": "verified",
+    "set": {
+     "typicalOffer": "A*AA"
+    },
+    "note": "Minimum entry standard A*AA (A* in Mathematics, A in Physics, A in a third subject); typical offer A*AA – A*A*A. Matching uses the minimum, A*AA.",
+    "reviewFlag": "Excluded subjects and the practical endorsement are display-only; the matcher does not apply them."
+   }
+  },
+  "keep": [],
+  "reviewerNotes": "Owner decision: engine takes the official minimum.",
+  "ownerFix": true
+ },
+ {
+  "id": "uk-medicine-glasgow",
+  "changes": [
+   {
+    "field": "requirements.essential",
+    "old": [
+     "Chemistry",
+     "Biology"
+    ],
+    "new": [
+     "Chemistry"
+    ],
+    "kind": "essential-remove",
+    "category": "subjectPrerequisites",
+    "url": "https://www.gla.ac.uk/undergraduate/degrees/medicine/",
+    "quote": "UK A-level Standard Entry Requirements AAA Additional requirements: A-levels Chemistry and one of either Biology, Physics or Mathematics.",
+    "ownerDecision": "2026-10-19: where routes differ, the engine follows the A-Level requirement"
+   }
+  ],
+  "rows": {
+   "subjectPrerequisites": {
+    "set": {
+     "codes": [
+      "Chemistry"
+     ]
+    },
+    "note": "Matching follows the UK A-level route: Chemistry required, plus one of Biology, Physics or Mathematics (a choice the engine cannot express). International A-level and IB applicants also need Biology (shown in the items above; the IB Higher Level Biology requirement is applied in matching).",
+    "reviewFlag": null
+   },
+   "aLevel": {
+    "set": {
+     "subjects.required": [
+      {
+       "name": "Chemistry",
+       "code": "Chemistry"
+      }
+     ]
+    },
+    "note": "UK A-level: AAA with Chemistry and one of Biology, Physics or Mathematics (GCSE English B/6; GCSE Biology B/6 if not at A-level). International A-level: AAA with Chemistry, Biology and one of Physics or Mathematics. Matching follows the UK A-level route (Chemistry required); the second-subject choice and the international Biology requirement are display-only.",
+    "reviewFlag": "The General Studies exclusion is display-only; the matcher does not apply it."
+   },
+   "ib": {
+    "set": {
+     "subjects.required": [
+      {
+       "name": "Chemistry",
+       "code": "Chemistry"
+      }
+     ]
+    },
+    "note": "IB route differs from A-Level: IB applicants need Chemistry and Biology at Higher Level (both applied in matching), plus SL Physics or Mathematics at 6 (HL recommended) and SL English at 6. UK A-level applicants need Biology only as one option among Biology, Physics or Mathematics."
+   }
+  },
+  "ownerFix": true
+ },
+ {
+  "id": "uk-medicine-birmingham",
+  "changes": [],
+  "rows": {
+   "ib": {
+    "note": "IB route differs from A-Level: 6,6,6 at Higher Level to include Chemistry plus a second science from Biology/Physics/Maths and one other approved subject; English, Biology and Mathematics at Standard Level if not taken at Higher Level; minimum 32 points. At A-Level, Biology is only one option for the second science; IB applicants need Biology at least at Standard Level. Matching follows the A-Level requirement (Chemistry), so the IB-only Biology/English/Mathematics requirements are display-only."
+   }
+  },
+  "ownerFix": true
+ },
+ {
+  "id": "uk-economics-leeds",
+  "changes": [],
+  "rows": {
+   "ib": {
+    "note": "IB route differs from A-Level: 35 points with 17 from HL subjects, and Mathematics is required (5 at Standard Level or 4 at Higher Level). The A-level route names no required subject, and matching follows it, so the IB Mathematics requirement is display-only."
+   }
+  },
+  "ownerFix": true
  }
 ]
