@@ -3868,3 +3868,41 @@ Format:
 - `uk-medicine-bristol` · subjectPrerequisites: row partial → partial (owner flag kept).
 - `uk-medicine-bristol` · aLevel: row partial → partial (owner flag kept).
 - `uk-medicine-bristol` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Bath
+
+- `uk-cs-bath` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.bath.ac.uk/courses/undergraduate-2027/computer-science/bsc-computer-science/
+  > A*A*A in three A levels including A in Mathematics.
+- `uk-cs-bath` · engine `grades.ibHL`: [Mathematics_Advanced] → [Mathematics_Standard] (ib-hl). Source: https://www.bath.ac.uk/courses/undergraduate-2027/computer-science/bsc-computer-science/
+  > 36 points overall and 7, 7, 6 in three Higher Level subjects including 6 in either HL Mathematics.
+- `uk-cs-bath` · engine `grades.ibHLNote`: 766 at HL → 776 at HL incl 6 in HL Mathematics (AA or AI) (ib-note). Source: https://www.bath.ac.uk/courses/undergraduate-2027/computer-science/bsc-computer-science/
+  > 36 points overall and 7, 7, 6 in three Higher Level subjects including 6 in either HL Mathematics.
+- `uk-cs-bath` · subjectPrerequisites: row partial → verified.
+- `uk-cs-bath` · aLevel: row partial → verified (owner flag kept).
+- `uk-cs-bath` · ib: row partial → partial (owner flag kept).
+- `uk-economics-bath` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.bath.ac.uk/courses/undergraduate-2027/economics/bsc-economics/
+  > A*AA in three A levels including Mathematics.
+- `uk-economics-bath` · subjectPrerequisites: row partial → verified.
+- `uk-economics-bath` · aLevel: row partial → verified (owner flag kept).
+- `uk-economics-bath` · ib: row partial → partial (owner flag kept).
+- `uk-engineering-bath` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.bath.ac.uk/courses/undergraduate-2027/mechanical-engineering/beng-mechanical-engineering/
+  > A*A*A in three A levels including A* in Mathematics and A in Physics
+- `uk-engineering-bath` · engine `grades.ibHL`: [Mathematics_Advanced, Physics] → [Mathematics_Standard, Physics] (ib-hl). Source: https://www.bath.ac.uk/courses/undergraduate-2027/mechanical-engineering/beng-mechanical-engineering/
+  > 36 points overall and 7, 7, 6 in three Higher Level subjects including 6 in Physics and 7 in either HL Mathematics.
+- `uk-engineering-bath` · engine `grades.ibHLNote`: 666 at HL → 776 at HL incl 7 in HL Mathematics (AA or AI) and 6 in HL Physics (ib-note). Source: https://www.bath.ac.uk/courses/undergraduate-2027/mechanical-engineering/beng-mechanical-engineering/
+  > 36 points overall and 7, 7, 6 in three Higher Level subjects including 6 in Physics and 7 in either HL Mathematics.
+- `uk-engineering-bath` · subjectPrerequisites: row partial → verified.
+- `uk-engineering-bath` · aLevel: row partial → verified (owner flag kept).
+- `uk-engineering-bath` · ib: row partial → verified.
+- `uk-pharmacy-bath` · engine `requirements.preferred`: [Biology, Mathematics_Standard] → [] (preferred-remove-unlisted). Source: https://www.bath.ac.uk/courses/undergraduate-2027/pharmacy/mpharm-pharmacy/
+  > You will need a strong performance in Chemistry and a second science or mathematics subject as part of your entry qualifications.
+- `uk-pharmacy-bath` · engine `grades.ibHL`: [Chemistry, Biology] → [Chemistry] (ib-hl). Source: https://www.bath.ac.uk/courses/undergraduate-2027/pharmacy/mpharm-pharmacy/
+  > 35 points overall and 6, 6, 5 in three Higher Level subjects including Chemistry and a second science or mathematics course.
+- `uk-pharmacy-bath` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-pharmacy-bath` · aLevel: row partial → partial (owner flag kept).
+- `uk-pharmacy-bath` · ib: row partial → partial (owner flag kept).
+- `uk-accounting-bath` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.bath.ac.uk/courses/undergraduate-2027/accounting-and-finance/bsc-accounting-and-finance/
+  > A*AA or A*A*B in three A levels including A in Mathematics.
+- `uk-accounting-bath` · subjectPrerequisites: row partial → verified.
+- `uk-accounting-bath` · aLevel: row partial → verified (owner flag kept).
+- `uk-accounting-bath` · ib: row partial → verified.
