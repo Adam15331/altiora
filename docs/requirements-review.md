@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 160 | 18 | 142 | 0 |
-| English language | 170 | 11 | 139 | 0 |
+| SAT / ACT | 164 | 18 | 138 | 0 |
+| English language | 175 | 11 | 134 | 0 |
 | Admissions tests | 285 | 25 | 10 | 0 |
-| Subject prerequisites | 131 | 179 | 10 | 0 |
-| A-Level requirements | 142 | 91 | 83 | 4 |
-| IB requirements | 205 | 90 | 21 | 4 |
-| Other qualifications | 150 | 54 | 116 | 0 |
-| Other requirements | 173 | 13 | 134 | 0 |
+| Subject prerequisites | 126 | 184 | 10 | 0 |
+| A-Level requirements | 137 | 96 | 83 | 4 |
+| IB requirements | 202 | 93 | 21 | 4 |
+| Other qualifications | 154 | 54 | 112 | 0 |
+| Other requirements | 178 | 13 | 129 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -293,6 +293,19 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-accounting-bath` | Subject prerequisites | Official (2027 entry): A in Mathematics required; the page names no preferred subjects. |
 | `uk-accounting-bath` | A-Level requirements | Official (2027 entry): A*AA or A*A*B including A in Mathematics — agrees with the stored offer. Not confirmed: the preferred Economics / Further Mathematics shown here. |
 | `uk-accounting-bath` | IB requirements | Official (2027 entry): 36 points and 7, 6, 6 or 7, 7, 5 at HL including 6 in either HL Mathematics — agrees with the stored score and "766 at HL" (7, 7, 5 is also accepted). Not confirmed: the preferred Economics shown here. |
+| `uk-medicine-glasgow` | Subject prerequisites | Official (2027 entry): subject requirements differ between UK and international A-level applicants; Mathematics is one of two (or three) alternatives in a required choice. |
+| `uk-medicine-glasgow` | A-Level requirements | Official (2027 entry): UK A-level standard entry AAA with Chemistry and one of Biology, Physics or Mathematics (GCSE English B/6; GCSE Biology B/6 if not at A-level); International A-level AAA with Chemistry, Biology and one of Physics or Mathematics. Required grades and subjects must be obtained at one sitting and at the first attempt; UCAT and interview also required. |
+| `uk-medicine-glasgow` | IB requirements | Official (2027 entry): IB 38 (6,6,6 HL) with HL Chemistry and Biology, SL Physics or Mathematics at 6 (HL recommended) and SL English at 6; UCAT and interview. |
+| `uk-cs-glasgow` | Subject prerequisites | Official (2027 entry): Mathematics is required; Further Mathematics is not listed as preferred (for IB, HL Mathematics: Analysis & Approaches is required). |
+| `uk-cs-glasgow` | A-Level requirements | Official (2027 entry, BSc G400): A-level standard entry AAA with A-level Mathematics at A (international A-level applicants: also AAA with Mathematics at A). Further Mathematics is not listed as preferred. |
+| `uk-law-glasgow` | Subject prerequisites | Official (2027 entry): a Humanities subject (A-level) and English (GCSE; IB HL) are required; no preferred subjects are listed. |
+| `uk-law-glasgow` | A-Level requirements | Official (2027 entry, Common Law LLB M100): A-level AAA including an A-level Humanities subject at A, GCSE English at B and the LNAT. (Scots Law LLB M114: AAA including A-level English at A*/A, plus the LNAT.) Glasgow treats History and English as Humanities subjects but lists no preferred subjects. |
+| `uk-law-glasgow` | IB requirements | Official (2027 entry, Common Law LLB): IB 38 (6,6,6 HL) with HL English at 6, plus the LNAT. |
+| `uk-economics-glasgow` | Subject prerequisites | Official (2027 entry): Mathematics and English/Humanities are required; no preferred subjects are listed. |
+| `uk-economics-glasgow` | A-Level requirements | Official (2027 entry, MA(SocSci) L150): A-level AAB including A-level English or a Humanities subject at A/B and A-level Mathematics at B (international A-level applicants: ABB with the same subjects). No preferred subjects are listed. |
+| `uk-economics-glasgow` | IB requirements | Official (2027 entry): IB 36 (6,6,5 HL) with HL English or HL Humanities at 6 and HL Mathematics at 6 (international applicants: IB Diploma 34 (6,5,5)). |
+| `uk-engineering-glasgow` | Subject prerequisites | Official (2027 entry): Mathematics and Physics (or Design & Technology for UK A-level applicants) are required; Further Mathematics is not listed as preferred. |
+| `uk-engineering-glasgow` | A-Level requirements | Official (2027 entry): MEng (H302) A-level AAA with Mathematics at A and Physics or Design & Technology (3D or Product Design only) at A (international A-level applicants: Mathematics and Physics at A); BEng (H300) AAB. Advanced entry to Year 2: A*A*A including Mathematics and Physics. Further Mathematics is not listed as preferred. |
 | `uk-medicine-leeds` | Subject prerequisites | Partly verified: the official page does not state the preferred subject(s) held for matching (Mathematics_Standard). |
 | `uk-medicine-leeds` | A-Level requirements | A* cannot compensate for a B (A*A*B is not accepted for AAA); EPQs and Level 3 Core Maths are not considered in scoring. Partly verified: the official page does not state the preferred subject(s) held for matching (Mathematics_Standard). |
 | `uk-medicine-leeds` | IB requirements | Official (2027 entry): 36 points with 6 in three HL subjects including Chemistry and Biology. 34 points (HL minimum 5,5,5 incl Chemistry and Biology) is the Access to Leeds contextual IB offer, not the standard offer. |
@@ -796,6 +809,19 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `uk-accounting-bath` | Subject prerequisites | Preferred Economics / Further Mathematics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Economics","Mathematics_Advanced"]. Owner decision. |
 | `uk-accounting-bath` | A-Level requirements | Preferred Economics / Further Mathematics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Economics","Mathematics_Advanced"]. Owner decision. contextualOffer is display-only; the matcher does not apply it. |
 | `uk-accounting-bath` | IB requirements | Preferred Economics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Economics","Mathematics_Advanced"]. Owner decision. |
+| `uk-medicine-glasgow` | Subject prerequisites | Mathematics is an alternative within a required choice (with Physics, or with Biology/Physics), not a preference, and Biology is not required of UK A-level applicants; data/courseRequirements.js holds essential [Chemistry, Biology], preferred [Mathematics_Standard] (codes kept). Owner decision. |
+| `uk-medicine-glasgow` | A-Level requirements | Required subjects differ: UK A-level applicants need Chemistry plus ONE of Biology, Physics or Mathematics; international A-level applicants need Chemistry, Biology plus ONE of Physics or Mathematics — Mathematics is an alternative in a required pair, not a preference. data/courseRequirements.js holds essential [Chemistry, Biology], preferred [Mathematics_Standard]. Owner decision. The General Studies exclusion is display-only; the matcher does not apply it. |
+| `uk-medicine-glasgow` | IB requirements | Physics OR Mathematics at SL 6 is required (HL recommended); data/courseRequirements.js holds preferred [Mathematics_Standard] rather than a required Physics/Mathematics choice. Owner decision. SL subjects are display-only; the matcher does not apply them. |
+| `uk-cs-glasgow` | Subject prerequisites | Glasgow does not state Further Mathematics as preferred for A-level applicants; data/courseRequirements.js holds preferred [Mathematics_Advanced] (codes kept). Owner decision. |
+| `uk-cs-glasgow` | A-Level requirements | Glasgow does not list Further Mathematics (or any subject) as preferred; data/courseRequirements.js holds preferred [Mathematics_Advanced]. Owner decision. The General Studies exclusion is display-only; the matcher does not apply it. |
+| `uk-law-glasgow` | Subject prerequisites | A Humanities subject and English are required, not preferred; data/courseRequirements.js holds essential [], preferred [History, English] (codes kept). Owner decision. |
+| `uk-law-glasgow` | A-Level requirements | Glasgow REQUIRES an A-level Humanities subject at A (plus GCSE English at B); data/courseRequirements.js holds essential [], preferred [History, English]. Owner decision. The General Studies exclusion is display-only; the matcher does not apply it. |
+| `uk-law-glasgow` | IB requirements | HL English at 6 is required; data/courseRequirements.js holds ibHL [], essential [], preferred [History, English]. Owner decision. |
+| `uk-economics-glasgow` | Subject prerequisites | English/Humanities is also required and Economics / advanced mathematics are not stated as preferred; data/courseRequirements.js holds essential [Mathematics_Standard], preferred [Economics, Mathematics_Advanced] (codes kept). Owner decision. |
+| `uk-economics-glasgow` | A-Level requirements | Glasgow also REQUIRES A-level English or a Humanities subject, and lists no preferred subjects; data/courseRequirements.js holds essential [Mathematics_Standard], preferred [Economics, Mathematics_Advanced]. Owner decision. The General Studies exclusion is display-only; the matcher does not apply it. |
+| `uk-economics-glasgow` | IB requirements | HL English or Humanities at 6 is required but is not in the required-subject codes, and no preferred subjects are listed; data/courseRequirements.js holds essential [Mathematics_Standard], preferred [Economics, Mathematics_Advanced]. Owner decision. |
+| `uk-engineering-glasgow` | Subject prerequisites | Further Mathematics is not stated as preferred, and Design & Technology may replace Physics for UK A-level applicants; data/courseRequirements.js holds essential [Mathematics_Standard, Physics], preferred [Mathematics_Advanced] (codes kept). Owner decision. |
+| `uk-engineering-glasgow` | A-Level requirements | For UK A-level applicants Design & Technology (3D/Product Design) can replace Physics, and Further Mathematics is not listed as preferred; data/courseRequirements.js holds essential [Mathematics_Standard, Physics], preferred [Mathematics_Advanced] and the MEng offer AAA. Owner decision. The General Studies exclusion is display-only; the matcher does not apply it. |
 | `uk-medicine-leeds` | Subject prerequisites | Mathematics is not named as a preferred subject on the 2027 page; data/courseRequirements.js holds preferred [Mathematics_Standard]. Owner decision. Official page does not name the engine’s preferred subject(s) [Mathematics_Standard] as preferred; data/courseRequirements.js holds them. Owner decision. |
 | `uk-medicine-leeds` | A-Level requirements | Mathematics is not named as a preferred subject on the 2027 page; data/courseRequirements.js holds preferred [Mathematics_Standard]. Owner decision. Contextual/alternative offers and excluded subjects are display-only; the matcher does not apply them. Official page does not name the engine’s preferred subject(s) [Mathematics_Standard] as preferred; data/courseRequirements.js holds them. Owner decision. |
 | `uk-medicine-leeds` | IB requirements | IB score differs (official standard offer 36 points; 34 is the Access to Leeds contextual offer); data/courseRequirements.js holds ib 34. Owner decision. |
@@ -1099,11 +1125,7 @@ category — check the official source; never copy a hint in as a value.
 | `uk-pharmacy-ucl` | University College London | SAT / ACT, English language, Other requirements |  |
 | `uk-maths-ucl` | University College London | SAT / ACT, English language, Other requirements |  |
 | `uk-maths-bath` | University of Bath | SAT / ACT | SAT / ACT: Not verified: Bath’s 2027 Mathematics page (https://www.bath.ac.uk/courses/undergraduate-2027/mathematical-sciences/bsc-mathematics/) says its typical Advanced Placement requirements for this course are under review and will be published soon, and states nothing about SAT/ACT for US-diploma applicants — check the official page. |
-| `uk-medicine-glasgow` | University of Glasgow | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-cs-glasgow` | University of Glasgow | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-law-glasgow` | University of Glasgow | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-economics-glasgow` | University of Glasgow | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `uk-engineering-glasgow` | University of Glasgow | SAT / ACT, English language, Other qualifications, Other requirements |  |
+| `uk-medicine-glasgow` | University of Glasgow | SAT / ACT, Other qualifications | SAT / ACT: Not verified: Glasgow’s USA page refers Medicine applicants to the Medical School admissions team (med-sch-admissions@glasgow.ac.uk), and the Medicine course page gives no US-qualification route; the course-requirements feed for A100 returned a server error (500) on 19 Oct 2026. Pages checked: https://www.gla.ac.uk/undergraduate/degrees/medicine/, https://www.gla.ac.uk/international/country/usa/.; Other qualifications: Not verified: no AP or US-diploma requirement for Medicine is published on the pages checked (https://www.gla.ac.uk/undergraduate/degrees/medicine/, https://www.gla.ac.uk/international/country/usa/); the USA page refers Medicine applicants to the Medical School admissions team. |
 | `uk-cs-standrews` | University of St Andrews | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-economics-standrews` | University of St Andrews | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-medicine-standrews` | University of St Andrews | SAT / ACT, English language, Other qualifications, Other requirements |  |
