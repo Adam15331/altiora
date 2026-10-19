@@ -374,7 +374,7 @@ const courses = [
     id: "uk-finance-lse", name: "Finance BSc",
     university: "London School of Economics", country: "UK", degreeLevel: "BSc", category: "economics",
     requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Economics","Statistics"] },
-    grades: { aLevels: "A*AA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL" },
+    grades: { aLevels: "A*AA", ib: 39, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -386,8 +386,8 @@ const courses = [
   {
     id: "uk-accounting-lse", name: "Accounting & Finance BSc",
     university: "London School of Economics", country: "UK", degreeLevel: "BSc", category: "business",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics","Mathematics_Advanced"], useful: ["Statistics"] },
-    grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL" },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Statistics"] },
+    grades: { aLevels: "A*AA", ib: 39, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -399,8 +399,8 @@ const courses = [
   {
     id: "uk-law-lse", name: "Law LLB",
     university: "London School of Economics", country: "UK", degreeLevel: "LLB", category: "law",
-    requirements: { essential: [], preferred: ["History","English"], useful: ["Economics","Politics"] },
-    grades: { aLevels: "A*AA", ib: 38, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "766 at HL" },
+    requirements: { essential: [], preferred: [], useful: ["Economics","Politics"] },
+    grades: { aLevels: "A*AA", ib: 39, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "766 at HL" },
     admissionTests: ["LNAT"],
     universityContext: {
       tier: "world-top-100",
@@ -412,7 +412,7 @@ const courses = [
   {
     id: "uk-politics-lse", name: "Politics & Economics BSc",
     university: "London School of Economics", country: "UK", degreeLevel: "BSc", category: "economics",
-    requirements: { essential: [], preferred: ["Mathematics_Standard","Economics"], useful: ["History","Politics"] },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["History","Politics"] },
     grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL" },
     admissionTests: [],
     universityContext: {
@@ -4306,10 +4306,10 @@ const courseVerification = {
   "uk-maths-imperial": { status: "partial", source: "https://www.imperial.ac.uk/study/courses/undergraduate/mathematics-bsc/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ib 39→40; ibHLNote 776 at HL→7 in HL Mathematics; 6 in another HL subject. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.imperial.ac.uk/study/courses/undergraduate/mathematics-bsc/): Verified: A-level A*A*A (A* Maths + A* Further Maths + A) via Imperial + The Uni Guide; IB 39 incl HL7 Maths; TMUA required." },
   "uk-bioengineering-imperial": { status: "partial", source: "https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): admissionTests [ESAT]→[]; preferred [Chemistry]→[]; ib 38→40; ibHLNote HL6 Mathematics + HL6 Physics or Chemistry; 39 typical→666 at HL. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.imperial.ac.uk/study/courses/undergraduate/biomedical-engineering/): Re-mapped from non-existent 'Bioengineering MEng' to Imperial's real Biomedical Engineering MEng. Verified: A-level AAA incl Maths+Physics; IB 38 min (39 typical), HL6 Maths + HL6 Physics or Chemistry; ESAT required. Gated on Maths+Physics, not Biology." },
   "uk-economics-lse": { status: "verified", source: "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-economics", checkedDate: "2026-06-28", notes: "A*AA / IB 39 / 766 HL confirmed; TMUA mandatory for BSc Economics." },
-  "uk-finance-lse": { status: "verified", source: "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-finance", checkedDate: "2026-06-28", notes: "A*AA / IB 38 / 766 HL confirmed. TMUA encouraged, not mandatory (no required test)." },
-  "uk-accounting-lse": { status: "verified", source: "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-accounting-and-finance", checkedDate: "2026-06-28", notes: "A*AA→AAA (standard offer incl A in Maths; AAB contextual). IB 38 / 766 HL confirmed; no required test." },
-  "uk-law-lse": { status: "verified", source: "https://www.lse.ac.uk/study-at-lse/undergraduate/llb-bachelor-of-laws", checkedDate: "2026-06-28", notes: "A*AA / LNAT confirmed; standard offer A*AA–AAB, IB 37–39 (stored 38) with 666/766 HL." },
-  "uk-politics-lse": { status: "verified", source: "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-politics-and-economics", checkedDate: "2026-06-28", notes: "IB 39→38 (39 was wrong; 37/666 is contextual). AAA / 766 HL confirmed; A-level Maths required; no required test." },
+  "uk-finance-lse": { status: "verified", source: "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-finance", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ib 38→39. EARLIER (2026-06-28, https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-finance): A*AA / IB 38 / 766 HL confirmed. TMUA encouraged, not mandatory (no required test)." },
+  "uk-accounting-lse": { status: "verified", source: "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-accounting-and-finance", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels AAA→A*AA; ib 38→39; preferred [Economics, Mathematics_Advanced]→[]. EARLIER (2026-06-28, https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-accounting-and-finance): A*AA→AAA (standard offer incl A in Maths; AAB contextual). IB 38 / 766 HL confirmed; no required test." },
+  "uk-law-lse": { status: "verified", source: "https://www.lse.ac.uk/study-at-lse/undergraduate/llb-bachelor-of-laws", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [History, English]→[]; ib 38→39. EARLIER (2026-06-28, https://www.lse.ac.uk/study-at-lse/undergraduate/llb-bachelor-of-laws): A*AA / LNAT confirmed; standard offer A*AA–AAB, IB 37–39 (stored 38) with 666/766 HL." },
+  "uk-politics-lse": { status: "verified", source: "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-politics-and-economics", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential []→[Mathematics_Standard]; preferred [Mathematics_Standard, Economics]→[]. EARLIER (2026-06-28, https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-politics-and-economics): IB 39→38 (39 was wrong; 37/666 is contextual). AAA / 766 HL confirmed; A-level Maths required; no required test." },
   "uk-management-lse": { status: "verified", source: "https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-management", checkedDate: "2026-06-28", notes: "Standard offer AAA / IB 38 / 766 HL (stored 37/666 were the contextual offer). No required test." },
   "uk-medicine-ucl": { status: "verified", source: "https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2026-entry", checkedDate: "2026-06-28", notes: "A*AA / IB 39 (19 at HL incl Biology & Chemistry 6&7) / UCAT confirmed for 2026." },
   "uk-cs-ucl": { status: "verified", source: "https://www.ucl.ac.uk/engineering/computer-science/study/undergraduate/tara-admissions-test-computer-science-courses", checkedDate: "2026-06-23", notes: "UCL CS now requires TARA for 2026 (cross-confirmed). A*AA confirmed; IB total not separately quoted (kept 39)." },

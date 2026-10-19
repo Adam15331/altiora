@@ -11,9 +11,9 @@
 | SAT / ACT | 169 | 18 | 133 | 0 |
 | English language | 179 | 11 | 130 | 0 |
 | Admissions tests | 280 | 30 | 10 | 0 |
-| Subject prerequisites | 119 | 191 | 10 | 0 |
-| A-Level requirements | 130 | 103 | 83 | 4 |
-| IB requirements | 195 | 100 | 21 | 4 |
+| Subject prerequisites | 122 | 188 | 10 | 0 |
+| A-Level requirements | 133 | 100 | 83 | 4 |
+| IB requirements | 199 | 96 | 21 | 4 |
 | Other qualifications | 162 | 51 | 107 | 0 |
 | Other requirements | 181 | 14 | 125 | 0 |
 
@@ -75,16 +75,6 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-maths-imperial` | IB requirements | Typical offer 40 points; minimum entry standard 39 points including 7 in Mathematics and 6 in another subject at higher level. Unconfirmed: the snippet gives the HL grades only for the minimum entry standard. |
 | `uk-bioengineering-imperial` | A-Level requirements | Minimum entry standard A*AA (A* in Mathematics, A in Physics, A in a third subject); typical offer A*AA – A*A*A. Unconfirmed: the engine still holds AAA — the typical-offer range is not expressible, and AAA appears on the page only as the contextual-scheme threshold for a guaranteed interview. |
 | `uk-bioengineering-imperial` | IB requirements | Typical offer 40 points; minimum entry standard 39 points including 6 in Mathematics, 6 in Physics and 6 in a third subject at higher level (Physics HL required). Unconfirmed: the snippet gives the HL grades only for the minimum entry standard. |
-| `uk-finance-lse` | IB requirements | Official (2027 entry): 39 points overall. 766 in higher level subjects, including 7 in Mathematics. (38 points is LSE’s contextual offer.) |
-| `uk-accounting-lse` | Subject prerequisites | Official (2027 entry): A-level Mathematics is essential; there are no set subject combinations, traditional academic subjects (including A-level Accounting) are preferred; Further Mathematics is not required. Economics is not named as preferred. |
-| `uk-accounting-lse` | A-Level requirements | Official (2027 entry): A*AA with A in Mathematics (AAA with A in Mathematics is the contextual offer). No preference for Economics or Further Mathematics is stated. |
-| `uk-accounting-lse` | IB requirements | Official (2027 entry): 39 points overall. 766 in higher level subjects, including 6 in higher level Mathematics. (38 points with 666 is the contextual offer.) |
-| `uk-law-lse` | Subject prerequisites | Official (2027 entry): there is no set subject combination; LSE expects a high level of literacy in post-16 subject choices and does not name History or English. |
-| `uk-law-lse` | A-Level requirements | Official (2027 entry): A*AA (contextual offer AAB) with no set subject combination — the A*AA offer agrees; the History/English preference is not stated by LSE. |
-| `uk-law-lse` | IB requirements | Official (2027 entry): 39 points overall. 766 in higher level subjects (contextual: 37 points, 666). No preferred subjects are stated. |
-| `uk-politics-lse` | Subject prerequisites | Official (2027 entry): A-level Mathematics (or equivalent) is required; Economics is only listed among typical subject choices. |
-| `uk-politics-lse` | A-Level requirements | Official (2027 entry): AAA, including Mathematics (contextual AAB including A in Mathematics). The AAA offer agrees; Mathematics is required, not preferred. |
-| `uk-politics-lse` | IB requirements | Official (2027 entry): 38 points overall, including 766 at higher level, including Mathematics — score and HL profile agree; Mathematics is required (engine lists it as preferred). |
 | `uk-medicine-ucl` | Admissions tests | Partly verified: checked on 28 Jun 2026 against UCL’s 2026-entry page; the 2027-entry page could not be opened for checking on 19 Oct 2026. |
 | `uk-medicine-ucl` | Subject prerequisites | Partly verified: checked on 28 Jun 2026 against UCL’s 2026-entry page; the 2027-entry page could not be opened for checking on 19 Oct 2026. |
 | `uk-medicine-ucl` | A-Level requirements | Partly verified: checked on 28 Jun 2026 against UCL’s 2026-entry page; the 2027-entry page could not be opened for checking on 19 Oct 2026. |
@@ -670,16 +660,13 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `uk-economics-lse` | A-Level requirements | Contextual offer is display-only — the matcher does not apply it. |
 | `uk-economics-lse` | IB requirements | Contextual offer is display-only — the matcher does not apply it. |
 | `uk-finance-lse` | A-Level requirements | Contextual offer is display-only — the matcher does not apply it. |
-| `uk-finance-lse` | IB requirements | IB overall score differs: LSE’s standard offer is 39 (38 is the contextual offer); data/courseRequirements.js holds grades.ib 38. Owner decision. |
-| `uk-accounting-lse` | Subject prerequisites | Preferred subjects differ: LSE names no preference for Economics or Further Mathematics; data/courseRequirements.js holds requirements.preferred ["Economics","Mathematics_Advanced"]. Owner decision. |
-| `uk-accounting-lse` | A-Level requirements | A-level offer differs: LSE’s standard offer is A*AA with A in Mathematics (AAA is the contextual offer); data/courseRequirements.js holds grades.aLevels "AAA". Preferred Economics/Further Mathematics not stated by LSE; engine holds ["Economics","Mathematics_Advanced"]. Owner decision. |
-| `uk-accounting-lse` | IB requirements | IB overall score differs: LSE’s standard offer is 39 (38 is the contextual offer); data/courseRequirements.js holds grades.ib 38. Owner decision. |
-| `uk-law-lse` | Subject prerequisites | Preferred subjects differ: LSE names no preferred subjects; data/courseRequirements.js holds requirements.preferred ["History","English"]. Owner decision. |
-| `uk-law-lse` | A-Level requirements | Preferred subjects differ: LSE names no preferred subjects; data/courseRequirements.js holds requirements.preferred ["History","English"]. Owner decision. |
-| `uk-law-lse` | IB requirements | IB overall score differs: LSE’s standard offer is 39 (contextual 37); data/courseRequirements.js holds grades.ib 38. Preferred History/English not stated; engine holds ["History","English"]. Owner decision. |
-| `uk-politics-lse` | Subject prerequisites | Subject requirement differs: LSE requires A-level Mathematics; data/courseRequirements.js holds Mathematics_Standard as preferred (requirements.essential []) and Economics as preferred. Owner decision. |
-| `uk-politics-lse` | A-Level requirements | Required subject missing: LSE requires A-level Mathematics; data/courseRequirements.js holds requirements.essential [] and preferred ["Mathematics_Standard","Economics"]. Owner decision. |
-| `uk-politics-lse` | IB requirements | Required subject missing: LSE requires Mathematics; data/courseRequirements.js holds requirements.essential [] and preferred ["Mathematics_Standard","Economics"]. Owner decision. |
+| `uk-finance-lse` | IB requirements | Contextual offer is display-only — the matcher does not apply it. |
+| `uk-accounting-lse` | A-Level requirements | Contextual offer is display-only — the matcher does not apply it. |
+| `uk-accounting-lse` | IB requirements | Contextual offer is display-only — the matcher does not apply it. |
+| `uk-law-lse` | A-Level requirements | Contextual offer is display-only — the matcher does not apply it. |
+| `uk-law-lse` | IB requirements | Contextual offer is display-only — the matcher does not apply it. |
+| `uk-politics-lse` | A-Level requirements | Contextual offer is display-only — the matcher does not apply it. |
+| `uk-politics-lse` | IB requirements | Contextual offer is display-only — the matcher does not apply it. |
 | `uk-management-lse` | A-Level requirements | Contextual offer is display-only — the matcher does not apply it. |
 | `uk-management-lse` | IB requirements | Contextual offer is display-only — the matcher does not apply it. |
 | `uk-medicine-ucl` | SAT / ACT | Re-check in a browser: https://www.ucl.ac.uk/prospective-students/international/united-states-america-your-questions-answered and the course page https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2027-entry (2027-entry version of https://www.ucl.ac.uk/medical-sciences/divisions/medical-school/study/undergraduate/mbbs-admissions/entry-requirements/2026-entry) (HTTP 403 to automated checks on 2026-10-19; all www.ucl.ac.uk pages tried returned 403). Record what UCL states for applicants with a US high-school diploma (SAT/ACT with APs, or not required), with a verbatim snippet. |

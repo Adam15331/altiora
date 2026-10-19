@@ -3589,3 +3589,32 @@ Format:
 - `uk-bioengineering-imperial` · subjectPrerequisites: row partial → verified.
 - `uk-bioengineering-imperial` · aLevel: row partial → partial (owner flag kept).
 - `uk-bioengineering-imperial` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: London School of Economics
+
+- `uk-finance-lse` · engine `grades.ib`: 38 → 39 (ib-score). Source: https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-finance
+  > IB Diploma 39 points overall. 766 in higher level subjects, including 7 in Mathematics
+- `uk-finance-lse` · ib: row partial → verified (owner flag kept).
+- `uk-accounting-lse` · engine `grades.aLevels`: AAA → A*AA (offer). Source: https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-accounting-and-finance
+  > A-levels A*AA with A in Mathematics
+- `uk-accounting-lse` · engine `grades.ib`: 38 → 39 (ib-score). Source: https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-accounting-and-finance
+  > IB Diploma 39 points overall. 766 in higher level subjects, including 6 in higher level Mathematics
+- `uk-accounting-lse` · engine `requirements.preferred`: [Economics, Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-accounting-and-finance
+  > Further Mathematics is not required
+- `uk-accounting-lse` · subjectPrerequisites: row partial → verified.
+- `uk-accounting-lse` · aLevel: row partial → verified (owner flag kept).
+- `uk-accounting-lse` · ib: row partial → verified (owner flag kept).
+- `uk-law-lse` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-unlisted). Source: https://www.lse.ac.uk/study-at-lse/undergraduate/llb-bachelor-of-laws
+  > There is no set subject combination.
+- `uk-law-lse` · engine `grades.ib`: 38 → 39 (ib-score). Source: https://www.lse.ac.uk/study-at-lse/undergraduate/llb-bachelor-of-laws
+  > IB Diploma 39 points overall. 766 in higher level subjects
+- `uk-law-lse` · subjectPrerequisites: row partial → verified.
+- `uk-law-lse` · aLevel: row partial → verified (owner flag kept).
+- `uk-law-lse` · ib: row partial → verified (owner flag kept).
+- `uk-politics-lse` · engine `requirements.essential`: [] → [Mathematics_Standard] (preferred-to-essential). Source: https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-politics-and-economics
+  > There is no set subject combination, although A-level Mathematics (or equivalent) is required.
+- `uk-politics-lse` · engine `requirements.preferred`: [Mathematics_Standard, Economics] → [] (preferred-to-essential). Source: https://www.lse.ac.uk/study-at-lse/undergraduate/bsc-politics-and-economics
+  > There is no set subject combination, although A-level Mathematics (or equivalent) is required.
+- `uk-politics-lse` · subjectPrerequisites: row partial → verified.
+- `uk-politics-lse` · aLevel: row partial → verified (owner flag kept).
+- `uk-politics-lse` · ib: row partial → verified (owner flag kept).
