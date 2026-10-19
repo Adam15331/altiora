@@ -35,8 +35,8 @@ const courses = [
   {
     id: "uk-medicine-oxford", name: "Medicine MBChB",
     university: "University of Oxford", country: "UK", degreeLevel: "MBChB", category: "medicine",
-    requirements: { essential: ["Chemistry","Biology"], preferred: ["Physics"], useful: ["Mathematics_Standard"] },
-    grades: { aLevels: "A*AA", ib: 39, sgALevels: null, hkDse: null, ibHL: ["Chemistry", "Biology"], ibHLNote: "766 at HL" },
+    requirements: { essential: ["Chemistry"], preferred: ["Biology","Physics"], useful: ["Mathematics_Standard"] },
+    grades: { aLevels: "A*AA", ib: 39, sgALevels: null, hkDse: null, ibHL: ["Chemistry"], ibHLNote: "766 at HL" },
     admissionTests: ["UCAT"],
     universityContext: {
       tier: "world-top-5",
@@ -61,7 +61,7 @@ const courses = [
   {
     id: "uk-maths-oxford", name: "Mathematics BA",
     university: "University of Oxford", country: "UK", degreeLevel: "BA", category: "mathematics",
-    requirements: { essential: ["Mathematics_Standard","Mathematics_Advanced"], preferred: [], useful: ["Physics","Statistics"] },
+    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Physics","Statistics"] },
     grades: { aLevels: "A*A*A", ib: 39, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "766 at HL" },
     admissionTests: ["TMUA"],
     universityContext: {
@@ -75,7 +75,7 @@ const courses = [
     id: "uk-physics-oxford", name: "Physics BA/MPhys",
     university: "University of Oxford", country: "UK", degreeLevel: "MPhys", category: "sciences",
     requirements: { essential: ["Mathematics_Standard","Physics"], preferred: ["Mathematics_Advanced"], useful: ["Chemistry"] },
-    grades: { aLevels: "A*AA", ib: 39, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Chemistry"], ibHLNote: "766 at HL" },
+    grades: { aLevels: "A*AA", ib: 39, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "766 at HL" },
     admissionTests: ["ESAT"],
     universityContext: {
       tier: "world-top-5",
@@ -87,8 +87,8 @@ const courses = [
   {
     id: "uk-ppe-oxford", name: "Philosophy, Politics & Economics (PPE) BA",
     university: "University of Oxford", country: "UK", degreeLevel: "BA", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Economics"], useful: ["History","Philosophy"] },
-    grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "666 at HL" },
+    requirements: { essential: [], preferred: ["Mathematics_Standard"], useful: ["History","Philosophy"] },
+    grades: { aLevels: "AAA", ib: 39, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "766 at HL" },
     admissionTests: ["TARA"],
     universityContext: {
       tier: "world-top-5",
@@ -113,7 +113,7 @@ const courses = [
   {
     id: "uk-law-oxford", name: "Law (Jurisprudence) BA",
     university: "University of Oxford", country: "UK", degreeLevel: "BA", category: "law",
-    requirements: { essential: [], preferred: ["History","English"], useful: ["Philosophy"] },
+    requirements: { essential: [], preferred: [], useful: ["Philosophy"] },
     grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "666 at HL" },
     admissionTests: ["LNAT"],
     universityContext: {
@@ -126,8 +126,8 @@ const courses = [
   {
     id: "uk-biochemistry-oxford", name: "Biochemistry MBiochem",
     university: "University of Oxford", country: "UK", degreeLevel: "MBiochem", category: "sciences",
-    requirements: { essential: ["Chemistry","Biology"], preferred: ["Mathematics_Standard"], useful: ["Physics"] },
-    grades: { aLevels: "A*AA", ib: 39, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Chemistry"], ibHLNote: "766 at HL" },
+    requirements: { essential: ["Chemistry"], preferred: ["Mathematics_Standard","Biology"], useful: ["Physics"] },
+    grades: { aLevels: "A*AA", ib: 39, sgALevels: null, hkDse: null, ibHL: ["Chemistry"], ibHLNote: "7 in HL Chemistry; 6 in two other relevant subjects" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-5",
@@ -139,8 +139,8 @@ const courses = [
   {
     id: "uk-economics-oxford", name: "Economics and Management BA",
     university: "University of Oxford", country: "UK", degreeLevel: "BA", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
-    grades: { aLevels: "A*AA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "666 at HL" },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Statistics"] },
+    grades: { aLevels: "A*AA", ib: 39, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL" },
     admissionTests: ["TARA"],
     universityContext: {
       tier: "world-top-5",
@@ -152,7 +152,7 @@ const courses = [
   {
     id: "uk-history-oxford", name: "History BA",
     university: "University of Oxford", country: "UK", degreeLevel: "BA", category: "law",
-    requirements: { essential: [], preferred: ["History","English"], useful: ["Economics","Philosophy"] },
+    requirements: { essential: [], preferred: ["History"], useful: ["Economics","Philosophy"] },
     grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
     universityContext: {
@@ -4280,16 +4280,16 @@ const courses = [
  * ────────────────────────────────────────────────────────────── */
 const courseVerification = {
   // Populated per source check (see commit history). Courses absent here default to "unverified".
-  "uk-medicine-oxford": { status: "verified", source: "https://www.medsci.ox.ac.uk/study/medicine/pre-clinical/requirements", checkedDate: "2026-06-23", notes: "A*AA / IB 39 / UCAT confirmed; HL note corrected 776→766 (7 in Chemistry)." },
+  "uk-medicine-oxford": { status: "partial", source: "https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential [Chemistry, Biology]→[Chemistry]; preferred [Physics]→[Biology, Physics]; ibHL [Chemistry, Biology]→[Chemistry]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-23, https://www.medsci.ox.ac.uk/study/medicine/pre-clinical/requirements): A*AA / IB 39 / UCAT confirmed; HL note corrected 776→766 (7 in Chemistry)." },
   "uk-cs-oxford": { status: "verified", source: "https://www.cs.ox.ac.uk/admissions/undergraduate/why_oxford/offers.html", checkedDate: "2026-06-23", notes: "MAT discontinued; CS uses TMUA from 2026 entry (cross-confirmed UAT-UK). HL 776→766 (7 in Maths)." },
-  "uk-maths-oxford": { status: "verified", source: "https://www.maths.ox.ac.uk/study-here/undergraduate-study/our-offer", checkedDate: "2026-06-23", notes: "IB 41→39 (corrected); MAT→TMUA from 2026 (cross-confirmed). HL 776→766." },
-  "uk-physics-oxford": { status: "verified", source: "https://www.physics.ox.ac.uk/study/undergraduates/how-apply", checkedDate: "2026-06-23", notes: "PAT→ESAT from 2026 (cross-confirmed UAT-UK). HL 776→766." },
-  "uk-ppe-oxford": { status: "verified", source: "https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics", checkedDate: "2026-06-23", notes: "TSA discontinued after 2023; PPE uses TARA from 2026 (cross-confirmed). HL 766→666." },
+  "uk-maths-oxford": { status: "verified", source: "https://www.maths.ox.ac.uk/study-here/undergraduate-study/our-offer", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential [Mathematics_Standard, Mathematics_Advanced]→[Mathematics_Standard]; preferred []→[Mathematics_Advanced]. EARLIER (2026-06-23, https://www.maths.ox.ac.uk/study-here/undergraduate-study/our-offer): IB 41→39 (corrected); MAT→TMUA from 2026 (cross-confirmed). HL 776→766." },
+  "uk-physics-oxford": { status: "partial", source: "https://www.physics.ox.ac.uk/study/undergraduates/how-apply", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ibHL [Mathematics_Advanced, Chemistry]→[Mathematics_Advanced, Physics]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-23, https://www.physics.ox.ac.uk/study/undergraduates/how-apply): PAT→ESAT from 2026 (cross-confirmed UAT-UK). HL 776→766." },
+  "uk-ppe-oxford": { status: "verified", source: "https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ib 38→39; ibHLNote 666 at HL→766 at HL; ibHL [Mathematics_Standard]→[]; essential [Mathematics_Standard]→[]; preferred [Economics]→[Mathematics_Standard]. EARLIER (2026-06-23, https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics): TSA discontinued after 2023; PPE uses TARA from 2026 (cross-confirmed). HL 766→666." },
   "uk-engineering-oxford": { status: "verified", source: "https://eng.ox.ac.uk/study/undergraduate/applications/entry-requirements", checkedDate: "2026-06-23", notes: "A*AA→A*A*A and PAT→ESAT for 2026 (both cross-confirmed)." },
-  "uk-law-oxford": { status: "verified", source: "https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/law-jurisprudence", checkedDate: "2026-06-23", notes: "AAA / IB 38 / LNAT confirmed; added HL note 666." },
-  "uk-biochemistry-oxford": { status: "verified", source: "https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/biochemistry-molecular-and-cellular", checkedDate: "2026-06-23", notes: "A*AA / IB 39 / no admissions test confirmed; HL 776→766 (7 in Chemistry)." },
-  "uk-economics-oxford": { status: "verified", source: "https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/economics-and-management", checkedDate: "2026-06-23", notes: "AAA→A*AA (incl Maths); TSA→TARA for 2026; HL 766→666." },
-  "uk-history-oxford": { status: "verified", source: "https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/history", checkedDate: "2026-06-23", notes: "AAA / IB 38 confirmed. HAT not run for History for 2025–26 entry — no admissions test currently (cycle-specific; recheck each cycle)." },
+  "uk-law-oxford": { status: "verified", source: "https://www.law.ox.ac.uk/admissions/undergraduate/undergraduate-admissions-faqs-ba-jurisprudence", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [History, English]→[]. EARLIER (2026-06-23, https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/law-jurisprudence): AAA / IB 38 / LNAT confirmed; added HL note 666." },
+  "uk-biochemistry-oxford": { status: "partial", source: "https://www.bioch.ox.ac.uk/undergraduate-admissions", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential [Chemistry, Biology]→[Chemistry]; preferred [Mathematics_Standard]→[Mathematics_Standard, Biology]; ibHL [Mathematics_Advanced, Chemistry]→[Chemistry]; ibHLNote 766 at HL→7 in HL Chemistry; 6 in two other relevant subjects. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-23, https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/biochemistry-molecular-and-cellular): A*AA / IB 39 / no admissions test confirmed; HL 776→766 (7 in Chemistry)." },
+  "uk-economics-oxford": { status: "verified", source: "https://www.economics.ox.ac.uk/undergraduate-admissions-criteria", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): ib 38→39; ibHLNote 666 at HL→766 at HL; preferred [Mathematics_Advanced, Economics]→[]. EARLIER (2026-06-23, https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/economics-and-management): AAA→A*AA (incl Maths); TSA→TARA for 2026; HL 766→666." },
+  "uk-history-oxford": { status: "verified", source: "https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/history", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [History, English]→[History]. EARLIER (2026-06-23, https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/history): AAA / IB 38 confirmed. HAT not run for History for 2025–26 entry — no admissions test currently (cycle-specific; recheck each cycle)." },
   "uk-medicine-cambridge": { status: "partial", source: "https://www.undergraduate.study.cam.ac.uk/courses/medicine-mb-bchir", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): essential [Chemistry, Biology]→[Chemistry]; preferred [Physics]→[Physics, Biology]; ibHL [Chemistry, Biology, Mathematics_Standard]→[Chemistry]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-23, https://www.undergraduate.study.cam.ac.uk/courses/medicine-mb-bchir): A*AA→A*A*A; IB published as 41–42 (stored 41); UCAT confirmed. A* usually in Chemistry." },
   "uk-cs-cambridge": { status: "verified", source: "https://www.undergraduate.study.cam.ac.uk/courses/computer-science-ba-hons-meng", checkedDate: "2026-06-23", notes: "Cambridge CS uses TMUA (added). A*A*A / IB 41–42 confirmed." },
   "uk-maths-cambridge": { status: "verified", source: "https://www.undergraduate.study.cam.ac.uk/courses/mathematics-ba-hons-mmath", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): admissionTests [STEP]→[TMUA, STEP]. EARLIER (2026-06-23, https://www.undergraduate.study.cam.ac.uk/courses/mathematics-ba-hons-mmath): A*A*A / STEP / IB 41–42 confirmed (no change)." },

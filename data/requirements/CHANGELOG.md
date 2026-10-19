@@ -4298,3 +4298,68 @@ Format:
   > We use your written work to help assess your reasoning, language and writing skills. … The work must be accompanied by a cover sheet, that is also signed by a member of staff at your school/college … The interview is designed to assess your academic potential. … Following a university-wide vote, all interviews will be on-line. … Some colleges may require you to read a short passage of historical writing just before your interview, which they will ask you to discuss as part of the interview process.
   > One argument-driven essay on a historical topic, written as part of your normal school or college work. … The essay should be a **maximum of 2000 words**. … Written work must be accompanied by a signed certificate (confirmed by the school or college) stating the circumstances under which the work was written. … Deadline | 10 November 2026 … Shortlisted candidates will be invited to at least one online interview. Interviews are expected to take place in December … If you are shortlisted, you may be asked to discuss your submitted written work and personal statement during interview. Applicants may also be asked to read and talk about a short passage as part of the interview.
   Owner flag: Retrieved via the r.jina.ai text reader on 2026-10-19 (www.ox.ac.uk returns HTTP 403 to automated requests); re-check in a browser: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/history.
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: University of Oxford
+
+- `uk-maths-oxford` · engine `requirements.essential`: [Mathematics_Standard, Mathematics_Advanced] → [Mathematics_Standard] (essential-to-preferred). Source: https://www.maths.ox.ac.uk/study-here/undergraduate-study/our-offer
+  > A-level Mathematics is required, and we highly recommend A-level Further Maths
+- `uk-maths-oxford` · engine `requirements.preferred`: [] → [Mathematics_Advanced] (essential-to-preferred). Source: https://www.maths.ox.ac.uk/study-here/undergraduate-study/our-offer
+  > A-level Mathematics is required, and we highly recommend A-level Further Maths
+- `uk-maths-oxford` · subjectPrerequisites: row partial → verified.
+- `uk-maths-oxford` · aLevel: row partial → verified (owner flag kept).
+- `uk-maths-oxford` · ib: row verified → verified.
+- `uk-physics-oxford` · engine `grades.ibHL`: [Mathematics_Advanced, Chemistry] → [Mathematics_Advanced, Physics] (ib-hl). Source: https://www.physics.ox.ac.uk/study/undergraduates/how-apply
+  > Candidates are expected to have Physics and Mathematics to A-level, Advanced Higher, Higher Level in the IB or equivalent.
+- `uk-physics-oxford` · ib: row partial → partial (owner flag kept).
+- `uk-law-oxford` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-stated). Source: https://www.law.ox.ac.uk/admissions/undergraduate/undergraduate-admissions-faqs-ba-jurisprudence
+  > Otherwise your choice of subjects is your own
+- `uk-law-oxford` · subjectPrerequisites: row partial → verified.
+- `uk-law-oxford` · aLevel: row partial → verified (owner flag kept).
+- `uk-law-oxford` · ib: row partial → verified.
+- `uk-biochemistry-oxford` · engine `requirements.essential`: [Chemistry, Biology] → [Chemistry] (essential-to-preferred). Source: https://www.bioch.ox.ac.uk/undergraduate-admissions
+  > Biology beyond GCSE or the equivalent can be helpful to students in completing the course, although not required for admission.
+- `uk-biochemistry-oxford` · engine `requirements.preferred`: [Mathematics_Standard] → [Mathematics_Standard, Biology] (essential-to-preferred). Source: https://www.bioch.ox.ac.uk/undergraduate-admissions
+  > Biology beyond GCSE or the equivalent can be helpful to students in completing the course, although not required for admission.
+- `uk-biochemistry-oxford` · engine `grades.ibHL`: [Mathematics_Advanced, Chemistry] → [Chemistry] (ib-hl). Source: https://www.bioch.ox.ac.uk/undergraduate-admissions
+  > with 7 in HL chemistry and 6 in two other relevant subjects
+- `uk-biochemistry-oxford` · engine `grades.ibHLNote`: 766 at HL → 7 in HL Chemistry; 6 in two other relevant subjects (ib-note). Source: https://www.bioch.ox.ac.uk/undergraduate-admissions
+  > with 7 in HL chemistry and 6 in two other relevant subjects
+- `uk-biochemistry-oxford` · subjectPrerequisites: row partial → verified.
+- `uk-biochemistry-oxford` · aLevel: row partial → partial (owner flag kept).
+- `uk-biochemistry-oxford` · ib: row partial → verified.
+- `uk-economics-oxford` · engine `grades.ib`: 38 → 39 (ib-score). Source: https://www.economics.ox.ac.uk/undergraduate-admissions-criteria
+  > IB:39 (including core points) with 766 at HL
+- `uk-economics-oxford` · engine `grades.ibHLNote`: 666 at HL → 766 at HL (ib-note). Source: https://www.economics.ox.ac.uk/undergraduate-admissions-criteria
+  > IB:39 (including core points) with 766 at HL
+- `uk-economics-oxford` · engine `requirements.preferred`: [Mathematics_Advanced, Economics] → [] (preferred-remove-unlisted). Source: https://www.economics.ox.ac.uk/undergraduate-admissions-criteria
+  > Candidates are required to have Mathematics to A-level (A* or A grade), Advanced Higher (A grade), Higher Level in the IB (score 6 or 7) or another equivalent.
+- `uk-economics-oxford` · subjectPrerequisites: row partial → verified.
+- `uk-economics-oxford` · aLevel: row partial → verified.
+- `uk-economics-oxford` · ib: row partial → verified.
+- `uk-medicine-oxford` · engine `requirements.essential`: [Chemistry, Biology] → [Chemistry] (essential-to-preferred). Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine
+  > Required | Chemistry and at least one of Biology, Physics, Mathematics or Further Mathematics.
+- `uk-medicine-oxford` · engine `requirements.preferred`: [Physics] → [Biology, Physics] (essential-to-preferred). Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine
+  > Recommended | Further subjects in Biology, Physics, Mathematics or Further Mathematics.
+- `uk-medicine-oxford` · engine `grades.ibHL`: [Chemistry, Biology] → [Chemistry] (ib-hl). Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/medicine
+  > Applicants are required to take Chemistry and at least one of Biology, Physics or Mathematics to Higher Level.
+- `uk-medicine-oxford` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-medicine-oxford` · aLevel: row partial → partial (owner flag kept).
+- `uk-medicine-oxford` · ib: row partial → partial (owner flag kept).
+- `uk-ppe-oxford` · engine `grades.ib`: 38 → 39 (ib-score). Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics
+  > 39 (including core points) with 766 at HL
+- `uk-ppe-oxford` · engine `grades.ibHLNote`: 666 at HL → 766 at HL (ib-note). Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics
+  > 39 (including core points) with 766 at HL
+- `uk-ppe-oxford` · engine `grades.ibHL`: [Mathematics_Standard] → [] (ib-hl). Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics
+  > Although a background in Mathematics is not an essential requirement for admission, it is recommended.
+- `uk-ppe-oxford` · engine `requirements.essential`: [Mathematics_Standard] → [] (essential-to-preferred). Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics
+  > Although a background in Mathematics is not an essential requirement for admission, it is recommended.
+- `uk-ppe-oxford` · engine `requirements.preferred`: [Economics] → [Mathematics_Standard] (essential-to-preferred). Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/philosophy-politics-and-economics
+  > Although a background in Mathematics is not an essential requirement for admission, it is recommended. … Relevant | You may apply for PPE having done any combination of subjects at school; it is not necessary to have studied Politics, Philosophy or Economics.
+- `uk-ppe-oxford` · subjectPrerequisites: row partial → verified (owner flag kept).
+- `uk-ppe-oxford` · aLevel: row partial → verified (owner flag kept).
+- `uk-ppe-oxford` · ib: row partial → verified (owner flag kept).
+- `uk-history-oxford` · engine `requirements.preferred`: [History, English] → [History] (preferred-remove-unlisted). Source: https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing/history
+  > Recommended | It is highly recommended for applicants to have History to A-level, Advanced Higher, Higher Level in the IB or another equivalent.
+- `uk-history-oxford` · subjectPrerequisites: row partial → verified (owner flag kept).
+- `uk-history-oxford` · aLevel: row partial → verified (owner flag kept).
+- `uk-history-oxford` · ib: row partial → verified (owner flag kept).
