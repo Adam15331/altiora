@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 68 | 0 | 252 | 0 |
-| English language | 68 | 0 | 252 | 0 |
+| SAT / ACT | 71 | 0 | 249 | 0 |
+| English language | 71 | 0 | 249 | 0 |
 | Admissions tests | 308 | 12 | 0 | 0 |
-| Subject prerequisites | 240 | 80 | 0 | 0 |
-| A-Level requirements | 200 | 10 | 106 | 4 |
-| IB requirements | 262 | 11 | 43 | 4 |
+| Subject prerequisites | 238 | 82 | 0 | 0 |
+| A-Level requirements | 203 | 10 | 103 | 4 |
+| IB requirements | 265 | 11 | 40 | 4 |
 | Other qualifications | 83 | 34 | 203 | 0 |
-| Other requirements | 68 | 0 | 252 | 0 |
+| Other requirements | 71 | 0 | 249 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -87,6 +87,8 @@ Shown with a "Partly verified" badge and the note below.
 | `us-maths-columbia` | Subject prerequisites | Official (Columbia College): no explicit unit requirements, but applicants must present evidence of preparation in the humanities, mathematics, social sciences, foreign languages and natural sciences. Columbia College strongly recommends four years of English literature and composition, four years of mathematics (unless already completed what is available), three to four years of history/social studies, three to four years of laboratory science and three to four years of one world language. Mathematics at least through pre-calculus is strongly advised wherever possible for students planning to become scientists, engineers, physicians or dentists. |
 | `us-economics-columbia` | Subject prerequisites | Official (Columbia College): no explicit unit requirements, but applicants must present evidence of preparation in the humanities, mathematics, social sciences, foreign languages and natural sciences. Columbia College strongly recommends four years of English literature and composition, four years of mathematics (unless already completed what is available), three to four years of history/social studies, three to four years of laboratory science and three to four years of one world language. Mathematics at least through pre-calculus is strongly advised wherever possible for students planning to become scientists, engineers, physicians or dentists. |
 | `us-engineering-columbia` | Subject prerequisites | Official (Columbia Engineering): no standardized course of study is prescribed, but Columbia Engineering strongly advises physics and calculus within its recommended preparation — four years of mathematics through calculus (unless already completed what is available), four years of laboratory science including one year of chemistry and one year of physics (preferably in the last two years), four years of English literature and composition, three to four years of history/social studies, and two to three years of a world language. |
+| `us-business-wharton` | Subject prerequisites | Official: in applicants to The Wharton School, Penn would like to see strong preparation in mathematics, including calculus. Penn presents this as guidance (“we would like to see”), not a stated requirement; Penn also says it has no explicit course requirements. |
+| `us-cs-penn` | Subject prerequisites | Official: in applicants to Penn Engineering, Penn would like to see strong preparation in physics and mathematics, particularly calculus. Penn presents this as guidance (“we would like to see”), not a stated requirement; Penn also says it has no explicit course requirements. |
 | `us-law-georgetown` | Subject prerequisites | Official: all applicants are expected to have completed four years of English, a minimum of two years of social studies, language study and mathematics, and one year of natural science. Government is in the College of Arts & Sciences (humanities/social sciences); Georgetown lists no extra preparation for it. |
 | `us-business-georgetown` | Subject prerequisites | Official: all applicants are expected to have completed four years of English, a minimum of two years of social studies, language study and mathematics, and one year of natural science. McDonough School of Business: students interested in business should complete a minimum of three years of math, through advanced algebra and trigonometry, as calculus is required of all students in the program; two years of natural science are recommended. |
 | `us-cs-duke` | Subject prerequisites | Official: Duke recommends four years of English and at least three years of mathematics, natural sciences, world language and social studies (recommended, not required). The Pratt-only calculus requirement does not apply: this course is in Trinity College of Arts & Sciences. |
@@ -180,9 +182,6 @@ Shown to students only as "Previously recorded, not verified". Confirm or correc
 
 | Course | Category | Recorded value |
 |---|---|---|
-| `us-business-wharton` | SAT / ACT | SAT/ACT required |
-| `us-cs-penn` | SAT / ACT | SAT/ACT required |
-| `us-economics-penn` | SAT / ACT | SAT/ACT required |
 | `us-cs-caltech` | SAT / ACT | SAT/ACT required |
 | `us-physics-caltech` | SAT / ACT | SAT/ACT required |
 | `us-engineering-caltech` | SAT / ACT | SAT/ACT required |
@@ -252,6 +251,8 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `us-maths-columbia` | Subject prerequisites | Official source lists strongly recommended high-school preparation for Columbia College (English, mathematics, history/social studies, laboratory science, world language); data/courseRequirements.js holds none. Owner decision. |
 | `us-economics-columbia` | Subject prerequisites | Official source lists strongly recommended high-school preparation for Columbia College (English, mathematics, history/social studies, laboratory science, world language); data/courseRequirements.js holds none. Owner decision. |
 | `us-engineering-columbia` | Subject prerequisites | Official source lists strongly advised high-school preparation for Columbia Engineering (mathematics through calculus; laboratory science incl. one year each of chemistry and physics); data/courseRequirements.js holds none. Owner decision. |
+| `us-business-wharton` | Subject prerequisites | Official source lists Wharton guidance: strong preparation in mathematics, including calculus; data/courseRequirements.js holds none. Owner decision. |
+| `us-cs-penn` | Subject prerequisites | Official source lists Penn Engineering guidance: strong preparation in physics and mathematics, particularly calculus; data/courseRequirements.js holds none. Owner decision. |
 | `us-law-georgetown` | Subject prerequisites | Official source lists expected high-school coursework (4 years English; at least 2 years social studies, language and mathematics; 1 year natural science); data/courseRequirements.js holds none. Owner decision. |
 | `us-business-georgetown` | Subject prerequisites | Official source lists expected high-school coursework (all applicants) plus McDonough guidance (at least 3 years of math through advanced algebra and trigonometry; 2 years natural science recommended); data/courseRequirements.js holds none. Owner decision. |
 | `us-cs-duke` | Subject prerequisites | Official source lists recommended high-school coursework (4 years English; at least 3 years each of mathematics, natural sciences, world language, social studies); data/courseRequirements.js holds none. Owner decision. |
@@ -449,9 +450,9 @@ category — check the official source; never copy a hint in as a value.
 | `uk-law-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-cs-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `uk-psychology-exeter` | University of Exeter | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `us-business-wharton` | University of Pennsylvania | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-cs-penn` | University of Pennsylvania | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-economics-penn` | University of Pennsylvania | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
+| `us-business-wharton` | University of Pennsylvania | Other qualifications | Other qualifications: Not verified: Penn’s Testing (https://admissions.upenn.edu/how-to-apply/preparing-your-application/testing) and Application Requirements pages do not say how AP scores are used in admission; the Pre-College Credits page (https://admissions.upenn.edu/how-to-apply/first-year-applicants/pre-college-credits) covers AP/IB/A-Level credit after enrolment only, which is not an admission requirement. |
+| `us-cs-penn` | University of Pennsylvania | Other qualifications | Other qualifications: Not verified: Penn’s Testing (https://admissions.upenn.edu/how-to-apply/preparing-your-application/testing) and Application Requirements pages do not say how AP scores are used in admission; the Pre-College Credits page (https://admissions.upenn.edu/how-to-apply/first-year-applicants/pre-college-credits) covers AP/IB/A-Level credit after enrolment only, which is not an admission requirement. |
+| `us-economics-penn` | University of Pennsylvania | Other qualifications | Other qualifications: Not verified: Penn’s Testing (https://admissions.upenn.edu/how-to-apply/preparing-your-application/testing) and Application Requirements pages do not say how AP scores are used in admission; the Pre-College Credits page (https://admissions.upenn.edu/how-to-apply/first-year-applicants/pre-college-credits) covers AP/IB/A-Level credit after enrolment only, which is not an admission requirement. |
 | `us-cs-caltech` | Caltech | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-physics-caltech` | Caltech | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-engineering-caltech` | Caltech | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
