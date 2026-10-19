@@ -42,6 +42,8 @@ an entry for **every** category in `config.categories`:
 | `lastVerified` | `YYYY-MM-DD`, the day you checked the source. Required for verified/partial; never in the future. |
 | `note` | Caveat. **Required for partial** — say exactly what is unconfirmed. |
 | `recorded` | Unverified only: a value previously held without (current) verification, shown as "Previously recorded, not verified". |
+| `sourceSnippet` | A verbatim quote (one or two sentences) from the source that supports the value — a string, or an array with one quote per `sources` entry, in order; "…" separates excerpts from the same page. **Required** on every verified, partial or not-applicable entry last verified on or after `snippetsRequiredFrom` in the config (2026-10-19). Not shown to students; it lets a reviewer audit without re-researching. `lastVerified` is the access date. |
+| `reviewFlag` | For the data owner, never shown to students: a decision the entry raises — e.g. the matching engine still holds a value the official source contradicts. Listed under "Flags for the data owner" in the review report. |
 
 An **unverified** entry may not carry `items`, `none`, `sources`, `lastVerified`
 or `codes` — it cannot look verified. Students see **Not verified — check the
@@ -72,7 +74,7 @@ use structured fields instead of `items` / `none` / `codes`:
 | `typicalOffer` | A-Level grades exactly as `grades.aLevels` holds them. Shown as "Grades". |
 | `overallScore` | IB points, a whole number 1–45, exactly as `grades.ib`. Shown as "Overall score". |
 | `subjects` | Any of `required`, `preferred`, `excluded`, `higherLevel`, `standardLevel`; each a non-empty list of `{name, code}`. `name` is the qualification's own subject name; `code` is the engine's subject tag. Leave a group out when there are none. |
-| `detail` | Subject-grade detail verbatim from `grades.ibHLNote` (e.g. "766 at HL"). Shown as "Subject grades". |
+| `detail` | Detail as stated: for IB, verbatim from `grades.ibHLNote` (e.g. "766 at HL"); for a row checked on an official page where the engine holds none, the policy as the page states it (e.g. how IB scores are used). Shown as "Details". Cross-checked against `grades.ibHLNote` whenever the engine holds one. |
 | `practicalEndorsement`, `contextualOffer`, `coreNote` (TOK / EE / CAS), `testsInterview` | Free text, only when the official source states it. None are populated yet — the repo holds no structured data for them. |
 | `withheld` | Values the engine holds that are deliberately **not shown** (`typicalOffer`, `overallScore`, `detail`) — e.g. an IB note that quotes admitted-student figures, which are not requirements. Needs a `note` saying why; the panel shows "Not shown — see note". |
 
@@ -119,6 +121,10 @@ npm run check      # lint + typecheck + validate + test (what CI runs)
 - `app.html` does not load the current cycle's file;
 - `docs/requirements-review.md` is out of date.
 
+- an entry checked on or after `snippetsRequiredFrom` has no `sourceSnippet`, or
+  an array snippet does not have one quote per source; an unverified entry
+  carries a snippet;
+
 It warns (does not fail) when an entry was last verified over 18 months ago.
 CI (`.github/workflows/checks.yml`) runs `npm run check` on every push and pull request.
 
@@ -156,6 +162,31 @@ If you cannot verify something, leave it `unverified` — never fill it in.
    holds one, list the field in `withheld` with a note.
 5. Not an entry route (graduate-entry)? Use `notApplicable` with the reason.
    Changelog, `npm run report && npm run check`, bump the cycle file's `?v=`.
+
+## Verifying against official pages (the US pass, and any re-check)
+
+1. Fetch the official pages themselves — admissions site, testing policy,
+   English-proficiency page for international applicants, the course page, the
+   IB / A-Level page if one exists. Never use search-result summaries,
+   aggregators, forums or prep-company sites as source text.
+2. For each category, record the requirement as the page states it — no
+   stronger. Copy one or two supporting sentences verbatim into `sourceSnippet`
+   (one per source) and check each quote against the page text.
+3. Admitted-student ranges, averages, percentiles and "most competitive
+   applicants score …" are **not** requirements. If that is all a page
+   publishes, say so in a note and record no score.
+4. Nothing listed (no subject prerequisites, no course-specific test)? Use
+   `none: true` with a snippet from the page that lists the requirements.
+5. Admissions tests, subject prerequisites, A-Level and IB are read by the
+   matching engine. If the official value differs from
+   `data/courseRequirements.js`, keep the engine's value, mark the row
+   `partial`, put the official value in `note` (with the snippet and URL), and
+   add a `reviewFlag`. For the other categories, correct the row.
+6. If a page cannot be reached or read, leave the row `unverified` with a
+   `note` naming the URL tried and what happened (e.g. "returned 403 on
+   2026-10-19") — the review report lists it as the action item.
+7. Changelog entry (old → new, URL, access date, snippet), `npm run report &&
+   npm run check`, bump the cycle file's `?v=`.
 
 ## The annual update
 

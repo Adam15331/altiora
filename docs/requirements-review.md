@@ -8,14 +8,14 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 0 | 0 | 320 | 0 |
-| English language | 0 | 0 | 320 | 0 |
+| SAT / ACT | 4 | 0 | 316 | 0 |
+| English language | 4 | 0 | 316 | 0 |
 | Admissions tests | 308 | 12 | 0 | 0 |
 | Subject prerequisites | 308 | 12 | 0 | 0 |
-| A-Level requirements | 141 | 1 | 174 | 4 |
-| IB requirements | 198 | 7 | 111 | 4 |
-| Other qualifications | 19 | 30 | 271 | 0 |
-| Other requirements | 0 | 0 | 320 | 0 |
+| A-Level requirements | 141 | 5 | 170 | 4 |
+| IB requirements | 202 | 7 | 107 | 4 |
+| Other qualifications | 23 | 30 | 267 | 0 |
+| Other requirements | 4 | 0 | 316 | 0 |
 
 320 courses × 8 categories = 2560 requirement entries.
 
@@ -55,6 +55,10 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-law-durham` | Other qualifications | Durham converts its A-Level requirement into an AP equivalent via a university equivalency table. Students at a school offering AP curriculum are expected to submit AP exams. Exams must be sat and submitted; the course grade is not accepted. Any subject-specific requirement must be evidenced with an AP exam. The equivalency table values are not yet captured. |
 | `uk-physics-durham` | Other qualifications | Durham converts its A-Level requirement into an AP equivalent via a university equivalency table. Students at a school offering AP curriculum are expected to submit AP exams. Exams must be sat and submitted; the course grade is not accepted. Any subject-specific requirement must be evidenced with an AP exam. The equivalency table values are not yet captured. |
 | `uk-engineering-durham` | Other qualifications | Durham converts its A-Level requirement into an AP equivalent via a university equivalency table. Students at a school offering AP curriculum are expected to submit AP exams. Exams must be sat and submitted; the course grade is not accepted. Any subject-specific requirement must be evidenced with an AP exam. The equivalency table values are not yet captured. |
+| `us-cs-yale` | A-Level requirements | Yale’s pages do not mention A-Levels by name — this row applies Yale’s statement on international leaving exams. |
+| `us-economics-yale` | A-Level requirements | Yale’s pages do not mention A-Levels by name — this row applies Yale’s statement on international leaving exams. |
+| `us-law-yale` | A-Level requirements | Yale’s pages do not mention A-Levels by name — this row applies Yale’s statement on international leaving exams. |
+| `us-biology-yale` | A-Level requirements | Yale’s pages do not mention A-Levels by name — this row applies Yale’s statement on international leaving exams. |
 | `sg-engineering-sutd` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `sg-engineering-sutd` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `sg-engineering-sutd` | IB requirements | Confirmed on the university's page for A-Level-type applicants, not on a page for IB applicants — check it applies to IB. |
@@ -115,10 +119,6 @@ Shown to students only as "Previously recorded, not verified". Confirm or correc
 | `us-engineering-princeton` | SAT / ACT | Test-optional |
 | `us-economics-princeton` | SAT / ACT | Test-optional |
 | `us-maths-princeton` | SAT / ACT | Test-optional |
-| `us-cs-yale` | SAT / ACT | Test-flexible |
-| `us-economics-yale` | SAT / ACT | Test-flexible |
-| `us-law-yale` | SAT / ACT | Test-flexible |
-| `us-biology-yale` | SAT / ACT | Test-flexible |
 | `us-cs-columbia` | SAT / ACT | Test-optional |
 | `us-maths-columbia` | SAT / ACT | Test-optional |
 | `us-economics-columbia` | SAT / ACT | Test-optional |
@@ -195,6 +195,18 @@ Shown to students only as "Previously recorded, not verified". Confirm or correc
 | `us-cs-purdue` | SAT / ACT | SAT/ACT required |
 | `us-business-unc` | SAT / ACT | Test-optional |
 | `us-economics-unc` | SAT / ACT | Test-optional |
+
+## Flags for the data owner
+
+Decisions an entry raises that are not for students — e.g. the matching engine (`data/courseRequirements.js`)
+still holds a value a verified official source contradicts. Not shown in the panel.
+
+| Course | Category | Flag |
+|---|---|---|
+| `us-cs-yale` | SAT / ACT | data/courseRequirements.js still records usAdmissions.test "flexible" (test-flexible) for this course; Yale now requires the ACT or SAT. Owner decision — not changed here. |
+| `us-economics-yale` | SAT / ACT | data/courseRequirements.js still records usAdmissions.test "flexible" (test-flexible) for this course; Yale now requires the ACT or SAT. Owner decision — not changed here. |
+| `us-law-yale` | SAT / ACT | data/courseRequirements.js still records usAdmissions.test "flexible" (test-flexible) for this course; Yale now requires the ACT or SAT. Owner decision — not changed here. |
+| `us-biology-yale` | SAT / ACT | data/courseRequirements.js still records usAdmissions.test "flexible" (test-flexible) for this course; Yale now requires the ACT or SAT. Owner decision — not changed here. |
 
 ## Values withheld from the panel
 
@@ -364,10 +376,6 @@ category — check the official source; never copy a hint in as a value.
 | `us-engineering-princeton` | Princeton University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-economics-princeton` | Princeton University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-maths-princeton` | Princeton University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
-| `us-cs-yale` | Yale University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; notes mention IB; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
-| `us-economics-yale` | Yale University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; notes mention IB; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
-| `us-law-yale` | Yale University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; notes mention IB; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
-| `us-biology-yale` | Yale University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; notes mention IB; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
 | `us-cs-columbia` | Columbia University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-maths-columbia` | Columbia University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
 | `us-economics-columbia` | Columbia University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page; IB: no points, Higher Level or IB note held in the repo — check the university's IB entry page |
@@ -510,7 +518,7 @@ category — check the official source; never copy a hint in as a value.
 | `ca-medicine-utoronto` | University of Toronto | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
 | `ca-economics-utoronto` | University of Toronto | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
 | `ca-law-utoronto` | University of Toronto | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-medicine-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
+| `ca-medicine-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level requirements: The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
 | `ca-cs-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
 | `ca-engineering-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
 | `ca-economics-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
@@ -541,7 +549,7 @@ category — check the official source; never copy a hint in as a value.
 | `ca-business-calgary` | University of Calgary | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention A-Level grades |
 | `ca-law-ottawa` | University of Ottawa | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `ca-cs-ottawa` | University of Ottawa | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
-| `ca-medicine-dalhousie` | Dalhousie University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
+| `ca-medicine-dalhousie` | Dalhousie University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level requirements: The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
 | `ca-engineering-dalhousie` | Dalhousie University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
 | `ca-business-concordia` | Concordia University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
 | `ca-cs-concordia` | Concordia University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |

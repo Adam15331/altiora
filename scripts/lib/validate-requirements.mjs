@@ -15,7 +15,7 @@
  */
 
 export const STATUSES = ['verified', 'partial', 'unverified', 'notApplicable'];
-const COMMON_KEYS = ['status', 'sources', 'lastVerified', 'note', 'recorded'];
+const COMMON_KEYS = ['status', 'sources', 'lastVerified', 'note', 'recorded', 'sourceSnippet', 'reviewFlag'];
 const LIST_KEYS = ['items', 'none', 'codes'];
 // Qualification categories (A-Level, IB): structured fields, no items.
 const QUAL_VALUE_KEYS = ['typicalOffer', 'overallScore', 'subjects', 'detail', 'practicalEndorsement', 'contextualOffer', 'coreNote', 'testsInterview'];
@@ -47,11 +47,12 @@ const sameSet = (a, b) => a.length === b.length && [...a].sort().join('\u0000') 
 const isNonEmptyString = s => typeof s === 'string' && s.trim() !== '';
 
 /**
- * Source + date rules shared by every checked status (verified, partial,
- * notApplicable).
+ * Source + date (+ snippet) rules shared by every checked status
+ * (verified, partial, notApplicable).
  * @param {RequirementEntry} e @param {string} where @param {string} todayIso @param {Problem[]} out
+ * @param {string} [snippetsRequiredFrom]
  */
-function validateProvenance(e, where, todayIso, out) {
+function validateProvenance(e, where, todayIso, out, snippetsRequiredFrom) {
   const err = (/** @type {string} */ message) => out.push({ level: 'error', where, message });
   if (!Array.isArray(e.sources) || e.sources.length === 0) err(`a ${e.status} entry needs at least one source`);
   else e.sources.forEach((s, i) => {
@@ -63,6 +64,17 @@ function validateProvenance(e, where, todayIso, out) {
   else if (/** @type {string} */ (e.lastVerified) > todayIso) err(`"lastVerified" ${e.lastVerified} is in the future`);
   else if (daysBetween(/** @type {string} */ (e.lastVerified), todayIso) > STALE_AFTER_DAYS) {
     out.push({ level: 'warning', where, message: `last verified ${e.lastVerified} — over 18 months ago, re-check due` });
+  }
+
+  if ('sourceSnippet' in e) {
+    const sn = e.sourceSnippet;
+    const ok = isNonEmptyString(sn) || (Array.isArray(sn) && sn.length > 0 && sn.every(isNonEmptyString));
+    if (!ok) err('"sourceSnippet" must be a non-empty string, or an array of them (one per source)');
+    else if (Array.isArray(sn) && Array.isArray(e.sources) && sn.length !== e.sources.length) {
+      err(`"sourceSnippet" has ${sn.length} quotes for ${e.sources.length} sources — give one per source, in order`);
+    }
+  } else if (snippetsRequiredFrom && isIsoDate(e.lastVerified ?? '') && /** @type {string} */ (e.lastVerified) >= snippetsRequiredFrom) {
+    err(`checked on ${e.lastVerified} but has no "sourceSnippet" — quote the source (required from ${snippetsRequiredFrom})`);
   }
 }
 
@@ -102,18 +114,20 @@ function validateQualificationFields(e, err) {
  * Validate one entry. Pushes onto `out`.
  * @param {RequirementEntry} e @param {string} where @param {string} todayIso @param {Problem[]} out
  * @param {'list' | 'qualification'} [kind]  the category's kind (default 'list')
+ * @param {{snippetsRequiredFrom?: string}} [opts]
  */
-export function validateEntry(e, where, todayIso, out, kind = 'list') {
+export function validateEntry(e, where, todayIso, out, kind = 'list', opts = {}) {
   const err = (/** @type {string} */ message) => out.push({ level: 'error', where, message });
   if (!e || typeof e !== 'object' || Array.isArray(e)) { err('entry must be an object'); return; }
   const allowed = [...COMMON_KEYS, ...(kind === 'qualification' ? QUAL_KEYS : LIST_KEYS)];
   for (const k of Object.keys(e)) if (!allowed.includes(k)) err(`unknown field "${k}"${kind === 'qualification' && LIST_KEYS.includes(k) ? ' (qualification categories use structured fields, not items/none/codes)' : ''}`);
   if (!STATUSES.includes(e.status)) { err(`status must be one of ${STATUSES.join(', ')} (got ${JSON.stringify(e.status)})`); return; }
   if ('note' in e && !isNonEmptyString(e.note)) err('"note" must be a non-empty string');
+  if ('reviewFlag' in e && !isNonEmptyString(e.reviewFlag)) err('"reviewFlag" must be a non-empty string');
 
   if (e.status === 'unverified') {
     // An unverified entry may not look verified: no value, no source, no date.
-    for (const k of ['items', 'none', 'sources', 'lastVerified', 'codes', 'withheld', ...QUAL_VALUE_KEYS]) {
+    for (const k of ['items', 'none', 'sources', 'lastVerified', 'codes', 'withheld', 'sourceSnippet', ...QUAL_VALUE_KEYS]) {
       if (k in e) err(`unverified entries may not carry "${k}" — verify it (and set status) or remove it`);
     }
     if ('accepted' in e && e.accepted !== 'unknown') err('an unverified entry can only say accepted: "unknown"');
@@ -128,7 +142,7 @@ export function validateEntry(e, where, todayIso, out, kind = 'list') {
     if (e.accepted !== 'no') err('a notApplicable entry must say accepted: "no"');
     for (const k of ['items', 'none', 'codes', 'withheld', ...QUAL_VALUE_KEYS]) if (k in e) err(`a notApplicable entry may not carry "${k}"`);
     if (!isNonEmptyString(e.note)) err('a notApplicable entry must say why in "note"');
-    validateProvenance(e, where, todayIso, out);
+    validateProvenance(e, where, todayIso, out, opts.snippetsRequiredFrom);
     return;
   }
 
@@ -145,7 +159,7 @@ export function validateEntry(e, where, todayIso, out, kind = 'list') {
     if ('codes' in e && !(Array.isArray(e.codes) && e.codes.every(c => typeof c === 'string'))) err('"codes" must be an array of strings');
   }
 
-  validateProvenance(e, where, todayIso, out);
+  validateProvenance(e, where, todayIso, out, opts.snippetsRequiredFrom);
   if (e.status === 'partial' && !isNonEmptyString(e.note)) err('a partial entry must say what is unconfirmed in "note"');
 }
 
@@ -192,7 +206,10 @@ export function engineDisagreements(catId, e, course) {
     same('typicalOffer', e.typicalOffer, g.aLevels, 'grades.aLevels');
   } else {
     same('overallScore', e.overallScore, typeof g.ib === 'number' ? g.ib : null, 'grades.ib');
-    same('detail', e.detail, g.ibHLNote, 'grades.ibHLNote');
+    // The IB note is display text the engine does not match on: a verified
+    // note may be added where the engine holds none, but must not
+    // contradict one it holds.
+    if (g.ibHLNote != null || withheld.includes('detail')) same('detail', e.detail, g.ibHLNote, 'grades.ibHLNote');
     sameCodes('higherLevel', g.ibHL ?? [], 'grades.ibHL');
   }
   sameCodes('required', course.requirements?.essential ?? [], 'requirements.essential');
@@ -235,7 +252,9 @@ export function validateCycle(cycle, { config, courses, today }) {
     if (!rec || typeof rec !== 'object') { err(at(cid), 'record must be an object'); continue; }
     for (const cat of catIds) if (!(cat in rec)) err(at(cid, cat), 'missing required category');
     for (const cat of Object.keys(rec)) if (!catIds.includes(cat)) err(at(cid, cat), 'unknown category (add it to config.categories first)');
-    for (const cat of config.categories) if (cat.id in rec) validateEntry(rec[cat.id], at(cid, cat.id), today, out, cat.kind ?? 'list');
+    for (const cat of config.categories) {
+      if (cat.id in rec) validateEntry(rec[cat.id], at(cid, cat.id), today, out, cat.kind ?? 'list', { snippetsRequiredFrom: config.snippetsRequiredFrom });
+    }
 
     // Cross-check against the matching engine's copy (current cycle only):
     // until the engine reads this file, both must say the same thing.
@@ -275,6 +294,7 @@ export function validateConfig(config) {
   const out = [];
   const err = (/** @type {string} */ message) => out.push({ level: 'error', where: 'config', message });
   if (!config.cycles || !config.cycles[config.currentCycle]) err(`currentCycle ${JSON.stringify(config.currentCycle)} is not in config.cycles`);
+  if ('snippetsRequiredFrom' in config && !isIsoDate(config.snippetsRequiredFrom ?? '')) err('snippetsRequiredFrom must be a YYYY-MM-DD date');
   for (const [cid, info] of Object.entries(config.cycles ?? {})) {
     if (!/^\d{4}$/.test(cid)) err(`cycle id ${JSON.stringify(cid)} must be a 4-digit entry year`);
     if (!info?.label || !info?.applicationPeriod) err(`cycle ${cid} needs label and applicationPeriod`);

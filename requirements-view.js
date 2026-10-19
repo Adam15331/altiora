@@ -52,7 +52,7 @@
   ];
   /** @type {Array<[keyof RequirementEntry, string]>} */
   const TEXT_FACTS = [
-    ['detail', 'Subject grades'],
+    ['detail', 'Details'],
     ['practicalEndorsement', 'Practical endorsement'],
     ['contextualOffer', 'Contextual offer'],
     ['coreNote', 'TOK / EE / CAS'],
