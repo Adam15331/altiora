@@ -3774,3 +3774,55 @@ Format:
 - `uk-engineering-warwick` · subjectPrerequisites: row partial → verified.
 - `uk-engineering-warwick` · aLevel: row partial → verified (owner flag kept).
 - `uk-engineering-warwick` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-19 — 2027 entry — Engine migration to 2027 entry: Durham University
+
+- `uk-economics-durham` · engine `grades.aLevels`: AAA → A*AA (offer). Source: https://www.durham.ac.uk/business/courses/economics-l100/
+  > A*AA including Mathematics.
+- `uk-economics-durham` · engine `requirements.preferred`: [Mathematics_Advanced, Economics] → [] (preferred-remove-stated). Source: https://www.durham.ac.uk/business/courses/economics-l100/
+  > You do not need to have studied Economics at A-Level to apply for this programme.
+- `uk-economics-durham` · engine `requirements.preferred`: [Mathematics_Advanced, Economics] → [] (preferred-remove-unlisted). Source: https://www.durham.ac.uk/business/courses/economics-l100/
+  > A*AA including Mathematics.
+- `uk-economics-durham` · engine `grades.ib`: 38 → 37 (ib-score). Source: https://www.durham.ac.uk/business/courses/economics-l100/
+  > 37 with 766 in higher level subjects, including Mathematics.
+- `uk-economics-durham` · engine `grades.ibHLNote`: 666 at HL → 766 at HL (ib-note). Source: https://www.durham.ac.uk/business/courses/economics-l100/
+  > 37 with 766 in higher level subjects, including Mathematics.
+- `uk-economics-durham` · subjectPrerequisites: row partial → verified.
+- `uk-economics-durham` · aLevel: row partial → verified (owner flag kept).
+- `uk-economics-durham` · ib: row partial → verified (owner flag kept).
+- `uk-cs-durham` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.durham.ac.uk/study/courses/computer-science-g400/
+  > A*AA including A in Mathematics.
+- `uk-cs-durham` · engine `grades.ibHL`: [Mathematics_Advanced] → [Mathematics_Standard] (ib-hl). Source: https://www.durham.ac.uk/study/courses/computer-science-g400/
+  > 37 with 766 in higher level subjects, including Mathematics.
+- `uk-cs-durham` · subjectPrerequisites: row partial → verified.
+- `uk-cs-durham` · aLevel: row partial → verified (owner flag kept).
+- `uk-cs-durham` · ib: row partial → verified.
+- `uk-law-durham` · engine `requirements.preferred`: [History, English] → [] (preferred-remove-unlisted). Source: https://www.durham.ac.uk/study/courses/law-m101/
+  > Entry requirements A*AA Contextual offer Contextual offer AAB
+- `uk-law-durham` · engine `grades.ib`: 38 → 37 (ib-score). Source: https://www.durham.ac.uk/study/courses/law-m101/
+  > 37 with 766 in higher level subjects.
+- `uk-law-durham` · engine `grades.ibHLNote`: 666 at HL → 766 at HL (ib-note). Source: https://www.durham.ac.uk/study/courses/law-m101/
+  > 37 with 766 in higher level subjects.
+- `uk-law-durham` · subjectPrerequisites: row partial → verified.
+- `uk-law-durham` · aLevel: row partial → verified (owner flag kept).
+- `uk-law-durham` · ib: row partial → verified.
+- `uk-physics-durham` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.durham.ac.uk/study/courses/physics-f300/
+  > A*A*A including Mathematics and Physics.
+- `uk-physics-durham` · engine `grades.ibHL`: [Mathematics_Advanced, Chemistry] → [Mathematics_Advanced, Physics] (ib-hl). Source: https://www.durham.ac.uk/study/courses/physics-f300/
+  > 38 with 776 in higher level subjects, including Mathematics (maths analysis & approaches) and Physics.
+- `uk-physics-durham` · subjectPrerequisites: row partial → verified.
+- `uk-physics-durham` · aLevel: row partial → verified (owner flag kept).
+- `uk-physics-durham` · ib: row partial → verified.
+- `uk-engineering-durham` · engine `grades.aLevels`: AAA → A*AA (offer). Source: https://www.durham.ac.uk/study/courses/general-engineering-h100/
+  > A*AA including Mathematics and one of either Biology, Chemistry, Geology or Physics.
+- `uk-engineering-durham` · engine `requirements.essential`: [Mathematics_Standard, Physics] → [Mathematics_Standard] (essential-remove). Source: https://www.durham.ac.uk/study/courses/general-engineering-h100/
+  > A*AA including Mathematics and one of either Biology, Chemistry, Geology or Physics.
+- `uk-engineering-durham` · engine `requirements.preferred`: [Mathematics_Advanced] → [] (preferred-remove-unlisted). Source: https://www.durham.ac.uk/study/courses/general-engineering-h100/
+  > A*AA including Mathematics and one of either Biology, Chemistry, Geology or Physics.
+- `uk-engineering-durham` · engine `grades.ibHL`: [Mathematics_Advanced, Physics] → [Mathematics_Standard] (ib-hl). Source: https://www.durham.ac.uk/study/courses/general-engineering-h100/
+  > 37 with 766 in higher level subjects including Mathematics and one STEM subject (Biology, Chemistry or Physics).
+- `uk-engineering-durham` · engine `grades.ibHLNote`: 666 at HL → 766 at HL incl HL Mathematics and one of Biology, Chemistry or Physics (ib-note). Source: https://www.durham.ac.uk/study/courses/general-engineering-h100/
+  > 37 with 766 in higher level subjects including Mathematics and one STEM subject (Biology, Chemistry or Physics).
+- `uk-engineering-durham` · subjectPrerequisites: row partial → partial (owner flag kept).
+- `uk-engineering-durham` · aLevel: row partial → partial (owner flag kept).
+- `uk-engineering-durham` · ib: row partial → partial (owner flag kept).

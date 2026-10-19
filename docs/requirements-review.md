@@ -11,9 +11,9 @@
 | SAT / ACT | 169 | 18 | 133 | 0 |
 | English language | 179 | 11 | 130 | 0 |
 | Admissions tests | 280 | 30 | 10 | 0 |
-| Subject prerequisites | 131 | 179 | 10 | 0 |
-| A-Level requirements | 139 | 94 | 83 | 4 |
-| IB requirements | 202 | 93 | 21 | 4 |
+| Subject prerequisites | 135 | 175 | 10 | 0 |
+| A-Level requirements | 143 | 90 | 83 | 4 |
+| IB requirements | 206 | 89 | 21 | 4 |
 | Other qualifications | 162 | 51 | 107 | 0 |
 | Other requirements | 181 | 14 | 125 | 0 |
 
@@ -238,25 +238,13 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-medicine-bristol` | A-Level requirements | Official (2027 entry): AAA including Chemistry and either Biology, Physics, Mathematics or Further Mathematics. The AAA offer agrees; Biology is one option, not a requirement. Graduates: 2:1 plus BBB at A-level with the same subjects. |
 | `uk-medicine-bristol` | IB requirements | Official (2027 entry): 36 points with 18 at Higher Level, including 6, 6 at HL in Chemistry and one of Biology, Physics or Mathematics. |
 | `uk-medicine-bristol` | Other qualifications | Official (2027 entry): high-school diploma with GPA 3.2 minimum (3.4 for competitive courses) and three additional qualifications; AP tests count at a score of at least 4 (more commonly 5). Bristol does not say which courses count as competitive, and APs are one of several qualification types that can make up the three. |
-| `uk-economics-durham` | Subject prerequisites | Official (2027 entry): Mathematics is required; the page says Economics A-level is not needed and names no preferred subjects. |
-| `uk-economics-durham` | A-Level requirements | Official (2027 entry): A*AA including Mathematics. The page states Economics A-level is not required and names no preferred subjects. |
-| `uk-economics-durham` | IB requirements | Official (2027 entry): 37 with 766 in higher level subjects, including Mathematics; standard level Mathematics at grade 7 accepted if not taken at HL. |
 | `uk-economics-durham` | Other qualifications | Official (2027 entry): for a A*AA course, three AP exams at 5, 5, 5, or two AP exams at 5, 5 plus one additional qualification (SAT, ACT, honours course or dual-enrolment course). Two AP exams alone do not meet the requirement. Students at schools without AP may use honours courses with an overall GPA of 3.7. |
-| `uk-cs-durham` | Subject prerequisites | Official (2027 entry): A in Mathematics is required; the page names no preferred subjects. |
-| `uk-cs-durham` | A-Level requirements | Official (2027 entry): A*AA including A in Mathematics — agrees with the stored offer. Not confirmed: the preferred Further Mathematics shown here (the page names no preferred subjects). |
-| `uk-cs-durham` | IB requirements | Official (2027 entry): 37 with 766 in higher level subjects, including Mathematics — agrees with the stored points and HL profile. HL Mathematics is required, so the "preferred" HL Mathematics group is not confirmed as a preference. |
 | `uk-cs-durham` | Other qualifications | Official (2027 entry): for a A*AA course, three AP exams at 5, 5, 5, or two AP exams at 5, 5 plus one additional qualification (SAT, ACT, honours course or dual-enrolment course). Two AP exams alone do not meet the requirement. Students at schools without AP may use honours courses with an overall GPA of 3.7. |
-| `uk-law-durham` | Subject prerequisites | Official (2027 entry): A*AA with no subject named; the page names no preferred subjects. |
-| `uk-law-durham` | A-Level requirements | Official (2027 entry): A*AA (contextual AAB) — agrees with the stored offer. Not confirmed: the preferred History / English shown here (the page names no subjects). |
-| `uk-law-durham` | IB requirements | Official (2027 entry): 37 with 766 in higher level subjects. |
 | `uk-law-durham` | Other qualifications | Official (2027 entry): for a A*AA course, three AP exams at 5, 5, 5, or two AP exams at 5, 5 plus one additional qualification (SAT, ACT, honours course or dual-enrolment course). Two AP exams alone do not meet the requirement. Students at schools without AP may use honours courses with an overall GPA of 3.7. |
-| `uk-physics-durham` | Subject prerequisites | Official (2027 entry): Mathematics and Physics required; the page names no preferred subjects. |
-| `uk-physics-durham` | A-Level requirements | Official (2027 entry): A*A*A including Mathematics and Physics — agrees with the stored offer. Not confirmed: the preferred Further Mathematics shown here. |
-| `uk-physics-durham` | IB requirements | Official (2027 entry): 38 with 776 in higher level subjects, including Mathematics (Analysis & Approaches) and Physics. |
 | `uk-physics-durham` | Other qualifications | Official (2027 entry): for a A*A*A course, three AP exams at 5, 5, 5, or two AP exams at 5, 5 plus one additional qualification (SAT, ACT, honours course or dual-enrolment course). Two AP exams alone do not meet the requirement. Students at schools without AP may use honours courses with an overall GPA of 3.7. |
-| `uk-engineering-durham` | Subject prerequisites | Official (2027 entry): Mathematics and one of Biology, Chemistry, Geology or Physics — Physics specifically is not required; no preferred subjects named. |
-| `uk-engineering-durham` | A-Level requirements | Official (2027 entry): A*AA including Mathematics and one of either Biology, Chemistry, Geology or Physics. |
-| `uk-engineering-durham` | IB requirements | Official (2027 entry): 37 with 766 in higher level subjects including Mathematics and one STEM subject (Biology, Chemistry or Physics). |
+| `uk-engineering-durham` | Subject prerequisites | The second required subject is a one-of choice the engine cannot express; only Mathematics is coded. |
+| `uk-engineering-durham` | A-Level requirements | A*AA including Mathematics and one of Biology, Chemistry, Geology or Physics; only Mathematics is coded (the second subject is a one-of choice). |
+| `uk-engineering-durham` | IB requirements | 37 with 766 at HL including Mathematics and one STEM subject (Biology, Chemistry or Physics); only HL Mathematics is coded. |
 | `uk-engineering-durham` | Other qualifications | Official (2027 entry): for a A*AA course, three AP exams at 5, 5, 5, or two AP exams at 5, 5 plus one additional qualification (SAT, ACT, honours course or dual-enrolment course). Two AP exams alone do not meet the requirement. Students at schools without AP may use honours courses with an overall GPA of 3.7. |
 | `uk-cs-bath` | Subject prerequisites | Official (2027 entry): A in Mathematics required. Further Mathematics appears only within the alternative-offer routes (A in AS Further Mathematics, or a fourth A level including Further Mathematics), not as a preferred subject. |
 | `uk-cs-bath` | A-Level requirements | Official (2027 entry): A*A*A including A in Mathematics — agrees with the stored offer. Not confirmed: Further Mathematics as a preferred subject. |
@@ -826,25 +814,18 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `uk-medicine-bristol` | A-Level requirements | Required subjects differ: official Chemistry + one of Biology/Physics/Mathematics/Further Mathematics; data/courseRequirements.js holds essential ["Chemistry","Biology"]. Owner decision. contextualOffer is display-only; the matcher does not apply it. |
 | `uk-medicine-bristol` | IB requirements | IB HL subjects differ: official HL Chemistry + one of Biology/Physics/Mathematics; data/courseRequirements.js holds ibHL ["Chemistry","Biology"]. The "666 at HL" note matches 18 HL points in substance. Owner decision. |
 | `uk-medicine-bristol` | Other qualifications | Bristol’s USA page sets GPA 3.2 minimum (3.4 for competitive courses) plus three additional qualifications, with APs at 4+ (more commonly 5); data/courseRequirements.js holds "Advanced Placement: 3 AP exams at grades 4, 4, 4; Minimum GPA 3.2". Owner decision. |
-| `uk-economics-durham` | Subject prerequisites | Preferred Further Mathematics / Economics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Mathematics_Advanced","Economics"]. Owner decision. |
-| `uk-economics-durham` | A-Level requirements | Typical offer differs: official A*AA; data/courseRequirements.js holds AAA. Preferred Further Mathematics / Economics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Mathematics_Advanced","Economics"]. Owner decision. contextualOffer and practicalEndorsement are display-only; the matcher does not apply them. |
-| `uk-economics-durham` | IB requirements | IB differs: official 37 points with 766 at HL; data/courseRequirements.js holds 38 and "666 at HL". Preferred Economics not stated. Owner decision. |
+| `uk-economics-durham` | A-Level requirements | contextualOffer is display-only; the matcher does not apply it. |
+| `uk-economics-durham` | IB requirements | The SL Mathematics at 7 alternative is display-only; the engine's ibHL tag requires HL Mathematics. |
 | `uk-economics-durham` | Other qualifications | Durham’s course page requires three APs at 5,5,5 or two APs at 5,5 plus a third qualification for a A*AA course; data/courseRequirements.js holds "Advanced Placement: 2 AP exams". Owner decision. |
-| `uk-cs-durham` | Subject prerequisites | Preferred Further Mathematics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Mathematics_Advanced"]. Owner decision. |
-| `uk-cs-durham` | A-Level requirements | Preferred Further Mathematics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Mathematics_Advanced"]. Owner decision. contextualOffer and practicalEndorsement are display-only; the matcher does not apply them. |
-| `uk-cs-durham` | IB requirements | Preferred HL Mathematics (as a preference; the page requires it) not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Mathematics_Advanced"]. Owner decision. |
+| `uk-cs-durham` | A-Level requirements | contextualOffer and practicalEndorsement are display-only; the matcher does not apply them. |
 | `uk-cs-durham` | Other qualifications | Durham’s course page requires three APs at 5,5,5 or two APs at 5,5 plus a third qualification for a A*AA course; data/courseRequirements.js holds "Advanced Placement: 2 AP exams". Owner decision. |
-| `uk-law-durham` | Subject prerequisites | Preferred History / English not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["History","English"]. Owner decision. |
-| `uk-law-durham` | A-Level requirements | Preferred History / English not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["History","English"]. Owner decision. contextualOffer and practicalEndorsement are display-only; the matcher does not apply them. |
-| `uk-law-durham` | IB requirements | IB differs: official 37 points with 766 at HL; data/courseRequirements.js holds 38 and "666 at HL". Preferred History / English not stated. Owner decision. |
+| `uk-law-durham` | A-Level requirements | contextualOffer is display-only; the matcher does not apply it. |
 | `uk-law-durham` | Other qualifications | Durham’s course page requires three APs at 5,5,5 or two APs at 5,5 plus a third qualification for a A*AA course; data/courseRequirements.js holds "Advanced Placement: 2 AP exams". Owner decision. |
-| `uk-physics-durham` | Subject prerequisites | Preferred Further Mathematics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Mathematics_Advanced"]. Owner decision. |
-| `uk-physics-durham` | A-Level requirements | Preferred Further Mathematics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Mathematics_Advanced"]. Owner decision. contextualOffer and practicalEndorsement are display-only; the matcher does not apply them. |
-| `uk-physics-durham` | IB requirements | IB HL subjects differ: official HL Mathematics AA and HL Physics; data/courseRequirements.js holds ibHL ["Mathematics_Advanced","Chemistry"]. Owner decision. |
+| `uk-physics-durham` | A-Level requirements | contextualOffer and practicalEndorsement are display-only; the matcher does not apply them. |
 | `uk-physics-durham` | Other qualifications | Durham’s course page requires three APs at 5,5,5 or two APs at 5,5 plus a third qualification for a A*A*A course; data/courseRequirements.js holds "Advanced Placement: 2 AP exams". Owner decision. |
-| `uk-engineering-durham` | Subject prerequisites | Required subjects differ: official Mathematics + one of Biology/Chemistry/Geology/Physics; data/courseRequirements.js holds essential ["Mathematics_Standard","Physics"] and preferred ["Mathematics_Advanced"]. Owner decision. |
-| `uk-engineering-durham` | A-Level requirements | Typical offer and subjects differ: official A*AA with Mathematics + one of Biology/Chemistry/Geology/Physics; data/courseRequirements.js holds AAA with Physics required. Owner decision. contextualOffer and practicalEndorsement are display-only; the matcher does not apply them. |
-| `uk-engineering-durham` | IB requirements | IB differs: official 766 at HL with Mathematics + one of Biology/Chemistry/Physics; data/courseRequirements.js holds "666 at HL" and ibHL ["Mathematics_Advanced","Physics"]. Owner decision. |
+| `uk-engineering-durham` | Subject prerequisites | One-of second subject (Biology/Chemistry/Geology/Physics) is display-only, not matched. Owner decision. |
+| `uk-engineering-durham` | A-Level requirements | One-of second subject is display-only, not matched. Owner decision. contextualOffer and practicalEndorsement are display-only; the matcher does not apply them. |
+| `uk-engineering-durham` | IB requirements | One-of HL STEM subject (Biology/Chemistry/Physics) is display-only, not matched. Owner decision. |
 | `uk-engineering-durham` | Other qualifications | Durham’s course page requires three APs at 5,5,5 or two APs at 5,5 plus a third qualification for a A*AA course; data/courseRequirements.js holds "Advanced Placement: 2 AP exams". Owner decision. |
 | `uk-cs-bath` | Subject prerequisites | Preferred Further Mathematics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Mathematics_Advanced"]. Owner decision. |
 | `uk-cs-bath` | A-Level requirements | Preferred Further Mathematics not stated on the official 2027 course page; data/courseRequirements.js holds preferred ["Mathematics_Advanced"]. Owner decision. contextualOffer is display-only; the matcher does not apply it. |

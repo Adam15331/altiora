@@ -1041,8 +1041,8 @@ const courses = [
   {
     id: "uk-economics-durham", name: "Economics BA/BSc",
     university: "Durham University", country: "UK", degreeLevel: "BSc", category: "economics",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced","Economics"], useful: ["Statistics"] },
-    grades: { aLevels: "AAA", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "666 at HL" },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Statistics"] },
+    grades: { aLevels: "A*AA", ib: 37, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -1054,8 +1054,8 @@ const courses = [
   {
     id: "uk-cs-durham", name: "Computer Science BSc",
     university: "Durham University", country: "UK", degreeLevel: "BSc", category: "cs",
-    requirements: { essential: ["Mathematics_Standard"], preferred: ["Mathematics_Advanced"], useful: ["Computer_Science","Physics"] },
-    grades: { aLevels: "A*AA", ib: 37, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced"], ibHLNote: "766 at HL" },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Computer_Science","Physics"] },
+    grades: { aLevels: "A*AA", ib: 37, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -1067,8 +1067,8 @@ const courses = [
   {
     id: "uk-law-durham", name: "Law LLB",
     university: "Durham University", country: "UK", degreeLevel: "LLB", category: "law",
-    requirements: { essential: [], preferred: ["History","English"], useful: ["Economics"] },
-    grades: { aLevels: "A*AA", ib: 38, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "666 at HL" },
+    requirements: { essential: [], preferred: [], useful: ["Economics"] },
+    grades: { aLevels: "A*AA", ib: 37, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "766 at HL" },
     admissionTests: ["LNAT"],
     universityContext: {
       tier: "world-top-100",
@@ -1080,8 +1080,8 @@ const courses = [
   {
     id: "uk-physics-durham", name: "Physics BSc/MPhys",
     university: "Durham University", country: "UK", degreeLevel: "MPhys", category: "sciences",
-    requirements: { essential: ["Mathematics_Standard","Physics"], preferred: ["Mathematics_Advanced"], useful: ["Chemistry"] },
-    grades: { aLevels: "A*A*A", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Chemistry"], ibHLNote: "776 at HL" },
+    requirements: { essential: ["Mathematics_Standard","Physics"], preferred: [], useful: ["Chemistry"] },
+    grades: { aLevels: "A*A*A", ib: 38, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "776 at HL" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -1093,8 +1093,8 @@ const courses = [
   {
     id: "uk-engineering-durham", name: "Engineering BEng/MEng",
     university: "Durham University", country: "UK", degreeLevel: "MEng", category: "engineering",
-    requirements: { essential: ["Mathematics_Standard","Physics"], preferred: ["Mathematics_Advanced"], useful: ["Chemistry"] },
-    grades: { aLevels: "AAA", ib: 37, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Advanced", "Physics"], ibHLNote: "666 at HL" },
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: ["Chemistry"] },
+    grades: { aLevels: "A*AA", ib: 37, sgALevels: null, hkDse: null, ibHL: ["Mathematics_Standard"], ibHLNote: "766 at HL incl HL Mathematics and one of Biology, Chemistry or Physics" },
     admissionTests: [],
     universityContext: {
       tier: "world-top-100",
@@ -4332,11 +4332,11 @@ const courseVerification = {
   "uk-law-warwick": { status: "verified", source: "https://warwick.ac.uk/study/undergraduate/courses/llb-law/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels AAA→A*AA; preferred [History, English]→[]. EARLIER (2026-06-28, https://warwick.ac.uk/study/undergraduate/courses/llb-law/): AAA / IB 38 / no test confirmed; Warwick Law does NOT require the LNAT." },
   "uk-accounting-warwick": { status: "partial", source: "https://www.wbs.ac.uk/courses/undergraduate/accounting-and-finance/requirements/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Economics, Mathematics_Advanced]→[]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.wbs.ac.uk/courses/undergraduate/accounting-and-finance/requirements/): AAA→A*AA (incl A in Maths); IB 38 (6 in HL Maths) confirmed; no test." },
   "uk-engineering-warwick": { status: "partial", source: "https://warwick.ac.uk/study/undergraduate/courses/meng-engineering/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Advanced]→[]; ibHL [Mathematics_Advanced, Physics]→[Mathematics_Standard, Physics]. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://warwick.ac.uk/study/undergraduate/courses/meng-engineering/): A*AA / IB 38 / 666 HL (incl Maths & Physics) confirmed; no test." },
-  "uk-economics-durham": { status: "verified", source: "https://www.durham.ac.uk/business/courses/economics-l100/", checkedDate: "2026-06-28", notes: "AAA / IB 38 / 666 HL (incl Maths) / no test confirmed." },
-  "uk-cs-durham": { status: "verified", source: "https://www.durham.ac.uk/study/courses/computer-science-g400/", checkedDate: "2026-06-28", notes: "Verified: standard A-level A*AA incl Mathematics (contextual AAB incl A in Maths); IB 37 with 766 HL incl Maths. Stored flat AAA was the contextual tier." },
-  "uk-law-durham": { status: "verified", source: "https://www.durham.ac.uk/study/courses/law-m101/", checkedDate: "2026-06-28", notes: "A*AA / IB 38 / 666 HL / LNAT all confirmed." },
-  "uk-physics-durham": { status: "verified", source: "https://www.durham.ac.uk/study/courses/physics-f300/", checkedDate: "2026-06-28", notes: "A*A*A / IB 38 / 776 HL (Maths AA + Physics) / no test confirmed." },
-  "uk-engineering-durham": { status: "verified", source: "https://www.durham.ac.uk/study/courses/general-engineering-h100/", checkedDate: "2026-06-28", notes: "AAA / IB 37 confirmed; HL 665→666 (Maths + one STEM). No test." },
+  "uk-economics-durham": { status: "verified", source: "https://www.durham.ac.uk/business/courses/economics-l100/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels AAA→A*AA; preferred [Mathematics_Advanced, Economics]→[]; preferred [Mathematics_Advanced, Economics]→[]; ib 38→37; ibHLNote 666 at HL→766 at HL. EARLIER (2026-06-28, https://www.durham.ac.uk/business/courses/economics-l100/): AAA / IB 38 / 666 HL (incl Maths) / no test confirmed." },
+  "uk-cs-durham": { status: "verified", source: "https://www.durham.ac.uk/study/courses/computer-science-g400/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Advanced]→[]; ibHL [Mathematics_Advanced]→[Mathematics_Standard]. EARLIER (2026-06-28, https://www.durham.ac.uk/study/courses/computer-science-g400/): Verified: standard A-level A*AA incl Mathematics (contextual AAB incl A in Maths); IB 37 with 766 HL incl Maths. Stored flat AAA was the contextual tier." },
+  "uk-law-durham": { status: "verified", source: "https://www.durham.ac.uk/study/courses/law-m101/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [History, English]→[]; ib 38→37; ibHLNote 666 at HL→766 at HL. EARLIER (2026-06-28, https://www.durham.ac.uk/study/courses/law-m101/): A*AA / IB 38 / 666 HL / LNAT all confirmed." },
+  "uk-physics-durham": { status: "verified", source: "https://www.durham.ac.uk/study/courses/physics-f300/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): preferred [Mathematics_Advanced]→[]; ibHL [Mathematics_Advanced, Chemistry]→[Mathematics_Advanced, Physics]. EARLIER (2026-06-28, https://www.durham.ac.uk/study/courses/physics-f300/): A*A*A / IB 38 / 776 HL (Maths AA + Physics) / no test confirmed." },
+  "uk-engineering-durham": { status: "partial", source: "https://www.durham.ac.uk/study/courses/general-engineering-h100/", checkedDate: "2026-10-19", notes: "2027 ENTRY (checked 2026-10-19, engine migrated to the official 2027-entry values): aLevels AAA→A*AA; essential [Mathematics_Standard, Physics]→[Mathematics_Standard]; preferred [Mathematics_Advanced]→[]; ibHL [Mathematics_Advanced, Physics]→[Mathematics_Standard]; ibHLNote 666 at HL→766 at HL incl HL Mathematics and one of Biology, Chemistry or Physics. Some 2027 requirements are not expressible in the engine and stay partial in data/requirements/2027.js. EARLIER (2026-06-28, https://www.durham.ac.uk/study/courses/general-engineering-h100/): AAA / IB 37 confirmed; HL 665→666 (Maths + one STEM). No test." },
   "uk-cs-bristol": { status: "verified", source: "https://www.bristol.ac.uk/study/undergraduate/2026/computer-science/bsc-computer-science/", checkedDate: "2026-06-28", notes: "A*AA (A* in Maths) / IB 38 / 766 HL (7 HL Maths) / no test confirmed." },
   "uk-economics-bristol": { status: "verified", source: "https://www.bristol.ac.uk/study/undergraduate/2026/economics/bsc-economics/", checkedDate: "2026-06-28", notes: "Verified: standard offer A*AA incl Mathematics (contextual AAB); IB 38 (18 at HL) incl HL6 Maths. Stored AAA was the alternative/joint-honours wording." },
   "uk-engineering-bristol": { status: "verified", source: "https://www.bristol.ac.uk/study/undergraduate/2026/mechanical-engineering/meng-mechanical-engineering/", checkedDate: "2026-06-28", notes: "AAA / IB 38 confirmed; HL 766→776 (7,6 Maths + a science)." },
