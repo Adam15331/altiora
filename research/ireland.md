@@ -5,7 +5,7 @@ Naming: "IE" here is the **country code for Ireland**. IE University (Spain) is 
 
 **Method.** Non-EU international direct-application route only. CAO points (the domestic/EU route, whose cut-offs move every year) are never recorded as a requirement; where mentioned they appear only in notes, labelled CAO. Every non-NOT-PUBLISHED cell and every requirement claim carries its official source URL, access date and a verbatim `sourceSnippet`, checked mechanically against the saved page text. States: ACCEPTED (with this course's published minimum), ACCEPTED WITH CONDITIONS (not standalone, or only with extra steps), NOT ACCEPTED (an official page says so), NOT PUBLISHED (silent, ambiguous, blocked or unreadable — never a rejection). A university-wide minimum is labelled "university-wide". No third-party evidence; no proxy, text reader, cache, mirror or archive was used.
 
-**User-agent note.** The fetch script sends a browser User-Agent header by default. Every page used as evidence was re-requested on 2026-10-21 without that header. Every Trinity page still loads, so none of its access depended on the header. Every UCD page returns HTTP 403 without it, so all UCD content was discarded as evidence and UCD is reported as blocked (section 5).
+**User-agent note.** The fetch script sent a browser User-Agent header by default (removed 2026-10-21; see `research/user-agent-audit.md`). Every page used as evidence was re-requested on 2026-10-21 without that header. Every Trinity page still loads, so none of its access depended on the header. Every UCD page returns HTTP 403 without it, so all UCD content was discarded as evidence and UCD is reported as blocked (section 5).
 
 ## 1. Summary
 

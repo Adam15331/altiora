@@ -16,12 +16,15 @@ Saves to $VERIFY_PAGES (default ./pages):
                          (PDFs go through pdftotext -layout).
 verify.mjs reads the .txt files, so a quote is checked against the exact
 page it cites.
+
+Requests go out as curl's own default request: no browser User-Agent or any
+other header that disguises the client. A page that refuses that request is
+blocked; record it as NOT PUBLISHED (blocked) for manual review.
 """
 import hashlib, html, os, re, subprocess, sys
 from html.parser import HTMLParser
 
 PAGES = os.environ.get('VERIFY_PAGES', 'pages')
-UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36'
 BLOCK = {'p', 'div', 'li', 'tr', 'td', 'th', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'section', 'article',
          'header', 'footer', 'dt', 'dd', 'br', 'table', 'ul', 'ol', 'blockquote', 'summary', 'details', 'main'}
 SKIP = {'script', 'style', 'noscript', 'svg', 'template'}
@@ -75,7 +78,7 @@ def fetch(url):
     os.makedirs(PAGES, exist_ok=True)
     k = key(url)
     raw = os.path.join(PAGES, k + '.raw')
-    status = subprocess.run(['curl', '-sS', '-L', '--max-time', '60', '-A', UA, '-o', raw, '-w', '%{http_code}', url],
+    status = subprocess.run(['curl', '-sS', '-L', '--max-time', '60', '-o', raw, '-w', '%{http_code}', url],
                             capture_output=True, text=True).stdout.strip() or '000'
     with open(raw, 'rb') as f:
         body = f.read() if os.path.exists(raw) else b''

@@ -1,8 +1,8 @@
 # English-taught bachelor's in Spain, Italy and France — qualification acceptance
 
-Research report only — no data, code, page or engine file was changed. Generated 2026-10-21.
+Research report only — no data, code, page or engine file was changed. Generated 2026-10-21. Corrected 2026-10-21: all Esade evidence withdrawn because it was obtained only with a browser User-Agent header (see Method and the Esade section).
 
-**Method.** Every claim below comes from an official university page (or an official national admissions body) read directly on 2026-10-21, and every ACCEPTED / NOT ACCEPTED cell and requirement claim carries its source URL, access date and a verbatim `sourceSnippet` checked mechanically against the saved page text. Three states only: **ACCEPTED** (an official page names or clearly covers the qualification), **NOT ACCEPTED** (an official page explicitly says so), **NOT PUBLISHED** (silent, ambiguous, blocked or unreadable — never read as a rejection). No third-party site was used as evidence, and no proxy, text reader, cache, mirror, archive, alternate user agent or other bypass was used for any page: blocked pages are listed for manual review (section 5).
+**Method.** Every claim below comes from an official university page (or an official national admissions body) read directly on 2026-10-21, and every ACCEPTED / NOT ACCEPTED cell and requirement claim carries its source URL, access date and a verbatim `sourceSnippet` checked mechanically against the saved page text. Three states only: **ACCEPTED** (an official page names or clearly covers the qualification), **NOT ACCEPTED** (an official page explicitly says so), **NOT PUBLISHED** (silent, ambiguous, blocked or unreadable — never read as a rejection). No third-party site was used as evidence, and no proxy, text reader, cache, mirror or archive was used. **Correction:** the original statement that no alternate user agent was used was wrong. The fetch script sent a browser User-Agent header on every request. On 2026-10-21 every URL in this report was re-requested without that header. Every Esade page (www.esade.edu) returns HTTP 403 without it, so all Esade evidence came only through the header, which is a bypass; it has been withdrawn and Esade is NOT PUBLISHED (blocked). Every other page cited as evidence loads without the header. Blocked pages are listed for manual review (section 5).
 
 **QS 2027 ranks.** topuniversities.com (and QS's support site) returned HTTP 403 to direct requests on 2026-10-21, so the QS World University Rankings 2027 could not be read. A rank is shown only where the university's own official page states its QS 2027 position verbatim; otherwise it is "not published". Candidates were therefore chosen as the strongest-known universities with fully English-taught bachelor's programmes, not by a QS 2027 list read in this session.
 
@@ -14,7 +14,7 @@ Research report only — no data, code, page or engine file was changed. Generat
 | not published | Universitat Autònoma de Barcelona (UAB) | Spain | public | ACCEPTED | ACCEPTED | NOT PUBLISHED | NOT PUBLISHED | NOT PUBLISHED | Economics, Business | UNED PCE / PAU specific-stage subjects (All bachelor's) — required for some applicants only |
 | not published | Universitat Politècnica de Catalunya (UPC - BarcelonaTech) | Spain | public | NOT PUBLISHED | NOT PUBLISHED | NOT PUBLISHED | NOT PUBLISHED | NOT PUBLISHED | Computer Science, Engineering | none stated as required |
 | not published | IE University | Spain | private | ACCEPTED | ACCEPTED | ACCEPTED | NOT PUBLISHED | NOT PUBLISHED | Mathematics, Computer Science, Economics, Business, Law, Architecture, Natural Sciences | IE Admissions Test (or SAT >= 1300 / ACT >= 28 / LNAT >= 22 as alternative) (All bachelor's; Science & Technology programmes add a Mathematics Assessment and SAT Math >= 700 if SAT used) |
-| not published | Esade (Universitat Ramon Llull) | Spain | private | ACCEPTED | ACCEPTED | ACCEPTED | ACCEPTED | NOT PUBLISHED | Business, Economics | Esade Admissions Test (logic, numerical, problem-solving + English level) (All bachelor's) |
+| not published | Esade (Universitat Ramon Llull) | Spain | private | NOT PUBLISHED (blocked) | NOT PUBLISHED (blocked) | NOT PUBLISHED (blocked) | NOT PUBLISHED (blocked) | NOT PUBLISHED (blocked) | not assessed (blocked) | not published (blocked) |
 | not published | Politecnico di Milano | Italy | public | NOT PUBLISHED | NOT PUBLISHED | NOT PUBLISHED | NOT PUBLISHED | NOT PUBLISHED | Engineering | TOL (Politecnico Online Test), min 30/100; alternatives TOLC-I, CEnT-S, SAT (Engineering Bachelor degree programmes 2026/27) |
 | not published | Università di Bologna (Alma Mater Studiorum) | Italy | public | ACCEPTED | ACCEPTED | ACCEPTED | NOT PUBLISHED | NOT PUBLISHED | Business, Economics, Medicine | SAT (General) (Business and Economics (CLaBE)); IMAT (admission test, 29 Sept 2026, via Universitaly) (Medicine and Surgery (English)) |
 | not published | Università degli Studi di Padova | Italy | public | ACCEPTED | ACCEPTED | ACCEPTED | NOT PUBLISHED | NOT PUBLISHED | Engineering, Psychology, Medicine | CISIA CEnT-S (Information Engineering); Online entry test in English (Psychological Science); IMAT (Medicine and Surgery (English)) |
@@ -352,90 +352,25 @@ Cells: **28 ACCEPTED**, **0 NOT ACCEPTED**, **42 NOT PUBLISHED**.
 
 #### Esade (Universitat Ramon Llull) — Barcelona (Sant Cugat), Spain (private)
 
-**QS 2027 rank:** not published — QS site blocked; not stated on university pages read (Esade pages cite only QS subject rankings, not the overall 2027 ranking).
+**Blocked — evidence withdrawn (2026-10-21).** Every official Esade page this report relied on returns HTTP 403 to a direct request. They loaded only when the fetch script sent a browser User-Agent header, which is a way round an access restriction. All Esade quotes have been removed, every cell is NOT PUBLISHED (blocked), and the pages are in section 5 for a person to check in a browser. Nothing below should be read as a rejection.
 
-**English-taught bachelor's by Altiora field**
+**QS 2027 rank:** not published — QS site blocked; Esade pages blocked.
 
-- **Business** — Bachelor of Business Administration (BBA) - English section
-  - source: <https://www.esade.edu/bachelor/en/programmes/business-administration>  
-    accessed: 2026-10-21  
-    sourceSnippet: «The program is 100% in English.»
-- **Business** — Bachelor in Business and Artificial Intelligence
-  - source: <https://www.esade.edu/bachelor/en/programmes/bachelor-in-business-and-artificial-intelligence>  
-    accessed: 2026-10-21  
-    sourceSnippet: «The program is taught 100% in English.»
-- **Economics** — Bachelor in Global Governance, Economics & Legal Order (Global Economics track)
-  - source: <https://www.esade.edu/bachelor/en/programmes/global-governance>  
-    accessed: 2026-10-21  
-    sourceSnippet: «The degree is taught entirely in English»
-- Not found as a fully English-taught bachelor's on the pages read: Engineering, Computer Science, Mathematics, Natural Sciences, Medicine, Law (Bachelor in Law taught in Spanish and progressively in English), Psychology, Architecture.
+**English-taught bachelor's by Altiora field:** not assessed (blocked).
 
 **Qualifications**
 
-- **UK A-Level: ACCEPTED** — Minimum 5 IGCSEs + 3 A-Levels (Spanish government); accepted range AAB-A*A*A*; Maths A-Level >= B for BBA (A* for Business & AI); predicted grades sufficient; Critical Thinking/General Studies not accepted; BTEC not a replacement.
-  - source: <https://www.esade.edu/bachelor/en/degrees/admissions/admission-requirements>  
-    accessed: 2026-10-21  
-    sourceSnippet: «The Spanish Government requires a minimum of 5 IGCSEs and 3 A-Levels. Esade accepts A-Levels that range from AAB to A*A*A*. (I)GCSE scores are expected to be As and Bs.»
-  - source: <https://www.esade.edu/bachelor/en/degrees/admissions/admission-requirements>  
-    accessed: 2026-10-21  
-    sourceSnippet: «Mandatory to have chosen Mathematics as one of the 3 A-Levels with a score (≥B)»
-  - source: <https://www.esade.edu/bachelor/en/degrees/admissions/admission-requirements>  
-    accessed: 2026-10-21  
-    sourceSnippet: «Predicted A-Level grades together with ongoing progress reports/transcripts are sufficient for the admission process, however, the admitted students are required to verify their final results in the Summer, when the results are released. A-Levels in Critical Thinking and General Studies are not accepted by Esade. BTEC is not accepted as a replacement for A-Levels.»
-- **IB Diploma: ACCEPTED** — Predicted 32/42 can be considered; admitted average 36/42; conditional offer may be revoked if final is >3 points below; full Diploma only (no Certificates/CP); May session only.
-  - source: <https://www.esade.edu/bachelor/en/degrees/admissions/admission-requirements>  
-    accessed: 2026-10-21  
-    sourceSnippet: «A predicted score of 32/42 in IBDP 2 can be considered for admission. … Currently, the average final IB score of our admitted students is 36/42 (TOK, EE and CAS excluded). … IB Certificates and IB Career Related Programme (CP) are not valid for enrollment, therefore, only the IB Diploma Programme is considered for admission»
-- **US HSD + AP: ACCEPTED** — US HS Diploma, GPA >= 3.3/4 unweighted; 1+ AP or Honors highly recommended (not mandatory); Calculus for BBA, AP Calculus AB/BC for Business & AI; grades 10-12 transcripts for homologation.
-  - source: <https://www.esade.edu/bachelor/en/degrees/admissions/admission-requirements>  
-    accessed: 2026-10-21  
-    sourceSnippet: «We accept American High School Diplomas issued by American high schools in the United States and American Schools based abroad. Although not mandatory, it is highly recommended to provide 1+ Advanced Placement (AP) or 1 Honors course. We are looking for a GPA score of ≥3.3/4 (≥B+) (unweighted).»
-  - source: <https://www.esade.edu/bachelor/en/degrees/admissions/admission-requirements>  
-    accessed: 2026-10-21  
-    sourceSnippet: «AP Calculus AB/BC»
-- **SG A-Level: ACCEPTED** — Minimum 3 Singapore-Cambridge GCE O-levels + 3 approved H2 A-levels in general academic subjects + 1 H1 A-level + General Paper. No grade threshold published.
-  - source: <https://www.esade.edu/bachelor/en/degrees/admissions/admission-requirements>  
-    accessed: 2026-10-21  
-    sourceSnippet: «Singapore: A minimum of 3 Singapore-Cambridge GCE O-levels + 3 approved Singapore-Cambridge H2 GCE A-levels in general academic subjects + 1 H1 Singapore-Cambridge A-level + General paper»
-- **HKDSE: NOT PUBLISHED** — reason: Hong Kong DSE not listed under 'Other international educational systems accepted' on Esade's admission-requirements page.
+- **UK A-Level: NOT PUBLISHED (blocked)** — reason: www.esade.edu returns HTTP 403 to a direct request; the pages loaded only with a browser User-Agent header, so nothing from them is used as evidence.
+- **IB Diploma: NOT PUBLISHED (blocked)** — reason: www.esade.edu returns HTTP 403 to a direct request; the pages loaded only with a browser User-Agent header, so nothing from them is used as evidence.
+- **US HSD + AP: NOT PUBLISHED (blocked)** — reason: www.esade.edu returns HTTP 403 to a direct request; the pages loaded only with a browser User-Agent header, so nothing from them is used as evidence.
+- **SG A-Level: NOT PUBLISHED (blocked)** — reason: www.esade.edu returns HTTP 403 to a direct request; the pages loaded only with a browser User-Agent header, so nothing from them is used as evidence.
+- **HKDSE: NOT PUBLISHED (blocked)** — reason: www.esade.edu returns HTTP 403 to a direct request; the pages loaded only with a browser User-Agent header, so nothing from them is used as evidence.
 
-**Application route:** Direct online application to Esade (EUR 150 fee; open until June 2027 while places remain), Esade Admissions Test (or SAT/ACT), document upload, committee review, interview if required; international students start UNEDasiss accreditation or homologation in early July.
-- source: <https://www.esade.edu/bachelor/en/degrees/admissions>  
-  accessed: 2026-10-21  
-  sourceSnippet: «Admissions process for September 2027: You can now fill out your application online! The process will be open until June 2027, as long as there are places left.»
-- source: <https://www.esade.edu/bachelor/en/degrees/admissions>  
-  accessed: 2026-10-21  
-  sourceSnippet: «Before completing and forwarding your application, you have to pay the corresponding €150 application fee.»
-- source: <https://www.esade.edu/bachelor/en/degrees/admissions>  
-  accessed: 2026-10-21  
-  sourceSnippet: «– Early July: Students from international systems must start the UNEDassis accreditation or Homologation process»
+**Application route:** not published (blocked).
 
-**Admission tests:**
-- **Esade Admissions Test (logic, numerical, problem-solving + English level) — REQUIRED (unless official SAT or ACT submitted)** (All bachelor's)
-  - source: <https://www.esade.edu/bachelor/en/degrees/admissions/admission-requirements>  
-    accessed: 2026-10-21  
-    sourceSnippet: «As part of our Admissions Process, you must take the Esade Admissions Test which allows us to measure your competencies in logic, numerical and problem-solving skills focusing on testing your ability to reason more than your ability to memorize. It will also evaluate your English level.»
-- **SAT / ACT (alternative to Esade test) — OPTIONAL alternative: SAT min 1200 (avg 1350), ACT min 24 (avg 30)** (All bachelor's)
-  - source: <https://www.esade.edu/bachelor/en/degrees/admissions/admission-requirements>  
-    accessed: 2026-10-21  
-    sourceSnippet: «SAT: Average 1350. Minimum 1200. Esade’s identification code (7073) ACT: Average 30. Minimum 24. Esade’s identification code (6922)»
+**Admission tests:** not published (blocked).
 
-**English language:** English assessed in Esade test; certificate not mandatory for Anglophone systems (A-levels, IB in English, US HS). BBA English section minimums: CAE/CPE 190, IELTS 7, TOEFL iBT 100, Duolingo 160.
-- source: <https://www.esade.edu/bachelor/en/degrees/admissions/admission-requirements>  
-  accessed: 2026-10-21  
-  sourceSnippet: «For those taking Esade’s Admissions test, the possession of English language certificates is not mandatory, particularly if the candidates have studied in an Anglophone educational system (such as American High School Diploma, IB in English or A-levels).»
-- source: <https://www.esade.edu/bachelor/en/degrees/admissions/admission-requirements>  
-  accessed: 2026-10-21  
-  sourceSnippet: «IELTS Academic: Minimum score accepted 7 (Between 6.5 and 7*) TOEFL iBT: Minimum score accepted 100 (From 90 to 99*) Esade code (B051)»
-
-**Why grade-based matching would be misleading here:**
-- Holistic private admission with no minimum entry grades; admissions test and possible interview.
-  - source: <https://www.esade.edu/bachelor/en/degrees/admissions/admission-requirements>  
-    accessed: 2026-10-21  
-    sourceSnippet: «Unlike public universities, none of the Esade degrees has minimum entry grades, therefore to decide on your admission, we will assess your past academic record, your most recent grades, your education system, your application essays, your admissions test and English language proficiency.»
-  - source: <https://www.esade.edu/bachelor/en/degrees/admissions>  
-    accessed: 2026-10-21  
-    sourceSnippet: «In some cases, the Admissions Committee may require additional information from candidates. If this is your case, the committee will request a personal interview.»
+**English language:** not published (blocked).
 
 ### Italy
 
@@ -1014,10 +949,7 @@ Cells: **28 ACCEPTED**, **0 NOT ACCEPTED**, **42 NOT PUBLISHED**.
     accessed: 2026-10-21  
     sourceSnippet: «Full English teaching in the 1st year and part of the 2nd year (check details on this webpage).»
 - **Universidad Complutense de Madrid (UCM)** (Spain) — Not researched in depth this session (no fully English-taught bachelor's identified); not assessed.
-- **Esade Bachelor in Law** (Spain) — Excluded programme (Esade itself included): taught in Spanish and progressively in English.
-  - source: <https://www.esade.edu/bachelor/en/programmes/law>  
-    accessed: 2026-10-21  
-    sourceSnippet: «The programme is taught in Spanish and progressively in English.»
+- **Esade Bachelor in Law** (Spain) — Not assessed: blocked (www.esade.edu returns HTTP 403 without a browser User-Agent header; quote withdrawn). See section 5.
 - **Sapienza Università di Roma** (Italy) — Not assessed: all uniroma1.it admission pages and PDFs tried returned 504 (timeout) to the fetcher on two attempts; see manualReview.
 - **Politecnico di Torino** (Italy) — Not assessed: polito.it bachelor admissions page and Engineering call PDF returned 503 on two attempts; see manualReview.
 - **Università degli Studi di Milano (La Statale)** (Italy) — Only a small set of English-taught bachelor's (four) plus International Medical School; not selected within the ~5 limit (not researched further).
@@ -1102,6 +1034,12 @@ Two national routes for first-year bachelor's: (1) Parcoursup - EU students and 
 | <https://www.upf.edu/web/international/bachelor-s-degrees-in-english> | 403 | UPF list of English-taught bachelor's degrees. |
 | <https://web.ub.edu/en/web/estudis/w/grau-G1080> | 403 | Language of instruction of UB Bachelor's in International Business (fully English or partial). |
 | <https://web.ub.edu/en/web/facultat-economia-empresa/llengues-a-la-facultat> | 403 | UB Faculty of Economics and Business English-taught tracks. |
+| <https://www.esade.edu/bachelor/en/degrees/admissions/admission-requirements> | 403 without a browser User-Agent header (earlier read only with it; evidence withdrawn) | Esade acceptance and conditions for UK A-Level, IB Diploma, US HSD + AP, Singapore A-Level and HKDSE; Esade Admissions Test and SAT/ACT alternative; English-language requirements; whether entry is holistic with no minimum grades. |
+| <https://www.esade.edu/bachelor/en/degrees/admissions> | 403 without a browser User-Agent header (earlier read only with it; evidence withdrawn) | Esade application route for September 2027 entry: dates, fee, interview, UNEDasiss/homologation step. |
+| <https://www.esade.edu/bachelor/en/programmes/business-administration> | 403 without a browser User-Agent header (earlier read only with it; evidence withdrawn) | Whether the BBA English section is taught 100% in English. |
+| <https://www.esade.edu/bachelor/en/programmes/bachelor-in-business-and-artificial-intelligence> | 403 without a browser User-Agent header (earlier read only with it; evidence withdrawn) | Whether the Bachelor in Business and Artificial Intelligence is taught 100% in English. |
+| <https://www.esade.edu/bachelor/en/programmes/global-governance> | 403 without a browser User-Agent header (earlier read only with it; evidence withdrawn) | Whether the Bachelor in Global Governance, Economics & Legal Order is taught entirely in English. |
+| <https://www.esade.edu/bachelor/en/programmes/law> | 403 without a browser User-Agent header (earlier read only with it; evidence withdrawn) | Language of instruction of the Bachelor in Law. |
 | <https://www.upc.edu/en/bachelors/access-and-admission/other-foreign-secondary-students> | 200 (no detail) | Page defers to Generalitat de Catalunya; check how UPC treats UK A-Level/IB/US/SG/HK applicants. |
 | <https://www.polimi.it/en/prospective-students/how-to-apply/admission-to-laurea-programmes/students-with-a-foreign-degree> | 404 | Polimi foreign-qualification rules for bachelor's (A-level, IB, AP, Singapore A-Level, HKDSE). |
 | <https://www.polimi.it/en/prospective-students/how-to-apply/admission-to-laurea-programmes/engineering> | 403 | Polimi engineering admission page (TOL/SAT rules, English-taught programme list). |
