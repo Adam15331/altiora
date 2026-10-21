@@ -128,8 +128,14 @@ a row that is not verified; every other row is verified.
 | `us-engineering-columbia` | satAct, englishLanguage, admissionsTests, subjectPrerequisites (partial), aLevel, ib, otherQualifications, otherRequirements |
 | `us-maths-columbia` | satAct, englishLanguage, admissionsTests, subjectPrerequisites (partial), aLevel, ib, otherQualifications, otherRequirements |
 
-## 4. Not done here
+## 4. Follow-up (2026-10-21)
 
-No row was changed. Downgrading these rows, or re-checking them by hand,
-is the owner's decision. `fetch.py --reader` still exists and routes requests
-through r.jina.ai, which the no-bypass rule also prohibits.
+- `fetch.py --reader` (r.jina.ai) has been removed.
+- The 256 rows in section 3 are now `partial` in `data/requirements/2027.js`.
+  Each carries a reviewFlag naming this audit, and a note saying it awaits a
+  manual check. Every value, source, date and snippet is unchanged, and so
+  is the engine, so matching does not move.
+- `research/manual-check.md` lists the 57 URLs behind those rows, with every
+  quote to confirm in a browser.
+- The rows in section 2 marked "refused or failed for another reason" were
+  left as they are.
