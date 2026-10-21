@@ -8,7 +8,7 @@ const AXE = fs.readFileSync(process.env.AXE_PATH ?? new URL('../../../node_modul
 const subs = ['Mathematics', 'Further Mathematics', 'Physics', 'Chemistry'];
 const st = { profile: { stage: 'choosing', qualificationSystem: 'UK_A_Level', subjects: subs, predictedGrades: Object.fromEntries(subs.map(s => [s, 'A*'])), interests: [], candidateFields: [], achievements: [], applicationTasks: {}, statementDrafts: { q1: '', q2: '', q3: '' }, yearGroup: 'Year 12', yearsUntilApplication: 1, yearSetAt: null }, shortlist: ['uk-medicine-oxford', 'uk-medicine-ucl', 'uk-cs-cambridge'], progress: {}, meta: { firstVisit: null, lastVisit: null, hasOnboarded: true } };
 const PAGES = [
-  ['Landing', '/index.html', null], ['Check', '/app.html', 'check'], ['Shortlist', '/app.html', 'shortlist'], ['fields/medicine', '/fields/medicine.html', null],
+  ['Landing', '/index.html', null], ['Home', '/app.html', 'home'], ['Check', '/app.html', 'check'], ['Shortlist', '/app.html', 'shortlist'], ['fields/medicine', '/fields/medicine.html', null],
 ];
 const server = await serve(root, port);
 const browser = await chromium.launch({ executablePath: EXE });

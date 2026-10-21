@@ -5075,6 +5075,7 @@ function renderWorkspaceHome() {
       <header class="home__header">
         <h1 class="home__welcome">${_isReturningUser ? 'Welcome back.' : "You're all set."}</h1>
         <p class="home__stage">You're in the <strong>${esc(cfg.name)}</strong> stage — ${_isReturningUser ? esc(STAGE_SUMMARY[stage] ?? '') : "here's your next step."}</p>
+        <button type="button" class="home__explore-link" data-go-tool="strengths">Explore fields →</button>
       </header>
 
       ${gradHtml || `
@@ -5104,6 +5105,14 @@ function renderWorkspaceHome() {
           <button class="home-card__link" data-go-tool="shortlist">View shortlist →</button>
         </section>
 
+        <!-- Explore fields: open at every stage. Opens the Strengths tool
+             directly; it does not move the student's stage. -->
+        <section class="home-card home-card--explore">
+          <h2 class="home-card__title"><span class="home-card__icon" aria-hidden="true">🧭</span>Explore fields</h2>
+          <p>Not sure what to study? Explore fields and career paths — match your strengths to fields and see where each one leads.</p>
+          <button class="home-card__link" data-go-tool="strengths">Start exploring →</button>
+        </section>
+
         <div id="homeStorySlot" class="home-story-slot"></div>
       </div>
 
@@ -5113,6 +5122,7 @@ function renderWorkspaceHome() {
         <span class="home-quick__label">Quick access</span>
         <div class="home-quick__row">
           ${toolBtns}
+          ${[cfg.primary, ...cfg.secondary].includes('strengths') ? '' : '<button class="home-quick__btn" data-go-tool="strengths">🧭 Explore fields</button>'}
           <button class="home-quick__btn" data-go-tool="shortlist">🔖 My Shortlist (${saved.length})</button>
           <button class="home-quick__btn" data-open-story>📖 Your story</button>
           <button class="home-quick__btn" data-open-summary>🖨 Print summary</button>
