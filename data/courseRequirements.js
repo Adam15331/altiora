@@ -1571,6 +1571,7 @@ const courses = [
   {
     id: "us-cs-mit", name: "Computer Science & Engineering BS",
     university: "MIT", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1584,6 +1585,7 @@ const courses = [
   {
     id: "us-engineering-mit", name: "Electrical Engineering with Computing BS",
     university: "MIT", country: "US", degreeLevel: "BS", category: "engineering",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1597,6 +1599,7 @@ const courses = [
   {
     id: "us-mechanical-mit", name: "Mechanical Engineering BS",
     university: "MIT", country: "US", degreeLevel: "BS", category: "engineering",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1610,6 +1613,7 @@ const courses = [
   {
     id: "us-physics-mit", name: "Physics BS",
     university: "MIT", country: "US", degreeLevel: "BS", category: "sciences",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1623,6 +1627,7 @@ const courses = [
   {
     id: "us-economics-mit", name: "Economics BS",
     university: "MIT", country: "US", degreeLevel: "BS", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1636,6 +1641,7 @@ const courses = [
   {
     id: "us-maths-mit", name: "Mathematics BS",
     university: "MIT", country: "US", degreeLevel: "BS", category: "mathematics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1649,6 +1655,7 @@ const courses = [
   {
     id: "us-cs-stanford", name: "Computer Science BS",
     university: "Stanford University", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1662,6 +1669,7 @@ const courses = [
   {
     id: "us-engineering-stanford", name: "Engineering BS",
     university: "Stanford University", country: "US", degreeLevel: "BS", category: "engineering",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1675,6 +1683,7 @@ const courses = [
   {
     id: "us-economics-stanford", name: "Economics BA",
     university: "Stanford University", country: "US", degreeLevel: "BA", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1688,6 +1697,7 @@ const courses = [
   {
     id: "us-maths-stanford", name: "Mathematics BS",
     university: "Stanford University", country: "US", degreeLevel: "BS", category: "mathematics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1701,6 +1711,7 @@ const courses = [
   {
     id: "us-psychology-stanford", name: "Psychology BA",
     university: "Stanford University", country: "US", degreeLevel: "BA", category: "psychology",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Psychology","Biology","Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1714,6 +1725,7 @@ const courses = [
   {
     id: "us-cs-harvard", name: "Computer Science AB/SM",
     university: "Harvard University", country: "US", degreeLevel: "AB", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1727,6 +1739,7 @@ const courses = [
   {
     id: "us-economics-harvard", name: "Economics AB",
     university: "Harvard University", country: "US", degreeLevel: "AB", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1740,6 +1753,7 @@ const courses = [
   {
     id: "us-law-harvard", name: "Government AB (pre-law track)",
     university: "Harvard University", country: "US", degreeLevel: "AB", category: "law",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Philosophy","Economics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1753,6 +1767,7 @@ const courses = [
   {
     id: "us-biology-harvard", name: "Molecular & Cellular Biology AB",
     university: "Harvard University", country: "US", degreeLevel: "AB", category: "sciences",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Physics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1766,6 +1781,7 @@ const courses = [
   {
     id: "us-maths-harvard", name: "Mathematics AB",
     university: "Harvard University", country: "US", degreeLevel: "AB", category: "mathematics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1779,6 +1795,7 @@ const courses = [
   {
     id: "us-cs-princeton", name: "Computer Science AB/BSE",
     university: "Princeton University", country: "US", degreeLevel: "BSE", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1792,6 +1809,7 @@ const courses = [
   {
     id: "us-engineering-princeton", name: "Mechanical & Aerospace Engineering BSE",
     university: "Princeton University", country: "US", degreeLevel: "BSE", category: "engineering",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: [] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1805,6 +1823,7 @@ const courses = [
   {
     id: "us-economics-princeton", name: "Economics AB",
     university: "Princeton University", country: "US", degreeLevel: "AB", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1818,6 +1837,7 @@ const courses = [
   {
     id: "us-maths-princeton", name: "Mathematics AB",
     university: "Princeton University", country: "US", degreeLevel: "AB", category: "mathematics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1831,6 +1851,7 @@ const courses = [
   {
     id: "us-cs-yale", name: "Computer Science BS",
     university: "Yale University", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1844,6 +1865,7 @@ const courses = [
   {
     id: "us-economics-yale", name: "Economics BA",
     university: "Yale University", country: "US", degreeLevel: "BA", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1857,6 +1879,7 @@ const courses = [
   {
     id: "us-law-yale", name: "Political Science BA (pre-law track)",
     university: "Yale University", country: "US", degreeLevel: "BA", category: "law",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Philosophy","Economics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1870,6 +1893,7 @@ const courses = [
   {
     id: "us-biology-yale", name: "Molecular, Cellular & Developmental Biology BS",
     university: "Yale University", country: "US", degreeLevel: "BS", category: "sciences",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Physics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1883,6 +1907,7 @@ const courses = [
   {
     id: "us-cs-columbia", name: "Computer Science BS",
     university: "Columbia University", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1896,6 +1921,7 @@ const courses = [
   {
     id: "us-maths-columbia", name: "Mathematics BA",
     university: "Columbia University", country: "US", degreeLevel: "BA", category: "mathematics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1909,6 +1935,7 @@ const courses = [
   {
     id: "us-economics-columbia", name: "Economics BA",
     university: "Columbia University", country: "US", degreeLevel: "BA", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1922,6 +1949,7 @@ const courses = [
   {
     id: "us-engineering-columbia", name: "Engineering & Applied Science BS",
     university: "Columbia University", country: "US", degreeLevel: "BS", category: "engineering",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: [] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1935,6 +1963,7 @@ const courses = [
   {
     id: "us-business-wharton", name: "Economics BS (Wharton School)",
     university: "University of Pennsylvania", country: "US", degreeLevel: "BS", category: "business",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science","Business"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1948,6 +1977,7 @@ const courses = [
   {
     id: "us-cs-penn", name: "Computer Science BSE (Penn Engineering)",
     university: "University of Pennsylvania", country: "US", degreeLevel: "BSE", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1961,6 +1991,7 @@ const courses = [
   {
     id: "us-economics-penn", name: "Economics BA",
     university: "University of Pennsylvania", country: "US", degreeLevel: "BA", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1974,6 +2005,7 @@ const courses = [
   {
     id: "us-cs-caltech", name: "Computer Science BS",
     university: "Caltech", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -1987,6 +2019,7 @@ const courses = [
   {
     id: "us-physics-caltech", name: "Physics BS",
     university: "Caltech", country: "US", degreeLevel: "BS", category: "sciences",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2000,6 +2033,7 @@ const courses = [
   {
     id: "us-engineering-caltech", name: "Electrical Engineering BS",
     university: "Caltech", country: "US", degreeLevel: "BS", category: "engineering",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2013,6 +2047,7 @@ const courses = [
   {
     id: "us-maths-caltech", name: "Mathematics BS",
     university: "Caltech", country: "US", degreeLevel: "BS", category: "mathematics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2026,6 +2061,7 @@ const courses = [
   {
     id: "us-cs-cmu", name: "Computer Science BS",
     university: "Carnegie Mellon University", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2039,6 +2075,7 @@ const courses = [
   {
     id: "us-engineering-cmu", name: "Electrical & Computer Engineering BS",
     university: "Carnegie Mellon University", country: "US", degreeLevel: "BS", category: "engineering",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Chemistry"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2052,6 +2089,7 @@ const courses = [
   {
     id: "us-business-cmu", name: "Business Administration BS (Tepper)",
     university: "Carnegie Mellon University", country: "US", degreeLevel: "BS", category: "business",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2065,6 +2103,7 @@ const courses = [
   {
     id: "us-maths-cmu", name: "Mathematical Sciences BS",
     university: "Carnegie Mellon University", country: "US", degreeLevel: "BS", category: "mathematics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2078,6 +2117,7 @@ const courses = [
   {
     id: "us-cs-berkeley", name: "Electrical Engineering & Computer Sciences (EECS) BS",
     university: "UC Berkeley", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2091,6 +2131,7 @@ const courses = [
   {
     id: "us-engineering-berkeley", name: "Mechanical Engineering BS",
     university: "UC Berkeley", country: "US", degreeLevel: "BS", category: "engineering",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2104,6 +2145,7 @@ const courses = [
   {
     id: "us-economics-berkeley", name: "Economics BA",
     university: "UC Berkeley", country: "US", degreeLevel: "BA", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2117,6 +2159,7 @@ const courses = [
   {
     id: "us-business-berkeley", name: "Business Administration BS (Haas)",
     university: "UC Berkeley", country: "US", degreeLevel: "BS", category: "business",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics","Business"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2130,6 +2173,7 @@ const courses = [
   {
     id: "us-maths-berkeley", name: "Mathematics BA",
     university: "UC Berkeley", country: "US", degreeLevel: "BA", category: "mathematics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2143,6 +2187,7 @@ const courses = [
   {
     id: "us-cs-michigan", name: "Computer Science BS",
     university: "University of Michigan", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2156,6 +2201,7 @@ const courses = [
   {
     id: "us-engineering-michigan", name: "Mechanical Engineering BSE",
     university: "University of Michigan", country: "US", degreeLevel: "BSE", category: "engineering",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2169,6 +2215,7 @@ const courses = [
   {
     id: "us-business-michigan", name: "Business Administration BBA (Ross)",
     university: "University of Michigan", country: "US", degreeLevel: "BBA", category: "business",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics","Business"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2182,6 +2229,7 @@ const courses = [
   {
     id: "us-economics-michigan", name: "Economics BA",
     university: "University of Michigan", country: "US", degreeLevel: "BA", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2195,6 +2243,7 @@ const courses = [
   {
     id: "us-maths-michigan", name: "Mathematics BS/BA",
     university: "University of Michigan", country: "US", degreeLevel: "BS/BA", category: "mathematics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2208,6 +2257,7 @@ const courses = [
   {
     id: "us-psychology-michigan", name: "Psychology BA",
     university: "University of Michigan", country: "US", degreeLevel: "BA", category: "psychology",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Psychology","Biology","Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2221,6 +2271,7 @@ const courses = [
   {
     id: "us-business-nyu", name: "Business (Stern School) BS",
     university: "New York University", country: "US", degreeLevel: "BS", category: "business",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics","Business"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2234,6 +2285,7 @@ const courses = [
   {
     id: "us-cs-nyu", name: "Computer Science BS",
     university: "New York University", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2247,6 +2299,7 @@ const courses = [
   {
     id: "us-law-georgetown", name: "Government BA (pre-law track)",
     university: "Georgetown University", country: "US", degreeLevel: "BA", category: "law",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Philosophy","Economics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2260,6 +2313,7 @@ const courses = [
   {
     id: "us-business-georgetown", name: "Business Administration BSBA",
     university: "Georgetown University", country: "US", degreeLevel: "BSBA", category: "business",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2273,6 +2327,7 @@ const courses = [
   {
     id: "us-cs-duke", name: "Computer Science BS",
     university: "Duke University", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2289,6 +2344,7 @@ const courses = [
     // BS/BA and Brown's AB/ScB) — the department offers both; see
     // verification.
     university: "Duke University", country: "US", degreeLevel: "BS/AB", category: "mathematics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2302,6 +2358,7 @@ const courses = [
   {
     id: "us-economics-duke", name: "Economics BA",
     university: "Duke University", country: "US", degreeLevel: "BA", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2315,6 +2372,7 @@ const courses = [
   {
     id: "us-biomedical-jhu", name: "Biomedical Engineering BS",
     university: "Johns Hopkins University", country: "US", degreeLevel: "BS", category: "engineering",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -2328,6 +2386,7 @@ const courses = [
   {
     id: "us-cs-jhu", name: "Computer Science BS",
     university: "Johns Hopkins University", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3113,6 +3172,7 @@ const courses = [
   {
     id: "us-cs-northwestern", name: "Computer Science BS",
     university: "Northwestern University", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3126,6 +3186,7 @@ const courses = [
   {
     id: "us-economics-northwestern", name: "Economics BA",
     university: "Northwestern University", country: "US", degreeLevel: "BA", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3139,6 +3200,7 @@ const courses = [
   {
     id: "us-engineering-northwestern", name: "Engineering BS (McCormick)",
     university: "Northwestern University", country: "US", degreeLevel: "BS", category: "engineering",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3152,6 +3214,7 @@ const courses = [
   {
     id: "us-cs-dartmouth", name: "Computer Science AB",
     university: "Dartmouth College", country: "US", degreeLevel: "AB", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3165,6 +3228,7 @@ const courses = [
   {
     id: "us-economics-dartmouth", name: "Economics AB",
     university: "Dartmouth College", country: "US", degreeLevel: "AB", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3178,6 +3242,7 @@ const courses = [
   {
     id: "us-cs-brown", name: "Computer Science ScB",
     university: "Brown University", country: "US", degreeLevel: "ScB", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3193,6 +3258,7 @@ const courses = [
     // AB/ScB compound is the verified truth (same pattern as Michigan's
     // BS/BA) — the concentration leads to either degree; see verification.
     university: "Brown University", country: "US", degreeLevel: "AB/ScB", category: "mathematics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3206,6 +3272,7 @@ const courses = [
   {
     id: "us-economics-brown", name: "Economics AB",
     university: "Brown University", country: "US", degreeLevel: "AB", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3219,6 +3286,7 @@ const courses = [
   {
     id: "us-cs-cornell", name: "Computer Science BS",
     university: "Cornell University", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3232,6 +3300,7 @@ const courses = [
   {
     id: "us-maths-cornell", name: "Mathematics BA",
     university: "Cornell University", country: "US", degreeLevel: "BA", category: "mathematics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3245,6 +3314,7 @@ const courses = [
   {
     id: "us-engineering-cornell", name: "Engineering BS",
     university: "Cornell University", country: "US", degreeLevel: "BS", category: "engineering",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3258,6 +3328,7 @@ const courses = [
   {
     id: "us-economics-cornell", name: "Economics BA",
     university: "Cornell University", country: "US", degreeLevel: "BA", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3271,6 +3342,7 @@ const courses = [
   {
     id: "us-business-cornell", name: "Applied Economics & Management BS (Dyson School)",
     university: "Cornell University", country: "US", degreeLevel: "BS", category: "business",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3284,6 +3356,7 @@ const courses = [
   {
     id: "us-cs-rice", name: "Computer Science BS",
     university: "Rice University", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3297,6 +3370,7 @@ const courses = [
   {
     id: "us-engineering-rice", name: "Mechanical Engineering BS",
     university: "Rice University", country: "US", degreeLevel: "BS", category: "engineering",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3310,6 +3384,7 @@ const courses = [
   {
     id: "us-economics-vanderbilt", name: "Economics BS",
     university: "Vanderbilt University", country: "US", degreeLevel: "BS", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3323,6 +3398,7 @@ const courses = [
   {
     id: "us-cs-vanderbilt", name: "Computer Science BS",
     university: "Vanderbilt University", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3336,6 +3412,7 @@ const courses = [
   {
     id: "us-business-notredame", name: "Business Administration BBA (Mendoza)",
     university: "University of Notre Dame", country: "US", degreeLevel: "BBA", category: "business",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3349,6 +3426,7 @@ const courses = [
   {
     id: "us-cs-notredame", name: "Computer Science BS",
     university: "University of Notre Dame", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3362,6 +3440,7 @@ const courses = [
   {
     id: "us-cs-washu", name: "Computer Science BS",
     university: "Washington University in St. Louis", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3375,6 +3454,7 @@ const courses = [
   {
     id: "us-business-washu", name: "Business Administration BSBA (Olin)",
     university: "Washington University in St. Louis", country: "US", degreeLevel: "BSBA", category: "business",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3388,6 +3468,7 @@ const courses = [
   {
     id: "us-business-emory", name: "Business Administration BBA (Goizueta)",
     university: "Emory University", country: "US", degreeLevel: "BBA", category: "business",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3401,6 +3482,7 @@ const courses = [
   {
     id: "us-economics-emory", name: "Economics BA",
     university: "Emory University", country: "US", degreeLevel: "BA", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3414,6 +3496,7 @@ const courses = [
   {
     id: "us-cs-ucla", name: "Computer Science BS",
     university: "UCLA", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3427,6 +3510,7 @@ const courses = [
   {
     id: "us-engineering-ucla", name: "Mechanical Engineering BS",
     university: "UCLA", country: "US", degreeLevel: "BS", category: "engineering",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3440,6 +3524,7 @@ const courses = [
   {
     id: "us-economics-ucla", name: "Economics BA",
     university: "UCLA", country: "US", degreeLevel: "BA", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3453,6 +3538,7 @@ const courses = [
   {
     id: "us-maths-ucla", name: "Mathematics BS",
     university: "UCLA", country: "US", degreeLevel: "BS", category: "mathematics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Physics","Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3466,6 +3552,7 @@ const courses = [
   {
     id: "us-psychology-ucla", name: "Psychology BA",
     university: "UCLA", country: "US", degreeLevel: "BA", category: "psychology",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Psychology","Biology","Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3479,6 +3566,7 @@ const courses = [
   {
     id: "us-business-usc", name: "Business Administration BS (Marshall)",
     university: "University of Southern California", country: "US", degreeLevel: "BS", category: "business",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3492,6 +3580,7 @@ const courses = [
   {
     id: "us-cs-usc", name: "Computer Science BS",
     university: "University of Southern California", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3505,6 +3594,7 @@ const courses = [
   {
     id: "us-cs-gatech", name: "Computer Science BS",
     university: "Georgia Tech", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3518,6 +3608,7 @@ const courses = [
   {
     id: "us-engineering-gatech", name: "Mechanical Engineering BS",
     university: "Georgia Tech", country: "US", degreeLevel: "BS", category: "engineering",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3531,6 +3622,7 @@ const courses = [
   {
     id: "us-business-uva", name: "Commerce BS (McIntire)",
     university: "University of Virginia", country: "US", degreeLevel: "BS", category: "business",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3544,6 +3636,7 @@ const courses = [
   {
     id: "us-cs-uva", name: "Computer Science BS",
     university: "University of Virginia", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3557,6 +3650,7 @@ const courses = [
   {
     id: "us-economics-uva", name: "Economics BA",
     university: "University of Virginia", country: "US", degreeLevel: "BA", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3570,6 +3664,7 @@ const courses = [
   {
     id: "us-cs-uiuc", name: "Computer Science BS",
     university: "University of Illinois Urbana-Champaign", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3583,6 +3678,7 @@ const courses = [
   {
     id: "us-engineering-uiuc", name: "Mechanical Engineering BS",
     university: "University of Illinois Urbana-Champaign", country: "US", degreeLevel: "BS", category: "engineering",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3596,6 +3692,7 @@ const courses = [
   {
     id: "us-engineering-purdue", name: "Engineering (First-Year) BS",
     university: "Purdue University", country: "US", degreeLevel: "BS", category: "engineering",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Computer_Science"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3609,6 +3706,7 @@ const courses = [
   {
     id: "us-cs-purdue", name: "Computer Science BS",
     university: "Purdue University", country: "US", degreeLevel: "BS", category: "cs",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3622,6 +3720,7 @@ const courses = [
   {
     id: "us-business-unc", name: "Business Administration BSBA (Kenan-Flagler)",
     university: "UNC Chapel Hill", country: "US", degreeLevel: "BSBA", category: "business",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Business","Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -3635,6 +3734,7 @@ const courses = [
   {
     id: "us-economics-unc", name: "Economics BA",
     university: "UNC Chapel Hill", country: "US", degreeLevel: "BA", category: "economics",
+    holisticAdmission: true,
     requirements: { essential: [], preferred: [], useful: ["Statistics"] },
     grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
     admissionTests: [],
@@ -4275,6 +4375,216 @@ const courses = [
     notes: "Co-op available across the Faculty of Engineering and Computer Science. UVic requires the full IB Diploma with a maths prerequisite (SL acceptable) rather than a published point cutoff; admission is competitive and minimums do not guarantee entry.",
   },
 
+
+  /* ══════════════════════════════════════════════════════════════
+   * IRELAND (country code "IE") — Trinity College Dublin. Loaded from research/ireland.md;
+   * non-EU direct-application route; CAO points never used.
+   * ══════════════════════════════════════════════════════════════ */
+  {
+    id: "ie-engineering-trinity", name: "Engineering",
+    university: "Trinity College Dublin", country: "IE", degreeLevel: "MAI / BAI", category: "engineering",
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: [] },
+    grades: { aLevels: "ABB", ib: 30, sgALevels: null, hkDse: "54444", ibHL: ["Mathematics_Standard"], ibHLNote: null },
+    admissionTests: [],
+    universityContext: {
+      tier: null,
+      intlFriendly: null,
+      notes: "Trinity publishes overall competitive admission bands for non-EU applicants; each course is assigned a band. Posted scores are minimums and do not guarantee admission.",
+    },
+    notes: "Non-EU direct application. Band minimum used for matching: ABB (A-Level), 30 (IB), 54444 (HKDSE). Singapore A-Level accepted but no conversion published.",
+  },
+  {
+    id: "ie-cs-trinity", name: "Computer Science",
+    university: "Trinity College Dublin", country: "IE", degreeLevel: "BA", category: "cs",
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: [] },
+    grades: { aLevels: "AAA", ib: 33, sgALevels: null, hkDse: "55544", ibHL: ["Mathematics_Standard"], ibHLNote: null },
+    admissionTests: [],
+    universityContext: {
+      tier: null,
+      intlFriendly: null,
+      notes: "Trinity publishes overall competitive admission bands for non-EU applicants; each course is assigned a band. Posted scores are minimums and do not guarantee admission.",
+    },
+    notes: "Non-EU direct application. Band minimum used for matching: AAA (A-Level), 33 (IB), 55544 (HKDSE). Singapore A-Level accepted but no conversion published.",
+  },
+  {
+    id: "ie-maths-trinity", name: "Mathematics",
+    university: "Trinity College Dublin", country: "IE", degreeLevel: "BA", category: "mathematics",
+    requirements: { essential: ["Mathematics_Standard"], preferred: [], useful: [] },
+    grades: { aLevels: "A*AA", ib: 36, sgALevels: null, hkDse: "5*5544", ibHL: ["Mathematics_Standard"], ibHLNote: null },
+    admissionTests: [],
+    universityContext: {
+      tier: null,
+      intlFriendly: null,
+      notes: "Trinity publishes overall competitive admission bands for non-EU applicants; each course is assigned a band. Posted scores are minimums and do not guarantee admission.",
+    },
+    notes: "Non-EU direct application. Band minimum used for matching: A*AA (A-Level), 36 (IB), 5*5544 (HKDSE). Singapore A-Level accepted but no conversion published.",
+  },
+  {
+    id: "ie-naturalsciences-trinity", name: "Science",
+    university: "Trinity College Dublin", country: "IE", degreeLevel: "Honours degree", category: "sciences",
+    requirements: { essential: [], preferred: [], useful: [] },
+    grades: { aLevels: "AAA", ib: 33, sgALevels: null, hkDse: "55544", ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    universityContext: {
+      tier: null,
+      intlFriendly: null,
+      notes: "Trinity publishes overall competitive admission bands for non-EU applicants; each course is assigned a band. Posted scores are minimums and do not guarantee admission.",
+    },
+    notes: "Non-EU direct application. Band minimum used for matching: AAA (A-Level), 33 (IB), 55544 (HKDSE). Singapore A-Level accepted but no conversion published.",
+  },
+  {
+    id: "ie-medicine-trinity", name: "Medicine",
+    university: "Trinity College Dublin", country: "IE", degreeLevel: "MB BCh BAO", category: "medicine",
+    requirements: { essential: [], preferred: [], useful: [] },
+    grades: { aLevels: "A*A*A", ib: 40, sgALevels: null, hkDse: "5*5*554", ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    universityContext: {
+      tier: null,
+      intlFriendly: null,
+      notes: "Trinity publishes overall competitive admission bands for non-EU applicants; each course is assigned a band. Posted scores are minimums and do not guarantee admission.",
+    },
+    notes: "Non-EU direct application. Band minimum used for matching: A*A*A (A-Level), 40 (IB), 5*5*554 (HKDSE). Singapore A-Level accepted but no conversion published.",
+  },
+  {
+    id: "ie-economics-trinity", name: "Business, Economics and Social Studies (BESS)",
+    university: "Trinity College Dublin", country: "IE", degreeLevel: "BA (BESS) / BBS", category: "economics",
+    requirements: { essential: [], preferred: [], useful: [] },
+    grades: { aLevels: "A*AA", ib: 36, sgALevels: null, hkDse: "5*5544", ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    universityContext: {
+      tier: null,
+      intlFriendly: null,
+      notes: "Trinity publishes overall competitive admission bands for non-EU applicants; each course is assigned a band. Posted scores are minimums and do not guarantee admission.",
+    },
+    notes: "Non-EU direct application. Band minimum used for matching: A*AA (A-Level), 36 (IB), 5*5544 (HKDSE). Singapore A-Level accepted but no conversion published.",
+  },
+  {
+    id: "ie-law-trinity", name: "Law",
+    university: "Trinity College Dublin", country: "IE", degreeLevel: "LLB / BA", category: "law",
+    requirements: { essential: [], preferred: [], useful: [] },
+    grades: { aLevels: "AAA", ib: 33, sgALevels: null, hkDse: "55544", ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    universityContext: {
+      tier: null,
+      intlFriendly: null,
+      notes: "Trinity publishes overall competitive admission bands for non-EU applicants; each course is assigned a band. Posted scores are minimums and do not guarantee admission.",
+    },
+    notes: "Non-EU direct application. Band minimum used for matching: AAA (A-Level), 33 (IB), 55544 (HKDSE). Singapore A-Level accepted but no conversion published.",
+  },
+  {
+    id: "ie-business-trinity", name: "Business, Economics and Social Studies (BESS)",
+    university: "Trinity College Dublin", country: "IE", degreeLevel: "BA (BESS) / BBS", category: "business",
+    requirements: { essential: [], preferred: [], useful: [] },
+    grades: { aLevels: "A*AA", ib: 36, sgALevels: null, hkDse: "5*5544", ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    universityContext: {
+      tier: null,
+      intlFriendly: null,
+      notes: "Trinity publishes overall competitive admission bands for non-EU applicants; each course is assigned a band. Posted scores are minimums and do not guarantee admission.",
+    },
+    notes: "Non-EU direct application. Band minimum used for matching: A*AA (A-Level), 36 (IB), 5*5544 (HKDSE). Singapore A-Level accepted but no conversion published.",
+  },
+  {
+    id: "ie-psychology-trinity", name: "Psychology",
+    university: "Trinity College Dublin", country: "IE", degreeLevel: "BA", category: "psychology",
+    requirements: { essential: [], preferred: [], useful: [] },
+    grades: { aLevels: "A*AA", ib: 36, sgALevels: null, hkDse: "5*5544", ibHL: [], ibHLNote: null },
+    admissionTests: [],
+    universityContext: {
+      tier: null,
+      intlFriendly: null,
+      notes: "Trinity publishes overall competitive admission bands for non-EU applicants; each course is assigned a band. Posted scores are minimums and do not guarantee admission.",
+    },
+    notes: "Non-EU direct application. Band minimum used for matching: A*AA (A-Level), 36 (IB), 5*5544 (HKDSE). Singapore A-Level accepted but no conversion published.",
+  },
+  /* ══════════════════════════════════════════════════════════════
+   * SPAIN (country code "ES") — IE University (private). Loaded from research/ie-university.md;
+   * holistic admission, so every grade field is null.
+   * ══════════════════════════════════════════════════════════════ */
+  {
+    id: "es-cs-ie", name: "Bachelor in Computer Science and Artificial Intelligence",
+    university: "IE University", country: "ES", degreeLevel: "Bachelor", category: "cs",
+    holisticAdmission: true,
+    requirements: { essential: [], preferred: [], useful: [] },
+    grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: ["IE University Admissions Test", "IE University Mathematics Assessment"],
+    universityContext: {
+      tier: null,
+      intlFriendly: null,
+      notes: "Private university (Madrid and Segovia). Holistic admission: own admissions test or SAT/ACT, online assessment, usually an interview, and the application file. No course-level grade requirement is published.",
+    },
+    notes: "English-taught. University-wide guidelines only (they do not guarantee admission): A-Level applications range AAB–A*A*A*, IB typical 34–45, US GPA 3.4. No grade is used for matching.",
+  },
+  {
+    id: "es-maths-ie", name: "Bachelor in Applied Mathematics",
+    university: "IE University", country: "ES", degreeLevel: "Bachelor", category: "mathematics",
+    holisticAdmission: true,
+    requirements: { essential: [], preferred: [], useful: [] },
+    grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: ["IE University Admissions Test", "IE University Mathematics Assessment"],
+    universityContext: {
+      tier: null,
+      intlFriendly: null,
+      notes: "Private university (Madrid and Segovia). Holistic admission: own admissions test or SAT/ACT, online assessment, usually an interview, and the application file. No course-level grade requirement is published.",
+    },
+    notes: "English-taught. University-wide guidelines only (they do not guarantee admission): A-Level applications range AAB–A*A*A*, IB typical 34–45, US GPA 3.4. No grade is used for matching.",
+  },
+  {
+    id: "es-economics-ie", name: "Bachelor in Economics",
+    university: "IE University", country: "ES", degreeLevel: "Bachelor", category: "economics",
+    holisticAdmission: true,
+    requirements: { essential: [], preferred: [], useful: [] },
+    grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: ["IE University Admissions Test", "IE University Mathematics Assessment"],
+    universityContext: {
+      tier: null,
+      intlFriendly: null,
+      notes: "Private university (Madrid and Segovia). Holistic admission: own admissions test or SAT/ACT, online assessment, usually an interview, and the application file. No course-level grade requirement is published.",
+    },
+    notes: "English-taught. University-wide guidelines only (they do not guarantee admission): A-Level applications range AAB–A*A*A*, IB typical 34–45, US GPA 3.4. No grade is used for matching.",
+  },
+  {
+    id: "es-law-ie", name: "Bachelor of Laws (LL.B.)",
+    university: "IE University", country: "ES", degreeLevel: "LLB", category: "law",
+    holisticAdmission: true,
+    requirements: { essential: [], preferred: [], useful: [] },
+    grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: ["IE University Admissions Test"],
+    universityContext: {
+      tier: null,
+      intlFriendly: null,
+      notes: "Private university (Madrid and Segovia). Holistic admission: own admissions test or SAT/ACT, online assessment, usually an interview, and the application file. No course-level grade requirement is published.",
+    },
+    notes: "English-taught. University-wide guidelines only (they do not guarantee admission): A-Level applications range AAB–A*A*A*, IB typical 34–45, US GPA 3.4. No grade is used for matching.",
+  },
+  {
+    id: "es-business-ie", name: "Bachelor in Business Administration",
+    university: "IE University", country: "ES", degreeLevel: "Bachelor", category: "business",
+    holisticAdmission: true,
+    requirements: { essential: [], preferred: [], useful: [] },
+    grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: ["IE University Admissions Test", "IE University Mathematics Assessment"],
+    universityContext: {
+      tier: null,
+      intlFriendly: null,
+      notes: "Private university (Madrid and Segovia). Holistic admission: own admissions test or SAT/ACT, online assessment, usually an interview, and the application file. No course-level grade requirement is published.",
+    },
+    notes: "English-taught. University-wide guidelines only (they do not guarantee admission): A-Level applications range AAB–A*A*A*, IB typical 34–45, US GPA 3.4. No grade is used for matching.",
+  },
+  {
+    id: "es-architecture-ie", name: "Bachelor in Architectural Studies",
+    university: "IE University", country: "ES", degreeLevel: "Bachelor", category: "architecture",
+    holisticAdmission: true,
+    requirements: { essential: [], preferred: [], useful: [] },
+    grades: { aLevels: null, ib: null, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: null },
+    admissionTests: ["IE University Admissions Test"],
+    universityContext: {
+      tier: null,
+      intlFriendly: null,
+      notes: "Private university (Madrid and Segovia). Holistic admission: own admissions test or SAT/ACT, online assessment, usually an interview, and the application file. No course-level grade requirement is published.",
+    },
+    notes: "English-taught. University-wide guidelines only (they do not guarantee admission): A-Level applications range AAB–A*A*A*, IB typical 34–45, US GPA 3.4. No grade is used for matching.",
+  },
 ];
 
 /* ──────────────────────────────────────────────────────────────
@@ -4614,6 +4924,22 @@ const courseVerification = {
   "hk-engineering-cityu": { status: "verified", source: "https://www.cityu.edu.hk/admo/admissions/jupas-admission", checkedDate: "2026-07-03", notes: "There is no single generic 'Engineering BEng' entry at CityU. College of Engineering admission is via department/major-group JUPAS codes: e.g. JS1201 Architecture and Civil Engineering (majors: BEng Architectural Eng / BEng Civil Eng / BSc Architecture and Surveying), JS1205 Electrical Engineering (majors: BEng Computer and Data Eng / Electronic and Electrical Eng / Information Eng / Microelectronics Eng), JS1207 Mechanical Engineering, JS1210 Materials Science and Engineering, JS1216 Intelligent Manufacturing Engineering, JS1217 PRIME pathway; some codes admit to a department with undeclared major (major chosen after Year 1). INDICATIVE 2025 JUPAS scores (programme-specific WEIGHTED formulas, not comparable to Best-5 numbers): JS1205 weighted median 39 (LQ 37); JS1207 weighted median 34.5 (LQ 34). International entry: general entrance requirements (3 GCE A-Levels at E, or IB Diploma); no engineering-specific IB total published. Stored ibHLNote '655 at HL' unsourced — removed." },
   "hk-business-cityu": { status: "verified", source: "https://www.cb.cityu.edu.hk/programmes/undergraduate-programmes/admission-requirements", checkedDate: "2026-07-03", notes: "There is no single generic 'Business Administration BBA' programme. CityU College of Business admits by department/programme-based JUPAS codes: JS1001 BBA Global Business (flagship), JS1002 BBA Accountancy, JS1005 BBA Management, JS1007 BBA Marketing, JS1012 Department of Economics and Finance (majors: BBA Business Economics / BBA Finance), JS1000 BSc Computational Finance and Financial Technology (Maths Level 4 required), etc.; department-based codes let students enter a major after Year 1. INDICATIVE 2026 JUPAS weighted scores: JS1005 BBA Management median 22 (LQ 21.5); JS1001 BBA Global Business median 29.5 (LQ 28) — flagship, much higher. International entry: general entrance requirements (3 GCE A-Levels at E or IB Diploma); no BBA-wide IB total published." },
   "hk-economics-cityu": { status: "verified", source: "https://www.cityu.edu.hk/admo/programmes/economics-and-finance-majors-bba-business-economics-bba-finance", checkedDate: "2026-07-03", notes: "Remapped from \"Economics BSocSci\" (CityU does not offer Economics as a BSocSc degree. The real programme is BBA Business Economics, entered via the department-based JS1012 Economics and Finance route (major declared after Year 1), confirmed on cityu.edu.hk/admo and jupas.edu.hk.). Phantom as stored: CityU does NOT offer an 'Economics BSocSci'. The real economics programme is BBA Business Economics in the Department of Economics and Finance (College of Business). Entry route: JUPAS JS1012 'Economics and Finance' — admission to the department, major (Business Economics or Finance) chosen after Year 1 (top 40% of students get free choice of major). INDICATIVE published score: 2025 JUPAS median 21.5 (Best 5 including Mathematics, equal weighting). International entry: general entrance requirements (3 GCE A-Levels at E or IB Diploma); no programme-specific IB total published. Stored maths emphasis is consistent (score formula requires Mathematics in Best 5)." },
+  // Ireland (IE) and Spain (ES), loaded 2026-10-21 from the research files.
+  "ie-engineering-trinity": { status: "partial", source: "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf", checkedDate: "2026-10-21", notes: "Loaded 2026-10-21 from research/ireland.md (non-EU direct-application route; CAO points not used). Grades are Trinity competitive-band minimums from the brochure file named 2027, which still reads \"Applicants seeking admission in 2026\"; Singapore A-Level conversion not published; US applicants assessed on GPA with SAT/ACT optional and AP only as supporting evidence." },
+  "ie-cs-trinity": { status: "partial", source: "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf", checkedDate: "2026-10-21", notes: "Loaded 2026-10-21 from research/ireland.md (non-EU direct-application route; CAO points not used). Grades are Trinity competitive-band minimums from the brochure file named 2027, which still reads \"Applicants seeking admission in 2026\"; Singapore A-Level conversion not published; US applicants assessed on GPA with SAT/ACT optional and AP only as supporting evidence." },
+  "ie-maths-trinity": { status: "partial", source: "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf", checkedDate: "2026-10-21", notes: "Loaded 2026-10-21 from research/ireland.md (non-EU direct-application route; CAO points not used). Grades are Trinity competitive-band minimums from the brochure file named 2027, which still reads \"Applicants seeking admission in 2026\"; Singapore A-Level conversion not published; US applicants assessed on GPA with SAT/ACT optional and AP only as supporting evidence." },
+  "ie-naturalsciences-trinity": { status: "partial", source: "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf", checkedDate: "2026-10-21", notes: "Loaded 2026-10-21 from research/ireland.md (non-EU direct-application route; CAO points not used). Grades are Trinity competitive-band minimums from the brochure file named 2027, which still reads \"Applicants seeking admission in 2026\"; Singapore A-Level conversion not published; US applicants assessed on GPA with SAT/ACT optional and AP only as supporting evidence." },
+  "ie-medicine-trinity": { status: "partial", source: "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf", checkedDate: "2026-10-21", notes: "Loaded 2026-10-21 from research/ireland.md (non-EU direct-application route; CAO points not used). Grades are Trinity competitive-band minimums from the brochure file named 2027, which still reads \"Applicants seeking admission in 2026\"; Singapore A-Level conversion not published; US applicants assessed on GPA with SAT/ACT optional and AP only as supporting evidence." },
+  "ie-economics-trinity": { status: "partial", source: "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf", checkedDate: "2026-10-21", notes: "Loaded 2026-10-21 from research/ireland.md (non-EU direct-application route; CAO points not used). Grades are Trinity competitive-band minimums from the brochure file named 2027, which still reads \"Applicants seeking admission in 2026\"; Singapore A-Level conversion not published; US applicants assessed on GPA with SAT/ACT optional and AP only as supporting evidence." },
+  "ie-law-trinity": { status: "partial", source: "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf", checkedDate: "2026-10-21", notes: "Loaded 2026-10-21 from research/ireland.md (non-EU direct-application route; CAO points not used). Grades are Trinity competitive-band minimums from the brochure file named 2027, which still reads \"Applicants seeking admission in 2026\"; Singapore A-Level conversion not published; US applicants assessed on GPA with SAT/ACT optional and AP only as supporting evidence." },
+  "ie-business-trinity": { status: "partial", source: "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf", checkedDate: "2026-10-21", notes: "Loaded 2026-10-21 from research/ireland.md (non-EU direct-application route; CAO points not used). Grades are Trinity competitive-band minimums from the brochure file named 2027, which still reads \"Applicants seeking admission in 2026\"; Singapore A-Level conversion not published; US applicants assessed on GPA with SAT/ACT optional and AP only as supporting evidence." },
+  "ie-psychology-trinity": { status: "partial", source: "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf", checkedDate: "2026-10-21", notes: "Loaded 2026-10-21 from research/ireland.md (non-EU direct-application route; CAO points not used). Grades are Trinity competitive-band minimums from the brochure file named 2027, which still reads \"Applicants seeking admission in 2026\"; Singapore A-Level conversion not published; US applicants assessed on GPA with SAT/ACT optional and AP only as supporting evidence." },
+  "es-cs-ie": { status: "partial", source: "https://www.ie.edu/university/admission/access-to-university/freshmen-students/", checkedDate: "2026-10-21", notes: "Loaded 2026-10-21 from research/ie-university.md. Holistic admission; no course-level grade requirement published, so every engine grade field is null. University-wide guidelines are shown only as labelled panel detail." },
+  "es-maths-ie": { status: "partial", source: "https://www.ie.edu/university/admission/access-to-university/freshmen-students/", checkedDate: "2026-10-21", notes: "Loaded 2026-10-21 from research/ie-university.md. Holistic admission; no course-level grade requirement published, so every engine grade field is null. University-wide guidelines are shown only as labelled panel detail." },
+  "es-economics-ie": { status: "partial", source: "https://www.ie.edu/university/admission/access-to-university/freshmen-students/", checkedDate: "2026-10-21", notes: "Loaded 2026-10-21 from research/ie-university.md. Holistic admission; no course-level grade requirement published, so every engine grade field is null. University-wide guidelines are shown only as labelled panel detail." },
+  "es-law-ie": { status: "partial", source: "https://www.ie.edu/university/admission/access-to-university/freshmen-students/", checkedDate: "2026-10-21", notes: "Loaded 2026-10-21 from research/ie-university.md. Holistic admission; no course-level grade requirement published, so every engine grade field is null. University-wide guidelines are shown only as labelled panel detail." },
+  "es-business-ie": { status: "partial", source: "https://www.ie.edu/university/admission/access-to-university/freshmen-students/", checkedDate: "2026-10-21", notes: "Loaded 2026-10-21 from research/ie-university.md. Holistic admission; no course-level grade requirement published, so every engine grade field is null. University-wide guidelines are shown only as labelled panel detail." },
+  "es-architecture-ie": { status: "partial", source: "https://www.ie.edu/university/admission/access-to-university/freshmen-students/", checkedDate: "2026-10-21", notes: "Loaded 2026-10-21 from research/ie-university.md. Holistic admission; no course-level grade requirement published, so every engine grade field is null. University-wide guidelines are shown only as labelled panel detail." },
 };
 
 courses.forEach(function (c) {

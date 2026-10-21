@@ -43,8 +43,8 @@ const state = {
 };
 
 /* ─── Constants ─────────────────────────────────────────────────── */
-const COUNTRY_FLAGS  = { UK:'🇬🇧', US:'🇺🇸', CA:'🇨🇦', SG:'🇸🇬', HK:'🇭🇰' };
-const COUNTRY_LABELS = { UK:'UK',  US:'US',  CA:'Canada', SG:'Singapore', HK:'Hong Kong' };
+const COUNTRY_FLAGS  = { UK:'🇬🇧', US:'🇺🇸', CA:'🇨🇦', SG:'🇸🇬', HK:'🇭🇰', IE:'🇮🇪', ES:'🇪🇸' };
+const COUNTRY_LABELS = { UK:'UK',  US:'US',  CA:'Canada', SG:'Singapore', HK:'Hong Kong', IE:'Ireland', ES:'Spain' };
 
 // Minimum number of subjects required before results can show as GREEN.
 // Below this threshold results are capped at AMBER — no university admits on 1-2 subjects alone.
@@ -2558,8 +2558,8 @@ function renderApplyingPanel() {
   const diagLine = bal.classified > 0
     ? `Your list: ${bal.countsBits.join(' · ')}`
     : `Your list: ${savedCourses.length} course${savedCourses.length === 1 ? '' : 's'}, unclassified`;
-  const usNote = savedCourses.some(c => c.country === 'US')
-    ? `<p class="applying-diag__aside">${esc(US_NO_SAFETY_NOTE)}</p>` : '';
+  const usNote = savedCourses.some(c => c.holisticAdmission)
+    ? `<p class="applying-diag__aside">${esc(holisticNoSafetyNote(savedCourses))}</p>` : '';
 
   const diagnostic = `
     <section class="applying-diag" aria-label="Your list at a glance">
@@ -2670,7 +2670,7 @@ function buildCounselorSummaryHtml() {
   const reqFor = c => {
     const raw = gradeKey ? c.grades?.[gradeKey] : null;
     if (raw != null && raw !== '') return String(raw);
-    if (c.country === 'US') return 'holistic — no fixed offer';
+    if (c.holisticAdmission) return 'holistic — no fixed offer';
     return 'not published';
   };
   let shortlistHtml;
@@ -2695,8 +2695,8 @@ function buildCounselorSummaryHtml() {
     shortlistHtml += `
       <p class="cs-counsel"><strong>${esc(bal.classified > 0 ? `Your list: ${bal.countsBits.join(' · ')}` : `Your list: ${saved.length} course${saved.length === 1 ? '' : 's'}, unclassified`)}</strong>
         ${esc(bal.advice)}</p>`;
-    if (saved.some(c => c.country === 'US')) {
-      shortlistHtml += `<p class="cs-none">${esc(US_NO_SAFETY_NOTE)}</p>`;
+    if (saved.some(c => c.holisticAdmission)) {
+      shortlistHtml += `<p class="cs-none">${esc(holisticNoSafetyNote(saved))}</p>`;
     }
   }
 
@@ -4394,15 +4394,16 @@ function shortlistRequirementsSummary(saved) {
   const key      = SYSTEM_GRADE_KEY[system];
   const sysLabel = SYSTEM_SHORT_LABELS[system] ?? 'grade';
 
-  // US courses publish no fixed offer in ANY system — holistic admissions.
-  const holistic   = saved.filter(c => c.country === 'US' && !(key && c.grades?.[key]));
+  // Holistic-admission courses (all US, IE University) publish no fixed offer in any system.
+  const holistic   = saved.filter(c => c.holisticAdmission && !(key && c.grades?.[key]));
   const rest       = saved.filter(c => !holistic.includes(c));
   const withFigure = key ? rest.filter(c => c.grades?.[key] != null && c.grades[key] !== '') : [];
   const noFigure   = rest.length - withFigure.length;
 
   const notes = [];
   if (holistic.length) {
-    notes.push(`${holistic.length} US course${holistic.length === 1 ? ' uses' : 's use'} holistic admissions — no fixed offer`);
+    const usOnly = holistic.every(c => c.country === 'US');
+    notes.push(`${holistic.length} ${usOnly ? 'US ' : ''}course${holistic.length === 1 ? ' uses' : 's use'} holistic admissions — no fixed offer`);
   }
   if (withFigure.length && noFigure > 0) {
     notes.push(`${noFigure} course${noFigure === 1 ? " doesn't" : " don't"} publish a ${sysLabel} figure`);
@@ -4561,17 +4562,21 @@ function hasValidGrade(system, grade) {
 // by construction rather than by remembering.
 function shortlistVerdict(course, system, predictedGrade, profile) {
   const v = shortlistVerdictRaw(course, system, predictedGrade, profile);
-  return (course.country === 'US' && v === 'safety') ? 'match' : v;
+  return (course.holisticAdmission && v === 'safety') ? 'match' : v;
 }
 
 // True when the honest verdict was held back by the US holistic rule — the
 // surfaces use this to show the quiet explanatory note.
 function usSafetyCapped(course, system, predictedGrade, profile) {
-  return course.country === 'US'
+  return !!course.holisticAdmission
     && shortlistVerdictRaw(course, system, predictedGrade, profile) === 'safety';
 }
 
 const US_NO_SAFETY_NOTE = 'US admissions are holistic — no course is a guaranteed safety.';
+// Holistic admission (course.holisticAdmission — all US courses and IE University):
+// no course is a safety. US-only lists keep the US sentence exactly.
+const HOLISTIC_NO_SAFETY_NOTE = 'Holistic admissions — no course is a guaranteed safety.';
+const holisticNoSafetyNote = list => list.filter(c => c.holisticAdmission).every(c => c.country === 'US') ? US_NO_SAFETY_NOTE : HOLISTIC_NO_SAFETY_NOTE;
 
 function shortlistVerdictRaw(course, system, predictedGrade, profile) {
   // Same all-or-nothing rule as Check: reach/match/safety rests on the same
@@ -4593,7 +4598,7 @@ function shortlistVerdictRaw(course, system, predictedGrade, profile) {
   if (!gradeSet) return 'unknown';
 
   // Elite-tier holistic US courses are reaches for everyone with grades set.
-  if (course.country === 'US' && ELITE_HOLISTIC_TIERS.has(course.universityContext?.tier)) return 'reach';
+  if (course.holisticAdmission && ELITE_HOLISTIC_TIERS.has(course.universityContext?.tier)) return 'reach';
 
   if (system === 'UK_A_Level' || system === 'SG_A_Level' || system === 'HK_DSE') {
     const gradeStr = course.grades?.[SYSTEM_GRADE_KEY[system]];
@@ -4694,8 +4699,8 @@ function buildShortlistCard(course, studentTags, hasSubjects) {
   // verdict, say why "Safety" is never one of the options. (The cap in
   // shortlistVerdict is the structural guarantee; this is the sentence that
   // tells the student what it means.)
-  const usCapNote = (course.country === 'US' && vMeta)
-    ? `<p class="card-us-nosafety">${esc(US_NO_SAFETY_NOTE)}</p>` : '';
+  const usCapNote = (course.holisticAdmission && vMeta)
+    ? `<p class="card-us-nosafety">${esc(holisticNoSafetyNote([course]))}</p>` : '';
 
   const card = document.createElement('div');
   card.className = 'course-card course-card--saved';
@@ -6582,7 +6587,7 @@ function buildRequirementsText(course) {
 
   // US admissions is holistic — there are no hard subject requirements, so
   // label the essential line accordingly instead of the misleading "Required".
-  const essentialLabel = course.country === 'US'
+  const essentialLabel = course.holisticAdmission
     ? 'Recommended for competitive applicants:'
     : 'Required:';
 
@@ -8051,7 +8056,7 @@ function renderFieldOverview(fieldId) {
       ? `Strong courses typically ask for high grades — around ${parts.join(', ')}, or equivalent in other systems.`
       : neutralGrade;
   }
-  const usShare = catCourses.length ? catCourses.filter(c => c.country === 'US').length / catCourses.length : 0;
+  const usShare = catCourses.length ? catCourses.filter(c => c.holisticAdmission).length / catCourses.length : 0;
   const holisticLine = usShare >= 0.3
     ? `Many courses here (especially US) use holistic admissions — grades are one factor alongside essays, activities, and recommendations.`
     : '';

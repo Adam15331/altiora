@@ -8,16 +8,16 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 185 | 19 | 116 | 0 |
-| English language | 195 | 5 | 120 | 0 |
-| Admissions tests | 288 | 22 | 10 | 0 |
-| Subject prerequisites | 166 | 144 | 10 | 0 |
-| A-Level requirements | 171 | 62 | 83 | 4 |
-| IB requirements | 223 | 71 | 22 | 4 |
-| Other qualifications | 178 | 42 | 100 | 0 |
-| Other requirements | 194 | 12 | 114 | 0 |
+| SAT / ACT | 191 | 28 | 116 | 0 |
+| English language | 210 | 5 | 120 | 0 |
+| Admissions tests | 302 | 23 | 10 | 0 |
+| Subject prerequisites | 175 | 149 | 11 | 0 |
+| A-Level requirements | 180 | 68 | 83 | 4 |
+| IB requirements | 232 | 77 | 22 | 4 |
+| Other qualifications | 178 | 57 | 100 | 0 |
+| Other requirements | 209 | 12 | 114 | 0 |
 
-320 courses × 8 categories = 2560 requirement entries.
+335 courses × 8 categories = 2680 requirement entries.
 
 ## Partly verified
 
@@ -402,6 +402,48 @@ Shown with a "Partly verified" badge and the note below.
 | `ca-medicine-dalhousie` | IB requirements | The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
 | `ca-engineering-dalhousie` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-engineering-dalhousie` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
+| `ie-engineering-trinity` | SAT / ACT | The brochure (content labelled for 2026 admission) gives SAT/ACT plus GPA bands; the USA page for 2027 entry lets applicants be assessed without standardised tests. Both shown; neither is a guaranteed threshold. |
+| `ie-engineering-trinity` | Other qualifications | Singapore A-Level course grade not published; AP has no published grade minimum. |
+| `ie-cs-trinity` | SAT / ACT | The brochure (content labelled for 2026 admission) gives SAT/ACT plus GPA bands; the USA page for 2027 entry lets applicants be assessed without standardised tests. Both shown; neither is a guaranteed threshold. |
+| `ie-cs-trinity` | Other qualifications | Singapore A-Level course grade not published; AP has no published grade minimum. |
+| `ie-maths-trinity` | SAT / ACT | The brochure (content labelled for 2026 admission) gives SAT/ACT plus GPA bands; the USA page for 2027 entry lets applicants be assessed without standardised tests. Both shown; neither is a guaranteed threshold. |
+| `ie-maths-trinity` | Other qualifications | Singapore A-Level course grade not published; AP has no published grade minimum. |
+| `ie-naturalsciences-trinity` | SAT / ACT | The brochure (content labelled for 2026 admission) gives SAT/ACT plus GPA bands; the USA page for 2027 entry lets applicants be assessed without standardised tests. Both shown; neither is a guaranteed threshold. |
+| `ie-naturalsciences-trinity` | Other qualifications | Singapore A-Level course grade not published; AP has no published grade minimum. |
+| `ie-medicine-trinity` | SAT / ACT | Whether US applicants can be admitted to Medicine on a US High School Diploma is not stated; 'n/a' is unexplained. |
+| `ie-medicine-trinity` | Admissions tests | The course page states HPAT only for EU/CAO applicants; it is silent on any test for non-EU applicants. No HPAT code added because it is not stated for the non-EU route. |
+| `ie-medicine-trinity` | Other qualifications | Singapore A-Level course grade not published; AP has no published grade minimum. |
+| `ie-economics-trinity` | SAT / ACT | The brochure (content labelled for 2026 admission) gives SAT/ACT plus GPA bands; the USA page for 2027 entry lets applicants be assessed without standardised tests. Both shown; neither is a guaranteed threshold. |
+| `ie-economics-trinity` | Other qualifications | Singapore A-Level course grade not published; AP has no published grade minimum. |
+| `ie-law-trinity` | SAT / ACT | The brochure (content labelled for 2026 admission) gives SAT/ACT plus GPA bands; the USA page for 2027 entry lets applicants be assessed without standardised tests. Both shown; neither is a guaranteed threshold. |
+| `ie-law-trinity` | Other qualifications | Singapore A-Level course grade not published; AP has no published grade minimum. |
+| `ie-business-trinity` | SAT / ACT | The brochure (content labelled for 2026 admission) gives SAT/ACT plus GPA bands; the USA page for 2027 entry lets applicants be assessed without standardised tests. Both shown; neither is a guaranteed threshold. |
+| `ie-business-trinity` | Other qualifications | Singapore A-Level course grade not published; AP has no published grade minimum. |
+| `ie-psychology-trinity` | SAT / ACT | The brochure (content labelled for 2026 admission) gives SAT/ACT plus GPA bands; the USA page for 2027 entry lets applicants be assessed without standardised tests. Both shown; neither is a guaranteed threshold. |
+| `ie-psychology-trinity` | Other qualifications | Singapore A-Level course grade not published; AP has no published grade minimum. |
+| `es-cs-ie` | Subject prerequisites | Listed under 'Required Math Competency' but IE states these are 'purely advisory' guidance and an application is still considered if a subject is unavailable at the school. |
+| `es-cs-ie` | A-Level requirements | No grade minimum or typical offer is published; AAB–A*A*A* is the range of applications, not a requirement. Spanish legal access also needs five GCSE/IGCSE passes at A–C (4–9). Holistic scoring-system admission. |
+| `es-cs-ie` | IB requirements | 34–45 and 36 describe admitted students, not a minimum; no overallScore recorded. Full IB Diploma required (Certificate not legally accepted in Spain); UNED university-access accreditation. |
+| `es-cs-ie` | Other qualifications | Spanish homologation for the US diploma requires official transcripts for Grades 10–12. Singapore A-Level and HKDSE are not mentioned on IE's requirements page. |
+| `es-maths-ie` | Subject prerequisites | Listed under 'Required Math Competency' but IE states these are 'purely advisory' guidance and an application is still considered if a subject is unavailable at the school. |
+| `es-maths-ie` | A-Level requirements | No grade minimum or typical offer is published; AAB–A*A*A* is the range of applications, not a requirement. Spanish legal access also needs five GCSE/IGCSE passes at A–C (4–9). Holistic scoring-system admission. |
+| `es-maths-ie` | IB requirements | 34–45 and 36 describe admitted students, not a minimum; no overallScore recorded. Full IB Diploma required (Certificate not legally accepted in Spain); UNED university-access accreditation. |
+| `es-maths-ie` | Other qualifications | Spanish homologation for the US diploma requires official transcripts for Grades 10–12. Singapore A-Level and HKDSE are not mentioned on IE's requirements page. |
+| `es-economics-ie` | Subject prerequisites | Listed under 'Required Math Competency' but IE states these are 'purely advisory' guidance and an application is still considered if a subject is unavailable at the school. |
+| `es-economics-ie` | A-Level requirements | No grade minimum or typical offer is published; AAB–A*A*A* is the range of applications, not a requirement. Spanish legal access also needs five GCSE/IGCSE passes at A–C (4–9). Holistic scoring-system admission. |
+| `es-economics-ie` | IB requirements | 34–45 and 36 describe admitted students, not a minimum; no overallScore recorded. Full IB Diploma required (Certificate not legally accepted in Spain); UNED university-access accreditation. |
+| `es-economics-ie` | Other qualifications | Spanish homologation for the US diploma requires official transcripts for Grades 10–12. Singapore A-Level and HKDSE are not mentioned on IE's requirements page. |
+| `es-law-ie` | A-Level requirements | No grade minimum or typical offer is published; AAB–A*A*A* is the range of applications, not a requirement. Spanish legal access also needs five GCSE/IGCSE passes at A–C (4–9). Holistic scoring-system admission. |
+| `es-law-ie` | IB requirements | 34–45 and 36 describe admitted students, not a minimum; no overallScore recorded. Full IB Diploma required (Certificate not legally accepted in Spain); UNED university-access accreditation. |
+| `es-law-ie` | Other qualifications | Spanish homologation for the US diploma requires official transcripts for Grades 10–12. Singapore A-Level and HKDSE are not mentioned on IE's requirements page. |
+| `es-business-ie` | Subject prerequisites | Listed under 'Required Math Competency' but IE states these are 'purely advisory' guidance and an application is still considered if a subject is unavailable at the school. |
+| `es-business-ie` | A-Level requirements | No grade minimum or typical offer is published; AAB–A*A*A* is the range of applications, not a requirement. Spanish legal access also needs five GCSE/IGCSE passes at A–C (4–9). Holistic scoring-system admission. |
+| `es-business-ie` | IB requirements | 34–45 and 36 describe admitted students, not a minimum; no overallScore recorded. Full IB Diploma required (Certificate not legally accepted in Spain); UNED university-access accreditation. |
+| `es-business-ie` | Other qualifications | Spanish homologation for the US diploma requires official transcripts for Grades 10–12. Singapore A-Level and HKDSE are not mentioned on IE's requirements page. |
+| `es-architecture-ie` | Subject prerequisites | Listed under 'Required Math Competency' but IE states these are 'purely advisory' guidance and an application is still considered if a subject is unavailable at the school. |
+| `es-architecture-ie` | A-Level requirements | No grade minimum or typical offer is published; AAB–A*A*A* is the range of applications, not a requirement. Spanish legal access also needs five GCSE/IGCSE passes at A–C (4–9). Holistic scoring-system admission. |
+| `es-architecture-ie` | IB requirements | 34–45 and 36 describe admitted students, not a minimum; no overallScore recorded. Full IB Diploma required (Certificate not legally accepted in Spain); UNED university-access accreditation. |
+| `es-architecture-ie` | Other qualifications | Spanish homologation for the US diploma requires official transcripts for Grades 10–12. Singapore A-Level and HKDSE are not mentioned on IE's requirements page. |
 
 ## Previously recorded values awaiting verification
 
@@ -989,6 +1031,45 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `us-business-unc` | Subject prerequisites | Official source lists UNC System minimum high-school course units (English 4, Math 4, Science 3, Social science 2, plus 2 additional); data/courseRequirements.js holds none. Owner decision. |
 | `us-economics-unc` | SAT / ACT | data/courseRequirements.js records usAdmissions.test "optional" for this course; the official policy is test-optional only for applicants with a weighted GPA of 2.8+ (ACT 17+/SAT 930+ required below that). Owner decision — not changed here. |
 | `us-economics-unc` | Subject prerequisites | Official source lists UNC System minimum high-school course units (English 4, Math 4, Science 3, Social science 2, plus 2 additional); data/courseRequirements.js holds none. Owner decision. |
+| `ie-engineering-trinity` | A-Level requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. An older, undated A-Level quick guide (TCD_NonEU_ALevel_Quick_Guide.pdf) lists different grades (e.g. Medicine AAAA); its values are not used — the brochure bands are. |
+| `ie-engineering-trinity` | IB requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `ie-engineering-trinity` | Other qualifications | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `ie-cs-trinity` | A-Level requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. An older, undated A-Level quick guide (TCD_NonEU_ALevel_Quick_Guide.pdf) lists different grades (e.g. Medicine AAAA); its values are not used — the brochure bands are. |
+| `ie-cs-trinity` | IB requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `ie-cs-trinity` | Other qualifications | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `ie-maths-trinity` | A-Level requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. An older, undated A-Level quick guide (TCD_NonEU_ALevel_Quick_Guide.pdf) lists different grades (e.g. Medicine AAAA); its values are not used — the brochure bands are. |
+| `ie-maths-trinity` | IB requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `ie-maths-trinity` | Other qualifications | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `ie-naturalsciences-trinity` | A-Level requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. An older, undated A-Level quick guide (TCD_NonEU_ALevel_Quick_Guide.pdf) lists different grades (e.g. Medicine AAAA); its values are not used — the brochure bands are. |
+| `ie-naturalsciences-trinity` | IB requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `ie-naturalsciences-trinity` | Other qualifications | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `ie-medicine-trinity` | A-Level requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. An older, undated A-Level quick guide (TCD_NonEU_ALevel_Quick_Guide.pdf) lists different grades (e.g. Medicine AAAA); its values are not used — the brochure bands are. |
+| `ie-medicine-trinity` | IB requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `ie-medicine-trinity` | Other qualifications | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `ie-economics-trinity` | A-Level requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. An older, undated A-Level quick guide (TCD_NonEU_ALevel_Quick_Guide.pdf) lists different grades (e.g. Medicine AAAA); its values are not used — the brochure bands are. |
+| `ie-economics-trinity` | IB requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `ie-economics-trinity` | Other qualifications | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `ie-law-trinity` | A-Level requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. An older, undated A-Level quick guide (TCD_NonEU_ALevel_Quick_Guide.pdf) lists different grades (e.g. Medicine AAAA); its values are not used — the brochure bands are. |
+| `ie-law-trinity` | IB requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `ie-law-trinity` | Other qualifications | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `ie-business-trinity` | A-Level requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. An older, undated A-Level quick guide (TCD_NonEU_ALevel_Quick_Guide.pdf) lists different grades (e.g. Medicine AAAA); its values are not used — the brochure bands are. |
+| `ie-business-trinity` | IB requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `ie-business-trinity` | Other qualifications | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `ie-psychology-trinity` | A-Level requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. An older, undated A-Level quick guide (TCD_NonEU_ALevel_Quick_Guide.pdf) lists different grades (e.g. Medicine AAAA); its values are not used — the brochure bands are. |
+| `ie-psychology-trinity` | IB requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `ie-psychology-trinity` | Other qualifications | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `es-cs-ie` | A-Level requirements | Do not convert the AAB–A*A*A* application range into a typicalOffer; IE publishes no A-Level grade requirement. |
+| `es-cs-ie` | IB requirements | Do not record 34 or 36 as an overallScore; IE publishes no IB minimum. |
+| `es-maths-ie` | A-Level requirements | Do not convert the AAB–A*A*A* application range into a typicalOffer; IE publishes no A-Level grade requirement. |
+| `es-maths-ie` | IB requirements | Do not record 34 or 36 as an overallScore; IE publishes no IB minimum. |
+| `es-economics-ie` | A-Level requirements | Do not convert the AAB–A*A*A* application range into a typicalOffer; IE publishes no A-Level grade requirement. |
+| `es-economics-ie` | IB requirements | Do not record 34 or 36 as an overallScore; IE publishes no IB minimum. |
+| `es-law-ie` | A-Level requirements | Do not convert the AAB–A*A*A* application range into a typicalOffer; IE publishes no A-Level grade requirement. |
+| `es-law-ie` | IB requirements | Do not record 34 or 36 as an overallScore; IE publishes no IB minimum. |
+| `es-business-ie` | A-Level requirements | Do not convert the AAB–A*A*A* application range into a typicalOffer; IE publishes no A-Level grade requirement. |
+| `es-business-ie` | IB requirements | Do not record 34 or 36 as an overallScore; IE publishes no IB minimum. |
+| `es-architecture-ie` | A-Level requirements | Do not convert the AAB–A*A*A* application range into a typicalOffer; IE publishes no A-Level grade requirement. |
+| `es-architecture-ie` | IB requirements | Do not record 34 or 36 as an overallScore; IE publishes no IB minimum. |
 
 ## Values withheld from the panel
 
@@ -1148,3 +1229,4 @@ category — check the official source; never copy a hint in as a value.
 | `ca-law-york` | York University | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `ca-law-uvic` | University of Victoria | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `ca-cs-uvic` | University of Victoria | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `es-law-ie` | IE University | Subject prerequisites |  |

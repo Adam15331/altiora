@@ -15,7 +15,11 @@ const config = loadConfig();
 const courses = loadCourses();
 const byId = new Map(courses.map(c => [c.id, c]));
 const cycle = loadCycle('2027');
-const TODAY = '2026-10-19';
+// The validator's "today": the newest check date in the data (never before
+// 2026-10-19), so tests are deterministic and newly loaded records are never "in the future".
+const TODAY = Object.values(cycle.courses)
+  .flatMap(r => Object.values(r).map(e => e.lastVerified ?? ''))
+  .reduce((a, b) => (b > a ? b : a), '2026-10-19');
 const SRC = [{ url: 'https://www.example.ac.uk/course', label: 'Official source' }];
 // A frozen copy of uk-medicine-oxford's A-Level and IB rows as verified on
 // 23 Jun 2026: the rendering tests below need fixed values, while the real
@@ -47,7 +51,7 @@ test('every course has an A-Level and an IB entry with a status', () => {
   }
 });
 
-test('A-Level and IB entries agree with the matching engine for all 320 courses', () => {
+test('A-Level and IB entries agree with the matching engine for every course', () => {
   for (const c of courses) {
     for (const cat of /** @type {const} */ (['aLevel', 'ib'])) {
       assert.deepEqual(engineDisagreements(cat, cycle.courses[c.id][cat], c), [], `${c.id} › ${cat}`);
@@ -226,7 +230,9 @@ test('the validator fails a course with no A-Level or IB entry, and a config wit
   const noIb = { ...config, categories: config.categories.filter(c => c.id !== 'ib') };
   assert.match(validateConfig(noIb).map(p => p.message).join(), /IB category \("ib"\) is missing/);
   assert.deepEqual(validateConfig(config), []);
-  assert.ok(byId.size === 320);
+  // Count read from the data, not typed: ids are unique and every course has one cycle record.
+  assert.equal(byId.size, courses.length);
+  assert.equal(Object.keys(cycle.courses).length, courses.length);
 });
 
 test('new cycle: A-Level, IB and not-applicable rows draft as unverified, keeping the old value', () => {

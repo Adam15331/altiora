@@ -15,7 +15,11 @@ const view = require('../requirements-view.js');
 const config = loadConfig();
 const courses = loadCourses();
 const cycle = loadCycle(config.currentCycle);
-const TODAY = '2026-10-19';
+// The validator's "today": the newest check date in the data (never before
+// 2026-10-19), so tests are deterministic and newly loaded records are never "in the future".
+const TODAY = Object.values(cycle.courses)
+  .flatMap(r => Object.values(r).map(e => e.lastVerified ?? ''))
+  .reduce((a, b) => (b > a ? b : a), '2026-10-19');
 const SRC = [{ url: 'https://www.example.ac.uk/course', label: 'Official source' }];
 
 /** @param {any} entry */
