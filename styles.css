@@ -5761,3 +5761,34 @@ button, input, select, textarea { font-family: inherit; }
 /* Group-header counts: de-emphasised by weight only — fading them with
  * opacity dropped the coloured headers below 3:1. */
 .results-group__count { font-weight: var(--weight-regular); }
+
+/* ═══════════════════════════════════════════════════════════════
+ * FIELD AND COUNTRY SELECTORS (Check screen) — prominent
+ * Both questions are section headings in the display face (they reuse
+ * .plan-section-head); both pill rows share one size with a 44px touch
+ * target, and wrap — never scroll sideways — at every width. Placed
+ * last so it overrides the earlier phone rules that shrank the country
+ * pills and made their row scroll.
+ * ═══════════════════════════════════════════════════════════════ */
+.selector-heading { margin: 0; }
+.category-picker-section .subject-picker-header { flex-wrap: wrap; align-items: baseline; row-gap: var(--space-1); }
+.country-filter-section { margin-bottom: var(--space-6); }
+.country-filter-section .selector-heading { margin-bottom: var(--space-3); }
+.category-picker,
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  max-width: 100%;
+  overflow: visible;
+  padding-bottom: 0;
+}
+.category-chip,
+.filter-btn {
+  min-height: 44px;
+  padding: 10px 18px;
+  font-size: var(--text-base);
+  line-height: 1.2;
+  flex-shrink: 1;
+}
+.category-chip__icon { font-size: var(--text-base); }

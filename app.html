@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
   <link rel="stylesheet" href="tokens.css?v=11" />
-  <link rel="stylesheet" href="styles.css?v=103" />
+  <link rel="stylesheet" href="styles.css?v=104" />
   <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "48e78fd025b74d35921517dcb99a87ed"}'></script><!-- End Cloudflare Web Analytics -->
 </head>
 <body>
@@ -330,7 +330,7 @@
         <!-- Course interest filter — shown after subjects are selected -->
         <div id="categoryPickerSection" class="category-picker-section hidden" aria-live="polite">
           <div class="subject-picker-header">
-            <span class="control-label">What are you interested in studying?</span>
+            <h2 class="plan-section-head selector-heading">What are you interested in studying?</h2>
             <span id="categoryHintDefault" class="picker-hint-inline">Optional — leave blank to see all courses</span>
             <span id="categoryDefaultNote" class="picker-hint-inline category-default-note hidden">Showing your kept fields — clear to see everything.</span>
           </div>
@@ -346,6 +346,20 @@
 
         <!-- Results — hidden until at least one subject is selected -->
         <div id="checkResultsSection" class="results-section hidden" aria-live="polite">
+
+          <!-- Country selector — its own row with a heading, above the
+               results summary and tally chips. Pills wrap; never scroll. -->
+          <div class="country-filter-section">
+            <h2 class="plan-section-head selector-heading">Where do you want to study?</h2>
+            <div
+              id="countryFilterBar"
+              class="filter-bar"
+              role="group"
+              aria-label="Filter results by country"
+            >
+              <!-- filter buttons inserted by JS -->
+            </div>
+          </div>
 
           <!-- Persistent disclaimer -->
           <div class="disclaimer-banner" role="note">
@@ -363,14 +377,6 @@
               aria-live="polite"
               aria-atomic="true"
             ></div>
-            <div
-              id="countryFilterBar"
-              class="filter-bar"
-              role="group"
-              aria-label="Filter results by country"
-            >
-              <!-- filter buttons inserted by JS -->
-            </div>
           </div>
 
           <!-- Filter the current results by university / course name -->
