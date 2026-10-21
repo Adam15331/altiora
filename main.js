@@ -4732,7 +4732,7 @@ function buildShortlistCard(course, studentTags, hasSubjects) {
       <div class="card-admission-tests">
         ${tests.map(t => testTagHtml(course, t)).join('')}
       </div>` : ''}
-    ${(course.verification?.status ?? 'unverified') !== 'verified'
+    ${courseVerificationStatus(course) !== 'verified'
       ? `<p class="card-unverified">⚠ Requirements not yet verified — confirm with the university.</p>`
       : ''}
     ${cardRequirementsHtml(course)}
@@ -6044,6 +6044,12 @@ function courseRequirementsRecord(course) {
   if (!cfg || typeof AltioraRequirementCycles === 'undefined' || typeof AltioraRequirementsView === 'undefined') return null;
   return AltioraRequirementsView.recordFor(AltioraRequirementCycles, cfg.currentCycle, course.id);
 }
+// 'verified' | 'partial' | 'unverified', from the current cycle's row
+// statuses (the same rule as the coverage copy; see requirements-view.js).
+function courseVerificationStatus(course) {
+  if (typeof AltioraRequirementsView === 'undefined') return 'unverified';
+  return AltioraRequirementsView.courseVerificationStatus(courseRequirementsRecord(course));
+}
 // The official course page an unverified row should send the student to —
 // only when the stored source is a live URL (link-health sweep: unswept = ok).
 function courseOfficialUrl(course) {
@@ -6298,7 +6304,7 @@ function buildCheckCard(course, result) {
   // ── Requirement-data verification caveat ──────────────────────
   // If these grades/tests haven't been checked against a published
   // source, say so plainly rather than presenting them as confirmed.
-  const verifyStatus = course.verification?.status ?? 'unverified';
+  const verifyStatus = courseVerificationStatus(course);
   const unverifiedHtml = (verifyStatus !== 'verified' && (gradeStr || tests.length))
     ? `<p class="card-unverified">⚠ ${verifyStatus === 'partial'
         ? 'Some requirements not yet verified'

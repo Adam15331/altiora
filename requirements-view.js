@@ -254,7 +254,20 @@
     return cycles?.[cycleId]?.courses?.[courseId] ?? null;
   }
 
-  const api = { panelHtml, entryText, entryValue, recordFor, formatDate, STATUS_LABEL, NONE_TEXT, UNVERIFIED_TEXT, NOT_APPLICABLE_TEXT, NOT_RECORDED_TEXT, WITHHELD_TEXT };
+  /**
+   * A course's verification status from its cycle record's row statuses:
+   * "verified" when no row is partial or unverified, "unverified" when no
+   * row has been checked at all (or there is no record), else "partial".
+   * @param {Record<string, RequirementEntry> | null | undefined} record
+   * @returns {'verified' | 'partial' | 'unverified'}
+   */
+  function courseVerificationStatus(record) {
+    const rows = record ? Object.values(record) : [];
+    if (rows.every(e => e?.status === 'unverified')) return 'unverified';
+    return rows.some(e => e?.status === 'partial' || e?.status === 'unverified') ? 'partial' : 'verified';
+  }
+
+  const api = { panelHtml, entryText, entryValue, recordFor, courseVerificationStatus, formatDate, STATUS_LABEL, NONE_TEXT, UNVERIFIED_TEXT, NOT_APPLICABLE_TEXT, NOT_RECORDED_TEXT, WITHHELD_TEXT };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.AltioraRequirementsView = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

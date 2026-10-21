@@ -99,3 +99,13 @@ test('each category is a status card: list items with label lead-ins, footer aft
   // The one-line text (CSV / copy) is unchanged by the card layout.
   assert.equal(view.entryText(/** @type {any} */ (english)), 'Required if English is not your first language; Minimum scores: IELTS 7.5; TOEFL iBT 102 (taken before Jan 2026; 5 after); Duolingo <135> (verified 19 Oct 2026)');
 });
+
+test('courseVerificationStatus: verified only when no row is partial or unverified', () => {
+  const v = { status: 'verified' }, p = { status: 'partial' }, u = { status: 'unverified' }, na = { status: 'notApplicable' };
+  const s = (/** @type {any} */ r) => view.courseVerificationStatus(r);
+  assert.equal(s({ a: v, b: na }), 'verified');
+  assert.equal(s({ a: v, b: p }), 'partial');
+  assert.equal(s({ a: v, b: u }), 'partial');
+  assert.equal(s({ a: u, b: u }), 'unverified');
+  assert.equal(s(null), 'unverified');
+});
