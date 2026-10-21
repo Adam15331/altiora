@@ -13,7 +13,7 @@ Altiora is a static web application. It runs entirely in the browser, has no acc
 ## How requirements are sourced
 
 - Every course requirement is checked against an official university source. Each record carries the source URL and the date it was checked.
-- Where a source could not be fully verified, the record is marked partial rather than presented as confirmed. At the time of writing, 76 of the 335 records carry a partial verification status (read from data/courseRequirements.js).
+- Where a source could not be fully verified, the record is marked partial rather than presented as confirmed. At the time of writing, 316 of the 335 records carry a partial verification status (read from the row statuses in data/requirements/2027.js: a record counts as fully verified only when none of its rows is partial or unverified).
 - If a university does not publish a figure, Altiora does not supply one.
 
 ## Pages
