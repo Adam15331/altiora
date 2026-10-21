@@ -81,3 +81,20 @@ test('starting a new cycle resets everything to unverified and still validates',
   const cfg2 = { ...config, cycles: { ...config.cycles, [next]: cycleInfo(next) } };
   assert.deepEqual(validateCycle(draft, { config: cfg2, courses, today: TODAY }).filter(p => p.level === 'error'), []);
 });
+
+test('nothing reads the retired course-level verification.status', () => {
+  // Course cards and the coverage copy read the cycle file's row statuses
+  // (requirements-view.js courseVerificationStatus). The two one-off 2027
+  // migration scripts, which refuse to run over the existing cycle file
+  // without --force, are the only historical readers.
+  const historical = ['scripts/migrate-requirements-2027.mjs', 'scripts/migrate-requirements-2027-qualifications.mjs'];
+  /** @param {string} dir @returns {string[]} */
+  const walk = dir => fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true }).flatMap(d => {
+    const rel = path.join(dir, d.name);
+    if (d.isDirectory()) return ['node_modules', 'tests'].includes(d.name) || d.name.startsWith('.') ? [] : walk(rel);
+    return /\.m?js$/.test(d.name) ? [rel] : [];
+  });
+  for (const file of walk('.').filter(f => !historical.includes(f))) {
+    assert.doesNotMatch(fs.readFileSync(path.join(ROOT, file), 'utf8'), /verification\??\.status/, file);
+  }
+});

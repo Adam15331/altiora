@@ -75,14 +75,13 @@ test('every A-Level offer and IB score the engine holds is surfaced, or explicit
 /** @param {any} e */
 const fromPass = e => (e.lastVerified ?? '') >= /** @type {string} */ (config.snippetsRequiredFrom);
 
-test('a row is verified only on a verified course record, with that record\'s source and date', () => {
+test('a migrated row keeps its course record\'s source and date', () => {
   for (const c of courses) {
     for (const cat of ['aLevel', 'ib']) {
       const e = cycle.courses[c.id][cat];
       if (e.status === 'unverified' || fromPass(e)) continue;
       assert.equal(e.sources?.[0]?.url, c.verification.source, `${c.id} › ${cat}`);
       assert.equal(e.lastVerified, c.verification.checkedDate, `${c.id} › ${cat}`);
-      if (c.verification.status === 'partial') assert.notEqual(e.status, 'verified', `${c.id} › ${cat}`);
     }
   }
 });
