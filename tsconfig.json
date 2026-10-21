@@ -23,6 +23,7 @@
     "scripts/validate-requirements.mjs",
     "scripts/requirements-report.mjs",
     "scripts/requirements-new-cycle.mjs",
+    "scripts/sync-coverage-copy.mjs",
     "scripts/migrate-requirements-2027.mjs",
     "scripts/migrate-requirements-2027-qualifications.mjs",
     "tests/**/*.mjs"

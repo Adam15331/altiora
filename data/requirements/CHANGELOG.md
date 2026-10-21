@@ -4777,3 +4777,11 @@ Format:
 - `uk-medicine-glasgow` · ib: row verified → verified (owner flag kept).
 - `uk-medicine-birmingham` · ib: row partial → partial (owner flag kept).
 - `uk-economics-leeds` · ib: row partial → partial (owner flag kept).
+
+## 2026-10-21 — 2027 entry — New countries: Ireland (IE) and Spain (ES)
+
+- Added 15 courses from the merged research files (`research/ireland.md`, `research/ireland-proposed.json`, `research/ie-university.md`, `research/ie-university-proposed.json`); no web research. UCD is not loaded (its evidence was discarded as blocked).
+- **Trinity College Dublin (IE), 9 courses:** `ie-engineering-trinity`, `ie-cs-trinity`, `ie-maths-trinity`, `ie-naturalsciences-trinity`, `ie-medicine-trinity`, `ie-economics-trinity`, `ie-law-trinity`, `ie-business-trinity`, `ie-psychology-trinity`. Engine grades are Trinity's competitive-band minimums for the course (A-Level, IB, HKDSE) from the brochure file named 2027, which still reads "Applicants seeking admission in 2026" (reviewFlag on the A-Level, IB and other-qualification rows); an older A-Level quick guide that disagrees is not used (reviewFlag). Singapore A-Level: null (no conversion published). AP: engine apRequirement null; the panel states AP is supporting evidence only. CAO points are in no grade field.
+- Corrected from the proposals: A-Level "Mathematics" (Engineering, CS, Maths) is `Mathematics_Standard` — the engine's `Mathematics_Advanced` means Further Mathematics at A-Level — and Trinity's IB "HL Mathematics" names no course, so HL Maths AA or AI (`Mathematics_Standard`).
+- **IE University (ES), 6 courses:** `es-cs-ie`, `es-maths-ie`, `es-economics-ie`, `es-law-ie`, `es-business-ie`, `es-architecture-ie`. Holistic admission: every engine grade field is null; the university-wide guidelines (A-Level application range, IB typical range, US GPA) appear only in panel detail, labelled as guidelines that do not guarantee admission. Test codes are readable names ("IE University Admissions Test", "IE University Mathematics Assessment"); LNAT is recorded as Law's alternative, not a required test. No Natural Sciences course.
+- `holisticAdmission: true` set on all 100 US courses and the 6 IE University courses (replaces `country === 'US'` in the holistic checks in main.js).
