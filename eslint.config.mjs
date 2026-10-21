@@ -17,7 +17,7 @@ export default [
   },
   {
     // Classic browser scripts that also export for Node.
-    files: ['requirements-view.js', 'data/requirements/*.js'],
+    files: ['requirements-view.js', 'ib-hl.js', 'data/requirements/*.js'],
     languageOptions: { ecmaVersion: 2022, sourceType: 'script', globals: { ...globals.browser, module: 'writable' } },
   },
   {

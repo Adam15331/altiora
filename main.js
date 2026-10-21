@@ -4624,8 +4624,8 @@ function shortlistVerdictRaw(course, system, predictedGrade, profile) {
     // taking makes the course a reach regardless of points.
     const reqHL = course.grades?.ibHL ?? [];
     if (reqHL.length && typeof selectedSubjectsWithLevel !== 'undefined' && selectedSubjectsWithLevel.size) {
-      const haveHL = new Set([...selectedSubjectsWithLevel.values()].filter(x => x.isHL).map(x => x.tag));
-      if (reqHL.some(t => !haveHL.has(t))) return 'reach';
+      const haveHL = [...selectedSubjectsWithLevel.values()].filter(x => x.isHL).map(x => x.tag);
+      if (AltioraIbHl.missingHLTags(reqHL, haveHL).length) return 'reach';
     }
     return pts >= need + 3 ? 'safety' : 'match';
   }
@@ -5748,8 +5748,9 @@ function checkStatusFor(course) {
         .filter(item => item.isHL === true)
         .map(item => item.tag);
 
-      // Find which required HL tags are missing
-      const missingHL = requiredHLTags.filter(tag => !studentHLTags.includes(tag));
+      // Find which required HL tags are missing (HL Maths AA satisfies a
+      // Mathematics_Standard requirement; see ib-hl.js)
+      const missingHL = AltioraIbHl.missingHLTags(requiredHLTags, studentHLTags);
 
       // Only downgrade and warn for ACTUAL missing HL subjects this course
       // lists. Courses with no ibHL requirements get no HL warning at all —
