@@ -1,0 +1,1694 @@
+{
+ "_note": "PROPOSED records only — not loaded into data/requirements/2027.js. Shape follows existing records; every checked value traces to a sourceSnippet; unknown = unverified, never guessed. Country code IE = Ireland.",
+ "courses": {
+  "ie-engineering-trinity": {
+   "satAct": {
+    "status": "partial",
+    "items": [
+     "Brochure band for this course (Band 3): SAT 1250, GPA 3.2 or ACT 27, GPA 3.2 (unweighted GPA)",
+     "For 2027 entry SAT/ACT are optional: 'You may submit any SAT/ACT test scores … if you also wish them to be considered'"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/study/country/usa/",
+      "label": "Trinity: USA country page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "USA – SAT SAT score plus high school GPA n/a 1400, 3.5 1350, 3.4 1250, 3.2 … USA – ACT ACT score plus high school GPA n/a 32, 3.5 30, 3.4 27, 3.2 … 3 Engineering Mathematics 2",
+     "You may submit any SAT/ACT test scores you have been able to take if you also wish them to be considered."
+    ],
+    "note": "The brochure (content labelled for 2026 admission) gives SAT/ACT plus GPA bands; the USA page for 2027 entry lets applicants be assessed without standardised tests. Both shown; neither is a guaranteed threshold."
+   },
+   "englishLanguage": {
+    "status": "verified",
+    "items": [
+     "Band B (Standard Entry)",
+     "IELTS Academic 6.5 overall (6.0 in each band)",
+     "Duolingo 120 overall (100 in each subscore)",
+     "TOEFL iBT 90 overall (21 each section) before January 2026; 4.5 overall (4.0 each section) after January 2026",
+     "Cambridge Advanced/Proficiency 180 overall (no score below 170)",
+     "PTE Academic 69 overall (59 in each section)"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/engineering/",
+      "label": "Trinity: Engineering course page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/english-language-requirements/",
+      "label": "Trinity: English language requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Applicants to this course are required to meet Band B (Standard Entry) English language requirements.",
+     "IELTS Academic Duolingo English Test (See Note 3) TOEFL iBT (Before January 2026) TOEFL iBT (After January 2026) Cambridge Advanced or Proficiency PTE Academic (Pearson) … Band B (Standard entry) UG & PG Standard requirements 6.5 overall 6.0 in each band 120 overall 100 in each subscore 90 overall 21 in each section 4.5 overall 4.0 in each section 180 overall no score below 170 69 overall 59 in each section"
+    ],
+    "note": "GCSE English Language C/5 and other school qualifications are also accepted (English requirements page)."
+   },
+   "admissionsTests": {
+    "status": "verified",
+    "none": true,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/engineering/",
+      "label": "Trinity: Engineering course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Advanced GCE (A-Level): Grade C in Mathematics International Baccalaureate: HL Grade 5 Mathematics",
+    "note": "The course page's Admission Requirements section lists no admissions test."
+   },
+   "subjectPrerequisites": {
+    "status": "verified",
+    "items": [
+     "A-Level: Grade C in Mathematics; IB: HL Grade 5 Mathematics (brochure Table 4: Mathematics level 2)."
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/engineering/",
+      "label": "Trinity: Engineering course page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Advanced GCE (A-Level): Grade C in Mathematics International Baccalaureate: HL Grade 5 Mathematics",
+     "3 Engineering Mathematics 2"
+    ],
+    "codes": [
+     "Mathematics_Advanced"
+    ]
+   },
+   "aLevel": {
+    "status": "verified",
+    "accepted": "yes",
+    "typicalOffer": "ABB",
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/engineering/",
+      "label": "Trinity: Engineering course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "QUALIFICATION NOTES SPECIAL BAND 1 BAND 2 BAND 3 BAND … A-levels, 3 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*A A*AA AAA ABB … A-levels, 4 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*AA A*ABC AABC BBBC … 3 Engineering Mathematics 2",
+     "Advanced GCE (A-Level): Grade C in Mathematics International Baccalaureate: HL Grade 5 Mathematics"
+    ],
+    "note": "Trinity publishes overall competitive admission bands, not per-course offers: this course is Band 3 — ABB from 3 A-levels or BBBC from 4 A-levels. Posted scores are minimums and do not guarantee admission. Subject: Grade C in A-Level Mathematics.",
+    "subjects": {
+     "required": [
+      {
+       "name": "Mathematics",
+       "code": "Mathematics_Advanced"
+      }
+     ]
+    }
+   },
+   "ib": {
+    "status": "verified",
+    "accepted": "yes",
+    "overallScore": 30,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/engineering/",
+      "label": "Trinity: Engineering course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "QUALIFICATION NOTES SPECIAL BAND 1 BAND 2 BAND 3 BAND … International Baccalaureate Including bonus points. No HL below 5 or SL below 4 40 36 33 30 … 3 Engineering Mathematics 2",
+     "Advanced GCE (A-Level): Grade C in Mathematics International Baccalaureate: HL Grade 5 Mathematics"
+    ],
+    "detail": "Including bonus points; no HL below 5 or SL below 4; HL Grade 5 Mathematics",
+    "note": "Brochure Band 3 for this course.",
+    "subjects": {
+     "required": [
+      {
+       "name": "Mathematics (HL)",
+       "code": "Mathematics_Advanced"
+      }
+     ],
+     "higherLevel": [
+      {
+       "name": "Mathematics (HL)",
+       "code": "Mathematics_Advanced"
+      }
+     ]
+    }
+   },
+   "otherQualifications": {
+    "status": "partial",
+    "items": [
+     "Advanced Placement: not a standalone qualification — considered as additional academic evidence alongside the US High School Diploma (unweighted GPA 3.2+); no AP grade minimum published",
+     "Hong Kong HKDSE: 54444 (3 core + 2 electives, Band 3)",
+     "Singapore-Cambridge A-Level: 'GCE A Levels' accepted for direct application from Singapore; no H2 conversion or course grade published"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/country/usa/",
+      "label": "Trinity: USA country page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/study/country/singapore/",
+      "label": "Trinity: Singapore country page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Trinity admissions office will consider alternative evidence from students applying for entry in 2027. In lieu of standardised tests, the admissions office will consider criteria including: GPA, academic transcripts, two references, a personal statement for your application. We will also consider other academic criteria such as Advanced Placement courses (APs), college and honors level classes with strong grades where relevant to the programme / major for which you are applying. You may submit any SAT/ACT test scores you have been able to take if you also wish them to be considered.",
+     "Hong Kong – HKDSE 3 core subjects and 2 electives in recognised subjects 5*5*554 5*5544 55544 54444 … 3 Engineering Mathematics 2",
+     "Accepted qualifications for direct applications include: Polytechnic Diploma - 3.0 minimum GPA GCE A Levels Click here for a quick guide to Trinity requirements for GCE A Levels"
+    ],
+    "note": "Singapore A-Level course grade not published; AP has no published grade minimum."
+   },
+   "otherRequirements": {
+    "status": "verified",
+    "items": [
+     "Two letters of recommendation and a personal statement (direct application)",
+     "Age: date of birth before 15 January 2010 (stated for 2026 admission)",
+     "Minimum matriculation: pass grades in English, Mathematics and a language other than English",
+     "Brochure Table 5: Engineering programmes Fitness to Practice"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/apply/making-an-application/undergraduate/direct-applications/",
+      "label": "Trinity: Direct application information"
+     },
+     {
+      "url": "https://www.tcd.ie/study/apply/admission-requirements/undergraduate/",
+      "label": "Trinity: Undergraduate admission requirements"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "SAT, AP or ACT scores (US and Canadian applicants only) Two letters of recommendation",
+     "Applicants seeking admission in 2026 must have a date of birth before 15 January 2010. … The standard matriculation requirements are pass grades in English, Mathematics, a language other than English, and a full set of valid subjects for your examination system.",
+     "Engineering programmes Fitness to Practice"
+    ]
+   }
+  },
+  "ie-cs-trinity": {
+   "satAct": {
+    "status": "partial",
+    "items": [
+     "Brochure band for this course (Band 2): SAT 1350, GPA 3.4 or ACT 30, GPA 3.4 (unweighted GPA)",
+     "For 2027 entry SAT/ACT are optional: 'You may submit any SAT/ACT test scores … if you also wish them to be considered'"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/study/country/usa/",
+      "label": "Trinity: USA country page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "USA – SAT SAT score plus high school GPA n/a 1400, 3.5 1350, 3.4 1250, 3.2 … USA – ACT ACT score plus high school GPA n/a 32, 3.5 30, 3.4 27, 3.2 … 2 Computer Science Mathematics 2",
+     "You may submit any SAT/ACT test scores you have been able to take if you also wish them to be considered."
+    ],
+    "note": "The brochure (content labelled for 2026 admission) gives SAT/ACT plus GPA bands; the USA page for 2027 entry lets applicants be assessed without standardised tests. Both shown; neither is a guaranteed threshold."
+   },
+   "englishLanguage": {
+    "status": "verified",
+    "items": [
+     "Band B (Standard Entry)",
+     "IELTS Academic 6.5 overall (6.0 in each band)",
+     "Duolingo 120 overall (100 in each subscore)",
+     "TOEFL iBT 90 overall (21 each section) before January 2026; 4.5 overall (4.0 each section) after January 2026",
+     "Cambridge Advanced/Proficiency 180 overall (no score below 170)",
+     "PTE Academic 69 overall (59 in each section)"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/computer-science/",
+      "label": "Trinity: Computer Science course page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/english-language-requirements/",
+      "label": "Trinity: English language requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Applicants to this course are required to meet Band B (Standard Entry) English language requirements.",
+     "IELTS Academic Duolingo English Test (See Note 3) TOEFL iBT (Before January 2026) TOEFL iBT (After January 2026) Cambridge Advanced or Proficiency PTE Academic (Pearson) … Band B (Standard entry) UG & PG Standard requirements 6.5 overall 6.0 in each band 120 overall 100 in each subscore 90 overall 21 in each section 4.5 overall 4.0 in each section 180 overall no score below 170 69 overall 59 in each section"
+    ],
+    "note": "GCSE English Language C/5 and other school qualifications are also accepted (English requirements page)."
+   },
+   "admissionsTests": {
+    "status": "verified",
+    "none": true,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/computer-science/",
+      "label": "Trinity: Computer Science course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Advanced GCE (A-Level): Grade C Mathematics International Baccalaureate: HL Grade 5 Mathematics",
+    "note": "The course page's Admission Requirements section lists no admissions test."
+   },
+   "subjectPrerequisites": {
+    "status": "verified",
+    "items": [
+     "A-Level: Grade C Mathematics; IB: HL Grade 5 Mathematics (brochure Table 4: Mathematics level 2)."
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/computer-science/",
+      "label": "Trinity: Computer Science course page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Advanced GCE (A-Level): Grade C Mathematics International Baccalaureate: HL Grade 5 Mathematics",
+     "2 Computer Science Mathematics 2"
+    ],
+    "codes": [
+     "Mathematics_Advanced"
+    ]
+   },
+   "aLevel": {
+    "status": "verified",
+    "accepted": "yes",
+    "typicalOffer": "AAA",
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/computer-science/",
+      "label": "Trinity: Computer Science course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "QUALIFICATION NOTES SPECIAL BAND 1 BAND 2 BAND 3 BAND … A-levels, 3 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*A A*AA AAA ABB … A-levels, 4 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*AA A*ABC AABC BBBC … 2 Computer Science Mathematics 2",
+     "Advanced GCE (A-Level): Grade C Mathematics International Baccalaureate: HL Grade 5 Mathematics"
+    ],
+    "note": "Trinity publishes overall competitive admission bands, not per-course offers: this course is Band 2 — AAA from 3 A-levels or AABC from 4 A-levels. Posted scores are minimums and do not guarantee admission. Subject: Grade C in A-Level Mathematics.",
+    "subjects": {
+     "required": [
+      {
+       "name": "Mathematics",
+       "code": "Mathematics_Advanced"
+      }
+     ]
+    }
+   },
+   "ib": {
+    "status": "verified",
+    "accepted": "yes",
+    "overallScore": 33,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/computer-science/",
+      "label": "Trinity: Computer Science course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "QUALIFICATION NOTES SPECIAL BAND 1 BAND 2 BAND 3 BAND … International Baccalaureate Including bonus points. No HL below 5 or SL below 4 40 36 33 30 … 2 Computer Science Mathematics 2",
+     "Advanced GCE (A-Level): Grade C Mathematics International Baccalaureate: HL Grade 5 Mathematics"
+    ],
+    "detail": "Including bonus points; no HL below 5 or SL below 4; HL Grade 5 Mathematics",
+    "note": "Brochure Band 2 for this course.",
+    "subjects": {
+     "required": [
+      {
+       "name": "Mathematics (HL)",
+       "code": "Mathematics_Advanced"
+      }
+     ],
+     "higherLevel": [
+      {
+       "name": "Mathematics (HL)",
+       "code": "Mathematics_Advanced"
+      }
+     ]
+    }
+   },
+   "otherQualifications": {
+    "status": "partial",
+    "items": [
+     "Advanced Placement: not a standalone qualification — considered as additional academic evidence alongside the US High School Diploma (unweighted GPA 3.2+); no AP grade minimum published",
+     "Hong Kong HKDSE: 55544 (3 core + 2 electives, Band 2)",
+     "Singapore-Cambridge A-Level: 'GCE A Levels' accepted for direct application from Singapore; no H2 conversion or course grade published"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/country/usa/",
+      "label": "Trinity: USA country page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/study/country/singapore/",
+      "label": "Trinity: Singapore country page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Trinity admissions office will consider alternative evidence from students applying for entry in 2027. In lieu of standardised tests, the admissions office will consider criteria including: GPA, academic transcripts, two references, a personal statement for your application. We will also consider other academic criteria such as Advanced Placement courses (APs), college and honors level classes with strong grades where relevant to the programme / major for which you are applying. You may submit any SAT/ACT test scores you have been able to take if you also wish them to be considered.",
+     "Hong Kong – HKDSE 3 core subjects and 2 electives in recognised subjects 5*5*554 5*5544 55544 54444 … 2 Computer Science Mathematics 2",
+     "Accepted qualifications for direct applications include: Polytechnic Diploma - 3.0 minimum GPA GCE A Levels Click here for a quick guide to Trinity requirements for GCE A Levels"
+    ],
+    "note": "Singapore A-Level course grade not published; AP has no published grade minimum."
+   },
+   "otherRequirements": {
+    "status": "verified",
+    "items": [
+     "Two letters of recommendation and a personal statement (direct application)",
+     "Age: date of birth before 15 January 2010 (stated for 2026 admission)",
+     "Minimum matriculation: pass grades in English, Mathematics and a language other than English"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/apply/making-an-application/undergraduate/direct-applications/",
+      "label": "Trinity: Direct application information"
+     },
+     {
+      "url": "https://www.tcd.ie/study/apply/admission-requirements/undergraduate/",
+      "label": "Trinity: Undergraduate admission requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "SAT, AP or ACT scores (US and Canadian applicants only) Two letters of recommendation",
+     "Applicants seeking admission in 2026 must have a date of birth before 15 January 2010. … The standard matriculation requirements are pass grades in English, Mathematics, a language other than English, and a full set of valid subjects for your examination system."
+    ]
+   }
+  },
+  "ie-maths-trinity": {
+   "satAct": {
+    "status": "partial",
+    "items": [
+     "Brochure band for this course (Band 1): SAT 1400, GPA 3.5 or ACT 32, GPA 3.5 (unweighted GPA)",
+     "For 2027 entry SAT/ACT are optional: 'You may submit any SAT/ACT test scores … if you also wish them to be considered'"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/study/country/usa/",
+      "label": "Trinity: USA country page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "USA – SAT SAT score plus high school GPA n/a 1400, 3.5 1350, 3.4 1250, 3.2 … USA – ACT ACT score plus high school GPA n/a 32, 3.5 30, 3.4 27, 3.2 … 1 Mathematics, Mathematics (JH) Mathematics 1",
+     "You may submit any SAT/ACT test scores you have been able to take if you also wish them to be considered."
+    ],
+    "note": "The brochure (content labelled for 2026 admission) gives SAT/ACT plus GPA bands; the USA page for 2027 entry lets applicants be assessed without standardised tests. Both shown; neither is a guaranteed threshold."
+   },
+   "englishLanguage": {
+    "status": "verified",
+    "items": [
+     "Band B (Standard Entry)",
+     "IELTS Academic 6.5 overall (6.0 in each band)",
+     "Duolingo 120 overall (100 in each subscore)",
+     "TOEFL iBT 90 overall (21 each section) before January 2026; 4.5 overall (4.0 each section) after January 2026",
+     "Cambridge Advanced/Proficiency 180 overall (no score below 170)",
+     "PTE Academic 69 overall (59 in each section)"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/mathematics/",
+      "label": "Trinity: Mathematics course page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/english-language-requirements/",
+      "label": "Trinity: English language requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Applicants to this course are required to meet Band B (Standard Entry) English language requirements.",
+     "IELTS Academic Duolingo English Test (See Note 3) TOEFL iBT (Before January 2026) TOEFL iBT (After January 2026) Cambridge Advanced or Proficiency PTE Academic (Pearson) … Band B (Standard entry) UG & PG Standard requirements 6.5 overall 6.0 in each band 120 overall 100 in each subscore 90 overall 21 in each section 4.5 overall 4.0 in each section 180 overall no score below 170 69 overall 59 in each section"
+    ],
+    "note": "GCSE English Language C/5 and other school qualifications are also accepted (English requirements page)."
+   },
+   "admissionsTests": {
+    "status": "verified",
+    "none": true,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/mathematics/",
+      "label": "Trinity: Mathematics course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Advanced GCE (A Level): Grade B in Mathematics International Baccalaureate: HL Grade 6 in Mathematics",
+    "note": "The course page's Admission Requirements section lists no admissions test."
+   },
+   "subjectPrerequisites": {
+    "status": "verified",
+    "items": [
+     "A-Level: Grade B in Mathematics; IB: HL Grade 6 in Mathematics (brochure Table 4: Mathematics level 1)."
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/mathematics/",
+      "label": "Trinity: Mathematics course page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Advanced GCE (A Level): Grade B in Mathematics International Baccalaureate: HL Grade 6 in Mathematics",
+     "1 Mathematics, Mathematics (JH) Mathematics 1"
+    ],
+    "codes": [
+     "Mathematics_Advanced"
+    ]
+   },
+   "aLevel": {
+    "status": "verified",
+    "accepted": "yes",
+    "typicalOffer": "A*AA",
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/mathematics/",
+      "label": "Trinity: Mathematics course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "QUALIFICATION NOTES SPECIAL BAND 1 BAND 2 BAND 3 BAND … A-levels, 3 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*A A*AA AAA ABB … A-levels, 4 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*AA A*ABC AABC BBBC … 1 Mathematics, Mathematics (JH) Mathematics 1",
+     "Advanced GCE (A Level): Grade B in Mathematics International Baccalaureate: HL Grade 6 in Mathematics"
+    ],
+    "note": "Trinity publishes overall competitive admission bands, not per-course offers: this course is Band 1 — A*AA from 3 A-levels or A*ABC from 4 A-levels. Posted scores are minimums and do not guarantee admission. Subject: Grade B in A-Level Mathematics.",
+    "subjects": {
+     "required": [
+      {
+       "name": "Mathematics",
+       "code": "Mathematics_Advanced"
+      }
+     ]
+    }
+   },
+   "ib": {
+    "status": "verified",
+    "accepted": "yes",
+    "overallScore": 36,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/mathematics/",
+      "label": "Trinity: Mathematics course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "QUALIFICATION NOTES SPECIAL BAND 1 BAND 2 BAND 3 BAND … International Baccalaureate Including bonus points. No HL below 5 or SL below 4 40 36 33 30 … 1 Mathematics, Mathematics (JH) Mathematics 1",
+     "Advanced GCE (A Level): Grade B in Mathematics International Baccalaureate: HL Grade 6 in Mathematics"
+    ],
+    "detail": "Including bonus points; no HL below 5 or SL below 4; HL Grade 6 in Mathematics",
+    "note": "Brochure Band 1 for this course.",
+    "subjects": {
+     "required": [
+      {
+       "name": "Mathematics (HL)",
+       "code": "Mathematics_Advanced"
+      }
+     ],
+     "higherLevel": [
+      {
+       "name": "Mathematics (HL)",
+       "code": "Mathematics_Advanced"
+      }
+     ]
+    }
+   },
+   "otherQualifications": {
+    "status": "partial",
+    "items": [
+     "Advanced Placement: not a standalone qualification — considered as additional academic evidence alongside the US High School Diploma (unweighted GPA 3.2+); no AP grade minimum published",
+     "Hong Kong HKDSE: 5*5544 (3 core + 2 electives, Band 1)",
+     "Singapore-Cambridge A-Level: 'GCE A Levels' accepted for direct application from Singapore; no H2 conversion or course grade published"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/country/usa/",
+      "label": "Trinity: USA country page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/study/country/singapore/",
+      "label": "Trinity: Singapore country page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Trinity admissions office will consider alternative evidence from students applying for entry in 2027. In lieu of standardised tests, the admissions office will consider criteria including: GPA, academic transcripts, two references, a personal statement for your application. We will also consider other academic criteria such as Advanced Placement courses (APs), college and honors level classes with strong grades where relevant to the programme / major for which you are applying. You may submit any SAT/ACT test scores you have been able to take if you also wish them to be considered.",
+     "Hong Kong – HKDSE 3 core subjects and 2 electives in recognised subjects 5*5*554 5*5544 55544 54444 … 1 Mathematics, Mathematics (JH) Mathematics 1",
+     "Accepted qualifications for direct applications include: Polytechnic Diploma - 3.0 minimum GPA GCE A Levels Click here for a quick guide to Trinity requirements for GCE A Levels"
+    ],
+    "note": "Singapore A-Level course grade not published; AP has no published grade minimum."
+   },
+   "otherRequirements": {
+    "status": "verified",
+    "items": [
+     "Two letters of recommendation and a personal statement (direct application)",
+     "Age: date of birth before 15 January 2010 (stated for 2026 admission)",
+     "Minimum matriculation: pass grades in English, Mathematics and a language other than English"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/apply/making-an-application/undergraduate/direct-applications/",
+      "label": "Trinity: Direct application information"
+     },
+     {
+      "url": "https://www.tcd.ie/study/apply/admission-requirements/undergraduate/",
+      "label": "Trinity: Undergraduate admission requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "SAT, AP or ACT scores (US and Canadian applicants only) Two letters of recommendation",
+     "Applicants seeking admission in 2026 must have a date of birth before 15 January 2010. … The standard matriculation requirements are pass grades in English, Mathematics, a language other than English, and a full set of valid subjects for your examination system."
+    ]
+   }
+  },
+  "ie-naturalsciences-trinity": {
+   "satAct": {
+    "status": "partial",
+    "items": [
+     "Brochure band for this course (Band 2): SAT 1350, GPA 3.4 or ACT 30, GPA 3.4 (unweighted GPA)",
+     "For 2027 entry SAT/ACT are optional: 'You may submit any SAT/ACT test scores … if you also wish them to be considered'"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/study/country/usa/",
+      "label": "Trinity: USA country page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "USA – SAT SAT score plus high school GPA n/a 1400, 3.5 1350, 3.4 1250, 3.2 … USA – ACT ACT score plus high school GPA n/a 32, 3.5 30, 3.4 27, 3.2 … 2 Science: Biological & Biomedical Sciences Mathematics 4 Group D 2 + 2 … 2 Science: Chemical Sciences Mathematics 4 Group D 2 + 2 … 2 Science: Geography and Geoscience Mathematics 4 Group D 2 + 2 … 2 Science: Physical Sciences Mathematics 4 Group D 2 + 2",
+     "You may submit any SAT/ACT test scores you have been able to take if you also wish them to be considered."
+    ],
+    "note": "The brochure (content labelled for 2026 admission) gives SAT/ACT plus GPA bands; the USA page for 2027 entry lets applicants be assessed without standardised tests. Both shown; neither is a guaranteed threshold."
+   },
+   "englishLanguage": {
+    "status": "verified",
+    "items": [
+     "Band B (Standard Entry)",
+     "IELTS Academic 6.5 overall (6.0 in each band)",
+     "Duolingo 120 overall (100 in each subscore)",
+     "TOEFL iBT 90 overall (21 each section) before January 2026; 4.5 overall (4.0 each section) after January 2026",
+     "Cambridge Advanced/Proficiency 180 overall (no score below 170)",
+     "PTE Academic 69 overall (59 in each section)"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/science/",
+      "label": "Trinity: Science course page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/english-language-requirements/",
+      "label": "Trinity: English language requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Applicants to this course are required to meet Band B (Standard Entry) English language requirements.",
+     "IELTS Academic Duolingo English Test (See Note 3) TOEFL iBT (Before January 2026) TOEFL iBT (After January 2026) Cambridge Advanced or Proficiency PTE Academic (Pearson) … Band B (Standard entry) UG & PG Standard requirements 6.5 overall 6.0 in each band 120 overall 100 in each subscore 90 overall 21 in each section 4.5 overall 4.0 in each section 180 overall no score below 170 69 overall 59 in each section"
+    ],
+    "note": "GCSE English Language C/5 and other school qualifications are also accepted (English requirements page)."
+   },
+   "admissionsTests": {
+    "status": "verified",
+    "none": true,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/science/",
+      "label": "Trinity: Science course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "GCSE: Grade B/6 Mathematics Advanced GCE (A Level): Grade C in two of Physics, Chemistry, Biology, Physics/Chemistry, Geology, Geography, Applied Mathematics, Agricultural Science, or Computer Science International Baccalaureate: SL Grade 5 Mathematics HL Grade 5 in two of Physics, Chemistry, Biology, Physics/Chemistry, Geology, Geography, Applied Mathematics, Agricultural Science, or Computer Science",
+    "note": "The course page's Admission Requirements section lists no admissions test."
+   },
+   "subjectPrerequisites": {
+    "status": "verified",
+    "items": [
+     "A-Level Grade C in two of Physics, Chemistry, Biology, Physics/Chemistry, Geology, Geography, Applied Mathematics, Agricultural Science or Computer Science; GCSE Grade B/6 Mathematics. IB: SL Grade 5 Mathematics and HL Grade 5 in two of the same list. Excluded combinations: Physics/Chemistry with Physics or Chemistry; Agricultural Science with Biology; Applied Mathematics with Mathematics."
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/science/",
+      "label": "Trinity: Science course page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "GCSE: Grade B/6 Mathematics Advanced GCE (A Level): Grade C in two of Physics, Chemistry, Biology, Physics/Chemistry, Geology, Geography, Applied Mathematics, Agricultural Science, or Computer Science International Baccalaureate: SL Grade 5 Mathematics HL Grade 5 in two of Physics, Chemistry, Biology, Physics/Chemistry, Geology, Geography, Applied Mathematics, Agricultural Science, or Computer Science",
+     "2 Science: Biological & Biomedical Sciences Mathematics 4 Group D 2 + 2 … 2 Science: Chemical Sciences Mathematics 4 Group D 2 + 2 … 2 Science: Geography and Geoscience Mathematics 4 Group D 2 + 2 … 2 Science: Physical Sciences Mathematics 4 Group D 2 + 2"
+    ]
+   },
+   "aLevel": {
+    "status": "verified",
+    "accepted": "yes",
+    "typicalOffer": "AAA",
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/science/",
+      "label": "Trinity: Science course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "QUALIFICATION NOTES SPECIAL BAND 1 BAND 2 BAND 3 BAND … A-levels, 3 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*A A*AA AAA ABB … A-levels, 4 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*AA A*ABC AABC BBBC … 2 Science: Biological & Biomedical Sciences Mathematics 4 Group D 2 + 2 … 2 Science: Chemical Sciences Mathematics 4 Group D 2 + 2 … 2 Science: Geography and Geoscience Mathematics 4 Group D 2 + 2 … 2 Science: Physical Sciences Mathematics 4 Group D 2 + 2",
+     "GCSE: Grade B/6 Mathematics Advanced GCE (A Level): Grade C in two of Physics, Chemistry, Biology, Physics/Chemistry, Geology, Geography, Applied Mathematics, Agricultural Science, or Computer Science International Baccalaureate: SL Grade 5 Mathematics HL Grade 5 in two of Physics, Chemistry, Biology, Physics/Chemistry, Geology, Geography, Applied Mathematics, Agricultural Science, or Computer Science"
+    ],
+    "note": "Trinity publishes overall competitive admission bands, not per-course offers: this course is Band 2 — AAA from 3 A-levels or AABC from 4 A-levels. Posted scores are minimums and do not guarantee admission. Subject: Grade C in two of Physics, Chemistry, Biology, Physics/Chemistry, Geology, Geography, Applied Mathematics, Agricultural Science or Computer Science; GCSE Grade B/6 Mathematics."
+   },
+   "ib": {
+    "status": "verified",
+    "accepted": "yes",
+    "overallScore": 33,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/science/",
+      "label": "Trinity: Science course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "QUALIFICATION NOTES SPECIAL BAND 1 BAND 2 BAND 3 BAND … International Baccalaureate Including bonus points. No HL below 5 or SL below 4 40 36 33 30 … 2 Science: Biological & Biomedical Sciences Mathematics 4 Group D 2 + 2 … 2 Science: Chemical Sciences Mathematics 4 Group D 2 + 2 … 2 Science: Geography and Geoscience Mathematics 4 Group D 2 + 2 … 2 Science: Physical Sciences Mathematics 4 Group D 2 + 2",
+     "GCSE: Grade B/6 Mathematics Advanced GCE (A Level): Grade C in two of Physics, Chemistry, Biology, Physics/Chemistry, Geology, Geography, Applied Mathematics, Agricultural Science, or Computer Science International Baccalaureate: SL Grade 5 Mathematics HL Grade 5 in two of Physics, Chemistry, Biology, Physics/Chemistry, Geology, Geography, Applied Mathematics, Agricultural Science, or Computer Science"
+    ],
+    "detail": "Including bonus points; no HL below 5 or SL below 4; SL Grade 5 Mathematics; HL Grade 5 in two of Physics, Chemistry, Biology, Physics/Chemistry, Geology, Geography, Applied Mathematics, Agricultural Science or Computer Science",
+    "note": "Brochure Band 2 for this course."
+   },
+   "otherQualifications": {
+    "status": "partial",
+    "items": [
+     "Advanced Placement: not a standalone qualification — considered as additional academic evidence alongside the US High School Diploma (unweighted GPA 3.2+); no AP grade minimum published",
+     "Hong Kong HKDSE: 55544 (3 core + 2 electives, Band 2)",
+     "Singapore-Cambridge A-Level: 'GCE A Levels' accepted for direct application from Singapore; no H2 conversion or course grade published"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/country/usa/",
+      "label": "Trinity: USA country page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/study/country/singapore/",
+      "label": "Trinity: Singapore country page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Trinity admissions office will consider alternative evidence from students applying for entry in 2027. In lieu of standardised tests, the admissions office will consider criteria including: GPA, academic transcripts, two references, a personal statement for your application. We will also consider other academic criteria such as Advanced Placement courses (APs), college and honors level classes with strong grades where relevant to the programme / major for which you are applying. You may submit any SAT/ACT test scores you have been able to take if you also wish them to be considered.",
+     "Hong Kong – HKDSE 3 core subjects and 2 electives in recognised subjects 5*5*554 5*5544 55544 54444 … 2 Science: Biological & Biomedical Sciences Mathematics 4 Group D 2 + 2 … 2 Science: Chemical Sciences Mathematics 4 Group D 2 + 2 … 2 Science: Geography and Geoscience Mathematics 4 Group D 2 + 2 … 2 Science: Physical Sciences Mathematics 4 Group D 2 + 2",
+     "Accepted qualifications for direct applications include: Polytechnic Diploma - 3.0 minimum GPA GCE A Levels Click here for a quick guide to Trinity requirements for GCE A Levels"
+    ],
+    "note": "Singapore A-Level course grade not published; AP has no published grade minimum."
+   },
+   "otherRequirements": {
+    "status": "verified",
+    "items": [
+     "Two letters of recommendation and a personal statement (direct application)",
+     "Age: date of birth before 15 January 2010 (stated for 2026 admission)",
+     "Minimum matriculation: pass grades in English, Mathematics and a language other than English"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/apply/making-an-application/undergraduate/direct-applications/",
+      "label": "Trinity: Direct application information"
+     },
+     {
+      "url": "https://www.tcd.ie/study/apply/admission-requirements/undergraduate/",
+      "label": "Trinity: Undergraduate admission requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "SAT, AP or ACT scores (US and Canadian applicants only) Two letters of recommendation",
+     "Applicants seeking admission in 2026 must have a date of birth before 15 January 2010. … The standard matriculation requirements are pass grades in English, Mathematics, a language other than English, and a full set of valid subjects for your examination system."
+    ]
+   }
+  },
+  "ie-medicine-trinity": {
+   "satAct": {
+    "status": "partial",
+    "items": [
+     "US applicants: SAT/ACT scores may be submitted for 2027 entry (test-optional; GPA, transcripts, references and personal statement considered in lieu)",
+     "Brochure US rows (SAT/ACT plus GPA) show 'n/a' in the Special band that applies to Medicine"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/country/usa/",
+      "label": "Trinity: USA country page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "You may submit any SAT/ACT test scores you have been able to take if you also wish them to be considered.",
+     "USA – SAT SAT score plus high school GPA n/a 1400, 3.5 1350, 3.4 1250, 3.2 … S Medicine † Group C 1 Group C 2"
+    ],
+    "note": "Whether US applicants can be admitted to Medicine on a US High School Diploma is not stated; 'n/a' is unexplained."
+   },
+   "englishLanguage": {
+    "status": "verified",
+    "items": [
+     "Band B (Standard Entry)",
+     "IELTS Academic 6.5 overall (6.0 in each band)",
+     "Duolingo 120 overall (100 in each subscore)",
+     "TOEFL iBT 90 overall (21 each section) before January 2026; 4.5 overall (4.0 each section) after January 2026",
+     "Cambridge Advanced/Proficiency 180 overall (no score below 170)",
+     "PTE Academic 69 overall (59 in each section)"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/medicine/",
+      "label": "Trinity: Medicine course page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/english-language-requirements/",
+      "label": "Trinity: English language requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Applicants to this course are required to meet Band B (Standard Entry) English language requirements.",
+     "IELTS Academic Duolingo English Test (See Note 3) TOEFL iBT (Before January 2026) TOEFL iBT (After January 2026) Cambridge Advanced or Proficiency PTE Academic (Pearson) … Band B (Standard entry) UG & PG Standard requirements 6.5 overall 6.0 in each band 120 overall 100 in each subscore 90 overall 21 in each section 4.5 overall 4.0 in each section 180 overall no score below 170 69 overall 59 in each section"
+    ],
+    "note": "GCSE English Language C/5 and other school qualifications are also accepted (English requirements page)."
+   },
+   "admissionsTests": {
+    "status": "partial",
+    "items": [
+     "HPAT-Ireland — required for EU applicants applying via CAO, taken in the year of admission",
+     "No admissions test is stated for non-EU direct applicants"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/medicine/",
+      "label": "Trinity: Medicine course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "In addition, all EU applicants applying via CAO will be required to sit the admissions test (HPAT – Ireland) to be accepted into this course. Applicants must complete the HPAT-Ireland admission test in the same year the student wishes to be admitted",
+    "note": "The course page states HPAT only for EU/CAO applicants; it is silent on any test for non-EU applicants. No HPAT code added because it is not stated for the non-EU route."
+   },
+   "subjectPrerequisites": {
+    "status": "verified",
+    "items": [
+     "A-Level Grade B and Grade C in two of Physics, Chemistry, Biology (GCSE Mathematics Grade B or better if no Physics qualification). IB HL Grade 5 and 6 in two of Physics, Chemistry, Biology (IB SL Mathematics 5 or better if no Physics). Physics/Chemistry may not be presented with Physics or Chemistry."
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/medicine/",
+      "label": "Trinity: Medicine course page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Advanced GCE (A Level): Grade B + and Grade C in two of Physics, Chemistry, Biology If you do not have a qualification in Physics, you must present GCSE in Mathematics at Grade B or better International Baccalaureate: HL Grade 5 and 6 in two of Physics, Chemistry, Biology. If you do not have a qualification in Physics, you must present Mathematics at IB SL Grade 5 or better.",
+     "S Medicine † Group C 1 Group C 2"
+    ]
+   },
+   "aLevel": {
+    "status": "verified",
+    "accepted": "yes",
+    "typicalOffer": "A*A*A",
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/medicine/",
+      "label": "Trinity: Medicine course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "QUALIFICATION NOTES SPECIAL BAND 1 BAND 2 BAND 3 BAND … A-levels, 3 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*A A*AA AAA ABB … A-levels, 4 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*AA A*ABC AABC BBBC … S Medicine † Group C 1 Group C 2",
+     "Advanced GCE (A Level): Grade B + and Grade C in two of Physics, Chemistry, Biology If you do not have a qualification in Physics, you must present GCSE in Mathematics at Grade B or better International Baccalaureate: HL Grade 5 and 6 in two of Physics, Chemistry, Biology. If you do not have a qualification in Physics, you must present Mathematics at IB SL Grade 5 or better."
+    ],
+    "note": "Trinity publishes overall competitive admission bands, not per-course offers: this course is Special band — A*A*A from 3 A-levels or A*A*AA from 4 A-levels. Posted scores are minimums and do not guarantee admission. Subject: Grade B and Grade C in two of Physics, Chemistry, Biology; without a Physics qualification, GCSE Mathematics Grade B or better."
+   },
+   "ib": {
+    "status": "verified",
+    "accepted": "yes",
+    "overallScore": 40,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/medicine/",
+      "label": "Trinity: Medicine course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "QUALIFICATION NOTES SPECIAL BAND 1 BAND 2 BAND 3 BAND … International Baccalaureate Including bonus points. No HL below 5 or SL below 4 40 36 33 30 … S Medicine † Group C 1 Group C 2",
+     "Advanced GCE (A Level): Grade B + and Grade C in two of Physics, Chemistry, Biology If you do not have a qualification in Physics, you must present GCSE in Mathematics at Grade B or better International Baccalaureate: HL Grade 5 and 6 in two of Physics, Chemistry, Biology. If you do not have a qualification in Physics, you must present Mathematics at IB SL Grade 5 or better."
+    ],
+    "detail": "Including bonus points; no HL below 5 or SL below 4; HL Grade 5 and 6 in two of Physics, Chemistry, Biology; without a Physics qualification, IB SL Mathematics Grade 5 or better",
+    "note": "Brochure Special band for this course."
+   },
+   "otherQualifications": {
+    "status": "partial",
+    "items": [
+     "Advanced Placement: considered only as supporting evidence with a US High School Diploma; no US standard published for Medicine (brochure US rows show 'n/a' in the Special band)",
+     "Hong Kong HKDSE: 5*5*554 (3 core + 2 electives, Special band)",
+     "Singapore-Cambridge A-Level: 'GCE A Levels' accepted for direct application from Singapore; no H2 conversion or course grade published"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/country/usa/",
+      "label": "Trinity: USA country page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/study/country/singapore/",
+      "label": "Trinity: Singapore country page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Trinity admissions office will consider alternative evidence from students applying for entry in 2027. In lieu of standardised tests, the admissions office will consider criteria including: GPA, academic transcripts, two references, a personal statement for your application. We will also consider other academic criteria such as Advanced Placement courses (APs), college and honors level classes with strong grades where relevant to the programme / major for which you are applying. You may submit any SAT/ACT test scores you have been able to take if you also wish them to be considered.",
+     "Hong Kong – HKDSE 3 core subjects and 2 electives in recognised subjects 5*5*554 5*5544 55544 54444 … S Medicine † Group C 1 Group C 2",
+     "Accepted qualifications for direct applications include: Polytechnic Diploma - 3.0 minimum GPA GCE A Levels Click here for a quick guide to Trinity requirements for GCE A Levels"
+    ],
+    "note": "Singapore A-Level course grade not published; AP has no published grade minimum."
+   },
+   "otherRequirements": {
+    "status": "verified",
+    "items": [
+     "Two letters of recommendation and a personal statement (direct application)",
+     "Age: date of birth before 15 January 2010 (stated for 2026 admission)",
+     "Minimum matriculation: pass grades in English, Mathematics and a language other than English",
+     "Brochure Table 5: Medicine Garda Vetting, Health Screening, Fitness to Practice"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/apply/making-an-application/undergraduate/direct-applications/",
+      "label": "Trinity: Direct application information"
+     },
+     {
+      "url": "https://www.tcd.ie/study/apply/admission-requirements/undergraduate/",
+      "label": "Trinity: Undergraduate admission requirements"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "SAT, AP or ACT scores (US and Canadian applicants only) Two letters of recommendation",
+     "Applicants seeking admission in 2026 must have a date of birth before 15 January 2010. … The standard matriculation requirements are pass grades in English, Mathematics, a language other than English, and a full set of valid subjects for your examination system.",
+     "Medicine Garda Vetting, Health Screening, Fitness to Practice"
+    ]
+   }
+  },
+  "ie-economics-trinity": {
+   "satAct": {
+    "status": "partial",
+    "items": [
+     "Brochure band for this course (Band 1): SAT 1400, GPA 3.5 or ACT 32, GPA 3.5 (unweighted GPA)",
+     "For 2027 entry SAT/ACT are optional: 'You may submit any SAT/ACT test scores … if you also wish them to be considered'"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/study/country/usa/",
+      "label": "Trinity: USA country page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "USA – SAT SAT score plus high school GPA n/a 1400, 3.5 1350, 3.4 1250, 3.2 … USA – ACT ACT score plus high school GPA n/a 32, 3.5 30, 3.4 27, 3.2 … 1 Business, Economics and Social Studies Mathematics 3",
+     "You may submit any SAT/ACT test scores you have been able to take if you also wish them to be considered."
+    ],
+    "note": "The brochure (content labelled for 2026 admission) gives SAT/ACT plus GPA bands; the USA page for 2027 entry lets applicants be assessed without standardised tests. Both shown; neither is a guaranteed threshold."
+   },
+   "englishLanguage": {
+    "status": "verified",
+    "items": [
+     "Band B (Standard Entry)",
+     "IELTS Academic 6.5 overall (6.0 in each band)",
+     "Duolingo 120 overall (100 in each subscore)",
+     "TOEFL iBT 90 overall (21 each section) before January 2026; 4.5 overall (4.0 each section) after January 2026",
+     "Cambridge Advanced/Proficiency 180 overall (no score below 170)",
+     "PTE Academic 69 overall (59 in each section)"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/business-economics-and-social-studies/",
+      "label": "Trinity: Business, Economics and Social Studies course page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/english-language-requirements/",
+      "label": "Trinity: English language requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Applicants to this course are required to meet Band B (Standard Entry) English language requirements.",
+     "IELTS Academic Duolingo English Test (See Note 3) TOEFL iBT (Before January 2026) TOEFL iBT (After January 2026) Cambridge Advanced or Proficiency PTE Academic (Pearson) … Band B (Standard entry) UG & PG Standard requirements 6.5 overall 6.0 in each band 120 overall 100 in each subscore 90 overall 21 in each section 4.5 overall 4.0 in each section 180 overall no score below 170 69 overall 59 in each section"
+    ],
+    "note": "GCSE English Language C/5 and other school qualifications are also accepted (English requirements page)."
+   },
+   "admissionsTests": {
+    "status": "verified",
+    "none": true,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/business-economics-and-social-studies/",
+      "label": "Trinity: Business, Economics and Social Studies course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "GCSE: Grade A/8 Mathematics International Baccalaureate: HL Grade 5 / SL Grade 7 Mathematics",
+    "note": "The course page's Admission Requirements section lists no admissions test."
+   },
+   "subjectPrerequisites": {
+    "status": "verified",
+    "items": [
+     "GCSE Grade A/8 Mathematics; IB HL Grade 5 / SL Grade 7 Mathematics (brochure Table 4: Mathematics level 3)."
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/business-economics-and-social-studies/",
+      "label": "Trinity: Business, Economics and Social Studies course page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "GCSE: Grade A/8 Mathematics International Baccalaureate: HL Grade 5 / SL Grade 7 Mathematics",
+     "1 Business, Economics and Social Studies Mathematics 3"
+    ]
+   },
+   "aLevel": {
+    "status": "verified",
+    "accepted": "yes",
+    "typicalOffer": "A*AA",
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/business-economics-and-social-studies/",
+      "label": "Trinity: Business, Economics and Social Studies course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "QUALIFICATION NOTES SPECIAL BAND 1 BAND 2 BAND 3 BAND … A-levels, 3 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*A A*AA AAA ABB … A-levels, 4 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*AA A*ABC AABC BBBC … 1 Business, Economics and Social Studies Mathematics 3",
+     "GCSE: Grade A/8 Mathematics International Baccalaureate: HL Grade 5 / SL Grade 7 Mathematics"
+    ],
+    "note": "Trinity publishes overall competitive admission bands, not per-course offers: this course is Band 1 — A*AA from 3 A-levels or A*ABC from 4 A-levels. Posted scores are minimums and do not guarantee admission. Subject: GCSE Grade A/8 Mathematics (no A-Level subject named)."
+   },
+   "ib": {
+    "status": "verified",
+    "accepted": "yes",
+    "overallScore": 36,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/business-economics-and-social-studies/",
+      "label": "Trinity: Business, Economics and Social Studies course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "QUALIFICATION NOTES SPECIAL BAND 1 BAND 2 BAND 3 BAND … International Baccalaureate Including bonus points. No HL below 5 or SL below 4 40 36 33 30 … 1 Business, Economics and Social Studies Mathematics 3",
+     "GCSE: Grade A/8 Mathematics International Baccalaureate: HL Grade 5 / SL Grade 7 Mathematics"
+    ],
+    "detail": "Including bonus points; no HL below 5 or SL below 4; HL Grade 5 / SL Grade 7 Mathematics",
+    "note": "Brochure Band 1 for this course."
+   },
+   "otherQualifications": {
+    "status": "partial",
+    "items": [
+     "Advanced Placement: not a standalone qualification — considered as additional academic evidence alongside the US High School Diploma (unweighted GPA 3.2+); no AP grade minimum published",
+     "Hong Kong HKDSE: 5*5544 (3 core + 2 electives, Band 1)",
+     "Singapore-Cambridge A-Level: 'GCE A Levels' accepted for direct application from Singapore; no H2 conversion or course grade published"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/country/usa/",
+      "label": "Trinity: USA country page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/study/country/singapore/",
+      "label": "Trinity: Singapore country page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Trinity admissions office will consider alternative evidence from students applying for entry in 2027. In lieu of standardised tests, the admissions office will consider criteria including: GPA, academic transcripts, two references, a personal statement for your application. We will also consider other academic criteria such as Advanced Placement courses (APs), college and honors level classes with strong grades where relevant to the programme / major for which you are applying. You may submit any SAT/ACT test scores you have been able to take if you also wish them to be considered.",
+     "Hong Kong – HKDSE 3 core subjects and 2 electives in recognised subjects 5*5*554 5*5544 55544 54444 … 1 Business, Economics and Social Studies Mathematics 3",
+     "Accepted qualifications for direct applications include: Polytechnic Diploma - 3.0 minimum GPA GCE A Levels Click here for a quick guide to Trinity requirements for GCE A Levels"
+    ],
+    "note": "Singapore A-Level course grade not published; AP has no published grade minimum."
+   },
+   "otherRequirements": {
+    "status": "verified",
+    "items": [
+     "Two letters of recommendation and a personal statement (direct application)",
+     "Age: date of birth before 15 January 2010 (stated for 2026 admission)",
+     "Minimum matriculation: pass grades in English, Mathematics and a language other than English"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/apply/making-an-application/undergraduate/direct-applications/",
+      "label": "Trinity: Direct application information"
+     },
+     {
+      "url": "https://www.tcd.ie/study/apply/admission-requirements/undergraduate/",
+      "label": "Trinity: Undergraduate admission requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "SAT, AP or ACT scores (US and Canadian applicants only) Two letters of recommendation",
+     "Applicants seeking admission in 2026 must have a date of birth before 15 January 2010. … The standard matriculation requirements are pass grades in English, Mathematics, a language other than English, and a full set of valid subjects for your examination system."
+    ]
+   }
+  },
+  "ie-law-trinity": {
+   "satAct": {
+    "status": "partial",
+    "items": [
+     "Brochure band for this course (Band 2): SAT 1350, GPA 3.4 or ACT 30, GPA 3.4 (unweighted GPA)",
+     "For 2027 entry SAT/ACT are optional: 'You may submit any SAT/ACT test scores … if you also wish them to be considered'"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/study/country/usa/",
+      "label": "Trinity: USA country page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "USA – SAT SAT score plus high school GPA n/a 1400, 3.5 1350, 3.4 1250, 3.2 … USA – ACT ACT score plus high school GPA n/a 32, 3.5 30, 3.4 27, 3.2 … 2 Law, Law (JH)",
+     "You may submit any SAT/ACT test scores you have been able to take if you also wish them to be considered."
+    ],
+    "note": "The brochure (content labelled for 2026 admission) gives SAT/ACT plus GPA bands; the USA page for 2027 entry lets applicants be assessed without standardised tests. Both shown; neither is a guaranteed threshold."
+   },
+   "englishLanguage": {
+    "status": "verified",
+    "items": [
+     "Band B (Standard Entry)",
+     "IELTS Academic 6.5 overall (6.0 in each band)",
+     "Duolingo 120 overall (100 in each subscore)",
+     "TOEFL iBT 90 overall (21 each section) before January 2026; 4.5 overall (4.0 each section) after January 2026",
+     "Cambridge Advanced/Proficiency 180 overall (no score below 170)",
+     "PTE Academic 69 overall (59 in each section)"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/law/",
+      "label": "Trinity: Law course page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/english-language-requirements/",
+      "label": "Trinity: English language requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Applicants to this course are required to meet Band B (Standard Entry) English language requirements.",
+     "IELTS Academic Duolingo English Test (See Note 3) TOEFL iBT (Before January 2026) TOEFL iBT (After January 2026) Cambridge Advanced or Proficiency PTE Academic (Pearson) … Band B (Standard entry) UG & PG Standard requirements 6.5 overall 6.0 in each band 120 overall 100 in each subscore 90 overall 21 in each section 4.5 overall 4.0 in each section 180 overall no score below 170 69 overall 59 in each section"
+    ],
+    "note": "GCSE English Language C/5 and other school qualifications are also accepted (English requirements page)."
+   },
+   "admissionsTests": {
+    "status": "verified",
+    "none": true,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/law/",
+      "label": "Trinity: Law course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Admission Requirements English Language Requirements All applicants to Trinity are required to provide official evidence of proficiency in the English language.",
+    "note": "The course page's Admission Requirements section lists no admissions test."
+   },
+   "subjectPrerequisites": {
+    "status": "verified",
+    "none": true,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "2 Law, Law (JH)",
+    "note": "Brochure Table 4 lists no subject requirement for this programme; the course page lists only the English requirement."
+   },
+   "aLevel": {
+    "status": "verified",
+    "accepted": "yes",
+    "typicalOffer": "AAA",
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "QUALIFICATION NOTES SPECIAL BAND 1 BAND 2 BAND 3 BAND … A-levels, 3 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*A A*AA AAA ABB … A-levels, 4 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*AA A*ABC AABC BBBC … 2 Law, Law (JH)"
+    ],
+    "note": "Trinity publishes overall competitive admission bands, not per-course offers: this course is Band 2 — AAA from 3 A-levels or AABC from 4 A-levels. Posted scores are minimums and do not guarantee admission."
+   },
+   "ib": {
+    "status": "verified",
+    "accepted": "yes",
+    "overallScore": 33,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "QUALIFICATION NOTES SPECIAL BAND 1 BAND 2 BAND 3 BAND … International Baccalaureate Including bonus points. No HL below 5 or SL below 4 40 36 33 30 … 2 Law, Law (JH)"
+    ],
+    "detail": "Including bonus points; no HL below 5 or SL below 4",
+    "note": "Brochure Band 2 for this course."
+   },
+   "otherQualifications": {
+    "status": "partial",
+    "items": [
+     "Advanced Placement: not a standalone qualification — considered as additional academic evidence alongside the US High School Diploma (unweighted GPA 3.2+); no AP grade minimum published",
+     "Hong Kong HKDSE: 55544 (3 core + 2 electives, Band 2)",
+     "Singapore-Cambridge A-Level: 'GCE A Levels' accepted for direct application from Singapore; no H2 conversion or course grade published"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/country/usa/",
+      "label": "Trinity: USA country page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/study/country/singapore/",
+      "label": "Trinity: Singapore country page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Trinity admissions office will consider alternative evidence from students applying for entry in 2027. In lieu of standardised tests, the admissions office will consider criteria including: GPA, academic transcripts, two references, a personal statement for your application. We will also consider other academic criteria such as Advanced Placement courses (APs), college and honors level classes with strong grades where relevant to the programme / major for which you are applying. You may submit any SAT/ACT test scores you have been able to take if you also wish them to be considered.",
+     "Hong Kong – HKDSE 3 core subjects and 2 electives in recognised subjects 5*5*554 5*5544 55544 54444 … 2 Law, Law (JH)",
+     "Accepted qualifications for direct applications include: Polytechnic Diploma - 3.0 minimum GPA GCE A Levels Click here for a quick guide to Trinity requirements for GCE A Levels"
+    ],
+    "note": "Singapore A-Level course grade not published; AP has no published grade minimum."
+   },
+   "otherRequirements": {
+    "status": "verified",
+    "items": [
+     "Two letters of recommendation and a personal statement (direct application)",
+     "Age: date of birth before 15 January 2010 (stated for 2026 admission)",
+     "Minimum matriculation: pass grades in English, Mathematics and a language other than English"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/apply/making-an-application/undergraduate/direct-applications/",
+      "label": "Trinity: Direct application information"
+     },
+     {
+      "url": "https://www.tcd.ie/study/apply/admission-requirements/undergraduate/",
+      "label": "Trinity: Undergraduate admission requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "SAT, AP or ACT scores (US and Canadian applicants only) Two letters of recommendation",
+     "Applicants seeking admission in 2026 must have a date of birth before 15 January 2010. … The standard matriculation requirements are pass grades in English, Mathematics, a language other than English, and a full set of valid subjects for your examination system."
+    ]
+   }
+  },
+  "ie-business-trinity": {
+   "satAct": {
+    "status": "partial",
+    "items": [
+     "Brochure band for this course (Band 1): SAT 1400, GPA 3.5 or ACT 32, GPA 3.5 (unweighted GPA)",
+     "For 2027 entry SAT/ACT are optional: 'You may submit any SAT/ACT test scores … if you also wish them to be considered'"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/study/country/usa/",
+      "label": "Trinity: USA country page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "USA – SAT SAT score plus high school GPA n/a 1400, 3.5 1350, 3.4 1250, 3.2 … USA – ACT ACT score plus high school GPA n/a 32, 3.5 30, 3.4 27, 3.2 … 1 Business, Economics and Social Studies Mathematics 3",
+     "You may submit any SAT/ACT test scores you have been able to take if you also wish them to be considered."
+    ],
+    "note": "The brochure (content labelled for 2026 admission) gives SAT/ACT plus GPA bands; the USA page for 2027 entry lets applicants be assessed without standardised tests. Both shown; neither is a guaranteed threshold."
+   },
+   "englishLanguage": {
+    "status": "verified",
+    "items": [
+     "Band B (Standard Entry)",
+     "IELTS Academic 6.5 overall (6.0 in each band)",
+     "Duolingo 120 overall (100 in each subscore)",
+     "TOEFL iBT 90 overall (21 each section) before January 2026; 4.5 overall (4.0 each section) after January 2026",
+     "Cambridge Advanced/Proficiency 180 overall (no score below 170)",
+     "PTE Academic 69 overall (59 in each section)"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/business-economics-and-social-studies/",
+      "label": "Trinity: Business, Economics and Social Studies course page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/english-language-requirements/",
+      "label": "Trinity: English language requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Applicants to this course are required to meet Band B (Standard Entry) English language requirements.",
+     "IELTS Academic Duolingo English Test (See Note 3) TOEFL iBT (Before January 2026) TOEFL iBT (After January 2026) Cambridge Advanced or Proficiency PTE Academic (Pearson) … Band B (Standard entry) UG & PG Standard requirements 6.5 overall 6.0 in each band 120 overall 100 in each subscore 90 overall 21 in each section 4.5 overall 4.0 in each section 180 overall no score below 170 69 overall 59 in each section"
+    ],
+    "note": "GCSE English Language C/5 and other school qualifications are also accepted (English requirements page)."
+   },
+   "admissionsTests": {
+    "status": "verified",
+    "none": true,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/business-economics-and-social-studies/",
+      "label": "Trinity: Business, Economics and Social Studies course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "GCSE: Grade A/8 Mathematics International Baccalaureate: HL Grade 5 / SL Grade 7 Mathematics",
+    "note": "The course page's Admission Requirements section lists no admissions test."
+   },
+   "subjectPrerequisites": {
+    "status": "verified",
+    "items": [
+     "GCSE Grade A/8 Mathematics; IB HL Grade 5 / SL Grade 7 Mathematics (brochure Table 4: Mathematics level 3)."
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/business-economics-and-social-studies/",
+      "label": "Trinity: Business, Economics and Social Studies course page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "GCSE: Grade A/8 Mathematics International Baccalaureate: HL Grade 5 / SL Grade 7 Mathematics",
+     "1 Business, Economics and Social Studies Mathematics 3"
+    ]
+   },
+   "aLevel": {
+    "status": "verified",
+    "accepted": "yes",
+    "typicalOffer": "A*AA",
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/business-economics-and-social-studies/",
+      "label": "Trinity: Business, Economics and Social Studies course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "QUALIFICATION NOTES SPECIAL BAND 1 BAND 2 BAND 3 BAND … A-levels, 3 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*A A*AA AAA ABB … A-levels, 4 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*AA A*ABC AABC BBBC … 1 Business, Economics and Social Studies Mathematics 3",
+     "GCSE: Grade A/8 Mathematics International Baccalaureate: HL Grade 5 / SL Grade 7 Mathematics"
+    ],
+    "note": "Trinity publishes overall competitive admission bands, not per-course offers: this course is Band 1 — A*AA from 3 A-levels or A*ABC from 4 A-levels. Posted scores are minimums and do not guarantee admission. Subject: GCSE Grade A/8 Mathematics (no A-Level subject named)."
+   },
+   "ib": {
+    "status": "verified",
+    "accepted": "yes",
+    "overallScore": 36,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/business-economics-and-social-studies/",
+      "label": "Trinity: Business, Economics and Social Studies course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "QUALIFICATION NOTES SPECIAL BAND 1 BAND 2 BAND 3 BAND … International Baccalaureate Including bonus points. No HL below 5 or SL below 4 40 36 33 30 … 1 Business, Economics and Social Studies Mathematics 3",
+     "GCSE: Grade A/8 Mathematics International Baccalaureate: HL Grade 5 / SL Grade 7 Mathematics"
+    ],
+    "detail": "Including bonus points; no HL below 5 or SL below 4; HL Grade 5 / SL Grade 7 Mathematics",
+    "note": "Brochure Band 1 for this course."
+   },
+   "otherQualifications": {
+    "status": "partial",
+    "items": [
+     "Advanced Placement: not a standalone qualification — considered as additional academic evidence alongside the US High School Diploma (unweighted GPA 3.2+); no AP grade minimum published",
+     "Hong Kong HKDSE: 5*5544 (3 core + 2 electives, Band 1)",
+     "Singapore-Cambridge A-Level: 'GCE A Levels' accepted for direct application from Singapore; no H2 conversion or course grade published"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/country/usa/",
+      "label": "Trinity: USA country page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/study/country/singapore/",
+      "label": "Trinity: Singapore country page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Trinity admissions office will consider alternative evidence from students applying for entry in 2027. In lieu of standardised tests, the admissions office will consider criteria including: GPA, academic transcripts, two references, a personal statement for your application. We will also consider other academic criteria such as Advanced Placement courses (APs), college and honors level classes with strong grades where relevant to the programme / major for which you are applying. You may submit any SAT/ACT test scores you have been able to take if you also wish them to be considered.",
+     "Hong Kong – HKDSE 3 core subjects and 2 electives in recognised subjects 5*5*554 5*5544 55544 54444 … 1 Business, Economics and Social Studies Mathematics 3",
+     "Accepted qualifications for direct applications include: Polytechnic Diploma - 3.0 minimum GPA GCE A Levels Click here for a quick guide to Trinity requirements for GCE A Levels"
+    ],
+    "note": "Singapore A-Level course grade not published; AP has no published grade minimum."
+   },
+   "otherRequirements": {
+    "status": "verified",
+    "items": [
+     "Two letters of recommendation and a personal statement (direct application)",
+     "Age: date of birth before 15 January 2010 (stated for 2026 admission)",
+     "Minimum matriculation: pass grades in English, Mathematics and a language other than English"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/apply/making-an-application/undergraduate/direct-applications/",
+      "label": "Trinity: Direct application information"
+     },
+     {
+      "url": "https://www.tcd.ie/study/apply/admission-requirements/undergraduate/",
+      "label": "Trinity: Undergraduate admission requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "SAT, AP or ACT scores (US and Canadian applicants only) Two letters of recommendation",
+     "Applicants seeking admission in 2026 must have a date of birth before 15 January 2010. … The standard matriculation requirements are pass grades in English, Mathematics, a language other than English, and a full set of valid subjects for your examination system."
+    ]
+   }
+  },
+  "ie-psychology-trinity": {
+   "satAct": {
+    "status": "partial",
+    "items": [
+     "Brochure band for this course (Band 1): SAT 1400, GPA 3.5 or ACT 32, GPA 3.5 (unweighted GPA)",
+     "For 2027 entry SAT/ACT are optional: 'You may submit any SAT/ACT test scores … if you also wish them to be considered'"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/study/country/usa/",
+      "label": "Trinity: USA country page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "USA – SAT SAT score plus high school GPA n/a 1400, 3.5 1350, 3.4 1250, 3.2 … USA – ACT ACT score plus high school GPA n/a 32, 3.5 30, 3.4 27, 3.2 … 1 Psychology",
+     "You may submit any SAT/ACT test scores you have been able to take if you also wish them to be considered."
+    ],
+    "note": "The brochure (content labelled for 2026 admission) gives SAT/ACT plus GPA bands; the USA page for 2027 entry lets applicants be assessed without standardised tests. Both shown; neither is a guaranteed threshold."
+   },
+   "englishLanguage": {
+    "status": "verified",
+    "items": [
+     "Band B (Standard Entry)",
+     "IELTS Academic 6.5 overall (6.0 in each band)",
+     "Duolingo 120 overall (100 in each subscore)",
+     "TOEFL iBT 90 overall (21 each section) before January 2026; 4.5 overall (4.0 each section) after January 2026",
+     "Cambridge Advanced/Proficiency 180 overall (no score below 170)",
+     "PTE Academic 69 overall (59 in each section)"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/psychology/",
+      "label": "Trinity: Psychology course page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/english-language-requirements/",
+      "label": "Trinity: English language requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Applicants to this course are required to meet Band B (Standard Entry) English language requirements.",
+     "IELTS Academic Duolingo English Test (See Note 3) TOEFL iBT (Before January 2026) TOEFL iBT (After January 2026) Cambridge Advanced or Proficiency PTE Academic (Pearson) … Band B (Standard entry) UG & PG Standard requirements 6.5 overall 6.0 in each band 120 overall 100 in each subscore 90 overall 21 in each section 4.5 overall 4.0 in each section 180 overall no score below 170 69 overall 59 in each section"
+    ],
+    "note": "GCSE English Language C/5 and other school qualifications are also accepted (English requirements page)."
+   },
+   "admissionsTests": {
+    "status": "verified",
+    "none": true,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/courses/undergraduate/courses/psychology/",
+      "label": "Trinity: Psychology course page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Admission Requirements English Language Requirements All applicants to Trinity are required to provide official evidence of proficiency in the English language.",
+    "note": "The course page's Admission Requirements section lists no admissions test."
+   },
+   "subjectPrerequisites": {
+    "status": "verified",
+    "none": true,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "1 Psychology",
+    "note": "Brochure Table 4 lists no subject requirement for this programme; the course page lists only the English requirement."
+   },
+   "aLevel": {
+    "status": "verified",
+    "accepted": "yes",
+    "typicalOffer": "A*AA",
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "QUALIFICATION NOTES SPECIAL BAND 1 BAND 2 BAND 3 BAND … A-levels, 3 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*A A*AA AAA ABB … A-levels, 4 subjects www.tcd.ie/study/apply/admission-requirements/undergraduate/ A*A*AA A*ABC AABC BBBC … 1 Psychology"
+    ],
+    "note": "Trinity publishes overall competitive admission bands, not per-course offers: this course is Band 1 — A*AA from 3 A-levels or A*ABC from 4 A-levels. Posted scores are minimums and do not guarantee admission."
+   },
+   "ib": {
+    "status": "verified",
+    "accepted": "yes",
+    "overallScore": 36,
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "QUALIFICATION NOTES SPECIAL BAND 1 BAND 2 BAND 3 BAND … International Baccalaureate Including bonus points. No HL below 5 or SL below 4 40 36 33 30 … 1 Psychology"
+    ],
+    "detail": "Including bonus points; no HL below 5 or SL below 4",
+    "note": "Brochure Band 1 for this course."
+   },
+   "otherQualifications": {
+    "status": "partial",
+    "items": [
+     "Advanced Placement: not a standalone qualification — considered as additional academic evidence alongside the US High School Diploma (unweighted GPA 3.2+); no AP grade minimum published",
+     "Hong Kong HKDSE: 5*5544 (3 core + 2 electives, Band 1)",
+     "Singapore-Cambridge A-Level: 'GCE A Levels' accepted for direct application from Singapore; no H2 conversion or course grade published"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/country/usa/",
+      "label": "Trinity: USA country page"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     },
+     {
+      "url": "https://www.tcd.ie/study/country/singapore/",
+      "label": "Trinity: Singapore country page"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Trinity admissions office will consider alternative evidence from students applying for entry in 2027. In lieu of standardised tests, the admissions office will consider criteria including: GPA, academic transcripts, two references, a personal statement for your application. We will also consider other academic criteria such as Advanced Placement courses (APs), college and honors level classes with strong grades where relevant to the programme / major for which you are applying. You may submit any SAT/ACT test scores you have been able to take if you also wish them to be considered.",
+     "Hong Kong – HKDSE 3 core subjects and 2 electives in recognised subjects 5*5*554 5*5544 55544 54444 … 1 Psychology",
+     "Accepted qualifications for direct applications include: Polytechnic Diploma - 3.0 minimum GPA GCE A Levels Click here for a quick guide to Trinity requirements for GCE A Levels"
+    ],
+    "note": "Singapore A-Level course grade not published; AP has no published grade minimum."
+   },
+   "otherRequirements": {
+    "status": "verified",
+    "items": [
+     "Two letters of recommendation and a personal statement (direct application)",
+     "Age: date of birth before 15 January 2010 (stated for 2026 admission)",
+     "Minimum matriculation: pass grades in English, Mathematics and a language other than English",
+     "Brochure Table 5: Psychology Fitness to Practice"
+    ],
+    "sources": [
+     {
+      "url": "https://www.tcd.ie/study/apply/making-an-application/undergraduate/direct-applications/",
+      "label": "Trinity: Direct application information"
+     },
+     {
+      "url": "https://www.tcd.ie/study/apply/admission-requirements/undergraduate/",
+      "label": "Trinity: Undergraduate admission requirements"
+     },
+     {
+      "url": "https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf",
+      "label": "Trinity Undergraduate Admission Guide for non-EU Students (brochure file named 2027)"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "SAT, AP or ACT scores (US and Canadian applicants only) Two letters of recommendation",
+     "Applicants seeking admission in 2026 must have a date of birth before 15 January 2010. … The standard matriculation requirements are pass grades in English, Mathematics, a language other than English, and a full set of valid subjects for your examination system.",
+     "Psychology Fitness to Practice"
+    ]
+   }
+  }
+ }
+}
