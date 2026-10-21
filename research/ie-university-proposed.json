@@ -1,0 +1,924 @@
+{
+ "_note": "PROPOSED records only — not loaded into data/requirements/2027.js. IE University = private Spanish university (country code ES), not Ireland. Every checked value traces to a sourceSnippet; unknown = unverified, never guessed.",
+ "courses": {
+  "es-cs-ie": {
+   "satAct": {
+    "status": "verified",
+    "items": [
+     "Optional alternative to the required IE University Admissions Test: SAT 1300 or above, or ACT 28 or above",
+     "Science & Technology programs: SAT Mathematics section minimum 700"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Alternatively, we accept the following globally recognized tests: New SAT: 1300* or above … who choose to submit SAT scores must obtain a minimum score of 700 in the SAT Mathematics section … ACT: 28 or above",
+    "note": "SAT/ACT replace the IE Admissions Test; they are not required in addition. The 2027–2028 Admissions Policy calls these 'recommended minimum scores'."
+   },
+   "englishLanguage": {
+    "status": "verified",
+    "items": [
+     "All programs taught in English",
+     "TOEFL iBT 100 (105 recommended; 5.0 on the new 1–6 scale)",
+     "IELTS 7 (7.5 recommended)",
+     "Cambridge C1 Advanced or C2 Proficiency",
+     "Duolingo English Test 130",
+     "Exempt if living >2 years in an English-speaking country or educated in an English-medium system (e.g. American High School, IB in English, A-levels) for the whole education or the last two years"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "TOEFL: Minimum score 100; 105 recommended (or 5.0 on the new 1–6 scale). … IELTS: minimum 7, 7.5 recommended … Duolingo English Test: minimum score of 130",
+    "note": "Certificates valid two years; the Admissions Committee may request a certificate from any candidate."
+   },
+   "admissionsTests": {
+    "status": "verified",
+    "items": [
+     "IE University Admissions Test — required unless SAT (1300+) or ACT (28+) submitted",
+     "IE Mathematics Assessment (60 minutes) for School of Science & Technology programs",
+     "If SAT submitted: SAT Math section minimum 700"
+    ],
+    "codes": [
+     "IEU-TEST",
+     "IEU-MATH"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     },
+     {
+      "url": "https://www.ie.edu/university/admission/admission-process/admissions-test/",
+      "label": "IE University: Admissions Test"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "we require candidates to take our IEU Admissions Test … who choose to submit SAT scores must obtain a minimum score of 700 in the SAT Mathematics section",
+     "Mathematics Assessment for programs within the School of Science and Technology … Sixty (60) minutes to complete"
+    ],
+    "note": "The IE Admissions Test may be replaced by SAT/ACT (or LNAT for Law). Results are not shared with the applicant; no pass mark is published."
+   },
+   "subjectPrerequisites": {
+    "status": "partial",
+    "items": [
+     "Advisory (not mandatory): A-Level Mathematics, Further Mathematics, Computer Science, Digital Technology, IT, Physics or Software Systems Development",
+     "Advisory: IB Mathematics AA HL/SL or Math AI HL"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements — Required Math Competency"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Bachelor in Computer Science & Artificial Intelligence: Mathematics, Further Mathematics, Computer Science, Digital Technology, Information Technology, Physics, Software Systems Development.",
+    "note": "Listed under 'Required Math Competency' but IE states these are 'purely advisory' guidance and an application is still considered if a subject is unavailable at the school."
+   },
+   "aLevel": {
+    "status": "partial",
+    "accepted": "yes",
+    "detail": "Minimum of three A-Levels; no grade requirement published (applications range AAB to A*A*A*); retakes not accepted",
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "IE University requires a minimum of three A-Levels, and our applications range from AAB to A*A*A*, in the ordinary intake.",
+    "note": "No grade minimum or typical offer is published; AAB–A*A*A* is the range of applications, not a requirement. Spanish legal access also needs five GCSE/IGCSE passes at A–C (4–9). Holistic scoring-system admission.",
+    "reviewFlag": "Do not convert the AAB–A*A*A* application range into a typicalOffer; IE publishes no A-Level grade requirement."
+   },
+   "ib": {
+    "status": "partial",
+    "accepted": "yes",
+    "detail": "Full IB Diploma; no minimum points published (typical admissions 34–45, average 36); first results only",
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "The average final IB score of our students is 36. Typical admissions are based on scores between 34 and 45.",
+    "note": "34–45 and 36 describe admitted students, not a minimum; no overallScore recorded. Full IB Diploma required (Certificate not legally accepted in Spain); UNED university-access accreditation.",
+    "reviewFlag": "Do not record 34 or 36 as an overallScore; IE publishes no IB minimum."
+   },
+   "otherQualifications": {
+    "status": "partial",
+    "items": [
+     "US High School Diploma: unweighted GPA of at least 3.4 (last three years); AP courses not required but highly recommended; no AP score minimum published",
+     "Advisory AP guidance for this program: AP Calculus AB and BC, or AP Calculus and AP Computer Science A/Principles",
+     "Singapore-Cambridge A-Level and HKDSE: not listed (contact Admissions)"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Applicants are expected to have an unweighted GPA of at least 3.4 on a 4.0 scale (unweighted) for the last three years of high school. Although not required, AP and Honors courses are highly recommended. … Bachelor in Computer Science & Artificial Intelligence: AP Calculus AB and BC, or AP Calculus and AP Computer Science A/Principles.",
+    "note": "Spanish homologation for the US diploma requires official transcripts for Grades 10–12. Singapore A-Level and HKDSE are not mentioned on IE's requirements page."
+   },
+   "otherRequirements": {
+    "status": "verified",
+    "items": [
+     "Holistic, scoring-system review (academic record, extracurriculars, personal background, English, admission test, online assessment); no single factor decisive",
+     "Online Assessment (written and video responses) for all applicants",
+     "Personal interview (online) at the Committee's discretion — most candidates expected to complete one",
+     "CV, one recommendation letter, 'Express Yourself' piece (essay, video or other format)",
+     "Rolling Admissions Rounds (Early, 1, 2, 3, then post-rounds) with limited program capacity"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     },
+     {
+      "url": "https://www.ie.edu/university/admission/admission-process/admissions-rounds/",
+      "label": "IE University: Admissions Rounds"
+     },
+     {
+      "url": "https://www.ie.edu/university/admission/admission-process/application-form/",
+      "label": "IE University: Application form"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Our admissions process is rigorous and holistic, designed to evaluate each applicant beyond grades alone.",
+     "Most candidates are expected to complete an interview as part of their evaluation. … Not all programs will have available places in every round.",
+     "One letter of recommendation from your professor/tutor, or another from your head of studies/dean. … A recent CV which includes your academic background, work experience and extracurricular activities."
+    ]
+   }
+  },
+  "es-maths-ie": {
+   "satAct": {
+    "status": "verified",
+    "items": [
+     "Optional alternative to the required IE University Admissions Test: SAT 1300 or above, or ACT 28 or above",
+     "Science & Technology programs: SAT Mathematics section minimum 700"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Alternatively, we accept the following globally recognized tests: New SAT: 1300* or above … who choose to submit SAT scores must obtain a minimum score of 700 in the SAT Mathematics section … ACT: 28 or above",
+    "note": "SAT/ACT replace the IE Admissions Test; they are not required in addition. The 2027–2028 Admissions Policy calls these 'recommended minimum scores'."
+   },
+   "englishLanguage": {
+    "status": "verified",
+    "items": [
+     "All programs taught in English",
+     "TOEFL iBT 100 (105 recommended; 5.0 on the new 1–6 scale)",
+     "IELTS 7 (7.5 recommended)",
+     "Cambridge C1 Advanced or C2 Proficiency",
+     "Duolingo English Test 130",
+     "Exempt if living >2 years in an English-speaking country or educated in an English-medium system (e.g. American High School, IB in English, A-levels) for the whole education or the last two years"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "TOEFL: Minimum score 100; 105 recommended (or 5.0 on the new 1–6 scale). … IELTS: minimum 7, 7.5 recommended … Duolingo English Test: minimum score of 130",
+    "note": "Certificates valid two years; the Admissions Committee may request a certificate from any candidate."
+   },
+   "admissionsTests": {
+    "status": "verified",
+    "items": [
+     "IE University Admissions Test — required unless SAT (1300+) or ACT (28+) submitted",
+     "IE Mathematics Assessment (60 minutes) for School of Science & Technology programs",
+     "If SAT submitted: SAT Math section minimum 700"
+    ],
+    "codes": [
+     "IEU-TEST",
+     "IEU-MATH"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     },
+     {
+      "url": "https://www.ie.edu/university/admission/admission-process/admissions-test/",
+      "label": "IE University: Admissions Test"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "we require candidates to take our IEU Admissions Test … who choose to submit SAT scores must obtain a minimum score of 700 in the SAT Mathematics section",
+     "Mathematics Assessment for programs within the School of Science and Technology … Sixty (60) minutes to complete"
+    ],
+    "note": "The IE Admissions Test may be replaced by SAT/ACT (or LNAT for Law). Results are not shared with the applicant; no pass mark is published."
+   },
+   "subjectPrerequisites": {
+    "status": "partial",
+    "items": [
+     "Advisory (not mandatory): A-Level Mathematics and Further Mathematics (AS Further Mathematics can be considered)",
+     "Advisory: IB Mathematics AA HL"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements — Required Math Competency"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Bachelor in Applied Mathematics: Mathematics and Further Mathematics (if no A-Level in Further Mathematics, AS-Level can be considered).",
+    "note": "Listed under 'Required Math Competency' but IE states these are 'purely advisory' guidance and an application is still considered if a subject is unavailable at the school."
+   },
+   "aLevel": {
+    "status": "partial",
+    "accepted": "yes",
+    "detail": "Minimum of three A-Levels; no grade requirement published (applications range AAB to A*A*A*); retakes not accepted",
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "IE University requires a minimum of three A-Levels, and our applications range from AAB to A*A*A*, in the ordinary intake.",
+    "note": "No grade minimum or typical offer is published; AAB–A*A*A* is the range of applications, not a requirement. Spanish legal access also needs five GCSE/IGCSE passes at A–C (4–9). Holistic scoring-system admission.",
+    "reviewFlag": "Do not convert the AAB–A*A*A* application range into a typicalOffer; IE publishes no A-Level grade requirement."
+   },
+   "ib": {
+    "status": "partial",
+    "accepted": "yes",
+    "detail": "Full IB Diploma; no minimum points published (typical admissions 34–45, average 36); first results only",
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "The average final IB score of our students is 36. Typical admissions are based on scores between 34 and 45.",
+    "note": "34–45 and 36 describe admitted students, not a minimum; no overallScore recorded. Full IB Diploma required (Certificate not legally accepted in Spain); UNED university-access accreditation.",
+    "reviewFlag": "Do not record 34 or 36 as an overallScore; IE publishes no IB minimum."
+   },
+   "otherQualifications": {
+    "status": "partial",
+    "items": [
+     "US High School Diploma: unweighted GPA of at least 3.4 (last three years); AP courses not required but highly recommended; no AP score minimum published",
+     "Advisory AP guidance for this program: at least two of AP Calculus AB, AP Calculus BC, AP Physics 1/2/C",
+     "Singapore-Cambridge A-Level and HKDSE: not listed (contact Admissions)"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Applicants are expected to have an unweighted GPA of at least 3.4 on a 4.0 scale (unweighted) for the last three years of high school. Although not required, AP and Honors courses are highly recommended. … Bachelor in Applied Mathematics: At least two of these subjects: AP Calculus AB, AP Calculus BC, AP Physics 1/2/C.",
+    "note": "Spanish homologation for the US diploma requires official transcripts for Grades 10–12. Singapore A-Level and HKDSE are not mentioned on IE's requirements page."
+   },
+   "otherRequirements": {
+    "status": "verified",
+    "items": [
+     "Holistic, scoring-system review (academic record, extracurriculars, personal background, English, admission test, online assessment); no single factor decisive",
+     "Online Assessment (written and video responses) for all applicants",
+     "Personal interview (online) at the Committee's discretion — most candidates expected to complete one",
+     "CV, one recommendation letter, 'Express Yourself' piece (essay, video or other format)",
+     "Rolling Admissions Rounds (Early, 1, 2, 3, then post-rounds) with limited program capacity"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     },
+     {
+      "url": "https://www.ie.edu/university/admission/admission-process/admissions-rounds/",
+      "label": "IE University: Admissions Rounds"
+     },
+     {
+      "url": "https://www.ie.edu/university/admission/admission-process/application-form/",
+      "label": "IE University: Application form"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Our admissions process is rigorous and holistic, designed to evaluate each applicant beyond grades alone.",
+     "Most candidates are expected to complete an interview as part of their evaluation. … Not all programs will have available places in every round.",
+     "One letter of recommendation from your professor/tutor, or another from your head of studies/dean. … A recent CV which includes your academic background, work experience and extracurricular activities."
+    ]
+   }
+  },
+  "es-economics-ie": {
+   "satAct": {
+    "status": "verified",
+    "items": [
+     "Optional alternative to the required IE University Admissions Test: SAT 1300 or above, or ACT 28 or above"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Alternatively, we accept the following globally recognized tests: New SAT: 1300* or above … ACT: 28 or above",
+    "note": "SAT/ACT replace the IE Admissions Test; they are not required in addition. The 2027–2028 Admissions Policy calls these 'recommended minimum scores'."
+   },
+   "englishLanguage": {
+    "status": "verified",
+    "items": [
+     "All programs taught in English",
+     "TOEFL iBT 100 (105 recommended; 5.0 on the new 1–6 scale)",
+     "IELTS 7 (7.5 recommended)",
+     "Cambridge C1 Advanced or C2 Proficiency",
+     "Duolingo English Test 130",
+     "Exempt if living >2 years in an English-speaking country or educated in an English-medium system (e.g. American High School, IB in English, A-levels) for the whole education or the last two years"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "TOEFL: Minimum score 100; 105 recommended (or 5.0 on the new 1–6 scale). … IELTS: minimum 7, 7.5 recommended … Duolingo English Test: minimum score of 130",
+    "note": "Certificates valid two years; the Admissions Committee may request a certificate from any candidate."
+   },
+   "admissionsTests": {
+    "status": "verified",
+    "items": [
+     "IE University Admissions Test — required unless SAT (1300+) or ACT (28+) submitted",
+     "IE Mathematics Assessment for BBA, BIE and PPLE (15 minutes)"
+    ],
+    "codes": [
+     "IEU-TEST",
+     "IEU-MATH"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     },
+     {
+      "url": "https://www.ie.edu/university/admission/admission-process/admissions-test/",
+      "label": "IE University: Admissions Test"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "we require candidates to take our IEU Admissions Test … New SAT: 1300* or above",
+     "MATHEMATICS ASSESSMENT FOR BBA, BIE AND PPLE … Fifteen (15) minutes to complete."
+    ],
+    "note": "The IE Admissions Test may be replaced by SAT/ACT (or LNAT for Law). Results are not shared with the applicant; no pass mark is published."
+   },
+   "subjectPrerequisites": {
+    "status": "partial",
+    "items": [
+     "Advisory (positively valued, not mandatory): an A-Level quantitative subject (Accounting, Mathematics, Physics, Psychology, Statistics) with GCSE Mathematics"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements — Required Math Competency"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Bachelor in Business Administration/Bachelor in Economics/Bachelor in Philosophy, Politics, Law & Economics: We positively value applicants taking a quantitative subject (Accounting, Mathematics, Physics, Psychology, Statistics, etc.) along with a GCSE in Mathematics.",
+    "note": "Listed under 'Required Math Competency' but IE states these are 'purely advisory' guidance and an application is still considered if a subject is unavailable at the school."
+   },
+   "aLevel": {
+    "status": "partial",
+    "accepted": "yes",
+    "detail": "Minimum of three A-Levels; no grade requirement published (applications range AAB to A*A*A*); retakes not accepted",
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "IE University requires a minimum of three A-Levels, and our applications range from AAB to A*A*A*, in the ordinary intake.",
+    "note": "No grade minimum or typical offer is published; AAB–A*A*A* is the range of applications, not a requirement. Spanish legal access also needs five GCSE/IGCSE passes at A–C (4–9). Holistic scoring-system admission.",
+    "reviewFlag": "Do not convert the AAB–A*A*A* application range into a typicalOffer; IE publishes no A-Level grade requirement."
+   },
+   "ib": {
+    "status": "partial",
+    "accepted": "yes",
+    "detail": "Full IB Diploma; no minimum points published (typical admissions 34–45, average 36); first results only",
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "The average final IB score of our students is 36. Typical admissions are based on scores between 34 and 45.",
+    "note": "34–45 and 36 describe admitted students, not a minimum; no overallScore recorded. Full IB Diploma required (Certificate not legally accepted in Spain); UNED university-access accreditation.",
+    "reviewFlag": "Do not record 34 or 36 as an overallScore; IE publishes no IB minimum."
+   },
+   "otherQualifications": {
+    "status": "partial",
+    "items": [
+     "US High School Diploma: unweighted GPA of at least 3.4 (last three years); AP courses not required but highly recommended; no AP score minimum published",
+     "Advisory AP guidance for this program: AP Calculus desirable",
+     "Singapore-Cambridge A-Level and HKDSE: not listed (contact Admissions)"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Applicants are expected to have an unweighted GPA of at least 3.4 on a 4.0 scale (unweighted) for the last three years of high school. Although not required, AP and Honors courses are highly recommended. … Bachelor in Business Administration/Bachelor in Economics/Bachelor in Philosophy, Politics, Law & Economics: AP Calculus is desirable.",
+    "note": "Spanish homologation for the US diploma requires official transcripts for Grades 10–12. Singapore A-Level and HKDSE are not mentioned on IE's requirements page."
+   },
+   "otherRequirements": {
+    "status": "verified",
+    "items": [
+     "Holistic, scoring-system review (academic record, extracurriculars, personal background, English, admission test, online assessment); no single factor decisive",
+     "Online Assessment (written and video responses) for all applicants",
+     "Personal interview (online) at the Committee's discretion — most candidates expected to complete one",
+     "CV, one recommendation letter, 'Express Yourself' piece (essay, video or other format)",
+     "Rolling Admissions Rounds (Early, 1, 2, 3, then post-rounds) with limited program capacity"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     },
+     {
+      "url": "https://www.ie.edu/university/admission/admission-process/admissions-rounds/",
+      "label": "IE University: Admissions Rounds"
+     },
+     {
+      "url": "https://www.ie.edu/university/admission/admission-process/application-form/",
+      "label": "IE University: Application form"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Our admissions process is rigorous and holistic, designed to evaluate each applicant beyond grades alone.",
+     "Most candidates are expected to complete an interview as part of their evaluation. … Not all programs will have available places in every round.",
+     "One letter of recommendation from your professor/tutor, or another from your head of studies/dean. … A recent CV which includes your academic background, work experience and extracurricular activities."
+    ]
+   }
+  },
+  "es-law-ie": {
+   "satAct": {
+    "status": "verified",
+    "items": [
+     "Optional alternative to the required IE University Admissions Test: SAT 1300 or above, or ACT 28 or above"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Alternatively, we accept the following globally recognized tests: New SAT: 1300* or above … ACT: 28 or above",
+    "note": "SAT/ACT replace the IE Admissions Test; they are not required in addition. The 2027–2028 Admissions Policy calls these 'recommended minimum scores'."
+   },
+   "englishLanguage": {
+    "status": "verified",
+    "items": [
+     "All programs taught in English",
+     "TOEFL iBT 100 (105 recommended; 5.0 on the new 1–6 scale)",
+     "IELTS 7 (7.5 recommended)",
+     "Cambridge C1 Advanced or C2 Proficiency",
+     "Duolingo English Test 130",
+     "Exempt if living >2 years in an English-speaking country or educated in an English-medium system (e.g. American High School, IB in English, A-levels) for the whole education or the last two years"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "TOEFL: Minimum score 100; 105 recommended (or 5.0 on the new 1–6 scale). … IELTS: minimum 7, 7.5 recommended … Duolingo English Test: minimum score of 130",
+    "note": "Certificates valid two years; the Admissions Committee may request a certificate from any candidate."
+   },
+   "admissionsTests": {
+    "status": "verified",
+    "items": [
+     "IE University Admissions Test — required unless SAT (1300+), ACT (28+) or LNAT (22+) submitted"
+    ],
+    "codes": [
+     "IEU-TEST",
+     "LNAT"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "we require candidates to take our IEU Admissions Test … LNAT: Minimum 22 (only for Law School programs)",
+    "note": "The IE Admissions Test may be replaced by SAT/ACT (or LNAT for Law). Results are not shared with the applicant; no pass mark is published."
+   },
+   "subjectPrerequisites": {
+    "status": "unverified"
+   },
+   "aLevel": {
+    "status": "partial",
+    "accepted": "yes",
+    "detail": "Minimum of three A-Levels; no grade requirement published (applications range AAB to A*A*A*); retakes not accepted",
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "IE University requires a minimum of three A-Levels, and our applications range from AAB to A*A*A*, in the ordinary intake.",
+    "note": "No grade minimum or typical offer is published; AAB–A*A*A* is the range of applications, not a requirement. Spanish legal access also needs five GCSE/IGCSE passes at A–C (4–9). Holistic scoring-system admission.",
+    "reviewFlag": "Do not convert the AAB–A*A*A* application range into a typicalOffer; IE publishes no A-Level grade requirement."
+   },
+   "ib": {
+    "status": "partial",
+    "accepted": "yes",
+    "detail": "Full IB Diploma; no minimum points published (typical admissions 34–45, average 36); first results only",
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "The average final IB score of our students is 36. Typical admissions are based on scores between 34 and 45.",
+    "note": "34–45 and 36 describe admitted students, not a minimum; no overallScore recorded. Full IB Diploma required (Certificate not legally accepted in Spain); UNED university-access accreditation.",
+    "reviewFlag": "Do not record 34 or 36 as an overallScore; IE publishes no IB minimum."
+   },
+   "otherQualifications": {
+    "status": "partial",
+    "items": [
+     "US High School Diploma: unweighted GPA of at least 3.4 (last three years); AP courses not required but highly recommended; no AP score minimum published",
+     "Singapore-Cambridge A-Level and HKDSE: not listed (contact Admissions)"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Applicants are expected to have an unweighted GPA of at least 3.4 on a 4.0 scale (unweighted) for the last three years of high school. Although not required, AP and Honors courses are highly recommended.",
+    "note": "Spanish homologation for the US diploma requires official transcripts for Grades 10–12. Singapore A-Level and HKDSE are not mentioned on IE's requirements page."
+   },
+   "otherRequirements": {
+    "status": "verified",
+    "items": [
+     "Holistic, scoring-system review (academic record, extracurriculars, personal background, English, admission test, online assessment); no single factor decisive",
+     "Online Assessment (written and video responses) for all applicants",
+     "Personal interview (online) at the Committee's discretion — most candidates expected to complete one",
+     "CV, one recommendation letter, 'Express Yourself' piece (essay, video or other format)",
+     "Rolling Admissions Rounds (Early, 1, 2, 3, then post-rounds) with limited program capacity"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     },
+     {
+      "url": "https://www.ie.edu/university/admission/admission-process/admissions-rounds/",
+      "label": "IE University: Admissions Rounds"
+     },
+     {
+      "url": "https://www.ie.edu/university/admission/admission-process/application-form/",
+      "label": "IE University: Application form"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Our admissions process is rigorous and holistic, designed to evaluate each applicant beyond grades alone.",
+     "Most candidates are expected to complete an interview as part of their evaluation. … Not all programs will have available places in every round.",
+     "One letter of recommendation from your professor/tutor, or another from your head of studies/dean. … A recent CV which includes your academic background, work experience and extracurricular activities."
+    ]
+   }
+  },
+  "es-business-ie": {
+   "satAct": {
+    "status": "verified",
+    "items": [
+     "Optional alternative to the required IE University Admissions Test: SAT 1300 or above, or ACT 28 or above"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Alternatively, we accept the following globally recognized tests: New SAT: 1300* or above … ACT: 28 or above",
+    "note": "SAT/ACT replace the IE Admissions Test; they are not required in addition. The 2027–2028 Admissions Policy calls these 'recommended minimum scores'."
+   },
+   "englishLanguage": {
+    "status": "verified",
+    "items": [
+     "All programs taught in English",
+     "TOEFL iBT 100 (105 recommended; 5.0 on the new 1–6 scale)",
+     "IELTS 7 (7.5 recommended)",
+     "Cambridge C1 Advanced or C2 Proficiency",
+     "Duolingo English Test 130",
+     "Exempt if living >2 years in an English-speaking country or educated in an English-medium system (e.g. American High School, IB in English, A-levels) for the whole education or the last two years"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "TOEFL: Minimum score 100; 105 recommended (or 5.0 on the new 1–6 scale). … IELTS: minimum 7, 7.5 recommended … Duolingo English Test: minimum score of 130",
+    "note": "Certificates valid two years; the Admissions Committee may request a certificate from any candidate."
+   },
+   "admissionsTests": {
+    "status": "verified",
+    "items": [
+     "IE University Admissions Test — required unless SAT (1300+) or ACT (28+) submitted",
+     "IE Mathematics Assessment for BBA, BIE and PPLE (15 minutes)"
+    ],
+    "codes": [
+     "IEU-TEST",
+     "IEU-MATH"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     },
+     {
+      "url": "https://www.ie.edu/university/admission/admission-process/admissions-test/",
+      "label": "IE University: Admissions Test"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "we require candidates to take our IEU Admissions Test … New SAT: 1300* or above",
+     "MATHEMATICS ASSESSMENT FOR BBA, BIE AND PPLE … Fifteen (15) minutes to complete."
+    ],
+    "note": "The IE Admissions Test may be replaced by SAT/ACT (or LNAT for Law). Results are not shared with the applicant; no pass mark is published."
+   },
+   "subjectPrerequisites": {
+    "status": "partial",
+    "items": [
+     "Advisory (positively valued, not mandatory): an A-Level quantitative subject (Accounting, Mathematics, Physics, Psychology, Statistics) with GCSE Mathematics"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements — Required Math Competency"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Bachelor in Business Administration/Bachelor in Economics/Bachelor in Philosophy, Politics, Law & Economics: We positively value applicants taking a quantitative subject (Accounting, Mathematics, Physics, Psychology, Statistics, etc.) along with a GCSE in Mathematics.",
+    "note": "Listed under 'Required Math Competency' but IE states these are 'purely advisory' guidance and an application is still considered if a subject is unavailable at the school."
+   },
+   "aLevel": {
+    "status": "partial",
+    "accepted": "yes",
+    "detail": "Minimum of three A-Levels; no grade requirement published (applications range AAB to A*A*A*); retakes not accepted",
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "IE University requires a minimum of three A-Levels, and our applications range from AAB to A*A*A*, in the ordinary intake.",
+    "note": "No grade minimum or typical offer is published; AAB–A*A*A* is the range of applications, not a requirement. Spanish legal access also needs five GCSE/IGCSE passes at A–C (4–9). Holistic scoring-system admission.",
+    "reviewFlag": "Do not convert the AAB–A*A*A* application range into a typicalOffer; IE publishes no A-Level grade requirement."
+   },
+   "ib": {
+    "status": "partial",
+    "accepted": "yes",
+    "detail": "Full IB Diploma; no minimum points published (typical admissions 34–45, average 36); first results only",
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "The average final IB score of our students is 36. Typical admissions are based on scores between 34 and 45.",
+    "note": "34–45 and 36 describe admitted students, not a minimum; no overallScore recorded. Full IB Diploma required (Certificate not legally accepted in Spain); UNED university-access accreditation.",
+    "reviewFlag": "Do not record 34 or 36 as an overallScore; IE publishes no IB minimum."
+   },
+   "otherQualifications": {
+    "status": "partial",
+    "items": [
+     "US High School Diploma: unweighted GPA of at least 3.4 (last three years); AP courses not required but highly recommended; no AP score minimum published",
+     "Advisory AP guidance for this program: AP Calculus desirable",
+     "Singapore-Cambridge A-Level and HKDSE: not listed (contact Admissions)"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Applicants are expected to have an unweighted GPA of at least 3.4 on a 4.0 scale (unweighted) for the last three years of high school. Although not required, AP and Honors courses are highly recommended. … Bachelor in Business Administration/Bachelor in Economics/Bachelor in Philosophy, Politics, Law & Economics: AP Calculus is desirable.",
+    "note": "Spanish homologation for the US diploma requires official transcripts for Grades 10–12. Singapore A-Level and HKDSE are not mentioned on IE's requirements page."
+   },
+   "otherRequirements": {
+    "status": "verified",
+    "items": [
+     "Holistic, scoring-system review (academic record, extracurriculars, personal background, English, admission test, online assessment); no single factor decisive",
+     "Online Assessment (written and video responses) for all applicants",
+     "Personal interview (online) at the Committee's discretion — most candidates expected to complete one",
+     "CV, one recommendation letter, 'Express Yourself' piece (essay, video or other format)",
+     "Rolling Admissions Rounds (Early, 1, 2, 3, then post-rounds) with limited program capacity"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     },
+     {
+      "url": "https://www.ie.edu/university/admission/admission-process/admissions-rounds/",
+      "label": "IE University: Admissions Rounds"
+     },
+     {
+      "url": "https://www.ie.edu/university/admission/admission-process/application-form/",
+      "label": "IE University: Application form"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Our admissions process is rigorous and holistic, designed to evaluate each applicant beyond grades alone.",
+     "Most candidates are expected to complete an interview as part of their evaluation. … Not all programs will have available places in every round.",
+     "One letter of recommendation from your professor/tutor, or another from your head of studies/dean. … A recent CV which includes your academic background, work experience and extracurricular activities."
+    ]
+   }
+  },
+  "es-architecture-ie": {
+   "satAct": {
+    "status": "verified",
+    "items": [
+     "Optional alternative to the required IE University Admissions Test: SAT 1300 or above, or ACT 28 or above"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Alternatively, we accept the following globally recognized tests: New SAT: 1300* or above … ACT: 28 or above",
+    "note": "SAT/ACT replace the IE Admissions Test; they are not required in addition. The 2027–2028 Admissions Policy calls these 'recommended minimum scores'."
+   },
+   "englishLanguage": {
+    "status": "verified",
+    "items": [
+     "All programs taught in English",
+     "TOEFL iBT 100 (105 recommended; 5.0 on the new 1–6 scale)",
+     "IELTS 7 (7.5 recommended)",
+     "Cambridge C1 Advanced or C2 Proficiency",
+     "Duolingo English Test 130",
+     "Exempt if living >2 years in an English-speaking country or educated in an English-medium system (e.g. American High School, IB in English, A-levels) for the whole education or the last two years"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "TOEFL: Minimum score 100; 105 recommended (or 5.0 on the new 1–6 scale). … IELTS: minimum 7, 7.5 recommended … Duolingo English Test: minimum score of 130",
+    "note": "Certificates valid two years; the Admissions Committee may request a certificate from any candidate."
+   },
+   "admissionsTests": {
+    "status": "verified",
+    "items": [
+     "IE University Admissions Test — required unless SAT (1300+) or ACT (28+) submitted"
+    ],
+    "codes": [
+     "IEU-TEST"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "we require candidates to take our IEU Admissions Test which allows us to measure their verbal, logical and numerical skills. … New SAT: 1300* or above",
+    "note": "The IE Admissions Test may be replaced by SAT/ACT (or LNAT for Law). Results are not shared with the applicant; no pass mark is published."
+   },
+   "subjectPrerequisites": {
+    "status": "partial",
+    "items": [
+     "Advisory (positively valued, not mandatory): an A-Level quantitative subject (Mathematics, Physics) with GCSE Mathematics and Physics",
+     "Advisory: IB Mathematics AA/AI HL/SL"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements — Required Math Competency"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Bachelor in Architectural Studies: We positively value applicants taking a quantitative subject (Mathematics, Physics, etc.) along with a GCSE in Mathematics and Physics.",
+    "note": "Listed under 'Required Math Competency' but IE states these are 'purely advisory' guidance and an application is still considered if a subject is unavailable at the school."
+   },
+   "aLevel": {
+    "status": "partial",
+    "accepted": "yes",
+    "detail": "Minimum of three A-Levels; no grade requirement published (applications range AAB to A*A*A*); retakes not accepted",
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "IE University requires a minimum of three A-Levels, and our applications range from AAB to A*A*A*, in the ordinary intake.",
+    "note": "No grade minimum or typical offer is published; AAB–A*A*A* is the range of applications, not a requirement. Spanish legal access also needs five GCSE/IGCSE passes at A–C (4–9). Holistic scoring-system admission.",
+    "reviewFlag": "Do not convert the AAB–A*A*A* application range into a typicalOffer; IE publishes no A-Level grade requirement."
+   },
+   "ib": {
+    "status": "partial",
+    "accepted": "yes",
+    "detail": "Full IB Diploma; no minimum points published (typical admissions 34–45, average 36); first results only",
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "The average final IB score of our students is 36. Typical admissions are based on scores between 34 and 45.",
+    "note": "34–45 and 36 describe admitted students, not a minimum; no overallScore recorded. Full IB Diploma required (Certificate not legally accepted in Spain); UNED university-access accreditation.",
+    "reviewFlag": "Do not record 34 or 36 as an overallScore; IE publishes no IB minimum."
+   },
+   "otherQualifications": {
+    "status": "partial",
+    "items": [
+     "US High School Diploma: unweighted GPA of at least 3.4 (last three years); AP courses not required but highly recommended; no AP score minimum published",
+     "Advisory AP guidance for this program: AP exams in Calculus and Geometry",
+     "Singapore-Cambridge A-Level and HKDSE: not listed (contact Admissions)"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": "Applicants are expected to have an unweighted GPA of at least 3.4 on a 4.0 scale (unweighted) for the last three years of high school. Although not required, AP and Honors courses are highly recommended. … Bachelor in Architectural Studies: AP exams in Calculus and Geometry.",
+    "note": "Spanish homologation for the US diploma requires official transcripts for Grades 10–12. Singapore A-Level and HKDSE are not mentioned on IE's requirements page."
+   },
+   "otherRequirements": {
+    "status": "verified",
+    "items": [
+     "Holistic, scoring-system review (academic record, extracurriculars, personal background, English, admission test, online assessment); no single factor decisive",
+     "Online Assessment (written and video responses) for all applicants",
+     "Personal interview (online) at the Committee's discretion — most candidates expected to complete one",
+     "CV, one recommendation letter, 'Express Yourself' piece (essay, video or other format)",
+     "Rolling Admissions Rounds (Early, 1, 2, 3, then post-rounds) with limited program capacity",
+     "Portfolio required for Bachelor of Architectural Studies"
+    ],
+    "sources": [
+     {
+      "url": "https://www.ie.edu/university/admission/access-to-university/freshmen-students/",
+      "label": "IE University: Freshmen entry requirements"
+     },
+     {
+      "url": "https://www.ie.edu/university/admission/admission-process/admissions-rounds/",
+      "label": "IE University: Admissions Rounds"
+     },
+     {
+      "url": "https://www.ie.edu/university/admission/admission-process/application-form/",
+      "label": "IE University: Application form"
+     },
+     {
+      "url": "https://static.ie.edu/marketing/web/IEU/IEU_Admissions%20Policy.pdf",
+      "label": "IE University: Undergraduate Admissions Policy 2027–2028"
+     }
+    ],
+    "lastVerified": "2026-10-21",
+    "sourceSnippet": [
+     "Our admissions process is rigorous and holistic, designed to evaluate each applicant beyond grades alone.",
+     "Most candidates are expected to complete an interview as part of their evaluation. … Not all programs will have available places in every round.",
+     "One letter of recommendation from your professor/tutor, or another from your head of studies/dean. … A recent CV which includes your academic background, work experience and extracurricular activities.",
+     "Studies are required to submit a portfolio"
+    ]
+   }
+  }
+ }
+}
