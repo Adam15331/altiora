@@ -8,7 +8,7 @@ import globals from 'globals';
 
 export default [
   {
-    ignores: ['node_modules/**', 'fields/**', 'main.js', 'state.js', 'data/*.js', 'scripts/check-links.mjs'],
+    ignores: ['node_modules/**', 'fields/**', 'courses/**', 'universities/**', 'main.js', 'state.js', 'data/*.js', 'scripts/check-links.mjs'],
   },
   js.configs.recommended,
   {
