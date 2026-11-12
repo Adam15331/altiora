@@ -1,9 +1,13 @@
-# Regenerates the static field pages (fields/*.html), sitemap.xml and the
-# index.html field-links block from data/fieldProfiles.js on every push to
-# main, and commits the result if anything changed. Never runs on pull
-# requests, so it can never commit to a PR branch. If the generator fails,
-# the job fails before the commit step — no partial output is committed.
-name: Build field pages
+# Regenerates the static pages on every push to main and commits the result
+# if anything changed:
+#   - field pages (fields/*.html) from data/fieldProfiles.js
+#   - course and university pages (courses/*.html, universities/*.html) from
+#     data/courseRequirements.js and the current cycle in data/requirements/
+#   - sitemap.xml and the generated link blocks in index.html
+# Never runs on pull requests, so it can never commit to a PR branch. If a
+# generator fails, the job fails before the commit step — no partial output
+# is committed.
+name: Build static pages
 
 on:
   push:
@@ -22,14 +26,16 @@ jobs:
           node-version: '22'
       - name: Generate field pages
         run: node scripts/build-field-pages.mjs
+      - name: Generate course and university pages
+        run: node scripts/build-course-pages.mjs
       - name: Commit regenerated pages if changed
         run: |
-          git add fields sitemap.xml index.html
+          git add fields courses universities sitemap.xml index.html
           if git diff --cached --quiet; then
-            echo "Field pages already up to date."
+            echo "Static pages already up to date."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "Regenerate field pages from data/fieldProfiles.js"
+          git commit -m "Regenerate static pages from the data"
           git push
