@@ -19,6 +19,7 @@
   "include": [
     "data/requirements/config.js",
     "requirements-view.js",
+    "statement-review.js",
     "ib-hl.js",
     "scripts/lib/**/*.mjs",
     "scripts/validate-requirements.mjs",

@@ -14,7 +14,7 @@ const read = (/** @type {string} */ f) => fs.readFileSync(path.join(ROOT, f), 'u
 const env = { pieces: appPieces(), pagesCssV: 'test' };
 const built = Object.fromEntries(INFO_PAGE_CONTENT.map(p => [p.file, infoPageHtml(p, env)]));
 // Site code that runs in the browser (data files hold no behaviour).
-const SITE_CODE = ['main.js', 'state.js', 'requirements-view.js', 'ib-hl.js', 'app.html', 'index.html'];
+const SITE_CODE = ['main.js', 'state.js', 'requirements-view.js', 'statement-review.js', 'ib-hl.js', 'app.html', 'index.html'];
 
 test('the committed info pages are up to date with their source', () => {
   for (const p of INFO_PAGE_CONTENT) {
