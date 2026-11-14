@@ -5783,9 +5783,9 @@ button.plan-combo-tag--drop:focus-visible {
   .stmt-print__answer--empty { font-style: italic; color: #444; }
   /* Blank space after each answer for comments. */
   .stmt-print__space { height: 42mm; border-bottom: 0.5pt solid #999; margin-bottom: 12pt; }
-  /* The space after the last answer is kept too, so it can spill onto a page
-     of its own when that answer ends near the bottom of a page. */
-  .stmt-print__q:last-child .stmt-print__space { border-bottom: none; margin-bottom: 0; }
+  /* No fixed space after the LAST answer: there it could spill onto a blank
+     page of its own. The rest of that page and the right margin are the room. */
+  .stmt-print__q:last-child .stmt-print__space { display: none; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
