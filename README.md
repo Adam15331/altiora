@@ -30,3 +30,6 @@ npm run check    # lint + typecheck + validate requirements data + tests (CI run
 - A student's saved plan file (`altiora-plan-YYYY-MM-DD.json`) is written and read by `state.js`
   (`exportBackup` / `validateBackup` / `importBackup`). The format is versioned (`schemaVersion`); every
   older version must keep loading — see `tests/plan-file.test.mjs`.
+- "Review my statement" (`statement-review.js`) states facts about the student's draft — lengths, the same
+  story entry in two answers, repeated 6-word runs, unused entries — and never grades it. Matching rules and
+  the ignored-word list are in that file's header; tests in `tests/statement-review.test.mjs`.

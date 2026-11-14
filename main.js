@@ -2518,15 +2518,23 @@ function applyingTasks(savedCourses, opts = {}) {
   return tasks;
 }
 
-// Distinct admission tests across the list — the load observation's input.
-function shortlistTestLoad(savedCourses) {
-  return [...new Set(savedCourses.flatMap(c => Array.isArray(c.admissionTests) ? c.admissionTests : []))];
+// The Applying checklist for this student: every task, minus tests sat after
+// offers (afterOffersOnly — STEP) for a student who applies later. The ONE
+// list both the checklist and the test-load line are derived from.
+function applyingChecklistTasks(savedCourses, yrs) {
+  const preview = yrs != null && yrs >= 1;
+  return applyingTasks(savedCourses).filter(t => !(preview && afterOffersOnly(t)));
+}
+
+// Distinct admission tests in that checklist (from its registration tasks).
+function checklistTestCodes(tasks) {
+  return [...new Set(tasks.filter(t => t.id.startsWith('test-reg:')).flatMap(t => t.id.slice('test-reg:'.length).split('+')))];
 }
 
 // One factual load observation. States the load; never recommends dropping
 // or swapping a course, never quantifies effort saved.
-function testLoadNoteHtml(savedCourses) {
-  const n = shortlistTestLoad(savedCourses).length;
+function testLoadNoteHtml(tasks) {
+  const n = checklistTestCodes(tasks).length;
   if (n < 2) return '';
   const text = n >= 3
     ? `Your list needs ${n} different admission tests — that's a heavy prep load alongside term-time study.`
@@ -2545,7 +2553,7 @@ function renderApplyingChecklist() {
   const preview = yrs != null && yrs >= 1;
   // Tests sat after offers (afterOffersOnly — STEP) belong to the
   // application year: a student who applies later doesn't see them yet.
-  const tasks = applyingTasks(saved).filter(t => !(preview && afterOffersOnly(t)));
+  const tasks = applyingChecklistTasks(saved, yrs);
 
   // In preview the sequence is what matters; in the application year it's
   // urgency. Actionable-in-preview items are the genuinely live ones.
@@ -2682,7 +2690,7 @@ function renderApplyingPanel() {
     <section class="applying-diag" aria-label="Your list at a glance">
       <p class="applying-diag__counts">${esc(diagLine)}</p>
       <p class="applying-diag__advice">${esc(bal.advice)}</p>
-      ${testLoadNoteHtml(savedCourses)}
+      ${testLoadNoteHtml(applyingChecklistTasks(savedCourses, yrs))}
       ${usNote}
       <p class="applying-diag__meta"><strong>${savedCourses.length}</strong> course${savedCourses.length === 1 ? '' : 's'} ·
         <strong>${unis.size}</strong> universit${unis.size === 1 ? 'y' : 'ies'} ·
@@ -3841,9 +3849,86 @@ function statementSectionHtml() {
       <p class="stmt__total" data-stmt-total aria-live="polite"></p>
       <div data-stmt-empty class="hidden"></div>
       ${qs}
+      <div class="stmt__tools">
+        <button type="button" class="home-next__btn" data-stmt-review>Review my statement</button>
+        <button type="button" class="home-next__btn" data-stmt-print>Print for a teacher or parent</button>
+      </div>
+      <section class="stmt-review hidden" data-stmt-review-out aria-label="Review of your statement" aria-live="polite"></section>
       <p class="achv__note">Assemble from your own material — the finished statement is submitted on UCAS, not here.
         Your drafts stay on this device only, which matches UCAS's own advice not to share your statement or post it anywhere.</p>
     </section>`;
+}
+
+/* ─── Review my statement ─────────────────────────────────────
+ * Facts about the draft, computed by statement-review.js only when the
+ * student presses the button (never live while typing). No grades, no
+ * suggestions, no good/bad styling. Nothing leaves the browser.
+ * ───────────────────────────────────────────────────────────── */
+function renderStatementReview() {
+  const out = document.querySelector('[data-stmt-review-out]');
+  if (!out || typeof AltioraStatementReview === 'undefined') return;
+  const vals = statementLiveValues();
+  const entries = AltioraState.getAchievements().map(a => ({ id: a.id, title: a.title }));
+  // "Shown in a question's rail" — the rails' own rule, so the two agree.
+  const railEntryIds = [...new Set(UCAS_STATEMENT.questions.flatMap(q => statementRefsFor(q.id).map(a => a.id)))];
+  const result = AltioraStatementReview.review({
+    answers: UCAS_STATEMENT.questions.map(q => vals[q.id] ?? ''),
+    entries, railEntryIds,
+    totalLimit: UCAS_STATEMENT.totalLimit, perAnswerMin: UCAS_STATEMENT.perAnswerMin,
+  });
+  const lines = AltioraStatementReview.reviewLines(result, UCAS_STATEMENT.totalLimit, UCAS_STATEMENT.perAnswerMin);
+  const block = (head, items) => `
+        <div class="stmt-review__check">
+          <h3 class="stmt-review__head">${esc(head)}</h3>
+          <ul class="stmt-review__list">${items.map(l => `<li>${esc(l)}</li>`).join('')}</ul>
+        </div>`;
+  out.innerHTML = `
+        <h2 class="stmt-review__title">Review of your statement</h2>
+        <p class="stmt-review__when">From your draft as it was when you pressed Review. Press it again after you edit.</p>
+        ${block('Length of each answer', lines.length)}
+        ${block('The same experience in more than one answer', lines.sharedEntries)}
+        ${block('Repeated wording', lines.repeatedWording)}
+        ${block('Story entries you haven’t used', lines.unused)}`;
+  out.classList.remove('hidden');
+  logEvent('statement_review', {});
+}
+
+/* ─── Print for a teacher or parent ───────────────────────────
+ * A print-only sheet: each UCAS question with the prompt shown under it,
+ * the draft verbatim (or "Not written yet."), a wide right margin and
+ * space for comments, and the date. No app chrome, no review results.
+ * Printed with the browser's own dialog; the sheet is removed afterwards.
+ * ───────────────────────────────────────────────────────────── */
+function buildStatementPrintSheet(now = new Date()) {
+  document.getElementById('stmtPrintSheet')?.remove();
+  const vals = statementLiveValues();
+  const sheet = document.createElement('div');
+  sheet.id = 'stmtPrintSheet';
+  sheet.className = 'stmt-print';
+  sheet.innerHTML = `
+    <p class="stmt-print__date">Printed ${esc(now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }))}</p>
+    ${UCAS_STATEMENT.questions.map((q, i) => {
+      const draft = vals[q.id] ?? '';
+      return `
+    <section class="stmt-print__q">
+      <h2 class="stmt-print__question">${i + 1} · ${esc(q.text)}</h2>
+      <p class="stmt-print__prompt">${esc(STATEMENT_PROMPTS[q.id])}</p>
+      <div class="stmt-print__answer${draft.trim() ? '' : ' stmt-print__answer--empty'}">${draft.trim() ? esc(draft) : 'Not written yet.'}</div>
+      <div class="stmt-print__space" aria-hidden="true"></div>
+    </section>`;
+    }).join('')}`;
+  document.body.appendChild(sheet);
+  document.body.classList.add('print-statement');
+  return sheet;
+}
+function clearStatementPrintSheet() {
+  document.getElementById('stmtPrintSheet')?.remove();
+  document.body.classList.remove('print-statement');
+}
+function printStatementSheet() {
+  buildStatementPrintSheet();
+  window.addEventListener('afterprint', clearStatementPrintSheet, { once: true });
+  window.print();
 }
 
 // Read the LIVE textarea values (they lead the state by a debounce tick).
@@ -3981,6 +4066,8 @@ function wireStatementDrafting() {
     _stmtSaveTimers[q] = setTimeout(() => AltioraState.setStatementDraft(q, ta.value), 500);
   });
   document.addEventListener('click', e => {
+    if (e.target.closest?.('[data-stmt-review]')) { renderStatementReview(); return; }
+    if (e.target.closest?.('[data-stmt-print]')) { printStatementSheet(); return; }
     const copy = e.target.closest?.('[data-stmt-copy]');
     if (copy) {
       const ta = document.querySelector(`[data-stmt-input="${copy.dataset.stmtCopy}"]`);
