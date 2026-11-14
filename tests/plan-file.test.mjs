@@ -160,9 +160,20 @@ function yearRule() {
   return ctx;
 }
 
-test('every qualification system has an academic-year start month (September)', () => {
+test('every qualification system has an academic-year start month (Singapore January, others September)', () => {
   const { START } = yearRule();
-  assert.deepEqual(plain(START), { UK_A_Level: 9, IB: 9, US_AP: 9, SG_A_Level: 9, HK_DSE: 9 });
+  assert.deepEqual(plain(START), { UK_A_Level: 9, IB: 9, US_AP: 9, SG_A_Level: 1, HK_DSE: 9 });
+});
+
+test('a Singapore year group rolls over in January, not September', () => {
+  const { yearNeedsConfirm, academicYearStart } = yearRule();
+  const now = new Date(2026, 10, 14);                 // 14 Nov 2026
+  assert.equal(academicYearStart('SG_A_Level', now).getTime(), new Date(2026, 0, 1).getTime());
+  const sg = (/** @type {string} */ at) => ({ qualificationSystem: 'SG_A_Level', yearGroup: 'JC1', yearsUntilApplication: 1, yearSetAt: at });
+  assert.equal(yearNeedsConfirm(sg(new Date(2025, 10, 20).toISOString()), now), true);    // November of the previous year → asked
+  assert.equal(yearNeedsConfirm(sg(new Date(2026, 1, 10).toISOString()), now), false);    // February this year → not asked
+  // The same February date would be stale for a September system.
+  assert.equal(yearNeedsConfirm({ ...sg(new Date(2026, 1, 10).toISOString()), qualificationSystem: 'UK_A_Level' }, now), true);
 });
 
 test('a year group set before the current school year began must be confirmed', () => {

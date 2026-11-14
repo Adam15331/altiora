@@ -1537,11 +1537,11 @@ function stageProposalReason(yearLabel, stage) {
  * A year group set last school year is wrong now. yearSetAt records when
  * the year was last set or confirmed; if that is before the most recent
  * start of the school year, the student is asked to confirm (never
- * advanced silently). No system's start month was in the codebase, so all
- * five use September (month 9) — change a value here if that is wrong for
- * a system.
+ * advanced silently). The Singapore school year starts in January; the
+ * other four systems use September (month 9). Change a value here if a
+ * system's start month is wrong.
  * ───────────────────────────────────────────────────────────── */
-const ACADEMIC_YEAR_START_MONTH = { UK_A_Level: 9, IB: 9, US_AP: 9, SG_A_Level: 9, HK_DSE: 9 };
+const ACADEMIC_YEAR_START_MONTH = { UK_A_Level: 9, IB: 9, US_AP: 9, SG_A_Level: 1, HK_DSE: 9 };
 
 // The most recent start of the school year (local time) on or before `now`.
 function academicYearStart(sys, now = new Date()) {
@@ -2543,7 +2543,9 @@ function renderApplyingChecklist() {
     .filter(Boolean);
   const yrs = studentYears();
   const preview = yrs != null && yrs >= 1;
-  const tasks = applyingTasks(saved);
+  // Tests sat after offers (afterOffersOnly — STEP) belong to the
+  // application year: a student who applies later doesn't see them yet.
+  const tasks = applyingTasks(saved).filter(t => !(preview && afterOffersOnly(t)));
 
   // In preview the sequence is what matters; in the application year it's
   // urgency. Actionable-in-preview items are the genuinely live ones.
