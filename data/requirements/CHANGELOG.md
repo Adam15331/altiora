@@ -4797,3 +4797,7 @@ Format:
 
 - No web research and no value changed. Only the student-facing `note` text changed; status, items/grades, sources, `lastVerified`, `sourceSnippet` and every `reviewFlag` are unchanged, and `research/manual-check.md` is unchanged. The engine (`courseRequirements.js`) is untouched.
 - Why: no manual check is planned, so the note no longer promises one. In the 218 rows (38 courses) from the bypass audit above, the sentence "Awaiting a manual check: the official page could not be re-read automatically, so this has not been re-confirmed." is now "Not re-checked automatically. Confirm this on the university's page." — on its own in 68 rows, and as the last sentence of a longer note in 150.
+
+## 2026-11-14 — 2027 entry — Curly apostrophe in the reworded note (218 rows)
+
+- No web research and no value changed. In the 218 rows reworded above, "university's" (straight apostrophe) is now "university’s" (U+2019), the apostrophe the other notes use. Nothing else in those notes changed.
