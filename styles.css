@@ -5731,6 +5731,67 @@ button.plan-combo-tag--drop:focus-visible {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+ * YOUR PLAN FILE — Story-panel controls and the restore dialog
+ * ═══════════════════════════════════════════════════════════════ */
+.plan-keep {
+  margin-top: var(--space-10);
+  padding-top: var(--space-6);
+  border-top: var(--ce-hairline);
+}
+.plan-keep__head {
+  font-family: var(--ce-font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  margin: 0 0 var(--space-2);
+}
+.plan-keep__text { margin: 0 0 var(--space-4); max-width: 62ch; color: var(--ce-ink-60); line-height: 1.6; }
+.plan-keep__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+
+.plan-dialog {
+  margin: auto;                        /* the global reset removes the native centring */
+  width: min(520px, calc(100vw - 32px));
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  padding: var(--space-6);
+  border: var(--ce-hairline);
+  border-radius: var(--ce-radius);
+  background: var(--ce-surface);
+  color: var(--ce-ink);
+}
+.plan-dialog::backdrop { background: rgba(31, 26, 23, .45); }
+.plan-dialog__title {
+  font-family: var(--ce-font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  margin: 0 0 var(--space-3);
+}
+.plan-dialog__text { margin: 0 0 var(--space-3); line-height: 1.6; }
+.plan-dialog__list { margin: 0 0 var(--space-4); display: grid; gap: 6px; }
+.plan-dialog__list > div {
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+  gap: var(--space-3);
+  padding-bottom: 6px;
+  border-bottom: var(--ce-hairline);
+}
+.plan-dialog__list dt { color: var(--ce-ink-60); font-size: var(--text-sm); }
+.plan-dialog__list dd { margin: 0; font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
+.plan-dialog__warn { margin: 0 0 var(--space-5); font-weight: 600; }
+.plan-dialog__actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-3); }
+@media (max-width: 480px) {
+  .plan-dialog__list > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+}
+
+/* ── This month ─────────────────────────────────────────────── */
+.month__none { margin: 0 0 var(--space-6); color: var(--ce-ink-60); line-height: 1.6; }
+.month .home-next { margin-top: var(--space-8); }
+
+/* The year group a student saved last school year, in the confirm prompt. */
+.stage-card--saved { border-color: var(--ce-ink); }
+
+/* ═══════════════════════════════════════════════════════════════
  * ACCESSIBILITY BASELINE
  * One unmistakable keyboard focus ring for every interactive element —
  * several components set `outline: none` on :focus with no replacement.

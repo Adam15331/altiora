@@ -25,11 +25,15 @@ const AltioraState = (() => {
 
   const STORAGE_KEY = 'altiora_state_v1';
 
-  // The shape version carried in a backup envelope. Bump ONLY when an
-  // older export would need handling beyond _hydrateFromRaw — which is
-  // the same path old localStorage saves already take, so a lower number
-  // in an import is not an error, it is just an older save.
-  const SCHEMA_VERSION = 1;
+  // The FORMAT version of a saved plan file (the envelope, not the state
+  // shape). Every version loads through _hydrateFromRaw — the same path old
+  // localStorage saves take — so a lower number is just an older file:
+  //   1  { app, schemaVersion, exportedAt, data }            (backup files)
+  //   2  adds kind: 'plan' and a SHA-256 checksum of the saved data
+  // A HIGHER number was written by a newer build and is refused.
+  const SCHEMA_VERSION = 2;
+  // A plan file is a few KB to a few hundred KB; anything far larger is not one.
+  const MAX_PLAN_FILE_BYTES = 5 * 1024 * 1024;
 
   // Every localStorage key the app owns. There is exactly one today; the
   // export envelope is keyed by name so adding a second key later needs
@@ -55,7 +59,7 @@ const AltioraState = (() => {
         statementDrafts:     { q1: '', q2: '', q3: '' },  // UCAS statement drafts, one string per official question — see setStatementDraft()
         yearGroup:            null,   // raw year label in the student's own system, e.g. "Year 12", "Grade 11", "Form 5"
         yearsUntilApplication: null,  // normalised scale driving ALL logic: 3 (3+ years out) | 2 | 1 | 0 (application year)
-        yearSetAt:            null,   // ISO date the year was last set — for future academic-year rollover detection
+        yearSetAt:            null,   // ISO date the year was last set or confirmed — read by yearNeedsConfirm() in main.js
       },
       shortlist: [],                  // course id strings
       progress:  {},                  // keyed by course id or milestone
@@ -207,8 +211,55 @@ const AltioraState = (() => {
    * stored by us — the envelope is written locally and read back locally.
    * ═══════════════════════════════════════════════════════════════ */
 
+  /* SHA-256 (FIPS 180-4) over a UTF-8 string, synchronous so validation
+   * stays a pure function. It detects a file edited or damaged after it
+   * was saved; it is an integrity check, not security — anyone editing the
+   * file on purpose could recompute it. */
+  const _K = [
+    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+    0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+    0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+    0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+    0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+    0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+    0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+    0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,
+  ];
+  function sha256Hex(str) {
+    const bytes = new TextEncoder().encode(String(str));
+    const bitLen = bytes.length * 8;
+    const padded = new Uint8Array(((bytes.length + 9 + 63) >> 6) << 6);
+    padded.set(bytes);
+    padded[bytes.length] = 0x80;
+    const view = new DataView(padded.buffer);
+    view.setUint32(padded.length - 8, Math.floor(bitLen / 0x100000000));
+    view.setUint32(padded.length - 4, bitLen >>> 0);
+    const H = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];
+    const W = new Uint32Array(64);
+    const rotr = (x, n) => (x >>> n) | (x << (32 - n));
+    for (let off = 0; off < padded.length; off += 64) {
+      for (let i = 0; i < 16; i++) W[i] = view.getUint32(off + i * 4);
+      for (let i = 16; i < 64; i++) {
+        const s0 = rotr(W[i - 15], 7) ^ rotr(W[i - 15], 18) ^ (W[i - 15] >>> 3);
+        const s1 = rotr(W[i - 2], 17) ^ rotr(W[i - 2], 19) ^ (W[i - 2] >>> 10);
+        W[i] = (W[i - 16] + s0 + W[i - 7] + s1) >>> 0;
+      }
+      let [a, b, c, d, e, f, g, h] = H;
+      for (let i = 0; i < 64; i++) {
+        const t1 = (h + (rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25)) + ((e & f) ^ (~e & g)) + _K[i] + W[i]) >>> 0;
+        const t2 = ((rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) >>> 0;
+        h = g; g = f; f = e; e = (d + t1) >>> 0; d = c; c = b; b = a; a = (t1 + t2) >>> 0;
+      }
+      H[0] = (H[0] + a) >>> 0; H[1] = (H[1] + b) >>> 0; H[2] = (H[2] + c) >>> 0; H[3] = (H[3] + d) >>> 0;
+      H[4] = (H[4] + e) >>> 0; H[5] = (H[5] + f) >>> 0; H[6] = (H[6] + g) >>> 0; H[7] = (H[7] + h) >>> 0;
+    }
+    return H.map(x => x.toString(16).padStart(8, '0')).join('');
+  }
+
   // The full envelope, ready to serialise. `data` is keyed by localStorage
-  // key name so a future second key needs no format change.
+  // key name so a future second key needs no format change. The whole plan
+  // — profile, subjects, grades, fields, shortlist, story, statement drafts,
+  // checklist ticks — is the one state object under STORAGE_KEY.
   function exportBackup() {
     const data = {};
     OWNED_KEYS.forEach(k => {
@@ -225,58 +276,122 @@ const AltioraState = (() => {
     });
     return {
       app: 'altiora',
+      kind: 'plan',
       schemaVersion: SCHEMA_VERSION,
       exportedAt: new Date().toISOString(),
       data,
+      checksum: { algorithm: 'SHA-256', value: sha256Hex(data[STORAGE_KEY]) },
     };
   }
 
-  // Backup filename: altiora-backup-YYYY-MM-DD.json
+  // Plan filename: altiora-plan-YYYY-MM-DD.json (the student's local date).
   function backupFilename(now) {
     const d = now instanceof Date ? now : new Date();
     const pad = n => String(n).padStart(2, '0');
-    return `altiora-backup-${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}.json`;
+    return `altiora-plan-${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}.json`;
   }
 
-  // Validate WITHOUT touching state. Returns { ok:true, envelope } or
+  // Structural check of the saved state inside a file. Hydration is
+  // forgiving (it fills in missing fields for older files) — this catches
+  // the opposite: a field that IS present but has the wrong type, which
+  // only happens when a file was edited or damaged. Absent fields are fine.
+  function _stateShapeError(inner) {
+    const isObj = v => v != null && typeof v === 'object' && !Array.isArray(v);
+    const isStrArr = v => Array.isArray(v) && v.every(x => typeof x === 'string');
+    const optional = (obj, key, ok) => !(key in obj) || obj[key] === null || ok(obj[key]);
+    if ('profile' in inner && !isObj(inner.profile)) return 'profile';
+    if ('shortlist' in inner && !isStrArr(inner.shortlist)) return 'shortlist';
+    if ('progress' in inner && !isObj(inner.progress)) return 'progress';
+    if ('meta' in inner && !isObj(inner.meta)) return 'meta';
+    const p = inner.profile || {};
+    const checks = {
+      stage:                 v => typeof v === 'string',
+      qualificationSystem:   v => typeof v === 'string',
+      subjects:              isStrArr,
+      predictedGrades:       v => typeof v === 'string' || (isObj(v) && Object.values(v).every(x => typeof x === 'string')),
+      interests:             isStrArr,
+      candidateFields:       isStrArr,
+      achievements:          v => Array.isArray(v) && v.every(isObj),
+      applicationTasks:      isObj,
+      statementDrafts:       v => isObj(v) && Object.values(v).every(x => typeof x === 'string'),
+      yearGroup:             v => typeof v === 'string',
+      yearsUntilApplication: v => Number.isInteger(v) && v >= 0 && v <= 3,
+      yearSetAt:             v => typeof v === 'string' && !Number.isNaN(Date.parse(v)),
+    };
+    for (const [key, ok] of Object.entries(checks)) if (!optional(p, key, ok)) return `profile.${key}`;
+    return null;
+  }
+
+  const DAMAGED = 'That file’s saved plan is damaged or has been edited, so it can’t be restored. Nothing has been changed.';
+
+  // Validate WITHOUT touching state. Returns { ok:true, envelope, inner } or
   // { ok:false, error } with a message meant to be shown to the student.
+  // Accepts format 1 (no checksum) and 2 (checksum required and checked).
   function validateBackup(text) {
+    if (typeof text !== 'string' || text.length > MAX_PLAN_FILE_BYTES) {
+      return { ok: false, error: 'That file is too large to be an Altiora plan. Nothing has been changed.' };
+    }
     let parsed;
     try {
       parsed = JSON.parse(text);
     } catch (_) {
-      return { ok: false, error: 'That file isn’t readable — it may be incomplete or not a backup file.' };
+      return { ok: false, error: 'That file isn’t readable — it may be incomplete or not an Altiora plan file. Nothing has been changed.' };
     }
-    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
-      return { ok: false, error: 'That file isn’t an Altiora backup.' };
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || parsed.app !== 'altiora') {
+      return { ok: false, error: 'That file isn’t an Altiora plan. Nothing has been changed.' };
     }
-    if (parsed.app !== 'altiora') {
-      return { ok: false, error: 'That file isn’t an Altiora backup.' };
+    // A LOWER version is not an error: it is an older file, and it goes
+    // through the same hydration path old localStorage saves take.
+    const v = parsed.schemaVersion ?? 1;
+    if (!Number.isInteger(v) || v < 1) return { ok: false, error: DAMAGED };
+    if (v > SCHEMA_VERSION) {
+      return { ok: false, error: 'That file was saved by a newer version of Altiora than this one. Nothing has been changed.' };
     }
-    if (!parsed.data || typeof parsed.data !== 'object' || Array.isArray(parsed.data)) {
-      return { ok: false, error: 'That backup is missing its saved data.' };
+    if (!parsed.data || typeof parsed.data !== 'object' || Array.isArray(parsed.data)
+        || typeof parsed.data[STORAGE_KEY] !== 'string') {
+      return { ok: false, error: 'That file is missing its saved plan. Nothing has been changed.' };
     }
-    if (typeof parsed.data[STORAGE_KEY] !== 'string') {
-      return { ok: false, error: 'That backup is missing its saved data.' };
-    }
-    // The payload must itself be parseable before we accept the file —
-    // otherwise a truncated export would validate and then wipe state.
-    try {
-      const inner = JSON.parse(parsed.data[STORAGE_KEY]);
-      if (!inner || typeof inner !== 'object' || Array.isArray(inner)) {
-        return { ok: false, error: 'That backup’s saved data is damaged.' };
+    const raw = parsed.data[STORAGE_KEY];
+    if (v >= 2) {
+      const sum = parsed.checksum;
+      if (!sum || sum.algorithm !== 'SHA-256' || typeof sum.value !== 'string'
+          || sum.value.toLowerCase() !== sha256Hex(raw)) {
+        return { ok: false, error: DAMAGED };
       }
-    } catch (_) {
-      return { ok: false, error: 'That backup’s saved data is damaged.' };
     }
-    // A LOWER schemaVersion is not an error: it is an older save, and it
-    // goes through the same hydration path old localStorage saves take.
-    // A HIGHER one was written by a newer build than this one.
-    const v = parsed.schemaVersion;
-    if (typeof v === 'number' && v > SCHEMA_VERSION) {
-      return { ok: false, error: 'That backup was made by a newer version of Altiora than this one.' };
+    // The payload must itself be parseable and well-formed before we accept
+    // the file — otherwise a truncated export would validate and wipe state.
+    let inner;
+    try { inner = JSON.parse(raw); } catch (_) { return { ok: false, error: DAMAGED }; }
+    if (!inner || typeof inner !== 'object' || Array.isArray(inner) || _stateShapeError(inner)) {
+      return { ok: false, error: DAMAGED };
     }
-    return { ok: true, envelope: parsed };
+    return { ok: true, envelope: parsed, inner };
+  }
+
+  // What a plan holds, as counts, for the restore confirmation and for the
+  // "currently on this device" comparison. Reads the HYDRATED shape, so an
+  // older file is described exactly as it will load. Pure.
+  function describePlan(stateLike) {
+    // Always hydrate (idempotent on current state) so an older file's
+    // missing fields are filled exactly as they will be on restore.
+    const s = _hydrateFromRaw(JSON.stringify(stateLike ?? {}));
+    const p = s.profile;
+    const grades = p.predictedGrades;
+    const drafts = Object.values(p.statementDrafts || {});
+    return {
+      qualificationSystem: p.qualificationSystem || null,
+      yearGroup: p.yearGroup || null,
+      stage: p.stage || null,
+      subjects: p.subjects.length,
+      grades: typeof grades === 'string' ? (grades ? 1 : 0)
+        : (grades && typeof grades === 'object' ? Object.values(grades).filter(Boolean).length : 0),
+      fields: p.candidateFields.length,
+      shortlist: s.shortlist.length,
+      story: p.achievements.length,
+      draftWords: drafts.reduce((n, d) => n + (d.trim() ? d.trim().split(/\s+/).length : 0), 0),
+      checklistTicks: Object.keys(p.applicationTasks).length,
+    };
   }
 
   // All-or-nothing REPLACE. Validates first; only on success does any
@@ -285,7 +400,8 @@ const AltioraState = (() => {
     const res = validateBackup(text);
     if (!res.ok) return res;
     const raw = res.envelope.data[STORAGE_KEY];
-    // The SAME hydration path old saves use — no parallel migration.
+    // The SAME hydration path old saves use — no parallel migration, so a
+    // format-1 file and a format-2 file load identically.
     const next = _hydrateFromRaw(raw);
     _state = next;
     _state.meta.lastVisit = new Date().toISOString();
@@ -614,6 +730,9 @@ const AltioraState = (() => {
     backupFilename,
     validateBackup,
     importBackup,
+    describePlan,
+    sha256Hex,
+    MAX_PLAN_FILE_BYTES,
     // Exposed for debugging / future migrations.
     STORAGE_KEY,
     SCHEMA_VERSION,

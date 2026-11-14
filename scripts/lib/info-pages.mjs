@@ -77,7 +77,7 @@ const privacy = {
     { head: 'Backups and downloads',
       // Audit: main.js exportBackupFile (Blob download), FileReader import,
       // shortlist CSV (Blob download). No upload anywhere.
-      body: p('“Back up my data” saves a file to your device, and “Restore from backup” reads a file you choose from your device. Downloading your shortlist as a spreadsheet also creates the file on your device. None of these files are uploaded anywhere.') },
+      body: p('“Save my plan to a file” saves your whole plan as a file on your device, and “Restore my plan from a file” reads a file you choose from your device. Downloading your shortlist as a spreadsheet also creates the file on your device. None of these files are uploaded anywhere.') },
     { head: 'How to delete your information',
       // Audit: no in-app reset control; data is only in localStorage.
       body: p('Because everything is stored in your browser, you delete it there. In your browser’s settings, clear the site data for <strong>usealtiora.com</strong> (browsers call this “site data”, “website data” or “cookies and site data”). This removes everything the app saved. If you made a backup file, delete that file too.') },
