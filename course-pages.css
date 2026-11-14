@@ -1,5 +1,5 @@
-/* Styles for the generated course and university pages (courses/,
- * universities/) only. Everything else they use — the page shell, the
+/* Styles for the generated course, university and site-information pages
+ * (courses/, universities/, privacy.html, terms.html, accessibility.html) only. Everything else they use — the page shell, the
  * .fo-* layout and the .reqs panel — comes from styles.css. Loaded with a
  * content hash by scripts/build-course-pages.mjs, so edits here need no
  * manual version bump. */
@@ -72,3 +72,24 @@
 .cp-table tbody th { font-weight: 600; min-width: 16ch; }
 .cp-table .reqs__badge { margin-left: 4px; }
 .cp-num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* Sentence lists on the site-information pages. */
+.cp-list {
+  max-width: 66ch;
+  margin: 0 0 var(--space-4);
+  padding: 0 0 0 1.2em;
+  list-style: disc;
+  font-family: var(--ce-font-body);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--ce-ink);
+}
+.cp-list > li + li { margin-top: var(--space-2); }
+.cp-list li::marker { color: var(--ce-ink-60); }
+.cp .fo-prose a,
+.cp-list a {
+  color: var(--ce-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.cp .fo-prose code { font-family: var(--ce-font-mono); font-size: .9em; }

@@ -1,5 +1,5 @@
 /* global switchMode, axe */
-// axe-core WCAG 2.0 A/AA on Landing, Check, Shortlist, fields/medicine (+ all <details> open),
+// axe-core WCAG 2.0 A/AA on Landing, Check, Shortlist, fields/medicine, privacy/terms/accessibility (+ all <details> open),
 // reducedMotion reduce, 2.5s wait; also 375px overflow and minimum text size.
 import { chromium } from 'playwright-core'; import { serve } from './serve.mjs'; import fs from 'node:fs';
 const EXE = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
@@ -9,6 +9,7 @@ const subs = ['Mathematics', 'Further Mathematics', 'Physics', 'Chemistry'];
 const st = { profile: { stage: 'choosing', qualificationSystem: 'UK_A_Level', subjects: subs, predictedGrades: Object.fromEntries(subs.map(s => [s, 'A*'])), interests: [], candidateFields: [], achievements: [], applicationTasks: {}, statementDrafts: { q1: '', q2: '', q3: '' }, yearGroup: 'Year 12', yearsUntilApplication: 1, yearSetAt: null }, shortlist: ['uk-medicine-oxford', 'uk-medicine-ucl', 'uk-cs-cambridge'], progress: {}, meta: { firstVisit: null, lastVisit: null, hasOnboarded: true } };
 const PAGES = [
   ['Landing', '/index.html', null], ['Home', '/app.html', 'home'], ['Check', '/app.html', 'check'], ['Shortlist', '/app.html', 'shortlist'], ['fields/medicine', '/fields/medicine.html', null],
+  ['privacy', '/privacy.html', null], ['terms', '/terms.html', null], ['accessibility', '/accessibility.html', null],
 ];
 const server = await serve(root, port);
 const browser = await chromium.launch({ executablePath: EXE });

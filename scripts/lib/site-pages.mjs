@@ -16,6 +16,31 @@ export const SITE = 'https://usealtiora.com';
 /** Directories of generated pages, in sitemap order. */
 export const PAGE_DIRS = ['fields', 'courses', 'universities'];
 
+/** Site-information pages at the root, built by build-info-pages.mjs. */
+export const INFO_PAGES = [
+  { file: 'privacy.html', label: 'Privacy' },
+  { file: 'terms.html', label: 'Terms' },
+  { file: 'accessibility.html', label: 'Accessibility' },
+];
+export const SUPPORT_EMAIL = 'support@usealtiora.com';
+
+/**
+ * The site-information links every page carries in its footer.
+ * @param {string} base  path from the page to the site root ('' or '../')
+ * @param {{email?: boolean}} [opts]  email: false where the page already has a support link
+ */
+export function infoLinksHtml(base, { email = true } = {}) {
+  return [...INFO_PAGES.map(p => `<a href="${base}${p.file}">${p.label}</a>`),
+    ...(email ? [`<a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>`] : [])].join(' · ');
+}
+
+/** The footer for generated pages (styles.css: footer, .footer-meta). @param {string} base */
+export function footerHtml(base) {
+  return `<footer>
+    <p class="footer-meta">${infoLinksHtml(base)}</p>
+  </footer>`;
+}
+
 /** @param {unknown} str */
 export const esc = str => String(str)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -49,7 +74,8 @@ export function fileHash(file, root = ROOT) {
 }
 
 /**
- * A full page one directory below the site root (courses/, universities/).
+ * A full page: one directory below the site root (courses/, universities/)
+ * by default, or at the root with base ''.
  * @param {object} p
  * @param {ReturnType<typeof appPieces>} p.pieces
  * @param {string} p.generator   script path, for the "generated file" banner
@@ -61,8 +87,9 @@ export function fileHash(file, root = ROOT) {
  * @param {string | null} [p.accent]  field key for the accent colour
  * @param {unknown[]} [p.structuredData]  schema.org objects
  * @param {string} p.body        inner HTML of the page
+ * @param {string} [p.base]      path from the page to the site root
  */
-export function pageShell({ pieces, generator, source, title, description, url, pagesCssV, accent = null, structuredData = [], body }) {
+export function pageShell({ pieces, generator, source, title, description, url, pagesCssV, accent = null, structuredData = [], body, base = '../' }) {
   const accentStyle = accent
     ? ` style="--fo-accent: var(--color-cat-${esc(accent)}); --fo-accent-bg: var(--color-cat-${esc(accent)}-bg);"`
     : '';
@@ -77,8 +104,8 @@ export function pageShell({ pieces, generator, source, title, description, url, 
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}" />
   <link rel="canonical" href="${esc(url)}" />
-  <link rel="icon" href="../favicon.png" type="image/png" sizes="32x32" />
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml" sizes="any" />
+  <link rel="icon" href="${base}favicon.png" type="image/png" sizes="32x32" />
+  <link rel="icon" href="${base}favicon.svg" type="image/svg+xml" sizes="any" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="${esc(url)}" />
   <meta property="og:title" content="${esc(title)}" />
@@ -88,19 +115,19 @@ ${structuredData.map(d => `  <script type="application/ld+json">${jsonLd(d)}</sc
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 ${pieces.fontHrefs.map(h => `  <link rel="stylesheet" href="${h}" />`).join('\n')}
-  <link rel="stylesheet" href="../tokens.css?v=${pieces.tokensV}" />
-  <link rel="stylesheet" href="../styles.css?v=${pieces.stylesV}" />
-  <link rel="stylesheet" href="../course-pages.css?v=${pagesCssV}" />
+  <link rel="stylesheet" href="${base}tokens.css?v=${pieces.tokensV}" />
+  <link rel="stylesheet" href="${base}styles.css?v=${pieces.stylesV}" />
+  <link rel="stylesheet" href="${base}course-pages.css?v=${pagesCssV}" />
   ${pieces.analytics}
 </head>
 <body>
   <nav class="nav" aria-label="Main navigation">
     <div class="nav__inner">
-      <a class="nav__brand" href="../" aria-label="Altiora — home" title="Altiora">
+      <a class="nav__brand" href="${base || './'}" aria-label="Altiora — home" title="Altiora">
         <span class="nav__logo">${pieces.lockup}</span>
         <span class="nav__tagline">Your journey, guided.</span>
       </a>
-      <div class="about-wrap"><a class="about-pill" href="../app.html">Open the app →</a></div>
+      <div class="about-wrap"><a class="about-pill" href="${base}app.html">Open the app →</a></div>
     </div>
   </nav>
   <main>
@@ -110,6 +137,7 @@ ${body}
       </div>
     </div>
   </main>
+  ${footerHtml(base)}
 </body>
 </html>
 `;
@@ -132,12 +160,13 @@ export function writePages(dir, pages, root = ROOT) {
 }
 
 /**
- * Every public URL: the two site pages plus each generated page on disk
+ * Every public URL: the two site pages, the info pages, and each generated page on disk
  * (index.html is listed as its directory).
  * @param {string} [root]
  */
 export function sitemapUrls(root = ROOT) {
   const urls = [`${SITE}/`, `${SITE}/app.html`];
+  for (const { file } of INFO_PAGES) if (fs.existsSync(path.join(root, file))) urls.push(`${SITE}/${file}`);
   for (const dir of PAGE_DIRS) {
     const abs = path.join(root, dir);
     if (!fs.existsSync(abs)) continue;
@@ -157,7 +186,7 @@ export function sitemapUrls(root = ROOT) {
 export function writeSitemap(root = ROOT) {
   const urls = sitemapUrls(root);
   fs.writeFileSync(path.join(root, 'sitemap.xml'),
-    `<?xml version="1.0" encoding="UTF-8"?>\n<!-- Generated by scripts/lib/site-pages.mjs (build-field-pages.mjs, build-course-pages.mjs) — do not edit by hand. -->\n` +
+    `<?xml version="1.0" encoding="UTF-8"?>\n<!-- Generated by scripts/lib/site-pages.mjs (build-field-pages.mjs, build-course-pages.mjs, build-info-pages.mjs) — do not edit by hand. -->\n` +
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
     urls.map(u => `  <url>\n    <loc>${u}</loc>\n  </url>`).join('\n') + `\n</urlset>\n`);
   return urls.length;

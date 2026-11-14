@@ -27,7 +27,7 @@ import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { writeSitemap } from './lib/site-pages.mjs';
+import { writeSitemap, footerHtml } from './lib/site-pages.mjs';
 
 const require = createRequire(import.meta.url);
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -180,6 +180,7 @@ ${fontHrefs.map(h => `  <link rel="stylesheet" href="${h}" />`).join('\n')}
       </div>
     </div>
   </main>
+  ${footerHtml('../')}
 </body>
 </html>
 `;
