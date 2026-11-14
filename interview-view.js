@@ -55,7 +55,10 @@
       length: all('numberAndLength'),
       assessed: all('whatIsAssessed'),
       prep: avail.flatMap((/** @type {any} */ r) => r.prepAdvice),
-      questions: avail.flatMap((/** @type {any} */ r) => r.sampleQuestions.map((/** @type {any} */ q) => ({ ...q, university: r.university }))),
+      // `university` on a question is who published it, as the practice view
+      // shows after "Published by" (publishedBy in the data; the university
+      // itself when absent).
+      questions: avail.flatMap((/** @type {any} */ r) => r.sampleQuestions.map((/** @type {any} */ q) => ({ ...q, university: q.publishedBy ?? r.university }))),
       timing: avail.find((/** @type {any} */ r) => r.timing)?.timing ?? null,
       timingRecord: avail.find((/** @type {any} */ r) => r.timing) ?? null,
     };

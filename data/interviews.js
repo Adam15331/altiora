@@ -95,6 +95,7 @@
           {
             "id": "oxford-computer-science#1",
             "subject": "Computer Science",
+            "publishedBy": "University of Oxford",
             "source": "https://www.cs.ox.ac.uk/admissions/undergraduate/how_to_apply/sample_interview_problem.html",
             "accessed": "2026-11-14",
             "sourceSnippet": "Tidy boxes. You are given 10 boxes, each large enough to contain exactly 10 wooden building blocks, and a total of 100 blocks in 10 different colours. There may not be the same number in each colour, so you may not be able to pack the blocks into the boxes in such a way that each box contains only one colour of block. Show that it is possible to do it so that each box contains at most two different colours. A sample interview dialogue for this question is available.",
@@ -103,6 +104,7 @@
           {
             "id": "oxford-computer-science#2",
             "subject": "Computer Science",
+            "publishedBy": "University of Oxford",
             "source": "https://www.cs.ox.ac.uk/admissions/undergraduate/how_to_apply/sample_interview_problem.html",
             "accessed": "2026-11-14",
             "sourceSnippet": "Searching for the maximum. The real-valued function f(x), defined for 0 ≤ x ≤ 1, has a single maximum at x = m. If 0 ≤ u < v ≤ m then f(u) < f(v), and if m ≤ u < v ≤ 1 then f(u) > f(v). You are told nothing else about f, but you may ask for the value of f(x) for any values of x you choose. How would you find the approximate value of m? How accurately could you find m if you could choose only 10 values of x for which to evaluate f(x)?",
@@ -111,6 +113,7 @@
           {
             "id": "oxford-computer-science#3",
             "subject": "Computer Science",
+            "publishedBy": "University of Oxford",
             "source": "https://www.cs.ox.ac.uk/admissions/undergraduate/how_to_apply/sample_interview_problem.html",
             "accessed": "2026-11-14",
             "sourceSnippet": "Death by chocolate. You are locked in a room with your worst enemy. On a table in the centre of the room is a bar of chocolate, divided into squares in the usual way. One square of the chocolate is painted with a bright green paint that contains a deadly poison. You and your enemy take it in turns to break off one or more squares from the remaining chocolate (along a straight line) and eat them. Whoever is left with the green square must eat it and die in agony. You may look at the bar of chocolate and then decide whether to go first or second. Describe your strategy.",
@@ -119,6 +122,7 @@
           {
             "id": "oxford-computer-science#4",
             "subject": "Computer Science",
+            "publishedBy": "University of Oxford",
             "source": "https://www.cs.ox.ac.uk/admissions/undergraduate/how_to_apply/sample_interview_problem.html",
             "accessed": "2026-11-14",
             "sourceSnippet": "Monkey beans. An urn contains 23 white beans and 34 black beans. A monkey takes out two beans; if they are the same, he puts a black bean into the urn, and if they are different, he puts in a white bean from a large heap he has next to him. The monkey repeats this procedure until there is only one bean left. What colour is it?",
@@ -127,6 +131,7 @@
           {
             "id": "oxford-computer-science#5",
             "subject": "Computer Science",
+            "publishedBy": "University of Oxford",
             "source": "https://www.cs.ox.ac.uk/admissions/undergraduate/how_to_apply/sample_interview_problem.html",
             "accessed": "2026-11-14",
             "sourceSnippet": "Lily-pad lunacy. Eleven lily pads are numbered from 0 to 10. A frog starts on pad 0 and wants to get to pad 10. At each jump, the frog can move forward by one or two pads, so there are many ways it can get to pad 10. For example, it can make 10 jumps of one pad, 1111111111, or five jumps of two pads, 22222, or go 221212 or 221122, and so on. We'll call each of these ways different, even if the frog takes the same jumps in a different order. How many different ways are there of getting from 0 to 10?",
@@ -135,6 +140,7 @@
           {
             "id": "oxford-computer-science#6",
             "subject": "Computer Science",
+            "publishedBy": "University of Oxford",
             "source": "https://www.cs.ox.ac.uk/admissions/undergraduate/how_to_apply/sample_interview_problem.html",
             "accessed": "2026-11-14",
             "sourceSnippet": "Missing numbers. Imagine you are given a list of slightly less than 1,000,000 numbers, all different, and each between 0 and 999,999 inclusive. How could you find (in a reasonable time) a number between 0 and 999,999 that is not on the list?",
@@ -143,6 +149,7 @@
           {
             "id": "oxford-computer-science#7",
             "subject": "Computer Science",
+            "publishedBy": "University of Oxford",
             "source": "https://www.cs.ox.ac.uk/admissions/undergraduate/how_to_apply/sample_interview_problem.html",
             "accessed": "2026-11-14",
             "sourceSnippet": "Scribble. The game of Scribble is played with an inexhaustible supply of tiles, and consists of forming 'words' according to certain rules. Since each tile bears one of the letters P, Q, or R, these are not words that will be found in an ordinary dictionary. The game begins with the word PQ on the board; each move consists of applying one of the following rules: / If the word on the board is Px, for some shorter word x, you may change it to Pxx. For example, if the word is PQRRQ then you may change it to PQRRQQRRQ. / If the word on the board is xQQQy, for some shorter words x and y, then you may change it to xRy, replacing the sequence QQQ with a single R. / If the word on the board is xRRy, for some shorter words x and y, then you may change it to xy, deleting the sequence RR entirely. / (i) For each of the following words, say whether you can make it or not by following the rules of the game: QPR, PQQ, PQR, PR. (ii) Given any word, how can you decide whether it can be made or not?",
@@ -151,6 +158,7 @@
           {
             "id": "oxford-computer-science#8",
             "subject": "Computer Science",
+            "publishedBy": "an Oxford Computer Science tutor, linked from the department's admissions page",
             "source": "https://www.cs.ox.ac.uk/people/varun.kanade/website/post/2022/06/29/interview-question1.html",
             "accessed": "2026-11-14",
             "sourceSnippet": "For a non-negative real number \\(x\\), the floor of \\(x\\), denoted by \\( \\lfloor x \\rfloor\\) is the largest integer that is less than or equal to \\(x\\). For example, \\(\\lfloor 3 \\rfloor = 3 \\) and \\( \\lfloor 6.999 \\rfloor = 6 \\). / Let \\(n\\) be a positive natural number that is a perfect square. You are asked to pick a set of \\( \\lfloor \\frac{n}{2} \\rfloor \\) natural numbers from \\( 1,2, \\ldots,n - 1 \\), such that none of the chosen numbers is a perfect square, and no two distinct chosen elements add up to \\(n \\). For what values of \\(n\\) is this possible? Let \\(n\\) be a positive natural number that is a perfect cube. You are asked to pick a set of \\( \\lfloor \\frac{n}{2} \\rfloor \\) natural numbers from \\( 1,2, \\ldots,n -1 \\), such that none of the chosen numbers is a perfect cube, and no two distinct chosen elements add up to \\(n\\). For what values of \\(n\\) is this possible?",
@@ -159,6 +167,7 @@
           {
             "id": "oxford-computer-science#9",
             "subject": "Computer Science",
+            "publishedBy": "an Oxford Computer Science tutor, linked from the department's admissions page",
             "source": "https://www.cs.ox.ac.uk/people/varun.kanade/website/post/2022/06/29/interview-question2.html",
             "accessed": "2026-11-14",
             "sourceSnippet": "Find the smallest natural number ending in \\(6\\), such that if the last \\(6\\) is removed and placed in the front, the new number is \\(4\\) times the original number. Can you give a procedure to find the smallest number ending in digit \\(d\\), where \\(d\\) is between \\(1\\) and \\(9\\), such that if the last digit, \\(d\\), is removed and placed in front, you get a number that is \\(k\\) times as large? Is this possible for every value of \\(d\\) and \\(k\\)?",
@@ -167,6 +176,7 @@
           {
             "id": "oxford-computer-science#10",
             "subject": "Computer Science (Maths & CS joint)",
+            "publishedBy": "an Oxford Computer Science tutor, linked from the department's admissions page",
             "source": "https://www.cs.ox.ac.uk/people/varun.kanade/website/post/2022/09/16/interview-question3.html",
             "accessed": "2026-11-14",
             "sourceSnippet": "This question is about the function \\(Z\\) defined by \\( \\displaystyle Z(s) = \\sum_{k = 1}^\\infty \\frac{1}{k^s}, \\) for \\( s > 1 \\). / Can you find a lower bound on this function which is valid for all \\( s > 1 \\)? Why have we excluded \\( s = 1\\) from the domain? / From now on, we will concentrate on \\( Z(2) \\). / Can you find an upper bound on \\(Z(2) \\)? / In fact, \\( \\displaystyle Z(2) = \\frac{\\pi^2}{6} \\), i.e., \\( \\displaystyle \\sum_{k=1}^n \\frac{1}{k^2} \\rightarrow \\frac{\\pi^2}{6} \\) as \\( n \\rightarrow \\infty \\). / One proof of this fact relies on the inequalities / \\( \\sin \\theta < \\theta < \\tan \\theta,~~~~\\)for \\(\\theta \\in (0, \\pi/2)\\). / Can you show why this is true geometrically? / Can you use this to get upper and lower bounds on \\(1/\\theta^2\\) in terms only of \\(\\tan \\theta\\)? / Now let \\( \\theta_k = \\frac{k \\pi}{2 n + 1} \\) for \\(1 \\leq k \\leq n \\). Find upper and lower bounds on \\[ \\sum_{k=1}^n \\frac{1}{k^2}. \\] / It turns out that the numbers \\[ r_k = \\frac{1}{\\tan^2 \\left( \\frac{\\pi k}{2n + 1 } \\right) }, ~~ 1 \\leq k \\leq n, \\] are roots of the polynomial \\[ p_n(x) = { 2n + 1 \\choose 1} x^n - {2n + 1 \\choose 3} x^{n-1} + \\cdots + (-1)^n {2n + 1 \\choose 2n + 1}. \\] Can you use this to show that / \\( \\displaystyle \\sum_{k=1}^n \\frac{1}{k^2} \\rightarrow \\frac{\\pi^2}{6} \\) as \\( n \\rightarrow \\infty \\)?",
@@ -175,6 +185,7 @@
           {
             "id": "oxford-computer-science#11",
             "subject": "Computer Science",
+            "publishedBy": "an Oxford Computer Science tutor, linked from the department's admissions page",
             "source": "https://www.cs.ox.ac.uk/people/varun.kanade/website/post/2022/09/16/interview-question4.html",
             "accessed": "2026-11-14",
             "sourceSnippet": "Consider the following ten-digit number: / \\( 7~1~0~6~4~1~9~9~0~2\\). / You should remove three of the digits so as to get the largest possible seven digit number. As a first step, you may want to try to delete two digits from the following five digit number to get the largest possible three digit number: / \\(7~1~9~3~4\\). / Now consider the more general question when you are given an \\(n\\) digit number and asked to delete \\(k < n\\) out of the \\(n\\) digits, so as to leave the largest possible \\(n - k\\) digit number. Explain your general strategy. Evaluate the number of steps requried to perform your strategy and try to minimise this number as much as you can.",
@@ -183,6 +194,7 @@
           {
             "id": "oxford-computer-science#12",
             "subject": "Computer Science (Maths & CS joint)",
+            "publishedBy": "an Oxford Computer Science tutor, linked from the department's admissions page",
             "source": "https://www.cs.ox.ac.uk/people/varun.kanade/website/post/2023/06/28/interview-question5.html",
             "accessed": "2026-11-14",
             "sourceSnippet": "An increasing tree is a rooted labelled tree whose labels increase along paths away from the root. For simplicity, if the tree has \\(n\\) vertices we will take the root to be labelled \\(1\\) and the other vertices to be labelled by \\(2, \\ldots, n\\). An example is shown below. / Note that when a node has more than one child, the order in which the children are represented is irrelevant, so that, for example, the following two trees are equivalent. / Can you draw all the increasing trees with \\(4\\) vertices? / How many increasing trees on \\(n\\) vertices are there? / Suppose now that \\(n\\) is even. How many of these can be split by removing a single edge into a tree labelled only by odd numbers and a tree labelled only by even numbers? / Suppose now that we want to generate an increasing tree on \\(n\\) vertices picked uniformly at random, i.e. pick each of the possible trees with equal probability. Can you give an algorithm to do this? / When a random tree is picked as in the previous part, what is the average number of neighbours of the root?",
@@ -191,6 +203,7 @@
           {
             "id": "oxford-computer-science#13",
             "subject": "Computer Science",
+            "publishedBy": "an Oxford Computer Science tutor, linked from the department's admissions page",
             "source": "https://www.cs.ox.ac.uk/people/varun.kanade/website/post/2023/06/28/interview-question6.html",
             "accessed": "2026-11-14",
             "sourceSnippet": "Suppose \\(a_1, \\ldots, a_8\\) are positive real numbers that add up to \\( 27 \\). Can you find the minimum of the following expression? / \\[ \\sqrt{1^2 + a_1^2} + \\sqrt{2^2 + a_2^2} + \\cdots + \\sqrt{8^2 + a_8^2} \\] / Can the values of \\(a_i\\) that minimise this expression be rational?",
@@ -457,13 +470,7 @@
         },
         "mmiStations": null,
         "whatIsAssessed": null,
-        "prepAdvice": [
-          {
-            "source": "https://www.cst.cam.ac.uk/admissions/undergraduate/interviews",
-            "accessed": "2026-11-14",
-            "sourceSnippet": "Since solving Maths problems will likely form a large part of your interview, make sure to practise solving tricky problems. These problems might just involve Maths, however some might focus more on algorithms or other concepts in Computer Science, such as programming and logic. Below is a list of resources you can use to find practice problems:"
-          }
-        ],
+        "prepAdvice": [],
         "sampleQuestions": [],
         "unavailable": false,
         "interviewed": "yes",
@@ -925,6 +932,7 @@
           {
             "id": "manchester-medicine#1",
             "subject": "Medicine",
+            "publishedBy": "University of Manchester",
             "source": "https://www.bmh.manchester.ac.uk/study/medicine/apply/interviews/",
             "accessed": "2026-11-14",
             "sourceSnippet": "Why do you want to be a doctor?",
