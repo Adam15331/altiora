@@ -47,6 +47,7 @@ export function coverageFacts() {
 }
 
 const LABELLED = 'Every requirement is labelled verified, partly verified or not yet checked.';
+const SHOWN = 'Every requirement shows whether it has been checked against the university&rsquo;s own page.';
 
 /** "A, B and C" / "A, B &amp; C". @param {string[]} xs @param {string} and */
 const list = (xs, and) => xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} ${and} ${xs.at(-1)}`;
@@ -55,7 +56,10 @@ const list = (xs, and) => xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(
 export function managedStrings(f = coverageFacts()) {
   return [
     { file: 'app.html', re: /Covers [^·]*? &middot; \d+ courses/, text: `Covers ${list(f.countries, '&amp;')} &middot; ${f.total} courses` },
+    // meta description, og:description and JSON-LD
     { file: 'index.html', re: /\d+ courses\. Every requirement is labelled verified, partly verified or not yet checked\./g, text: `${f.total} courses. ${LABELLED}` },
+    // the hero paragraph
+    { file: 'index.html', re: /across \d+ courses\. Every requirement shows whether it has been checked against the university&rsquo;s own page\./, text: `across ${f.total} courses. ${SHOWN}` },
     { file: 'index.html', re: /<p class="small">\d+ courses</, text: `<p class="small">${f.total} courses<` },
     { file: 'llms.txt', re: /- Universities in the [^\n]*\./, text: `- Universities in the ${list(f.countries, 'and')}.` },
     { file: 'llms.txt', re: /The dataset holds \d+ course records/, text: `The dataset holds ${f.total} course records` },

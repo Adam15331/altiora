@@ -20,6 +20,7 @@
     "data/requirements/config.js",
     "requirements-view.js",
     "statement-review.js",
+    "interview-view.js",
     "ib-hl.js",
     "scripts/lib/**/*.mjs",
     "scripts/validate-requirements.mjs",
@@ -28,6 +29,7 @@
     "scripts/sync-coverage-copy.mjs",
     "scripts/build-course-pages.mjs",
     "scripts/build-info-pages.mjs",
+    "scripts/build-interview-data.mjs",
     "scripts/migrate-requirements-2027.mjs",
     "scripts/migrate-requirements-2027-qualifications.mjs",
     "tests/**/*.mjs"

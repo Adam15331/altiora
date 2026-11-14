@@ -29,12 +29,18 @@ test('the verification split comes from the cycle file row statuses', () => {
     + `(counted from the row statuses in data/requirements/${f.cycle}.js)`));
 });
 
-test('the landing page states the labelling claim, verbatim, on every surface', () => {
+test('the landing page states the labelling claim, verbatim, in its link previews', () => {
   const f = coverageFacts();
   const index = read('index.html');
   const claim = `${f.total} courses. Every requirement is labelled verified, partly verified or not yet checked.`;
-  assert.equal(index.split(claim).length - 1, 4, 'meta, og, JSON-LD and hero');
-  assert.ok(index.includes('Every requirement shows whether it has been checked against the university\'s own page.'));
+  assert.equal(index.split(claim).length - 1, 3, 'meta description, og:description and JSON-LD');
+});
+
+test('the hero states the current course count and the per-requirement check', () => {
+  const f = coverageFacts();
+  const hero = /<p class="hero__sub">From &ldquo;no idea what to study&rdquo;[^<]*<\/p>/.exec(read('index.html'))?.[0] ?? '';
+  assert.equal(hero, `<p class="hero__sub">From &ldquo;no idea what to study&rdquo; to a finished application plan, across ${f.total} courses. `
+    + 'Every requirement shows whether it has been checked against the university&rsquo;s own page.</p>');
 });
 
 test('no site file claims "verified courses" or "Every requirement checked"', () => {

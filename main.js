@@ -1360,6 +1360,8 @@ function switchMode(mode) {
   $('panel-story')             ?.classList.toggle('hidden', mode !== 'story');
   $('panel-summary')           ?.classList.toggle('hidden', mode !== 'summary');
   $('panel-month')             ?.classList.toggle('hidden', mode !== 'month');
+  $('panel-interview')         ?.classList.toggle('hidden', mode !== 'interview');
+  if (mode !== 'interview' && typeof ivTimerStop === 'function') ivTimerStop();
 
   // The shortlist and home are cross-stage views, not stage tools —
   // highlight their own controls rather than a stage-tool button.
@@ -1413,6 +1415,9 @@ function switchMode(mode) {
   }
   if (mode === 'month') {
     renderMonthPanel();
+  }
+  if (mode === 'interview') {
+    renderInterviewPanel();
   }
 
   // Record the workspace view in history (the field profile records itself,
@@ -2163,6 +2168,7 @@ function rerenderCurrentView() {
     case 'story':    renderStoryPanel(); break;
     case 'summary':  renderCounselorSummary(); break;
     case 'month':    renderMonthPanel(); break;
+    case 'interview': renderInterviewPanel(); break;
     // shortlist: the glance counsel is year- and system-aware.
     case 'shortlist': renderShortlist(); break;
     // strengths: the grid is system-agnostic, but the intro copy and the
@@ -3682,6 +3688,7 @@ function renderStoryPanel() {
       <header class="story-view__header">
         <h1 class="story-view__title">Your story<span id="achvCount" class="achv__count"></span></h1>
         <p class="story-view__sub">The things you've done, and what they taught you.</p>
+        <button type="button" class="applying-task__link iv-practise-link" data-iv-open>Interview practice →</button>
       </header>
       ${achievementsSectionHtml()}
       ${statementSectionHtml()}
@@ -6377,6 +6384,219 @@ function cardRequirementsHtml(course) {
     categories: cfg.categories,
     cycleLabel: cycle.label,
     fallbackUrl: courseOfficialUrl(course),
+    // Display only: the university's own interview information, if any.
+    extraRows: (typeof AltioraInterviewView !== 'undefined')
+      ? AltioraInterviewView.sectionHtml(courseInterview(course.id), { fallbackUrl: courseOfficialUrl(course), practise: true })
+      : '',
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * INTERVIEW PRACTICE
+ * Display only — nothing here touches a verdict. Shows the university's
+ * own format and preparation advice (data/interviews.js, verbatim, sourced)
+ * and practice prompts drawn ONLY from:
+ *   - the university's published sample questions, labelled and linked;
+ *   - the student's own story entries, through the one fixed template
+ *     AltioraInterviewView.storyPrompt().
+ * No microphone, camera or recording; no network request. The only thing
+ * saved is which prompts are marked practised (profile.interviewPractice).
+ * ═══════════════════════════════════════════════════════════════ */
+function courseInterview(courseId) {
+  return (typeof AltioraInterviewView !== 'undefined' && typeof AltioraInterviewData !== 'undefined')
+    ? AltioraInterviewView.forCourse(AltioraInterviewData, courseId) : null;
+}
+
+let _ivCourseId = null;      // the course being practised for
+const _ivTimer = { phases: [], index: 0, left: 0, handle: null, endsAt: 0 };
+
+// Shortlisted courses that interview, plus the course a card button opened.
+function interviewPracticeCourses() {
+  const ids = [...new Set([...AltioraState.getShortlist(), ...(_ivCourseId ? [_ivCourseId] : [])])];
+  return ids.map(id => (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null)
+    .filter(c => c && AltioraInterviewView.interviews(courseInterview(c.id)));
+}
+
+function openInterviewPractice(courseId) {
+  if (courseId) _ivCourseId = courseId;
+  switchMode('interview');
+}
+
+function ivFactList(label, items) {
+  if (!items.length) return '';
+  return `<div class="reqs__fact"><dt>${esc(label)}</dt><dd><ul class="reqs__items">${items.map(e =>
+    `<li>“${esc(e.sourceSnippet).split(' / ').join('<br>')}” <a class="reqs__link" href="${esc(e.source)}" target="_blank" rel="noopener noreferrer">Source</a></li>`).join('')}</ul></dd></div>`;
+}
+
+function ivTimerPhases(v) {
+  const t = v?.timing;
+  if (!t) return [{ name: 'Practice', secs: AltioraInterviewView.PLAIN_TIMER_SECONDS }];
+  const answer = t.kind === 'station' ? 'Station' : 'Interview';
+  return [...(t.prepSeconds ? [{ name: 'Preparation', secs: t.prepSeconds }] : []), { name: answer, secs: t.answerSeconds }];
+}
+
+function ivTimerLabelHtml(v) {
+  const t = v?.timing;
+  const mm = AltioraInterviewView.mmss;
+  if (!t) return `<p class="iv-timer__label">${esc(AltioraInterviewView.PLAIN_TIMER_LABEL)}: ${mm(AltioraInterviewView.PLAIN_TIMER_SECONDS)}</p>`;
+  const rec = v.timingRecord;
+  const what = t.kind === 'station'
+    ? `${t.prepSeconds ? `${mm(t.prepSeconds)} preparation, then ` : ''}${mm(t.answerSeconds)} per station`
+    : `${mm(t.answerSeconds)} for the whole interview`;
+  return `<p class="iv-timer__label">Timed to the format ${esc(rec.university)} states: ${what}.</p>
+        <p class="iv-timer__source">“${esc(t.quote)}” <a class="reqs__link" href="${esc(rec[t.field].source)}" target="_blank" rel="noopener noreferrer">Source</a></p>`;
+}
+
+function ivTimerStop() { clearInterval(_ivTimer.handle); _ivTimer.handle = null; }
+function ivTimerReset(v) {
+  ivTimerStop();
+  _ivTimer.phases = ivTimerPhases(v);
+  _ivTimer.index = 0;
+  _ivTimer.left = _ivTimer.phases[0].secs;
+  ivTimerPaint();
+}
+function ivTimerPaint(announce = null) {
+  const clock = document.querySelector('[data-iv-clock]');
+  const phase = document.querySelector('[data-iv-phase]');
+  const btn = document.querySelector('[data-iv-timer-toggle]');
+  if (clock) clock.textContent = AltioraInterviewView.mmss(Math.max(0, _ivTimer.left));
+  if (phase && announce !== null) phase.textContent = announce;
+  else if (phase && !phase.textContent) phase.textContent = _ivTimer.phases[_ivTimer.index]?.name ?? '';
+  if (btn) btn.textContent = _ivTimer.handle ? 'Pause' : (_ivTimer.left <= 0 && _ivTimer.index >= _ivTimer.phases.length - 1 ? 'Done' : 'Start');
+}
+function ivTimerToggle() {
+  if (_ivTimer.handle) { ivTimerStop(); ivTimerPaint(); return; }
+  if (_ivTimer.left <= 0 && _ivTimer.index >= _ivTimer.phases.length - 1) return;
+  _ivTimer.endsAt = Date.now() + _ivTimer.left * 1000;
+  _ivTimer.handle = setInterval(() => {
+    _ivTimer.left = Math.ceil((_ivTimer.endsAt - Date.now()) / 1000);
+    if (_ivTimer.left > 0) { ivTimerPaint(); return; }
+    if (_ivTimer.index < _ivTimer.phases.length - 1) {
+      _ivTimer.index++;
+      _ivTimer.left = _ivTimer.phases[_ivTimer.index].secs;
+      _ivTimer.endsAt = Date.now() + _ivTimer.left * 1000;
+      ivTimerPaint(_ivTimer.phases[_ivTimer.index].name);
+      return;
+    }
+    ivTimerStop();
+    _ivTimer.left = 0;
+    ivTimerPaint('Time is up.');
+  }, 250);
+  ivTimerPaint(_ivTimer.phases[_ivTimer.index].name);
+}
+
+function ivPromptHtml(key, bodyHtml, metaHtml) {
+  const done = AltioraState.isInterviewPractised(key);
+  return `
+        <li class="iv-prompt${done ? ' iv-prompt--done' : ''}">
+          <div class="iv-prompt__body">${bodyHtml}${metaHtml}</div>
+          <label class="iv-prompt__done"><input type="checkbox" data-iv-practised="${esc(key)}"${done ? ' checked' : ''}> Practised</label>
+        </li>`;
+}
+
+function renderInterviewPanel() {
+  const panel = $('panel-interview');
+  if (!panel || typeof AltioraInterviewView === 'undefined') return;
+  ivTimerStop();
+  const V = AltioraInterviewView;
+  const options = interviewPracticeCourses();
+  if (!options.some(c => c.id === _ivCourseId)) _ivCourseId = options[0]?.id ?? null;
+  const header = `
+      <header class="applying__header">
+        <h1 class="applying__title">Interview practice</h1>
+        <p class="applying__sub">Practise for a course on your shortlist that interviews. Questions come only from the university itself and from your own story.</p>
+      </header>`;
+  if (!options.length) {
+    panel.innerHTML = `
+    <div class="applying iv">${header}
+      <div class="applying-empty">
+        <p>None of the courses on your shortlist has published interview details.</p>
+        <button type="button" class="home-next__btn home-next__btn--primary" data-go-tool="shortlist">View your shortlist →</button>
+      </div>
+    </div>`;
+    return;
+  }
+  const course = options.find(c => c.id === _ivCourseId);
+  const v = courseInterview(course.id);
+  const entries = AltioraState.getAchievements();
+  const questions = v.questions;
+
+  const officialHtml = questions.map(q => {
+    const p = V.plainText(q.question);
+    const body = p.readable
+      ? `<p class="iv-prompt__text">${p.lines.map(esc).join('<br>')}</p>`
+      : `<p class="iv-prompt__text iv-prompt__text--muted">This question is written in mathematical notation that can't be shown here. <a class="reqs__link" href="${esc(q.source)}" target="_blank" rel="noopener noreferrer">Open it on the source page</a>.</p>`;
+    const meta = `<p class="iv-prompt__meta">Published by ${esc(q.university)} · <a class="reqs__link" href="${esc(q.source)}" target="_blank" rel="noopener noreferrer">Source</a></p>`;
+    return ivPromptHtml(`q:${q.id}`, body, meta);
+  }).join('');
+  const storyHtml = entries.map(a =>
+    ivPromptHtml(`story:${a.id}`, `<p class="iv-prompt__text">${esc(V.storyPrompt(a.title))}</p>`, '')).join('');
+  const promptsHtml = (!questions.length && !entries.length)
+    ? `<p class="month__none">${esc(V.EMPTY_PRACTICE_TEXT)}</p>
+        <button type="button" class="home-next__btn" data-open-story>Open My Story →</button>`
+    : `${questions.length ? `<h3 class="iv-group">From ${esc(v.university)}</h3><ul class="iv-prompts">${officialHtml}</ul>` : ''}
+        ${entries.length ? `<h3 class="iv-group">From your story</h3><ul class="iv-prompts">${storyHtml}</ul>` : ''}`;
+
+  panel.innerHTML = `
+    <div class="applying iv">${header}
+      <label class="iv-pick"><span class="iv-pick__label">Course</span>
+        <select class="grade-inline-select" data-iv-course>
+          ${options.map(c => `<option value="${esc(c.id)}"${c.id === course.id ? ' selected' : ''}>${esc(c.name)} — ${esc(c.university)}</option>`).join('')}
+        </select>
+      </label>
+      <section class="applying-section" aria-labelledby="ivFormatHead">
+        <h2 id="ivFormatHead" class="applying-section__head">How this interview works</h2>
+        <dl class="reqs__facts">
+          <div class="reqs__fact"><dt>Interviewed</dt><dd>${esc(V.INTERVIEWED_LABEL[v.interviewed] ?? v.interviewed)}</dd></div>
+          ${ivFactList('Format', v.format)}
+          ${ivFactList('Stations', v.stations)}
+          ${ivFactList('Number and length', v.length)}
+          ${ivFactList('What is assessed', v.assessed)}
+        </dl>
+      </section>
+      <section class="applying-section" aria-labelledby="ivPrepHead">
+        <h2 id="ivPrepHead" class="applying-section__head">How ${esc(v.university)} says to prepare</h2>
+        ${v.prep.length ? `<dl class="reqs__facts">${ivFactList('In their words', v.prep)}</dl>` : `<p class="month__none">${esc(v.university)} publishes no preparation advice on the pages Altiora has read.</p>`}
+      </section>
+      <section class="applying-section iv-timer" aria-labelledby="ivTimerHead">
+        <h2 id="ivTimerHead" class="applying-section__head">Timer</h2>
+        ${ivTimerLabelHtml(v)}
+        <p class="iv-timer__phase" data-iv-phase aria-live="polite"></p>
+        <p class="iv-timer__clock" data-iv-clock role="timer" aria-label="Time remaining"></p>
+        <div class="plan-keep__actions">
+          <button type="button" class="home-next__btn home-next__btn--primary" data-iv-timer-toggle>Start</button>
+          <button type="button" class="home-next__btn" data-iv-timer-reset>Reset</button>
+        </div>
+      </section>
+      <section class="applying-section" aria-labelledby="ivPromptsHead">
+        <h2 id="ivPromptsHead" class="applying-section__head">Practice prompts</h2>
+        ${promptsHtml}
+      </section>
+    </div>`;
+  ivTimerReset(v);
+}
+
+function wireInterviewPractice() {
+  document.addEventListener('click', e => {
+    const t = e.target;
+    if (!t.closest) return;
+    const practise = t.closest('[data-iv-practise]');
+    if (practise) { e.preventDefault(); openInterviewPractice(practise.dataset.ivPractise); return; }
+    if (t.closest('[data-iv-open]')) { e.preventDefault(); openInterviewPractice(null); return; }
+    if (t.closest('[data-iv-timer-toggle]')) { ivTimerToggle(); return; }
+    if (t.closest('[data-iv-timer-reset]')) { ivTimerReset(courseInterview(_ivCourseId)); return; }
+    const go = t.closest('#panel-interview [data-go-tool]');
+    if (go) switchMode(go.dataset.goTool);
+  });
+  document.addEventListener('change', e => {
+    const box = e.target.closest?.('[data-iv-practised]');
+    if (box) {
+      AltioraState.setInterviewPractised(box.dataset.ivPractised, box.checked);
+      box.closest('.iv-prompt')?.classList.toggle('iv-prompt--done', box.checked);
+      return;
+    }
+    const pick = e.target.closest?.('[data-iv-course]');
+    if (pick) { _ivCourseId = pick.value; renderInterviewPanel(); }
   });
 }
 // One category as plain text (CSV export, copy-to-clipboard).
@@ -8828,6 +9048,7 @@ function init() {
   AltioraState.subscribe(renderApplyingChecklist);
   wireApplyingChecklist();
   wireBackupControls();
+  wireInterviewPractice();
   wireStatementDrafting();
   AltioraState.subscribe(syncStatementSurface);
 
