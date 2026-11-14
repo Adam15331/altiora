@@ -1359,11 +1359,13 @@ function switchMode(mode) {
   $('panel-field-overview')    .classList.toggle('hidden', mode !== 'field-overview');
   $('panel-story')             ?.classList.toggle('hidden', mode !== 'story');
   $('panel-summary')           ?.classList.toggle('hidden', mode !== 'summary');
+  $('panel-month')             ?.classList.toggle('hidden', mode !== 'month');
 
   // The shortlist and home are cross-stage views, not stage tools —
   // highlight their own controls rather than a stage-tool button.
   $('shortlistLink')?.classList.toggle('shortlist-link--active', mode === 'shortlist');
   $('storyLink')?.classList.toggle('shortlist-link--active', mode === 'story');
+  $('monthLink')?.classList.toggle('shortlist-link--active', mode === 'month');
   $('homeLink')?.classList.toggle('home-link--active', mode === 'home');
 
   if (mode === 'check') {
@@ -1408,6 +1410,9 @@ function switchMode(mode) {
   }
   if (mode === 'summary') {
     renderCounselorSummary();
+  }
+  if (mode === 'month') {
+    renderMonthPanel();
   }
 
   // Record the workspace view in history (the field profile records itself,
@@ -1528,15 +1533,56 @@ function stageProposalReason(yearLabel, stage) {
   return REASONS[stage] ?? '';
 }
 
+/* ─── Academic-year rollover ──────────────────────────────────
+ * A year group set last school year is wrong now. yearSetAt records when
+ * the year was last set or confirmed; if that is before the most recent
+ * start of the school year, the student is asked to confirm (never
+ * advanced silently). No system's start month was in the codebase, so all
+ * five use September (month 9) — change a value here if that is wrong for
+ * a system.
+ * ───────────────────────────────────────────────────────────── */
+const ACADEMIC_YEAR_START_MONTH = { UK_A_Level: 9, IB: 9, US_AP: 9, SG_A_Level: 9, HK_DSE: 9 };
+
+// The most recent start of the school year (local time) on or before `now`.
+function academicYearStart(sys, now = new Date()) {
+  const m = (ACADEMIC_YEAR_START_MONTH[sys] ?? 9) - 1;
+  const y = now.getMonth() >= m ? now.getFullYear() : now.getFullYear() - 1;
+  return new Date(y, m, 1);
+}
+
+// True when a year group is set but was set (or last confirmed) before the
+// current school year began — or when the save has no record of when.
+function yearNeedsConfirm(profile, now = new Date()) {
+  if (!profile || profile.yearsUntilApplication == null) return false;
+  const set = Date.parse(profile.yearSetAt ?? '');
+  if (Number.isNaN(set)) return true;
+  return set < academicYearStart(profile.qualificationSystem, now).getTime();
+}
+
+const YEAR_SELECT_COPY = {
+  heading: 'What year are you in?',
+  sub: 'This helps us point you at the right step. You can change it anytime.',
+};
+
 // Show the full-screen year-selection screen for the CURRENT system
-// (onboarding step 2, and the one-time prompt for old saves missing a year).
-function showYearSelect() {
+// (onboarding step 2, the one-time prompt for old saves missing a year, and
+// — with { confirm: true } — the new-school-year confirmation).
+function showYearSelect({ confirm = false } = {}) {
   closeStageMenu();
-  const sys = AltioraState.getProfile().qualificationSystem;
+  const p = AltioraState.getProfile();
+  const sys = p.qualificationSystem;
   const options = YEAR_OPTIONS[sys] || YEAR_OPTIONS.UK_A_Level;
+  const saved = confirm ? p.yearGroup : null;
+  const setOn = confirm && !Number.isNaN(Date.parse(p.yearSetAt ?? ''))
+    ? ` on ${new Date(p.yearSetAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}` : '';
+  $('yearSelectHeading').textContent = confirm ? 'Is this still your year group?' : YEAR_SELECT_COPY.heading;
+  $('yearSelectSub').textContent = confirm
+    ? `You told us you were in ${saved}${setOn}. A new school year has started since then, so choose the year you're in now.`
+    : YEAR_SELECT_COPY.sub;
   $('yearCards').innerHTML = options.map(o => `
-    <button class="stage-card stage-card--year" data-year-label="${esc(o.label)}" data-years="${o.years}" role="listitem">
-      <span class="stage-card__title">${esc(o.label)}</span>
+    <button class="stage-card stage-card--year${o.label === saved ? ' stage-card--saved' : ''}" data-year-label="${esc(o.label)}" data-years="${o.years}" role="listitem">
+      <span class="stage-card__title">${esc(o.label)}</span>${o.label === saved ? `
+      <span class="stage-card__desc">Your saved year group</span>` : ''}
     </button>`).join('');
   $$('#yearCards .stage-card').forEach(card =>
     card.addEventListener('click', () => chooseYear(card.dataset.yearLabel, parseInt(card.dataset.years, 10))));
@@ -1704,47 +1750,98 @@ function exportBackupFile() {
     document.body.appendChild(a);
     a.click();
     a.remove();
-    showToast('Backup saved to your device.');
+    showToast('Your plan was saved to your device.');
     logEvent('backup_export', {});
   } catch (err) {
     console.error('[backup] export failed:', err);
-    showToast('Couldn’t save the backup file.');
+    showToast('Couldn’t save your plan file.');
   } finally {
     // Revoke on the next frame so the download has taken the handle.
     if (url) setTimeout(() => URL.revokeObjectURL(url), 0);
   }
 }
 
-// Read → validate → confirm → replace. Nothing changes unless the file
-// validates AND the student confirms; the confirm names the consequence.
+// What a plan holds, as the rows the restore dialog shows. Counts come from
+// AltioraState.describePlan, i.e. from the data as it will actually load.
+function planSummaryRows(d) {
+  const sys = d.qualificationSystem
+    ? (qualificationMappings[d.qualificationSystem]?.systemLabel ?? d.qualificationSystem) : null;
+  const n = (k, one, many) => `${k} ${k === 1 ? one : many}`;
+  return [
+    ['Qualification and year', [sys, d.yearGroup].filter(Boolean).join(' · ') || 'Not set'],
+    ['Stage', d.stage ? (STAGES[d.stage]?.name ?? d.stage) : 'Not set'],
+    ['Subjects', d.subjects ? n(d.subjects, 'subject', 'subjects') : 'None'],
+    ['Predicted grades', d.grades ? `${d.grades} set` : 'None'],
+    ['Fields kept', d.fields ? n(d.fields, 'field', 'fields') : 'None'],
+    ['Shortlist', d.shortlist ? n(d.shortlist, 'course', 'courses') : 'Empty'],
+    ['Story', d.story ? n(d.story, 'entry', 'entries') : 'Empty'],
+    ['Statement drafts', d.draftWords ? n(d.draftWords, 'word', 'words') : 'Empty'],
+    ['Checklist', d.checklistTicks ? n(d.checklistTicks, 'item ticked', 'items ticked') : 'Nothing ticked'],
+  ];
+}
+
+// The restore dialog (a native <dialog>: modal, focus-contained, Escape
+// closes). mode 'confirm' shows what the file holds and asks; mode 'error'
+// shows why nothing was changed.
+let _pendingPlanText = null;
+function openPlanDialog({ mode, title, html }) {
+  const dlg = $('planDialog');
+  if (!dlg) return;
+  $('planDialogTitle').textContent = title;
+  $('planDialogBody').innerHTML = html;
+  dlg.querySelector('[data-plan-confirm]').hidden = mode !== 'confirm';
+  dlg.querySelector('[data-plan-cancel]').textContent = mode === 'confirm' ? 'Cancel' : 'OK';
+  if (!dlg.open) dlg.showModal();
+  dlg.querySelector('[data-plan-cancel]').focus();   // the safe choice has focus
+}
+function planRejected(message) {
+  _pendingPlanText = null;
+  openPlanDialog({ mode: 'error', title: 'This file can’t be restored', html: `<p class="plan-dialog__text">${esc(message)}</p>` });
+  logEvent('backup_import_rejected', { reason: message });
+}
+
+// Read → validate → show what it holds → confirm → replace. Nothing changes
+// unless the file validates AND the student confirms.
 function importBackupFile(file) {
   if (!file) return;
+  if (file.size > AltioraState.MAX_PLAN_FILE_BYTES) {
+    planRejected('That file is too large to be an Altiora plan. Nothing has been changed.');
+    return;
+  }
   const reader = new FileReader();
-  reader.onerror = () => showToast('Couldn’t read that file.');
+  reader.onerror = () => planRejected('Couldn’t read that file. Nothing has been changed.');
   reader.onload = () => {
     const text = String(reader.result ?? '');
     const check = AltioraState.validateBackup(text);
-    if (!check.ok) {
-      showToast(check.error);
-      logEvent('backup_import_rejected', { reason: check.error });
-      return;
-    }
-    const when = check.envelope.exportedAt
-      ? new Date(check.envelope.exportedAt).toLocaleDateString('en-GB',
-          { day: 'numeric', month: 'long', year: 'numeric' })
+    if (!check.ok) { planRejected(check.error); return; }
+    const when = !Number.isNaN(Date.parse(check.envelope.exportedAt ?? ''))
+      ? new Date(check.envelope.exportedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
       : null;
-    const ok = window.confirm(
-      `Restore this backup${when ? ` from ${when}` : ''}?\n\n`
-      + 'This replaces everything currently saved on this device.');
-    if (!ok) return;
-    const res = AltioraState.importBackup(text);
-    if (!res.ok) { showToast(res.error); return; }
-    logEvent('backup_import', {});
+    const rows = planSummaryRows(AltioraState.describePlan(check.inner));
+    _pendingPlanText = text;
     closeProfileMenu();
-    // Re-project everything from the restored state.
-    location.reload();
+    openPlanDialog({
+      mode: 'confirm',
+      title: 'Restore this plan?',
+      html: `
+        <p class="plan-dialog__text">${when ? `This plan was saved on ${esc(when)}.` : 'This plan file has no save date.'} It contains:</p>
+        <dl class="plan-dialog__list">${rows.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
+        <p class="plan-dialog__warn">Restoring replaces everything currently saved in this browser.</p>`,
+    });
   };
   reader.readAsText(file);
+}
+
+function confirmPlanRestore() {
+  const text = _pendingPlanText;
+  _pendingPlanText = null;
+  if (text == null) return;
+  const res = AltioraState.importBackup(text);
+  if (!res.ok) { planRejected(res.error); return; }
+  logEvent('backup_import', {});
+  $('planDialog')?.close();
+  // Re-project everything from the restored state.
+  location.reload();
 }
 
 function wireBackupControls() {
@@ -1755,10 +1852,15 @@ function wireBackupControls() {
     e.target.value = '';           // so re-picking the same file re-fires
     importBackupFile(file);
   });
-  // The Counselor Summary already exists as the loss hedge; its own
-  // export line is delegated here so it survives re-renders.
+  const dlg = $('planDialog');
+  dlg?.querySelector('[data-plan-confirm]')?.addEventListener('click', confirmPlanRestore);
+  dlg?.querySelector('[data-plan-cancel]')?.addEventListener('click', () => dlg.close());
+  dlg?.addEventListener('close', () => { _pendingPlanText = null; });
+  // Delegated: the Counselor Summary's export line and the Story panel's
+  // plan controls are re-rendered, so they are handled here.
   document.addEventListener('click', e => {
-    if (e.target.closest?.('[data-backup-export]')) { e.preventDefault(); exportBackupFile(); }
+    if (e.target.closest?.('[data-backup-export], [data-plan-save]')) { e.preventDefault(); exportBackupFile(); return; }
+    if (e.target.closest?.('[data-plan-restore]')) { e.preventDefault(); $('backupImportFile')?.click(); }
   });
 }
 
@@ -2060,6 +2162,7 @@ function rerenderCurrentView() {
     case 'applying': renderApplyingPanel(); break;
     case 'story':    renderStoryPanel(); break;
     case 'summary':  renderCounselorSummary(); break;
+    case 'month':    renderMonthPanel(); break;
     // shortlist: the glance counsel is year- and system-aware.
     case 'shortlist': renderShortlist(); break;
     // strengths: the grid is system-agnostic, but the intro copy and the
@@ -2444,7 +2547,7 @@ function renderApplyingChecklist() {
 
   // In preview the sequence is what matters; in the application year it's
   // urgency. Actionable-in-preview items are the genuinely live ones.
-  const isLive = t => !preview || (t.liveEarly && (t.id.startsWith('test-reg:') ? yrs === 1 : true));
+  const isLive = t => applyingTaskIsLive(t, yrs);
   const actionable = tasks.filter(isLive);
   const doneCount = actionable.filter(t => AltioraState.isApplicationTaskDone(t.id)).length;
 
@@ -2469,14 +2572,28 @@ function renderApplyingChecklist() {
   host.innerHTML = groups.map(g => `
     <div class="applying-task-group">
       <span class="applying-task-group__label">${esc(g.name)}</span>
-      ${g.items.map(t => {
-        const live = isLive(t);
-        const done = live && AltioraState.isApplicationTaskDone(t.id);
-        const cls = `applying-task${done ? ' applying-task--done' : ''}${live ? '' : ' applying-task--preview'}`;
-        const box = live
-          ? `<input type="checkbox" class="applying-task__box" data-app-task="${esc(t.id)}"${done ? ' checked' : ''}>`
-          : `<span class="applying-task__marker" aria-hidden="true">·</span>`;
-        return `
+      ${g.items.map(t => applyingTaskHtml(t, isLive(t))).join('')}
+    </div>`).join('');
+}
+
+// Is a task actionable for this student now? In the application year every
+// task is; in a preview year only the genuinely early ones (registration for
+// a Year-12-equivalent student, and story-building). Shared by Applying and
+// This month so the two can never disagree.
+function applyingTaskIsLive(t, yrs) {
+  const preview = yrs != null && yrs >= 1;
+  return !preview || (!!t.liveEarly && (t.id.startsWith('test-reg:') ? yrs === 1 : true));
+}
+
+// One checklist item, exactly as the Applying panel shows it. Live items are
+// tickable (the delegated [data-app-task] handler saves the tick).
+function applyingTaskHtml(t, live) {
+  const done = live && AltioraState.isApplicationTaskDone(t.id);
+  const cls = `applying-task${done ? ' applying-task--done' : ''}${live ? '' : ' applying-task--preview'}`;
+  const box = live
+    ? `<input type="checkbox" class="applying-task__box" data-app-task="${esc(t.id)}"${done ? ' checked' : ''}>`
+    : `<span class="applying-task__marker" aria-hidden="true">·</span>`;
+  return `
         <${live ? 'label' : 'div'} class="${cls}">
           ${box}
           <span class="applying-task__body">
@@ -2491,8 +2608,6 @@ function renderApplyingChecklist() {
             ${t.action && live ? `<button type="button" class="applying-task__link applying-task__action" data-go-tool="${esc(t.action.mode)}">${esc(t.action.label)} →</button>` : ''}
           </span>
         </${live ? 'label' : 'div'}>`;
-      }).join('')}
-    </div>`).join('');
 }
 
 // Delegated once — survives every re-render of the panel.
@@ -2602,6 +2717,103 @@ function renderApplyingPanel() {
 
   renderApplyingChecklist();
   panel.querySelector('[data-go-shortlist]')?.addEventListener('click', () => switchMode('shortlist'));
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * THIS MONTH — what is relevant to the student now.
+ *
+ * Writes NO advice of its own. Everything shown is an existing item:
+ *   - checklist items from applyingTasks() (admission-test registration and
+ *     test windows for tests on the shortlist, application tasks and
+ *     deadline shapes), filtered with the Applying panel's own live rule
+ *     (applyingTaskIsLive) and its own "Now" bucket (cycleBucket), and
+ *     rendered with the same applyingTaskHtml — windows, never dates;
+ *   - the year-aware next step from computeNextStep(), the same counsel the
+ *     workspace home shows.
+ * In a preview year (applying next year or later) only items with a window
+ * of their own count: the application tasks take their month from next
+ * cycle's deadlines, which are not this month's business, and tests sat
+ * after offers (STEP) belong to the application year.
+ * Requires a CONFIRMED year group (see yearNeedsConfirm).
+ * ═══════════════════════════════════════════════════════════════ */
+
+const WINDOWED_TASK = /^(test-reg|test-sit|deadline):/;
+
+// A test sat AFTER offers (admissionTestInfo requiredStatus 'offer-condition',
+// e.g. STEP) belongs to the application year, so its window is not a
+// preview-year student's business this month.
+function afterOffersOnly(t) {
+  const m = /^test-(?:reg|sit):(.+)$/.exec(t.id);
+  return !!m && m[1].split('+').every(code => testInfoFor(code)?.requiredStatus === 'offer-condition');
+}
+
+function thisMonthTasks(savedCourses, yrs, nowMonth) {
+  return applyingTasks(savedCourses, { nowMonth })
+    .filter(t => applyingTaskIsLive(t, yrs) && t.bucket === 0
+      && (yrs === 0 || (WINDOWED_TASK.test(t.id) && !afterOffersOnly(t))))
+    .sort((a, b) => a.seq - b.seq);
+}
+
+function renderMonthPanel(now = new Date()) {
+  const panel = $('panel-month');
+  if (!panel) return;
+  const profile = AltioraState.getProfile();
+  const monthLabel = now.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+  const header = sub => `
+      <header class="applying__header">
+        <h1 class="applying__title">This month</h1>
+        <p class="applying__sub">${sub}</p>
+      </header>`;
+
+  // A month view built on a stale or missing year would mislead: ask first.
+  const yrs = studentYears();
+  if (yrs == null || yearNeedsConfirm(profile, now)) {
+    panel.innerHTML = `
+    <div class="applying month">
+      ${header(esc(monthLabel))}
+      <div class="applying-empty">
+        <p>${yrs == null ? 'Tell us your year group first — what matters this month depends on it.'
+                         : `A new school year has started since you told us you were in ${esc(profile.yearGroup)}. Confirm your year group first — what matters this month depends on it.`}</p>
+        <button type="button" class="home-next__btn home-next__btn--primary" data-month-confirm-year>${yrs == null ? 'Choose your year group' : 'Confirm your year group'} →</button>
+      </div>
+    </div>`;
+    return;
+  }
+
+  const saved = AltioraState.getShortlist()
+    .map(id => (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null)
+    .filter(Boolean);
+  const tasks = thisMonthTasks(saved, yrs, now.getMonth() + 1);
+  const stage = profile.stage || DEFAULT_STAGE;
+  const next = computeNextStep(stage, profile, saved.length);
+  const nextBtns = next.actions.map((a, i) => {
+    const cls = `home-next__btn${i === 0 ? ' home-next__btn--primary' : ''}`;
+    if (a.tool)  return `<button class="${cls}" data-go-tool="${esc(a.tool)}">${esc(a.label)} →</button>`;
+    if (a.field) return `<button class="${cls}" data-go-field="${esc(a.field)}">${esc(a.label)} →</button>`;
+    return `<button class="${cls}" data-go-stage="${esc(a.stage)}">${esc(a.label)} →</button>`;
+  }).join('');
+
+  const nothing = saved.length
+    ? 'Nothing on your shortlist has a test or application window open, or about to open, this month.'
+    : 'Your shortlist is empty, so there are no test or application windows to show.';
+  const windowsHtml = tasks.length
+    ? `<div class="applying-tasks">${tasks.map(t => applyingTaskHtml(t, true)).join('')}</div>
+        <p class="applying-tasks__foot">Windows are typical and shift year to year — always confirm on the official page.</p>`
+    : `<p class="month__none">${esc(nothing)}</p>`;
+
+  panel.innerHTML = `
+    <div class="applying month">
+      ${header(`${esc(monthLabel)} · ${esc(profile.yearGroup)} · ${saved.length} course${saved.length === 1 ? '' : 's'} on your shortlist`)}
+      <section class="applying-section" aria-labelledby="monthWindowsHead">
+        <h2 id="monthWindowsHead" class="applying-section__head">On your list now</h2>
+        ${windowsHtml}
+      </section>
+      <section class="home-next" aria-label="Your next step">
+        <span class="home-next__eyebrow">Your next step</span>
+        <p class="home-next__text">${esc(next.text)}</p>
+        <div class="home-next__actions">${nextBtns}</div>
+      </section>
+    </div>`;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -3463,6 +3675,14 @@ function renderStoryPanel() {
       </header>
       ${achievementsSectionHtml()}
       ${statementSectionHtml()}
+      <section class="plan-keep" aria-labelledby="planKeepHead">
+        <h2 id="planKeepHead" class="plan-keep__head">Keep a copy of your plan</h2>
+        <p class="plan-keep__text">Your plan is saved only in this browser. Save it to a file to keep a copy or move it to another device — your subjects, grades, fields, shortlist, story, statement drafts and checklist, in one file. Nothing is uploaded.</p>
+        <div class="plan-keep__actions">
+          <button type="button" class="home-next__btn" data-plan-save>Save my plan to a file</button>
+          <button type="button" class="home-next__btn" data-plan-restore>Restore my plan from a file</button>
+        </div>
+      </section>
     </div>`;
   renderAchievementsList();
   renderStatementRefs();
@@ -8563,6 +8783,19 @@ function init() {
     if (e.target.closest('[data-change-stage]')) showStageSelect();
   });
 
+  // This month: the same routing buttons as the home next step. Checklist
+  // action buttons are handled document-wide by wireApplyingChecklist.
+  $('panel-month')?.addEventListener('click', e => {
+    if (e.target.closest('[data-month-confirm-year]')) { showYearSelect({ confirm: true }); return; }
+    const toolBtn = e.target.closest('[data-go-tool]');
+    if (toolBtn && !toolBtn.classList.contains('applying-task__action')) { switchMode(toolBtn.dataset.goTool); return; }
+    const stageBtn = e.target.closest('[data-go-stage]');
+    if (stageBtn) { enterStage(stageBtn.dataset.goStage); return; }
+    const fieldBtn = e.target.closest('[data-go-field]');
+    if (fieldBtn) openFieldOverview(fieldBtn.dataset.goField, { from: 'strengths' });
+  });
+  $('monthLink')?.addEventListener('click', () => switchMode('month'));
+
   $('planSwitchToCheck').addEventListener('click', () => switchMode('check'));
 
   // ── Entry router ─────────────────────────────────────────────
@@ -8591,6 +8824,11 @@ function init() {
       // Old save from before year capture — prompt once (same pattern as the
       // system backfill), then continue as normal.
       showYearSelect();
+    } else if (yearNeedsConfirm(_profile)) {
+      // A new school year has started since the year group was set: ask the
+      // student to confirm it. Never advanced silently.
+      _isReturningUser = true;
+      showYearSelect({ confirm: true });
     } else {
       // Already onboarded with a system and year → genuinely returning.
       _isReturningUser = true;

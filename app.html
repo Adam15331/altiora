@@ -8,6 +8,15 @@
   <link rel="canonical" href="https://usealtiora.com/app.html" />
   <link rel="icon" href="favicon.png" type="image/png" sizes="32x32" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" sizes="any" />
+  <!-- Add to home screen: name and icons only. No service worker and no
+       caching — every visit loads the live site. -->
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#F5F4EF" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Altiora" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://usealtiora.com/app.html" />
   <meta property="og:title" content="Altiora" />
@@ -17,7 +26,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
   <link rel="stylesheet" href="tokens.css?v=11" />
-  <link rel="stylesheet" href="styles.css?v=104" />
+  <link rel="stylesheet" href="styles.css?v=105" />
   <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "48e78fd025b74d35921517dcb99a87ed"}'></script><!-- End Cloudflare Web Analytics -->
 </head>
 <body>
@@ -139,7 +148,7 @@
            ═══════════════════════════════════════════════════════ -->
       <section id="yearSelect" class="stage-select hidden" aria-labelledby="yearSelectHeading">
         <h1 id="yearSelectHeading" class="stage-select__heading">What year are you in?</h1>
-        <p class="stage-select__sub">This helps us point you at the right step. You can change it anytime.</p>
+        <p id="yearSelectSub" class="stage-select__sub">This helps us point you at the right step. You can change it anytime.</p>
         <div id="yearCards" class="stage-cards stage-cards--years" role="list">
           <!-- rendered by JS for the chosen system (showYearSelect) -->
         </div>
@@ -217,12 +226,12 @@
               <div id="yearMenu" role="group" aria-label="Change your year group">
                 <!-- items rendered by JS for the active system (updateYearIndicator) -->
               </div>
-              <span class="profile-menu__label">Your data</span>
-              <div role="group" aria-label="Back up or restore your data">
-                <button id="backupExportBtn" class="stage-menu__item" role="menuitem" type="button">Back up my data</button>
-                <button id="backupImportBtn" class="stage-menu__item" role="menuitem" type="button">Restore from backup</button>
+              <span class="profile-menu__label">Your plan</span>
+              <div role="group" aria-label="Save or restore your plan">
+                <button id="backupExportBtn" class="stage-menu__item" role="menuitem" type="button">Save my plan to a file</button>
+                <button id="backupImportBtn" class="stage-menu__item" role="menuitem" type="button">Restore my plan from a file</button>
                 <input id="backupImportFile" type="file" accept="application/json,.json" class="hidden" aria-hidden="true" tabindex="-1">
-                <p class="profile-menu__note">Saves a file to your device. Altiora stores nothing — the file is yours to keep.</p>
+                <p class="profile-menu__note">Your whole plan in one file on your device. Nothing is uploaded.</p>
               </div>
             </div>
           </div>
@@ -248,6 +257,11 @@
           <button id="storyLink" class="shortlist-link" type="button" data-open-story aria-label="Open your story">
             <span class="shortlist-link__icon" aria-hidden="true">📖</span>
             <span class="shortlist-link__text">My Story (<span id="storyCount">0</span>)</span>
+          </button>
+          <!-- What is relevant now: windows from the shortlist + the next step. -->
+          <button id="monthLink" class="shortlist-link" type="button">
+            <span class="shortlist-link__icon" aria-hidden="true">🗓</span>
+            <span class="shortlist-link__text">This month</span>
           </button>
           </div><!-- /stage-bar__collections -->
           </div><!-- /stage-bar__me -->
@@ -514,6 +528,13 @@
       </div><!-- /panel-applying -->
 
       <!-- ═══════════════════════════════════════════════════════
+           Panel — This month (cross-stage; built only from existing items)
+           ═══════════════════════════════════════════════════════ -->
+      <div id="panel-month" class="panel hidden" role="tabpanel" aria-label="This month">
+        <!-- rendered by JS (renderMonthPanel) -->
+      </div><!-- /panel-month -->
+
+      <!-- ═══════════════════════════════════════════════════════
            Panel — Your story (the story bank; reachable cross-stage)
            ═══════════════════════════════════════════════════════ -->
       <div id="panel-story" class="panel hidden" role="tabpanel" aria-label="Your story">
@@ -540,6 +561,16 @@
     </p>
   </footer>
 
+  <!-- Plan restore: what the file holds, and the explicit confirmation -->
+  <dialog id="planDialog" class="plan-dialog" aria-labelledby="planDialogTitle">
+    <h2 id="planDialogTitle" class="plan-dialog__title"></h2>
+    <div id="planDialogBody"></div>
+    <div class="plan-dialog__actions">
+      <button type="button" class="home-next__btn" data-plan-cancel>Cancel</button>
+      <button type="button" class="home-next__btn home-next__btn--primary" data-plan-confirm>Replace my plan</button>
+    </div>
+  </dialog>
+
   <!-- Clipboard toast notification -->
   <div id="toast" class="toast" role="status" aria-live="assertive"></div>
 
@@ -553,11 +584,11 @@
   <!-- Admissions requirements: central config, the CURRENT cycle's data
        (npm run new-cycle rewrites this path), and the shared renderer. -->
   <script src="data/requirements/config.js?v=4"></script>
-  <script src="data/requirements/2027.js?v=6"></script>
+  <script src="data/requirements/2027.js?v=7"></script>
   <script src="requirements-view.js?v=7"></script>
   <script src="ib-hl.js?v=1"></script>
-  <script src="state.js?v=18"></script>
-  <script src="main.js?v=123"></script>
+  <script src="state.js?v=19"></script>
+  <script src="main.js?v=124"></script>
   <script>
     // Redirect ?mode=strengths to open strengths panel after init
     const _urlParams = new URLSearchParams(window.location.search);

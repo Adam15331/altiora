@@ -24,3 +24,9 @@ npm run check    # lint + typecheck + validate requirements data + tests (CI run
   from `scripts/lib/info-pages.mjs`. Every statement in the privacy policy describes confirmed site
   behaviour: if the site starts storing or sending anything new, update that file in the same change.
 - `npm run build-pages` runs all three generators; CI also regenerates them on every push to `main`.
+- Home-screen icons (`icons/*.png`, `apple-touch-icon.png`) are rendered from `favicon.svg` by
+  `node scripts/build-app-icons.mjs` (needs `npm i --no-save playwright-core`). `manifest.webmanifest`
+  gives the name and icons only: there is deliberately no service worker and no caching.
+- A student's saved plan file (`altiora-plan-YYYY-MM-DD.json`) is written and read by `state.js`
+  (`exportBackup` / `validateBackup` / `importBackup`). The format is versioned (`schemaVersion`); every
+  older version must keep loading — see `tests/plan-file.test.mjs`.
