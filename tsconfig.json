@@ -26,6 +26,7 @@
     "scripts/requirements-new-cycle.mjs",
     "scripts/sync-coverage-copy.mjs",
     "scripts/build-course-pages.mjs",
+    "scripts/build-info-pages.mjs",
     "scripts/migrate-requirements-2027.mjs",
     "scripts/migrate-requirements-2027-qualifications.mjs",
     "tests/**/*.mjs"

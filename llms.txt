@@ -21,6 +21,7 @@ Altiora is a static web application. It runs entirely in the browser, has no acc
 - Landing page: https://usealtiora.com/
 - The app: https://usealtiora.com/app.html — the tool itself. Its content is rendered by JavaScript after load; the raw HTML contains no course, requirement or field-profile content.
 - Entry requirements by course: https://usealtiora.com/courses/ — static HTML, one page per course (https://usealtiora.com/courses/<course id>.html) and per university (https://usealtiora.com/universities/<slug>.html). Each requirement is shown with its verification status, the date it was checked and the official source.
+- Privacy policy: https://usealtiora.com/privacy.html · Terms of use: https://usealtiora.com/terms.html · Accessibility: https://usealtiora.com/accessibility.html
 
 ## Data files
 

@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { loadConfig, loadCourses, loadCycle } from '../scripts/lib/requirements-io.mjs';
-import { appPieces } from '../scripts/lib/site-pages.mjs';
+import { appPieces, INFO_PAGES } from '../scripts/lib/site-pages.mjs';
 import { buildModel, buildAll, hasPage, universitySlug, courseDescription, coursePage } from '../scripts/lib/course-pages.mjs';
 
 const require = createRequire(import.meta.url);
@@ -70,6 +70,7 @@ test('titles and canonical URLs are unique, and every internal link resolves', (
   const titles = new Set(), files = new Set();
   for (const [dir, map] of Object.entries(pages)) for (const f of map.keys()) files.add(`${dir}/${f}`);
   for (const f of Object.keys(fieldProfiles)) files.add(`fields/${f}.html`);
+  for (const { file } of INFO_PAGES) files.add(file);
   for (const [dir, map] of Object.entries(pages)) {
     for (const [file, html] of map) {
       const title = /<title>(.*?)<\/title>/.exec(html)?.[1];
