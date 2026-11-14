@@ -192,9 +192,11 @@
    * @param {RequirementCategory[]} p.categories
    * @param {string} p.cycleLabel        e.g. "2027 entry"
    * @param {string | null} [p.fallbackUrl]
+   * @param {string} [p.extraRows]  further rows (already HTML), e.g. the
+   *   Interview row; display only, never counted in the verified tally
    */
-  function panelHtml({ record, categories, cycleLabel, fallbackUrl = null }) {
-    const rows = categories.map(cat => rowHtml(cat, record?.[cat.id], fallbackUrl)).join('');
+  function panelHtml({ record, categories, cycleLabel, fallbackUrl = null, extraRows = '' }) {
+    const rows = categories.map(cat => rowHtml(cat, record?.[cat.id], fallbackUrl)).join('') + extraRows;
     const verified = categories.filter(cat => record?.[cat.id]?.status === 'verified').length;
     // A qualification that is not an entry route has nothing to verify.
     const applicable = categories.filter(cat => record?.[cat.id]?.status !== 'notApplicable').length;

@@ -14,6 +14,8 @@ import path from 'node:path';
 import { ROOT, loadConfig, loadCourses, loadCycle, cyclePath, today } from './lib/requirements-io.mjs';
 import { buildReport, REPORT_PATH } from './requirements-report.mjs';
 import { validateConfig, validateCycle } from './lib/validate-requirements.mjs';
+import { validateInterviews } from './lib/validate-interviews.mjs';
+import { createRequire } from 'node:module';
 
 const config = loadConfig();
 const courses = loadCourses();
@@ -28,6 +30,10 @@ for (const cycleId of Object.keys(config.cycles ?? {})) {
   }
   problems.push(...validateCycle(loadCycle(cycleId), { config, courses, today: todayIso }));
 }
+
+// Interview information (display only): same provenance rule as requirement rows.
+const { interviewData } = createRequire(import.meta.url)(path.join(ROOT, 'data/interviews.js'));
+problems.push(...validateInterviews(interviewData, { courses, today: todayIso }));
 
 // The site must load the CURRENT cycle's data file.
 const appHtml = fs.readFileSync(path.join(ROOT, 'app.html'), 'utf8');
@@ -50,4 +56,5 @@ if (errors.length) {
   console.error(`\n✗ Requirements data invalid: ${errors.length} error(s), ${warnings.length} warning(s) across cycle(s) ${cycles}.`);
   process.exit(1);
 }
-console.log(`✓ Requirements data valid — cycle(s) ${cycles}, ${courses.length} courses × ${config.categories.length} categories, ${warnings.length} warning(s).`);
+console.log(`✓ Requirements data valid — cycle(s) ${cycles}, ${courses.length} courses × ${config.categories.length} categories, `
+  + `${Object.keys(interviewData.records).length} interview records, ${warnings.length} warning(s).`);

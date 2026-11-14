@@ -56,6 +56,7 @@ const AltioraState = (() => {
         candidateFields:     [],      // category ids the student is considering (max 3, order = priority)
         achievements:        [],      // the student's STORY BANK: entries with reflections + optional field tags — see addAchievement()
         applicationTasks:    {},      // Applying checklist: { taskId: true } for completed tasks — see setApplicationTask()
+        interviewPractice:   {},      // Interview practice: { promptKey: true } for prompts marked practised — see setInterviewPractised()
         statementDrafts:     { q1: '', q2: '', q3: '' },  // UCAS statement drafts, one string per official question — see setStatementDraft()
         yearGroup:            null,   // raw year label in the student's own system, e.g. "Year 12", "Grade 11", "Form 5"
         yearsUntilApplication: null,  // normalised scale driving ALL logic: 3 (3+ years out) | 2 | 1 | 0 (application year)
@@ -115,6 +116,12 @@ const AltioraState = (() => {
       profile.applicationTasks = Object.fromEntries(
         Object.entries(profile.applicationTasks).filter(([, v]) => v === true));
     }
+    // Interview practice marks are additive in the same way: old saves have
+    // no key; keep only { promptKey: true }.
+    profile.interviewPractice = (profile.interviewPractice && typeof profile.interviewPractice === 'object'
+        && !Array.isArray(profile.interviewPractice))
+      ? Object.fromEntries(Object.entries(profile.interviewPractice).filter(([, v]) => v === true))
+      : {};
     // UCAS statement drafts are additive: old saves have no key. Normalise
     // to the three-question shape with plain strings so callers never guard.
     const drafts = profile.statementDrafts;
@@ -313,6 +320,7 @@ const AltioraState = (() => {
       candidateFields:       isStrArr,
       achievements:          v => Array.isArray(v) && v.every(isObj),
       applicationTasks:      isObj,
+      interviewPractice:     isObj,
       statementDrafts:       v => isObj(v) && Object.values(v).every(x => typeof x === 'string'),
       yearGroup:             v => typeof v === 'string',
       yearsUntilApplication: v => Number.isInteger(v) && v >= 0 && v <= 3,
@@ -619,6 +627,27 @@ const AltioraState = (() => {
     _commit();
   }
 
+  /* ─── Interview practice ──────────────────────────────────────
+   * Only which prompts the student has marked as practised: a map of
+   * promptKey → true ("story:<entryId>" or "q:<questionId>"). No answers,
+   * recordings or timings are stored.
+   * ───────────────────────────────────────────────────────────── */
+  function _practiceRef() {
+    if (!_state.profile.interviewPractice || typeof _state.profile.interviewPractice !== 'object') {
+      _state.profile.interviewPractice = {};
+    }
+    return _state.profile.interviewPractice;
+  }
+  function isInterviewPractised(key) {
+    return _practiceRef()[key] === true;
+  }
+  function setInterviewPractised(key, done) {
+    if (typeof key !== 'string' || !key) return;
+    const marks = _practiceRef();
+    if (done) marks[key] = true; else delete marks[key];
+    _commit();
+  }
+
   /* ─── UCAS statement drafts ───────────────────────────────────
    * Three long-form strings, one per official question. Draft text is
    * stored verbatim (no trimming — whitespace is the student's own and
@@ -711,6 +740,8 @@ const AltioraState = (() => {
     getApplicationTasks,
     isApplicationTaskDone,
     setApplicationTask,
+    isInterviewPractised,
+    setInterviewPractised,
     getStatementDrafts,
     setStatementDraft,
     getAchievements,
