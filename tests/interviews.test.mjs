@@ -86,6 +86,31 @@ test('the card section shows interviewed, format, length and advice, each linked
   assert.ok(html.includes('data-iv-practise="uk-medicine-manchester"'));
 });
 
+test('sample questions name their publisher: the tutor posts are not labelled as the University', () => {
+  const qs = interviewData.records['oxford-computer-science'].sampleQuestions;
+  const tutor = qs.filter((/** @type {any} */ q) => q.source.startsWith('https://www.cs.ox.ac.uk/people/varun.kanade/'));
+  const dept = qs.filter((/** @type {any} */ q) => !q.source.startsWith('https://www.cs.ox.ac.uk/people/varun.kanade/'));
+  assert.equal(tutor.length, 6);
+  assert.equal(dept.length, 7);
+  for (const q of tutor) assert.equal(q.publishedBy, "an Oxford Computer Science tutor, linked from the department's admissions page");
+  for (const q of dept) assert.equal(q.publishedBy, 'University of Oxford');
+  // Every question everywhere has a publisher, and the view passes it on with the source link intact.
+  for (const r of /** @type {any[]} */ (Object.values(interviewData.records))) for (const q of r.sampleQuestions) assert.ok(q.publishedBy && q.source, q.id);
+  const v = /** @type {any} */ (V.forCourse(interviewData, 'uk-cs-oxford'));
+  assert.deepEqual([...new Set(v.questions.map((/** @type {any} */ q) => q.university))].sort(),
+    ["University of Oxford", "an Oxford Computer Science tutor, linked from the department's admissions page"]);
+  assert.equal(/** @type {any} */ (V.forCourse(interviewData, 'uk-medicine-manchester')).questions[0].university, 'University of Manchester');
+});
+
+test('no displayed quote ends with a colon (a list the quote does not contain)', () => {
+  const shown = /** @type {any[]} */ (Object.values(interviewData.records)).flatMap(r =>
+    [r.format, r.mmiStations, r.numberAndLength, r.whatIsAssessed, ...r.prepAdvice].filter(Boolean));
+  assert.ok(shown.length > 0);
+  for (const e of shown) assert.doesNotMatch(e.sourceSnippet, /:\s*$/, e.sourceSnippet.slice(-80));
+  // The one such quote in the research is left out.
+  assert.ok(!JSON.stringify(interviewData.records).includes('Below is a list of resources you can use to find practice problems:'));
+});
+
 test('the only prompt Altiora writes is the story template', () => {
   assert.equal(V.storyPrompt('Robotics club'), 'Talk about “Robotics club”: what you did, and what it showed about you.');
   const src = fs.readFileSync(path.join(ROOT, 'interview-view.js'), 'utf8') + fs.readFileSync(path.join(ROOT, 'main.js'), 'utf8');

@@ -57,6 +57,22 @@ const TIMING = {
 };
 
 const EVIDENCE_FIELDS = ['format', 'numberAndLength', 'mmiStations', 'whatIsAssessed'];
+
+// Who published each sample question, as shown after "Published by". The
+// Oxford Computer Science tutor's posts are on the department's domain and
+// linked from its admissions page, but are not a department page.
+const TUTOR_POSTS = 'https://www.cs.ox.ac.uk/people/varun.kanade/';
+const TUTOR_LABEL = "an Oxford Computer Science tutor, linked from the department's admissions page";
+/** @param {any} q @param {string} university */
+const publisherOf = (q, university) => (q.source.startsWith(TUTOR_POSTS) ? TUTOR_LABEL : university);
+
+// A preparation quote that ends with a colon introduces a list the quote
+// does not contain, so on its own it points at nothing. Such quotes are left
+// out (and reported).
+/** @param {any} e */
+const introducesMissingList = e => /:\s*$/.test(e.sourceSnippet);
+/** @type {Array<{record: string, source: string, sourceSnippet: string}>} */
+const removedPrep = [];
 /** @param {any} e */
 const keep = e => e && !excluded.has(e.source);
 /** @param {any} e */
@@ -70,9 +86,13 @@ for (const r of research.records) {
   /** @type {any} */
   const out = { id: r.id, university: r.university, subject: r.subject };
   for (const f of EVIDENCE_FIELDS) out[f] = keep(r[f]) ? ev(r[f]) : null;
-  out.prepAdvice = r.prepAdvice.filter(keep).map(ev);
+  out.prepAdvice = r.prepAdvice.filter(keep).filter((/** @type {any} */ e) => {
+    if (!introducesMissingList(e)) return true;
+    removedPrep.push({ record: r.id, source: e.source, sourceSnippet: e.sourceSnippet });
+    return false;
+  }).map(ev);
   out.sampleQuestions = r.sampleQuestions.filter(keep).map((/** @type {any} */ q, /** @type {number} */ i) =>
-    ({ id: `${r.id}#${i + 1}`, subject: q.subject, ...ev(q), question: q.question }));
+    ({ id: `${r.id}#${i + 1}`, subject: q.subject, publishedBy: publisherOf(q, r.university), ...ev(q), question: q.question }));
   const hasEvidence = EVIDENCE_FIELDS.some(f => out[f]) || out.prepAdvice.length || out.sampleQuestions.length;
   const blocked = r.manualReview || r.interviewed.startsWith('not published');
   if (!hasEvidence && !blocked) continue;          // covered by a university-wide record
@@ -107,5 +127,6 @@ fs.writeFileSync(path.join(ROOT, 'data/interviews.js'), `/* ══════�
 })(typeof globalThis !== 'undefined' ? globalThis : this);
 `);
 const n = Object.values(records);
+for (const x of removedPrep) console.log(`Left out (preparation quote ends with a colon): ${x.record} — “${x.sourceSnippet}” ${x.source}`);
 console.log(`Wrote data/interviews.js: ${n.length} records (${n.filter(r => r.unavailable).length} unavailable), ${Object.keys(courses).length} courses, `
   + `${n.reduce((s, r) => s + r.sampleQuestions.length, 0)} official sample questions, ${n.filter(r => r.timing).length} with stated timing.`);
