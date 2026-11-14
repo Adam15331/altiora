@@ -15,7 +15,9 @@
  *
  * Matching (b, d) — an entry is "mentioned" in an answer when EITHER
  *   1. its whole title appears there as a run of words, OR
- *   2. at least two DISTINCTIVE words of its title appear there anywhere,
+ *   2. two different DISTINCTIVE words of its title appear there within
+ *      NEAR_WORDS (10) words of each other — positions at most 10 apart,
+ *      i.e. no more than 9 words between them,
  * after normalising both texts the same way (see words()). A distinctive
  * word is a title word of 3+ characters that is not in COMMON_WORDS.
  * A title word also matches the same word with or without a trailing "s".
@@ -47,6 +49,9 @@
 
   /** Minimum run, in words, for check c. */
   const MIN_REPEAT_WORDS = 6;
+
+  /** Rule 2: the two distinctive title words must be at most this many word positions apart. */
+  const NEAR_WORDS = 10;
 
   /**
    * Words of a text with their positions in the ORIGINAL string.
@@ -88,7 +93,11 @@
     }
     const distinct = distinctiveWords(title);
     if (distinct.length < 2) return false;
-    return distinct.filter(w => a.some(x => sameWord(w, x))).length >= 2;
+    // Every position in the answer where some distinctive title word occurs.
+    const hits = [];
+    a.forEach((x, pos) => distinct.forEach((w, k) => { if (sameWord(w, x)) hits.push({ pos, k }); }));
+    // Two DIFFERENT title words, close together in the same answer.
+    return hits.some(h => hits.some(o => o.k !== h.k && Math.abs(o.pos - h.pos) <= NEAR_WORDS));
   }
 
   /**
@@ -185,7 +194,7 @@
     };
   }
 
-  const api = { review, reviewLines, mentions, repeatedRuns, distinctiveWords, words, COMMON_WORDS, MIN_REPEAT_WORDS, NOTHING };
+  const api = { review, reviewLines, mentions, repeatedRuns, distinctiveWords, words, COMMON_WORDS, MIN_REPEAT_WORDS, NEAR_WORDS, NOTHING };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.AltioraStatementReview = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

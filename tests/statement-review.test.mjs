@@ -32,6 +32,22 @@ test('b: an entry is mentioned by its whole title, or by two distinctive title w
   assert.deepEqual(R.distinctiveWords('The National Robotics Team Project'), ['robotics']);
 });
 
+test('b: rule 2 needs the two distinctive words within 10 words of each other', () => {
+  const filler = (/** @type {number} */ n) => Array.from({ length: n }, (_, i) => `word${i}`).join(' ');
+  // "Maths" and "challenge" 30 words apart: not a mention.
+  assert.equal(R.mentions('UK Maths Challenge gold', `Maths ${filler(29)} challenge`), false);
+  // "the maths challenge" in one phrase: a mention.
+  assert.equal(R.mentions('UK Maths Challenge gold', 'I entered the maths challenge in Year 11.'), true);
+  // The boundary: 10 positions apart counts, 11 does not.
+  assert.equal(R.mentions('UK Maths Challenge gold', `maths ${filler(9)} challenge`), true);
+  assert.equal(R.mentions('UK Maths Challenge gold', `maths ${filler(10)} challenge`), false);
+  // The same word twice is not two distinctive words.
+  assert.equal(R.mentions('UK Maths Challenge gold', 'maths and more maths'), false);
+  // Rule 1 is unchanged: the whole title still counts wherever it sits.
+  assert.equal(R.mentions('Robotics club', `${filler(40)} robotics club`), true);
+  assert.equal(R.NEAR_WORDS, 10);
+});
+
 test('b: the same entry in two or more answers is reported, with every answer listed', () => {
   const entries = [{ id: 'e1', title: 'Robotics club' }, { id: 'e2', title: 'Hospital volunteering' }];
   const out = run(['At robotics club I built a rover.', 'Physics helped.', 'Robotics club taught me teamwork.'], entries);
