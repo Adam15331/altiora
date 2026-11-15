@@ -11,7 +11,7 @@
  *   a. length per answer (characters, share of the 4,000 limit, minimum)
  *   b. the same story entry in more than one answer
  *   c. the same run of 6+ consecutive words in two different answers
- *   d. story entries shown beside a question but used in no answer
+ *   d. story entries used in no answer (every entry in the story)
  *
  * Matching (b, d) — an entry is "mentioned" in an answer when EITHER
  *   1. its whole title appears there as a run of words, OR
@@ -144,11 +144,10 @@
    * @param {object} p
    * @param {string[]} p.answers          the answers, in question order
    * @param {Array<{id: string, title: string}>} p.entries   every story entry
-   * @param {string[]} p.railEntryIds     ids of entries shown in any question's rail
    * @param {number} p.totalLimit         4000
    * @param {number} p.perAnswerMin       350
    */
-  function review({ answers, entries, railEntryIds, totalLimit, perAnswerMin }) {
+  function review({ answers, entries, totalLimit, perAnswerMin }) {
     const length = answers.map((text, i) => {
       const chars = String(text ?? '').length;     // spaces and line breaks count, as on UCAS
       return { n: i + 1, chars, pct: Math.round((chars / totalLimit) * 100), belowMin: chars < perAnswerMin };
@@ -168,8 +167,8 @@
       }
     }
 
-    const rail = new Set(railEntryIds);
-    const unused = usedIn.filter(u => rail.has(u.entry.id) && u.answers.length === 0).map(u => ({ title: u.entry.title }));
+    // Every story entry counts, not only those shown in a question's rail.
+    const unused = usedIn.filter(u => u.answers.length === 0).map(u => ({ title: u.entry.title }));
 
     return { length, sharedEntries, repeatedWording, unused };
   }
