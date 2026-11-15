@@ -98,7 +98,7 @@
             ${factList('Number and length', v.length)}
             ${factList('How to prepare', v.prep)}
           </dl>${practise && interviews(v) ? `
-          <button type="button" class="applying-task__link iv-practise-link" data-iv-practise="${esc(v.courseId)}">Practise for this interview →</button>` : ''}`;
+          <button type="button" class="home-next__btn iv-practise-link" data-iv-practise="${esc(v.courseId)}">Practise interview questions</button>` : ''}`;
     }
     return `
       <div class="reqs__row reqs__row--interview" data-req-category="interview">

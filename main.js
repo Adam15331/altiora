@@ -204,6 +204,12 @@ function hlTagLabel(tag) {
 const $  = id  => document.getElementById(id);
 const $$ = sel => document.querySelectorAll(sel);
 
+// Every programmatic scroll goes through this: smooth normally, instant
+// ('auto') when the device asks for reduced motion. Read at call time, so a
+// change to the setting applies without a reload.
+const scrollMotion = () =>
+  (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
+
 /* ═══════════════════════════════════════════════════════════════
  * REVERSE-MAP UTILITIES
  * Build tag → [local subject names] per system; pick the best
@@ -2578,7 +2584,11 @@ function renderApplyingChecklist() {
     (g ? g : (groups.push({ name, items: [] }), groups[groups.length - 1])).items.push(t);
   };
   if (preview) {
-    tasks.slice().sort((a, b) => a.seq - b.seq).forEach(t => push(`${t.seq} · ${t.seqLabel}`, t));
+    // Number only the sections actually shown, from 1 — not the fixed seq
+    // (a list with no test courses starts at "Your application", not "3 · …").
+    const shownSeqs = [...new Set(tasks.map(t => t.seq))].sort((a, b) => a - b);
+    tasks.slice().sort((a, b) => a.seq - b.seq)
+      .forEach(t => push(`${shownSeqs.indexOf(t.seq) + 1} · ${t.seqLabel}`, t));
   } else {
     tasks.slice()
       .sort((a, b) => a.bucket - b.bucket || a.seq - b.seq)
@@ -2644,44 +2654,57 @@ function calendarApplicationYear(profile, yrs, now) {
   return academicYearStart(profile.qualificationSystem, now).getFullYear() + yrs;
 }
 
-// null → no control (no tests with a stored window, or no confirmed year).
+// null → no control: nothing to add (no test windows, no UK deadlines) or no
+// confirmed year. Tests: the Applying checklist's own list, in Applying's
+// registration groups. Deadlines: the checklist's own deadline:UK sentence.
 function calendarPlan(savedCourses, now = new Date()) {
   if (typeof AltioraCalendar === 'undefined' || !savedCourses.length) return null;
   const profile = AltioraState.getProfile();
   const yrs = studentYears();
   if (yrs == null || yearNeedsConfirm(profile, now)) return null;
-  const codes = checklistTestCodes(applyingChecklistTasks(savedCourses, yrs));
-  // Applying's own registration groups (groupedTests): one shared
-  // registration → one "Registration opens/closes" event.
+  const tasks = applyingChecklistTasks(savedCourses, yrs);
+  const applicationYear = calendarApplicationYear(profile, yrs, now);
+  const ukDeadline = tasks.find(t => t.id === 'deadline:UK');
   const plan = AltioraCalendar.calendarEvents({
-    groups: groupedTests(codes).map(members => members.map(code => ({ code, info: testInfoFor(code) }))),
-    applicationYear: calendarApplicationYear(profile, yrs, now),
+    groups: groupedTests(checklistTestCodes(tasks)).map(members => members.map(code => ({ code, info: testInfoFor(code) }))),
+    applicationYear,
     today: localYmd(now),
+    deadlines: ukDeadline ? AltioraCalendar.ukDeadlineEvents({
+      shape: ukDeadline.detail,
+      ukCourses: savedCourses.filter(c => c.country === 'UK'),
+      applicationYear,
+      cycleStartMonth: ACADEMIC_YEAR_START_MONTH.UK_A_Level,
+    }) : [],
   });
-  return plan.withWindows ? plan : null;
+  return (plan.events.length || plan.past.length) ? plan : null;
 }
 
-function calendarControlHtml(savedCourses, now = new Date()) {
+// The control's pieces: the button, and what goes under it (Google links and
+// the confirm line) — or one line when every window has passed.
+function calendarParts(savedCourses, now = new Date()) {
   const plan = calendarPlan(savedCourses, now);
-  if (!plan) return '';
-  if (!plan.events.length) {
-    return `
-      <section class="applying-section" aria-label="Add to my calendar">
-        <p class="applying-tasks__foot">No upcoming test windows to add.</p>
-      </section>`;
-  }
+  if (!plan) return null;
+  if (!plan.events.length) return { message: '<p class="applying-tasks__foot">No upcoming test windows to add.</p>' };
   const links = plan.events.map(e =>
     `<a class="applying-task__link" href="${esc(AltioraCalendar.googleCalendarUrl(e))}" target="_blank" rel="noopener noreferrer">${esc(e.summary)} →</a>`).join('');
-  return `
-      <section class="applying-section" aria-label="Add to my calendar">
-        <div class="home-next__actions">
-          <button type="button" class="home-next__btn" data-cal-add>Add to my calendar</button>
-        </div>
+  return {
+    button: '<button type="button" class="home-next__btn" data-cal-add>Add to my calendar</button>',
+    extras: `
         <details class="card-uni-info">
           <summary>Google Calendar ${CARD_CHEVRON_ICON}</summary>
           <div class="card-uni-info__body"><span class="applying-task__links">${links}</span></div>
         </details>
-        <p class="applying-tasks__foot">Your phone will ask you to confirm before anything is added.</p>
+        <p class="applying-tasks__foot">Your phone will ask you to confirm before anything is added.</p>`,
+  };
+}
+
+// This month: the control as its own section.
+function calendarControlHtml(savedCourses, now = new Date()) {
+  const parts = calendarParts(savedCourses, now);
+  if (!parts) return '';
+  return `
+      <section class="applying-section" aria-label="Add to my calendar">
+        ${parts.message ?? `<div class="home-next__actions">${parts.button}</div>${parts.extras}`}
       </section>`;
 }
 
@@ -2788,6 +2811,9 @@ function renderApplyingPanel() {
         <button class="home-card__link applying-diag__link" data-go-shortlist>View full shortlist →</button></p>
     </section>`;
 
+  // "Add to my calendar" sits beside the checklist heading (tests and UK deadlines).
+  const cal = calendarParts(savedCourses);
+
   // ── Year-honest lead. An application-year student gets the dashboard; a
   // student who applies later gets an explicit PREVIEW, not a year of
   // premature tasks dressed up as a to-do list.
@@ -2808,12 +2834,15 @@ function renderApplyingPanel() {
       ${diagnostic}
 
       <section class="applying-section">
-        <h2 class="applying-section__head">${preview ? 'The cycle, in order' : "What's next"}<span id="applyingChecklistCount" class="applying-section__count"></span></h2>
+        <div class="applying-section__headrow">
+          <h2 class="applying-section__head">${preview ? 'The cycle, in order' : "What's next"}<span id="applyingChecklistCount" class="applying-section__count"></span></h2>
+          ${cal?.button ?? ''}
+        </div>
+        ${cal ? (cal.message ?? cal.extras) : ''}
         ${lead}
         <div id="applyingChecklist" class="applying-tasks${preview ? ' applying-tasks--preview' : ''}"></div>
         <p class="applying-tasks__foot">Windows are typical and shift year to year — always confirm on the official page.</p>
       </section>
-      ${calendarControlHtml(savedCourses)}
     </div>`;
 
   renderApplyingChecklist();
@@ -3652,7 +3681,7 @@ function openAchievementForm(entry) {
   renderAchievementFieldPicker(entry?.fields || []);
   $('achvSaveBtn').textContent = entry ? 'Save changes' : 'Save to your story';
   $('achvAddBtn')?.classList.add('hidden');
-  form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  form.scrollIntoView({ behavior: scrollMotion(), block: 'nearest' });
   syncDescCharTarget();
   $('achvTitle').focus();
 }
@@ -3774,7 +3803,7 @@ function renderStoryPanel() {
       <header class="story-view__header">
         <h1 class="story-view__title">Your story<span id="achvCount" class="achv__count"></span></h1>
         <p class="story-view__sub">The things you've done, and what they taught you.</p>
-        <button type="button" class="applying-task__link iv-practise-link" data-iv-open>Interview practice →</button>
+        <button type="button" class="home-next__btn iv-practise-link" data-iv-open>Practise interview questions</button>
       </header>
       ${achievementsSectionHtml()}
       ${statementSectionHtml()}
@@ -4182,13 +4211,13 @@ function wireStatementDrafting() {
     // open/close state, so go through the real control rather than a copy.
     if (e.target.closest?.('[data-stmt-open-fields]')) {
       const pill = $('fieldsLink');
-      pill?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      pill?.scrollIntoView({ behavior: scrollMotion(), block: 'nearest' });
       pill?.click();
       return;
     }
     // "Set your year": the profile pill popover, where the year lives.
     if (e.target.closest?.('[data-stmt-open-profile]')) {
-      $('profileIndicatorBtn')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      $('profileIndicatorBtn')?.scrollIntoView({ behavior: scrollMotion(), block: 'nearest' });
       openProfileMenu();
     }
   });
@@ -4571,8 +4600,8 @@ function renderShortlist() {
 
   panel.innerHTML =
     `<div class="shortlist-toolbar">
-       <button id="exportCsvBtn" class="export-csv-btn" type="button">⬇ Export CSV</button>
-       <button class="export-csv-btn" type="button" data-open-summary>🖨 Print summary</button>
+       <button id="exportCsvBtn" class="export-csv-btn" type="button"><span aria-hidden="true">⬇</span> Export CSV</button>
+       <button class="export-csv-btn" type="button" data-open-summary><span aria-hidden="true">🖨</span> Print summary</button>
      </div>`
     + buildShortlistInsightsHtml(saved)
     + `<div id="shortlistGroups"></div>`;
@@ -4599,7 +4628,7 @@ function renderShortlist() {
     group.className = 'results-group';
     const header = document.createElement('h2');
     header.className = 'results-group__header';
-    header.innerHTML = `${COUNTRY_FLAGS[country] ?? ''} ${esc(COUNTRY_LABELS[country] ?? country)} <span class="results-group__count">(${list.length})</span>`;
+    header.innerHTML = `${COUNTRY_FLAGS[country] ? `<span aria-hidden="true">${COUNTRY_FLAGS[country]}</span>` : ''} ${esc(COUNTRY_LABELS[country] ?? country)} <span class="results-group__count">(${list.length})</span>`;
     group.appendChild(header);
     const grid = document.createElement('div');
     grid.className = 'results-group__grid';
@@ -5134,7 +5163,7 @@ function buildShortlistCard(course, studentTags, hasSubjects) {
         ${tests.map(t => testTagHtml(course, t)).join('')}
       </div>` : ''}
     ${courseVerificationStatus(course) !== 'verified'
-      ? `<p class="card-unverified">⚠ Requirements not yet verified — confirm with the university.</p>`
+      ? `<p class="card-unverified"><span aria-hidden="true">⚠</span> Requirements not yet verified — confirm with the university.</p>`
       : ''}
     ${cardRequirementsHtml(course)}
     ${cardMoreHtml(course)}
@@ -5528,10 +5557,12 @@ function renderWorkspaceHome() {
         <span class="home-quick__label">Quick access</span>
         <div class="home-quick__row">
           ${toolBtns}
-          ${[cfg.primary, ...cfg.secondary].includes('strengths') ? '' : '<button class="home-quick__btn" data-go-tool="strengths">🧭 Explore fields</button>'}
-          <button class="home-quick__btn" data-go-tool="shortlist">🔖 My Shortlist (${saved.length})</button>
-          <button class="home-quick__btn" data-open-story>📖 Your story</button>
-          <button class="home-quick__btn" data-open-summary>🖨 Print summary</button>
+          ${[cfg.primary, ...cfg.secondary].includes('strengths') ? '' : '<button class="home-quick__btn" data-go-tool="strengths"><span aria-hidden="true">🧭</span> Explore fields</button>'}
+          <button class="home-quick__btn" data-go-tool="shortlist"><span aria-hidden="true">🔖</span> My Shortlist (${saved.length})</button>
+          <button class="home-quick__btn" data-open-story><span aria-hidden="true">📖</span> Your story</button>
+          <button class="home-quick__btn" data-open-summary><span aria-hidden="true">🖨</span> Print summary</button>
+          ${savedCourses.some(c => typeof AltioraInterviewView !== 'undefined' && AltioraInterviewView.interviews(courseInterview(c.id)))
+            ? '<button type="button" class="home-next__btn iv-practise-link" data-iv-open>Practise interview questions</button>' : ''}
           <button class="home-quick__btn" data-change-stage>Change stage</button>
         </div>
       </section>
@@ -5968,7 +5999,14 @@ function buildCountryFilterBar() {
     const btn = document.createElement('button');
     btn.className = `filter-btn${key === 'All' ? ' active' : ''}`;
     btn.dataset.country = key;
-    btn.textContent = (COUNTRY_FLAGS[key] ? COUNTRY_FLAGS[key] + ' ' : '') + label;
+    // The flag is decorative: the label names the country.
+    if (COUNTRY_FLAGS[key]) {
+      const flagEl = document.createElement('span');
+      flagEl.setAttribute('aria-hidden', 'true');
+      flagEl.textContent = COUNTRY_FLAGS[key];
+      btn.append(flagEl, ' ');
+    }
+    btn.append(label);
     btn.addEventListener('click', () => {
       state.countryFilter = key;
       $$('#countryFilterBar .filter-btn').forEach(b => b.classList.remove('active'));
@@ -6346,7 +6384,7 @@ function renderCheckResults() {
   // them into view so it's obvious something happened. Not on later toggles.
   if (firstAppearance) {
     requestAnimationFrame(() =>
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+      section.scrollIntoView({ behavior: scrollMotion(), block: 'start' }));
   }
 
   } catch (err) {
@@ -6738,7 +6776,7 @@ function cardMoreHtml(course) {
 
   // 3. The generic US explainer — stated once here for those who want it.
   if (course.country === 'US' && course.usAdmissions) {
-    sections.push(`<p class="card-more__us">🇺🇸 US admissions is holistic — there is no fixed grade cutoff.</p>`);
+    sections.push(`<p class="card-more__us"><span aria-hidden="true">🇺🇸</span> US admissions is holistic — there is no fixed grade cutoff.</p>`);
   }
 
   // 4. University info (unified here from the old "About this university").
@@ -6842,7 +6880,7 @@ function buildCheckCard(course, result) {
       : '';
     footerHtml = `
       <p class="card-tip">
-        <span class="card-tip__icon">💡</span>
+        <span class="card-tip__icon" aria-hidden="true">💡</span>
         Add <strong>${esc(topSubject)}</strong> to open more doors${extras}
       </p>`;
   }
@@ -6878,7 +6916,7 @@ function buildCheckCard(course, result) {
       if (ar.note) lines.push(ar.note);
       apNoteHtml = lines.map(l => `<p class="card-ap-note">${esc(l)}</p>`).join('');
       if (ar.sourceStatus === 'partial') {
-        apNoteHtml += `<p class="card-unverified">⚠ Some requirements not yet verified — confirm with the university before relying on these.</p>`;
+        apNoteHtml += `<p class="card-unverified"><span aria-hidden="true">⚠</span> Some requirements not yet verified — confirm with the university before relying on these.</p>`;
       }
     }
   }
@@ -6920,7 +6958,7 @@ function buildCheckCard(course, result) {
   // source, say so plainly rather than presenting them as confirmed.
   const verifyStatus = courseVerificationStatus(course);
   const unverifiedHtml = (verifyStatus !== 'verified' && (gradeStr || tests.length))
-    ? `<p class="card-unverified">⚠ ${verifyStatus === 'partial'
+    ? `<p class="card-unverified"><span aria-hidden="true">⚠</span> ${verifyStatus === 'partial'
         ? 'Some requirements not yet verified'
         : 'Requirements not yet verified'} — confirm with the university before relying on these.</p>`
     : '';
@@ -7767,7 +7805,7 @@ function renderSingleFieldPlan(category) {
       <p class="plan-section-sub">AP admission isn't about a fixed set of subjects — it's about taking enough rigorous, field-aligned APs.</p>`;
     $('planResults').classList.remove('hidden');
     requestAnimationFrame(() =>
-      $('planResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+      $('planResults').scrollIntoView({ behavior: scrollMotion(), block: 'nearest' }));
     return;
   }
 
@@ -7820,7 +7858,7 @@ function renderSingleFieldPlan(category) {
 
   $('planResults').classList.remove('hidden');
   requestAnimationFrame(() =>
-    $('planResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    $('planResults').scrollIntoView({ behavior: scrollMotion(), block: 'nearest' })
   );
 }
 
@@ -7956,7 +7994,7 @@ function renderMultiFieldPlan(cats) {
         </div>`).join('')}`;
     $('planResults').classList.remove('hidden');
     requestAnimationFrame(() =>
-      $('planResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+      $('planResults').scrollIntoView({ behavior: scrollMotion(), block: 'nearest' }));
     return;
   }
 
@@ -8045,7 +8083,7 @@ function renderMultiFieldPlan(cats) {
 
   $('planResults').classList.remove('hidden');
   requestAnimationFrame(() =>
-    $('planResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    $('planResults').scrollIntoView({ behavior: scrollMotion(), block: 'nearest' })
   );
 }
 
@@ -8106,7 +8144,7 @@ function switchToPlanCombo(tags, systemKey, opts = {}) {
   requestAnimationFrame(() => {
     const results = $('checkResultsSection');
     if (!results.classList.contains('hidden'))
-      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      results.scrollIntoView({ behavior: scrollMotion(), block: 'start' });
   });
 }
 
@@ -8249,7 +8287,7 @@ function renderStrengthsGrid() {
   if (!grid) return;
   grid.innerHTML = STRENGTHS_OPTIONS.map(opt => `
     <button class="plan-cat-card${_selectedStrengths.has(opt.id) ? ' active' : ''}" data-strength="${opt.id}" aria-pressed="${_selectedStrengths.has(opt.id)}">
-      <span class="plan-cat-card__icon" style="font-size: 28px;">${opt.icon}</span>
+      <span class="plan-cat-card__icon" style="font-size: 28px;" aria-hidden="true">${opt.icon}</span>
       <span class="plan-cat-card__label">${esc(opt.label)}</span>
       <span class="picker-hint-inline" style="margin-top: 6px;">${esc(opt.description)}</span>
     </button>
@@ -8576,7 +8614,7 @@ function openFieldOverview(key, opts = {}) {
   renderFieldOverview(fieldId);
   markRoute({ v: 'field', fieldId, from: _overviewFrom });
   requestAnimationFrame(() =>
-    $('panel-field-overview')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    $('panel-field-overview')?.scrollIntoView({ behavior: scrollMotion(), block: 'start' })
   );
 }
 
@@ -8788,7 +8826,7 @@ function renderFieldOverview(fieldId) {
     a.addEventListener('click', e => {
       e.preventDefault();
       document.getElementById(a.dataset.foAnchor)
-        ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        ?.scrollIntoView({ behavior: scrollMotion(), block: 'start' });
     }));
   // Unified back: one step through app history (same as the nav "← Back" and
   // the browser Back button). The label stays contextual; the mechanism is one.
@@ -8825,7 +8863,7 @@ function proceedToCheckFromField() {
   renderCheckEmptyState();
   if (state.selectedSubjects.length > 0) renderCheckResults();
   requestAnimationFrame(() =>
-    $('panel-check')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    $('panel-check')?.scrollIntoView({ behavior: scrollMotion(), block: 'start' })
   );
 }
 
@@ -8843,7 +8881,7 @@ function planForField() {
   enterStage('choosing');   // choosing stage's primary tool is the planner
   renderPlanResults();      // syncs the grid selection internally
   requestAnimationFrame(() =>
-    $('panel-plan')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    $('panel-plan')?.scrollIntoView({ behavior: scrollMotion(), block: 'start' })
   );
 }
 
@@ -9052,7 +9090,7 @@ function init() {
     if (e.target.closest?.('#gradeEditSubjects')) {
       state.pickerCollapsed = false;
       syncPickerCollapse();
-      $('subjectPickerSection')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      $('subjectPickerSection')?.scrollIntoView({ behavior: scrollMotion(), block: 'nearest' });
     }
   });
   $('subjectSummaryRow')?.addEventListener('click', e => {

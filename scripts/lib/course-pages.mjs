@@ -203,7 +203,7 @@ export function coursePage(model, course, env) {
         <h2 class="fo-section__head">Do your subjects and grades fit?</h2>
         <p class="fo-prose">Altiora is free and has no accounts. Enter your subjects and predicted grades once, and it checks them against this course and every other course it holds.</p>
         <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against this course in the app →</a>${official ? `
-        <a class="fo-btn" href="${esc(official)}" target="_blank" rel="noopener noreferrer">Official course page ↗</a>` : ''}
+        <a class="fo-btn" href="${esc(official)}" target="_blank" rel="noopener noreferrer">Official course page <span aria-hidden="true">↗</span></a>` : ''}
       </section>${siblings.length ? `
       <section class="fo-section">
         <h2 class="fo-section__head">More courses at ${esc(course.university)}</h2>
@@ -255,7 +255,7 @@ export function universityPage(model, uni, env) {
         <span class="fo__eyebrow">Entry requirements · ${esc(model.cycleLabel)}</span>
         <h1 class="fo__title">${esc(uni.name)}</h1>
         <p class="fo__desc">Entry requirements for ${count === 1 ? 'the 1 course' : `the ${count} courses`} Altiora holds at ${esc(uni.name)}, for ${esc(model.cycleLabel)}. Each figure carries its verification status; open a course for every requirement, the date it was checked and the official source.</p>
-        <p class="cp-crumbs">${esc(country)}${uni.websiteUrl ? ` · <a href="${esc(uni.websiteUrl)}" target="_blank" rel="noopener noreferrer">Official university website ↗</a>` : ''}</p>
+        <p class="cp-crumbs">${esc(country)}${uni.websiteUrl ? ` · <a href="${esc(uni.websiteUrl)}" target="_blank" rel="noopener noreferrer">Official university website <span aria-hidden="true">↗</span></a>` : ''}</p>
       </header>
       <section class="fo-section">
         <div class="cp-table-wrap">

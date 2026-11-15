@@ -1,4 +1,5 @@
 // @ts-check
+/* global document, getComputedStyle -- used only inside page.evaluate (runs in the browser) */
 // End-to-end: "Add to my calendar" the way a student uses it. A fresh
 // profile set up by clicks only; Durham Mathematics and Oxford Medicine
 // shortlisted from the course list; the button pressed in Applying and in
@@ -88,27 +89,36 @@ async function addToCalendar(p, requests) {
   return { name: dl.suggestedFilename(), text, fetched };
 }
 
-const summaries = (/** @type {string} */ ics) => [...ics.replace(/\r\n /g, '').matchAll(/\r\nSUMMARY:(.*)\r\n/g)].map(m => m[1]);
+// SUMMARY values, unfolded and unescaped (\, \; \\).
+const summaries = (/** @type {string} */ ics) => [...ics.replace(/\r\n /g, '').matchAll(/\r\nSUMMARY:(.*)\r\n/g)]
+  .map(m => m[1].replace(/\\([,;\\])/g, '$1'));
 
-test('Year 13, Durham Maths + Oxford Medicine: only STEP is still ahead; same file from Applying and This month', async () => {
+test('Year 13, Durham Maths + Oxford Medicine: STEP and the January UK deadline are still ahead; same file from Applying and This month', async () => {
   const { ctx, p, requests, errors } = await student('Year 13');
   await p.locator('.journey-bar__step', { hasText: 'Applying' }).click();
   await assert.doesNotReject(p.getByText('Your phone will ask you to confirm before anything is added.').waitFor());
   const a = await addToCalendar(p, requests);
   assert.equal(a.name, 'altiora-calendar-2026-11-15.ics');
+  // October's deadline (Oxford Medicine) has passed: skipped. January's (Durham) is ahead.
   assert.deepEqual(summaries(a.text), [
+    'Application deadline: Most other UK courses (typical deadline)',
     'Registration opens: STEP (typical window)', 'Registration closes: STEP (typical window)', 'STEP test window opens (typical window)']);
+  assert.match(a.text, /\r\nUID:uk-deadline-january-2027@usealtiora\.com\r\nDTSTAMP:\d{8}T\d{6}Z\r\nDTSTART;VALUE=DATE:20270120\r\n/);
   assert.match(a.text, /\r\nUID:step-reg-open-2027@usealtiora\.com\r\n/);
   assert.deepEqual(a.fetched, [], 'no network request while building and opening the file');
   // Google Calendar links: one per event, nothing requested until tapped.
   const links = await p.locator('a[href^="https://calendar.google.com/calendar/render?action=TEMPLATE"]').count();
-  assert.equal(links, 3);
+  assert.equal(links, 4);
   assert.ok(!requests.some(u => u.includes('calendar.google.com')));
 
   await p.click('#monthLink');
   const m = await addToCalendar(p, requests);
   assert.deepEqual(summaries(m.text), summaries(a.text));
   assert.deepEqual(m.fetched, []);
+  // Neither course has readable interview data (Oxford Medicine's page is on the manual-review list): no Home entry.
+  await p.reload();
+  await p.locator('#panel-home .home-quick__row').waitFor();
+  assert.equal(await p.locator('#panel-home [data-iv-open]').count(), 0);
   assert.deepEqual(errors, []);
   await ctx.close();
 });
@@ -120,7 +130,9 @@ test('Year 12: STEP is absent (sat after offers, application year only); next su
   assert.ok(!a.text.includes('STEP'));
   assert.deepEqual(summaries(a.text), [
     'Registration opens: UCAT (typical window)', 'UCAT test window opens (typical window)', 'Registration opens: TMUA (typical window)',
-    'Registration closes: UCAT (typical window)', 'Registration closes: TMUA (typical window)', 'TMUA test window opens (typical window)']);
+    'Registration closes: UCAT (typical window)', 'Registration closes: TMUA (typical window)',
+    'Application deadline: Medicine, dentistry, veterinary and Oxford/Cambridge courses (typical deadline)', 'TMUA test window opens (typical window)',
+    'Application deadline: Most other UK courses (typical deadline)']);
   assert.match(a.text, /DTSTART;VALUE=DATE:20270510/);
   assert.deepEqual(a.fetched, []);
   assert.deepEqual(errors, []);
@@ -134,9 +146,10 @@ test('Year 12, a TMUA course and an ESAT course: one shared registration pair, t
   const a = await addToCalendar(p, requests);
   assert.deepEqual(summaries(a.text), [
     'Registration opens: ESAT and TMUA (typical window)', 'Registration closes: ESAT and TMUA (typical window)',
-    'ESAT test window opens (typical window)', 'TMUA test window opens (typical window)']);
+    'ESAT test window opens (typical window)', 'TMUA test window opens (typical window)',
+    'Application deadline: Most other UK courses (typical deadline)']);
   const uids = [...a.text.matchAll(/\r\nUID:(.*)\r\n/g)].map(m => m[1]);
-  assert.deepEqual(uids, ['uat-uk-reg-open-2027@usealtiora.com', 'uat-uk-reg-close-2027@usealtiora.com',
+  assert.deepEqual(uids.slice(0, 4), ['uat-uk-reg-open-2027@usealtiora.com', 'uat-uk-reg-close-2027@usealtiora.com',
     'esat-test-window-2027@usealtiora.com', 'tmua-test-window-2027@usealtiora.com']);
   // The Google links carry the same titles.
   const texts = await p.locator('#panel-applying a[href^="https://calendar.google.com/"]')
@@ -163,5 +176,47 @@ test('iPhone: the Apple path navigates to a text/calendar data: URL — no downl
   assert.match(decodeURIComponent(url), /^data:text\/calendar;charset=utf-8,BEGIN:VCALENDAR\r\n[\s\S]*SUMMARY:STEP test window opens \(typical window\)/);
   assert.equal(await p.locator('a[download]').count(), 0, 'no download attribute on the Apple path');
   assert.deepEqual(requests.slice(before).filter(u => /^https?:/.test(u)), []);
+  await ctx.close();
+});
+
+test('Year 12, only UK courses with no admission test: sections numbered from 1, a deadline-only calendar beside the heading', async () => {
+  const { ctx, p, requests, errors } = await student('Year 12', undefined,
+    [['University of Oxford', 'History BA'], ['London School of Economics', 'Finance BSc']]);
+  await p.locator('.journey-bar__step', { hasText: 'Applying' }).click();
+  const groups = await p.locator('#applyingChecklist .applying-task-group__label').allTextContents();
+  assert.deepEqual(groups.map(g => g.trim()), ['1 · Your application', '2 · Deadlines']);
+  // The control sits in the heading row of "The cycle, in order".
+  const row = p.locator('#panel-applying .applying-section__headrow');
+  await assert.doesNotReject(row.getByRole('button', { name: 'Add to my calendar' }).waitFor());
+  assert.match(await row.innerText(), /The cycle, in order/);
+  const a = await addToCalendar(p, requests);
+  assert.deepEqual(summaries(a.text), [
+    'Application deadline: Medicine, dentistry, veterinary and Oxford/Cambridge courses (typical deadline)',
+    'Application deadline: Most other UK courses (typical deadline)']);
+  assert.match(a.text, /UID:uk-deadline-october-2027@usealtiora\.com\r\nDTSTAMP:\d{8}T\d{6}Z\r\nDTSTART;VALUE=DATE:20271010/);
+  assert.match(a.text, /UID:uk-deadline-january-2028@usealtiora\.com\r\nDTSTAMP:\d{8}T\d{6}Z\r\nDTSTART;VALUE=DATE:20280120/);
+  assert.deepEqual(a.fetched, []);
+  assert.deepEqual(errors, []);
+  await ctx.close();
+});
+
+test('Interview practice: every way in is a full-size button (44px or taller)', async () => {
+  const { ctx, p, errors } = await student('Year 13', { viewport: { width: 375, height: 800 } },
+    [['University of Oxford', 'Computer Science BA'], ['Durham', 'Mathematics BSc']]);
+  /** @param {any} loc */
+  const size = async loc => { await loc.scrollIntoViewIfNeeded(); return loc.evaluate((/** @type {any} */ e) => ({ h: e.getBoundingClientRect().height, fs: getComputedStyle(e).fontSize, text: e.innerText.trim() })); };
+  await p.reload();   // a returning student opens on Home
+  const home = await size(p.locator('#panel-home [data-iv-open]'));   // Oxford Computer Science has interview data
+  await p.click('#storyLink');
+  const story = await size(p.locator('#panel-story [data-iv-open]'));
+  await p.click('#shortlistLink');
+  await p.evaluate(() => document.querySelectorAll('#panel-shortlist details').forEach((/** @type {any} */ d) => { d.open = true; }));
+  const card = await size(p.locator('#panel-shortlist [data-iv-practise]').first());
+  for (const [where, m] of [['Home', home], ['Story', story], ['Shortlist card', card]]) {
+    assert.ok(m.h >= 44, `${where}: ${m.h}px tall`);
+    assert.equal(m.fs, '14px', where);
+    assert.match(m.text, /^Practise interview questions/, where);
+  }
+  assert.deepEqual(errors, []);
   await ctx.close();
 });

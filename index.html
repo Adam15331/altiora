@@ -49,6 +49,11 @@
    coral #E89B7D · sage #86C99A · lavender #B9A3D9 · hairline rgba(31,26,23,.12) */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
+/* Reduced motion: no smooth scrolling, no transitions or animations (as styles.css does for the app). */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+}
 body {
   font-family: var(--ce-font-body);
   background: var(--ce-bg);
