@@ -119,7 +119,7 @@ test('rule 3: a title with one distinctive word (4+ characters) is mentioned by 
 
 test('empty state: no story entries — checks b and d say so instead of "Nothing found."', () => {
   const out = run(['I have always been fascinated by bridges.', 'Physics helped.', '']);
-  const msg = "You have no story entries yet, so there's nothing to compare. Add some in My Story.";
+  const msg = "You have no story entries yet, so there’s nothing to compare. Add some in My Story.";
   assert.deepEqual(out.sharedEntries, [msg]);
   assert.deepEqual(out.unused, [msg]);
   assert.deepEqual(out.repeatedWording, ['Nothing found.']);          // c ran on real text
@@ -132,4 +132,30 @@ test('empty state: all three answers empty — every check says so', () => {
     const out = run(['', '  \n ', ''], entries);
     assert.deepEqual(out, { length: [msg], sharedEntries: [msg], repeatedWording: [msg], unused: [msg] });
   }
+});
+
+test('rule 3 does not apply to subject or field words: only the whole title counts', () => {
+  assert.equal(R.mentions('Maths club', 'I love maths'), false);
+  assert.equal(R.mentions('Maths club', 'maths taught me'), false);
+  assert.equal(R.mentions('Maths club', 'at maths club I learned to prove things'), true);   // rule 1
+  assert.equal(R.mentions('Physics society', 'physics'), false);
+  assert.equal(R.mentions('Robotics club', 'robotics'), true);
+  assert.equal(R.mentions('Hospital volunteering', 'hospital'), true);
+  // A maths applicant who writes "maths" everywhere but never "maths club".
+  const out = run(['I love maths.', 'Maths taught me rigour.', 'I tutor maths to younger pupils.'], [{ id: 'm', title: 'Maths club' }]);
+  assert.deepEqual(out.sharedEntries, ['Nothing found.']);
+  assert.deepEqual(out.unused, ['You haven’t written about “Maths club” yet.']);
+});
+
+test('the subject word list is built from qualificationMappings and fieldProfiles, not typed', async () => {
+  const fs = await import('node:fs'), vm = await import('node:vm');
+  const ctx = vm.createContext({});
+  for (const f of ['qualificationMappings.js', 'fieldProfiles.js']) vm.runInContext(fs.readFileSync(new URL(`../data/${f}`, import.meta.url), 'utf8'), ctx);
+  const built = R.buildSubjectWords(vm.runInContext('qualificationMappings', ctx), vm.runInContext('fieldProfiles', ctx));
+  assert.deepEqual(R.SUBJECT_WORDS, built);
+  for (const w of ['mathematics', 'physics', 'chemistry', 'economics', 'engineering', 'medicine', 'architecture', 'maths', 'stats']) assert.ok(built.includes(w), w);
+  for (const w of ['robotics', 'hospital', 'chess', 'club', 'law', 'art']) assert.ok(!built.includes(w), w);
+  // Data in, words out: a subject added to the data becomes a subject word.
+  assert.deepEqual(R.buildSubjectWords({ X: { subjects: { 'Astronomy': 'T' } } }, {}), ['astronomy']);
+  assert.ok(built.every(w => w.length >= R.SINGLE_WORD_MIN && !R.COMMON_WORDS.has(w)));
 });
