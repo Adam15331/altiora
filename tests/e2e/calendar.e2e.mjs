@@ -50,8 +50,10 @@ after(async () => {
   await new Promise(r => server.close(() => r(undefined)));
 });
 
-/** @param {'Year 12'|'Year 13'} year @param {object} [ctxOpts] */
-async function student(year, ctxOpts = { viewport: { width: 1280, height: 900 } }) {
+const DURHAM_OXFORD = [['Durham', 'Mathematics BSc'], ['University of Oxford', 'Medicine MBChB']];
+
+/** @param {'Year 12'|'Year 13'} year @param {object} [ctxOpts] @param {string[][]} [shortlist] */
+async function student(year, ctxOpts = { viewport: { width: 1280, height: 900 } }, shortlist = DURHAM_OXFORD) {
   const ctx = await browser.newContext({ ...ctxOpts, acceptDownloads: true });
   /** @type {string[]} */ const requests = [];
   ctx.on('request', (/** @type {any} */ r) => requests.push(r.url()));
@@ -69,7 +71,7 @@ async function student(year, ctxOpts = { viewport: { width: 1280, height: 900 } 
   }
   await p.click('#subjectOnboardContinue');
   if (year === 'Year 13') await p.getByRole('button', { name: /See the \d+ courses your subjects fit/ }).click();
-  for (const [uni, course] of [['Durham', 'Mathematics BSc'], ['University of Oxford', 'Medicine MBChB']]) {
+  for (const [uni, course] of shortlist) {
     await p.fill('#resultSearchInput', uni);
     await p.locator('.course-card', { hasText: course }).filter({ hasText: uni }).locator('.save-btn').first().click();
   }
@@ -95,7 +97,8 @@ test('Year 13, Durham Maths + Oxford Medicine: only STEP is still ahead; same fi
   const a = await addToCalendar(p, requests);
   assert.equal(a.name, 'altiora-calendar-2026-11-15.ics');
   assert.deepEqual(summaries(a.text), [
-    'Registration opens: STEP (typical window)', 'Registration closes: STEP (typical window)', 'Sit STEP (typical window)']);
+    'Registration opens: STEP (typical window)', 'Registration closes: STEP (typical window)', 'STEP test window opens (typical window)']);
+  assert.match(a.text, /\r\nUID:step-reg-open-2027@usealtiora\.com\r\n/);
   assert.deepEqual(a.fetched, [], 'no network request while building and opening the file');
   // Google Calendar links: one per event, nothing requested until tapped.
   const links = await p.locator('a[href^="https://calendar.google.com/calendar/render?action=TEMPLATE"]').count();
@@ -116,9 +119,29 @@ test('Year 12: STEP is absent (sat after offers, application year only); next su
   const a = await addToCalendar(p, requests);
   assert.ok(!a.text.includes('STEP'));
   assert.deepEqual(summaries(a.text), [
-    'Registration opens: UCAT (typical window)', 'Sit UCAT (typical window)', 'Registration opens: TMUA (typical window)',
-    'Registration closes: UCAT (typical window)', 'Registration closes: TMUA (typical window)', 'Sit TMUA (typical window)']);
+    'Registration opens: UCAT (typical window)', 'UCAT test window opens (typical window)', 'Registration opens: TMUA (typical window)',
+    'Registration closes: UCAT (typical window)', 'Registration closes: TMUA (typical window)', 'TMUA test window opens (typical window)']);
   assert.match(a.text, /DTSTART;VALUE=DATE:20270510/);
+  assert.deepEqual(a.fetched, []);
+  assert.deepEqual(errors, []);
+  await ctx.close();
+});
+
+test('Year 12, a TMUA course and an ESAT course: one shared registration pair, two test-window events', async () => {
+  const { ctx, p, requests, errors } = await student('Year 12', undefined,
+    [['Imperial', 'Computing MEng'], ['Imperial', 'Mechanical Engineering MEng']]);
+  await p.locator('.journey-bar__step', { hasText: 'Applying' }).click();
+  const a = await addToCalendar(p, requests);
+  assert.deepEqual(summaries(a.text), [
+    'Registration opens: ESAT and TMUA (typical window)', 'Registration closes: ESAT and TMUA (typical window)',
+    'ESAT test window opens (typical window)', 'TMUA test window opens (typical window)']);
+  const uids = [...a.text.matchAll(/\r\nUID:(.*)\r\n/g)].map(m => m[1]);
+  assert.deepEqual(uids, ['uat-uk-reg-open-2027@usealtiora.com', 'uat-uk-reg-close-2027@usealtiora.com',
+    'esat-test-window-2027@usealtiora.com', 'tmua-test-window-2027@usealtiora.com']);
+  // The Google links carry the same titles.
+  const texts = await p.locator('#panel-applying a[href^="https://calendar.google.com/"]')
+    .evaluateAll((/** @type {any[]} */ as) => as.map(x => new URL(x.href).searchParams.get('text')));
+  assert.deepEqual(texts, summaries(a.text));
   assert.deepEqual(a.fetched, []);
   assert.deepEqual(errors, []);
   await ctx.close();
@@ -137,7 +160,7 @@ test('iPhone: the Apple path navigates to a text/calendar data: URL — no downl
   await p.waitForTimeout(1500);
   assert.equal(downloads.length, 1);
   const url = downloads[0].url();
-  assert.match(decodeURIComponent(url), /^data:text\/calendar;charset=utf-8,BEGIN:VCALENDAR\r\n[\s\S]*SUMMARY:Sit STEP \(typical window\)/);
+  assert.match(decodeURIComponent(url), /^data:text\/calendar;charset=utf-8,BEGIN:VCALENDAR\r\n[\s\S]*SUMMARY:STEP test window opens \(typical window\)/);
   assert.equal(await p.locator('a[download]').count(), 0, 'no download attribute on the Apple path');
   assert.deepEqual(requests.slice(before).filter(u => /^https?:/.test(u)), []);
   await ctx.close();

@@ -2651,8 +2651,10 @@ function calendarPlan(savedCourses, now = new Date()) {
   const yrs = studentYears();
   if (yrs == null || yearNeedsConfirm(profile, now)) return null;
   const codes = checklistTestCodes(applyingChecklistTasks(savedCourses, yrs));
+  // Applying's own registration groups (groupedTests): one shared
+  // registration → one "Registration opens/closes" event.
   const plan = AltioraCalendar.calendarEvents({
-    tests: codes.map(code => ({ code, info: testInfoFor(code) })),
+    groups: groupedTests(codes).map(members => members.map(code => ({ code, info: testInfoFor(code) }))),
     applicationYear: calendarApplicationYear(profile, yrs, now),
     today: localYmd(now),
   });

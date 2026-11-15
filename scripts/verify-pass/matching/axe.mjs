@@ -1,14 +1,17 @@
 /* global switchMode, axe */
-// axe-core WCAG 2.0 A/AA on Landing, Check, Shortlist, fields/medicine, privacy/terms/accessibility (+ all <details> open),
+// axe-core WCAG 2.0 A/AA on Landing, the app views (Home, Check, Shortlist, This month, Story, Interview practice,
+// Applying as a Year 12 preview), fields/medicine, privacy/terms/accessibility (+ all <details> open),
 // reducedMotion reduce, 2.5s wait; also 375px overflow and minimum text size.
+// The saved year is stamped as set "now" in the page, so the app shows its views rather than the
+// new-school-year confirmation; each app view must actually be on screen or the run fails.
 import { chromium } from 'playwright-core'; import { serve } from './serve.mjs'; import fs from 'node:fs';
 const EXE = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
 const [root, portArg] = process.argv.slice(2); const port = Number(portArg);
 const AXE = fs.readFileSync(process.env.AXE_PATH ?? new URL('../../../node_modules/axe-core/axe.min.js', import.meta.url), 'utf8');
 const subs = ['Mathematics', 'Further Mathematics', 'Physics', 'Chemistry'];
-const st = { profile: { stage: 'choosing', qualificationSystem: 'UK_A_Level', subjects: subs, predictedGrades: Object.fromEntries(subs.map(s => [s, 'A*'])), interests: [], candidateFields: [], achievements: [], applicationTasks: {}, statementDrafts: { q1: '', q2: '', q3: '' }, yearGroup: 'Year 12', yearsUntilApplication: 1, yearSetAt: null }, shortlist: ['uk-medicine-oxford', 'uk-medicine-ucl', 'uk-cs-cambridge'], progress: {}, meta: { firstVisit: null, lastVisit: null, hasOnboarded: true } };
+const st = { profile: { stage: 'choosing', qualificationSystem: 'UK_A_Level', subjects: subs, predictedGrades: Object.fromEntries(subs.map(s => [s, 'A*'])), interests: [], candidateFields: [], achievements: [], applicationTasks: {}, statementDrafts: { q1: '', q2: '', q3: '' }, yearGroup: 'Year 12', yearsUntilApplication: 1, yearSetAt: null /* stamped in the page */ }, shortlist: ['uk-medicine-oxford', 'uk-medicine-ucl', 'uk-cs-cambridge'], progress: {}, meta: { firstVisit: null, lastVisit: null, hasOnboarded: true } };
 const PAGES = [
-  ['Landing', '/index.html', null], ['Home', '/app.html', 'home'], ['Check', '/app.html', 'check'], ['Shortlist', '/app.html', 'shortlist'], ['This month', '/app.html', 'month'], ['Story', '/app.html', 'story'], ['Interview practice', '/app.html', 'interview'], ['fields/medicine', '/fields/medicine.html', null],
+  ['Landing', '/index.html', null], ['Home', '/app.html', 'home'], ['Check', '/app.html', 'check'], ['Shortlist', '/app.html', 'shortlist'], ['This month', '/app.html', 'month'], ['Story', '/app.html', 'story'], ['Interview practice', '/app.html', 'interview'], ['Applying (Year 12 preview)', '/app.html', 'applying'], ['fields/medicine', '/fields/medicine.html', null],
   ['privacy', '/privacy.html', null], ['terms', '/terms.html', null], ['accessibility', '/accessibility.html', null],
 ];
 const server = await serve(root, port);
@@ -19,10 +22,18 @@ for (const width of [1280, 375]) for (const [name, url, mode] of PAGES) for (con
   const page = await ctx.newPage();
   // FONTS=1 loads the real web fonts (for overflow checks with their metrics).
   await page.route(process.env.FONTS ? /cloudflareinsights/ : /fonts\.googleapis|fonts\.gstatic|cloudflareinsights/, r => r.abort());
-  await page.addInitScript(s => { localStorage.setItem('altiora_state_v1', s); }, JSON.stringify(st));
+  await page.addInitScript(s => {
+    const state = JSON.parse(s);
+    state.profile.yearSetAt = new Date().toISOString();   // a confirmed year: no new-school-year prompt
+    localStorage.setItem('altiora_state_v1', JSON.stringify(state));
+  }, JSON.stringify(st));
   await page.goto(`http://localhost:${port}${url}`);
   if (mode) await page.evaluate(m => switchMode(m), mode);
   await page.waitForTimeout(2500);
+  // Guard: an app view that isn't on screen (e.g. behind the year prompt) is a failed check, not a pass.
+  const shown = !mode || await page.evaluate(() => !document.getElementById('workspace')?.classList.contains('hidden')
+    && document.getElementById('yearSelect')?.classList.contains('hidden'));
+  if (!shown) { total++; console.log(`${width}px ${name}: VIEW NOT SHOWN (workspace hidden)`); await ctx.close(); continue; }
   const fonts = process.env.FONTS ? await page.evaluate(async () => { await document.fonts.ready; return [...new Set([...document.fonts].filter(f => f.status === 'loaded').map(f => f.family.replace(/"/g, '')))].join('/'); }) : '';
   if (open) await page.evaluate(() => document.querySelectorAll('details').forEach(d => { d.open = true; }));
   await page.addScriptTag({ content: AXE });

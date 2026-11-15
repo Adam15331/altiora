@@ -13,10 +13,22 @@
  * says "(typical window)" in its title, and its description says it is not
  * a confirmed date.
  *
- * Events per test, only where the stored text states them:
- *   reg-open  "Registration opens: X"  — the date after "opens" in typicalRegistrationWindow
- *   reg-close "Registration closes: X" — the date after "deadline" in typicalRegistrationWindow
- *   sit       "Sit X"                  — the first date in typicalTestWindow
+ * Events, only where the stored text states them:
+ *   reg-open    "Registration opens: X"   — the date after "opens" in typicalRegistrationWindow
+ *   reg-close   "Registration closes: X"  — the date after "deadline" in typicalRegistrationWindow
+ *   test-window "X test window opens"     — the first date in typicalTestWindow
+ * Registration events are per REGISTRATION GROUP — Applying's own grouping
+ * (groupedTests in main.js: provider, else official host, + registration
+ * month), passed in by main.js — so tests sharing one registration (TMUA,
+ * ESAT, TARA) get ONE "Registration opens: ESAT and TMUA". Test-window
+ * events stay one per test.
+ *
+ * UIDs: <key>-<type>-<year>@usealtiora.com. For registration events key
+ * is the shared provider where a test has one (so adding a test to the
+ * group updates the same event), else the test code; for test windows it
+ * is always the test code. The year is the event's own.
+ * Re-exporting the same cycle gives identical UIDs; a later cycle never
+ * overwrites an earlier one.
  *
  * Year: the student's application year A (computed by main.js from the
  * school-year start and yearsUntilApplication). Tests sat before applying
@@ -76,11 +88,20 @@
 
   /**
    * @typedef {{ id?: string, name?: string, typicalRegistrationWindow?: string, typicalTestWindow?: string,
-   *             requiredStatus?: string, officialUrl?: string }} TestInfo
-   * @typedef {{ uid: string, type: 'reg-open'|'reg-close'|'sit', test: string, date: string, end: string,
+   *             requiredStatus?: string, officialUrl?: string, provider?: string }} TestInfo
+   * @typedef {{ uid: string, type: 'reg-open'|'reg-close'|'test-window', test: string, tests: string[], date: string, end: string,
    *             summary: string, description: string,
    *             source: { field: string, text: string, phrase: string, rule: string } }} CalEvent
    */
+
+  /** A lowercase slug. @param {string} s */
+  const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+  /** Registration UID key: the shared provider where a test has one, else the code. @param {string} code @param {TestInfo} info */
+  const uidKey = (code, info) => slug(info.provider || code);
+
+  /** "A", "A and B", "A, B and C" @param {string[]} xs */
+  const listNames = xs => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
 
   /**
    * Every event the stored windows of one test state, for one application year.
@@ -95,7 +116,7 @@
     const wanted = [
       ['reg-open', 'Registration opens', 'typicalRegistrationWindow', after(reg, 'opens') ?? ''],
       ['reg-close', 'Registration closes', 'typicalRegistrationWindow', after(reg, 'deadline') ?? ''],
-      ['sit', 'Sit', 'typicalTestWindow', sit],
+      ['test-window', 'test window opens', 'typicalTestWindow', sit],
     ];
     const name = info.name ?? code;
     const description = [NOT_CONFIRMED, info.officialUrl, APP_URL].filter(Boolean).join('\n');
@@ -108,9 +129,10 @@
       const year = openMonth != null && w.month < openMonth ? base + 1 : base;
       const date = ymd(year, w.month, w.day);
       out.push({
-        uid: `${code.toLowerCase()}-${type}@usealtiora.com`,
-        type, test: code, date, end: nextDay(date),
-        summary: `${type === 'sit' ? `Sit ${name}` : `${label}: ${name}`}${TITLE_SUFFIX}`,
+        // Registration is shared by provider; a test window is the test's own.
+        uid: `${type === 'test-window' ? slug(code) : uidKey(code, info)}-${type}-${year}@usealtiora.com`,
+        type, test: code, tests: [code], date, end: nextDay(date),
+        summary: `${type === 'test-window' ? `${name} ${label}` : `${label}: ${name}`}${TITLE_SUFFIX}`,
         description,
         source: { field, text: field === 'typicalRegistrationWindow' ? reg : sit, phrase: w.phrase, rule: w.rule },
       });
@@ -119,20 +141,61 @@
   }
 
   /**
+   * One registration group's events: its members' registration events merged
+   * (one per type and date, naming every member), test windows per test.
+   * @param {Array<{code: string, info: TestInfo}>} group
+   * @param {number} applicationYear
+   * @returns {CalEvent[]}
+   */
+  function eventsForGroup(group, applicationYear) {
+    const per = group.map(t => ({ ...t, events: eventsForTest(t.code, t.info, applicationYear) }));
+    /** @type {CalEvent[]} */
+    const out = per.flatMap(t => t.events.filter(e => e.type === 'test-window'));
+    for (const type of /** @type {const} */ (['reg-open', 'reg-close'])) {
+      /** @type {Map<string, Array<{code: string, info: TestInfo, event: CalEvent}>>} */
+      const byDate = new Map();
+      per.forEach(t => t.events.filter(e => e.type === type)
+        .forEach(event => byDate.set(event.date, [...(byDate.get(event.date) ?? []), { code: t.code, info: t.info, event }])));
+      for (const members of byDate.values()) {
+        const first = members[0].event;
+        if (members.length === 1 && byDate.size === 1) { out.push(first); continue; }
+        const codes = members.map(m => m.code);
+        const providers = /** @type {string[]} */ ([...new Set(members.map(m => m.info.provider).filter(Boolean))]);
+        // One shared provider and one date: the provider's key. Otherwise name the members.
+        const key = providers.length === 1 && byDate.size === 1 ? slug(providers[0]) : slug(codes.join('-'));
+        const label = type === 'reg-open' ? 'Registration opens' : 'Registration closes';
+        const links = [...new Set(members.map(m => m.info.officialUrl).filter(Boolean))];
+        out.push({
+          ...first,
+          uid: `${key}-${type}-${first.date.slice(0, 4)}@usealtiora.com`,
+          test: codes[0], tests: codes,
+          summary: `${label}: ${listNames(members.map(m => m.info.name ?? m.code))}${TITLE_SUFFIX}`,
+          description: [NOT_CONFIRMED, ...links, APP_URL].join('\n'),
+        });
+      }
+    }
+    return out;
+  }
+
+  /**
    * Upcoming events for a student's tests.
    * @param {object} p
-   * @param {Array<{code: string, info: TestInfo | null | undefined}>} p.tests  the Applying checklist's tests
+   * @param {Array<Array<{code: string, info: TestInfo | null | undefined}>>} p.groups
+   *   the Applying checklist's tests, in Applying's registration groups
    * @param {number} p.applicationYear
    * @param {string} p.today  YYYYMMDD, the student's local date
    * @returns {{ events: CalEvent[], past: CalEvent[], withWindows: number }}
    */
-  function calendarEvents({ tests, applicationYear, today }) {
-    const all = tests.filter(t => t.info).flatMap(t => eventsForTest(t.code, /** @type {TestInfo} */ (t.info), applicationYear));
-    const sorted = all.sort((a, b) => a.date.localeCompare(b.date) || a.test.localeCompare(b.test));
+  function calendarEvents({ groups, applicationYear, today }) {
+    const all = groups
+      .map(g => /** @type {Array<{code: string, info: TestInfo}>} */ (g.filter(t => t.info)))
+      .filter(g => g.length)
+      .flatMap(g => eventsForGroup(g, applicationYear));
+    const sorted = all.sort((a, b) => a.date.localeCompare(b.date) || a.summary.localeCompare(b.summary));
     return {
       events: sorted.filter(e => e.date >= today),
       past: sorted.filter(e => e.date < today),
-      withWindows: new Set(all.map(e => e.test)).size,
+      withWindows: new Set(all.flatMap(e => e.tests)).size,
     };
   }
 
@@ -220,7 +283,7 @@
   const fileName = today => `altiora-calendar-${today.slice(0, 4)}-${today.slice(4, 6)}-${today.slice(6, 8)}.ics`;
 
   const api = {
-    windowStart, eventsForTest, calendarEvents, buildIcs, googleCalendarUrl, openMethod, dataUrl, fileName,
+    windowStart, eventsForTest, eventsForGroup, calendarEvents, buildIcs, googleCalendarUrl, openMethod, dataUrl, fileName,
     escapeText, foldLine, WINDOW_DAY, NOT_CONFIRMED, APP_URL, TITLE_SUFFIX, PRODID,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
