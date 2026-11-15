@@ -2651,8 +2651,10 @@ function calendarPlan(savedCourses, now = new Date()) {
   const yrs = studentYears();
   if (yrs == null || yearNeedsConfirm(profile, now)) return null;
   const codes = checklistTestCodes(applyingChecklistTasks(savedCourses, yrs));
+  // Applying's own registration groups (groupedTests): one shared
+  // registration → one "Registration opens/closes" event.
   const plan = AltioraCalendar.calendarEvents({
-    tests: codes.map(code => ({ code, info: testInfoFor(code) })),
+    groups: groupedTests(codes).map(members => members.map(code => ({ code, info: testInfoFor(code) }))),
     applicationYear: calendarApplicationYear(profile, yrs, now),
     today: localYmd(now),
   });
@@ -8249,7 +8251,7 @@ function renderStrengthsGrid() {
     <button class="plan-cat-card${_selectedStrengths.has(opt.id) ? ' active' : ''}" data-strength="${opt.id}" aria-pressed="${_selectedStrengths.has(opt.id)}">
       <span class="plan-cat-card__icon" style="font-size: 28px;">${opt.icon}</span>
       <span class="plan-cat-card__label">${esc(opt.label)}</span>
-      <span class="picker-hint-inline" style="font-size: 11px; margin-top: 6px;">${esc(opt.description)}</span>
+      <span class="picker-hint-inline" style="margin-top: 6px;">${esc(opt.description)}</span>
     </button>
   `).join('');
   grid.querySelectorAll('.plan-cat-card').forEach(btn => {

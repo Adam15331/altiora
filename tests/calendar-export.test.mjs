@@ -10,7 +10,9 @@ const require = createRequire(import.meta.url);
 const C = require('../calendar-export.js');
 const { admissionTestInfo: T } = require('../data/admissionTestInfo.js');
 
-const tests = (/** @type {string[]} */ codes) => codes.map(code => ({ code, info: T[code] }));
+// One registration group per test, unless grouped explicitly (main.js passes Applying's groupedTests).
+const solo = (/** @type {string[]} */ codes) => codes.map(code => [{ code, info: T[code] }]);
+const group = (/** @type {string[]} */ codes) => [codes.map(code => ({ code, info: T[code] }))];
 const NOW = new Date(Date.UTC(2026, 10, 15, 11, 0, 0));
 
 test('dates: the first day each stored window can start', () => {
@@ -25,12 +27,13 @@ test('dates: the first day each stored window can start', () => {
 
 test('events: only what the stored text states (LNAT has no stated deadline)', () => {
   const lnat = C.eventsForTest('LNAT', T.LNAT, 2027).map(e => `${e.type} ${e.date}`);
-  assert.deepEqual(lnat, ['reg-open 20270801', 'sit 20270901']);
+  assert.deepEqual(lnat, ['reg-open 20270801', 'test-window 20270901']);
   const tmua = C.eventsForTest('TMUA', T.TMUA, 2027).map(e => `${e.type} ${e.date}`);
-  assert.deepEqual(tmua, ['reg-open 20270720', 'reg-close 20270920', 'sit 20271010']);
+  assert.deepEqual(tmua, ['reg-open 20270720', 'reg-close 20270920', 'test-window 20271010']);
   assert.deepEqual(C.eventsForTest('LSAT', T.LSAT, 2027), []);       // no usable month: no event
   const titles = C.eventsForTest('TMUA', T.TMUA, 2027).map(e => e.summary);
-  assert.deepEqual(titles, ['Registration opens: TMUA (typical window)', 'Registration closes: TMUA (typical window)', 'Sit TMUA (typical window)']);
+  assert.deepEqual(titles, ['Registration opens: TMUA (typical window)', 'Registration closes: TMUA (typical window)', 'TMUA test window opens (typical window)']);
+  assert.ok(!Object.keys(T).flatMap(k => C.eventsForTest(k, T[k], 2027)).some(e => /^Sit /.test(e.summary)));
 });
 
 test('after offers: an offer-condition test (STEP) falls in the year after the application year', () => {
@@ -40,18 +43,18 @@ test('after offers: an offer-condition test (STEP) falls in the year after the a
 });
 
 test('past windows are skipped, never rolled forward to next year', () => {
-  const p = C.calendarEvents({ tests: tests(['UCAT', 'TMUA', 'STEP']), applicationYear: 2026, today: '20261115' });
-  assert.deepEqual(p.events.map(e => `${e.test} ${e.type} ${e.date}`), ['STEP reg-open 20270301', 'STEP reg-close 20270501', 'STEP sit 20270601']);
+  const p = C.calendarEvents({ groups: solo(['UCAT', 'TMUA', 'STEP']), applicationYear: 2026, today: '20261115' });
+  assert.deepEqual(p.events.map(e => `${e.test} ${e.type} ${e.date}`), ['STEP reg-open 20270301', 'STEP reg-close 20270501', 'STEP test-window 20270601']);
   assert.equal(p.past.length, 6);
   assert.ok(p.events.every(e => e.date >= '20261115'));
   assert.ok(!p.events.some(e => e.date.startsWith('2027') && e.test !== 'STEP'));
   // A window on today's date is still upcoming.
-  assert.equal(C.calendarEvents({ tests: tests(['LNAT']), applicationYear: 2027, today: '20270801' }).events.length, 2);
+  assert.equal(C.calendarEvents({ groups: solo(['LNAT']), applicationYear: 2027, today: '20270801' }).events.length, 2);
   // Everything passed: no events, but the tests still had windows (→ "No upcoming test windows to add.").
-  const gone = C.calendarEvents({ tests: tests(['UCAT']), applicationYear: 2026, today: '20261115' });
+  const gone = C.calendarEvents({ groups: solo(['UCAT']), applicationYear: 2026, today: '20261115' });
   assert.deepEqual([gone.events.length, gone.withWindows], [0, 1]);
   // A code with no stored info is ignored.
-  assert.equal(C.calendarEvents({ tests: [{ code: 'X', info: undefined }], applicationYear: 2027, today: '20261115' }).withWindows, 0);
+  assert.equal(C.calendarEvents({ groups: [[{ code: 'X', info: undefined }]], applicationYear: 2027, today: '20261115' }).withWindows, 0);
 });
 
 test('every event says it is a typical window, with the official link and the app link', () => {
@@ -92,13 +95,39 @@ test('ics: commas, semicolons, backslashes and newlines are escaped', () => {
   assert.match(ics.replace(/\r\n /g, ''), /\r\nSUMMARY:x\\; y\\, z\r\n/);
 });
 
-test('UIDs are stable per test and event type, across years and rebuilds', () => {
-  const a = C.eventsForTest('TMUA', T.TMUA, 2026).map(e => e.uid);
-  const b = C.eventsForTest('TMUA', T.TMUA, 2027).map(e => e.uid);
-  assert.deepEqual(a, ['tmua-reg-open@usealtiora.com', 'tmua-reg-close@usealtiora.com', 'tmua-sit@usealtiora.com']);
-  assert.deepEqual(a, b);
-  const all = Object.keys(T).flatMap(k => C.eventsForTest(k, T[k], 2027).map(e => e.uid));
-  assert.equal(new Set(all).size, all.length);
+test('UIDs: per test (or shared provider) and event type, with the event year; identical on re-export', () => {
+  const step = C.eventsForTest('STEP', T.STEP, 2026).map(e => e.uid);
+  assert.deepEqual(step, ['step-reg-open-2027@usealtiora.com', 'step-reg-close-2027@usealtiora.com', 'step-test-window-2027@usealtiora.com']);
+  assert.deepEqual(C.eventsForTest('STEP', T.STEP, 2026).map(e => e.uid), step);                 // re-export: identical
+  assert.notDeepEqual(C.eventsForTest('STEP', T.STEP, 2027).map(e => e.uid), step);              // later cycle: new UIDs
+  assert.deepEqual(C.eventsForTest('TMUA', T.TMUA, 2027).map(e => e.uid),
+    ['uat-uk-reg-open-2027@usealtiora.com', 'uat-uk-reg-close-2027@usealtiora.com', 'tmua-test-window-2027@usealtiora.com']);
+  const all = C.calendarEvents({ groups: [...group(['ESAT', 'TARA', 'TMUA']), ...solo(['UCAT', 'LNAT', 'STEP'])], applicationYear: 2027, today: '20270101' });
+  const uids = [...all.events, ...all.past].map(e => e.uid);
+  assert.equal(new Set(uids).size, uids.length);
+  // The shared registration keeps its UID whether one or three of its tests are on the list.
+  const one = C.calendarEvents({ groups: group(['TMUA']), applicationYear: 2027, today: '20270101' }).events.find(e => e.type === 'reg-open');
+  const three = C.calendarEvents({ groups: group(['ESAT', 'TARA', 'TMUA']), applicationYear: 2027, today: '20270101' }).events.find(e => e.type === 'reg-open');
+  assert.equal(one?.uid, three?.uid);
+});
+
+test('shared registration: one opens and one closes event naming every test in the group; test windows per test', () => {
+  const p = C.calendarEvents({ groups: group(['ESAT', 'TMUA']), applicationYear: 2027, today: '20261115' });
+  assert.deepEqual(p.events.map(e => e.summary), [
+    'Registration opens: ESAT and TMUA (typical window)',
+    'Registration closes: ESAT and TMUA (typical window)',
+    'ESAT test window opens (typical window)',
+    'TMUA test window opens (typical window)',
+  ]);
+  assert.deepEqual(p.events.map(e => e.date), ['20270720', '20270920', '20271010', '20271010']);
+  assert.equal(p.withWindows, 2);
+  // Three tests: "A, B and C"; distinct official links all listed once.
+  const three = C.calendarEvents({ groups: group(['ESAT', 'TARA', 'TMUA']), applicationYear: 2027, today: '20261115' }).events[0];
+  assert.equal(three.summary, 'Registration opens: ESAT, TARA and TMUA (typical window)');
+  assert.equal(three.description, [C.NOT_CONFIRMED, 'https://esat-tmua.ac.uk/', 'https://esat-tmua.ac.uk/about-the-tests/tara/', C.APP_URL].join('\n'));
+  // Tests in different groups are never merged, even on the same day.
+  const apart = C.calendarEvents({ groups: solo(['ESAT', 'TMUA']), applicationYear: 2027, today: '20261115' });
+  assert.equal(apart.events.filter(e => e.type === 'reg-open').length, 2);
 });
 
 test('Google Calendar link: same title, all-day dates and description', () => {
@@ -115,7 +144,7 @@ test('Google Calendar link: same title, all-day dates and description', () => {
 test('no personal data: the file holds only test names, dates and links', () => {
   const ics = C.buildIcs(C.eventsForTest('UCAT', T.UCAT, 2027), { now: NOW }).replace(/\r\n /g, '');
   const values = ics.split('\r\n').filter(Boolean).map(l => l.slice(l.indexOf(':') + 1));
-  const allowed = /^(VCALENDAR|VEVENT|VALARM|2\.0|-\/\/Altiora.*|GREGORIAN|PUBLISH|ucat-[a-z-]+@usealtiora\.com|\d{8}(T\d{6}Z)?|TRANSPARENT|DISPLAY|-P7D|.*UCAT \(typical window\)|This is the typical window.*)$/;
+  const allowed = /^(VCALENDAR|VEVENT|VALARM|2\.0|-\/\/Altiora.*|GREGORIAN|PUBLISH|ucat-[a-z-]+-\d{4}@usealtiora\.com|\d{8}(T\d{6}Z)?|TRANSPARENT|DISPLAY|-P7D|.*UCAT( test window opens)? \(typical window\)|This is the typical window.*)$/;
   for (const v of values) assert.match(v, allowed);
 });
 
