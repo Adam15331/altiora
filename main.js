@@ -2626,6 +2626,87 @@ function applyingTaskHtml(t, live) {
         </${live ? 'label' : 'div'}>`;
 }
 
+/* ─── Add to my calendar ─────────────────────────────────────
+ * The student's admission-test windows as calendar events, built by
+ * calendar-export.js (pure). WHICH tests: the Applying checklist's own
+ * filtered list (applyingChecklistTasks → checklistTestCodes), so STEP
+ * appears only in the application year — one pipeline with Applying and
+ * This month. Needs a known, confirmed year: the year picks the cycle.
+ * Nothing is requested from anywhere; the file is built in the browser.
+ * ───────────────────────────────────────────────────────────── */
+function localYmd(d) {
+  return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+}
+
+// The calendar year the student applies in: the start of their school
+// year plus yearsUntilApplication (the same year scale Applying uses).
+function calendarApplicationYear(profile, yrs, now) {
+  return academicYearStart(profile.qualificationSystem, now).getFullYear() + yrs;
+}
+
+// null → no control (no tests with a stored window, or no confirmed year).
+function calendarPlan(savedCourses, now = new Date()) {
+  if (typeof AltioraCalendar === 'undefined' || !savedCourses.length) return null;
+  const profile = AltioraState.getProfile();
+  const yrs = studentYears();
+  if (yrs == null || yearNeedsConfirm(profile, now)) return null;
+  const codes = checklistTestCodes(applyingChecklistTasks(savedCourses, yrs));
+  const plan = AltioraCalendar.calendarEvents({
+    tests: codes.map(code => ({ code, info: testInfoFor(code) })),
+    applicationYear: calendarApplicationYear(profile, yrs, now),
+    today: localYmd(now),
+  });
+  return plan.withWindows ? plan : null;
+}
+
+function calendarControlHtml(savedCourses, now = new Date()) {
+  const plan = calendarPlan(savedCourses, now);
+  if (!plan) return '';
+  if (!plan.events.length) {
+    return `
+      <section class="applying-section" aria-label="Add to my calendar">
+        <p class="applying-tasks__foot">No upcoming test windows to add.</p>
+      </section>`;
+  }
+  const links = plan.events.map(e =>
+    `<a class="applying-task__link" href="${esc(AltioraCalendar.googleCalendarUrl(e))}" target="_blank" rel="noopener noreferrer">${esc(e.summary)} →</a>`).join('');
+  return `
+      <section class="applying-section" aria-label="Add to my calendar">
+        <div class="home-next__actions">
+          <button type="button" class="home-next__btn" data-cal-add>Add to my calendar</button>
+        </div>
+        <details class="card-uni-info">
+          <summary>Google Calendar ${CARD_CHEVRON_ICON}</summary>
+          <div class="card-uni-info__body"><span class="applying-task__links">${links}</span></div>
+        </details>
+        <p class="applying-tasks__foot">Your phone will ask you to confirm before anything is added.</p>
+      </section>`;
+}
+
+// Apple devices: navigate to the file (data: URL, text/calendar, no download
+// attribute) so Safari can offer its own "Add to Calendar". Others download
+// altiora-calendar-YYYY-MM-DD.ics. Built on click, from the current state.
+function openCalendarFile(now = new Date()) {
+  const saved = AltioraState.getShortlist()
+    .map(id => (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null)
+    .filter(Boolean);
+  const plan = calendarPlan(saved, now);
+  if (!plan?.events.length) return;
+  const ics = AltioraCalendar.buildIcs(plan.events, { now });
+  if (AltioraCalendar.openMethod(navigator) === 'data-url') {
+    window.location.href = AltioraCalendar.dataUrl(ics);
+    return;
+  }
+  const url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = AltioraCalendar.fileName(localYmd(now));
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 30000);
+}
+
 // Delegated once — survives every re-render of the panel.
 function wireApplyingChecklist() {
   document.addEventListener('change', e => {
@@ -2636,6 +2717,7 @@ function wireApplyingChecklist() {
   document.addEventListener('click', e => {
     const btn = e.target.closest?.('.applying-task__action');
     if (btn) { e.preventDefault(); switchMode(btn.dataset.goTool); }
+    if (e.target.closest?.('[data-cal-add]')) openCalendarFile();
   });
 }
 
@@ -2729,6 +2811,7 @@ function renderApplyingPanel() {
         <div id="applyingChecklist" class="applying-tasks${preview ? ' applying-tasks--preview' : ''}"></div>
         <p class="applying-tasks__foot">Windows are typical and shift year to year — always confirm on the official page.</p>
       </section>
+      ${calendarControlHtml(savedCourses)}
     </div>`;
 
   renderApplyingChecklist();
@@ -2824,6 +2907,7 @@ function renderMonthPanel(now = new Date()) {
         <h2 id="monthWindowsHead" class="applying-section__head">On your list now</h2>
         ${windowsHtml}
       </section>
+      ${calendarControlHtml(saved, now)}
       <section class="home-next" aria-label="Your next step">
         <span class="home-next__eyebrow">Your next step</span>
         <p class="home-next__text">${esc(next.text)}</p>

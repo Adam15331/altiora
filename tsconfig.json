@@ -20,6 +20,7 @@
     "data/requirements/config.js",
     "requirements-view.js",
     "statement-review.js",
+    "calendar-export.js",
     "interview-view.js",
     "ib-hl.js",
     "scripts/lib/**/*.mjs",
