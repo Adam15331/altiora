@@ -13,14 +13,21 @@
  *   c. the same run of 6+ consecutive words in two different answers
  *   d. story entries used in no answer (every entry in the story)
  *
- * Matching (b, d) — an entry is "mentioned" in an answer when EITHER
- *   1. its whole title appears there as a run of words, OR
+ * Matching (b, d) — an entry is "mentioned" in an answer when ANY of
+ *   1. its whole title appears there as a run of words,
  *   2. two different DISTINCTIVE words of its title appear there within
  *      NEAR_WORDS (10) words of each other — positions at most 10 apart,
  *      i.e. no more than 9 words between them,
+ *   3. the title has exactly ONE distinctive word, of at least
+ *      SINGLE_WORD_MIN (4) characters, and that word appears there
+ *      ("Robotics club" is mentioned by "robotics"),
  * after normalising both texts the same way (see words()). A distinctive
  * word is a title word of 3+ characters that is not in COMMON_WORDS.
  * A title word also matches the same word with or without a trailing "s".
+ *
+ * Empty states (reviewLines): with all three answers empty, every check
+ * says NO_ANSWERS; with no story entries, checks b and d say NO_ENTRIES.
+ * "Nothing found." only when a check ran on real content and found nothing.
  *
  * Browser: classic script, exposes `AltioraStatementReview`.
  * Node (tests): module.exports.
@@ -53,6 +60,9 @@
   /** Rule 2: the two distinctive title words must be at most this many word positions apart. */
   const NEAR_WORDS = 10;
 
+  /** Rule 3: a title's only distinctive word counts alone when it is at least this long. */
+  const SINGLE_WORD_MIN = 4;
+
   /**
    * Words of a text with their positions in the ORIGINAL string.
    * Normalised: lower case, accents removed, apostrophes dropped inside a
@@ -81,7 +91,7 @@
   }
 
   /**
-   * Is a story entry mentioned in an answer? (rule 1 or rule 2 above)
+   * Is a story entry mentioned in an answer? (rule 1, 2 or 3 above)
    * @param {string} title @param {string} answer
    */
   function mentions(title, answer) {
@@ -92,6 +102,8 @@
       if (t.every((w, k) => sameWord(w, a[i + k]))) return true;
     }
     const distinct = distinctiveWords(title);
+    // Rule 3: exactly one distinctive word, long enough to stand alone.
+    if (distinct.length === 1) return distinct[0].length >= SINGLE_WORD_MIN && a.some(x => sameWord(distinct[0], x));
     if (distinct.length < 2) return false;
     // Every position in the answer where some distinctive title word occurs.
     const hits = [];
@@ -170,10 +182,16 @@
     // Every story entry counts, not only those shown in a question's rail.
     const unused = usedIn.filter(u => u.answers.length === 0).map(u => ({ title: u.entry.title }));
 
-    return { length, sharedEntries, repeatedWording, unused };
+    // Nothing to work with: no text in any answer, or no story entries.
+    const noAnswers = answers.every(text => String(text ?? '').trim() === '');
+    const noEntries = entries.length === 0;
+
+    return { length, sharedEntries, repeatedWording, unused, noAnswers, noEntries };
   }
 
   const NOTHING = 'Nothing found.';
+  const NO_ANSWERS = 'Write something in at least one answer first.';
+  const NO_ENTRIES = "You have no story entries yet, so there's nothing to compare. Add some in My Story.";
 
   /**
    * The student-facing lines, verbatim.
@@ -182,18 +200,19 @@
   function reviewLines(r, totalLimit, perAnswerMin) {
     const fmt = (/** @type {number} */ n) => n.toLocaleString('en-GB');
     const or = (/** @type {string[]} */ lines) => (lines.length ? lines : [NOTHING]);
+    if (r.noAnswers) return { length: [NO_ANSWERS], sharedEntries: [NO_ANSWERS], repeatedWording: [NO_ANSWERS], unused: [NO_ANSWERS] };
     return {
       length: r.length.map(a => `Answer ${a.n}: ${fmt(a.chars)} characters (${a.pct}% of your ${fmt(totalLimit)}).`
         + (a.belowMin ? ` This is below the ${fmt(perAnswerMin)}-character minimum.` : '')),
-      sharedEntries: or(r.sharedEntries.map(s =>
+      sharedEntries: r.noEntries ? [NO_ENTRIES] : or(r.sharedEntries.map(s =>
         `“${s.title}” appears in answers ${listNumbers(s.answers)}. UCAS reads all three answers as one statement.`)),
       repeatedWording: or(r.repeatedWording.map(x =>
         `The same wording appears in answers ${x.answers[0]} and ${x.answers[1]}: “${x.phrase}”.`)),
-      unused: or(r.unused.map(u => `You haven't written about “${u.title}” yet.`)),
+      unused: r.noEntries ? [NO_ENTRIES] : or(r.unused.map(u => `You haven’t written about “${u.title}” yet.`)),
     };
   }
 
-  const api = { review, reviewLines, mentions, repeatedRuns, distinctiveWords, words, COMMON_WORDS, MIN_REPEAT_WORDS, NEAR_WORDS, NOTHING };
+  const api = { review, reviewLines, mentions, repeatedRuns, distinctiveWords, words, COMMON_WORDS, MIN_REPEAT_WORDS, NEAR_WORDS, SINGLE_WORD_MIN, NOTHING, NO_ANSWERS, NO_ENTRIES };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.AltioraStatementReview = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

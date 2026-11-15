@@ -22,11 +22,11 @@ test('a: length per answer, with the minimum line only when below it', () => {
   ]);
 });
 
-test('b: an entry is mentioned by its whole title, or by two distinctive title words', () => {
+test('b: an entry is mentioned by its whole title, by two distinctive title words, or by its only distinctive word', () => {
   assert.equal(R.mentions('Robotics club', 'I joined the Robotics Club in Year 10.'), true);        // whole title, any case
   assert.equal(R.mentions('UK Maths Challenge gold', 'my gold in the maths challenge'), true);         // maths + challenge + gold
   assert.equal(R.mentions('UK Maths Challenge gold', 'I enjoy maths.'), false);                          // one distinctive word
-  assert.equal(R.mentions('Chess club', 'I play chess.'), false);                                        // one distinctive word: needs the whole title
+  assert.equal(R.mentions('Chess club', 'I play chess.'), true);                                         // its only distinctive word (rule 3)
   assert.equal(R.mentions('Durham’s summer school', "At Durham's summer school I"), true);              // curly vs straight apostrophe
   assert.equal(R.mentions('Coding projects', 'my coding project'), true);                                // plural / singular
   assert.deepEqual(R.distinctiveWords('The National Robotics Team Project'), ['robotics']);
@@ -78,8 +78,8 @@ test('d: every story entry mentioned in no answer is listed, whichever rail it s
   const entries = [{ id: 'e1', title: 'Robotics club' }, { id: 'e2', title: 'Hospital volunteering' }, { id: 'e3', title: 'Piano grade 8' }];
   const out = run(['Robotics club was where it began.', '', ''], entries);
   assert.deepEqual(out.unused, [
-    "You haven't written about “Hospital volunteering” yet.",
-    "You haven't written about “Piano grade 8” yet.",
+    "You haven’t written about “Hospital volunteering” yet.",
+    "You haven’t written about “Piano grade 8” yet.",
   ]);
   // The review takes no rail list: an entry is never left out for where it is shown.
   const r = R.review({ answers: ['', '', ''], entries: [{ id: 'x', title: 'Chess club' }], totalLimit: LIMIT, perAnswerMin: MIN });
@@ -100,4 +100,36 @@ test('the copy never grades the writing', () => {
   const out = run(['short', 'short', 'short'], [{ id: 'e', title: 'Robotics club' }]);
   const all = Object.values(out).flat().join(' ').toLowerCase();
   for (const w of ['good', 'great', 'weak', 'strong', 'cliché', 'cliche', 'score', 'excellent', 'poor', 'should']) assert.ok(!all.includes(w), w);
+});
+
+test('rule 3: a title with one distinctive word (4+ characters) is mentioned by that word alone', () => {
+  assert.equal(R.mentions('Robotics club', 'I joined robotics in Year 10'), true);
+  assert.equal(R.mentions('Chess club', 'ch'), false);
+  assert.equal(R.mentions('Chess club', 'I enjoy drawing and long walks.'), false);
+  assert.equal(R.mentions('Art club', 'I love art.'), false);                // "art" is under 4 characters: the whole title is still needed
+  assert.equal(R.mentions('Art club', 'the art club'), true);                // rule 1 unchanged
+  // Two or more distinctive words: rules 1 and 2 only, as before.
+  assert.equal(R.mentions('UK Maths Challenge gold', 'I enjoy maths.'), false);
+  assert.equal(R.SINGLE_WORD_MIN, 4);
+  const out = run(['I joined robotics in Year 10.', 'Physics helped.', 'Robotics taught me patience.'],
+    [{ id: 'e1', title: 'Robotics club' }]);
+  assert.deepEqual(out.sharedEntries, ['“Robotics club” appears in answers 1 and 3. UCAS reads all three answers as one statement.']);
+  assert.deepEqual(out.unused, ['Nothing found.']);
+});
+
+test('empty state: no story entries — checks b and d say so instead of "Nothing found."', () => {
+  const out = run(['I have always been fascinated by bridges.', 'Physics helped.', '']);
+  const msg = "You have no story entries yet, so there's nothing to compare. Add some in My Story.";
+  assert.deepEqual(out.sharedEntries, [msg]);
+  assert.deepEqual(out.unused, [msg]);
+  assert.deepEqual(out.repeatedWording, ['Nothing found.']);          // c ran on real text
+  assert.equal(out.length.length, 3);                                  // a still reports each answer
+});
+
+test('empty state: all three answers empty — every check says so', () => {
+  const msg = 'Write something in at least one answer first.';
+  for (const entries of [[], [{ id: 'e1', title: 'Robotics club' }]]) {
+    const out = run(['', '  \n ', ''], entries);
+    assert.deepEqual(out, { length: [msg], sharedEntries: [msg], repeatedWording: [msg], unused: [msg] });
+  }
 });

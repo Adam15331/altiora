@@ -113,7 +113,7 @@ test('typed drafts: all three findings appear — immediately, after 5 seconds, 
   const expected = {
     shared: ['“Robotics club” appears in answers 1 and 3. UCAS reads all three answers as one statement.'],
     repeated: ['The same wording appears in answers 1 and 2: “I learned to break a problem into small testable steps”.'],
-    unused: ["You haven't written about “Hospital volunteering” yet."],
+    unused: ['You haven’t written about “Hospital volunteering” yet.'],
   };
   assert.deepEqual(await pressReview(p), expected, 'pressed immediately after typing');
   await p.waitForTimeout(5000);
