@@ -10,8 +10,8 @@ const require = createRequire(import.meta.url);
 const R = require('../statement-review.js');
 
 const LIMIT = 4000, MIN = 350;
-const run = (/** @type {string[]} */ answers, /** @type {any[]} */ entries = [], /** @type {string[]} */ rail = entries.map(e => e.id)) =>
-  R.reviewLines(R.review({ answers, entries, railEntryIds: rail, totalLimit: LIMIT, perAnswerMin: MIN }), LIMIT, MIN);
+const run = (/** @type {string[]} */ answers, /** @type {any[]} */ entries = []) =>
+  R.reviewLines(R.review({ answers, entries, totalLimit: LIMIT, perAnswerMin: MIN }), LIMIT, MIN);
 
 test('a: length per answer, with the minimum line only when below it', () => {
   const out = run(['x'.repeat(1200), 'y'.repeat(349), '']);
@@ -74,10 +74,16 @@ test('c: a run of 6+ identical consecutive words in two answers is reported once
   assert.deepEqual(long.repeatedWording, ['The same wording appears in answers 1 and 2: “A, b c d e f g h”.']);
 });
 
-test('d: entries shown in a rail but mentioned in no answer are listed; entries not in any rail are not', () => {
+test('d: every story entry mentioned in no answer is listed, whichever rail it shows in (or none)', () => {
   const entries = [{ id: 'e1', title: 'Robotics club' }, { id: 'e2', title: 'Hospital volunteering' }, { id: 'e3', title: 'Piano grade 8' }];
-  const out = run(['Robotics club was where it began.', '', ''], entries, ['e1', 'e2']);
-  assert.deepEqual(out.unused, ["You haven't written about “Hospital volunteering” yet."]);
+  const out = run(['Robotics club was where it began.', '', ''], entries);
+  assert.deepEqual(out.unused, [
+    "You haven't written about “Hospital volunteering” yet.",
+    "You haven't written about “Piano grade 8” yet.",
+  ]);
+  // The review takes no rail list: an entry is never left out for where it is shown.
+  const r = R.review({ answers: ['', '', ''], entries: [{ id: 'x', title: 'Chess club' }], totalLimit: LIMIT, perAnswerMin: MIN });
+  assert.deepEqual(r.unused, [{ title: 'Chess club' }]);
 });
 
 test('nothing found: every check after length says so plainly', () => {

@@ -3875,12 +3875,11 @@ function renderStatementReview() {
   const out = document.querySelector('[data-stmt-review-out]');
   if (!out || typeof AltioraStatementReview === 'undefined') return;
   const vals = statementLiveValues();
+  // Every saved story entry, whether or not it shows in a question's rail.
   const entries = AltioraState.getAchievements().map(a => ({ id: a.id, title: a.title }));
-  // "Shown in a question's rail" — the rails' own rule, so the two agree.
-  const railEntryIds = [...new Set(UCAS_STATEMENT.questions.flatMap(q => statementRefsFor(q.id).map(a => a.id)))];
   const result = AltioraStatementReview.review({
     answers: UCAS_STATEMENT.questions.map(q => vals[q.id] ?? ''),
-    entries, railEntryIds,
+    entries,
     totalLimit: UCAS_STATEMENT.totalLimit, perAnswerMin: UCAS_STATEMENT.perAnswerMin,
   });
   const lines = AltioraStatementReview.reviewLines(result, UCAS_STATEMENT.totalLimit, UCAS_STATEMENT.perAnswerMin);
