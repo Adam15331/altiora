@@ -23,7 +23,7 @@ function loadState(/** @type {Record<string, string>} */ initial = {}) {
   const ctx = { window: { localStorage }, TextEncoder, console };
   vm.createContext(ctx);
   vm.runInContext(`${read('state.js')}\nthis.AltioraState = AltioraState;`, ctx);
-  return { S: ctx.AltioraState, store };
+  return { S: ctx.AltioraState, store, ctx };
 }
 
 /** A plan with something in every part of it. */
@@ -43,8 +43,10 @@ const plain = (/** @type {any} */ x) => JSON.parse(JSON.stringify(x));
 const withoutVisit = (/** @type {any} */ st) => ({ ...plain(st), meta: { ...st.meta, lastVisit: null } });
 
 test('the plan file is named altiora-plan-YYYY-MM-DD.json and carries a format version and checksum', () => {
-  const { S } = loadState();
-  assert.equal(S.backupFilename(new Date(2026, 10, 14)), 'altiora-plan-2026-11-14.json');
+  const { S, ctx } = loadState();
+  // A Date made inside the sandbox, as the browser would pass (a Date from
+  // the test's own realm fails state.js's instanceof check).
+  assert.equal(S.backupFilename(vm.runInContext('new Date(2026, 10, 14)', ctx)), 'altiora-plan-2026-11-14.json');
   const env = S.exportBackup();
   assert.equal(env.app, 'altiora');
   assert.equal(env.kind, 'plan');
