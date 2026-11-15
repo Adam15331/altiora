@@ -6534,7 +6534,7 @@ function renderInterviewPanel() {
   const promptsHtml = (!questions.length && !entries.length)
     ? `<p class="month__none">${esc(V.EMPTY_PRACTICE_TEXT)}</p>
         <button type="button" class="home-next__btn" data-open-story>Open My Story →</button>`
-    : `${questions.length ? `<h3 class="iv-group">From ${esc(v.university)}</h3><ul class="iv-prompts">${officialHtml}</ul>` : ''}
+    : `${questions.length ? `<h3 class="iv-group">Published questions</h3><ul class="iv-prompts">${officialHtml}</ul>` : ''}
         ${entries.length ? `<h3 class="iv-group">From your story</h3><ul class="iv-prompts">${storyHtml}</ul>` : ''}`;
 
   panel.innerHTML = `
