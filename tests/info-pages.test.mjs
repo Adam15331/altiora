@@ -27,9 +27,10 @@ test('each info page names the operator, the contact and the date', () => {
   for (const p of INFO_PAGE_CONTENT.filter(x => x.file !== 'accessibility.html')) {
     assert.match(built[p.file], new RegExp(`${OPERATOR}, in ${LOCATION}`), p.file);
   }
-  for (const html of Object.values(built)) {
+  for (const p of INFO_PAGE_CONTENT) {
+    const html = built[p.file];
     assert.match(html, new RegExp(`mailto:${SUPPORT_EMAIL}`));
-    assert.match(html, new RegExp(`<time datetime="${LAST_UPDATED.iso}">`));
+    assert.match(html, new RegExp(`<time datetime="${(p.updated ?? LAST_UPDATED).iso}">`));
     assert.doesNotMatch(html.replace(/<[^>]+>/g, ' '), /tel:|\+\d{1,3}[\s-]?\d{2,}|\(\d{2,4}\)\s?\d{3}/, 'no phone number');
   }
 });

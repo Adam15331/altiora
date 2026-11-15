@@ -13,7 +13,7 @@ import { SITE, SUPPORT_EMAIL, pageShell, esc } from './site-pages.mjs';
 const GENERATOR = 'scripts/build-info-pages.mjs';
 const SOURCE = 'scripts/lib/info-pages.mjs';
 
-/** Shown on every page; change it whenever the text of a page changes. */
+/** Shown on every page that has no `updated` of its own; change it whenever the text of such a page changes. */
 export const LAST_UPDATED = { iso: '2026-11-14', text: '14 November 2026' };
 
 export const OPERATOR = 'Adam Arab';
@@ -29,7 +29,7 @@ const p = text => `<p class="fo-prose">${text}</p>`;
 
 /**
  * @typedef {{head: string, body: string}} Section
- * @typedef {{file: string, title: string, eyebrow: string, h1: string, intro: string, description: string, sections: Section[]}} InfoPage
+ * @typedef {{file: string, title: string, eyebrow: string, h1: string, intro: string, description: string, sections: Section[], updated?: {iso: string, text: string}}} InfoPage
  */
 
 /** @type {InfoPage} */
@@ -157,6 +157,7 @@ const accessibility = {
   h1: 'Accessibility',
   intro: 'Altiora should work for everyone, including people who use a keyboard, a screen reader, zoom or a small screen. This page says what has been done, what is still limited, and how to tell us about a problem.',
   description: 'What Altiora does for accessibility, its known limitations, and how to report a problem.',
+  updated: { iso: '2026-11-15', text: '15 November 2026' },
   sections: [
     { head: 'What we have done',
       // Each line: scripts/verify-pass/matching/axe.mjs (pages, widths, panels,
@@ -168,8 +169,8 @@ const accessibility = {
         '<strong>Text size.</strong> No text on the checked pages is smaller than 12px.',
         '<strong>Small screens.</strong> The checked pages fit a 375px-wide screen without sideways scrolling.',
         '<strong>Keyboard.</strong> Every link, button and form control can be reached and used with the keyboard, and shows a clear outline when it has focus. We have tested the About panel, the subject picker, the grade selectors and the Entry requirements panels by keyboard.',
-        '<strong>Screen readers.</strong> Decorative icons are hidden from screen readers. Course statuses are always written out in words, never shown by colour or icon alone.',
-        '<strong>Motion.</strong> If your device is set to reduce motion, animations are switched off.',
+        '<strong>Screen readers.</strong> Decorative drawn icons are hidden from screen readers, but some emoji used as icons, for example on buttons and course cards, are still read aloud. Course statuses are always written out in words, never shown by colour or icon alone.',
+        '<strong>Motion.</strong> If your device is set to reduce motion, animations and transitions are switched off. Some buttons that take you to another part of the page still scroll there smoothly.',
       ]) },
     { head: 'Known limitations',
       body: list([
@@ -195,7 +196,7 @@ export function infoPageHtml(page, env) {
         <span class="fo__eyebrow">${esc(page.eyebrow)}</span>
         <h1 class="fo__title">${esc(page.h1)}</h1>
         <p class="fo__desc">${esc(page.intro)}</p>
-        <p class="cp-crumbs">Last updated <time datetime="${LAST_UPDATED.iso}">${LAST_UPDATED.text}</time></p>
+        <p class="cp-crumbs">Last updated <time datetime="${(page.updated ?? LAST_UPDATED).iso}">${(page.updated ?? LAST_UPDATED).text}</time></p>
       </header>
 ${sections}
       <p><a class="fo-back" href="./">← Back to Altiora</a></p>`;

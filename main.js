@@ -8251,7 +8251,7 @@ function renderStrengthsGrid() {
     <button class="plan-cat-card${_selectedStrengths.has(opt.id) ? ' active' : ''}" data-strength="${opt.id}" aria-pressed="${_selectedStrengths.has(opt.id)}">
       <span class="plan-cat-card__icon" style="font-size: 28px;">${opt.icon}</span>
       <span class="plan-cat-card__label">${esc(opt.label)}</span>
-      <span class="picker-hint-inline" style="font-size: 11px; margin-top: 6px;">${esc(opt.description)}</span>
+      <span class="picker-hint-inline" style="margin-top: 6px;">${esc(opt.description)}</span>
     </button>
   `).join('');
   grid.querySelectorAll('.plan-cat-card').forEach(btn => {
