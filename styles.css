@@ -923,6 +923,7 @@ main     { flex: 1; padding: var(--pad); }
 }
 .home-quick__row { display: flex; flex-wrap: wrap; gap: var(--space-3); }
 .home-quick__btn {
+  min-height: 44px;   /* tap target */
   padding: var(--space-2) var(--space-4);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);

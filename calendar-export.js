@@ -33,11 +33,14 @@
  * UK application deadlines: only what Applying already states — its UK
  * deadline sentence (DEADLINE_SHAPE.UK, passed in from the checklist's own
  * deadline:UK task): "Medicine, dentistry, veterinary and Oxford/Cambridge
- * courses typically close in mid-October; most other UK courses in late
- * January." One event per clause the shortlist has a course for, titled
- * "Application deadline: <who> (typical deadline)". A deadline in or after
- * the month the UK school year starts falls in A, earlier months in A+1.
- * No other country: the app holds no single deadline for them.
+ * courses typically close in mid-October; most other UK courses in
+ * mid-January." One EARLY-WARNING event per clause the shortlist has a
+ * course for — never the deadline itself, which UCAS sets each cycle:
+ * "UK application deadline coming up (typically mid-October)", on
+ * WARNING_DAY (8 October, 6 January), which falls before the stated
+ * window can start. A month in or after the one the UK school year starts
+ * falls in A, earlier months in A+1. No other country: the app holds no
+ * single deadline for them.
  *
  * Year: the student's application year A (computed by main.js from the
  * school-year start and yearsUntilApplication). Tests sat before applying
@@ -59,7 +62,9 @@
 
   const NOT_CONFIRMED = 'This is the typical window, not a confirmed date. Check the exact date on the official test site before relying on it.';
   const DEADLINE_NOT_CONFIRMED = 'This is the typical deadline, not a confirmed date. Confirm the exact date on UCAS and the course page before relying on it.';
-  const DEADLINE_SUFFIX = ' (typical deadline)';
+  const DEADLINE_CHECK_UCAS = 'Check UCAS for the exact date and time of this deadline in your application cycle.';
+  /** Early-warning day per deadline month: a reminder before the window, never the deadline. */
+  const WARNING_DAY = { 10: 8, 1: 6 };
   const APP_URL = 'https://usealtiora.com/app.html';
   const TITLE_SUFFIX = ' (typical window)';
   const PRODID = '-//Altiora//Admission test windows//EN';
@@ -229,16 +234,16 @@
     if (clauses.length !== 2 || !ukCourses.length) return [];
     const has = [ukCourses.some(earlyUkDeadline), ukCourses.some(c => !earlyUkDeadline(c))];
     return clauses.flatMap((cl, i) => {
-      if (!has[i]) return [];
+      const warnDay = WARNING_DAY[/** @type {10|1} */ (cl.month)];
+      if (!has[i] || !warnDay) return [];   // no agreed warning day for this month: no event
       const year = cl.month >= cycleStartMonth ? applicationYear : applicationYear + 1;
-      const date = ymd(year, cl.month, cl.day);
-      const who = cl.who.charAt(0).toUpperCase() + cl.who.slice(1);
+      const date = ymd(year, cl.month, warnDay);
       return [{
         uid: `uk-deadline-${MONTHS[cl.month - 1]}-${year}@usealtiora.com`,
         type: /** @type {'deadline'} */ ('deadline'), test: 'UK', tests: [], date, end: nextDay(date),
-        summary: `Application deadline: ${who}${DEADLINE_SUFFIX}`,
-        description: [DEADLINE_NOT_CONFIRMED, APP_URL].join('\n'),
-        source: { field: 'DEADLINE_SHAPE.UK', text: String(shape), phrase: cl.phrase, rule: cl.rule },
+        summary: `UK application deadline coming up (typically ${cl.phrase})`,
+        description: [DEADLINE_CHECK_UCAS, DEADLINE_NOT_CONFIRMED, APP_URL].join('\n'),
+        source: { field: 'DEADLINE_SHAPE.UK', text: String(shape), phrase: cl.phrase, rule: `early warning: the ${warnDay}th` },
       }];
     });
   }
@@ -351,7 +356,7 @@
 
   const api = {
     windowStart, eventsForTest, eventsForGroup, calendarEvents, deadlineClauses, earlyUkDeadline, ukDeadlineEvents, buildIcs, googleCalendarUrl, openMethod, dataUrl, fileName,
-    escapeText, foldLine, WINDOW_DAY, NOT_CONFIRMED, DEADLINE_NOT_CONFIRMED, DEADLINE_SUFFIX, APP_URL, TITLE_SUFFIX, PRODID,
+    escapeText, foldLine, WINDOW_DAY, WARNING_DAY, NOT_CONFIRMED, DEADLINE_NOT_CONFIRMED, DEADLINE_CHECK_UCAS, APP_URL, TITLE_SUFFIX, PRODID,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.AltioraCalendar = api;

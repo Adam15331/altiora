@@ -2498,7 +2498,7 @@ function applyingTasks(savedCourses, opts = {}) {
   // 4. Deadlines, per country actually on the list. Month-level SHAPES only,
   // each ending in confirm-officially.
   const DEADLINE_SHAPE = {
-    UK: 'Medicine, dentistry, veterinary and Oxford/Cambridge courses typically close in mid-October; most other UK courses in late January. Both shift year to year — confirm the exact date on UCAS and each course page.',
+    UK: 'Medicine, dentistry, veterinary and Oxford/Cambridge courses typically close in mid-October; most other UK courses in mid-January. Both shift year to year — confirm the exact date on UCAS and each course page.',
     US: 'Many early-application deadlines (early action/decision) typically fall around early November, with regular decision later. Every university sets its own — confirm on each admissions page.',
     CA: 'Deadlines are set per university and per province, and often differ by programme. Confirm on each course page.',
     SG: 'Application windows are set per university and differ for international applicants. Confirm on each admissions page.',
@@ -2684,7 +2684,7 @@ function calendarPlan(savedCourses, now = new Date()) {
 function calendarParts(savedCourses, now = new Date()) {
   const plan = calendarPlan(savedCourses, now);
   if (!plan) return null;
-  if (!plan.events.length) return { message: '<p class="applying-tasks__foot">No upcoming test windows to add.</p>' };
+  if (!plan.events.length) return { message: '<p class="applying-tasks__foot">No upcoming test windows or deadlines to add.</p>' };
   const links = plan.events.map(e =>
     `<a class="applying-task__link" href="${esc(AltioraCalendar.googleCalendarUrl(e))}" target="_blank" rel="noopener noreferrer">${esc(e.summary)} →</a>`).join('');
   return {
@@ -5152,7 +5152,7 @@ function buildShortlistCard(course, studentTags, hasSubjects) {
         aria-label="Remove ${esc(course.name)} from shortlist">✕ Remove</button>
     </div>
     <div class="card-meta">
-      <span>${flag}&thinsp;${esc(country)}</span>
+      <span><span aria-hidden="true">${flag}</span>&thinsp;${esc(country)}</span>
       <span class="card-meta-sep">·</span>
       <span>${esc(course.degreeLevel)}</span>
       <span class="card-meta-sep">·</span>
@@ -6998,7 +6998,7 @@ function buildCheckCard(course, result) {
       ${saveButtonHtml(course.id)}
     </div>
     <div class="card-meta">
-      <span>${flag}&thinsp;${esc(country)}</span>
+      <span><span aria-hidden="true">${flag}</span>&thinsp;${esc(country)}</span>
       <span class="card-meta-sep">·</span>
       <span>${esc(course.degreeLevel)}</span>
       <span class="card-meta-sep">·</span>
@@ -7125,7 +7125,7 @@ function buildReverseCard(course) {
       </div>
       <div style="display:flex;gap:6px;align-items:center;flex-shrink:0">
         <span class="badge badge--neutral">${esc(course.degreeLevel)}</span>
-        <span class="badge badge--neutral">${flag}&thinsp;${esc(country)}</span>
+        <span class="badge badge--neutral"><span aria-hidden="true">${flag}</span>&thinsp;${esc(country)}</span>
       </div>
     </div>
     <div class="reverse-reqs">

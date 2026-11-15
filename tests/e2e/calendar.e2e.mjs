@@ -99,11 +99,11 @@ test('Year 13, Durham Maths + Oxford Medicine: STEP and the January UK deadline 
   await assert.doesNotReject(p.getByText('Your phone will ask you to confirm before anything is added.').waitFor());
   const a = await addToCalendar(p, requests);
   assert.equal(a.name, 'altiora-calendar-2026-11-15.ics');
-  // October's deadline (Oxford Medicine) has passed: skipped. January's (Durham) is ahead.
+  // October's warning (Oxford Medicine) has passed: skipped. January's (Durham) is ahead.
   assert.deepEqual(summaries(a.text), [
-    'Application deadline: Most other UK courses (typical deadline)',
+    'UK application deadline coming up (typically mid-January)',
     'Registration opens: STEP (typical window)', 'Registration closes: STEP (typical window)', 'STEP test window opens (typical window)']);
-  assert.match(a.text, /\r\nUID:uk-deadline-january-2027@usealtiora\.com\r\nDTSTAMP:\d{8}T\d{6}Z\r\nDTSTART;VALUE=DATE:20270120\r\n/);
+  assert.match(a.text, /\r\nUID:uk-deadline-january-2027@usealtiora\.com\r\nDTSTAMP:\d{8}T\d{6}Z\r\nDTSTART;VALUE=DATE:20270106\r\n/);
   assert.match(a.text, /\r\nUID:step-reg-open-2027@usealtiora\.com\r\n/);
   assert.deepEqual(a.fetched, [], 'no network request while building and opening the file');
   // Google Calendar links: one per event, nothing requested until tapped.
@@ -131,8 +131,8 @@ test('Year 12: STEP is absent (sat after offers, application year only); next su
   assert.deepEqual(summaries(a.text), [
     'Registration opens: UCAT (typical window)', 'UCAT test window opens (typical window)', 'Registration opens: TMUA (typical window)',
     'Registration closes: UCAT (typical window)', 'Registration closes: TMUA (typical window)',
-    'Application deadline: Medicine, dentistry, veterinary and Oxford/Cambridge courses (typical deadline)', 'TMUA test window opens (typical window)',
-    'Application deadline: Most other UK courses (typical deadline)']);
+    'UK application deadline coming up (typically mid-October)', 'TMUA test window opens (typical window)',
+    'UK application deadline coming up (typically mid-January)']);
   assert.match(a.text, /DTSTART;VALUE=DATE:20270510/);
   assert.deepEqual(a.fetched, []);
   assert.deepEqual(errors, []);
@@ -147,7 +147,7 @@ test('Year 12, a TMUA course and an ESAT course: one shared registration pair, t
   assert.deepEqual(summaries(a.text), [
     'Registration opens: ESAT and TMUA (typical window)', 'Registration closes: ESAT and TMUA (typical window)',
     'ESAT test window opens (typical window)', 'TMUA test window opens (typical window)',
-    'Application deadline: Most other UK courses (typical deadline)']);
+    'UK application deadline coming up (typically mid-January)']);
   const uids = [...a.text.matchAll(/\r\nUID:(.*)\r\n/g)].map(m => m[1]);
   assert.deepEqual(uids.slice(0, 4), ['uat-uk-reg-open-2027@usealtiora.com', 'uat-uk-reg-close-2027@usealtiora.com',
     'esat-test-window-2027@usealtiora.com', 'tmua-test-window-2027@usealtiora.com']);
@@ -191,10 +191,10 @@ test('Year 12, only UK courses with no admission test: sections numbered from 1,
   assert.match(await row.innerText(), /The cycle, in order/);
   const a = await addToCalendar(p, requests);
   assert.deepEqual(summaries(a.text), [
-    'Application deadline: Medicine, dentistry, veterinary and Oxford/Cambridge courses (typical deadline)',
-    'Application deadline: Most other UK courses (typical deadline)']);
-  assert.match(a.text, /UID:uk-deadline-october-2027@usealtiora\.com\r\nDTSTAMP:\d{8}T\d{6}Z\r\nDTSTART;VALUE=DATE:20271010/);
-  assert.match(a.text, /UID:uk-deadline-january-2028@usealtiora\.com\r\nDTSTAMP:\d{8}T\d{6}Z\r\nDTSTART;VALUE=DATE:20280120/);
+    'UK application deadline coming up (typically mid-October)',
+    'UK application deadline coming up (typically mid-January)']);
+  assert.match(a.text, /UID:uk-deadline-october-2027@usealtiora\.com\r\nDTSTAMP:\d{8}T\d{6}Z\r\nDTSTART;VALUE=DATE:20271008/);
+  assert.match(a.text, /UID:uk-deadline-january-2028@usealtiora\.com\r\nDTSTAMP:\d{8}T\d{6}Z\r\nDTSTART;VALUE=DATE:20280106/);
   assert.deepEqual(a.fetched, []);
   assert.deepEqual(errors, []);
   await ctx.close();
