@@ -30,6 +30,15 @@
  * Re-exporting the same cycle gives identical UIDs; a later cycle never
  * overwrites an earlier one.
  *
+ * UK application deadlines: only what Applying already states — its UK
+ * deadline sentence (DEADLINE_SHAPE.UK, passed in from the checklist's own
+ * deadline:UK task): "Medicine, dentistry, veterinary and Oxford/Cambridge
+ * courses typically close in mid-October; most other UK courses in late
+ * January." One event per clause the shortlist has a course for, titled
+ * "Application deadline: <who> (typical deadline)". A deadline in or after
+ * the month the UK school year starts falls in A, earlier months in A+1.
+ * No other country: the app holds no single deadline for them.
+ *
  * Year: the student's application year A (computed by main.js from the
  * school-year start and yearsUntilApplication). Tests sat before applying
  * fall in A; tests sat AFTER offers (requiredStatus 'offer-condition',
@@ -49,6 +58,8 @@
   const WINDOW_DAY = { early: 1, mid: 10, late: 20 };
 
   const NOT_CONFIRMED = 'This is the typical window, not a confirmed date. Check the exact date on the official test site before relying on it.';
+  const DEADLINE_NOT_CONFIRMED = 'This is the typical deadline, not a confirmed date. Confirm the exact date on UCAS and the course page before relying on it.';
+  const DEADLINE_SUFFIX = ' (typical deadline)';
   const APP_URL = 'https://usealtiora.com/app.html';
   const TITLE_SUFFIX = ' (typical window)';
   const PRODID = '-//Altiora//Admission test windows//EN';
@@ -89,7 +100,7 @@
   /**
    * @typedef {{ id?: string, name?: string, typicalRegistrationWindow?: string, typicalTestWindow?: string,
    *             requiredStatus?: string, officialUrl?: string, provider?: string }} TestInfo
-   * @typedef {{ uid: string, type: 'reg-open'|'reg-close'|'test-window', test: string, tests: string[], date: string, end: string,
+   * @typedef {{ uid: string, type: 'reg-open'|'reg-close'|'test-window'|'deadline', test: string, tests: string[], date: string, end: string,
    *             summary: string, description: string,
    *             source: { field: string, text: string, phrase: string, rule: string } }} CalEvent
    */
@@ -178,19 +189,75 @@
   }
 
   /**
-   * Upcoming events for a student's tests.
+   * The UK deadline sentence's clauses: who, and the first day the stated
+   * time can start. Reads only the first sentence ("…; …"); the rest is the
+   * confirm-officially line.
+   * @param {string} shape
+   * @returns {Array<{who: string, month: number, day: number, phrase: string, rule: string}>}
+   */
+  function deadlineClauses(shape) {
+    const first = String(shape ?? '').split(/\.\s/)[0];
+    return first.split(';').map(c => c.trim()).flatMap(c => {
+      const m = /^(.*?)\s+(?:typically close\s+)?in\s+(.+?)\.?$/i.exec(c);
+      const w = m ? windowStart(m[2]) : null;
+      return m && w ? [{ who: m[1], ...w }] : [];
+    });
+  }
+
+  /**
+   * Clause 1 of the sentence — "Medicine, dentistry, veterinary and
+   * Oxford/Cambridge courses": a course named Medicine, Dentistry/Dental or
+   * Veterinary, or at the University of Oxford or Cambridge. (The medicine
+   * category also holds Biomedical Sciences, Pharmacy and Nursing, which the
+   * sentence does not name, so the course name is what is read.)
+   * @param {{name?: string, university?: string}} course
+   */
+  const earlyUkDeadline = course => /\b(medicine|dentistry|dental|veterinary)\b/i.test(course.name ?? '')
+    || course.university === 'University of Oxford' || course.university === 'University of Cambridge';
+
+  /**
+   * UK application-deadline events for the student's UK courses.
+   * @param {object} p
+   * @param {string} p.shape  Applying's UK deadline sentence
+   * @param {Array<{name?: string, university?: string}>} p.ukCourses
+   * @param {number} p.applicationYear
+   * @param {number} p.cycleStartMonth  the month the UK school year starts (September)
+   * @returns {CalEvent[]}
+   */
+  function ukDeadlineEvents({ shape, ukCourses, applicationYear, cycleStartMonth }) {
+    const clauses = deadlineClauses(shape);
+    if (clauses.length !== 2 || !ukCourses.length) return [];
+    const has = [ukCourses.some(earlyUkDeadline), ukCourses.some(c => !earlyUkDeadline(c))];
+    return clauses.flatMap((cl, i) => {
+      if (!has[i]) return [];
+      const year = cl.month >= cycleStartMonth ? applicationYear : applicationYear + 1;
+      const date = ymd(year, cl.month, cl.day);
+      const who = cl.who.charAt(0).toUpperCase() + cl.who.slice(1);
+      return [{
+        uid: `uk-deadline-${MONTHS[cl.month - 1]}-${year}@usealtiora.com`,
+        type: /** @type {'deadline'} */ ('deadline'), test: 'UK', tests: [], date, end: nextDay(date),
+        summary: `Application deadline: ${who}${DEADLINE_SUFFIX}`,
+        description: [DEADLINE_NOT_CONFIRMED, APP_URL].join('\n'),
+        source: { field: 'DEADLINE_SHAPE.UK', text: String(shape), phrase: cl.phrase, rule: cl.rule },
+      }];
+    });
+  }
+
+  /**
+   * Upcoming events for a student's tests (and any deadline events passed in).
    * @param {object} p
    * @param {Array<Array<{code: string, info: TestInfo | null | undefined}>>} p.groups
    *   the Applying checklist's tests, in Applying's registration groups
    * @param {number} p.applicationYear
    * @param {string} p.today  YYYYMMDD, the student's local date
+   * @param {CalEvent[]} [p.deadlines]  from ukDeadlineEvents
    * @returns {{ events: CalEvent[], past: CalEvent[], withWindows: number }}
    */
-  function calendarEvents({ groups, applicationYear, today }) {
-    const all = groups
+  function calendarEvents({ groups, applicationYear, today, deadlines = [] }) {
+    const all = [...groups
       .map(g => /** @type {Array<{code: string, info: TestInfo}>} */ (g.filter(t => t.info)))
       .filter(g => g.length)
-      .flatMap(g => eventsForGroup(g, applicationYear));
+      .flatMap(g => eventsForGroup(g, applicationYear)), ...deadlines];
     const sorted = all.sort((a, b) => a.date.localeCompare(b.date) || a.summary.localeCompare(b.summary));
     return {
       events: sorted.filter(e => e.date >= today),
@@ -283,8 +350,8 @@
   const fileName = today => `altiora-calendar-${today.slice(0, 4)}-${today.slice(4, 6)}-${today.slice(6, 8)}.ics`;
 
   const api = {
-    windowStart, eventsForTest, eventsForGroup, calendarEvents, buildIcs, googleCalendarUrl, openMethod, dataUrl, fileName,
-    escapeText, foldLine, WINDOW_DAY, NOT_CONFIRMED, APP_URL, TITLE_SUFFIX, PRODID,
+    windowStart, eventsForTest, eventsForGroup, calendarEvents, deadlineClauses, earlyUkDeadline, ukDeadlineEvents, buildIcs, googleCalendarUrl, openMethod, dataUrl, fileName,
+    escapeText, foldLine, WINDOW_DAY, NOT_CONFIRMED, DEADLINE_NOT_CONFIRMED, DEADLINE_SUFFIX, APP_URL, TITLE_SUFFIX, PRODID,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.AltioraCalendar = api;

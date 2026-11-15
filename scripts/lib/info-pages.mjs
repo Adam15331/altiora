@@ -160,17 +160,18 @@ const accessibility = {
   updated: { iso: '2026-11-15', text: '15 November 2026' },
   sections: [
     { head: 'What we have done',
-      // Each line: scripts/verify-pass/matching/axe.mjs (pages, widths, panels,
-      // WCAG 2.0 A/AA tags, 12px minimum text, 375px overflow) and the keyboard
-      // pass recorded in the commit that added this page.
+      // Each line: scripts/verify-pass/matching/axe.mjs (its VIEWS list, widths,
+      // panels, WCAG 2.0 A/AA tags, 12px minimum text, 375px overflow) and the
+      // keyboard pass recorded in the commit that added this page. Emoji icons
+      // are aria-hidden; programmatic scrolling goes through scrollMotion().
       body: list([
-        '<strong>Automated checks.</strong> We test the home page, the app (home, check and shortlist views), a field guide and these information pages with axe-core against the WCAG 2.0 Level A and AA rules, at desktop and phone widths, with every expandable panel both open and closed. The most recent check found no violations.',
+        '<strong>Automated checks.</strong> We test the home page, the app’s main views (from the first questions to Applying, including its pop-up panels and dialogs), the course list, a course page, a university page, every field guide and these information pages with axe-core against the WCAG 2.0 Level A and AA rules, at desktop and phone widths, with every expandable panel both open and closed. The most recent check found no violations.',
         '<strong>Contrast.</strong> Text colours are checked for contrast against WCAG AA as part of those automated checks.',
         '<strong>Text size.</strong> No text on the checked pages is smaller than 12px.',
         '<strong>Small screens.</strong> The checked pages fit a 375px-wide screen without sideways scrolling.',
         '<strong>Keyboard.</strong> Every link, button and form control can be reached and used with the keyboard, and shows a clear outline when it has focus. We have tested the About panel, the subject picker, the grade selectors and the Entry requirements panels by keyboard.',
-        '<strong>Screen readers.</strong> Decorative drawn icons are hidden from screen readers, but some emoji used as icons, for example on buttons and course cards, are still read aloud. Course statuses are always written out in words, never shown by colour or icon alone.',
-        '<strong>Motion.</strong> If your device is set to reduce motion, animations and transitions are switched off. Some buttons that take you to another part of the page still scroll there smoothly.',
+        '<strong>Screen readers.</strong> Decorative icons are hidden from screen readers. Course statuses are always written out in words, never shown by colour or icon alone.',
+        '<strong>Motion.</strong> If your device is set to reduce motion, animations are switched off.',
       ]) },
     { head: 'Known limitations',
       body: list([

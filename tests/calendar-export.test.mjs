@@ -159,3 +159,54 @@ test('open method: Apple devices get the data: URL, others a dated download', ()
   assert.ok(C.dataUrl('BEGIN:VCALENDAR\r\n').startsWith('data:text/calendar;charset=utf-8,BEGIN%3AVCALENDAR%0D%0A'));
   assert.equal(C.fileName('20261115'), 'altiora-calendar-2026-11-15.ics');
 });
+
+// UK application deadlines: read from Applying's own sentence in main.js, so the two never drift.
+import { readFileSync } from 'node:fs';
+const UK_SHAPE = /UK: '([^']+)'/.exec(readFileSync(new URL('../main.js', import.meta.url), 'utf8').slice(
+  readFileSync(new URL('../main.js', import.meta.url), 'utf8').indexOf('const DEADLINE_SHAPE')))?.[1] ?? '';
+const uk = (/** @type {string} */ name, /** @type {string} */ university) => ({ name, university });
+
+test('UK deadlines: the clauses of Applying\'s sentence, at the first day each can start', () => {
+  assert.match(UK_SHAPE, /^Medicine, dentistry, veterinary and Oxford\/Cambridge courses typically close in mid-October; most other UK courses in late January\./);
+  assert.deepEqual(C.deadlineClauses(UK_SHAPE).map(c => [c.who, c.month, c.day]), [
+    ['Medicine, dentistry, veterinary and Oxford/Cambridge courses', 10, 10],   // "mid" → the 10th
+    ['most other UK courses', 1, 20],                                            // "late" → the 20th
+  ]);
+});
+
+test('UK deadlines: which courses close in mid-October', () => {
+  assert.equal(C.earlyUkDeadline(uk('Medicine MBChB', 'University of Leeds')), true);
+  assert.equal(C.earlyUkDeadline(uk('Computer Science BA', 'University of Oxford')), true);
+  assert.equal(C.earlyUkDeadline(uk('Economics BA', 'University of Cambridge')), true);
+  assert.equal(C.earlyUkDeadline(uk('Biomedical Sciences BSc', 'University College London')), false);   // medicine category, not named
+  assert.equal(C.earlyUkDeadline(uk('Pharmacy MPharm', 'University of Bath')), false);
+  assert.equal(C.earlyUkDeadline(uk('Computing MEng', 'Imperial College London')), false);
+});
+
+test('UK deadlines: one event per deadline type the shortlist has, in the application cycle, year in the UID', () => {
+  const ev = (/** @type {any[]} */ ukCourses) => C.ukDeadlineEvents({ shape: UK_SHAPE, ukCourses, applicationYear: 2027, cycleStartMonth: 9 });
+  const both = ev([uk('Medicine MBChB', 'University of Leeds'), uk('Economics BSc', 'University College London')]);
+  assert.deepEqual(both.map(e => [e.uid, e.date, e.summary]), [
+    ['uk-deadline-october-2027@usealtiora.com', '20271010', 'Application deadline: Medicine, dentistry, veterinary and Oxford/Cambridge courses (typical deadline)'],
+    ['uk-deadline-january-2028@usealtiora.com', '20280120', 'Application deadline: Most other UK courses (typical deadline)'],
+  ]);
+  assert.deepEqual(ev([uk('Economics BSc', 'University College London')]).map(e => e.date), ['20280120']);   // no October course: no October event
+  assert.deepEqual(ev([uk('Law BA', 'University of Oxford')]).map(e => e.date), ['20271010']);
+  assert.deepEqual(ev([]), []);
+  assert.deepEqual(C.ukDeadlineEvents({ shape: 'Nothing to read here.', ukCourses: [uk('Law BA', 'X')], applicationYear: 2027, cycleStartMonth: 9 }), []);
+  for (const e of both) {
+    assert.equal(e.description, 'This is the typical deadline, not a confirmed date. Confirm the exact date on UCAS and the course page before relying on it.\nhttps://usealtiora.com/app.html');
+    assert.ok(e.summary.endsWith(' (typical deadline)'));
+    const ics = C.buildIcs([e], { now: NOW }).replace(/\r\n /g, '');
+    assert.match(ics, /\r\nTRIGGER:-P7D\r\n/);
+    assert.match(ics, /\r\nDTSTART;VALUE=DATE:\d{8}\r\nDTEND;VALUE=DATE:\d{8}\r\n/);
+  }
+});
+
+test('UK deadlines: past deadlines are skipped with the tests, never rolled forward', () => {
+  const deadlines = C.ukDeadlineEvents({ shape: UK_SHAPE, ukCourses: [uk('Medicine MBChB', 'University of Oxford'), uk('Mathematics BSc', 'Durham University')], applicationYear: 2026, cycleStartMonth: 9 });
+  const p = C.calendarEvents({ groups: [], applicationYear: 2026, today: '20261115', deadlines });
+  assert.deepEqual(p.events.map(e => e.uid), ['uk-deadline-january-2027@usealtiora.com']);
+  assert.deepEqual(p.past.map(e => e.uid), ['uk-deadline-october-2026@usealtiora.com']);
+  assert.equal(p.withWindows, 0);   // deadlines are not tests
+});

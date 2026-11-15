@@ -2976,6 +2976,18 @@ footer p {
   color: var(--color-text-primary);
   margin: 0 0 var(--space-3);
 }
+/* A section heading with a control beside it (Applying: "Add to my
+   calendar"); the control wraps under the heading on narrow screens. */
+.applying-section__headrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-3);
+}
+.applying-section__headrow .applying-section__head { margin: 0; }
+.applying-section__headrow ~ .applying-tasks__foot { margin-bottom: var(--space-4); }   /* the calendar's confirm line, above the lead */
 /* ── Applying execution checklist — real, checkable, persistent ── */
 .applying-section__count {
   margin-left: var(--space-3);
@@ -5801,8 +5813,9 @@ button.plan-combo-tag--drop:focus-visible {
  * ═══════════════════════════════════════════════════════════════ */
 .reqs__row--interview { grid-column: 1 / -1; }       /* full width in the panel grid */
 .reqs__meta-inline { white-space: nowrap; }
-.iv-practise-link { display: inline-block; margin-top: var(--space-3); }
+.iv-practise-link { display: inline-flex; align-items: center; min-height: 44px; margin-top: var(--space-3); }   /* full-size button: a 44px tap target whatever font loads */
 .story-view__header .iv-practise-link { margin-top: var(--space-2); }
+.home-quick__row .iv-practise-link { margin-top: 0; }
 .iv-pick { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); margin: 0 0 var(--space-6); }
 .iv-pick__label {
   font-family: var(--ce-font-mono);

@@ -1,6 +1,9 @@
 /* global switchMode, axe */
-// axe-core WCAG 2.0 A/AA over every view in VIEWS below, at 1280px and 375px, each twice (as shown, then
-// with every <details> open); reducedMotion reduce, 2.5s wait; also overflow and minimum text size.
+// axe-core WCAG 2.0 A/AA over every view in VIEWS below; also overflow at 375px and minimum text size.
+//   node scripts/verify-pass/matching/axe.mjs <root> <port> build    every view at 375px, details open (per build)
+//   node scripts/verify-pass/matching/axe.mjs <root> <port> release  1280 + 375px, details closed and open (before release; default)
+// Env: CHROMIUM_PATH, SWEEP_WORKERS (default 4), VIEWS (name filter), VERBOSE=1, FONTS=1. Exits 1 on any failure.
+// reducedMotion reduce; each run waits for the page to settle (no DOM change for 300ms, max 3s).
 // App views get a saved state whose year is stamped as set "now" in the page (no new-school-year prompt),
 // except where a view says otherwise. On-demand surfaces are opened with real clicks. Every view has a
 // guard: if what it is meant to check is not on screen, the run fails ("VIEW NOT SHOWN").
@@ -87,51 +90,84 @@ const VIEWS = [
 ];
 
 const only = process.env.VIEWS ? new RegExp(process.env.VIEWS, 'i') : null;   // optional filter by view name
-const started = Date.now();
-const server = await serve(root, port);
-const browser = await chromium.launch({ executablePath: EXE });
-let total = 0, runs = 0;
-for (const width of [1280, 375]) for (const [name, url, state, mode, setup, guard] of VIEWS) for (const open of [false, true]) {
-  if (only && !only.test(name)) continue;
-  runs++;
+// Which set: 'build' (every view at 375px, details open — run on every build)
+// or 'release' (1280 and 375px, details closed and open — run before release).
+const SET = process.argv[4] ?? process.env.SWEEP_SET ?? 'release';
+if (!['build', 'release'].includes(SET)) throw new Error(`Unknown set "${SET}": use build or release`);
+const WIDTHS = SET === 'build' ? [375] : [1280, 375];
+const OPENS = SET === 'build' ? [true] : [false, true];
+const WORKERS = Number(process.env.SWEEP_WORKERS ?? 4);   // runs in parallel, each in its own browser context
+
+// Settled: no DOM change for 300ms (capped at 3s), and web fonts done. Replaces a fixed 2.5s wait.
+/** @param {import('playwright-core').Page} page */
+const settle = page => page.evaluate(() => new Promise(resolve => {
+  let quiet;
+  const done = () => { obs.disconnect(); clearTimeout(quiet); clearTimeout(cap); document.fonts.ready.then(() => resolve(undefined)); };
+  const obs = new MutationObserver(() => { clearTimeout(quiet); quiet = setTimeout(done, 300); });
+  obs.observe(document, { subtree: true, childList: true, attributes: true, characterData: true });
+  quiet = setTimeout(done, 300);
+  const cap = setTimeout(done, 3000);
+}));
+
+/** One run → its output line and its failure count. */
+async function run(/** @type {any} */ browser, /** @type {number} */ width, /** @type {any[]} */ view, /** @type {boolean} */ open) {
+  const [name, url, state, mode, setup, guard] = view;
   const label = `${width}px ${name}${open ? ' (all panels open)' : ''}`;
   const ctx = await browser.newContext({ reducedMotion: 'reduce', viewport: { width, height: 900 }, acceptDownloads: true });
-  const page = await ctx.newPage();
-  // FONTS=1 loads the real web fonts (for overflow checks with their metrics).
-  await page.route(process.env.FONTS ? /cloudflareinsights/ : /fonts\.googleapis|fonts\.gstatic|cloudflareinsights/, r => r.abort());
-  if (state) {
-    await page.addInitScript(s => {
-      const saved = JSON.parse(s);
-      if (saved.profile.yearSetAt === 'NOW') saved.profile.yearSetAt = new Date().toISOString();
-      if (!sessionStorage.getItem('axe_seeded')) {   // seed once: a reload (e.g. after restore) keeps the app's own state
-        localStorage.setItem('altiora_state_v1', JSON.stringify(saved));
-        sessionStorage.setItem('axe_seeded', '1');
-      }
-    }, JSON.stringify(state));
-  }
-  await page.goto(`http://localhost:${port}${url}`);
-  if (mode) await page.evaluate(m => switchMode(m), mode);
-  await page.waitForTimeout(2500);
   try {
-    if (setup) { await setup(page); await page.waitForTimeout(800); }
-  } catch (e) { total++; console.log(`${label}: SETUP FAILED (${String(e.message).split('\n')[0]})`); await ctx.close(); continue; }
-  // Guard: a view that isn't on screen is a failed check, not a pass.
-  if (!await page.evaluate(g => !!(0, eval)(g), guard)) { total++; console.log(`${label}: VIEW NOT SHOWN`); await ctx.close(); continue; }
-  const fonts = process.env.FONTS ? await page.evaluate(async () => { await document.fonts.ready; return [...new Set([...document.fonts].filter(f => f.status === 'loaded').map(f => f.family.replace(/"/g, '')))].join('/'); }) : '';
-  if (open) await page.evaluate(() => document.querySelectorAll('details').forEach(d => { d.open = true; }));
-  await page.addScriptTag({ content: AXE });
-  const res = await page.evaluate(async (verbose) => (await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa'] } })).violations
-    .map(v => verbose
-      ? `${v.id} (${v.nodes.length})\n${v.nodes.map(n => `      ${n.target.join(' ')} — ${(n.any[0] || n.all[0] || n.none[0])?.message ?? n.failureSummary}`).join('\n')}`
-      : `${v.id} (${v.nodes.length})`), !!process.env.VERBOSE);
-  const extra = await page.evaluate(() => {
-    const overflow = document.documentElement.scrollWidth > window.innerWidth;
-    let min = 99; for (const el of document.querySelectorAll('body *')) { if (!el.childNodes.length || ![...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) continue; const cs = getComputedStyle(el); if (cs.display === 'none' || cs.visibility === 'hidden' || !el.getClientRects().length) continue; min = Math.min(min, parseFloat(cs.fontSize)); }
-    return { overflow, min };
-  });
-  total += res.length + (extra.overflow && width === 375 ? 1 : 0) + (extra.min < 12 ? 1 : 0);
-  console.log(`${label}: ${res.length ? res.join(', ') : '0 violations'}; overflow=${extra.overflow}; minText=${extra.min}px${fonts ? `; fonts=${fonts}` : ''}`);
-  await ctx.close();
+    const page = await ctx.newPage();
+    // FONTS=1 loads the real web fonts (for overflow checks with their metrics).
+    await page.route(process.env.FONTS ? /cloudflareinsights/ : /fonts\.googleapis|fonts\.gstatic|cloudflareinsights/, r => r.abort());
+    if (state) {
+      await page.addInitScript(s => {
+        const saved = JSON.parse(s);
+        if (saved.profile.yearSetAt === 'NOW') saved.profile.yearSetAt = new Date().toISOString();
+        if (!sessionStorage.getItem('axe_seeded')) {   // seed once: a reload (e.g. after restore) keeps the app's own state
+          localStorage.setItem('altiora_state_v1', JSON.stringify(saved));
+          sessionStorage.setItem('axe_seeded', '1');
+        }
+      }, JSON.stringify(state));
+    }
+    await page.goto(`http://localhost:${port}${url}`);
+    if (mode) await page.evaluate(m => switchMode(m), mode);
+    await settle(page);
+    try {
+      if (setup) { await setup(page); await settle(page); }
+    } catch (e) { return { line: `${label}: SETUP FAILED (${String(/** @type {Error} */ (e).message).split('\n')[0]})`, fails: 1 }; }
+    // Guard: a view that isn't on screen is a failed check, not a pass.
+    if (!await page.evaluate(g => !!(0, eval)(g), guard)) return { line: `${label}: VIEW NOT SHOWN`, fails: 1 };
+    const fonts = process.env.FONTS ? await page.evaluate(async () => { await document.fonts.ready; return [...new Set([...document.fonts].filter(f => f.status === 'loaded').map(f => f.family.replace(/"/g, '')))].join('/'); }) : '';
+    if (open) await page.evaluate(() => document.querySelectorAll('details').forEach(d => { d.open = true; }));
+    await page.addScriptTag({ content: AXE });
+    const res = await page.evaluate(async (verbose) => (await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa'] } })).violations
+      .map(v => verbose
+        ? `${v.id} (${v.nodes.length})\n${v.nodes.map(n => `      ${n.target.join(' ')} — ${(n.any[0] || n.all[0] || n.none[0])?.message ?? n.failureSummary}`).join('\n')}`
+        : `${v.id} (${v.nodes.length})`), !!process.env.VERBOSE);
+    const extra = await page.evaluate(() => {
+      const overflow = document.documentElement.scrollWidth > window.innerWidth;
+      let min = 99; for (const el of document.querySelectorAll('body *')) { if (!el.childNodes.length || ![...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) continue; const cs = getComputedStyle(el); if (cs.display === 'none' || cs.visibility === 'hidden' || !el.getClientRects().length) continue; min = Math.min(min, parseFloat(cs.fontSize)); }
+      return { overflow, min };
+    });
+    return {
+      line: `${label}: ${res.length ? res.join(', ') : '0 violations'}; overflow=${extra.overflow}; minText=${extra.min}px${fonts ? `; fonts=${fonts}` : ''}`,
+      fails: res.length + (extra.overflow && width === 375 ? 1 : 0) + (extra.min < 12 ? 1 : 0),
+    };
+  } finally { await ctx.close(); }
 }
-console.log(`TOTAL violations: ${total} (${runs} runs, ${VIEWS.length} views, ${Math.round((Date.now() - started) / 1000)}s)`);
+
+const started = Date.now();
+const server = await serve(root, port);
+const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH ?? EXE });
+const jobs = [];
+for (const width of WIDTHS) for (const view of VIEWS) for (const open of OPENS) if (!only || only.test(view[0])) jobs.push([width, view, open]);
+/** @type {Array<{line: string, fails: number}>} */
+const results = new Array(jobs.length);
+let next = 0;
+await Promise.all(Array.from({ length: Math.max(1, WORKERS) }, async () => {
+  while (next < jobs.length) { const i = next++; const [w, v, o] = jobs[i]; results[i] = await run(browser, w, v, o); }
+}));
+results.forEach(r => console.log(r.line));   // printed in the fixed order, whatever finished first
+const total = results.reduce((n, r) => n + r.fails, 0);
+console.log(`TOTAL violations: ${total} (${SET} set: ${jobs.length} runs, ${VIEWS.length} views, ${WORKERS} workers, ${Math.round((Date.now() - started) / 1000)}s)`);
 await browser.close(); server.close();
+process.exitCode = total ? 1 : 0;
