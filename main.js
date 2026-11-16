@@ -6624,7 +6624,15 @@ function renderInterviewPanel() {
   const V = AltioraInterviewView;
   const options = interviewPracticeCourses();
   if (!options.some(c => c.id === _ivCourseId)) _ivCourseId = options[0]?.id ?? null;
-  const header = `
+  // A course whose university does not call it an interview (universityTerm, e.g. "Personal Profile"):
+  // the title and headings use the university's word instead of "interview".
+  const term = _ivCourseId ? courseInterview(_ivCourseId)?.universityTerm ?? null : null;
+  const termTitle = term ? term.charAt(0).toUpperCase() + term.slice(1) : null;
+  const header = term ? `
+      <header class="applying__header">
+        <h1 class="applying__title">${esc(termTitle)} practice</h1>
+        <p class="applying__sub">Practise for the ${esc(term)}. Questions come only from the university itself and from your own story.</p>
+      </header>` : `
       <header class="applying__header">
         <h1 class="applying__title">Interview practice</h1>
         <p class="applying__sub">Practise for a course on your shortlist that interviews. Questions come only from the university itself and from your own story.</p>
@@ -6668,9 +6676,9 @@ function renderInterviewPanel() {
         </select>
       </label>
       <section class="applying-section" aria-labelledby="ivFormatHead">
-        <h2 id="ivFormatHead" class="applying-section__head">How this interview works</h2>
+        <h2 id="ivFormatHead" class="applying-section__head">${term ? `How the ${esc(term)} works` : 'How this interview works'}</h2>
         <dl class="reqs__facts">
-          <div class="reqs__fact"><dt>Interviewed</dt><dd>${esc(V.INTERVIEWED_LABEL[v.interviewed] ?? v.interviewed)}</dd></div>
+          ${term ? '' : `<div class="reqs__fact"><dt>Interviewed</dt><dd>${esc(V.INTERVIEWED_LABEL[v.interviewed] ?? v.interviewed)}</dd></div>`}
           ${ivFactList('Format', v.format)}
           ${ivFactList('Stations', v.stations)}
           ${ivFactList('Number and length', v.length)}

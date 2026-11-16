@@ -126,25 +126,35 @@ for (const t of Object.keys(TIMING)) if (!records[t]?.timing) throw new Error(`t
 // ═══════════════════════════════════════════════════════════════
 const expansion = JSON.parse(fs.readFileSync(path.join(ROOT, 'research/interviews-expansion-proposed.json'), 'utf8'));
 
-// Route-limited records: the route, from the record's own page.
+// Route-limited records: the route label, verbatim from a quote on the record — its own evidence, or the
+// page/section heading captured in its appliesToEvidence (research file). Where the full label is not in a
+// quote, `key` is the term that is (e.g. "JUPAS"). The validator checks both.
+/** @type {Record<string, {appliesTo: string, key?: string}>} */
 const ROUTE = {
-  'cuhk-all': 'JUPAS applicants', 'cuhk-business': 'JUPAS candidates', 'cuhk-cs': 'JUPAS applicants',
-  'cuhk-engineering': 'JUPAS applicants', 'cuhk-economics': 'JUPAS applicants', 'cuhk-law': 'JUPAS applicants',
-  'cuhk-architecture': 'JUPAS applicants', 'hkust-all': 'applicants with international qualifications',
-  'hkust-engineering': 'JUPAS applicants', 'hkust-quantfin': 'JUPAS applicants',
-  'polyu-business': 'JUPAS applicants', 'polyu-engineering': 'JUPAS applicants', 'polyu-architecture': 'JUPAS applicants',
-  'polyu-computing': 'JUPAS applicants', 'polyu-nursing': 'JUPAS applicants',
-  'cityu-cs': 'JUPAS Applicants', 'cityu-business-marketing': 'JUPAS applicants', 'cityu-business-global-business': 'JUPAS applicants',
-  'mcgill-medicine': 'CEGEP students', 'mcgill-law': 'CEGEP candidates',
-  'tcd-medicine': 'mature applicants', 'tcd-psychology-mature': 'mature applicants', 'tcd-mature-all': 'mature applicants',
-  'nus-computing': 'Aptitude-Based Admissions (ABA) scheme', 'nus-all': 'some faculties',
-  'ntu-aba-all': 'Aptitude-based Admissions', 'ntu-intl-selected-qualifications': 'selected candidates (Indonesia, PRC Gao Kao, Taiwan GSAT and Vietnam qualifications)',
-  'bath-qualification-route': 'studying certain qualifications, such as an Access to HE or T Level',
-  'bath-mathematics': 'very exceptionally, if you have circumstances we cannot assess from an application alone',
-  'glasgow-year2-entry': 'entry into Year 2 in any subject',
-  'michigan-engineering': 'some applicants to the College of Engineering',
-  'unc-business': 'admitted transfer student or current UNC student who has completed your first year',
+  'cuhk-all': { appliesTo: 'JUPAS applicants' }, 'cuhk-business': { appliesTo: 'JUPAS candidates' },
+  'cuhk-cs': { appliesTo: 'JUPAS applicants', key: 'JUPAS' }, 'cuhk-engineering': { appliesTo: 'JUPAS applicants', key: 'JUPAS' },
+  'cuhk-economics': { appliesTo: 'JUPAS applicants', key: 'JUPAS' }, 'cuhk-law': { appliesTo: 'JUPAS applicants', key: 'JUPAS' },
+  'cuhk-architecture': { appliesTo: 'JUPAS applicants', key: 'JUPAS' },
+  'hkust-all': { appliesTo: 'International Qualification Holders' },
+  'hkust-engineering': { appliesTo: 'JUPAS applicants', key: 'JUPAS' }, 'hkust-quantfin': { appliesTo: 'JUPAS applicants', key: 'JUPAS' },
+  'polyu-business': { appliesTo: 'JUPAS applicants', key: 'JUPAS' }, 'polyu-engineering': { appliesTo: 'JUPAS applicants', key: 'JUPAS' },
+  'polyu-architecture': { appliesTo: 'JUPAS applicants', key: 'JUPAS' }, 'polyu-computing': { appliesTo: 'JUPAS applicants', key: 'JUPAS' },
+  'polyu-nursing': { appliesTo: 'JUPAS applicants', key: 'JUPAS' },
+  'cityu-cs': { appliesTo: 'JUPAS Applicants' }, 'cityu-business-marketing': { appliesTo: 'JUPAS applicants', key: 'JUPAS' },
+  'cityu-business-global-business': { appliesTo: 'JUPAS applicants', key: 'JUPAS' },
+  'mcgill-medicine': { appliesTo: 'CEGEP students' }, 'mcgill-law': { appliesTo: 'CEGEP candidates' },
+  'tcd-medicine': { appliesTo: 'mature applicants' }, 'tcd-psychology-mature': { appliesTo: 'mature applicants' },
+  'tcd-mature-all': { appliesTo: 'mature applicants', key: 'mature' },
+  'nus-computing': { appliesTo: 'Aptitude-Based Admissions (ABA) scheme' }, 'nus-all': { appliesTo: 'some faculties' },
+  'ntu-aba-all': { appliesTo: 'aptitude-based admissions scheme' },
+  'bath-mathematics': { appliesTo: 'Very exceptionally we may invite you to an interview if you have circumstances we cannot assess from an application alone' },
+  'glasgow-year2-entry': { appliesTo: 'entry into Year 2 in any subject' },
+  'michigan-engineering': { appliesTo: 'some applicants to the College of Engineering' },
+  'unc-business': { appliesTo: 'admitted transfer student or current UNC student who has completed your first year' },
 };
+// One research record whose courses state different routes: split per course, each with the label from
+// its own course page (appliesToEvidence items carry courseId).
+const SPLIT_BY_COURSE = { 'bath-qualification-route': /^If you are (studying certain qualifications, such as an Access to HE[^,]*), you will be invited/ };
 // Recorded responses (or a session) the university does not call an interview.
 const TERM = { 'utoronto-engineering': 'Personal Profile', 'queens-commerce': 'Supplementary Application',
   'mcmaster-engineering-cs': 'supplementary application', 'sutd-all': 'conversation session' };
@@ -158,7 +168,10 @@ const HOLD = {
   'Emory': 'Emory University — its FAQ says no evaluative interviews but also mentions an Alumni Interview program.',
 };
 const HOLD_RECORDS = { 'hku-business': 'HKU Business School JUPAS FAQ — the quote could not be re-fetched (connection reset).',
-  'ntu-business-alevel': 'NTU Business A-level PDF (2019–2020 profiles) — needs a human check.' };
+  'ntu-business-alevel': 'NTU Business A-level PDF (2019–2020 profiles) — needs a human check.',
+  'ntu-intl-selected-qualifications': 'NTU international qualifications PDF — the interview sentence sits in four table rows; which qualification each belongs to depends on the PDF text layout, so the route label cannot be backed by one quote.' };
+// "No" statements held back, by source: not a plain statement that there is no interview.
+const HOLD_STATEMENTS = { 'https://hhsp.healthsci.mcmaster.ca/faqs/': 'McMaster Health Sciences — "We will not … conduct interviews" is about reconsidering a decision after no offer, not a plain statement that admission has no interview.' };
 // HKUST Science and Maths: "no" was inferred from a list that leaves them out, so they load as "not published".
 const NOT_PUBLISHED = { 'hkust-science-maths': { university: 'HKUST', courseIds: ['hk-sciences-hkust', 'hk-maths-hkust'] } };
 const GRADUATE_ENTRY = new Set(expansion.notOpenToSchoolLeavers.flatMap((/** @type {any} */ n) => n.courseIds));
@@ -190,7 +203,7 @@ for (const r of expansion.records) {
   if (HOLD_RECORDS[r.id]) { toManual(r.university, HOLD_RECORDS[r.id], r.courseIds, evOf(r).map(e => e.source)); continue; }
   const h = held(r.university);
   if (h) { toManual(r.university, HOLD[h], r.courseIds, evOf(r).map(e => e.source)); continue; }
-  const kind = ROUTE[r.id] ? 'route' : TERM[r.id] ? 'term' : ALL.includes(r.id) ? 'all' : null;
+  const kind = ROUTE[r.id] || SPLIT_BY_COURSE[r.id] ? 'route' : TERM[r.id] ? 'term' : ALL.includes(r.id) ? 'all' : null;
   if (!kind) throw new Error(`expansion record ${r.id} has no load decision`);
   /** @type {any} */
   const out = { id: r.id, university: r.university, subject: r.subject };
@@ -206,9 +219,22 @@ for (const r of expansion.records) {
   out.unavailable = false;
   out.interviewed = 'yes';
   out.timing = null;
-  if (kind === 'route') out.appliesTo = ROUTE[r.id];
   if (kind === 'term') out.universityTerm = TERM[r.id];
   out.courseIds = r.courseIds.filter((/** @type {string} */ c) => !npCourses.has(c));
+  if (SPLIT_BY_COURSE[r.id]) {
+    for (const c of out.courseIds) {
+      const e = (r.appliesToEvidence ?? []).find((/** @type {any} */ x) => x.courseId === c);
+      const m = e && SPLIT_BY_COURSE[r.id].exec(e.sourceSnippet);
+      if (!m) throw new Error(`${r.id}: no route quote for ${c}`);
+      addNew({ ...out, id: `${r.id}-${c}`, appliesTo: m[1], appliesToEvidence: [ev(e)], courseIds: [c] });
+    }
+    continue;
+  }
+  if (kind === 'route') {
+    out.appliesTo = ROUTE[r.id].appliesTo;
+    if (ROUTE[r.id].key) out.appliesToKey = ROUTE[r.id].key;
+    if (r.appliesToEvidence?.length) out.appliesToEvidence = r.appliesToEvidence.map(ev);
+  }
   addNew(out);
 }
 // 2. Third-party only: no university interview; the provider as named in a quote.
@@ -234,6 +260,7 @@ for (const s of expansion.statedNoInterview) {
   const ids = s.courseIds.filter((/** @type {string} */ c) => !thirdPartyCourses.has(c) && !npCourses.has(c));
   if (!ids.length) continue;
   if (h) { toManual(s.university, HOLD[h], ids, [s.source]); continue; }
+  if (HOLD_STATEMENTS[s.source]) { toManual(s.university, HOLD_STATEMENTS[s.source], ids, [s.source]); continue; }
   const n = (noCount[s.university] = (noCount[s.university] ?? 0) + 1);
   addNew({ id: `${expSlug(s.university)}-no-${n}`, university: s.university, subject: 'Courses named in the statement',
     format: null, numberAndLength: null, mmiStations: null, whatIsAssessed: null, prepAdvice: [], sampleQuestions: [],

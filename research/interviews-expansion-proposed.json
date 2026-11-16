@@ -127,7 +127,14 @@
         }
       ],
       "notes": "JUPAS route. Central JUPAS FAQ and the Office of Admissions \"All You Need to Know about Admission Interview\" information package (its timeline is for 2024). The 2026 arrangement PDF says \"not all programmes at the University conduct selection interviews before making an admission offer.\" The package lists self-reflection prompts (e.g. why you want to study the programme) for preparation; these are not presented as interview questions, so none are recorded as sample questions. courseIds are the programmes with listed interview dates (see subject records).",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://admission.cuhk.edu.hk/application/jupas/faq/",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "When will programmes arrange interviews for JUPAS applicants? Selection interviews will generally be conducted after the completion of the HKDSE examinations, and/or after the release of HKDSE results in July 2027."
+        }
+      ]
     },
     {
       "id": "cuhk-medicine",
@@ -212,7 +219,14 @@
       "sampleQuestions": [],
       "prepAdvice": [],
       "notes": "Interview Arrangements (2026 Entry) PDF from the Office of Admissions and Financial Aid (JUPAS). The PDF notes: \"Only shortlisted candidates will be invited for interview.\" The PDF marks before/after-results columns with symbols that do not survive text extraction, so only the listed dates are recorded. General CUHK format and preparation advice: see record cuhk-all.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://admission.cuhk.edu.hk/wp-content/uploads/2026/03/Interview-Arrangement-2026-Entry.pdf",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "JUPAS Before After No Catalogue Programme / Stream release of release of Interview No. HKDSE results HKDSE results"
+        }
+      ]
     },
     {
       "id": "cuhk-engineering",
@@ -233,7 +247,14 @@
       "sampleQuestions": [],
       "prepAdvice": [],
       "notes": "Interview Arrangements (2026 Entry) PDF from the Office of Admissions and Financial Aid (JUPAS). The PDF notes: \"Only shortlisted candidates will be invited for interview.\" The PDF marks before/after-results columns with symbols that do not survive text extraction, so only the listed dates are recorded. General CUHK format and preparation advice: see record cuhk-all. Other Faculty of Engineering programmes in the PDF also carry dates (e.g. JS4412 Mid June, JS4460 Biomedical Engineering May).",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://admission.cuhk.edu.hk/wp-content/uploads/2026/03/Interview-Arrangement-2026-Entry.pdf",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "JUPAS Before After No Catalogue Programme / Stream release of release of Interview No. HKDSE results HKDSE results"
+        }
+      ]
     },
     {
       "id": "cuhk-economics",
@@ -254,7 +275,14 @@
       "sampleQuestions": [],
       "prepAdvice": [],
       "notes": "Interview Arrangements (2026 Entry) PDF from the Office of Admissions and Financial Aid (JUPAS). The PDF notes: \"Only shortlisted candidates will be invited for interview.\" The PDF marks before/after-results columns with symbols that do not survive text extraction, so only the listed dates are recorded. General CUHK format and preparation advice: see record cuhk-all.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://admission.cuhk.edu.hk/wp-content/uploads/2026/03/Interview-Arrangement-2026-Entry.pdf",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "JUPAS Before After No Catalogue Programme / Stream release of release of Interview No. HKDSE results HKDSE results"
+        }
+      ]
     },
     {
       "id": "cuhk-law",
@@ -275,7 +303,14 @@
       "sampleQuestions": [],
       "prepAdvice": [],
       "notes": "Interview Arrangements (2026 Entry) PDF from the Office of Admissions and Financial Aid (JUPAS). The PDF notes: \"Only shortlisted candidates will be invited for interview.\" The PDF marks before/after-results columns with symbols that do not survive text extraction, so only the listed dates are recorded. General CUHK format and preparation advice: see record cuhk-all.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://admission.cuhk.edu.hk/wp-content/uploads/2026/03/Interview-Arrangement-2026-Entry.pdf",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "JUPAS Before After No Catalogue Programme / Stream release of release of Interview No. HKDSE results HKDSE results"
+        }
+      ]
     },
     {
       "id": "cuhk-architecture",
@@ -296,7 +331,14 @@
       "sampleQuestions": [],
       "prepAdvice": [],
       "notes": "Interview Arrangements (2026 Entry) PDF from the Office of Admissions and Financial Aid (JUPAS). The PDF notes: \"Only shortlisted candidates will be invited for interview.\" The PDF marks before/after-results columns with symbols that do not survive text extraction, so only the listed dates are recorded. General CUHK format and preparation advice: see record cuhk-all.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://admission.cuhk.edu.hk/wp-content/uploads/2026/03/Interview-Arrangement-2026-Entry.pdf",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "JUPAS Before After No Catalogue Programme / Stream release of release of Interview No. HKDSE results HKDSE results"
+        }
+      ]
     },
     {
       "id": "hkust-all",
@@ -323,7 +365,14 @@
       "sampleQuestions": [],
       "prepAdvice": [],
       "notes": "Applies to applicants with international qualifications (page redirected to join.hkust.edu.hk/admissions/international-qualifications/application-procedures). The linked page did not show the interview requirements in its readable text. No sample questions published.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://join.hkust.edu.hk/node/7",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "Application Procedures for International Qualification Holders"
+        }
+      ]
     },
     {
       "id": "hkust-engineering",
@@ -345,7 +394,14 @@
       "sampleQuestions": [],
       "prepAdvice": [],
       "notes": "JUPAS Interview table on join.hkust.edu.hk (2026 intake). In the page HTML this cell sits in the \"Before Release of HKDSE Results\" column and spans the School of Engineering rows, including JS5240 Department of Computer Science and Engineering; JS5260 also lists 22 – 23 July 2026 after results. The page says: \"Individual interview notifications will be sent to selected candidates shortly before their interviews.\" The School of Engineering JUPAS FAQ page did not mention interviews. No sample questions published.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://join.hkust.edu.hk/admissions/jupas",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "JUPAS Interview Description Individual interview notifications will be sent to selected candidates shortly before their interviews."
+        }
+      ]
     },
     {
       "id": "hkust-quantfin",
@@ -366,7 +422,14 @@
       "sampleQuestions": [],
       "prepAdvice": [],
       "notes": "Same JUPAS Interview table lists \"JS5332 BSc in Quantitative Finance 31 May 2026 24 July 2026\" (before / after release of HKDSE results). No sample questions published.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://join.hkust.edu.hk/admissions/jupas",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "JUPAS Interview Description Individual interview notifications will be sent to selected candidates shortly before their interviews."
+        }
+      ]
     },
     {
       "id": "polyu-business",
@@ -395,7 +458,14 @@
       "sampleQuestions": [],
       "prepAdvice": [],
       "notes": "PolyU JUPAS Interview Arrangement page (2027/28). The page says arrangements may change and that schemes/programmes \"which do not specify any interview arrangement at the Study@PolyU may also invite applicants to attend an interview if deemed necessary.\" No sample questions published.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://www.polyu.edu.hk/study/ug/admissions/jupas/jupas-interview-arrangement",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "JUPAS - Interview Arrangement"
+        }
+      ]
     },
     {
       "id": "polyu-engineering",
@@ -424,7 +494,14 @@
       "sampleQuestions": [],
       "prepAdvice": [],
       "notes": "PolyU JUPAS Interview Arrangement page (2027/28). The page says arrangements may change and that schemes/programmes \"which do not specify any interview arrangement at the Study@PolyU may also invite applicants to attend an interview if deemed necessary.\" No sample questions published.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://www.polyu.edu.hk/study/ug/admissions/jupas/jupas-interview-arrangement",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "JUPAS - Interview Arrangement"
+        }
+      ]
     },
     {
       "id": "polyu-architecture",
@@ -453,7 +530,14 @@
       "sampleQuestions": [],
       "prepAdvice": [],
       "notes": "PolyU JUPAS Interview Arrangement page (2027/28). The page says arrangements may change and that schemes/programmes \"which do not specify any interview arrangement at the Study@PolyU may also invite applicants to attend an interview if deemed necessary.\" No sample questions published.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://www.polyu.edu.hk/study/ug/admissions/jupas/jupas-interview-arrangement?page=1",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "JUPAS - Interview Arrangement"
+        }
+      ]
     },
     {
       "id": "polyu-computing",
@@ -482,7 +566,14 @@
       "sampleQuestions": [],
       "prepAdvice": [],
       "notes": "PolyU JUPAS Interview Arrangement page (2027/28). The page says arrangements may change and that schemes/programmes \"which do not specify any interview arrangement at the Study@PolyU may also invite applicants to attend an interview if deemed necessary.\" No sample questions published.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://www.polyu.edu.hk/study/ug/admissions/jupas/jupas-interview-arrangement?page=4",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "JUPAS - Interview Arrangement"
+        }
+      ]
     },
     {
       "id": "polyu-nursing",
@@ -511,7 +602,14 @@
       "sampleQuestions": [],
       "prepAdvice": [],
       "notes": "PolyU JUPAS Interview Arrangement page (2027/28). The page says arrangements may change and that schemes/programmes \"which do not specify any interview arrangement at the Study@PolyU may also invite applicants to attend an interview if deemed necessary.\" No sample questions published.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://www.polyu.edu.hk/study/ug/admissions/jupas/jupas-interview-arrangement?page=3",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "JUPAS - Interview Arrangement"
+        }
+      ]
     },
     {
       "id": "cityu-cs",
@@ -582,7 +680,14 @@
       "sampleQuestions": [],
       "prepAdvice": [],
       "notes": "BBA Global Business programme admissions page (JUPAS FAQ). The page also says: \"Interview is not a must but it will SIGNIFICANTLY increase students’ chance to join the programme .\" No sample questions published.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://prog.cb.cityu.edu.hk/academics/bbagbu/admissions",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "Do I need to attend JUPAS admission interview? An interview would be scheduled around June for shortlisted applicants only."
+        }
+      ]
     },
     {
       "id": "utoronto-engineering",
@@ -687,7 +792,14 @@
         }
       ],
       "notes": "The direct-entry route for this course is the Med-P Qualifying Year; Med-P page: 'This one-year Qualifying Year is designed exclusively for CEGEP students' (Quebec Collegial/DEC graduates). MMI page: 'Candidates cannot be admitted without an interview.' Application-process page lists Med-P interview dates 'April 20, 21, 22, 23, 2027' under '*(Interviews are held virtually)'. The MDCM itself (university-level entry) is not a high-school route. The older Med-P PDF (Fall 2021) describing in-person interviews was not used.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://www.mcgill.ca/medadmissions/programs/med-p",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "This one-year Qualifying Year is designed exclusively for CEGEP students, and prepares you to excel in McGill’s MDCM medical program and go on to become a compassionate caregiver!"
+        }
+      ]
     },
     {
       "id": "mcgill-law",
@@ -992,7 +1104,14 @@
       "sampleQuestions": [],
       "prepAdvice": [],
       "notes": "From the Mature Student Guidelines 2027 (applies to mature applicants only). Applicant group(s) the quotes are about: Mature applicants.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://www.tcd.ie/media/tcd/mature-students/pdfs/TCD-Mature-Student-Guidelines-2027.pdf",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "As the Mature Student Officer, my role is to offer advice and guidance to prospective mature applicants while supporting the integration and success of mature students in Trinity."
+        }
+      ]
     },
     {
       "id": "tcd-mature-all",
@@ -1021,7 +1140,14 @@
       "sampleQuestions": [],
       "prepAdvice": [],
       "notes": "The calendar and mature guide do not list which of these subjects interview mature applicants; the statements are general to the mature route. Not applicable to school-leaver EU (CAO) or non-EU applicants. Applicant group(s) the quotes are about: Mature applicants.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://www.tcd.ie/media/tcd/calendar/undergraduate-studies/admission-requirements.pdf",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "MATURE STUDENTS 19 At the discretion of the Senior Lecturer, E.U. applicants who will be twenty-three years on 1 January in the year of admission may be admitted as mature students without having the normal minimum entry qualifications."
+        }
+      ]
     },
     {
       "id": "nus-medicine",
@@ -1164,7 +1290,14 @@
       "sampleQuestions": [],
       "prepAdvice": [],
       "notes": "University-wide ABA page; does not name programmes. Applicant group(s) the quotes are about: Aptitude-based Admissions (ABA) applicants.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://www.ntu.edu.sg/admissions/undergraduate/admissions/undergraduate/apply/aptitude-based-applications",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "Applying to NTU via our aptitude-based admissions scheme"
+        }
+      ]
     },
     {
       "id": "ntu-intl-selected-qualifications",
@@ -1278,7 +1411,33 @@
         }
       ],
       "notes": "Each 2027 course page (\"Selection process\") says: \"We will usually assess you based on your UCAS application.\" followed by the qualification sentence, e.g. Computer Science: \"If you are studying certain qualifications, such as an Access to HE or T Level, you will be invited to attend an interview as part of our selection process.\" (Economics and Mechanical Engineering name the Access to HE Diploma; Accounting & Finance names Access to HE Diploma or T Level), and all add \"Very exceptionally we may invite you to an interview if you have circumstances we cannot assess from an application alone.\" The interview guide (https://www.bath.ac.uk/guides/undergraduate-applicant-interviews/) adds: \"Typically you will be interviewed by two or three members of staff including the Admissions Tutor and a member of our Undergraduate Progression Team.\" No length or sample questions published.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "courseId": "uk-cs-bath",
+          "source": "https://www.bath.ac.uk/courses/undergraduate-2027/computer-science/bsc-computer-science/",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "If you are studying certain qualifications, such as an Access to HE or T Level, you will be invited to attend an interview as part of our selection process."
+        },
+        {
+          "courseId": "uk-economics-bath",
+          "source": "https://www.bath.ac.uk/courses/undergraduate-2027/economics/bsc-economics/",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "If you are studying certain qualifications, such as an Access to HE Diploma, you will be invited to attend an interview as part of our selection process."
+        },
+        {
+          "courseId": "uk-engineering-bath",
+          "source": "https://www.bath.ac.uk/courses/undergraduate-2027/mechanical-engineering/beng-mechanical-engineering/",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "If you are studying certain qualifications, such as an Access to HE Diploma, you will be invited to attend an interview as part of our selection process."
+        },
+        {
+          "courseId": "uk-accounting-bath",
+          "source": "https://www.bath.ac.uk/courses/undergraduate-2027/accounting-and-finance/bsc-accounting-and-finance/",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "If you are studying certain qualifications, such as an Access to HE Diploma or T Level, you will be invited to attend an interview as part of our selection process."
+        }
+      ]
     },
     {
       "id": "bath-mathematics",
@@ -1319,7 +1478,14 @@
         }
       ],
       "notes": "The 2027 BSc Mathematics page (\"Selection process\") says: \"We will usually assess you based on your UCAS application. Very exceptionally we may invite you to an interview if you have circumstances we cannot assess from an application alone.\" The general interview guide (https://www.bath.ac.uk/guides/undergraduate-applicant-interviews/) applies if invited.",
-      "manualReview": false
+      "manualReview": false,
+      "appliesToEvidence": [
+        {
+          "source": "https://www.bath.ac.uk/courses/undergraduate-2027/mathematical-sciences/bsc-mathematics/",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "Very exceptionally we may invite you to an interview if you have circumstances we cannot assess from an application alone."
+        }
+      ]
     },
     {
       "id": "glasgow-year2-entry",

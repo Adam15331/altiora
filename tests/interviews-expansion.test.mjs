@@ -31,6 +31,21 @@ test('route-limited: "Interviews some applicants: <route>" with a source link, n
   assert.equal(V.interviews(view('hk-cs-cuhk')), false);
   assert.match(text(card('uk-cs-glasgow')), /Interviews some applicants: entry into Year 2 in any subject/);
   assert.match(text(card('ie-medicine-trinity')), /Interviews some applicants: mature applicants/);
+  // Bath: each course page names its own qualifications.
+  assert.match(text(card('uk-cs-bath')), /Interviews some applicants: studying certain qualifications, such as an Access to HE or T Level Source/);
+  assert.match(text(card('uk-economics-bath')), /Interviews some applicants: studying certain qualifications, such as an Access to HE Diploma Source/);
+  assert.match(text(card('uk-accounting-bath')), /such as an Access to HE Diploma or T Level Source/);
+  // NTU's international-qualifications line could not be backed by one quote: not shown.
+  assert.doesNotMatch(text(card('sg-cs-ntu')), /Gao Kao|Indonesia/);
+});
+
+test('every route label is backed by a quote on its record: the label itself, or its key term', () => {
+  const routes = Object.values(D.records).filter((/** @type {any} */ r) => r.appliesTo);
+  assert.ok(routes.length >= 30);
+  for (const r of /** @type {any[]} */ (routes)) {
+    const quotes = [...['format', 'numberAndLength', 'mmiStations', 'whatIsAssessed'].map(f => r[f]?.sourceSnippet), ...r.prepAdvice.map((/** @type {any} */ e) => e.sourceSnippet), ...(r.appliesToEvidence ?? []).map((/** @type {any} */ e) => e.sourceSnippet)].filter(Boolean).join(' ');
+    assert.ok(quotes.includes(r.appliesTo) || (r.appliesToKey && r.appliesTo.includes(r.appliesToKey) && quotes.includes(r.appliesToKey)), r.id);
+  }
 });
 
 test('university term: the university\'s word, never "interview"; practice labelled with the term', () => {
@@ -63,7 +78,7 @@ test('third-party only: "No university interview. Accepts an interview through <
 });
 
 test('not published and manual review keep the existing wording and never imply there is no interview', () => {
-  for (const id of ['hk-maths-hkust', 'hk-sciences-hkust', 'ca-engineering-waterloo', 'us-business-emory', 'us-cs-notredame', 'hk-business-hku', 'uk-cs-ucl']) {
+  for (const id of ['hk-maths-hkust', 'hk-sciences-hkust', 'ca-engineering-waterloo', 'us-business-emory', 'us-cs-notredame', 'hk-business-hku', 'uk-cs-ucl', 'ca-medicine-mcmaster']) {
     const html = card(id);
     assert.equal(view(id).kind, 'unavailable', id);
     assert.ok(text(html).includes("Interview details aren't available from the university's site yet. Check the course page."), id);
@@ -104,4 +119,9 @@ test('validator: "no" needs the statement; term and provider must be in the quot
   assert.match(mutate(d => { d.records[tp.id].thirdPartyOnly = 'Acme Interviews'; }), /not named in the record's quotes/);
   assert.match(mutate(d => { d.records['cuhk-cs'].universityTerm = 'JS4412'; }), /only one of appliesTo, universityTerm, thirdPartyOnly/);
   assert.match(mutate(d => { d.records['cuhk-cs'].appliesTo = ''; }), /appliesTo must be a non-empty string/);
+  // Route wording must be quoted: an invented route, or a key term that is not in the quotes, is rejected.
+  assert.match(mutate(d => { d.records['glasgow-year2-entry'].appliesTo = 'Year 9 pupils'; }), /appliesTo "Year 9 pupils" \(or its key term\) is not in the record's quotes/);
+  assert.match(mutate(d => { d.records['cuhk-cs'].appliesToKey = 'Band A'; }), /appliesToKey "Band A" must be part of appliesTo/);
+  assert.match(mutate(d => { delete d.records['cuhk-cs'].appliesToEvidence; }), /is not in the record's quotes/);
+  assert.match(mutate(d => { d.records['cuhk-cs'].appliesToEvidence[0].accessed = ''; }), /accessed date/);
 });

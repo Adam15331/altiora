@@ -462,12 +462,20 @@
         "why": "Expansion, held for manual review: University of Waterloo — official pages conflict on whether the Engineering interview is optional."
       },
       {
+        "url": "https://www.ntu.edu.sg/media/docs/default-source/undergraduate-admissions/msr/emsr_intnl.pdf",
+        "why": "Expansion, held for manual review: NTU international qualifications PDF — the interview sentence sits in four table rows; which qualification each belongs to depends on the PDF text layout, so the route label cannot be backed by one quote."
+      },
+      {
         "url": "https://apply.emory.edu/apply/international",
         "why": "Expansion, held for manual review: Emory University — its FAQ says no evaluative interviews but also mentions an Alumni Interview program."
       },
       {
         "url": "https://apply.emory.edu/apply/faqs",
         "why": "Expansion, held for manual review: Emory University — its FAQ says no evaluative interviews but also mentions an Alumni Interview program."
+      },
+      {
+        "url": "https://hhsp.healthsci.mcmaster.ca/faqs/",
+        "why": "Expansion, held for manual review: McMaster Health Sciences — \"We will not … conduct interviews\" is about reconsidering a decision after no offer, not a plain statement that admission has no interview."
       },
       {
         "url": "https://m.nd.edu/notredame/admissions/_/faq__interviews",
@@ -1756,7 +1764,14 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "JUPAS applicants"
+        "appliesTo": "JUPAS applicants",
+        "appliesToEvidence": [
+          {
+            "source": "https://admission.cuhk.edu.hk/application/jupas/faq/",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "When will programmes arrange interviews for JUPAS applicants? Selection interviews will generally be conducted after the completion of the HKDSE examinations, and/or after the release of HKDSE results in July 2027."
+          }
+        ]
       },
       "cuhk-medicine": {
         "id": "cuhk-medicine",
@@ -1834,7 +1849,15 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "JUPAS applicants"
+        "appliesTo": "JUPAS applicants",
+        "appliesToKey": "JUPAS",
+        "appliesToEvidence": [
+          {
+            "source": "https://admission.cuhk.edu.hk/wp-content/uploads/2026/03/Interview-Arrangement-2026-Entry.pdf",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "JUPAS Before After No Catalogue Programme / Stream release of release of Interview No. HKDSE results HKDSE results"
+          }
+        ]
       },
       "cuhk-engineering": {
         "id": "cuhk-engineering",
@@ -1853,7 +1876,15 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "JUPAS applicants"
+        "appliesTo": "JUPAS applicants",
+        "appliesToKey": "JUPAS",
+        "appliesToEvidence": [
+          {
+            "source": "https://admission.cuhk.edu.hk/wp-content/uploads/2026/03/Interview-Arrangement-2026-Entry.pdf",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "JUPAS Before After No Catalogue Programme / Stream release of release of Interview No. HKDSE results HKDSE results"
+          }
+        ]
       },
       "cuhk-economics": {
         "id": "cuhk-economics",
@@ -1872,7 +1903,15 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "JUPAS applicants"
+        "appliesTo": "JUPAS applicants",
+        "appliesToKey": "JUPAS",
+        "appliesToEvidence": [
+          {
+            "source": "https://admission.cuhk.edu.hk/wp-content/uploads/2026/03/Interview-Arrangement-2026-Entry.pdf",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "JUPAS Before After No Catalogue Programme / Stream release of release of Interview No. HKDSE results HKDSE results"
+          }
+        ]
       },
       "cuhk-law": {
         "id": "cuhk-law",
@@ -1891,7 +1930,15 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "JUPAS applicants"
+        "appliesTo": "JUPAS applicants",
+        "appliesToKey": "JUPAS",
+        "appliesToEvidence": [
+          {
+            "source": "https://admission.cuhk.edu.hk/wp-content/uploads/2026/03/Interview-Arrangement-2026-Entry.pdf",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "JUPAS Before After No Catalogue Programme / Stream release of release of Interview No. HKDSE results HKDSE results"
+          }
+        ]
       },
       "cuhk-architecture": {
         "id": "cuhk-architecture",
@@ -1910,7 +1957,15 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "JUPAS applicants"
+        "appliesTo": "JUPAS applicants",
+        "appliesToKey": "JUPAS",
+        "appliesToEvidence": [
+          {
+            "source": "https://admission.cuhk.edu.hk/wp-content/uploads/2026/03/Interview-Arrangement-2026-Entry.pdf",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "JUPAS Before After No Catalogue Programme / Stream release of release of Interview No. HKDSE results HKDSE results"
+          }
+        ]
       },
       "hkust-all": {
         "id": "hkust-all",
@@ -1929,7 +1984,14 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "applicants with international qualifications"
+        "appliesTo": "International Qualification Holders",
+        "appliesToEvidence": [
+          {
+            "source": "https://join.hkust.edu.hk/node/7",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "Application Procedures for International Qualification Holders"
+          }
+        ]
       },
       "hkust-engineering": {
         "id": "hkust-engineering",
@@ -1948,7 +2010,15 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "JUPAS applicants"
+        "appliesTo": "JUPAS applicants",
+        "appliesToKey": "JUPAS",
+        "appliesToEvidence": [
+          {
+            "source": "https://join.hkust.edu.hk/admissions/jupas",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "JUPAS Interview Description Individual interview notifications will be sent to selected candidates shortly before their interviews."
+          }
+        ]
       },
       "hkust-quantfin": {
         "id": "hkust-quantfin",
@@ -1967,7 +2037,15 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "JUPAS applicants"
+        "appliesTo": "JUPAS applicants",
+        "appliesToKey": "JUPAS",
+        "appliesToEvidence": [
+          {
+            "source": "https://join.hkust.edu.hk/admissions/jupas",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "JUPAS Interview Description Individual interview notifications will be sent to selected candidates shortly before their interviews."
+          }
+        ]
       },
       "polyu-business": {
         "id": "polyu-business",
@@ -1994,7 +2072,15 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "JUPAS applicants"
+        "appliesTo": "JUPAS applicants",
+        "appliesToKey": "JUPAS",
+        "appliesToEvidence": [
+          {
+            "source": "https://www.polyu.edu.hk/study/ug/admissions/jupas/jupas-interview-arrangement",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "JUPAS - Interview Arrangement"
+          }
+        ]
       },
       "polyu-engineering": {
         "id": "polyu-engineering",
@@ -2021,7 +2107,15 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "JUPAS applicants"
+        "appliesTo": "JUPAS applicants",
+        "appliesToKey": "JUPAS",
+        "appliesToEvidence": [
+          {
+            "source": "https://www.polyu.edu.hk/study/ug/admissions/jupas/jupas-interview-arrangement",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "JUPAS - Interview Arrangement"
+          }
+        ]
       },
       "polyu-architecture": {
         "id": "polyu-architecture",
@@ -2048,7 +2142,15 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "JUPAS applicants"
+        "appliesTo": "JUPAS applicants",
+        "appliesToKey": "JUPAS",
+        "appliesToEvidence": [
+          {
+            "source": "https://www.polyu.edu.hk/study/ug/admissions/jupas/jupas-interview-arrangement?page=1",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "JUPAS - Interview Arrangement"
+          }
+        ]
       },
       "polyu-computing": {
         "id": "polyu-computing",
@@ -2075,7 +2177,15 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "JUPAS applicants"
+        "appliesTo": "JUPAS applicants",
+        "appliesToKey": "JUPAS",
+        "appliesToEvidence": [
+          {
+            "source": "https://www.polyu.edu.hk/study/ug/admissions/jupas/jupas-interview-arrangement?page=4",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "JUPAS - Interview Arrangement"
+          }
+        ]
       },
       "polyu-nursing": {
         "id": "polyu-nursing",
@@ -2102,7 +2212,15 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "JUPAS applicants"
+        "appliesTo": "JUPAS applicants",
+        "appliesToKey": "JUPAS",
+        "appliesToEvidence": [
+          {
+            "source": "https://www.polyu.edu.hk/study/ug/admissions/jupas/jupas-interview-arrangement?page=3",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "JUPAS - Interview Arrangement"
+          }
+        ]
       },
       "cityu-cs": {
         "id": "cityu-cs",
@@ -2148,7 +2266,8 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "JUPAS applicants"
+        "appliesTo": "JUPAS applicants",
+        "appliesToKey": "JUPAS"
       },
       "cityu-business-global-business": {
         "id": "cityu-business-global-business",
@@ -2167,7 +2286,15 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "JUPAS applicants"
+        "appliesTo": "JUPAS applicants",
+        "appliesToKey": "JUPAS",
+        "appliesToEvidence": [
+          {
+            "source": "https://prog.cb.cityu.edu.hk/academics/bbagbu/admissions",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "Do I need to attend JUPAS admission interview? An interview would be scheduled around June for shortlisted applicants only."
+          }
+        ]
       },
       "utoronto-engineering": {
         "id": "utoronto-engineering",
@@ -2265,7 +2392,14 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "CEGEP students"
+        "appliesTo": "CEGEP students",
+        "appliesToEvidence": [
+          {
+            "source": "https://www.mcgill.ca/medadmissions/programs/med-p",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "This one-year Qualifying Year is designed exclusively for CEGEP students, and prepares you to excel in McGill’s MDCM medical program and go on to become a compassionate caregiver!"
+          }
+        ]
       },
       "mcgill-law": {
         "id": "mcgill-law",
@@ -2513,7 +2647,14 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "mature applicants"
+        "appliesTo": "mature applicants",
+        "appliesToEvidence": [
+          {
+            "source": "https://www.tcd.ie/media/tcd/mature-students/pdfs/TCD-Mature-Student-Guidelines-2027.pdf",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "As the Mature Student Officer, my role is to offer advice and guidance to prospective mature applicants while supporting the integration and success of mature students in Trinity."
+          }
+        ]
       },
       "tcd-mature-all": {
         "id": "tcd-mature-all",
@@ -2532,7 +2673,15 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "mature applicants"
+        "appliesTo": "mature applicants",
+        "appliesToKey": "mature",
+        "appliesToEvidence": [
+          {
+            "source": "https://www.tcd.ie/media/tcd/calendar/undergraduate-studies/admission-requirements.pdf",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "MATURE STUDENTS 19 At the discretion of the Senior Lecturer, E.U. applicants who will be twenty-three years on 1 January in the year of admission may be admitted as mature students without having the normal minimum entry qualifications."
+          }
+        ]
       },
       "nus-medicine": {
         "id": "nus-medicine",
@@ -2649,26 +2798,14 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "Aptitude-based Admissions"
-      },
-      "ntu-intl-selected-qualifications": {
-        "id": "ntu-intl-selected-qualifications",
-        "university": "Nanyang Technological University",
-        "subject": "All courses (selected international qualifications)",
-        "format": {
-          "source": "https://www.ntu.edu.sg/media/docs/default-source/undergraduate-admissions/msr/emsr_intnl.pdf",
-          "accessed": "2026-11-15",
-          "sourceSnippet": "Admission interviews will be conducted online for selected candidates."
-        },
-        "numberAndLength": null,
-        "mmiStations": null,
-        "whatIsAssessed": null,
-        "prepAdvice": [],
-        "sampleQuestions": [],
-        "unavailable": false,
-        "interviewed": "yes",
-        "timing": null,
-        "appliesTo": "selected candidates (Indonesia, PRC Gao Kao, Taiwan GSAT and Vietnam qualifications)"
+        "appliesTo": "aptitude-based admissions scheme",
+        "appliesToEvidence": [
+          {
+            "source": "https://www.ntu.edu.sg/admissions/undergraduate/admissions/undergraduate/apply/aptitude-based-applications",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "Applying to NTU via our aptitude-based admissions scheme"
+          }
+        ]
       },
       "sutd-all": {
         "id": "sutd-all",
@@ -2689,8 +2826,8 @@
         "timing": null,
         "universityTerm": "conversation session"
       },
-      "bath-qualification-route": {
-        "id": "bath-qualification-route",
+      "bath-qualification-route-uk-cs-bath": {
+        "id": "bath-qualification-route-uk-cs-bath",
         "university": "University of Bath",
         "subject": "Computer Science, Economics, Mechanical Engineering, Accounting & Finance",
         "format": {
@@ -2726,7 +2863,152 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "studying certain qualifications, such as an Access to HE or T Level"
+        "appliesTo": "studying certain qualifications, such as an Access to HE or T Level",
+        "appliesToEvidence": [
+          {
+            "source": "https://www.bath.ac.uk/courses/undergraduate-2027/computer-science/bsc-computer-science/",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "If you are studying certain qualifications, such as an Access to HE or T Level, you will be invited to attend an interview as part of our selection process."
+          }
+        ]
+      },
+      "bath-qualification-route-uk-economics-bath": {
+        "id": "bath-qualification-route-uk-economics-bath",
+        "university": "University of Bath",
+        "subject": "Computer Science, Economics, Mechanical Engineering, Accounting & Finance",
+        "format": {
+          "source": "https://www.bath.ac.uk/guides/undergraduate-applicant-interviews/",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "Interviews take place virtually via Microsoft Teams."
+        },
+        "numberAndLength": null,
+        "mmiStations": null,
+        "whatIsAssessed": {
+          "source": "https://www.bath.ac.uk/guides/undergraduate-applicant-interviews/",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "The interview process is used to determine your suitability for the course you have applied for and to provide you with an opportunity to decide if our course is the right one for you."
+        },
+        "prepAdvice": [
+          {
+            "source": "https://www.bath.ac.uk/guides/undergraduate-applicant-interviews/",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "Think about what has motivated you to study the course and why you would like to study at the University of Bath Carefully consider what has really interested you during your current study and prepare some well thought out examples - which will help you evidence your enthusiasm and passion for your subject"
+          },
+          {
+            "source": "https://www.bath.ac.uk/guides/undergraduate-applicant-interviews/",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "Familiarise yourself with the published course material and look at which modules may be of interest to you Be prepared to discuss anything you have included in your personal statement and expand on this during your interview"
+          },
+          {
+            "source": "https://www.bath.ac.uk/guides/undergraduate-applicant-interviews/",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "You will also be asked to answer some academic subject-specific questions relating to your course. Please do not get anxious if you are unsure of the answer straight away; you will be given time to work through the question and the Admissions Tutor will support you and want to see how you can apply your logic to work out the answer."
+          }
+        ],
+        "sampleQuestions": [],
+        "unavailable": false,
+        "interviewed": "yes",
+        "timing": null,
+        "appliesTo": "studying certain qualifications, such as an Access to HE Diploma",
+        "appliesToEvidence": [
+          {
+            "source": "https://www.bath.ac.uk/courses/undergraduate-2027/economics/bsc-economics/",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "If you are studying certain qualifications, such as an Access to HE Diploma, you will be invited to attend an interview as part of our selection process."
+          }
+        ]
+      },
+      "bath-qualification-route-uk-engineering-bath": {
+        "id": "bath-qualification-route-uk-engineering-bath",
+        "university": "University of Bath",
+        "subject": "Computer Science, Economics, Mechanical Engineering, Accounting & Finance",
+        "format": {
+          "source": "https://www.bath.ac.uk/guides/undergraduate-applicant-interviews/",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "Interviews take place virtually via Microsoft Teams."
+        },
+        "numberAndLength": null,
+        "mmiStations": null,
+        "whatIsAssessed": {
+          "source": "https://www.bath.ac.uk/guides/undergraduate-applicant-interviews/",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "The interview process is used to determine your suitability for the course you have applied for and to provide you with an opportunity to decide if our course is the right one for you."
+        },
+        "prepAdvice": [
+          {
+            "source": "https://www.bath.ac.uk/guides/undergraduate-applicant-interviews/",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "Think about what has motivated you to study the course and why you would like to study at the University of Bath Carefully consider what has really interested you during your current study and prepare some well thought out examples - which will help you evidence your enthusiasm and passion for your subject"
+          },
+          {
+            "source": "https://www.bath.ac.uk/guides/undergraduate-applicant-interviews/",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "Familiarise yourself with the published course material and look at which modules may be of interest to you Be prepared to discuss anything you have included in your personal statement and expand on this during your interview"
+          },
+          {
+            "source": "https://www.bath.ac.uk/guides/undergraduate-applicant-interviews/",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "You will also be asked to answer some academic subject-specific questions relating to your course. Please do not get anxious if you are unsure of the answer straight away; you will be given time to work through the question and the Admissions Tutor will support you and want to see how you can apply your logic to work out the answer."
+          }
+        ],
+        "sampleQuestions": [],
+        "unavailable": false,
+        "interviewed": "yes",
+        "timing": null,
+        "appliesTo": "studying certain qualifications, such as an Access to HE Diploma",
+        "appliesToEvidence": [
+          {
+            "source": "https://www.bath.ac.uk/courses/undergraduate-2027/mechanical-engineering/beng-mechanical-engineering/",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "If you are studying certain qualifications, such as an Access to HE Diploma, you will be invited to attend an interview as part of our selection process."
+          }
+        ]
+      },
+      "bath-qualification-route-uk-accounting-bath": {
+        "id": "bath-qualification-route-uk-accounting-bath",
+        "university": "University of Bath",
+        "subject": "Computer Science, Economics, Mechanical Engineering, Accounting & Finance",
+        "format": {
+          "source": "https://www.bath.ac.uk/guides/undergraduate-applicant-interviews/",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "Interviews take place virtually via Microsoft Teams."
+        },
+        "numberAndLength": null,
+        "mmiStations": null,
+        "whatIsAssessed": {
+          "source": "https://www.bath.ac.uk/guides/undergraduate-applicant-interviews/",
+          "accessed": "2026-11-15",
+          "sourceSnippet": "The interview process is used to determine your suitability for the course you have applied for and to provide you with an opportunity to decide if our course is the right one for you."
+        },
+        "prepAdvice": [
+          {
+            "source": "https://www.bath.ac.uk/guides/undergraduate-applicant-interviews/",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "Think about what has motivated you to study the course and why you would like to study at the University of Bath Carefully consider what has really interested you during your current study and prepare some well thought out examples - which will help you evidence your enthusiasm and passion for your subject"
+          },
+          {
+            "source": "https://www.bath.ac.uk/guides/undergraduate-applicant-interviews/",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "Familiarise yourself with the published course material and look at which modules may be of interest to you Be prepared to discuss anything you have included in your personal statement and expand on this during your interview"
+          },
+          {
+            "source": "https://www.bath.ac.uk/guides/undergraduate-applicant-interviews/",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "You will also be asked to answer some academic subject-specific questions relating to your course. Please do not get anxious if you are unsure of the answer straight away; you will be given time to work through the question and the Admissions Tutor will support you and want to see how you can apply your logic to work out the answer."
+          }
+        ],
+        "sampleQuestions": [],
+        "unavailable": false,
+        "interviewed": "yes",
+        "timing": null,
+        "appliesTo": "studying certain qualifications, such as an Access to HE Diploma or T Level",
+        "appliesToEvidence": [
+          {
+            "source": "https://www.bath.ac.uk/courses/undergraduate-2027/accounting-and-finance/bsc-accounting-and-finance/",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "If you are studying certain qualifications, such as an Access to HE Diploma or T Level, you will be invited to attend an interview as part of our selection process."
+          }
+        ]
       },
       "bath-mathematics": {
         "id": "bath-mathematics",
@@ -2765,7 +3047,14 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "very exceptionally, if you have circumstances we cannot assess from an application alone"
+        "appliesTo": "Very exceptionally we may invite you to an interview if you have circumstances we cannot assess from an application alone",
+        "appliesToEvidence": [
+          {
+            "source": "https://www.bath.ac.uk/courses/undergraduate-2027/mathematical-sciences/bsc-mathematics/",
+            "accessed": "2026-11-15",
+            "sourceSnippet": "Very exceptionally we may invite you to an interview if you have circumstances we cannot assess from an application alone."
+          }
+        ]
       },
       "glasgow-year2-entry": {
         "id": "glasgow-year2-entry",
@@ -3107,27 +3396,6 @@
             "source": "https://admission.gatech.edu/first-year/interview",
             "accessed": "2026-11-15",
             "sourceSnippet": "We do not conduct alumni or admission staff interviews."
-          }
-        ]
-      },
-      "mcmaster-university-no-1": {
-        "id": "mcmaster-university-no-1",
-        "university": "McMaster University",
-        "subject": "Courses named in the statement",
-        "format": null,
-        "numberAndLength": null,
-        "mmiStations": null,
-        "whatIsAssessed": null,
-        "prepAdvice": [],
-        "sampleQuestions": [],
-        "unavailable": false,
-        "interviewed": "no",
-        "timing": null,
-        "statement": [
-          {
-            "source": "https://hhsp.healthsci.mcmaster.ca/faqs/",
-            "accessed": "2026-11-15",
-            "sourceSnippet": "Admissions decisions are final and we only reconsider applicants in cases where there are errors in the applicant’s high school transcripts. We will not review any additional information or conduct interviews."
           }
         ]
       },
@@ -3845,6 +4113,20 @@
         "interviewed": "not published",
         "timing": null
       },
+      "mcmaster-university-manual-review": {
+        "id": "mcmaster-university-manual-review",
+        "university": "McMaster University",
+        "subject": "Courses on the manual-review list",
+        "format": null,
+        "numberAndLength": null,
+        "mmiStations": null,
+        "whatIsAssessed": null,
+        "prepAdvice": [],
+        "sampleQuestions": [],
+        "unavailable": true,
+        "interviewed": "not published",
+        "timing": null
+      },
       "university-of-notre-dame-manual-review": {
         "id": "university-of-notre-dame-manual-review",
         "university": "University of Notre Dame",
@@ -4385,32 +4667,25 @@
       ],
       "sg-medicine-ntu": [
         "ntu-medicine",
-        "ntu-aba-all",
-        "ntu-intl-selected-qualifications"
+        "ntu-aba-all"
       ],
       "sg-cs-ntu": [
-        "ntu-aba-all",
-        "ntu-intl-selected-qualifications"
+        "ntu-aba-all"
       ],
       "sg-maths-ntu": [
-        "ntu-aba-all",
-        "ntu-intl-selected-qualifications"
+        "ntu-aba-all"
       ],
       "sg-engineering-ntu": [
-        "ntu-aba-all",
-        "ntu-intl-selected-qualifications"
+        "ntu-aba-all"
       ],
       "sg-business-ntu": [
-        "ntu-aba-all",
-        "ntu-intl-selected-qualifications"
+        "ntu-aba-all"
       ],
       "sg-economics-ntu": [
-        "ntu-aba-all",
-        "ntu-intl-selected-qualifications"
+        "ntu-aba-all"
       ],
       "sg-architecture-ntu": [
-        "ntu-aba-all",
-        "ntu-intl-selected-qualifications"
+        "ntu-aba-all"
       ],
       "sg-engineering-sutd": [
         "sutd-all"
@@ -4419,16 +4694,16 @@
         "sutd-all"
       ],
       "uk-cs-bath": [
-        "bath-qualification-route"
+        "bath-qualification-route-uk-cs-bath"
       ],
       "uk-economics-bath": [
-        "bath-qualification-route"
+        "bath-qualification-route-uk-economics-bath"
       ],
       "uk-engineering-bath": [
-        "bath-qualification-route"
+        "bath-qualification-route-uk-engineering-bath"
       ],
       "uk-accounting-bath": [
-        "bath-qualification-route"
+        "bath-qualification-route-uk-accounting-bath"
       ],
       "uk-maths-bath": [
         "bath-mathematics"
@@ -4525,9 +4800,6 @@
       ],
       "us-engineering-gatech": [
         "georgia-tech-third-party"
-      ],
-      "ca-medicine-mcmaster": [
-        "mcmaster-university-no-1"
       ],
       "ca-business-sfu": [
         "simon-fraser-university-no-1"
@@ -4740,6 +5012,9 @@
       ],
       "us-economics-emory": [
         "emory-university-manual-review"
+      ],
+      "ca-medicine-mcmaster": [
+        "mcmaster-university-manual-review"
       ],
       "us-business-notredame": [
         "university-of-notre-dame-manual-review"
