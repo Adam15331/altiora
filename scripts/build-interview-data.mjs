@@ -111,7 +111,168 @@ for (const r of research.records) {
 }
 for (const t of Object.keys(TIMING)) if (!records[t]?.timing) throw new Error(`timing for ${t} was not applied`);
 
-const data = { source: 'research/interviews-proposed.json', excludedSources: EXCLUDED_SOURCES, records, courses };
+// ═══════════════════════════════════════════════════════════════
+// Expansion: research/interviews-expansion-proposed.json, loaded by the
+// decisions in research/interviews-expansion.md §7. Added AFTER the records
+// above, which are not touched (new fields appear only on new records):
+//   appliesTo      — set when the interview is for one route/group only, in
+//                    the university's words (the card says "Interviews some
+//                    applicants: …", no practice button)
+//   universityTerm — what the university calls it when it does not call it an
+//                    interview (the card uses this word, never "interview")
+//   thirdPartyOnly — no university interview; the provider as the university
+//                    names it (the name must be in a quote)
+//   statement[]    — for interviewed "no": the university's own statement
+// ═══════════════════════════════════════════════════════════════
+const expansion = JSON.parse(fs.readFileSync(path.join(ROOT, 'research/interviews-expansion-proposed.json'), 'utf8'));
+
+// Route-limited records: the route, from the record's own page.
+const ROUTE = {
+  'cuhk-all': 'JUPAS applicants', 'cuhk-business': 'JUPAS candidates', 'cuhk-cs': 'JUPAS applicants',
+  'cuhk-engineering': 'JUPAS applicants', 'cuhk-economics': 'JUPAS applicants', 'cuhk-law': 'JUPAS applicants',
+  'cuhk-architecture': 'JUPAS applicants', 'hkust-all': 'applicants with international qualifications',
+  'hkust-engineering': 'JUPAS applicants', 'hkust-quantfin': 'JUPAS applicants',
+  'polyu-business': 'JUPAS applicants', 'polyu-engineering': 'JUPAS applicants', 'polyu-architecture': 'JUPAS applicants',
+  'polyu-computing': 'JUPAS applicants', 'polyu-nursing': 'JUPAS applicants',
+  'cityu-cs': 'JUPAS Applicants', 'cityu-business-marketing': 'JUPAS applicants', 'cityu-business-global-business': 'JUPAS applicants',
+  'mcgill-medicine': 'CEGEP students', 'mcgill-law': 'CEGEP candidates',
+  'tcd-medicine': 'mature applicants', 'tcd-psychology-mature': 'mature applicants', 'tcd-mature-all': 'mature applicants',
+  'nus-computing': 'Aptitude-Based Admissions (ABA) scheme', 'nus-all': 'some faculties',
+  'ntu-aba-all': 'Aptitude-based Admissions', 'ntu-intl-selected-qualifications': 'selected candidates (Indonesia, PRC Gao Kao, Taiwan GSAT and Vietnam qualifications)',
+  'bath-qualification-route': 'studying certain qualifications, such as an Access to HE or T Level',
+  'bath-mathematics': 'very exceptionally, if you have circumstances we cannot assess from an application alone',
+  'glasgow-year2-entry': 'entry into Year 2 in any subject',
+  'michigan-engineering': 'some applicants to the College of Engineering',
+  'unc-business': 'admitted transfer student or current UNC student who has completed your first year',
+};
+// Recorded responses (or a session) the university does not call an interview.
+const TERM = { 'utoronto-engineering': 'Personal Profile', 'queens-commerce': 'Supplementary Application',
+  'mcmaster-engineering-cs': 'supplementary application', 'sutd-all': 'conversation session' };
+// All-applicant records (an interview, possibly by shortlist, for any applicant).
+const ALL = ['hku-law', 'hku-architecture', 'cuhk-medicine', 'ubc-commerce', 'western-ivey-aeo', 'york-schulich-bba',
+  'berkeley-business', 'nus-medicine', 'ntu-medicine'];
+// Not loaded (report §7 / load decisions): to manual review instead.
+const HOLD = {
+  'Waterloo': 'University of Waterloo — official pages conflict on whether the Engineering interview is optional.',
+  'Notre Dame': 'University of Notre Dame — its "no interview" FAQ carries a 2017 footer.',
+  'Emory': 'Emory University — its FAQ says no evaluative interviews but also mentions an Alumni Interview program.',
+};
+const HOLD_RECORDS = { 'hku-business': 'HKU Business School JUPAS FAQ — the quote could not be re-fetched (connection reset).',
+  'ntu-business-alevel': 'NTU Business A-level PDF (2019–2020 profiles) — needs a human check.' };
+// HKUST Science and Maths: "no" was inferred from a list that leaves them out, so they load as "not published".
+const NOT_PUBLISHED = { 'hkust-science-maths': { university: 'HKUST', courseIds: ['hk-sciences-hkust', 'hk-maths-hkust'] } };
+const GRADUATE_ENTRY = new Set(expansion.notOpenToSchoolLeavers.flatMap((/** @type {any} */ n) => n.courseIds));
+
+const held = (/** @type {string} */ university) => Object.keys(HOLD).find(k => university.includes(k));
+const npCourses = new Set(Object.values(NOT_PUBLISHED).flatMap(n => n.courseIds));
+const manualCourses = /** @type {Record<string, {university: string, why: string, courseIds: Set<string>, urls: Set<string>}>} */ ({});
+const toManual = (/** @type {string} */ university, /** @type {string} */ why, /** @type {string[]} */ ids, /** @type {string[]} */ urls) => {
+  const m = (manualCourses[university] ??= { university, why, courseIds: new Set(), urls: new Set() });
+  ids.forEach(c => m.courseIds.add(c)); urls.forEach(u => m.urls.add(u));
+};
+const evOf = (/** @type {any} */ r) => [...EVIDENCE_FIELDS.map(f => r[f]).filter(Boolean), ...(r.prepAdvice ?? []), ...(r.sampleQuestions ?? [])];
+const expSlug = (/** @type {string} */ s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+/** @type {Record<string, any>} */
+const newRecords = {};
+const addNew = (/** @type {any} */ r) => {
+  if (records[r.id] || newRecords[r.id]) throw new Error(`expansion record id already used: ${r.id}`);
+  for (const c of r.courseIds) {
+    if (courses[c]) throw new Error(`${c} already has an interview record; the expansion only adds courses without one`);
+    if (GRADUATE_ENTRY.has(c)) throw new Error(`${c} is graduate-entry; nothing is loaded for it`);
+  }
+  newRecords[r.id] = r;
+};
+
+// 1. Interview records: all applicants, route-limited, university term.
+for (const r of expansion.records) {
+  const hasEv = evOf(r).length > 0;
+  if (!hasEv) continue;                                  // blocked placeholders: step 4
+  if (HOLD_RECORDS[r.id]) { toManual(r.university, HOLD_RECORDS[r.id], r.courseIds, evOf(r).map(e => e.source)); continue; }
+  const h = held(r.university);
+  if (h) { toManual(r.university, HOLD[h], r.courseIds, evOf(r).map(e => e.source)); continue; }
+  const kind = ROUTE[r.id] ? 'route' : TERM[r.id] ? 'term' : ALL.includes(r.id) ? 'all' : null;
+  if (!kind) throw new Error(`expansion record ${r.id} has no load decision`);
+  /** @type {any} */
+  const out = { id: r.id, university: r.university, subject: r.subject };
+  for (const f of EVIDENCE_FIELDS) out[f] = r[f] ? ev(r[f]) : null;
+  out.prepAdvice = r.prepAdvice.filter((/** @type {any} */ e) => {
+    if (!introducesMissingList(e)) return true;
+    removedPrep.push({ record: r.id, source: e.source, sourceSnippet: e.sourceSnippet });
+    return false;
+  }).map(ev);
+  out.sampleQuestions = r.sampleQuestions.map((/** @type {any} */ q, /** @type {number} */ i) =>
+    // The question is itself the verbatim snippet (checked verbatim on the page in the research).
+    ({ id: `${r.id}#${i + 1}`, subject: q.subject, publishedBy: r.university, source: q.source, accessed: q.accessed, sourceSnippet: q.question, question: q.question }));
+  out.unavailable = false;
+  out.interviewed = 'yes';
+  out.timing = null;
+  if (kind === 'route') out.appliesTo = ROUTE[r.id];
+  if (kind === 'term') out.universityTerm = TERM[r.id];
+  out.courseIds = r.courseIds.filter((/** @type {string} */ c) => !npCourses.has(c));
+  addNew(out);
+}
+// 2. Third-party only: no university interview; the provider as named in a quote.
+const PROVIDER = { 'Carnegie Mellon University': 'InitialView or Vericant', 'Washington University in St. Louis': 'InitialView or Vericant',
+  'Georgia Tech': 'InitialView and Vericant' };
+const thirdPartyCourses = new Set();
+for (const t of expansion.thirdPartyInterviewOnly) {
+  const h = held(t.university);
+  const statements = expansion.statedNoInterview.filter((/** @type {any} */ s) => s.university === t.university);
+  if (h) { toManual(t.university, HOLD[h], t.courseIds, [...t.evidence, ...statements].map((/** @type {any} */ e) => e.source)); continue; }
+  const provider = PROVIDER[t.university] ?? 'InitialView';
+  t.courseIds.forEach((/** @type {string} */ c) => thirdPartyCourses.add(c));
+  addNew({ id: `${expSlug(t.university)}-third-party`, university: t.university, subject: 'All listed courses',
+    format: ev(t.evidence[0]), numberAndLength: null, mmiStations: null, whatIsAssessed: t.evidence[1] ? ev(t.evidence[1]) : null,
+    prepAdvice: [], sampleQuestions: [], unavailable: false, interviewed: 'no', timing: null,
+    thirdPartyOnly: provider, statement: statements.map(ev), courseIds: t.courseIds });
+}
+// 3. "States no interview" (courses not already loaded as third-party only).
+/** @type {Record<string, number>} */
+const noCount = {};
+for (const s of expansion.statedNoInterview) {
+  const h = held(s.university);
+  const ids = s.courseIds.filter((/** @type {string} */ c) => !thirdPartyCourses.has(c) && !npCourses.has(c));
+  if (!ids.length) continue;
+  if (h) { toManual(s.university, HOLD[h], ids, [s.source]); continue; }
+  const n = (noCount[s.university] = (noCount[s.university] ?? 0) + 1);
+  addNew({ id: `${expSlug(s.university)}-no-${n}`, university: s.university, subject: 'Courses named in the statement',
+    format: null, numberAndLength: null, mmiStations: null, whatIsAssessed: null, prepAdvice: [], sampleQuestions: [],
+    unavailable: false, interviewed: 'no', timing: null, statement: [ev(s)], courseIds: ids });
+}
+// 4. Manual review: the research's blocked-site placeholders, plus everything held above. Not published.
+for (const r of expansion.records.filter((/** @type {any} */ r) => evOf(r).length === 0)) {
+  toManual(r.university, `Blocked: ${String(r.notes ?? '').replace(/^Blocked:\s*/, '')}`, r.courseIds, []);
+}
+for (const m of Object.values(manualCourses)) {
+  const ids = [...m.courseIds].filter(c => !Object.values(newRecords).some(r => r.courseIds.includes(c)));
+  if (!ids.length) continue;
+  addNew({ id: `${expSlug(m.university)}-manual-review`, university: m.university, subject: 'Courses on the manual-review list',
+    format: null, numberAndLength: null, mmiStations: null, whatIsAssessed: null, prepAdvice: [], sampleQuestions: [],
+    unavailable: true, interviewed: 'not published', timing: null, courseIds: ids });
+}
+// 5. Not published (inferred "no" not loaded).
+for (const [id, n] of Object.entries(NOT_PUBLISHED)) {
+  addNew({ id, university: n.university, subject: 'Courses with nothing published', format: null, numberAndLength: null,
+    mmiStations: null, whatIsAssessed: null, prepAdvice: [], sampleQuestions: [], unavailable: true,
+    interviewed: 'not published', timing: null, courseIds: n.courseIds });
+}
+// Wire the new records in. Subject records before university-wide ones for the same course, as above.
+for (const r of Object.values(newRecords)) {
+  const { courseIds, ...rec } = r;
+  records[r.id] = rec;
+  const wide = /All courses|All listed courses|^Courses /.test(r.subject) || courseIds.length > 2;
+  for (const c of courseIds) (courses[c] ??= [])[wide ? 'push' : 'unshift'](r.id);
+}
+// Everything held or blocked becomes an excluded source, so the validator proves none of it is shown.
+const EXPANSION_EXCLUDED = [
+  ...expansion.manualReview.filter((/** @type {any} */ m) => !m.carriedOver).map((/** @type {any} */ m) => ({ url: m.url, why: `Expansion manual-review list: ${m.why}` })),
+  ...Object.values(manualCourses).flatMap(m => [...m.urls].map(url => ({ url, why: `Expansion, held for manual review: ${m.why}` }))),
+];
+const seenUrl = new Set(EXCLUDED_SOURCES.map(e => e.url));
+for (const e of EXPANSION_EXCLUDED) if (!seenUrl.has(e.url)) { seenUrl.add(e.url); EXCLUDED_SOURCES.push(e); }
+export const EXPANSION_MANUAL_REVIEW = Object.values(manualCourses).map(m => ({ university: m.university, why: m.why, courseIds: [...m.courseIds], urls: [...m.urls] }));
+
+const data = { source: 'research/interviews-proposed.json + research/interviews-expansion-proposed.json', excludedSources: EXCLUDED_SOURCES, records, courses };
 const body = JSON.stringify(data, null, 2);
 fs.writeFileSync(path.join(ROOT, 'data/interviews.js'), `/* ═══════════════════════════════════════════════════════════════
  * Altiora — data/interviews.js   GENERATED — DO NOT EDIT BY HAND.

@@ -4,12 +4,15 @@
  * was read (not in the future) and a non-empty verbatim sourceSnippet — the
  * same provenance rule requirement rows follow. Also checks the course map,
  * the interviewed values, the stated timings (their quote must be in the
- * snippet they cite) and that no excluded source is used. */
+ * snippet they cite) and that no excluded source is used.
+ * Every record that states something — an interview, a route, a university
+ * term, a third-party provider or "no" — needs evidence with provenance;
+ * only unavailable ("not published") records carry none. */
 import { isIsoDate } from './validate-requirements.mjs';
 
 /** @typedef {{level: 'error'|'warning', where: string, message: string}} Problem */
 
-export const INTERVIEWED = ['yes', 'some applicants', 'optional', 'not published'];
+export const INTERVIEWED = ['yes', 'some applicants', 'optional', 'no', 'not published'];
 const EVIDENCE_FIELDS = ['format', 'numberAndLength', 'mmiStations', 'whatIsAssessed'];
 const STALE_DAYS = 548;   // ~18 months, as for requirement rows
 
@@ -58,10 +61,30 @@ export function validateInterviews(data, { courses, today }) {
       if (!q.id || qids.has(q.id)) err(`${where} sampleQuestions[${i}]`, 'needs a unique id');
       qids.add(q.id);
     });
-    const hasEvidence = EVIDENCE_FIELDS.some(f => r[f]) || r.prepAdvice.length > 0 || r.sampleQuestions.length > 0;
+    if (r.statement !== undefined) {
+      if (!Array.isArray(r.statement)) err(where, 'statement must be an array of evidence');
+      else r.statement.forEach((/** @type {any} */ e, /** @type {number} */ i) => evidence(e, `${where} statement[${i}]`));
+    }
+    const statement = Array.isArray(r.statement) ? r.statement : [];
+    const hasEvidence = EVIDENCE_FIELDS.some(f => r[f]) || r.prepAdvice.length > 0 || r.sampleQuestions.length > 0 || statement.length > 0;
     if (r.unavailable && hasEvidence) err(where, 'unavailable records must carry no evidence');
     if (r.unavailable && r.interviewed !== 'not published') err(where, 'unavailable records must be "not published"');
     if (!r.unavailable && !hasEvidence) err(where, 'a record that states an interview needs evidence');
+    // "No": the university's own statement is required, as source + accessed + verbatim snippet.
+    if (r.interviewed === 'no' && !statement.length) err(where, '"no" needs the university\'s statement (statement[])');
+    if (r.interviewed !== 'no' && statement.length) err(where, 'statement[] is only for "no" records');
+    // New fields: route, the university's own term, third-party provider. Words must come from the quotes.
+    const snippets = [...EVIDENCE_FIELDS.map(f => r[f]?.sourceSnippet), ...r.prepAdvice.map((/** @type {any} */ e) => e.sourceSnippet), ...statement.map((/** @type {any} */ e) => e.sourceSnippet)].filter(Boolean).join(' ');
+    const set = ['appliesTo', 'universityTerm', 'thirdPartyOnly'].filter(k => r[k] !== undefined && r[k] !== null);
+    if (set.length > 1) err(where, `only one of appliesTo, universityTerm, thirdPartyOnly may be set (has ${set.join(', ')})`);
+    for (const k of set) if (typeof r[k] !== 'string' || !r[k].trim()) err(where, `${k} must be a non-empty string`);
+    if (set.length && r.unavailable) err(where, 'unavailable records carry no route, term or provider');
+    if (typeof r.universityTerm === 'string' && !snippets.includes(r.universityTerm)) err(where, `universityTerm "${r.universityTerm}" is not in the record's quotes`);
+    if (typeof r.thirdPartyOnly === 'string') {
+      if (r.interviewed !== 'no') err(where, 'thirdPartyOnly records are interviewed "no" (no university interview)');
+      for (const name of r.thirdPartyOnly.split(/ or | and /)) if (!snippets.includes(name)) err(where, `provider "${name}" is not named in the record's quotes`);
+    }
+    if ((r.appliesTo || r.universityTerm) && r.interviewed !== 'yes') err(where, 'route and term records are interviewed "yes"');
     if (r.timing) {
       const t = r.timing;
       const snip = r[t.field]?.sourceSnippet;

@@ -16,7 +16,8 @@ const V = require('../interview-view.js');
 const research = JSON.parse(fs.readFileSync(path.join(ROOT, 'research/interviews-proposed.json'), 'utf8'));
 const courses = loadCourses();
 const clone = (/** @type {any} */ x) => JSON.parse(JSON.stringify(x));
-const errors = (/** @type {any} */ d) => validateInterviews(d, { courses, today: '2026-11-14' }).filter(p => p.level === 'error');
+// Today's date: evidence must not be dated in the future (the research was read on several days).
+const errors = (/** @type {any} */ d) => validateInterviews(d, { courses, today: new Date().toISOString().slice(0, 10) }).filter(p => p.level === 'error');
 const FIELDS = ['format', 'numberAndLength', 'mmiStations', 'whatIsAssessed'];
 /** @param {any} r */
 const evidenceOf = r => [...FIELDS.map(f => r[f]).filter(Boolean), ...r.prepAdvice, ...r.sampleQuestions];
@@ -26,9 +27,16 @@ test('the interview data validates', () => {
 });
 
 test('every loaded value is a research item, unchanged, with source, accessed and verbatim snippet', () => {
-  const researchEvidence = research.records.flatMap((/** @type {any} */ r) => evidenceOf(r))
-    .map((/** @type {any} */ e) => JSON.stringify([e.source, e.accessed, e.sourceSnippet]));
-  const loaded = Object.values(interviewData.records).flatMap(evidenceOf);
+  const expansion = JSON.parse(fs.readFileSync(path.join(ROOT, 'research/interviews-expansion-proposed.json'), 'utf8'));
+  const researchEvidence = [
+    ...research.records.flatMap((/** @type {any} */ r) => evidenceOf(r)),
+    ...expansion.records.flatMap((/** @type {any} */ r) => evidenceOf(r)),
+    // An expansion sample question's snippet is the question itself (verbatim on the page).
+    ...expansion.records.flatMap((/** @type {any} */ r) => r.sampleQuestions.map((/** @type {any} */ q) => ({ ...q, sourceSnippet: q.question }))),
+    ...expansion.statedNoInterview,
+    ...expansion.thirdPartyInterviewOnly.flatMap((/** @type {any} */ t) => t.evidence),
+  ].map((/** @type {any} */ e) => JSON.stringify([e.source, e.accessed, e.sourceSnippet]));
+  const loaded = Object.values(interviewData.records).flatMap((/** @type {any} */ r) => [...evidenceOf(r), ...(r.statement ?? [])]);
   assert.ok(loaded.length > 0);
   for (const e of loaded) {
     assert.ok(e.source && e.accessed && e.sourceSnippet, JSON.stringify(e).slice(0, 80));
