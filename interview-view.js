@@ -34,20 +34,45 @@
   const storyPrompt = title => `Talk about “${title}”: what you did, and what it showed about you.`;
 
   /**
+   * What a record says, for display:
+   *   all — an interview, for any applicant (possibly by shortlist)
+   *   term — recorded responses or a session the university does not call an interview (universityTerm)
+   *   route — an interview for one route or group only (appliesTo)
+   *   third-party — no university interview; accepts one through a provider (thirdPartyOnly)
+   *   no — the university states it does not interview
+   *   unavailable — not published / blocked
+   * @param {any} r
+   */
+  const kindOf = r => (r.unavailable ? 'unavailable' : r.interviewed === 'no' ? (r.thirdPartyOnly ? 'third-party' : 'no')
+    : r.appliesTo ? 'route' : r.universityTerm ? 'term' : 'all');
+  const KIND_ORDER = ['all', 'term', 'route', 'third-party', 'no', 'unavailable'];
+
+  /**
    * Everything known about one course's interview, merged across its records
-   * (the subject record first, then any university-wide one).
+   * (the subject record first, then any university-wide one). Only records of
+   * the course's leading kind (KIND_ORDER) are merged, so an all-applicant
+   * interview is never mixed with a route-limited one.
    * @param {any} data @param {string} courseId
    */
   function forCourse(data, courseId) {
     const ids = data?.courses?.[courseId];
     if (!ids) return null;
     const recs = ids.map((/** @type {string} */ id) => data.records[id]).filter(Boolean);
-    const avail = recs.filter((/** @type {any} */ r) => !r.unavailable);
+    const kind = KIND_ORDER.find(k => recs.some((/** @type {any} */ r) => kindOf(r) === k)) ?? 'unavailable';
+    const avail = recs.filter((/** @type {any} */ r) => kindOf(r) === kind && kind !== 'unavailable');
     /** @param {string} f */
     const all = f => avail.map((/** @type {any} */ r) => r[f]).filter(Boolean);
     return {
       courseId,
       university: recs[0]?.university ?? '',
+      kind,
+      universityTerm: avail[0]?.universityTerm ?? null,
+      // One line per distinct route (a subject record and a university-wide one often name the same route).
+      routes: kind === 'route' ? avail.map((/** @type {any} */ r) => ({ appliesTo: r.appliesTo, source: firstSource(r) }))
+        .filter((/** @type {any} */ x, /** @type {number} */ i, /** @type {any[]} */ a) => a.findIndex(y => y.appliesTo === x.appliesTo) === i) : [],
+      provider: avail[0]?.thirdPartyOnly ?? null,
+      statementSources: [...new Set(avail.flatMap((/** @type {any} */ r) => [...(r.statement ?? []), ...(kind === 'third-party' ? [r.format, r.whatIsAssessed] : [])]
+        .filter(Boolean).map((/** @type {any} */ e) => e.source)))],
       available: avail.length > 0,
       interviewed: avail[0]?.interviewed ?? 'not published',
       format: all('format'),
@@ -64,8 +89,26 @@
     };
   }
 
-  /** Does the student have something to practise for at this course? @param {any} v */
-  const interviews = v => !!v && v.available && v.interviewed !== 'not published';
+  /** The first source a record quotes. @param {any} r */
+  function firstSource(r) {
+    const e = ['format', 'numberAndLength', 'mmiStations', 'whatIsAssessed'].map(f => r[f]).find(Boolean) ?? r.prepAdvice?.[0] ?? r.statement?.[0];
+    return e?.source ?? null;
+  }
+
+  /**
+   * Does the student have something to practise for at this course? Only an
+   * all-applicant interview, or recorded responses under the university's own
+   * term — never a route-limited, third-party, "no" or unavailable record.
+   * @param {any} v
+   */
+  const interviews = v => !!v && v.available && (v.kind === 'all' || v.kind === 'term') && v.interviewed !== 'not published';
+
+  /** A small "Source" link. @param {string} url */
+  const sourceLink = url => `<a class="reqs__link" href="${esc(url)}" target="_blank" rel="noopener noreferrer">Source</a>`;
+  /** @param {string[]} urls */
+  const sourceLinks = urls => urls.map(sourceLink).join(' · ');
+  /** "Personal Profile" stays as written; "conversation session" → "Conversation session". @param {string} t */
+  const capFirst = t => t.charAt(0).toUpperCase() + t.slice(1);
 
   /** A quoted statement with its source link and the date it was read. @param {any} e */
   function quoteHtml(e) {
@@ -84,7 +127,26 @@
   function sectionHtml(v, { fallbackUrl = null, practise = false } = {}) {
     if (!v) return '';
     let body;
-    if (!v.available) {
+    let label = 'Interview';
+    if (v.kind === 'route') {
+      // Route-limited: who is interviewed, in the university's words. No practice.
+      body = v.routes.map((/** @type {any} */ r) =>
+        `<p class="reqs__text">Interviews some applicants: ${esc(r.appliesTo)} <span class="reqs__meta-inline">${r.source ? sourceLink(r.source) : ''}</span></p>`).join('');
+    } else if (v.kind === 'no') {
+      body = `<p class="reqs__text">${esc(v.university)} states it does not interview for this course. <span class="reqs__meta-inline">${sourceLinks(v.statementSources)}</span></p>`;
+    } else if (v.kind === 'third-party') {
+      body = `<p class="reqs__text">No university interview. Accepts an interview through ${esc(v.provider)}. <span class="reqs__meta-inline">${sourceLinks(v.statementSources)}</span></p>`;
+    } else if (v.kind === 'term') {
+      // The university's own word, never "interview".
+      label = capFirst(v.universityTerm);
+      body = `<dl class="reqs__facts">
+            ${factList('Format', v.format)}
+            ${factList('Stations', v.stations)}
+            ${factList('Number and length', v.length)}
+            ${factList('How to prepare', v.prep)}
+          </dl>${practise && interviews(v) ? `
+          <button type="button" class="home-next__btn iv-practise-link" data-iv-practise="${esc(v.courseId)}">Practise for the ${esc(v.universityTerm)}</button>` : ''}`;
+    } else if (!v.available) {
       // Never implies there is no interview: we could not read the university's page.
       const check = fallbackUrl && /^https?:\/\//i.test(fallbackUrl)
         ? `Check the <a class="reqs__link" href="${esc(fallbackUrl)}" target="_blank" rel="noopener noreferrer">course page</a>.`
@@ -102,7 +164,7 @@
     }
     return `
       <div class="reqs__row reqs__row--interview" data-req-category="interview">
-        <dt class="reqs__label">Interview</dt>
+        <dt class="reqs__label">${esc(label)}</dt>
         <dd class="reqs__value">
           <div class="reqs__body">${body}</div>
         </dd>
@@ -133,7 +195,7 @@
   const mmss = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 
   const api = {
-    forCourse, interviews, sectionHtml, storyPrompt, plainText, mmss, formatDate,
+    forCourse, interviews, kindOf, sectionHtml, storyPrompt, plainText, mmss, formatDate,
     INTERVIEWED_LABEL, UNAVAILABLE_TEXT, EMPTY_PRACTICE_TEXT, PLAIN_TIMER_LABEL, PLAIN_TIMER_SECONDS,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
