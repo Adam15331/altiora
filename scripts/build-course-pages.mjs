@@ -20,7 +20,8 @@
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { ROOT, loadConfig, loadCourses, loadCycle } from './lib/requirements-io.mjs';
-import { appPieces, fileHash, writePages, writeSitemap, replaceMarkedBlock } from './lib/site-pages.mjs';
+import { appPieces, fileHash, writePages, replaceMarkedBlock } from './lib/site-pages.mjs';
+import { writeSitemap } from './lib/sitemap.mjs';
 import { buildModel, buildAll } from './lib/course-pages.mjs';
 
 const require = createRequire(import.meta.url);
@@ -37,4 +38,4 @@ replaceMarkedBlock('index.html', 'course-links',
   `<p class="step__desc"><a class="step__link" href="courses/">Browse entry requirements for ${model.paged.length} courses at ${model.pagedUniversities.length} universities</a>.</p>`);
 const urls = writeSitemap();
 
-console.log(`Built ${pages.courses.size - 1} course pages, courses/index.html, ${pages.universities.size} university pages, sitemap.xml (${urls} URLs), index.html course links.`);
+console.log(`Built ${pages.courses.size - 1} course pages, courses/index.html, ${pages.universities.size - 1} university pages, universities/index.html, sitemap.xml (${urls} URLs), index.html course links.`);

@@ -308,6 +308,7 @@ export function hubPage(model, env) {
         <span class="fo__eyebrow">Entry requirements · ${esc(model.cycleLabel)}</span>
         <h1 class="fo__title">Entry requirements by course</h1>
         <p class="fo__desc">${model.paged.length} courses at ${model.pagedUniversities.length} universities. Every requirement is labelled verified, partly verified or not verified, with the date it was checked and a link to the official source.</p>
+        <p class="cp-crumbs"><a href="../universities/">Browse by university</a></p>
       </header>
 ${sections}
       <section class="fo-section">
@@ -324,6 +325,43 @@ ${sections}
 }
 
 /**
+ * universities/index.html — every university page, by country.
+ * @param {Model} model
+ * @param {{pieces: ReturnType<typeof import('./site-pages.mjs').appPieces>, pagesCssV: string}} env
+ */
+export function universitiesHubPage(model, env) {
+  const url = `${SITE}/universities/`;
+  const order = Object.keys(COUNTRY_NAMES);
+  const countries = [...new Set(model.pagedUniversities.map(u => u.country))]
+    .sort((a, b) => (order.indexOf(a) + 1 || 99) - (order.indexOf(b) + 1 || 99));
+  const sections = countries.map(code => {
+    const unis = model.pagedUniversities.filter(u => u.country === code).sort((a, b) => a.name.localeCompare(b.name, 'en'));
+    return `      <section class="fo-section">
+        <h2 class="fo-section__head">${esc(COUNTRY_NAMES[code] ?? code)}</h2>
+        <ul class="cp-links">${unis.map(u => `<li><a href="${esc(u.slug)}.html">${esc(u.name)}</a> <span class="cp-muted">· ${u.courses.length === 1 ? '1 course' : `${u.courses.length} courses`}</span></li>`).join('')}</ul>
+      </section>`;
+  }).join('\n');
+
+  const body = `      <header class="fo__header">
+        <span class="fo__eyebrow">Entry requirements · ${esc(model.cycleLabel)}</span>
+        <h1 class="fo__title">Entry requirements by university</h1>
+        <p class="fo__desc">${model.pagedUniversities.length} universities. Open one for its courses side by side, each requirement labelled verified, partly verified or not verified.</p>
+      </header>
+${sections}
+      <section class="fo-section">
+        <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against every course in the app →</a>
+      </section>
+      <p><a class="fo-back" href="../courses/">← All courses</a></p>`;
+
+  return pageShell({
+    ...env, generator: GENERATOR, source: SOURCE, url, body,
+    title: `Entry requirements by university, ${model.cycleLabel} · Altiora`,
+    description: `Entry requirements at ${model.pagedUniversities.length} universities, ${model.cycleLabel}, grouped by country. Every requirement is labelled verified, partly verified or not verified, with a link to the official source.`,
+    structuredData: [breadcrumbs([{ name: 'Altiora', url: `${SITE}/` }, { name: 'Universities', url }])],
+  });
+}
+
+/**
  * Every generated file, in memory: directory → (file name → HTML).
  * @param {Model} model
  * @param {{pieces: ReturnType<typeof import('./site-pages.mjs').appPieces>, pagesCssV: string}} env
@@ -331,7 +369,7 @@ ${sections}
 export function buildAll(model, env) {
   const coursePages = new Map([['index.html', hubPage(model, env)]]);
   for (const c of model.paged) coursePages.set(`${c.id}.html`, coursePage(model, c, env));
-  const universityPages = new Map();
+  const universityPages = new Map([['index.html', universitiesHubPage(model, env)]]);
   for (const u of model.pagedUniversities) universityPages.set(`${u.slug}.html`, universityPage(model, u, env));
   return { courses: coursePages, universities: universityPages };
 }
