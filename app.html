@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <!-- csp:start --><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" /><!-- csp:end -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Altiora — check whether your qualification subjects match university courses worldwide." />
   <title>Altiora · Check your subjects against real courses</title>
@@ -27,10 +28,7 @@
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="Altiora logo" />
   <meta name="twitter:card" content="summary_large_image" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
-  <link rel="stylesheet" href="tokens.css?v=11" />
+  <link rel="stylesheet" href="tokens.css?v=12" />
   <link rel="stylesheet" href="styles.css?v=111" />
   <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "48e78fd025b74d35921517dcb99a87ed"}'></script><!-- End Cloudflare Web Analytics -->
 </head>
@@ -232,11 +230,12 @@
                 <!-- items rendered by JS for the active system (updateYearIndicator) -->
               </div>
               <span class="profile-menu__label">Your plan</span>
-              <div role="group" aria-label="Save or restore your plan">
+              <div role="group" aria-label="Save, restore or erase your plan">
                 <button id="backupExportBtn" class="stage-menu__item" role="menuitem" type="button">Save my plan to a file</button>
                 <button id="backupImportBtn" class="stage-menu__item" role="menuitem" type="button">Restore my plan from a file</button>
                 <input id="backupImportFile" type="file" accept="application/json,.json" class="hidden" aria-hidden="true" tabindex="-1">
-                <p class="profile-menu__note">Your whole plan in one file on your device. Nothing is uploaded.</p>
+                <button id="planEraseBtn" class="stage-menu__item" role="menuitem" type="button">Erase my plan from this device</button>
+                <p class="profile-menu__note">Your whole plan in one file on your device. Nothing is uploaded. On a shared or school computer, erase your plan when you finish.</p>
               </div>
             </div>
           </div>
@@ -573,7 +572,7 @@
     </p>
   </footer>
 
-  <!-- Plan restore: what the file holds, and the explicit confirmation -->
+  <!-- Plan restore (what the file holds) and plan erase: the explicit confirmation -->
   <dialog id="planDialog" class="plan-dialog" aria-labelledby="planDialogTitle">
     <h2 id="planDialogTitle" class="plan-dialog__title"></h2>
     <div id="planDialogBody"></div>
@@ -599,18 +598,12 @@
   <script src="data/requirements/2027.js?v=8"></script>
   <script src="data/interviews.js?v=5"></script>
   <script src="requirements-view.js?v=8"></script>
-  <script src="statement-review.js?v=5"></script>
+  <script src="statement-review.js?v=6"></script>
   <script src="calendar-export.js?v=4"></script>
   <script src="interview-view.js?v=6"></script>
   <script src="ib-hl.js?v=1"></script>
-  <script src="state.js?v=20"></script>
-  <script src="main.js?v=135"></script>
-  <script>
-    // Redirect ?mode=strengths to open strengths panel after init
-    const _urlParams = new URLSearchParams(window.location.search);
-    if (_urlParams.get('mode') === 'strengths') {
-      window.sessionStorage.setItem('openStrengthsMode', 'true');
-    }
-  </script>
+  <script src="state.js?v=21"></script>
+  <script src="main.js?v=136"></script>
+  <script src="strengths-param.js?v=1"></script>
 </body>
 </html>

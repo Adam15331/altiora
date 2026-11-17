@@ -2,7 +2,10 @@
 // axe-core WCAG 2.0 A/AA over every view in VIEWS below; also overflow at 375px and minimum text size.
 //   node scripts/verify-pass/matching/axe.mjs <root> <port> build    every view at 375px, details open (per build)
 //   node scripts/verify-pass/matching/axe.mjs <root> <port> release  1280 + 375px, details closed and open (before release; default)
-// Env: CHROMIUM_PATH, SWEEP_WORKERS (default 4), VIEWS (name filter), VERBOSE=1, FONTS=1. Exits 1 on any failure.
+// Env: CHROMIUM_PATH, SWEEP_WORKERS (default 4), VIEWS (name filter), VERBOSE=1. Exits 1 on any failure.
+// The site's own fonts (served from /fonts) are loaded, so overflow and text size are checked with real metrics.
+// The sweep injects axe-core and evaluates its guards, both of which the pages' Content-Security-Policy would
+// refuse, so its browser contexts bypass the policy (tests/e2e/csp.e2e.mjs is what checks the policy).
 // reducedMotion reduce; each run waits for the page to settle (no DOM change for 300ms, max 3s).
 // App views get a saved state whose year is stamped as set "now" in the page (no new-school-year prompt),
 // except where a view says otherwise. On-demand surfaces are opened with real clicks. Every view has a
@@ -76,6 +79,8 @@ const VIEWS = [
   ['Story-entry form', '/app.html', st, 'story', async (/** @type {any} */ p) => p.click('#achvAddBtn'), visible('#achvForm')],
   ['Restore-plan dialog', '/app.html', st, 'story', restoreDialog, 'document.getElementById("planDialog").open'],
   ['Profile popover', '/app.html', st, 'home', async (/** @type {any} */ p) => p.click('#profileIndicatorBtn'), visible('#profileMenu')],
+  ['Erase-plan dialog', '/app.html', st, 'home', async (/** @type {any} */ p) => { await p.click('#profileIndicatorBtn'); await p.click('#planEraseBtn'); await p.locator('#planDialog[open]').waitFor(); },
+    'document.getElementById("planDialog").open && document.getElementById("planDialogTitle").textContent.startsWith("Erase your plan")'],
   ['Fields popover', '/app.html', st, 'home', async (/** @type {any} */ p) => p.click('#fieldsLink'), visible('#fieldsMenu')],
   ['About popover', '/app.html', st, 'home', async (/** @type {any} */ p) => p.click('#aboutPill'), `document.getElementById('aboutPanel').classList.contains('open') && ${visible('#aboutPanel')}`],
   // Generated pages
@@ -115,11 +120,10 @@ const settle = page => page.evaluate(() => new Promise(resolve => {
 async function run(/** @type {any} */ browser, /** @type {number} */ width, /** @type {any[]} */ view, /** @type {boolean} */ open) {
   const [name, url, state, mode, setup, guard] = view;
   const label = `${width}px ${name}${open ? ' (all panels open)' : ''}`;
-  const ctx = await browser.newContext({ reducedMotion: 'reduce', viewport: { width, height: 900 }, acceptDownloads: true });
+  const ctx = await browser.newContext({ reducedMotion: 'reduce', viewport: { width, height: 900 }, acceptDownloads: true, bypassCSP: true });
   try {
     const page = await ctx.newPage();
-    // FONTS=1 loads the real web fonts (for overflow checks with their metrics).
-    await page.route(process.env.FONTS ? /cloudflareinsights/ : /fonts\.googleapis|fonts\.gstatic|cloudflareinsights/, r => r.abort());
+    await page.route(/cloudflareinsights/, r => r.abort());
     if (state) {
       await page.addInitScript(s => {
         const saved = JSON.parse(s);
@@ -138,7 +142,7 @@ async function run(/** @type {any} */ browser, /** @type {number} */ width, /** 
     } catch (e) { return { line: `${label}: SETUP FAILED (${String(/** @type {Error} */ (e).message).split('\n')[0]})`, fails: 1 }; }
     // Guard: a view that isn't on screen is a failed check, not a pass.
     if (!await page.evaluate(g => !!(0, eval)(g), guard)) return { line: `${label}: VIEW NOT SHOWN`, fails: 1 };
-    const fonts = process.env.FONTS ? await page.evaluate(async () => { await document.fonts.ready; return [...new Set([...document.fonts].filter(f => f.status === 'loaded').map(f => f.family.replace(/"/g, '')))].join('/'); }) : '';
+    const fonts = process.env.VERBOSE ? await page.evaluate(async () => { await document.fonts.ready; return [...new Set([...document.fonts].filter(f => f.status === 'loaded').map(f => f.family.replace(/"/g, '')))].join('/'); }) : '';
     if (open) await page.evaluate(() => document.querySelectorAll('details').forEach(d => { d.open = true; }));
     await page.addScriptTag({ content: AXE });
     const res = await page.evaluate(async (verbose) => (await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa'] } })).violations

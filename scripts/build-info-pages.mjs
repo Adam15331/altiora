@@ -7,7 +7,9 @@
  * accessibility.html from scripts/lib/info-pages.mjs, and 404.html (the page
  * GitHub Pages serves for any address that does not exist), rewrites the
  * info-links blocks in index.html and app.html (between
- * <!-- info-links:start --> and <!-- info-links:end -->), and regenerates
+ * <!-- info-links:start --> and <!-- info-links:end -->) and their csp blocks
+ * (the Content-Security-Policy <meta>, between <!-- csp:start --> and
+ * <!-- csp:end -->), and regenerates
  * sitemap.xml.
  *
  * Usage:  node scripts/build-info-pages.mjs
@@ -15,7 +17,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './lib/requirements-io.mjs';
-import { appPieces, fileHash, infoLinksHtml, pageShell, replaceMarkedBlock } from './lib/site-pages.mjs';
+import { appPieces, cspMeta, fileHash, infoLinksHtml, pageShell, replaceMarkedBlock } from './lib/site-pages.mjs';
 import { writeSitemap } from './lib/sitemap.mjs';
 import { INFO_PAGE_CONTENT, infoPageHtml } from './lib/info-pages.mjs';
 
@@ -27,7 +29,7 @@ pages.push(['404.html', pageShell({
   ...env, base: '/', url: null, noindex: true,
   generator: 'scripts/build-info-pages.mjs', source: 'scripts/build-info-pages.mjs',
   title: 'Page not found · Altiora',
-  description: 'This page does not exist. Find entry requirements by course or university, read the field guides, or open the website.',
+  description: 'This page does not exist. Find entry requirements by course or university, read the field guides, or check your subjects against real courses.',
   body: `      <header class="fo__header">
         <span class="fo__eyebrow">Page not found</span>
         <h1 class="fo__title">This page doesn’t exist</h1>
@@ -41,12 +43,14 @@ pages.push(['404.html', pageShell({
         </ul>
       </section>
       <section class="fo-section">
-        <a class="fo-btn fo-btn--primary" href="/app.html">Open the website →</a>
+        <a class="fo-btn fo-btn--primary" href="/app.html">Check my subjects →</a>
       </section>
       <p><a class="fo-back" href="/">← Back to Altiora</a></p>`,
 })]);
 for (const [file, html] of pages) fs.writeFileSync(path.join(ROOT, file), html);
 
+// The Content-Security-Policy on the two hand-written pages: one source (CSP in site-pages.mjs).
+for (const file of ['index.html', 'app.html']) replaceMarkedBlock(file, 'csp', cspMeta());
 replaceMarkedBlock('index.html', 'info-links', infoLinksHtml(''));
 // app.html's footer already has its "Report an issue" mailto link.
 replaceMarkedBlock('app.html', 'info-links', ` · ${infoLinksHtml('', { email: false })}`);

@@ -3,7 +3,7 @@
  * build-course-pages.mjs): HTML escaping, the page shell for the course and
  * university pages, and the list of public URLs (the sitemap itself is written by sitemap.mjs).
  *
- * The header lockup, analytics snippet, font links and stylesheet versions
+ * The header lockup, analytics snippet and stylesheet versions
  * are read out of app.html at build time so generated pages cannot drift
  * from the app. */
 import fs from 'node:fs';
@@ -34,6 +34,29 @@ export function socialImageTags(indent = '  ') {
     '<meta name="twitter:card" content="summary_large_image" />',
   ].map(l => indent + l).join('\n');
 }
+
+/**
+ * The one Content-Security-Policy, sent as a <meta> directly after <meta charset> on every page.
+ * Scripts: the site's own files and the Cloudflare Web Analytics beacon — no inline scripts, no eval.
+ * Styles: the site's own files plus inline style attributes. Fonts and images: the site's own.
+ * Generated pages get it from pageShell(); index.html and app.html from their csp marked block
+ * (build-info-pages.mjs).
+ */
+export const CSP = [
+  "default-src 'self'",
+  "script-src 'self' https://static.cloudflareinsights.com",
+  "style-src 'self' 'unsafe-inline'",
+  "font-src 'self'",
+  "img-src 'self' data:",
+  "connect-src 'self' https://cloudflareinsights.com",
+  "manifest-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+].join('; ');
+
+/** The policy as its <meta> tag. */
+export const cspMeta = () => `<meta http-equiv="Content-Security-Policy" content="${CSP}" />`;
 
 /** Directories of generated pages, in sitemap order. */
 export const PAGE_DIRS = ['fields', 'courses', 'universities'];
@@ -79,14 +102,11 @@ export function appPieces(root = ROOT) {
     if (!m) throw new Error(`Could not find ${what} in app.html.`);
     return m[1] ?? m[0];
   };
-  const fontHrefs = [...appHtml.matchAll(/<link rel="stylesheet" href="(https:\/\/fonts\.googleapis\.com[^"]+)"/g)].map(m => m[1]);
-  if (!fontHrefs.length) throw new Error('Could not find the font stylesheet(s) in app.html.');
   return {
     lockup: pick(/<span class="nav__logo">([\s\S]*?)<\/span>\s*<span class="nav__tagline">/, 'the header lockup'),
     analytics: pick(/<!-- Cloudflare Web Analytics -->[\s\S]*?<!-- End Cloudflare Web Analytics -->/, 'the analytics snippet'),
     stylesV: pick(/styles\.css\?v=(\d+)/, 'styles.css version'),
     tokensV: pick(/tokens\.css\?v=(\d+)/, 'tokens.css version'),
-    fontHrefs,
   };
 }
 
@@ -123,6 +143,7 @@ export function pageShell({ pieces, generator, source, title, description, url, 
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  ${cspMeta()}
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}" />
@@ -133,9 +154,6 @@ ${url ? `  <meta property="og:url" content="${esc(url)}" />\n` : ''}  <meta prop
   <meta property="og:description" content="${esc(description)}" />
 ${socialImageTags()}
 ${structuredData.map(d => `  <script type="application/ld+json">${jsonLd(d)}</script>`).join('\n')}
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-${pieces.fontHrefs.map(h => `  <link rel="stylesheet" href="${h}" />`).join('\n')}
   <link rel="stylesheet" href="${base}tokens.css?v=${pieces.tokensV}" />
   <link rel="stylesheet" href="${base}styles.css?v=${pieces.stylesV}" />
   <link rel="stylesheet" href="${base}course-pages.css?v=${pagesCssV}" />
@@ -148,7 +166,7 @@ ${pieces.fontHrefs.map(h => `  <link rel="stylesheet" href="${h}" />`).join('\n'
         <span class="nav__logo">${pieces.lockup}</span>
         <span class="nav__tagline">Your journey, guided.</span>
       </a>
-      <div class="about-wrap"><a class="about-pill" href="${base}app.html">Open the website →</a></div>
+      <div class="about-wrap"><a class="about-pill" href="${base}app.html">Check my subjects →</a></div>
     </div>
   </nav>
   <main>

@@ -21,6 +21,11 @@ export default [
     languageOptions: { ecmaVersion: 2022, sourceType: 'script', globals: { ...globals.browser, module: 'writable' } },
   },
   {
+    // Small browser-only scripts (moved out of inline <script> blocks for the Content-Security-Policy).
+    files: ['about-pill.js', 'strengths-param.js'],
+    languageOptions: { ecmaVersion: 2022, sourceType: 'script', globals: { ...globals.browser } },
+  },
+  {
     // Playwright scripts: code passed to page.evaluate runs in the browser.
     files: ['scripts/verify-pass/matching/*.mjs'],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },

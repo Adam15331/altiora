@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<!-- csp:start --><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" /><!-- csp:end -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Altiora · See where your subjects can take you</title>
 <meta name="description" content="Free guidance from 'no idea what to study' to a finished application plan — subjects, courses, shortlist, story. 335 courses. Every requirement is labelled verified, partly verified or not yet checked. No account; your data stays on your device.">
@@ -43,10 +44,7 @@
 }
 </script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "48e78fd025b74d35921517dcb99a87ed"}'></script><!-- End Cloudflare Web Analytics -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
-<link rel="stylesheet" href="tokens.css?v=11">
+<link rel="stylesheet" href="tokens.css?v=12">
 <style>
 /* ═══ Confident Editorial — same tokens as the app (tokens.css) ═══
    Palette used on this page, all from --ce-*:
@@ -322,7 +320,7 @@ h2 {
         </span>
         <span class="demo__verdict demo__verdict--not">Subjects don&rsquo;t fit</span>
       </div>
-      <p class="demo__foot">Real courses, real verdicts on subjects alone. Add predicted grades on the website for the fuller picture.</p>
+      <p class="demo__foot">Real courses, real verdicts on subjects alone. Add predicted grades for the fuller picture.</p>
     </div>
   </div>
 </header>
@@ -392,25 +390,6 @@ h2 {
   </div>
 </footer>
 
-<script>
-// About pill: tap/click toggles, close control, click-away and Escape
-// dismiss — the same popover pattern as the app's fields menu (hover-reveal
-// is CSS, on hover-capable devices only).
-(function () {
-  var pill = document.getElementById('aboutPill');
-  var panel = document.getElementById('aboutPanel');
-  if (!pill || !panel) return;
-  function set(open) { panel.classList.toggle('open', open); pill.setAttribute('aria-expanded', String(open)); }
-  pill.addEventListener('click', function (e) { e.stopPropagation(); set(!panel.classList.contains('open')); });
-  // Closing from inside the panel hands focus back to the pill, so a
-  // keyboard user is never dropped onto <body>; tabbing out closes it.
-  function closeToPill() { var inside = panel.contains(document.activeElement); set(false); if (inside) pill.focus(); }
-  document.getElementById('aboutClose').addEventListener('click', function (e) { e.stopPropagation(); closeToPill(); });
-  panel.addEventListener('click', function (e) { e.stopPropagation(); });
-  panel.parentNode.addEventListener('focusout', function (e) { if (e.relatedTarget && !e.currentTarget.contains(e.relatedTarget)) set(false); });
-  document.addEventListener('click', function () { set(false); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeToPill(); });
-})();
-</script>
+<script src="about-pill.js?v=1"></script>
 </body>
 </html>
