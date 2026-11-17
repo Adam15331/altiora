@@ -21,6 +21,12 @@ test('og-image.png is a 1200×630 PNG', () => {
   assert.equal(png.readUInt32BE(16), SOCIAL_IMAGE.width);
   assert.equal(png.readUInt32BE(20), SOCIAL_IMAGE.height);
   assert.deepEqual([SOCIAL_IMAGE.width, SOCIAL_IMAGE.height], [1200, 630]);
+  // The URL carries a version, so a changed picture is fetched afresh; the alt text describes a logo, no words.
+  assert.equal(SOCIAL_IMAGE.url, `${SITE}/og-image.png?v=${SOCIAL_IMAGE.version}`);
+  assert.ok(Number.isInteger(SOCIAL_IMAGE.version) && SOCIAL_IMAGE.version >= 2);
+  assert.equal(SOCIAL_IMAGE.alt, 'Altiora logo');
+  // The builder draws the mark only: it no longer reads the landing page.
+  assert.doesNotMatch(read('scripts/build-og-image.mjs'), /index\.html'|<h1>|hero/);
 });
 
 test('every page carries the shared preview image and the large-picture card', () => {
