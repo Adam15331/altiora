@@ -68,7 +68,8 @@
       kind,
       universityTerm: avail[0]?.universityTerm ?? null,
       // One line per distinct route (a subject record and a university-wide one often name the same route).
-      routes: kind === 'route' ? avail.map((/** @type {any} */ r) => ({ appliesTo: r.appliesTo, source: firstSource(r) }))
+      // The Source link on a route line is the quote that names the route (appliesToEvidence) when there is one.
+      routes: kind === 'route' ? avail.map((/** @type {any} */ r) => ({ appliesTo: r.appliesTo, source: r.appliesToEvidence?.[0]?.source ?? firstSource(r) }))
         .filter((/** @type {any} */ x, /** @type {number} */ i, /** @type {any[]} */ a) => a.findIndex(y => y.appliesTo === x.appliesTo) === i) : [],
       provider: avail[0]?.thirdPartyOnly ?? null,
       statementSources: [...new Set(avail.flatMap((/** @type {any} */ r) => [...(r.statement ?? []), ...(kind === 'third-party' ? [r.format, r.whatIsAssessed] : [])]

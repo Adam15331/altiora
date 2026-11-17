@@ -74,12 +74,25 @@ export function validateInterviews(data, { courses, today }) {
     if (r.interviewed === 'no' && !statement.length) err(where, '"no" needs the university\'s statement (statement[])');
     if (r.interviewed !== 'no' && statement.length) err(where, 'statement[] is only for "no" records');
     // New fields: route, the university's own term, third-party provider. Words must come from the quotes.
-    const snippets = [...EVIDENCE_FIELDS.map(f => r[f]?.sourceSnippet), ...r.prepAdvice.map((/** @type {any} */ e) => e.sourceSnippet), ...statement.map((/** @type {any} */ e) => e.sourceSnippet)].filter(Boolean).join(' ');
+    // Route evidence: the quote (or page/section heading) that names the route.
+    if (r.appliesToEvidence !== undefined) {
+      if (!Array.isArray(r.appliesToEvidence) || !r.appliesToEvidence.length) err(where, 'appliesToEvidence must be a non-empty array of evidence');
+      else r.appliesToEvidence.forEach((/** @type {any} */ e, /** @type {number} */ i) => evidence(e, `${where} appliesToEvidence[${i}]`));
+      if (!r.appliesTo) err(where, 'appliesToEvidence is only for route-limited records');
+    }
+    const routeEv = Array.isArray(r.appliesToEvidence) ? r.appliesToEvidence : [];
+    const snippets = [...EVIDENCE_FIELDS.map(f => r[f]?.sourceSnippet), ...r.prepAdvice.map((/** @type {any} */ e) => e.sourceSnippet), ...statement.map((/** @type {any} */ e) => e.sourceSnippet), ...routeEv.map((/** @type {any} */ e) => e.sourceSnippet)].filter(Boolean).join(' ');
     const set = ['appliesTo', 'universityTerm', 'thirdPartyOnly'].filter(k => r[k] !== undefined && r[k] !== null);
     if (set.length > 1) err(where, `only one of appliesTo, universityTerm, thirdPartyOnly may be set (has ${set.join(', ')})`);
     for (const k of set) if (typeof r[k] !== 'string' || !r[k].trim()) err(where, `${k} must be a non-empty string`);
     if (set.length && r.unavailable) err(where, 'unavailable records carry no route, term or provider');
     if (typeof r.universityTerm === 'string' && !snippets.includes(r.universityTerm)) err(where, `universityTerm "${r.universityTerm}" is not in the record's quotes`);
+    // Same rule for the route: its wording, or its key term (which must be part of the wording), is quoted.
+    if (typeof r.appliesTo === 'string' && r.appliesTo.trim()) {
+      if (r.appliesToKey !== undefined && (typeof r.appliesToKey !== 'string' || !r.appliesTo.includes(r.appliesToKey))) err(where, `appliesToKey "${r.appliesToKey}" must be part of appliesTo`);
+      const term = typeof r.appliesToKey === 'string' ? r.appliesToKey : r.appliesTo;
+      if (!snippets.includes(r.appliesTo) && !snippets.includes(term)) err(where, `appliesTo "${r.appliesTo}" (or its key term) is not in the record's quotes`);
+    } else if (r.appliesToKey !== undefined) err(where, 'appliesToKey needs appliesTo');
     if (typeof r.thirdPartyOnly === 'string') {
       if (r.interviewed !== 'no') err(where, 'thirdPartyOnly records are interviewed "no" (no university interview)');
       for (const name of r.thirdPartyOnly.split(/ or | and /)) if (!snippets.includes(name)) err(where, `provider "${name}" is not named in the record's quotes`);
