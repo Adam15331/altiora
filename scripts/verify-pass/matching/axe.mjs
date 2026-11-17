@@ -82,6 +82,8 @@ const VIEWS = [
   ['courses/index', '/courses/index.html', null, null, null, page()],
   ['course page (uk-maths-durham)', '/courses/uk-maths-durham.html', null, null, null, page()],
   ['university page (durham-university)', '/universities/durham-university.html', null, null, null, page()],
+  ['universities/index', '/universities/index.html', null, null, null, page()],
+  ['404', '/404.html', null, null, null, page()],
   ...fs.readdirSync(new URL('../../../fields/', import.meta.url)).filter(f => f.endsWith('.html')).sort()
     .map(f => [`fields/${f.replace('.html', '')}`, `/fields/${f}`, null, null, null, page()]),
   ['privacy', '/privacy.html', null, null, null, page()],

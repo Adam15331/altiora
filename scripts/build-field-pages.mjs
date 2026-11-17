@@ -27,7 +27,8 @@ import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { writeSitemap, footerHtml } from './lib/site-pages.mjs';
+import { footerHtml, socialImageTags, pageShell, appPieces, fileHash } from './lib/site-pages.mjs';
+import { writeSitemap } from './lib/sitemap.mjs';
 
 const require = createRequire(import.meta.url);
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -147,7 +148,7 @@ function pageHtml(key, fp) {
   <meta property="og:url" content="${url}" />
   <meta property="og:title" content="${esc(title)}" />
   <meta property="og:description" content="${esc(description)}" />
-  <meta name="twitter:card" content="summary" />
+${socialImageTags()}
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 ${fontHrefs.map(h => `  <link rel="stylesheet" href="${h}" />`).join('\n')}
@@ -194,12 +195,36 @@ for (const key of keys) {
   pages.set(key, pageHtml(key, fieldProfiles[key]));
 }
 
+/* ── fields/index.html: every field guide ───────────────────────── */
+const indexHtml = pageShell({
+  pieces: appPieces(), pagesCssV: fileHash('course-pages.css'), generator: SCRIPT, source: SRC,
+  url: `${SITE}/fields/`,
+  title: 'Field guides · Altiora',
+  description: `Guides to ${keys.length} fields of study: what each one actually is, a day in the life, the degree versus the school subject, who thrives and where it leads.`,
+  structuredData: [{ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Altiora', item: `${SITE}/` },
+    { '@type': 'ListItem', position: 2, name: 'Field guides', item: `${SITE}/fields/` }] }],
+  body: `      <header class="fo__header">
+        <span class="fo__eyebrow">Field guide</span>
+        <h1 class="fo__title">Field guides</h1>
+        <p class="fo__desc">What each field is actually like: a day in the life, the degree versus the school subject, who thrives and where it leads.</p>
+      </header>
+      <section class="fo-section">
+        <ul class="cp-links">${keys.map(k => `<li><a href="${k}.html">${esc(fieldProfiles[k].name)}</a></li>`).join('')}</ul>
+      </section>
+      <section class="fo-section">
+        <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against real courses in the app →</a>
+      </section>
+      <p><a class="fo-back" href="../">← Back to Altiora</a></p>`,
+});
+
 fs.mkdirSync(OUT_DIR, { recursive: true });
-// Remove stale pages for profiles that no longer exist.
+// Remove stale pages for profiles that no longer exist (index.html is rewritten below).
 for (const f of fs.readdirSync(OUT_DIR)) {
-  if (f.endsWith('.html') && !pages.has(f.replace(/\.html$/, ''))) fs.unlinkSync(path.join(OUT_DIR, f));
+  if (f.endsWith('.html') && f !== 'index.html' && !pages.has(f.replace(/\.html$/, ''))) fs.unlinkSync(path.join(OUT_DIR, f));
 }
 for (const [key, html] of pages) fs.writeFileSync(path.join(OUT_DIR, `${key}.html`), html);
+fs.writeFileSync(path.join(OUT_DIR, 'index.html'), indexHtml);
 
 /* ── sitemap.xml: rewritten from every generated page on disk ─────── */
 const urlCount = writeSitemap();
@@ -213,4 +238,4 @@ const links = keys.map(k => `<a class="step__link" href="fields/${k}.html">${esc
 const block = `${START}<p class="step__desc">Read the guides: ${links}.</p>${END}`;
 fs.writeFileSync(indexPath, index.replace(new RegExp(`${START}[\\s\\S]*?${END}`), () => block));
 
-console.log(`Built ${pages.size} field pages, sitemap.xml (${urlCount} URLs), index.html field links.`);
+console.log(`Built ${pages.size} field pages, fields/index.html, sitemap.xml (${urlCount} URLs), index.html field links.`);
