@@ -1,5 +1,6 @@
 /* global switchMode, axe */
-// axe-core WCAG 2.0 A/AA over every view in VIEWS below; also overflow at 375px and minimum text size.
+// axe-core WCAG 2.0 A/AA over every view in VIEWS below; also overflow at 375px, minimum text size, and any
+// open menu, popover or dialog that hangs off the side of the viewport (at either width).
 //   node scripts/verify-pass/matching/axe.mjs <root> <port> build    every view at 375px, details open (per build)
 //   node scripts/verify-pass/matching/axe.mjs <root> <port> release  1280 + 375px, details closed and open (before release; default)
 // Env: CHROMIUM_PATH, SWEEP_WORKERS (default 4), VIEWS (name filter), VERBOSE=1. Exits 1 on any failure.
@@ -151,12 +152,21 @@ async function run(/** @type {any} */ browser, /** @type {number} */ width, /** 
         : `${v.id} (${v.nodes.length})`), !!process.env.VERBOSE);
     const extra = await page.evaluate(() => {
       const overflow = document.documentElement.scrollWidth > window.innerWidth;
+      // Open menus, popovers and dialogs sit above the page and do not widen it, so the scrollWidth test
+      // cannot see one that hangs off a side. Measure each open one against the viewport edges: its whole
+      // box (padding and border included) must be inside.
+      const vw = document.documentElement.clientWidth;
+      const clipped = [...document.querySelectorAll('[role="menu"], .stage-menu, .about-panel, dialog[open], [popover]')]
+        .filter(el => el.getClientRects().length && !el.closest('.hidden') && getComputedStyle(el).visibility !== 'hidden' && Number(getComputedStyle(el).opacity) > 0)
+        .map(el => { const r = el.getBoundingClientRect(); return { el: el.id ? `#${el.id}` : `.${String(el.className).split(' ')[0]}`, left: Math.round(r.left * 10) / 10, right: Math.round(r.right * 10) / 10 }; })
+        .filter(b => b.left < 0 || b.right > vw)
+        .map(b => `${b.el} spans ${b.left}–${b.right} of 0–${vw}`);
       let min = 99; for (const el of document.querySelectorAll('body *')) { if (!el.childNodes.length || ![...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) continue; const cs = getComputedStyle(el); if (cs.display === 'none' || cs.visibility === 'hidden' || !el.getClientRects().length) continue; min = Math.min(min, parseFloat(cs.fontSize)); }
-      return { overflow, min };
+      return { overflow, min, clipped };
     });
     return {
-      line: `${label}: ${res.length ? res.join(', ') : '0 violations'}; overflow=${extra.overflow}; minText=${extra.min}px${fonts ? `; fonts=${fonts}` : ''}`,
-      fails: res.length + (extra.overflow && width === 375 ? 1 : 0) + (extra.min < 12 ? 1 : 0),
+      line: `${label}: ${res.length ? res.join(', ') : '0 violations'}; overflow=${extra.overflow}; minText=${extra.min}px${extra.clipped.length ? `; OFF SCREEN: ${extra.clipped.join(', ')}` : ''}${fonts ? `; fonts=${fonts}` : ''}`,
+      fails: res.length + (extra.overflow && width === 375 ? 1 : 0) + (extra.min < 12 ? 1 : 0) + extra.clipped.length,
     };
   } finally { await ctx.close(); }
 }
