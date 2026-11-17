@@ -118,6 +118,10 @@ for (const t of Object.keys(TIMING)) if (!records[t]?.timing) throw new Error(`t
 //   appliesTo      — set when the interview is for one route/group only, in
 //                    the university's words (the card says "Interviews some
 //                    applicants: …", no practice button)
+//   routeDisplay   — on every route record: 'label' shows the route label
+//                    ("Interviews some applicants: JUPAS applicants"); 'quote'
+//                    shows the quote that names the route, in full ("Interviews
+//                    some applicants. <University> says: “…”"). Display only.
 //   universityTerm — what the university calls it when it does not call it an
 //                    interview (the card uses this word, never "interview")
 //   thirdPartyOnly — no university interview; the provider as the university
@@ -128,8 +132,9 @@ const expansion = JSON.parse(fs.readFileSync(path.join(ROOT, 'research/interview
 
 // Route-limited records: the route label, verbatim from a quote on the record — its own evidence, or the
 // page/section heading captured in its appliesToEvidence (research file). Where the full label is not in a
-// quote, `key` is the term that is (e.g. "JUPAS"). The validator checks both.
-/** @type {Record<string, {appliesTo: string, key?: string}>} */
+// quote, `key` is the term that is (e.g. "JUPAS"). The validator checks both. `display: 'quote'` shows the
+// quote that names the route instead of the label (routeDisplay); every other route record shows the label.
+/** @type {Record<string, {appliesTo: string, key?: string, display?: 'quote'}>} */
 const ROUTE = {
   'cuhk-all': { appliesTo: 'JUPAS applicants' }, 'cuhk-business': { appliesTo: 'JUPAS candidates' },
   'cuhk-cs': { appliesTo: 'JUPAS applicants', key: 'JUPAS' }, 'cuhk-engineering': { appliesTo: 'JUPAS applicants', key: 'JUPAS' },
@@ -145,16 +150,18 @@ const ROUTE = {
   'mcgill-medicine': { appliesTo: 'CEGEP students' }, 'mcgill-law': { appliesTo: 'CEGEP candidates' },
   'tcd-medicine': { appliesTo: 'mature applicants' }, 'tcd-psychology-mature': { appliesTo: 'mature applicants' },
   'tcd-mature-all': { appliesTo: 'mature applicants', key: 'mature' },
-  'nus-computing': { appliesTo: 'Aptitude-Based Admissions (ABA) scheme' }, 'nus-all': { appliesTo: 'some faculties' },
+  'nus-computing': { appliesTo: 'Aptitude-Based Admissions (ABA) scheme' }, 'nus-all': { appliesTo: 'some faculties', display: 'quote' },
   'ntu-aba-all': { appliesTo: 'aptitude-based admissions scheme' },
-  'bath-mathematics': { appliesTo: 'Very exceptionally we may invite you to an interview if you have circumstances we cannot assess from an application alone' },
-  'glasgow-year2-entry': { appliesTo: 'entry into Year 2 in any subject' },
-  'michigan-engineering': { appliesTo: 'some applicants to the College of Engineering' },
-  'unc-business': { appliesTo: 'admitted transfer student or current UNC student who has completed your first year' },
+  'bath-mathematics': { appliesTo: 'Very exceptionally we may invite you to an interview if you have circumstances we cannot assess from an application alone', display: 'quote' },
+  'glasgow-year2-entry': { appliesTo: 'entry into Year 2 in any subject', display: 'quote' },
+  'michigan-engineering': { appliesTo: 'some applicants to the College of Engineering', display: 'quote' },
+  'unc-business': { appliesTo: 'admitted transfer student or current UNC student who has completed your first year', display: 'quote' },
 };
 // One research record whose courses state different routes: split per course, each with the label from
 // its own course page (appliesToEvidence items carry courseId).
 const SPLIT_BY_COURSE = { 'bath-qualification-route': /^If you are (studying certain qualifications, such as an Access to HE[^,]*), you will be invited/ };
+// How each split record's route line shows (routeDisplay).
+const SPLIT_DISPLAY = { 'bath-qualification-route': 'quote' };
 // Recorded responses (or a session) the university does not call an interview.
 const TERM = { 'utoronto-engineering': 'Personal Profile', 'queens-commerce': 'Supplementary Application',
   'mcmaster-engineering-cs': 'supplementary application', 'sutd-all': 'conversation session' };
@@ -226,13 +233,14 @@ for (const r of expansion.records) {
       const e = (r.appliesToEvidence ?? []).find((/** @type {any} */ x) => x.courseId === c);
       const m = e && SPLIT_BY_COURSE[r.id].exec(e.sourceSnippet);
       if (!m) throw new Error(`${r.id}: no route quote for ${c}`);
-      addNew({ ...out, id: `${r.id}-${c}`, appliesTo: m[1], appliesToEvidence: [ev(e)], courseIds: [c] });
+      addNew({ ...out, id: `${r.id}-${c}`, appliesTo: m[1], routeDisplay: SPLIT_DISPLAY[r.id] ?? 'label', appliesToEvidence: [ev(e)], courseIds: [c] });
     }
     continue;
   }
   if (kind === 'route') {
     out.appliesTo = ROUTE[r.id].appliesTo;
     if (ROUTE[r.id].key) out.appliesToKey = ROUTE[r.id].key;
+    out.routeDisplay = ROUTE[r.id].display ?? 'label';
     if (r.appliesToEvidence?.length) out.appliesToEvidence = r.appliesToEvidence.map(ev);
   }
   addNew(out);

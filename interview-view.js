@@ -69,7 +69,12 @@
       universityTerm: avail[0]?.universityTerm ?? null,
       // One line per distinct route (a subject record and a university-wide one often name the same route).
       // The Source link on a route line is the quote that names the route (appliesToEvidence) when there is one.
-      routes: kind === 'route' ? avail.map((/** @type {any} */ r) => ({ appliesTo: r.appliesTo, source: r.appliesToEvidence?.[0]?.source ?? firstSource(r) }))
+      // Quote mode (routeDisplay 'quote') shows that quote in full instead of the label; its link is the quote's.
+      routes: kind === 'route' ? avail.map((/** @type {any} */ r) => {
+        const quote = r.routeDisplay === 'quote' ? routeQuote(r) : null;
+        return { appliesTo: r.appliesTo, university: r.university, quote: quote?.sourceSnippet ?? null,
+          source: quote?.source ?? r.appliesToEvidence?.[0]?.source ?? firstSource(r) };
+      })
         .filter((/** @type {any} */ x, /** @type {number} */ i, /** @type {any[]} */ a) => a.findIndex(y => y.appliesTo === x.appliesTo) === i) : [],
       provider: avail[0]?.thirdPartyOnly ?? null,
       statementSources: [...new Set(avail.flatMap((/** @type {any} */ r) => [...(r.statement ?? []), ...(kind === 'third-party' ? [r.format, r.whatIsAssessed] : [])]
@@ -88,6 +93,16 @@
       timing: avail.find((/** @type {any} */ r) => r.timing)?.timing ?? null,
       timingRecord: avail.find((/** @type {any} */ r) => r.timing) ?? null,
     };
+  }
+
+  /**
+   * The quote that names a record's route: the first of its quotes (route evidence first) that contains the
+   * full route wording. Null if none does (the validator requires one for quote mode).
+   * @param {any} r
+   */
+  function routeQuote(r) {
+    const quotes = [...(r.appliesToEvidence ?? []), ...['format', 'numberAndLength', 'mmiStations', 'whatIsAssessed'].map(f => r[f]), ...(r.prepAdvice ?? [])];
+    return quotes.find(e => e && typeof e.sourceSnippet === 'string' && typeof r.appliesTo === 'string' && e.sourceSnippet.includes(r.appliesTo)) ?? null;
   }
 
   /** The first source a record quotes. @param {any} r */
@@ -131,8 +146,10 @@
     let label = 'Interview';
     if (v.kind === 'route') {
       // Route-limited: who is interviewed, in the university's words. No practice.
-      body = v.routes.map((/** @type {any} */ r) =>
-        `<p class="reqs__text">Interviews some applicants: ${esc(r.appliesTo)} <span class="reqs__meta-inline">${r.source ? sourceLink(r.source) : ''}</span></p>`).join('');
+      // Label mode names the route; quote mode gives the university's sentence in full (never shortened).
+      body = v.routes.map((/** @type {any} */ r) => r.quote
+        ? `<p class="reqs__text">Interviews some applicants. ${esc(r.university)} says: “${String(r.quote).split(' / ').map(esc).join('<br>')}” <span class="reqs__meta-inline">${r.source ? sourceLink(r.source) : ''}</span></p>`
+        : `<p class="reqs__text">Interviews some applicants: ${esc(r.appliesTo)} <span class="reqs__meta-inline">${r.source ? sourceLink(r.source) : ''}</span></p>`).join('');
     } else if (v.kind === 'no') {
       body = `<p class="reqs__text">${esc(v.university)} states it does not interview for this course. <span class="reqs__meta-inline">${sourceLinks(v.statementSources)}</span></p>`;
     } else if (v.kind === 'third-party') {
@@ -196,7 +213,7 @@
   const mmss = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 
   const api = {
-    forCourse, interviews, kindOf, sectionHtml, storyPrompt, plainText, mmss, formatDate,
+    forCourse, interviews, kindOf, routeQuote, sectionHtml, storyPrompt, plainText, mmss, formatDate,
     INTERVIEWED_LABEL, UNAVAILABLE_TEXT, EMPTY_PRACTICE_TEXT, PLAIN_TIMER_LABEL, PLAIN_TIMER_SECONDS,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
