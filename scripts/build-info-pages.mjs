@@ -27,7 +27,7 @@ pages.push(['404.html', pageShell({
   ...env, base: '/', url: null, noindex: true,
   generator: 'scripts/build-info-pages.mjs', source: 'scripts/build-info-pages.mjs',
   title: 'Page not found · Altiora',
-  description: 'This page does not exist. Find entry requirements by course or university, read the field guides, or open the website.',
+  description: 'This page does not exist. Find entry requirements by course or university, read the field guides, or check your subjects against real courses.',
   body: `      <header class="fo__header">
         <span class="fo__eyebrow">Page not found</span>
         <h1 class="fo__title">This page doesn’t exist</h1>
@@ -41,7 +41,7 @@ pages.push(['404.html', pageShell({
         </ul>
       </section>
       <section class="fo-section">
-        <a class="fo-btn fo-btn--primary" href="/app.html">Open the website →</a>
+        <a class="fo-btn fo-btn--primary" href="/app.html">Check my subjects →</a>
       </section>
       <p><a class="fo-back" href="/">← Back to Altiora</a></p>`,
 })]);

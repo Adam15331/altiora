@@ -148,7 +148,7 @@ ${pieces.fontHrefs.map(h => `  <link rel="stylesheet" href="${h}" />`).join('\n'
         <span class="nav__logo">${pieces.lockup}</span>
         <span class="nav__tagline">Your journey, guided.</span>
       </a>
-      <div class="about-wrap"><a class="about-pill" href="${base}app.html">Open the website →</a></div>
+      <div class="about-wrap"><a class="about-pill" href="${base}app.html">Check my subjects →</a></div>
     </div>
   </nav>
   <main>

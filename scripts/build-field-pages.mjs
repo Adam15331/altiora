@@ -163,7 +163,7 @@ ${fontHrefs.map(h => `  <link rel="stylesheet" href="${h}" />`).join('\n')}
         <span class="nav__logo">${lockup}</span>
         <span class="nav__tagline">Your journey, guided.</span>
       </a>
-      <div class="about-wrap"><a class="about-pill" href="../app.html">Open the website →</a></div>
+      <div class="about-wrap"><a class="about-pill" href="../app.html">Check my subjects →</a></div>
     </div>
   </nav>
   <main>
@@ -175,9 +175,9 @@ ${fontHrefs.map(h => `  <link rel="stylesheet" href="${h}" />`).join('\n')}
       </header>
       ${sectionsHtml}
       <section class="fo-section">
-        <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against real courses on the website →</a>
+        <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against real courses →</a>
       </section>
-      <p><a class="fo-back" href="../">← Back to Altiora</a></p>
+      <p><a class="fo-back" href="./">← All field guides</a></p>
       </div>
     </div>
   </main>
@@ -213,7 +213,7 @@ const indexHtml = pageShell({
         <ul class="cp-links">${keys.map(k => `<li><a href="${k}.html">${esc(fieldProfiles[k].name)}</a></li>`).join('')}</ul>
       </section>
       <section class="fo-section">
-        <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against real courses on the website →</a>
+        <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against real courses →</a>
       </section>
       <p><a class="fo-back" href="../">← Back to Altiora</a></p>`,
 });
