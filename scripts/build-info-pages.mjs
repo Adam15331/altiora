@@ -41,7 +41,7 @@ pages.push(['404.html', pageShell({
         </ul>
       </section>
       <section class="fo-section">
-        <a class="fo-btn fo-btn--primary" href="/app.html">Open the app →</a>
+        <a class="fo-btn fo-btn--primary" href="/app.html">Open the website →</a>
       </section>
       <p><a class="fo-back" href="/">← Back to Altiora</a></p>`,
 })]);
