@@ -29,14 +29,39 @@ test('route-limited: "Interviews some applicants: <route>" with a source link, n
   assert.match(html, /<a class="reqs__link" href="https:\/\/[^"]+"[^>]*>Source<\/a>/);
   assert.doesNotMatch(html, /data-iv-practise|Practise/);
   assert.equal(V.interviews(view('hk-cs-cuhk')), false);
-  assert.match(text(card('uk-cs-glasgow')), /Interviews some applicants: entry into Year 2 in any subject/);
-  assert.match(text(card('ie-medicine-trinity')), /Interviews some applicants: mature applicants/);
-  // Bath: each course page names its own qualifications.
-  assert.match(text(card('uk-cs-bath')), /Interviews some applicants: studying certain qualifications, such as an Access to HE or T Level Source/);
-  assert.match(text(card('uk-economics-bath')), /Interviews some applicants: studying certain qualifications, such as an Access to HE Diploma Source/);
-  assert.match(text(card('uk-accounting-bath')), /such as an Access to HE Diploma or T Level Source/);
+  assert.match(text(card('ie-medicine-trinity')), /Interviews some applicants: mature applicants Source/);
+  assert.match(text(card('sg-cs-ntu')), /Interviews some applicants: aptitude-based admissions scheme Source/);
   // NTU's international-qualifications line could not be backed by one quote: not shown.
   assert.doesNotMatch(text(card('sg-cs-ntu')), /Gao Kao|Indonesia/);
+});
+
+test('route quote mode: "Interviews some applicants. <University> says:" and the quote that names the route, in full', () => {
+  const QUOTE = ['bath-mathematics', 'bath-qualification-route-uk-accounting-bath', 'bath-qualification-route-uk-cs-bath',
+    'bath-qualification-route-uk-economics-bath', 'bath-qualification-route-uk-engineering-bath', 'glasgow-year2-entry',
+    'michigan-engineering', 'nus-all', 'unc-business'];
+  const routes = /** @type {any[]} */ (Object.values(D.records).filter((/** @type {any} */ r) => r.appliesTo));
+  assert.deepEqual(routes.filter(r => r.routeDisplay === 'quote').map(r => r.id).sort(), QUOTE);
+  for (const r of routes) assert.ok(r.routeDisplay === 'quote' || r.routeDisplay === 'label', r.id);
+  // Each quote-mode course: the whole quote, verbatim, from the record's own quote that holds the route wording.
+  for (const [courseId, recordId] of [['uk-maths-bath', 'bath-mathematics'], ['uk-cs-bath', 'bath-qualification-route-uk-cs-bath'],
+    ['uk-economics-bath', 'bath-qualification-route-uk-economics-bath'], ['uk-engineering-bath', 'bath-qualification-route-uk-engineering-bath'],
+    ['uk-accounting-bath', 'bath-qualification-route-uk-accounting-bath'], ['uk-cs-glasgow', 'glasgow-year2-entry'],
+    ['us-engineering-michigan', 'michigan-engineering'], ['sg-economics-nus', 'nus-all'], ['us-business-unc', 'unc-business']]) {
+    const r = D.records[recordId];
+    const q = V.routeQuote(r);
+    assert.ok(q && q.sourceSnippet.includes(r.appliesTo), recordId);
+    const html = card(courseId);
+    const shown = html.replace(/&amp;/g, '&');
+    assert.ok(shown.includes(`Interviews some applicants. ${r.university} says: “${q.sourceSnippet}” <span class="reqs__meta-inline"><a class="reqs__link" href="${q.source}"`), courseId);
+    assert.doesNotMatch(text(html), /Interviews some applicants:/, courseId);   // no label line as well
+    assert.doesNotMatch(html, /data-iv-practise|Practise|…/, courseId);
+  }
+  assert.match(text(card('uk-maths-bath')), /^Interview Interviews some applicants\. University of Bath says: “Very exceptionally we may invite you to an interview if you have circumstances we cannot assess from an application alone\.” Source$/);
+  // A course with a label-mode route and a quote-mode route shows both, once each.
+  const both = text(card('sg-cs-nus'));
+  assert.match(both, /Interviews some applicants: Aptitude-Based Admissions \(ABA\) scheme Source/);
+  assert.match(both, /Interviews some applicants\. National University of Singapore says: “As part of the University’s holistic assessment, some faculties might also require/);
+  assert.equal((both.match(/Interviews some applicants/g) ?? []).length, 2);
 });
 
 test('every route label is backed by a quote on its record: the label itself, or its key term', () => {
@@ -122,6 +147,11 @@ test('validator: "no" needs the statement; term and provider must be in the quot
   // Route wording must be quoted: an invented route, or a key term that is not in the quotes, is rejected.
   assert.match(mutate(d => { d.records['glasgow-year2-entry'].appliesTo = 'Year 9 pupils'; }), /appliesTo "Year 9 pupils" \(or its key term\) is not in the record's quotes/);
   assert.match(mutate(d => { d.records['cuhk-cs'].appliesToKey = 'Band A'; }), /appliesToKey "Band A" must be part of appliesTo/);
+  assert.match(mutate(d => { delete d.records['cuhk-cs'].routeDisplay; }), /routeDisplay must be "label" or "quote" on a route record/);
+  assert.match(mutate(d => { d.records['cuhk-cs'].routeDisplay = 'full'; }), /routeDisplay must be "label" or "quote"/);
+  assert.match(mutate(d => { d.records['hku-law'].routeDisplay = 'label'; }), /routeDisplay is only for route-limited records/);
+  // cuhk-cs is backed by its key term only ("JUPAS"): no quote holds "JUPAS applicants", so it cannot be quoted.
+  assert.match(mutate(d => { d.records['cuhk-cs'].routeDisplay = 'quote'; }), /routeDisplay "quote" needs a quote that contains the full route wording "JUPAS applicants"/);
   assert.match(mutate(d => { delete d.records['cuhk-cs'].appliesToEvidence; }), /is not in the record's quotes/);
   assert.match(mutate(d => { d.records['cuhk-cs'].appliesToEvidence[0].accessed = ''; }), /accessed date/);
 });

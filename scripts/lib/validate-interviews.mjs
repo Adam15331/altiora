@@ -93,6 +93,13 @@ export function validateInterviews(data, { courses, today }) {
       const term = typeof r.appliesToKey === 'string' ? r.appliesToKey : r.appliesTo;
       if (!snippets.includes(r.appliesTo) && !snippets.includes(term)) err(where, `appliesTo "${r.appliesTo}" (or its key term) is not in the record's quotes`);
     } else if (r.appliesToKey !== undefined) err(where, 'appliesToKey needs appliesTo');
+    // How the route line shows: 'label' (the route wording) or 'quote' (the quote that names the route, in full).
+    // Quote mode needs one quote that holds the full route wording, so the sentence shown is the one that backs it.
+    if (r.appliesTo) {
+      if (!['label', 'quote'].includes(r.routeDisplay)) err(where, 'routeDisplay must be "label" or "quote" on a route record');
+      else if (r.routeDisplay === 'quote' && ![...routeEv, ...EVIDENCE_FIELDS.map(f => r[f]), ...r.prepAdvice].some(e => typeof e?.sourceSnippet === 'string' && e.sourceSnippet.includes(r.appliesTo)))
+        err(where, `routeDisplay "quote" needs a quote that contains the full route wording "${r.appliesTo}"`);
+    } else if (r.routeDisplay !== undefined) err(where, 'routeDisplay is only for route-limited records');
     if (typeof r.thirdPartyOnly === 'string') {
       if (r.interviewed !== 'no') err(where, 'thirdPartyOnly records are interviewed "no" (no university interview)');
       for (const name of r.thirdPartyOnly.split(/ or | and /)) if (!snippets.includes(name)) err(where, `provider "${name}" is not named in the record's quotes`);

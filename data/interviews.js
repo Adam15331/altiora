@@ -1765,6 +1765,7 @@
         "interviewed": "yes",
         "timing": null,
         "appliesTo": "JUPAS applicants",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://admission.cuhk.edu.hk/application/jupas/faq/",
@@ -1830,7 +1831,8 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "JUPAS candidates"
+        "appliesTo": "JUPAS candidates",
+        "routeDisplay": "label"
       },
       "cuhk-cs": {
         "id": "cuhk-cs",
@@ -1851,6 +1853,7 @@
         "timing": null,
         "appliesTo": "JUPAS applicants",
         "appliesToKey": "JUPAS",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://admission.cuhk.edu.hk/wp-content/uploads/2026/03/Interview-Arrangement-2026-Entry.pdf",
@@ -1878,6 +1881,7 @@
         "timing": null,
         "appliesTo": "JUPAS applicants",
         "appliesToKey": "JUPAS",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://admission.cuhk.edu.hk/wp-content/uploads/2026/03/Interview-Arrangement-2026-Entry.pdf",
@@ -1905,6 +1909,7 @@
         "timing": null,
         "appliesTo": "JUPAS applicants",
         "appliesToKey": "JUPAS",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://admission.cuhk.edu.hk/wp-content/uploads/2026/03/Interview-Arrangement-2026-Entry.pdf",
@@ -1932,6 +1937,7 @@
         "timing": null,
         "appliesTo": "JUPAS applicants",
         "appliesToKey": "JUPAS",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://admission.cuhk.edu.hk/wp-content/uploads/2026/03/Interview-Arrangement-2026-Entry.pdf",
@@ -1959,6 +1965,7 @@
         "timing": null,
         "appliesTo": "JUPAS applicants",
         "appliesToKey": "JUPAS",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://admission.cuhk.edu.hk/wp-content/uploads/2026/03/Interview-Arrangement-2026-Entry.pdf",
@@ -1985,6 +1992,7 @@
         "interviewed": "yes",
         "timing": null,
         "appliesTo": "International Qualification Holders",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://join.hkust.edu.hk/node/7",
@@ -2012,6 +2020,7 @@
         "timing": null,
         "appliesTo": "JUPAS applicants",
         "appliesToKey": "JUPAS",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://join.hkust.edu.hk/admissions/jupas",
@@ -2039,6 +2048,7 @@
         "timing": null,
         "appliesTo": "JUPAS applicants",
         "appliesToKey": "JUPAS",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://join.hkust.edu.hk/admissions/jupas",
@@ -2074,6 +2084,7 @@
         "timing": null,
         "appliesTo": "JUPAS applicants",
         "appliesToKey": "JUPAS",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://www.polyu.edu.hk/study/ug/admissions/jupas/jupas-interview-arrangement",
@@ -2109,6 +2120,7 @@
         "timing": null,
         "appliesTo": "JUPAS applicants",
         "appliesToKey": "JUPAS",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://www.polyu.edu.hk/study/ug/admissions/jupas/jupas-interview-arrangement",
@@ -2144,6 +2156,7 @@
         "timing": null,
         "appliesTo": "JUPAS applicants",
         "appliesToKey": "JUPAS",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://www.polyu.edu.hk/study/ug/admissions/jupas/jupas-interview-arrangement?page=1",
@@ -2179,6 +2192,7 @@
         "timing": null,
         "appliesTo": "JUPAS applicants",
         "appliesToKey": "JUPAS",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://www.polyu.edu.hk/study/ug/admissions/jupas/jupas-interview-arrangement?page=4",
@@ -2214,6 +2228,7 @@
         "timing": null,
         "appliesTo": "JUPAS applicants",
         "appliesToKey": "JUPAS",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://www.polyu.edu.hk/study/ug/admissions/jupas/jupas-interview-arrangement?page=3",
@@ -2243,7 +2258,8 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "JUPAS Applicants"
+        "appliesTo": "JUPAS Applicants",
+        "routeDisplay": "label"
       },
       "cityu-business-marketing": {
         "id": "cityu-business-marketing",
@@ -2267,7 +2283,8 @@
         "interviewed": "yes",
         "timing": null,
         "appliesTo": "JUPAS applicants",
-        "appliesToKey": "JUPAS"
+        "appliesToKey": "JUPAS",
+        "routeDisplay": "label"
       },
       "cityu-business-global-business": {
         "id": "cityu-business-global-business",
@@ -2288,6 +2305,7 @@
         "timing": null,
         "appliesTo": "JUPAS applicants",
         "appliesToKey": "JUPAS",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://prog.cb.cityu.edu.hk/academics/bbagbu/admissions",
@@ -2393,6 +2411,7 @@
         "interviewed": "yes",
         "timing": null,
         "appliesTo": "CEGEP students",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://www.mcgill.ca/medadmissions/programs/med-p",
@@ -2426,7 +2445,8 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "CEGEP candidates"
+        "appliesTo": "CEGEP candidates",
+        "routeDisplay": "label"
       },
       "mcmaster-engineering-cs": {
         "id": "mcmaster-engineering-cs",
@@ -2628,7 +2648,8 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "mature applicants"
+        "appliesTo": "mature applicants",
+        "routeDisplay": "label"
       },
       "tcd-psychology-mature": {
         "id": "tcd-psychology-mature",
@@ -2648,6 +2669,7 @@
         "interviewed": "yes",
         "timing": null,
         "appliesTo": "mature applicants",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://www.tcd.ie/media/tcd/mature-students/pdfs/TCD-Mature-Student-Guidelines-2027.pdf",
@@ -2675,6 +2697,7 @@
         "timing": null,
         "appliesTo": "mature applicants",
         "appliesToKey": "mature",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://www.tcd.ie/media/tcd/calendar/undergraduate-studies/admission-requirements.pdf",
@@ -2724,7 +2747,8 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "Aptitude-Based Admissions (ABA) scheme"
+        "appliesTo": "Aptitude-Based Admissions (ABA) scheme",
+        "routeDisplay": "label"
       },
       "nus-all": {
         "id": "nus-all",
@@ -2743,7 +2767,8 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "some faculties"
+        "appliesTo": "some faculties",
+        "routeDisplay": "quote"
       },
       "ntu-medicine": {
         "id": "ntu-medicine",
@@ -2799,6 +2824,7 @@
         "interviewed": "yes",
         "timing": null,
         "appliesTo": "aptitude-based admissions scheme",
+        "routeDisplay": "label",
         "appliesToEvidence": [
           {
             "source": "https://www.ntu.edu.sg/admissions/undergraduate/admissions/undergraduate/apply/aptitude-based-applications",
@@ -2864,6 +2890,7 @@
         "interviewed": "yes",
         "timing": null,
         "appliesTo": "studying certain qualifications, such as an Access to HE or T Level",
+        "routeDisplay": "quote",
         "appliesToEvidence": [
           {
             "source": "https://www.bath.ac.uk/courses/undergraduate-2027/computer-science/bsc-computer-science/",
@@ -2910,6 +2937,7 @@
         "interviewed": "yes",
         "timing": null,
         "appliesTo": "studying certain qualifications, such as an Access to HE Diploma",
+        "routeDisplay": "quote",
         "appliesToEvidence": [
           {
             "source": "https://www.bath.ac.uk/courses/undergraduate-2027/economics/bsc-economics/",
@@ -2956,6 +2984,7 @@
         "interviewed": "yes",
         "timing": null,
         "appliesTo": "studying certain qualifications, such as an Access to HE Diploma",
+        "routeDisplay": "quote",
         "appliesToEvidence": [
           {
             "source": "https://www.bath.ac.uk/courses/undergraduate-2027/mechanical-engineering/beng-mechanical-engineering/",
@@ -3002,6 +3031,7 @@
         "interviewed": "yes",
         "timing": null,
         "appliesTo": "studying certain qualifications, such as an Access to HE Diploma or T Level",
+        "routeDisplay": "quote",
         "appliesToEvidence": [
           {
             "source": "https://www.bath.ac.uk/courses/undergraduate-2027/accounting-and-finance/bsc-accounting-and-finance/",
@@ -3048,6 +3078,7 @@
         "interviewed": "yes",
         "timing": null,
         "appliesTo": "Very exceptionally we may invite you to an interview if you have circumstances we cannot assess from an application alone",
+        "routeDisplay": "quote",
         "appliesToEvidence": [
           {
             "source": "https://www.bath.ac.uk/courses/undergraduate-2027/mathematical-sciences/bsc-mathematics/",
@@ -3073,7 +3104,8 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "entry into Year 2 in any subject"
+        "appliesTo": "entry into Year 2 in any subject",
+        "routeDisplay": "quote"
       },
       "berkeley-business": {
         "id": "berkeley-business",
@@ -3134,7 +3166,8 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "some applicants to the College of Engineering"
+        "appliesTo": "some applicants to the College of Engineering",
+        "routeDisplay": "quote"
       },
       "unc-business": {
         "id": "unc-business",
@@ -3153,7 +3186,8 @@
         "unavailable": false,
         "interviewed": "yes",
         "timing": null,
-        "appliesTo": "admitted transfer student or current UNC student who has completed your first year"
+        "appliesTo": "admitted transfer student or current UNC student who has completed your first year",
+        "routeDisplay": "quote"
       },
       "caltech-third-party": {
         "id": "caltech-third-party",
