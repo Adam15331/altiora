@@ -21,7 +21,7 @@ export const SOCIAL_IMAGE = { url: `${SITE}/og-image.png?v=${SOCIAL_IMAGE_VERSIO
 
 /**
  * Link-preview tags every page carries after its og:title / og:description: the site name, the shared
- * picture and the large-picture card. index.html and app.html carry the same lines by hand.
+ * picture and the (square) summary card with the same picture. index.html and app.html carry the same lines by hand.
  * @param {string} [indent]
  */
 export function socialImageTags(indent = '  ') {
@@ -31,7 +31,8 @@ export function socialImageTags(indent = '  ') {
     `<meta property="og:image:width" content="${SOCIAL_IMAGE.width}" />`,
     `<meta property="og:image:height" content="${SOCIAL_IMAGE.height}" />`,
     `<meta property="og:image:alt" content="${esc(SOCIAL_IMAGE.alt)}" />`,
-    '<meta name="twitter:card" content="summary_large_image" />',
+    '<meta name="twitter:card" content="summary" />',
+    `<meta name="twitter:image" content="${SOCIAL_IMAGE.url}" />`,
   ].map(l => indent + l).join('\n');
 }
 

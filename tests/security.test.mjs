@@ -130,7 +130,7 @@ test('erase my plan: the wipe removes every key the site owns and the session ma
   assert.deepEqual([...S.getState().profile.subjects], []);
   // It is the only wipe in the site's code, and the session marker name matches the one that sets it.
   assert.match(read('strengths-param.js'), /sessionStorage\.setItem\('openStrengthsMode'/);
-  for (const f of SHIPPED_JS.filter(f => f !== 'state.js')) assert.doesNotMatch(read(f), /localStorage\.(removeItem|clear)\(|resetState\(/, f);
+  for (const f of SHIPPED_JS.filter(f => f !== 'state.js')) assert.doesNotMatch(read(f), /localStorage\.(removeItem|clear)\(/, f);
   assert.equal((read('state.js').match(/localStorage\.removeItem\(k\)/g) ?? []).length, 1);
 });
 

@@ -35,6 +35,12 @@ const AltioraState = (() => {
   // A plan file is a few KB to a few hundred KB; anything far larger is not one.
   const MAX_PLAN_FILE_BYTES = 5 * 1024 * 1024;
 
+  // The stages and qualification systems the site knows (main.js STAGES and
+  // data/qualificationMappings.js — tests/plan-file.test.mjs keeps the three in
+  // step). A plan file naming any other is refused: nothing else can be shown.
+  const KNOWN_STAGES = ['exploring', 'choosing', 'building', 'applying'];
+  const KNOWN_SYSTEMS = ['UK_A_Level', 'IB', 'US_AP', 'SG_A_Level', 'HK_DSE'];
+
   // Every localStorage key the app owns. There is exactly one today; the
   // export envelope is keyed by name so adding a second key later needs
   // no change to the file format.
@@ -45,7 +51,7 @@ const AltioraState = (() => {
   let _erased = false;
 
   /* ─── Default shape ───────────────────────────────────────────
-   * Returned fresh on first visit and by resetState(). Kept as a
+   * Returned fresh on first visit and after erasePlan(). Kept as a
    * factory (not a shared constant) so callers can never mutate the
    * canonical defaults by reference.
    * ───────────────────────────────────────────────────────────── */
@@ -317,8 +323,8 @@ const AltioraState = (() => {
     if ('meta' in inner && !isObj(inner.meta)) return 'meta';
     const p = inner.profile || {};
     const checks = {
-      stage:                 v => typeof v === 'string',
-      qualificationSystem:   v => typeof v === 'string',
+      stage:                 v => KNOWN_STAGES.includes(v),
+      qualificationSystem:   v => KNOWN_SYSTEMS.includes(v),
       subjects:              isStrArr,
       predictedGrades:       v => typeof v === 'string' || (isObj(v) && Object.values(v).every(x => typeof x === 'string')),
       interests:             isStrArr,
@@ -335,6 +341,7 @@ const AltioraState = (() => {
     return null;
   }
 
+  const UNKNOWN_SETTING = 'That file names a stage or qualification that Altiora doesn’t have, so it can’t be restored. Nothing has been changed.';
   const DAMAGED = 'That file’s saved plan is damaged or has been edited, so it can’t be restored. Nothing has been changed.';
 
   // Validate WITHOUT touching state. Returns { ok:true, envelope, inner } or
@@ -376,9 +383,10 @@ const AltioraState = (() => {
     // the file — otherwise a truncated export would validate and wipe state.
     let inner;
     try { inner = JSON.parse(raw); } catch (_) { return { ok: false, error: DAMAGED }; }
-    if (!inner || typeof inner !== 'object' || Array.isArray(inner) || _stateShapeError(inner)) {
-      return { ok: false, error: DAMAGED };
-    }
+    if (!inner || typeof inner !== 'object' || Array.isArray(inner)) return { ok: false, error: DAMAGED };
+    const bad = _stateShapeError(inner);
+    if (bad === 'profile.stage' || bad === 'profile.qualificationSystem') return { ok: false, error: UNKNOWN_SETTING };
+    if (bad) return { ok: false, error: DAMAGED };
     return { ok: true, envelope: parsed, inner };
   }
 
@@ -709,15 +717,6 @@ const AltioraState = (() => {
     _commit();
   }
 
-  // Wipe everything back to a fresh first-visit state, persist, notify.
-  function resetState() {
-    const now = new Date().toISOString();
-    _state = freshState();
-    _state.meta.firstVisit = now;
-    _state.meta.lastVisit  = now;
-    _commit();
-  }
-
   // "Erase my plan from this device" — the ONLY wipe path. Removes every key the site owns from
   // localStorage and the one sessionStorage marker, and stops this page writing anything back. The caller
   // reloads the page, which starts again from a fresh first visit.
@@ -771,7 +770,6 @@ const AltioraState = (() => {
     isInShortlist,
     setProgress,
     setOnboarded,
-    resetState,
     erasePlan,
     subscribe,
     // Backup: a file the student keeps. Nothing is uploaded anywhere.
@@ -782,6 +780,8 @@ const AltioraState = (() => {
     describePlan,
     sha256Hex,
     MAX_PLAN_FILE_BYTES,
+    KNOWN_STAGES: KNOWN_STAGES.slice(),
+    KNOWN_SYSTEMS: KNOWN_SYSTEMS.slice(),
     // Exposed for debugging / future migrations.
     STORAGE_KEY,
     OWNED_KEYS: OWNED_KEYS.slice(),
@@ -807,5 +807,4 @@ const AltioraState = (() => {
 // console.log('progress →', AltioraState.getProgress());
 // console.log('full     →', AltioraState.getState());
 //
-// AltioraState.resetState(); // back to a clean first-visit state
 // ───────────────────────────────────────────────────────────────── */

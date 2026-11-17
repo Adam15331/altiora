@@ -1,5 +1,5 @@
 // @ts-check
-/* global document, localStorage, sessionStorage, window -- used only inside page.evaluate / addInitScript (run in the browser) */
+/* global document, localStorage, sessionStorage, window, getComputedStyle -- used only inside page.evaluate / addInitScript (run in the browser) */
 // End-to-end: the Content-Security-Policy every page carries blocks nothing the site does. A
 // securitypolicyviolation listener is installed before any page script runs; each flow below is driven
 // with real clicks and must finish with zero violations. The same run records every third-party host
@@ -203,7 +203,7 @@ test('no Content-Security-Policy violation in any flow; the only outside host is
   await flow('/app.html?mode=strengths', async () => {
     await p.goto(`${base}/app.html?mode=strengths`);
     await p.locator('#systemSelect:not(.hidden)').waitFor();
-    assert.equal(await p.evaluate(() => sessionStorage.getItem('openStrengthsMode')), 'true');   // set by strengths-param.js, as the inline script did
+    assert.equal(await p.evaluate(() => sessionStorage.getItem('openStrengthsMode')), null);     // set by strengths-param.js, read and removed by main.js on this same load
   });
   await flow('index.html About pill', async () => {
     await p.goto(`${base}/index.html`);
@@ -268,6 +268,123 @@ test('all nine font weights load from /fonts on app.html and index.html, and fro
     for (const f of h.fontFiles) assert.match(f, /^\/fonts\/[a-z-]+-latin(-ext)?-\d{3}-normal\.woff2$/);
     console.log(`Third-party hosts requested by ${url}: ${JSON.stringify(h.thirdParty)}`);
     for (const host of Object.keys(h.thirdParty)) assert.ok(BEACON_HOSTS.includes(host), `${url}: unexpected host ${host}`);
+    assert.deepEqual(h.violations, []);
+    await h.ctx.close();
+  }
+});
+
+const RETURNING = () => ({ profile: { stage: 'building', qualificationSystem: 'UK_A_Level', subjects: ['Mathematics', 'Physics'], predictedGrades: {}, interests: [], candidateFields: [], achievements: [], applicationTasks: {}, statementDrafts: { q1: '', q2: '', q3: '' }, yearGroup: 'Year 12', yearsUntilApplication: 1, yearSetAt: new Date().toISOString() }, shortlist: ['uk-cs-oxford'], progress: {}, meta: { hasOnboarded: true } });
+/** Seed a saved plan once (a later reload keeps whatever the site itself saved). @param {any} ctx */
+const seed = (ctx, state = RETURNING()) => ctx.addInitScript((/** @type {string} */ s) => {
+  if (!sessionStorage.getItem('e2e_seeded')) { localStorage.setItem('altiora_state_v1', s); sessionStorage.setItem('e2e_seeded', '1'); }
+}, JSON.stringify(state));
+const shown = (/** @type {any} */ p) => p.evaluate(() => Array.from(document.querySelectorAll('#systemSelect, #yearSelect, #stageProposal, #subjectOnboard, [id^="panel-"]'))
+  .filter(e => e.getClientRects().length && !e.closest('.hidden')).map(e => e.id).join(','));
+
+test('?mode=strengths opens the strengths view on the first load, for a returning and a new student', async () => {
+  // Returning student: straight to the strengths view, on this load; the marker is used up.
+  const r = await harness();
+  await seed(r.ctx);
+  await r.p.goto(`${base}/app.html?mode=strengths`);
+  await r.p.locator('#panel-strengths:not(.hidden)').waitFor();
+  assert.equal(await shown(r.p), 'panel-strengths');
+  assert.equal(await r.p.evaluate(() => sessionStorage.getItem('openStrengthsMode')), null);
+  // A plain visit afterwards is an ordinary visit (Home), not the strengths view again.
+  await r.p.goto(`${base}/app.html`);
+  await r.p.locator('#panel-home:not(.hidden)').waitFor();
+  assert.equal(await shown(r.p), 'panel-home');
+  assert.deepEqual([r.violations, r.pageErrors], [[], []]);
+  await r.ctx.close();
+
+  // New student: the qualification question first (nothing can be shown without it), then the year and
+  // the subject picker, then the strengths view — the usual "where we'd start you" proposal is skipped.
+  const n = await harness();
+  await n.p.goto(`${base}/app.html?mode=strengths`);
+  await n.p.locator('#systemSelect:not(.hidden)').waitFor();
+  assert.equal(await shown(n.p), 'systemSelect');
+  await n.p.locator('.stage-card', { hasText: 'UK A-Levels' }).click();
+  await n.p.locator('.stage-card', { hasText: 'Year 12' }).click();
+  await n.p.locator('#subjectOnboard:not(.hidden)').waitFor();
+  assert.equal(await shown(n.p), 'subjectOnboard');
+  await n.p.click('#subjectOnboardSkip');
+  await n.p.locator('#panel-strengths:not(.hidden)').waitFor();
+  assert.equal(await shown(n.p), 'panel-strengths');
+  assert.deepEqual([n.violations, n.pageErrors], [[], []]);
+  await n.ctx.close();
+});
+
+test('restore: a file with an unknown stage is refused in the dialog, the plan is untouched and every section still loads', async () => {
+  const { writeFile, mkdtemp } = await import('node:fs/promises');
+  const { tmpdir } = await import('node:os');
+  const { createHash } = await import('node:crypto');
+  const dir = await mkdtemp(join(tmpdir(), 'altiora-plan-'));
+  const fileFor = async (/** @type {string} */ name, /** @type {any} */ state) => {
+    const raw = JSON.stringify(state);
+    const f = join(dir, name);
+    await writeFile(f, JSON.stringify({ app: 'altiora', kind: 'plan', schemaVersion: 2, exportedAt: new Date().toISOString(), data: { altiora_state_v1: raw }, checksum: { algorithm: 'SHA-256', value: createHash('sha256').update(raw).digest('hex') } }));
+    return f;
+  };
+  const bad = RETURNING(); bad.profile.stage = 'nonsense'; bad.shortlist = ['uk-maths-bath'];
+  const badSystem = RETURNING(); badSystem.profile.qualificationSystem = 'NL_VWO';
+  const good = RETURNING(); good.shortlist = ['uk-maths-bath', 'uk-cs-oxford'];
+  const h = await harness();
+  await seed(h.ctx);
+  const { p } = h;
+  await p.goto(`${base}/app.html`);
+  const stored = () => p.evaluate(() => { const s = JSON.parse(localStorage.getItem('altiora_state_v1') ?? '{}'); return [s.profile.stage, s.profile.qualificationSystem, s.shortlist]; });
+  const pick = async (/** @type {string} */ file) => {
+    await p.click('#profileIndicatorBtn');
+    const [chooser] = await Promise.all([p.waitForEvent('filechooser'), p.click('#backupImportBtn')]);
+    await chooser.setFiles(file);
+    await p.locator('#planDialog[open]').waitFor();
+  };
+  for (const f of [await fileFor('bad-stage.json', bad), await fileFor('bad-system.json', badSystem)]) {
+    await pick(f);
+    assert.equal(await p.locator('#planDialogTitle').innerText(), 'This file can’t be restored');
+    assert.equal((await p.locator('#planDialogBody').innerText()).trim(), 'That file names a stage or qualification that Altiora doesn’t have, so it can’t be restored. Nothing has been changed.');
+    assert.equal(await p.locator('#planDialog [data-plan-confirm]').isVisible(), false);       // nothing to confirm
+    await p.click('#planDialog [data-plan-cancel]');
+    assert.deepEqual(await stored(), ['building', 'UK_A_Level', ['uk-cs-oxford']]);
+  }
+  // Every section still loads, before and after a reload.
+  const MODES = ['home', 'check', 'shortlist', 'month', 'story', 'interview', 'applying', 'plan', 'reverse', 'strengths', 'summary'];
+  for (const round of ['now', 'after reload']) {
+    if (round === 'after reload') await p.reload();
+    for (const m of MODES) {
+      await p.evaluate(mode => /** @type {any} */ (window).switchMode(mode), m);
+      await p.locator(`#panel-${m}:not(.hidden)`).waitFor({ timeout: 5000 });
+    }
+  }
+  assert.deepEqual(await stored(), ['building', 'UK_A_Level', ['uk-cs-oxford']]);
+  // A valid file still restores.
+  await pick(await fileFor('good.json', good));
+  assert.equal(await p.locator('#planDialogTitle').innerText(), 'Restore this plan?');
+  await Promise.all([p.waitForEvent('load'), p.click('#planDialog [data-plan-confirm]')]);
+  await p.locator('#workspace:not(.hidden)').waitFor();
+  assert.deepEqual(await stored(), ['building', 'UK_A_Level', ['uk-maths-bath', 'uk-cs-oxford']]);
+  assert.deepEqual([h.violations, h.pageErrors], [[], []]);
+  await h.ctx.close();
+});
+
+test('profile menu: all of it, padding included, is inside the viewport at 375px and at desktop width', async () => {
+  for (const width of [375, 320, 1280]) {
+    const h = await harness({ viewport: { width, height: 800 } });
+    await seed(h.ctx);
+    await h.p.goto(`${base}/app.html`);
+    await h.p.evaluate(() => document.fonts.ready);
+    await h.p.click('#profileIndicatorBtn');
+    await h.p.locator('#profileMenu:not(.hidden)').waitFor();
+    const m = await h.p.evaluate(() => {
+      const menu = /** @type {HTMLElement} */ (document.getElementById('profileMenu'));
+      const r = menu.getBoundingClientRect();
+      const inner = Array.from(menu.querySelectorAll('button, .profile-menu__label, .profile-menu__note')).map(e => e.getBoundingClientRect());
+      return { left: r.left, right: r.right, vw: document.documentElement.clientWidth, scrollW: document.documentElement.scrollWidth,
+        innerLeft: Math.min(...inner.map(x => x.left)), innerRight: Math.max(...inner.map(x => x.right)), padLeft: parseFloat(getComputedStyle(menu).paddingLeft) };
+    });
+    console.log(`Profile menu at ${width}px: left ${m.left}, right ${m.right} of 0–${m.vw}; contents ${m.innerLeft}–${m.innerRight}`);
+    assert.ok(m.left >= 0 && m.right <= m.vw, `${width}px: menu spans ${m.left}–${m.right} of ${m.vw}`);
+    assert.ok(m.innerLeft >= m.left + m.padLeft - 0.5, `${width}px: padding intact`);
+    assert.equal(m.scrollW, m.vw, `${width}px: no sideways scroll`);
     assert.deepEqual(h.violations, []);
     await h.ctx.close();
   }

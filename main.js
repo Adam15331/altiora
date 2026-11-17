@@ -1736,7 +1736,19 @@ function restoreSubjectPickerHome() {
 // The system and year controls live together in ONE profile popover
 // ("A-Levels · Year 12 ▾"). The historical open/close names are kept as
 // aliases so every existing call site keeps working unchanged.
-function openProfileMenu()  { $('profileMenu')?.classList.remove('hidden'); $('profileIndicatorBtn')?.setAttribute('aria-expanded', 'true'); }
+function openProfileMenu()  { $('profileMenu')?.classList.remove('hidden'); $('profileIndicatorBtn')?.setAttribute('aria-expanded', 'true'); keepProfileMenuOnScreen(); }
+// The menu hangs from its pill, and where the pill sits depends on the screen width and on what is beside
+// it. Wherever that leaves the menu, slide it sideways until all of it (padding included) is on screen.
+function keepProfileMenuOnScreen() {
+  const menu = $('profileMenu');
+  if (!menu || menu.classList.contains('hidden')) return;
+  menu.style.transform = '';
+  const GAP = 8;
+  const r = menu.getBoundingClientRect();
+  const vw = document.documentElement.clientWidth;
+  const dx = r.left < GAP ? GAP - r.left : r.right > vw - GAP ? vw - GAP - r.right : 0;
+  if (dx) menu.style.transform = `translateX(${Math.round(dx)}px)`;
+}
 function closeProfileMenu() { $('profileMenu')?.classList.add('hidden');    $('profileIndicatorBtn')?.setAttribute('aria-expanded', 'false'); }
 function toggleProfileMenu(){ $('profileMenu')?.classList.contains('hidden') ? openProfileMenu() : closeProfileMenu(); }
 function openYearMenu()  { openProfileMenu(); }
@@ -9076,6 +9088,7 @@ function init() {
   );
   document.addEventListener('click', closeProfileMenu);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeProfileMenu(); });
+  window.addEventListener('resize', keepProfileMenuOnScreen);
   // Year items are (re)built inside the popover by updateYearIndicator, which
   // subscribes to state so every year/system change propagates here. Clicks
   // inside the popover must not bubble to the document-close handler.

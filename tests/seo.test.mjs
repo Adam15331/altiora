@@ -29,7 +29,7 @@ test('og-image.png is a 1200×630 PNG', () => {
   assert.doesNotMatch(read('scripts/build-og-image.mjs'), /index\.html'|<h1>|hero/);
 });
 
-test('every page carries the shared preview image and the large-picture card', () => {
+test('every page carries the shared preview image and the summary card with the same image', () => {
   assert.ok(PAGES.length >= 418, `only ${PAGES.length} pages`);
   for (const f of PAGES) {
     const html = read(f);
@@ -38,7 +38,9 @@ test('every page carries the shared preview image and the large-picture card', (
     assert.equal(meta(html, 'og:image:height'), '630', f);
     assert.equal(meta(html, 'og:image:alt'), SOCIAL_IMAGE.alt, f);
     assert.equal(meta(html, 'og:site_name'), 'Altiora', f);
-    assert.equal(meta(html, 'twitter:card'), 'summary_large_image', f);
+    assert.equal(meta(html, 'twitter:card'), 'summary', f);
+    assert.equal(meta(html, 'twitter:image'), SOCIAL_IMAGE.url, f);
+    assert.equal((html.match(/name="twitter:image"/g) ?? []).length, 1, f);
     assert.equal((html.match(/name="twitter:card"/g) ?? []).length, 1, f);
   }
 });

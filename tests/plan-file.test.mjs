@@ -128,6 +128,45 @@ test('invalid or tampered files are refused and change nothing', () => {
   assert.ok(b.S.validateBackup('x'.repeat(b.S.MAX_PLAN_FILE_BYTES + 1)).ok === false, 'oversized');
 });
 
+test('a file naming a stage or qualification the site does not have is refused, and nothing changes', () => {
+  // The lists in state.js are the ones the site actually has.
+  const { S } = loadState();
+  const stages = [...read('main.js').match(/const STAGES = \{([\s\S]*?)\n\};/)?.[1].matchAll(/^ {2}(\w+):/gm) ?? []].map(m => m[1]);
+  assert.deepEqual([...S.KNOWN_STAGES], stages);
+  const ctx = vm.createContext({});
+  vm.runInContext(read('data/qualificationMappings.js'), ctx);
+  assert.deepEqual([...S.KNOWN_SYSTEMS], Object.keys(vm.runInContext('qualificationMappings', ctx)));
+
+  const a = loadState(); fillPlan(a.S);
+  const good = a.S.exportBackup();
+  const withProfile = (/** @type {any} */ change) => {
+    const st = JSON.parse(good.data.altiora_state_v1); Object.assign(st.profile, change);
+    const raw = JSON.stringify(st);
+    return JSON.stringify({ ...good, data: { altiora_state_v1: raw }, checksum: { algorithm: 'SHA-256', value: a.S.sha256Hex(raw) } });
+  };
+  const MESSAGE = 'That file names a stage or qualification that Altiora doesn’t have, so it can’t be restored. Nothing has been changed.';
+  const b = loadState(); fillPlan(b.S);
+  const before = JSON.stringify(b.S.getState()); const storedBefore = b.store.get('altiora_state_v1');
+  for (const change of [{ stage: 'nonsense' }, { stage: '' }, { stage: 'Applying' }, { qualificationSystem: 'NL_VWO' }, { qualificationSystem: 'uk_a_level' }, { stage: 'building', qualificationSystem: '<img>' }]) {
+    for (const res of [b.S.validateBackup(withProfile(change)), b.S.importBackup(withProfile(change))]) {
+      assert.equal(res.ok, false, JSON.stringify(change));
+      assert.equal(res.error, MESSAGE, JSON.stringify(change));
+    }
+    assert.equal(JSON.stringify(b.S.getState()), before, 'state untouched');
+    assert.equal(b.store.get('altiora_state_v1'), storedBefore, 'storage untouched');
+  }
+  // Every known value, and "not set yet" (null / absent), still restores.
+  for (const stage of [...S.KNOWN_STAGES, null]) for (const qualificationSystem of [...S.KNOWN_SYSTEMS, null]) {
+    const c = loadState();
+    assert.equal(c.S.importBackup(withProfile({ stage, qualificationSystem })).ok, true, `${stage} / ${qualificationSystem}`);
+    assert.equal(c.S.getProfile().stage, stage); assert.equal(c.S.getProfile().qualificationSystem, qualificationSystem);
+    assert.deepEqual([...c.S.getShortlist()], ['uk-maths-durham', 'uk-maths-oxford']);
+  }
+  const d = loadState();
+  assert.equal(d.S.importBackup(JSON.stringify(good)).ok, true);
+  assert.equal(typeof d.S.resetState, 'undefined');   // the old reset is gone: erasePlan() is the only wipe
+});
+
 test('describePlan describes an older file as it will load', () => {
   const { S } = loadState();
   const d = S.describePlan({ profile: { qualificationSystem: 'UK_A_Level', subjects: ['Mathematics', 'Physics'], predictedGrades: 'A' }, shortlist: ['uk-cs-durham'] });
