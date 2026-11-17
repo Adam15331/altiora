@@ -202,7 +202,7 @@ export function coursePage(model, course, env) {
       <section class="fo-section">
         <h2 class="fo-section__head">Do your subjects and grades fit?</h2>
         <p class="fo-prose">Altiora is free and has no accounts. Enter your subjects and predicted grades once, and it checks them against this course and every other course it holds.</p>
-        <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against this course in the app →</a>${official ? `
+        <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against this course on the website →</a>${official ? `
         <a class="fo-btn" href="${esc(official)}" target="_blank" rel="noopener noreferrer">Official course page <span aria-hidden="true">↗</span></a>` : ''}
       </section>${siblings.length ? `
       <section class="fo-section">
@@ -269,7 +269,7 @@ export function universityPage(model, uni, env) {
         <p class="reqs__foot">Requirements change every year. Always confirm them on the university's official page before you apply.</p>
       </section>
       <section class="fo-section">
-        <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against these courses in the app →</a>
+        <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against these courses on the website →</a>
       </section>
       <p><a class="fo-back" href="../courses/">← All courses</a></p>`;
 
@@ -312,7 +312,7 @@ export function hubPage(model, env) {
       </header>
 ${sections}
       <section class="fo-section">
-        <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against every course in the app →</a>
+        <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against every course on the website →</a>
       </section>
       <p><a class="fo-back" href="../">← Back to Altiora</a></p>`;
 
@@ -349,7 +349,7 @@ export function universitiesHubPage(model, env) {
       </header>
 ${sections}
       <section class="fo-section">
-        <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against every course in the app →</a>
+        <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against every course on the website →</a>
       </section>
       <p><a class="fo-back" href="../courses/">← All courses</a></p>`;
 
