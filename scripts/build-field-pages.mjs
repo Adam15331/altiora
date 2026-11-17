@@ -175,7 +175,7 @@ ${fontHrefs.map(h => `  <link rel="stylesheet" href="${h}" />`).join('\n')}
       </header>
       ${sectionsHtml}
       <section class="fo-section">
-        <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against real courses in the app →</a>
+        <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against real courses on the website →</a>
       </section>
       <p><a class="fo-back" href="../">← Back to Altiora</a></p>
       </div>
@@ -213,7 +213,7 @@ const indexHtml = pageShell({
         <ul class="cp-links">${keys.map(k => `<li><a href="${k}.html">${esc(fieldProfiles[k].name)}</a></li>`).join('')}</ul>
       </section>
       <section class="fo-section">
-        <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against real courses in the app →</a>
+        <a class="fo-btn fo-btn--primary" href="../app.html">Check your subjects against real courses on the website →</a>
       </section>
       <p><a class="fo-back" href="../">← Back to Altiora</a></p>`,
 });

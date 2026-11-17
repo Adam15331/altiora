@@ -14,7 +14,7 @@ const GENERATOR = 'scripts/build-info-pages.mjs';
 const SOURCE = 'scripts/lib/info-pages.mjs';
 
 /** Shown on every page that has no `updated` of its own; change it whenever the text of such a page changes. */
-export const LAST_UPDATED = { iso: '2026-11-14', text: '14 November 2026' };
+export const LAST_UPDATED = { iso: '2026-11-17', text: '17 November 2026' };
 
 export const OPERATOR = 'Adam Arab';
 export const LOCATION = 'Dubai, UAE';
@@ -39,7 +39,7 @@ const privacy = {
   eyebrow: 'Privacy',
   h1: 'Privacy policy',
   intro: 'Altiora is a free website that helps students compare university course entry requirements with their own subjects and grades. This page explains, in plain English, what happens to your information when you use it.',
-  description: 'How Altiora handles your information: no accounts, no cookies, and what you enter in the app stays in your own browser.',
+  description: 'How Altiora handles your information: no accounts, no cookies, and what you enter on the website stays in your own browser.',
   sections: [
     { head: 'Who runs Altiora',
       body: p(`Altiora is run by ${OPERATOR}, in ${LOCATION}. If you have a question about this policy or your information, email ${mail}.`) },
@@ -50,8 +50,8 @@ const privacy = {
       body: list([
         'There are no accounts. You never give us a name, email address or password to use Altiora.',
         'Altiora does not use cookies.',
-        'What you enter in the app (your subjects, grades, shortlist and notes) is saved only in your own browser. It is not sent to us, and we can’t see it.',
-        'We count visits with Cloudflare Web Analytics, which doesn’t use cookies and doesn’t receive anything you enter in the app.',
+        'What you enter on the website (your subjects, grades, shortlist and notes) is saved only in your own browser. It is not sent to us, and we can’t see it.',
+        'We count visits with Cloudflare Web Analytics, which doesn’t use cookies and doesn’t receive anything you enter on the website.',
         'The site’s fonts come from Google Fonts, so Google receives your IP address when a page loads.',
       ]) },
     { head: 'What the app saves, and where',
@@ -99,7 +99,7 @@ const privacy = {
           'technical measurements of how quickly the page loaded;',
           'like any request over the internet, your IP address.',
         ]) +
-        p('It does not receive your subjects, grades, shortlist or anything else you enter in the app. Cloudflare handles this information under its own privacy policy.') },
+        p('It does not receive your subjects, grades, shortlist or anything else you enter on the website. Cloudflare handles this information under its own privacy policy.') },
     { head: 'Fonts: Google Fonts',
       // Audit: requests to fonts.googleapis.com / fonts.gstatic.com on every page,
       // referer = site origin only, user-agent sent, no cookie.
@@ -115,7 +115,7 @@ const privacy = {
     { head: 'Who Altiora is for',
       // Audit: no accounts, no sign-up, no form sends data off the device (the
       // story bank form saves to localStorage).
-      body: p('Altiora is intended for students aged 14 and over. It does not collect personal information through forms: there are no accounts, no sign-up and no contact form, and anything you write in the app is saved only in your browser.') },
+      body: p('Altiora is intended for students aged 14 and over. It does not collect personal information through forms: there are no accounts, no sign-up and no contact form, and anything you write on the website is saved only in your browser.') },
     { head: 'Links to other websites',
       body: p('The app and the course pages link to universities’ own websites. When you follow one of those links you leave Altiora, and that website’s own privacy policy applies.') },
     { head: 'Changes to this policy',
@@ -141,7 +141,7 @@ const terms = {
     { head: 'No guarantees',
       body: p('We work to keep the information accurate, but we cannot guarantee that it is complete, correct or up to date. A result in Altiora, such as a “strong match”, is not a prediction or a promise of an offer or of admission. Only universities make admissions decisions.') },
     { head: 'Your information',
-      body: p('What you enter in the app is saved only in your own browser. The <a href="privacy.html">privacy policy</a> explains what the site does with information.') },
+      body: p('What you enter on the website is saved only in your own browser. The <a href="privacy.html">privacy policy</a> explains what the site does with information.') },
     { head: 'Who runs Altiora',
       body: p(`Altiora is run by ${OPERATOR}, in ${LOCATION}. Contact: ${mail}.`) },
     { head: 'Changes to these terms',

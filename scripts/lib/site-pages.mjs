@@ -14,7 +14,10 @@ import { ROOT } from './requirements-io.mjs';
 export const SITE = 'https://usealtiora.com';
 
 /** The picture shown when any page is shared (og-image.png, built by scripts/build-og-image.mjs). */
-export const SOCIAL_IMAGE = { url: `${SITE}/og-image.png`, width: 1200, height: 630, alt: 'Altiora: See where your subjects can take you.' };
+// `version` is the ?v= on the URL: bump it whenever og-image.png changes, so apps that cached the old picture
+// fetch the new one (also in the hand-written copies in index.html and app.html).
+const SOCIAL_IMAGE_VERSION = 2;
+export const SOCIAL_IMAGE = { url: `${SITE}/og-image.png?v=${SOCIAL_IMAGE_VERSION}`, version: SOCIAL_IMAGE_VERSION, width: 1200, height: 630, alt: 'Altiora logo' };
 
 /**
  * Link-preview tags every page carries after its og:title / og:description: the site name, the shared

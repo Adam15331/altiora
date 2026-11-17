@@ -4,62 +4,71 @@
  *
  * Renders og-image.png (1200×630), the picture shown when a link to any
  * Altiora page is shared (WhatsApp, iMessage, Instagram, LinkedIn, X…).
- * Every word on it is the landing page's own: the header lockup (read out of
- * app.html), the hero eyebrow and the hero headline (read out of index.html).
- * Colours are tokens.css values; fonts are the site's own.
+ * It is the logo mark alone (favicon.svg, the single source of the mark),
+ * what it draws (the A and its bar) centred on the mark's own canvas
+ * colour. No words.
  *
- * Dev tooling only — run after changing the lockup or the hero copy:
+ * Crop-safe: some apps show only the central square of the picture, so the
+ * mark sits well inside the central 630×630. The build fails if anything
+ * that is not canvas falls outside the central SAFE×SAFE square.
+ *
+ * Dev tooling only — run after changing favicon.svg:
  *   npm i --no-save playwright-core && node scripts/build-og-image.mjs
- * CHROMIUM_PATH overrides the browser binary. Needs fonts.googleapis.com;
- * fails rather than render with fallback fonts.
+ * CHROMIUM_PATH overrides the browser binary. After a change, bump
+ * SOCIAL_IMAGE.version in scripts/lib/site-pages.mjs (and the two
+ * hand-written copies in index.html and app.html) so apps fetch the new file.
  * ═══════════════════════════════════════════════════════════════ */
-/* global document */
+/* global document, Image */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const app = fs.readFileSync(path.join(ROOT, 'app.html'), 'utf8');
-const index = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-const tokens = fs.readFileSync(path.join(ROOT, 'tokens.css'), 'utf8');
-/** @param {string} text @param {RegExp} re @param {string} what */
-const pick = (text, re, what) => { const m = text.match(re); if (!m) throw new Error(`Could not find ${what}.`); return m[1]; };
-const lockup = pick(app, /<span class="nav__logo">([\s\S]*?)<\/span>/, 'the header lockup in app.html');
-const fonts = pick(app, /<link rel="stylesheet" href="(https:\/\/fonts\.googleapis\.com[^"]+)"/, 'the font stylesheet in app.html');
-const eyebrow = pick(index, /<p class="mono hero__eyebrow">([\s\S]*?)<\/p>/, 'the hero eyebrow in index.html')
-  .replace(/<span class="dot">·<\/span>/g, '  ·  ').replace(/<[^>]+>/g, '');
-const headline = pick(index, /<header class="hero"[\s\S]*?<h1>([\s\S]*?)<\/h1>/, 'the hero headline in index.html');
-/** @param {string} name */
-const token = name => pick(tokens, new RegExp(`${name}:\\s*(#[0-9A-Fa-f]{6})`), `${name} in tokens.css`);
-const bg = token('--ce-bg'), ink = token('--ce-ink'), accent = token('--ce-accent');
+const svg = fs.readFileSync(path.join(ROOT, 'favicon.svg'), 'utf8');
+// The canvas colour is the mark's own tile fill (tokens.css --ce-bg).
+const canvas = /<rect[^>]*fill="(#[0-9A-Fa-f]{6})"/.exec(svg)?.[1];
+if (!canvas) throw new Error('Could not read the tile colour from favicon.svg.');
+const dataUri = `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
 
 const W = 1200, H = 630;
-const html = `<!DOCTYPE html><html><head><link rel="stylesheet" href="${fonts}">
-<style>
-  html, body { margin: 0; }
-  body { width: ${W}px; height: ${H}px; box-sizing: border-box; padding: 72px 80px; background: ${bg}; color: ${ink};
-    display: flex; flex-direction: column; justify-content: space-between; font-family: 'Hanken Grotesk', sans-serif; }
-  .logo svg { height: 64px !important; width: auto; }
-  .eyebrow { font-family: 'Space Mono', monospace; font-weight: 700; font-size: 22px; letter-spacing: .08em; text-transform: uppercase; opacity: .72; margin: 0 0 22px; }
-  h1 { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 84px; line-height: 1.04; letter-spacing: -.02em; margin: 0; max-width: 20ch; text-wrap: balance; }
-  .foot { display: flex; align-items: center; gap: 18px; font-family: 'Space Mono', monospace; font-size: 26px; font-weight: 700; }
-  .bar { width: 64px; height: 14px; background: ${accent}; }
-</style></head><body>
-  <div class="logo">${lockup}</div>
-  <div><p class="eyebrow">${eyebrow}</p><h1>${headline}</h1></div>
-  <div class="foot"><span class="bar"></span>usealtiora.com</div>
-</body></html>`;
+const MARK = 360;   // the mark's tile; its ink and bar fill the middle ~64% × ~79% of it
+const SAFE = 450;   // everything drawn must fall inside the central SAFE×SAFE square (90px clear of a 630 crop)
 
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH ?? '/opt/pw-browsers/chromium' });
 const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
-await page.setContent(html, { waitUntil: 'networkidle' });
-await page.evaluate(() => document.fonts.ready);
-const missing = await page.evaluate(() => ['800 84px "Bricolage Grotesque"', '700 26px "Space Mono"']
-  .filter(f => !document.fonts.check(f)));
-if (missing.length) throw new Error(`Fonts did not load: ${missing.join(', ')}`);
-const overflow = await page.evaluate(() => document.body.scrollHeight > document.body.clientHeight || document.body.scrollWidth > document.body.clientWidth);
-if (overflow) throw new Error('The text does not fit the image.');
+await page.setContent(`<!DOCTYPE html><html><body style="margin:0;width:${W}px;height:${H}px;display:grid;place-items:center;background:${canvas}">
+  <img src="${dataUri}" width="${MARK}" height="${MARK}" alt=""></body></html>`);
+await page.waitForFunction(() => document.images[0].complete && document.images[0].naturalWidth > 0);
+// Bounding box of every pixel that is not the canvas colour.
+const box = await page.evaluate(async ({ W, H, uri, bg, MARK }) => {
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const g = /** @type {CanvasRenderingContext2D} */ (c.getContext('2d'));
+  g.fillStyle = bg; g.fillRect(0, 0, W, H);
+  const img = new Image(); img.src = uri; await img.decode();
+  g.drawImage(img, (W - MARK) / 2, (H - MARK) / 2, MARK, MARK);
+  const d = g.getImageData(0, 0, W, H).data;
+  const [r0, g0, b0] = [d[0], d[1], d[2]];
+  let x0 = W, y0 = H, x1 = -1, y1 = -1;
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const i = (y * W + x) * 4;
+    if (Math.abs(d[i] - r0) + Math.abs(d[i + 1] - g0) + Math.abs(d[i + 2] - b0) > 6) {
+      if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+    }
+  }
+  return { x0, y0, x1, y1 };
+}, { W, H, uri: dataUri, bg: canvas, MARK });
+if (box.x1 < 0) throw new Error('The mark did not render.');
+const safe = { x0: (W - SAFE) / 2, y0: (H - SAFE) / 2, x1: (W + SAFE) / 2, y1: (H + SAFE) / 2 };
+if (box.x0 < safe.x0 || box.y0 < safe.y0 || box.x1 > safe.x1 || box.y1 > safe.y1) {
+  throw new Error(`The mark (${JSON.stringify(box)}) is outside the central ${SAFE}×${SAFE} square.`);
+}
+// Centre what is drawn (the tile has more room above the A than below the bar), then re-check.
+const dx = Math.round((W - (box.x0 + box.x1 + 1)) / 2), dy = Math.round((H - (box.y0 + box.y1 + 1)) / 2);
+await page.evaluate(({ dx, dy }) => { document.images[0].style.transform = `translate(${dx}px, ${dy}px)`; }, { dx, dy });
+box.x0 += dx; box.x1 += dx; box.y0 += dy; box.y1 += dy;
+if (box.x0 < safe.x0 || box.y0 < safe.y0 || box.x1 > safe.x1 || box.y1 > safe.y1) throw new Error('The centred mark is outside the safe square.');
 await page.screenshot({ path: path.join(ROOT, 'og-image.png') });
 await browser.close();
-console.log(`og-image.png  ${W}×${H}  "${headline}"`);
+console.log(`og-image.png  ${W}×${H}  mark spans x ${box.x0}–${box.x1}, y ${box.y0}–${box.y1}; `
+  + `margin inside a central 630×630 crop: ${Math.min(box.x0 - (W - 630) / 2, (W + 630) / 2 - box.x1)}px sides, ${Math.min(box.y0, H - box.y1)}px top/bottom`);
