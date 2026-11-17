@@ -39,6 +39,10 @@ const AltioraState = (() => {
   // export envelope is keyed by name so adding a second key later needs
   // no change to the file format.
   const OWNED_KEYS = [STORAGE_KEY];
+  // The one sessionStorage entry the site sets (strengths-param.js): "open the strengths view on the next load".
+  const SESSION_MARKER = 'openStrengthsMode';
+  // Set by erasePlan(): nothing is written back to storage between the wipe and the page reload.
+  let _erased = false;
 
   /* ─── Default shape ───────────────────────────────────────────
    * Returned fresh on first visit and by resetState(). Kept as a
@@ -164,6 +168,7 @@ const AltioraState = (() => {
 
   function _persist() {
     if (!_storageOK) return;            // in-memory fallback — no-op
+    if (_erased) return;                // wiped: stay wiped until the page reloads
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(_state));
     } catch (_) {
@@ -713,6 +718,18 @@ const AltioraState = (() => {
     _commit();
   }
 
+  // "Erase my plan from this device" — the ONLY wipe path. Removes every key the site owns from
+  // localStorage and the one sessionStorage marker, and stops this page writing anything back. The caller
+  // reloads the page, which starts again from a fresh first visit.
+  function erasePlan() {
+    _erased = true;
+    OWNED_KEYS.forEach(k => {
+      try { window.localStorage.removeItem(k); } catch (_) { /* storage blocked: nothing was saved */ }
+    });
+    try { window.sessionStorage.removeItem(SESSION_MARKER); } catch (_) { /* no session storage */ }
+    _state = freshState();
+  }
+
   /* ─── Reactivity ──────────────────────────────────────────────
    * subscribe(cb) registers a callback fired (with a state snapshot)
    * on every change. Returns an unsubscribe function.
@@ -755,6 +772,7 @@ const AltioraState = (() => {
     setProgress,
     setOnboarded,
     resetState,
+    erasePlan,
     subscribe,
     // Backup: a file the student keeps. Nothing is uploaded anywhere.
     exportBackup,
@@ -766,6 +784,8 @@ const AltioraState = (() => {
     MAX_PLAN_FILE_BYTES,
     // Exposed for debugging / future migrations.
     STORAGE_KEY,
+    OWNED_KEYS: OWNED_KEYS.slice(),
+    SESSION_MARKER,
     SCHEMA_VERSION,
     storageAvailable: _storageOK,
   };

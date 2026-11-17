@@ -1,4 +1,5 @@
 // @ts-check
+/* global qualificationMappings, fieldProfiles -- top-level consts of data/qualificationMappings.js and data/fieldProfiles.js, loaded before this script */
 /* ═══════════════════════════════════════════════════════════════
  * Altiora — statement-review.js
  *
@@ -134,9 +135,11 @@
    */
   function loadSubjectWords() {
     try {
-      // Top-level consts of earlier classic scripts: reachable by name, not via globalThis.
-      const fromPage = new Function('return typeof qualificationMappings !== "undefined" && typeof fieldProfiles !== "undefined" ? [qualificationMappings, fieldProfiles] : null;')();
-      if (fromPage) return buildSubjectWords(fromPage[0], fromPage[1]);
+      // Top-level consts of earlier classic scripts: reachable by name, not via globalThis (declared for
+      // lint in the global comment above and for tsc in types/page-globals.d.ts). Undefined in Node.
+      if (typeof qualificationMappings !== 'undefined' && typeof fieldProfiles !== 'undefined') {
+        return buildSubjectWords(qualificationMappings, fieldProfiles);
+      }
       if (typeof module !== 'undefined' && module.exports && typeof require === 'function') {
         const fs = require('node:fs'), path = require('node:path'), vm = require('node:vm');
         const ctx = vm.createContext({});

@@ -17,6 +17,7 @@
     "skipLibCheck": true
   },
   "include": [
+    "types/page-globals.d.ts",
     "data/requirements/config.js",
     "requirements-view.js",
     "statement-review.js",

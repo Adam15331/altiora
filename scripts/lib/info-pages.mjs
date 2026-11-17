@@ -45,14 +45,13 @@ const privacy = {
       body: p(`Altiora is run by ${OPERATOR}, in ${LOCATION}. If you have a question about this policy or your information, email ${mail}.`) },
     { head: 'The short version',
       // Audit: zero cookies on every page type; app state only in localStorage;
-      // third-party hosts are fonts.googleapis.com, fonts.gstatic.com,
-      // static.cloudflareinsights.com and cloudflareinsights.com only.
+      // third-party hosts are static.cloudflareinsights.com and
+      // cloudflareinsights.com only (fonts are served from /fonts).
       body: list([
         'There are no accounts. You never give us a name, email address or password to use Altiora.',
         'Altiora does not use cookies.',
         'What you enter (your subjects, grades, shortlist and notes) is saved only in your own browser. It is not sent to us, and we can’t see it.',
         'We count visits with Cloudflare Web Analytics, which doesn’t use cookies and doesn’t receive anything you enter.',
-        'The site’s fonts come from Google Fonts, so Google receives your IP address when a page loads.',
       ]) },
     { head: 'What the app saves, and where',
       // Audit: state.js — one localStorage key, altiora_state_v1, with the fields
@@ -79,12 +78,13 @@ const privacy = {
       // shortlist CSV (Blob download). No upload anywhere.
       body: p('“Save my plan to a file” saves your whole plan as a file on your device, and “Restore my plan from a file” reads a file you choose from your device. Downloading your shortlist as a spreadsheet also creates the file on your device. None of these files are uploaded anywhere.') },
     { head: 'How to delete your information',
-      // Audit: no in-app reset control; data is only in localStorage.
-      body: p('Because everything is stored in your browser, you delete it there. In your browser’s settings, clear the site data for <strong>usealtiora.com</strong> (browsers call this “site data”, “website data” or “cookies and site data”). This removes everything the app saved. If you made a backup file, delete that file too.') },
+      // Audit: data is only in localStorage; the profile menu's "Erase my plan from this device"
+      // removes every key the site owns (AltioraState.erasePlan).
+      body: p('Because everything is stored in your browser, you delete it there. In your browser’s settings, clear the site data for <strong>usealtiora.com</strong> (browsers call this “site data”, “website data” or “cookies and site data”). This removes everything the app saved. You can also erase your plan on the website itself: open the profile menu and choose “Erase my plan from this device”. If you made a backup file, delete that file too.') },
     { head: 'Cookies and storage',
       // Audit: every page type loaded in a fresh browser; context cookies and
       // document.cookie empty; no cookie header sent to any third party.
-      body: p('<strong>Altiora does not use any cookies</strong>, and neither do the services it loads (Google Fonts and Cloudflare Web Analytics). We loaded every type of page in a fresh browser and no cookies were created. That is why there is no cookie banner.') +
+      body: p('<strong>Altiora does not use any cookies</strong>, and neither does the service it loads (Cloudflare Web Analytics). We loaded every type of page in a fresh browser and no cookies were created. That is why there is no cookie banner.') +
         p('The only browser storage the site uses is the local storage and session storage described above. Only the app uses it, only to make the app work, and it is never sent anywhere.') },
     { head: 'Visit counting: Cloudflare Web Analytics',
       // Audit: beacon payload keys — location (query string removed), referrer
@@ -100,10 +100,6 @@ const privacy = {
           'like any request over the internet, your IP address.',
         ]) +
         p('It does not receive your subjects, grades, shortlist or anything else you enter. Cloudflare handles this information under its own privacy policy.') },
-    { head: 'Fonts: Google Fonts',
-      // Audit: requests to fonts.googleapis.com / fonts.gstatic.com on every page,
-      // referer = site origin only, user-agent sent, no cookie.
-      body: p('The site’s typefaces are loaded from Google Fonts. To send them, Google’s servers receive your IP address, your browser type and the address of this website (usealtiora.com, not the page you’re on). No cookies are involved. Google handles this information under its own privacy policy.') },
     { head: 'Hosting: GitHub Pages',
       // Audit: CNAME + README — the site is static files served by GitHub Pages.
       // What GitHub logs is not known from the code, so it is stated generally.

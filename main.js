@@ -1795,12 +1795,14 @@ function planSummaryRows(d) {
 // closes). mode 'confirm' shows what the file holds and asks; mode 'error'
 // shows why nothing was changed.
 let _pendingPlanText = null;
-function openPlanDialog({ mode, title, html }) {
+let _pendingPlanErase = false;   // the open confirmation is "erase my plan", not a restore
+function openPlanDialog({ mode, title, html, confirmLabel = 'Replace my plan' }) {
   const dlg = $('planDialog');
   if (!dlg) return;
   $('planDialogTitle').textContent = title;
   $('planDialogBody').innerHTML = html;
   dlg.querySelector('[data-plan-confirm]').hidden = mode !== 'confirm';
+  dlg.querySelector('[data-plan-confirm]').textContent = confirmLabel;
   dlg.querySelector('[data-plan-cancel]').textContent = mode === 'confirm' ? 'Cancel' : 'OK';
   if (!dlg.open) dlg.showModal();
   dlg.querySelector('[data-plan-cancel]').focus();   // the safe choice has focus
@@ -1830,6 +1832,7 @@ function importBackupFile(file) {
       : null;
     const rows = planSummaryRows(AltioraState.describePlan(check.inner));
     _pendingPlanText = text;
+    _pendingPlanErase = false;
     closeProfileMenu();
     openPlanDialog({
       mode: 'confirm',
@@ -1855,8 +1858,30 @@ function confirmPlanRestore() {
   location.reload();
 }
 
+// Erase my plan from this device: confirm (Cancel has focus), then the one wipe in state.js, then a clean
+// load of the page so the student lands in fresh onboarding.
+function askPlanErase() {
+  closeProfileMenu();
+  _pendingPlanText = null;
+  _pendingPlanErase = true;
+  openPlanDialog({
+    mode: 'confirm',
+    title: 'Erase your plan from this device?',
+    confirmLabel: 'Erase everything',
+    html: '<p class="plan-dialog__text">This removes everything Altiora has saved in this browser: your subjects, grades, shortlist, story and statement drafts. It can’t be undone. Save your plan to a file first if you want to keep it.</p>',
+  });
+}
+function confirmPlanErase() {
+  _pendingPlanErase = false;
+  AltioraState.erasePlan();
+  logEvent('plan_erased', {});
+  $('planDialog')?.close();
+  window.location.replace(window.location.pathname);   // /app.html, without any ?mode=
+}
+
 function wireBackupControls() {
   $('backupExportBtn')?.addEventListener('click', () => { closeProfileMenu(); exportBackupFile(); });
+  $('planEraseBtn')?.addEventListener('click', askPlanErase);
   $('backupImportBtn')?.addEventListener('click', () => $('backupImportFile')?.click());
   $('backupImportFile')?.addEventListener('change', e => {
     const file = e.target.files?.[0];
@@ -1864,9 +1889,9 @@ function wireBackupControls() {
     importBackupFile(file);
   });
   const dlg = $('planDialog');
-  dlg?.querySelector('[data-plan-confirm]')?.addEventListener('click', confirmPlanRestore);
+  dlg?.querySelector('[data-plan-confirm]')?.addEventListener('click', () => (_pendingPlanErase ? confirmPlanErase() : confirmPlanRestore()));
   dlg?.querySelector('[data-plan-cancel]')?.addEventListener('click', () => dlg.close());
-  dlg?.addEventListener('close', () => { _pendingPlanText = null; });
+  dlg?.addEventListener('close', () => { _pendingPlanText = null; _pendingPlanErase = false; });
   // Delegated: the Counselor Summary's export line and the Story panel's
   // plan controls are re-rendered, so they are handled here.
   document.addEventListener('click', e => {
@@ -8991,8 +9016,9 @@ function init() {
             ⚠️ Failed to load course data. Please check your internet connection and refresh the page.
             If the problem persists, <a href="mailto:support@usealtiora.com">contact support</a>.
           </p>
-          <button type="button" class="data-error-banner__retry" onclick="window.location.reload()">↺ Retry</button>
+          <button type="button" class="data-error-banner__retry">↺ Retry</button>
         </div>`;
+      main.querySelector('.data-error-banner__retry')?.addEventListener('click', () => window.location.reload());
     }
     return;
   }

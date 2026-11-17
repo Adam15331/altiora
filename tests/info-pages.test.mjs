@@ -14,7 +14,7 @@ const read = (/** @type {string} */ f) => fs.readFileSync(path.join(ROOT, f), 'u
 const env = { pieces: appPieces(), pagesCssV: 'test' };
 const built = Object.fromEntries(INFO_PAGE_CONTENT.map(p => [p.file, infoPageHtml(p, env)]));
 // Site code that runs in the browser (data files hold no behaviour).
-const SITE_CODE = ['main.js', 'state.js', 'requirements-view.js', 'statement-review.js', 'ib-hl.js', 'app.html', 'index.html'];
+const SITE_CODE = ['main.js', 'state.js', 'requirements-view.js', 'statement-review.js', 'ib-hl.js', 'strengths-param.js', 'about-pill.js', 'app.html', 'index.html'];
 
 test('the committed info pages are up to date with their source', () => {
   for (const p of INFO_PAGE_CONTENT) {
@@ -56,12 +56,12 @@ test('privacy facts: the storage keys the policy names are the only ones', () =>
   for (const f of SITE_CODE) assert.doesNotMatch(read(f), /indexedDB|caches\.open|serviceWorker\.register/, f);
 });
 
-test('privacy facts: the only third-party hosts loaded are Google Fonts and Cloudflare', () => {
+test('privacy facts: the only third-party host loaded is Cloudflare Web Analytics', () => {
   const pages = ['index.html', 'app.html', 'privacy.html', 'fields/medicine.html', 'courses/uk-medicine-oxford.html'];
   for (const f of pages) {
     const hosts = new Set([...read(f).matchAll(/<(?:script|link)[^>]+(?:src|href)=["']https:\/\/([^/"']+)/g)].map(m => m[1]));
     hosts.delete('usealtiora.com');  // canonical / og:url
-    for (const h of hosts) assert.ok(['fonts.googleapis.com', 'fonts.gstatic.com', 'static.cloudflareinsights.com'].includes(h), `${f} loads ${h}`);
+    for (const h of hosts) assert.equal(h, 'static.cloudflareinsights.com', `${f} loads ${h}`);
   }
 });
 
