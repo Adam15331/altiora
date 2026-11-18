@@ -125,12 +125,15 @@ test('graduate-entry courses: retired, not shown as not applicable; the not-appl
   for (const id of ['us-law-harvard', 'us-law-yale', 'us-law-georgetown']) {
     for (const cat of ['aLevel', 'ib']) assert.notEqual(cycle.courses[id][cat].status, 'notApplicable', `${id} › ${cat}`);
   }
-  // The record says graduate-entry but the engine holds IB Higher Level subjects:
-  // the conflict is shown, nothing is marked not applicable.
-  for (const id of ['ca-medicine-mcgill']) {
-    assert.equal(cycle.courses[id].ib.status, 'partial');
-    assert.equal(cycle.courses[id].aLevel.status, 'unverified');
-    assert.match(cycle.courses[id].ib.note ?? '', /graduate-entry/);
+  // McGill MDCM and BCL/JD: their records said graduate-entry while the engine held
+  // school-qualification data. McGill's own pages settled it (18 Nov 2026): both retired.
+  for (const id of ['ca-medicine-mcgill', 'ca-law-mcgill']) {
+    assert.ok(retired.has(id), `${id} is retired`);
+    assert.ok(!byId.has(id) && !(id in cycle.courses), `${id} is gone`);
+  }
+  // No remaining row still carries the "graduate-entry, yet the engine holds data" contradiction note.
+  for (const [id, r] of Object.entries(cycle.courses)) {
+    for (const cat of ['aLevel', 'ib']) assert.doesNotMatch(r[cat].note ?? '', /graduate-entry programme, yet the matching engine/, `${id} › ${cat}`);
   }
 });
 

@@ -30,7 +30,7 @@ test('og-image.png is a 1200×630 PNG', () => {
 });
 
 test('every page carries the shared preview image and the summary card with the same image', () => {
-  assert.ok(PAGES.length >= 413, `only ${PAGES.length} pages`);
+  assert.ok(PAGES.length >= 411, `only ${PAGES.length} pages`);
   for (const f of PAGES) {
     const html = read(f);
     assert.equal(meta(html, 'og:image'), SOCIAL_IMAGE.url, f);

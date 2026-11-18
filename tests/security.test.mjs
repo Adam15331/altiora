@@ -61,7 +61,7 @@ test('Content-Security-Policy: the constant is the agreed policy', () => {
 });
 
 test('Content-Security-Policy: exactly one on every page, identical to the constant, directly after <meta charset>', () => {
-  assert.ok(HTML.length >= 413, `only ${HTML.length} pages`);
+  assert.ok(HTML.length >= 411, `only ${HTML.length} pages`);
   const meta = cspMeta();
   for (const f of HTML) {
     const html = read(f);

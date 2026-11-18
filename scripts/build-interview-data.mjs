@@ -23,7 +23,7 @@
  * ═══════════════════════════════════════════════════════════════ */
 import fs from 'node:fs';
 import path from 'node:path';
-import { ROOT } from './lib/requirements-io.mjs';
+import { ROOT, loadRetiredCourses } from './lib/requirements-io.mjs';
 
 const research = JSON.parse(fs.readFileSync(path.join(ROOT, 'research/interviews-proposed.json'), 'utf8'));
 
@@ -133,6 +133,18 @@ for (const t of Object.keys(TIMING)) if (!records[t]?.timing) throw new Error(`t
 //   statement[]    — for interviewed "no": the university's own statement
 // ═══════════════════════════════════════════════════════════════
 const expansion = JSON.parse(fs.readFileSync(path.join(ROOT, 'research/interviews-expansion-proposed.json'), 'utf8'));
+// Retired courses (data/courseRequirements.js retiredCourses) are not on the site: nothing is loaded for
+// them, and a research entry whose only courses are retired is left out. The research file is unchanged.
+const RETIRED = new Set(loadRetiredCourses().map(r => r.id));
+const leftOutRetired = /** @type {string[]} */ ([]);
+for (const list of ['records', 'thirdPartyInterviewOnly', 'statedNoInterview']) {
+  expansion[list] = expansion[list].filter((/** @type {any} */ r) => {
+    const kept = r.courseIds.filter((/** @type {string} */ c) => !RETIRED.has(c));
+    if (kept.length < r.courseIds.length) leftOutRetired.push(`${r.id ?? r.university} (${r.courseIds.filter((/** @type {string} */ c) => RETIRED.has(c)).join(', ')})`);
+    r.courseIds = kept;
+    return kept.length > 0;
+  });
+}
 
 // Route-limited records: the route label, verbatim from a quote on the record — its own evidence, or the
 // page/section heading captured in its appliesToEvidence (research file). Where the full label is not in a
@@ -334,6 +346,7 @@ fs.writeFileSync(path.join(ROOT, 'data/interviews.js'), `/* ══════�
 })(typeof globalThis !== 'undefined' ? globalThis : this);
 `);
 const n = Object.values(records);
+for (const x of leftOutRetired) console.log(`Left out (retired course): ${x}`);
 for (const x of removedPrep) console.log(`Left out (preparation quote ends with a colon): ${x.record} — “${x.sourceSnippet}” ${x.source}`);
 console.log(`Wrote data/interviews.js: ${n.length} records (${n.filter(r => r.unavailable).length} unavailable), ${Object.keys(courses).length} courses, `
   + `${n.reduce((s, r) => s + r.sampleQuestions.length, 0)} official sample questions, ${n.filter(r => r.timing).length} with stated timing.`);

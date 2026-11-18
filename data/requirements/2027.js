@@ -2814,16 +2814,6 @@
       "otherQualifications": {"status":"unverified"},
       "otherRequirements": {"status":"unverified"}
     },
-    "ca-medicine-mcgill": {
-      "satAct": {"status":"unverified"},
-      "englishLanguage": {"status":"unverified"},
-      "admissionsTests": {"status":"verified","none":true,"sources":[{"url":"https://www.mcgill.ca/medadmissions/applying/requirements/requirements-edu/mcat","label":"Official source"}],"lastVerified":"2026-06-23"},
-      "subjectPrerequisites": {"status":"verified","items":["Required: Chemistry, Biology","Preferred: Mathematics"],"codes":["Chemistry","Biology","Mathematics_Standard"],"sources":[{"url":"https://www.mcgill.ca/medadmissions/applying/requirements/requirements-edu/mcat","label":"Official source"}],"lastVerified":"2026-06-23"},
-      "aLevel": {"status":"unverified","note":"The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either."},
-      "ib": {"status":"partial","accepted":"yes","subjects":{"required":[{"name":"Chemistry","code":"Chemistry"},{"name":"Biology","code":"Biology"}],"preferred":[{"name":"Mathematics","code":"Mathematics_Standard"}],"higherLevel":[{"name":"Chemistry","code":"Chemistry"},{"name":"Biology","code":"Biology"}]},"detail":"655 at HL","sources":[{"url":"https://www.mcgill.ca/medadmissions/applying/requirements/requirements-edu/mcat","label":"Official source"}],"lastVerified":"2026-06-23","note":"The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either."},
-      "otherQualifications": {"status":"unverified"},
-      "otherRequirements": {"status":"unverified"}
-    },
     "ca-cs-mcgill": {
       "satAct": {"status":"unverified"},
       "englishLanguage": {"status":"unverified"},
@@ -2851,16 +2841,6 @@
       "subjectPrerequisites": {"status":"partial","none":true,"sources":[{"url":"https://www.mcgill.ca/undergraduate-admissions/apply/requirements/international/ib","label":"Official source"}],"lastVerified":"2026-08-15","note":"Confirmed on the university's page for one specific qualification route — check the same applies to your qualification."},
       "aLevel": {"status":"unverified"},
       "ib": {"status":"verified","accepted":"yes","detail":"No HL subject requirements. Faculty of Arts has no maths admission prerequisite (SL Maths AI is accepted); minimum expectation is 5+ in every HL/SL subject, competitive entry typically higher.","sources":[{"url":"https://www.mcgill.ca/undergraduate-admissions/apply/requirements/international/ib","label":"Official source"}],"lastVerified":"2026-08-15"},
-      "otherQualifications": {"status":"unverified"},
-      "otherRequirements": {"status":"unverified"}
-    },
-    "ca-law-mcgill": {
-      "satAct": {"status":"unverified"},
-      "englishLanguage": {"status":"unverified"},
-      "admissionsTests": {"status":"verified","none":true,"sources":[{"url":"https://www.mcgill.ca/law/bcl-jd/admissions-guide/lsat","label":"Official source"}],"lastVerified":"2026-06-23"},
-      "subjectPrerequisites": {"status":"verified","items":["Preferred: History, English"],"codes":["History","English"],"sources":[{"url":"https://www.mcgill.ca/law/bcl-jd/admissions-guide/lsat","label":"Official source"}],"lastVerified":"2026-06-23"},
-      "aLevel": {"status":"unverified"},
-      "ib": {"status":"unverified"},
       "otherQualifications": {"status":"unverified"},
       "otherRequirements": {"status":"unverified"}
     },

@@ -2370,84 +2370,6 @@
         "interviewed": "yes",
         "timing": null
       },
-      "mcgill-medicine": {
-        "id": "mcgill-medicine",
-        "university": "McGill University",
-        "subject": "Medicine (Med-P Qualifying Year leading to MDCM)",
-        "format": {
-          "source": "https://www.mcgill.ca/medadmissions/applying/selection-process/multiple-mini-interviews",
-          "accessed": "2026-11-15",
-          "sourceSnippet": "The interviews are in virtual multiple mini-interview (vMMI) format and are conducted virtually by the Faculty of Medicine and Health Sciences. These mini-interviews consist of multiple stations that can be task-oriented, simulation-oriented, scenario-oriented, or discussion-oriented."
-        },
-        "numberAndLength": {
-          "source": "https://www.mcgill.ca/medadmissions/mdis",
-          "accessed": "2026-11-15",
-          "sourceSnippet": "The virtual MMI is divided into 2 separate Zoom meetings, with a break in between. The length of each zoom interview session is up to one hour."
-        },
-        "mmiStations": {
-          "source": "https://www.mcgill.ca/medadmissions/mdis",
-          "accessed": "2026-11-15",
-          "sourceSnippet": "The M³I consists of a circuit of between 7 to 10 stations, which can be in any of the following formats: (a) discussion-based (with evaluator present) (b) task-oriented (with or without evaluator present) or (c) controlled scenarios or simulations (with evaluator observing from outside the room). Stations are 7 minutes long, (with the exception of 1 station whose duration is double the length)."
-        },
-        "whatIsAssessed": {
-          "source": "https://www.mcgill.ca/medadmissions/applying/selection-process/multiple-mini-interviews",
-          "accessed": "2026-11-15",
-          "sourceSnippet": "Stations are designed to evaluate the various non-medical abilities targeted in the MDCM Program Learning Objectives which in turn references the CanMeds roles developped by the Royal College of Physicians and Surgeons of Canada. The MMIs can at times include themes that may be sensitive or personal for some candidates. Clinical skills are not tested."
-        },
-        "prepAdvice": [
-          {
-            "source": "https://www.mcgill.ca/medadmissions/mdis",
-            "accessed": "2026-11-15",
-            "sourceSnippet": "Preparation for the MMIs. It is unnecessary to pay for expensive training programs. We encourage you to be confident, and be yourself!"
-          },
-          {
-            "source": "https://www.mcgill.ca/medadmissions/mdis",
-            "accessed": "2026-11-15",
-            "sourceSnippet": "A s with all interviews, you are encouraged to reflect on your skills and strengths. Consider resources like your university or community career centre to learn more about the MMI format."
-          }
-        ],
-        "sampleQuestions": [],
-        "unavailable": false,
-        "interviewed": "yes",
-        "timing": null,
-        "appliesTo": "CEGEP students",
-        "routeDisplay": "label",
-        "appliesToEvidence": [
-          {
-            "source": "https://www.mcgill.ca/medadmissions/programs/med-p",
-            "accessed": "2026-11-15",
-            "sourceSnippet": "This one-year Qualifying Year is designed exclusively for CEGEP students, and prepares you to excel in McGill’s MDCM medical program and go on to become a compassionate caregiver!"
-          }
-        ]
-      },
-      "mcgill-law": {
-        "id": "mcgill-law",
-        "university": "McGill University",
-        "subject": "Law (BCL/JD, CEGEP/QFB applicant category)",
-        "format": {
-          "source": "https://www.mcgill.ca/law/bcl-jd/admissions-guide/admissions-policy",
-          "accessed": "2026-11-15",
-          "sourceSnippet": "Interviews may be held in person at the Faculty of Law or via videoconference."
-        },
-        "numberAndLength": {
-          "source": "https://www.mcgill.ca/law/bcl-jd/admissions-guide/admissions-policy",
-          "accessed": "2026-11-15",
-          "sourceSnippet": "Conducted by two professors, they are typically no longer than 25 minutes."
-        },
-        "mmiStations": null,
-        "whatIsAssessed": {
-          "source": "https://www.mcgill.ca/law/bcl-jd/admissions-guide/admissions-policy",
-          "accessed": "2026-11-15",
-          "sourceSnippet": "Interviewers engage with applicants to test their ability to articulate a position and their critical thinking skills. Interviewers typically use issues or experiences mentioned in the candidate’s application as a starting point. Particularly for CEGEP candidates, interviewers also assess maturity, readiness for our program, and reasons for studying law directly from CEGEP."
-        },
-        "prepAdvice": [],
-        "sampleQuestions": [],
-        "unavailable": false,
-        "interviewed": "yes",
-        "timing": null,
-        "appliesTo": "CEGEP candidates",
-        "routeDisplay": "label"
-      },
       "mcmaster-engineering-cs": {
         "id": "mcmaster-engineering-cs",
         "university": "McMaster University",
@@ -4626,12 +4548,6 @@
       ],
       "ca-business-ubc": [
         "ubc-commerce"
-      ],
-      "ca-medicine-mcgill": [
-        "mcgill-medicine"
-      ],
-      "ca-law-mcgill": [
-        "mcgill-law"
       ],
       "ca-engineering-mcmaster": [
         "mcmaster-engineering-cs"

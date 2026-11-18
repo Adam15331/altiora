@@ -8,16 +8,16 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 157 | 62 | 111 | 0 |
-| English language | 176 | 39 | 115 | 0 |
-| Admissions tests | 267 | 53 | 10 | 0 |
-| Subject prerequisites | 149 | 169 | 12 | 0 |
-| A-Level requirements | 156 | 92 | 82 | 0 |
-| IB requirements | 215 | 93 | 22 | 0 |
-| Other qualifications | 150 | 85 | 95 | 0 |
-| Other requirements | 178 | 43 | 109 | 0 |
+| SAT / ACT | 157 | 62 | 109 | 0 |
+| English language | 176 | 39 | 113 | 0 |
+| Admissions tests | 265 | 53 | 10 | 0 |
+| Subject prerequisites | 147 | 169 | 12 | 0 |
+| A-Level requirements | 156 | 92 | 80 | 0 |
+| IB requirements | 215 | 92 | 21 | 0 |
+| Other qualifications | 150 | 85 | 93 | 0 |
+| Other requirements | 178 | 43 | 107 | 0 |
 
-330 courses × 8 categories = 2640 requirement entries.
+328 courses × 8 categories = 2624 requirement entries.
 
 ## Partly verified
 
@@ -606,7 +606,6 @@ Shown with a "Partly verified" badge and the note below.
 | `us-economics-unc` | Subject prerequisites | Official: UNC System minimum high-school coursework to be eligible to apply — 4 units English; 4 units college-preparatory mathematics (e.g. algebra I and II, geometry and one unit beyond algebra II); 3 units science (one life/biological, one physical, one laboratory course); 2 units social science (one in U.S. history); 2 additional units of English, mathematics, science, social studies, world languages or computer science. Two sequential world language courses are recommended. Applicants who lack units may still apply and explain their circumstances. No major-specific high-school subjects are stated. |
 | `ca-maths-mcgill` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-maths-mcgill` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
-| `ca-medicine-mcgill` | IB requirements | The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
 | `ca-cs-mcgill` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-cs-mcgill` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-engineering-mcgill` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
@@ -1517,11 +1516,9 @@ category — check the official source; never copy a hint in as a value.
 | `ca-engineering-utoronto` | University of Toronto | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
 | `ca-medicine-utoronto` | University of Toronto | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
 | `ca-economics-utoronto` | University of Toronto | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
-| `ca-medicine-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level requirements: The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
 | `ca-cs-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
 | `ca-engineering-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
 | `ca-economics-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
-| `ca-law-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, IB requirements, Other qualifications, Other requirements | notes mention IB; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
 | `ca-cs-ubc` | University of British Columbia | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
 | `ca-engineering-ubc` | University of British Columbia | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
 | `ca-business-ubc` | University of British Columbia | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention A-Level grades |

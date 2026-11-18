@@ -5,7 +5,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { loadConfig, loadCourses, loadCycle, loadRetiredCourses } from '../scripts/lib/requirements-io.mjs';
-import { validateRetired } from '../scripts/lib/validate-requirements.mjs';
+import { validateRetired, RETIRED_REASONS } from '../scripts/lib/validate-requirements.mjs';
 
 const require = createRequire(import.meta.url);
 const { interviewData } = require('../data/interviews.js');
@@ -20,9 +20,9 @@ const errors = (list, over = {}) => validateRetired(list, { ...ctx, ...over }).m
 
 test('the retired list as stored passes, and every entry carries its evidence', () => {
   assert.deepEqual(errors(retired), []);
-  assert.ok(retired.length >= 5);
+  assert.ok(retired.length >= 7);
   for (const r of retired) {
-    assert.equal(r.reason, 'graduate-entry: not open to school leavers', r.id);
+    assert.ok(RETIRED_REASONS.includes(r.reason), r.id);
     assert.match(r.evidence.source, /^https:\/\//, r.id);
     assert.ok(r.evidence.sourceSnippet.length > 20, r.id);
   }

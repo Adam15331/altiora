@@ -63,9 +63,9 @@ test('no humanities subject: a Law course with no required subject is never red,
     const rows = await p.evaluate(() => courses.filter((/** @type {any} */ c) => c.category === 'law')
       // @ts-ignore -- browser globals
       .map((/** @type {any} */ c) => ({ id: c.id, essential: c.requirements.essential ?? [], status: checkStatusFor(c).status })));
-    assert.ok(rows.length >= 27, `${name}: ${rows.length} Law courses`);
+    assert.ok(rows.length >= 26, `${name}: ${rows.length} Law courses`);
     const open_ = rows.filter((/** @type {any} */ r) => !r.essential.length);
-    assert.ok(open_.length >= 22, `${name}: ${open_.length} Law courses with no required subject`);
+    assert.ok(open_.length >= 21, `${name}: ${open_.length} Law courses with no required subject`);
     for (const r of open_) assert.notEqual(r.status, 'red', `${name}: ${r.id} is red`);
     // A Law course that DOES require a subject the student lacks is still red: that is the course's rule, not the guard.
     for (const r of rows.filter((/** @type {any} */ r) => r.essential.length)) assert.equal(r.status, 'red', `${name}: ${r.id}`);

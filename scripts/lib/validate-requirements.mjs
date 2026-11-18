@@ -330,7 +330,7 @@ export function validateConfig(config) {
   return out;
 }
 
-export const RETIRED_REASONS = ['graduate-entry: not open to school leavers'];
+export const RETIRED_REASONS = ['graduate-entry: not open to school leavers', 'not open to school leavers: needs CEGEP or university credits'];
 
 /**
  * Validate the retired-courses list (data/courseRequirements.js
