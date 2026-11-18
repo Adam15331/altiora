@@ -84,7 +84,7 @@ test('no admitted-student figure is stated as a UK requirement', () => {
 
 test('noSubjectRequirements: only on courses whose verified, quoted row states no required subjects', () => {
   const flagged = courses.filter(c => c.noSubjectRequirements);
-  assert.deepEqual(flagged.map(c => c.id).sort(), ['uk-law-cambridge', 'uk-law-exeter', 'uk-law-kcl', 'uk-law-lse', 'uk-law-oxford', 'uk-nursing-kcl']);
+  assert.deepEqual(flagged.map(c => c.id).sort(), ['uk-law-cambridge', 'uk-law-kcl', 'uk-law-lse', 'uk-law-oxford', 'uk-nursing-kcl']);
   const id = 'uk-law-cambridge';
   const course = /** @type {any} */ (courses.find(c => c.id === id));
   const ok = validateCycle(cycle, { config, courses, today: TODAY }).filter(p => p.level === 'error');

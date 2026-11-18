@@ -1528,7 +1528,6 @@ const courses = [
     id: "uk-law-exeter", name: "Law LLB",
     university: "University of Exeter", country: "UK", degreeLevel: "LLB", category: "law",
     requirements: { essential: [], preferred: [], useful: ["Economics","Philosophy"] },
-    noSubjectRequirements: true,
     grades: { aLevels: "AAA", ib: 36, sgALevels: null, hkDse: null, ibHL: [], ibHLNote: "666 at HL" },
     admissionTests: [],
     universityContext: {
