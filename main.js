@@ -1171,10 +1171,16 @@ const FIELD_CORE_REASON = {
   medicine:     'Medicine-track courses expect biology and chemistry.',
   economics:    'Economics expects strong quantitative preparation (calculus or statistics).',
   business:     'Business courses expect quantitative preparation (calculus or statistics).',
-  law:          'Law-track courses expect strong humanities (e.g. English, history or government).',
+  law:          'Check whether this course prefers particular subjects.',
   psychology:   'Psychology expects relevant science or quantitative subjects.',
   architecture: 'Architecture expects maths and a design or art subject.',
 };
+
+// Fields whose core list above is Altiora's own expectation, not something the
+// universities' pages state. For these the guard may hold a course back from
+// STRONG, but it can never say "not a match": at most amber, with a line that
+// asks the student to check, never one that asserts what the course expects.
+const FIELD_CORE_ADVISORY_ONLY = new Set(['law']);
 
 // How many of a field's core subject GROUPS the student satisfies.
 function fieldRelevance(category, userTags) {
@@ -1203,8 +1209,9 @@ function classify(course, userTags) {
     if (fr && fr.satisfied < fr.total) {
       // None of the field's core subjects → weak (not a match); some but not
       // all → possible. Never strong without the expected core preparation.
+      // Advisory-only fields (Law) never go red here: at most amber.
       return {
-        status: fr.satisfied === 0 ? 'red' : 'amber',
+        status: fr.satisfied === 0 && !FIELD_CORE_ADVISORY_ONLY.has(course.category) ? 'red' : 'amber',
         missingEssential: [],
         missingPreferred,
         fieldCore: fr,
