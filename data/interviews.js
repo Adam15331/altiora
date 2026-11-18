@@ -3105,7 +3105,10 @@
         "interviewed": "yes",
         "timing": null,
         "appliesTo": "entry into Year 2 in any subject",
-        "routeDisplay": "quote"
+        "routeDisplay": "quote",
+        "routeQuoteParts": [
+          "You may also be interviewed if you’re applying for entry into Year 2 in any subject."
+        ]
       },
       "berkeley-business": {
         "id": "berkeley-business",
@@ -3187,7 +3190,11 @@
         "interviewed": "yes",
         "timing": null,
         "appliesTo": "admitted transfer student or current UNC student who has completed your first year",
-        "routeDisplay": "quote"
+        "routeDisplay": "quote",
+        "routeQuoteParts": [
+          "If you are an admitted transfer student or current UNC student who has completed your first year, you are encouraged to apply to the Undergraduate Business Program.",
+          "Video interview"
+        ]
       },
       "caltech-third-party": {
         "id": "caltech-third-party",

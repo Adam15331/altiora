@@ -118,6 +118,10 @@ for (const t of Object.keys(TIMING)) if (!records[t]?.timing) throw new Error(`t
 //   appliesTo      — set when the interview is for one route/group only, in
 //                    the university's words (the card says "Interviews some
 //                    applicants: …", no practice button)
+//   routeQuoteParts — optional, quote mode only: one or two parts of the quote to show instead of
+//                    the whole of it (research file, same field name). Each is an exact substring of
+//                    one of the record's sourceSnippets; two are shown joined by " … ". The build and
+//                    the validator both refuse anything else.
 //   routeDisplay   — on every route record: 'label' shows the route label
 //                    ("Interviews some applicants: JUPAS applicants"); 'quote'
 //                    shows the quote that names the route, in full ("Interviews
@@ -242,6 +246,13 @@ for (const r of expansion.records) {
     if (ROUTE[r.id].key) out.appliesToKey = ROUTE[r.id].key;
     out.routeDisplay = ROUTE[r.id].display ?? 'label';
     if (r.appliesToEvidence?.length) out.appliesToEvidence = r.appliesToEvidence.map(ev);
+    if (r.routeQuoteParts !== undefined) {
+      const snippets = [...(r.appliesToEvidence ?? []), ...evOf(r)].map((/** @type {any} */ e) => e.sourceSnippet);
+      if (out.routeDisplay !== 'quote') throw new Error(`${r.id}: routeQuoteParts is only for a record shown in quote mode`);
+      if (!Array.isArray(r.routeQuoteParts) || r.routeQuoteParts.length < 1 || r.routeQuoteParts.length > 2) throw new Error(`${r.id}: routeQuoteParts must hold one or two sub-quotes`);
+      for (const part of r.routeQuoteParts) if (typeof part !== 'string' || !part || !snippets.some((/** @type {string} */ s) => s.includes(part))) throw new Error(`${r.id}: sub-quote is not an exact part of the record's quotes: ${part}`);
+      out.routeQuoteParts = [...r.routeQuoteParts];
+    }
   }
   addNew(out);
 }

@@ -1491,6 +1491,9 @@
       "id": "glasgow-year2-entry",
       "university": "University of Glasgow",
       "subject": "Year 2 (advanced) entry, any subject",
+      "routeQuoteParts": [
+        "You may also be interviewed if you’re applying for entry into Year 2 in any subject."
+      ],
       "courseIds": [
         "uk-cs-glasgow",
         "uk-law-glasgow",
@@ -1581,6 +1584,10 @@
       "id": "unc-business",
       "university": "UNC Chapel Hill",
       "subject": "Business Administration (Kenan-Flagler Undergraduate Business Program)",
+      "routeQuoteParts": [
+        "If you are an admitted transfer student or current UNC student who has completed your first year, you are encouraged to apply to the Undergraduate Business Program.",
+        "Video interview"
+      ],
       "courseIds": [
         "us-business-unc"
       ],

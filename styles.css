@@ -5667,6 +5667,8 @@ button.plan-combo-tag--drop:focus-visible {
 .reqs__sublist > li + li { margin-top: 2px; }
 .reqs__text { margin: 0; }
 .reqs__text--muted { color: var(--color-text-secondary); }
+/* Two route lines on one Interview row (e.g. a scheme and a university-wide route): a gap between them. */
+.reqs__row--interview .reqs__text + .reqs__text { margin-top: var(--space-2); }
 /* Footer: status badge, date and sources, set apart by a rule. */
 .reqs__meta {
   display: flex;

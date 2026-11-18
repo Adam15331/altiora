@@ -100,6 +100,22 @@ export function validateInterviews(data, { courses, today }) {
       else if (r.routeDisplay === 'quote' && ![...routeEv, ...EVIDENCE_FIELDS.map(f => r[f]), ...r.prepAdvice].some(e => typeof e?.sourceSnippet === 'string' && e.sourceSnippet.includes(r.appliesTo)))
         err(where, `routeDisplay "quote" needs a quote that contains the full route wording "${r.appliesTo}"`);
     } else if (r.routeDisplay !== undefined) err(where, 'routeDisplay is only for route-limited records');
+    // Sub-quotes (quote mode only): one or two parts of the route quote shown instead of the whole of it. Each
+    // must be an exact substring of ONE of the record's sourceSnippets — the same one for both, the second
+    // after the first, since " … " between them says words were left out of a single passage.
+    if (r.routeQuoteParts !== undefined) {
+      const parts = r.routeQuoteParts;
+      const own = [...routeEv, ...EVIDENCE_FIELDS.map(f => r[f]), ...r.prepAdvice].map(e => e?.sourceSnippet).filter(s => typeof s === 'string');
+      if (r.routeDisplay !== 'quote') err(where, 'routeQuoteParts is only for a route record shown in quote mode');
+      else if (!Array.isArray(parts) || parts.length < 1) err(where, 'routeQuoteParts must hold one or two sub-quotes');
+      else if (parts.length > 2) err(where, `routeQuoteParts holds ${parts.length} sub-quotes; at most two are allowed`);
+      else {
+        for (const part of parts) if (typeof part !== 'string' || !part.trim() || !own.some(s => s.includes(part))) err(where, `sub-quote is not an exact part of the record's evidence: “${part}”`);
+        if (parts.length === 2 && parts.every(part => typeof part === 'string' && part) && !own.some(s => { const i = s.indexOf(parts[0]); return i !== -1 && s.indexOf(parts[1], i + parts[0].length) !== -1; }))
+          err(where, 'the two sub-quotes must come from the same quote, the second after the first');
+        if (typeof r.appliesTo === 'string' && parts.every(part => typeof part === 'string') && !parts.some(part => part.includes(r.appliesTo))) err(where, `a sub-quote must contain the full route wording "${r.appliesTo}"`);
+      }
+    }
     if (typeof r.thirdPartyOnly === 'string') {
       if (r.interviewed !== 'no') err(where, 'thirdPartyOnly records are interviewed "no" (no university interview)');
       for (const name of r.thirdPartyOnly.split(/ or | and /)) if (!snippets.includes(name)) err(where, `provider "${name}" is not named in the record's quotes`);
