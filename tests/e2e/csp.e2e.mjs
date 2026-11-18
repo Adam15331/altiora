@@ -278,38 +278,111 @@ const RETURNING = () => ({ profile: { stage: 'building', qualificationSystem: 'U
 const seed = (ctx, state = RETURNING()) => ctx.addInitScript((/** @type {string} */ s) => {
   if (!sessionStorage.getItem('e2e_seeded')) { localStorage.setItem('altiora_state_v1', s); sessionStorage.setItem('e2e_seeded', '1'); }
 }, JSON.stringify(state));
-const shown = (/** @type {any} */ p) => p.evaluate(() => Array.from(document.querySelectorAll('#systemSelect, #yearSelect, #stageProposal, #subjectOnboard, [id^="panel-"]'))
-  .filter(e => e.getClientRects().length && !e.closest('.hidden')).map(e => e.id).join(','));
 
-test('?mode=strengths opens the strengths view on the first load, for a returning and a new student', async () => {
-  // Returning student: straight to the strengths view, on this load; the marker is used up.
-  const r = await harness();
-  await seed(r.ctx);
-  await r.p.goto(`${base}/app.html?mode=strengths`);
-  await r.p.locator('#panel-strengths:not(.hidden)').waitFor();
-  assert.equal(await shown(r.p), 'panel-strengths');
-  assert.equal(await r.p.evaluate(() => sessionStorage.getItem('openStrengthsMode')), null);
-  // A plain visit afterwards is an ordinary visit (Home), not the strengths view again.
-  await r.p.goto(`${base}/app.html`);
-  await r.p.locator('#panel-home:not(.hidden)').waitFor();
-  assert.equal(await shown(r.p), 'panel-home');
-  assert.deepEqual([r.violations, r.pageErrors], [[], []]);
-  await r.ctx.close();
+/** What is on screen, the saved stage and the journey bar's current step. @param {any} p */
+const where = (p) => p.evaluate(() => {
+  const raw = localStorage.getItem('altiora_state_v1');
+  const showing = Array.from(document.querySelectorAll('#systemSelect, #yearSelect, #stageProposal, #subjectOnboard, [id^="panel-"]'))
+    .filter(e => e.getClientRects().length && !e.closest('.hidden')).map(e => e.id).join(',');
+  const current = Array.from(document.querySelectorAll('.journey-bar__step')).filter(e => e.getClientRects().length).find(e => e.getAttribute('aria-current'));
+  return { showing, stage: raw ? JSON.parse(raw).profile.stage : undefined, bar: current ? (current.textContent ?? '').replace(/\s+/g, ' ').trim() : null };
+});
+/** The saved plan without the visit timestamp every page load refreshes. @param {any} p */
+const plan = (p) => p.evaluate(() => { const s = JSON.parse(localStorage.getItem('altiora_state_v1') ?? '{}'); delete s.meta.lastVisit; return JSON.stringify(s); });
 
-  // New student: the qualification question first (nothing can be shown without it), then the year and
-  // the subject picker, then the strengths view — the usual "where we'd start you" proposal is skipped.
+test('the strengths link opens the view and never writes the stage: returning students', async () => {
+  for (const [stage, years, yearGroup, bar] of /** @type {Array<[string, number, string, string]>} */ ([['building', 1, 'Year 12', '3Building list'], ['applying', 0, 'Year 13', '4Applying'], ['choosing', 2, 'Year 11', '2Choosing subjects']])) {
+    const h = await harness();
+    // predictedGrades null is the site's own "none entered" value (an empty map is rewritten to it shortly after any load).
+    const state = RETURNING(); Object.assign(state.profile, { stage, yearsUntilApplication: years, yearGroup, predictedGrades: null });
+    await seed(h.ctx, state);
+    const { p } = h;
+    // Before the click: an ordinary visit.
+    await p.goto(`${base}/app.html`);
+    await p.locator('#panel-home:not(.hidden)').waitFor();
+    assert.deepEqual(await where(p), { showing: 'panel-home', stage, bar }, `${stage}: before`);
+    const before = await plan(p);
+    // Through the link: the strengths view on this first load; stage, journey bar and the whole plan as they were.
+    await p.goto(`${base}/app.html?mode=strengths`);
+    await p.locator('#panel-strengths:not(.hidden)').waitFor();
+    assert.deepEqual(await where(p), { showing: 'panel-strengths', stage, bar }, `${stage}: first load`);
+    assert.equal(await plan(p), before, `${stage}: plan unchanged on first load`);
+    assert.equal(await p.evaluate(() => sessionStorage.getItem('openStrengthsMode')), null);
+    // A reload with the link still in the address: the same.
+    await p.reload();
+    await p.locator('#panel-strengths:not(.hidden)').waitFor();
+    assert.deepEqual(await where(p), { showing: 'panel-strengths', stage, bar }, `${stage}: reload`);
+    assert.equal(await plan(p), before, `${stage}: plan unchanged after reload`);
+    // A plain visit afterwards: Home.
+    await p.goto(`${base}/app.html`);
+    await p.locator('#panel-home:not(.hidden)').waitFor();
+    assert.deepEqual(await where(p), { showing: 'panel-home', stage, bar }, `${stage}: plain visit`);
+    assert.equal(await plan(p), before, `${stage}: plan unchanged on a plain visit`);
+    assert.deepEqual([h.violations, h.pageErrors], [[], []]);
+    await h.ctx.close();
+  }
+});
+
+test('the strengths link: a new student gets onboarding in full, keeps the stage they accept, and lands on the strengths view', async () => {
+  // What a plain first visit saves (an empty record with visit times): the link must save nothing more.
+  const plainCtx = await harness();
+  await plainCtx.p.goto(`${base}/app.html`);
+  await plainCtx.p.locator('#systemSelect:not(.hidden)').waitFor();
+  const strip = (/** @type {string} */ raw) => { const s = JSON.parse(raw); delete s.meta.lastVisit; delete s.meta.firstVisit; return JSON.stringify(s); };
+  const plainSaved = strip(await plainCtx.p.evaluate(() => localStorage.getItem('altiora_state_v1') ?? '{}'));
+  await plainCtx.ctx.close();
+
+  for (const [year, stage, bar, proposal] of [['Year 12', 'building', '3Building list', /we'll start you at Building your university list/], ['Year 13', 'applying', '4Applying', /we'll start you at Applying/], ['Year 10', 'exploring', '1Exploring fields', /Exploring/]]) {
+    const h = await harness();
+    const { p } = h;
+    // First load: the first onboarding question; nothing saved beyond what any first visit saves.
+    await p.goto(`${base}/app.html?mode=strengths`);
+    await p.locator('#systemSelect:not(.hidden)').waitFor();
+    assert.deepEqual(await where(p), { showing: 'systemSelect', stage: null, bar: null }, `${year}: first load`);
+    assert.equal(strip(await p.evaluate(() => localStorage.getItem('altiora_state_v1') ?? '{}')), plainSaved, `${year}: the link saved nothing`);
+    assert.equal(await p.evaluate(() => sessionStorage.getItem('openStrengthsMode')), null);
+    // Qualification, then year: still no stage.
+    await p.locator('.stage-card', { hasText: 'UK A-Levels' }).click();
+    await p.locator('#yearSelect:not(.hidden)').waitFor();
+    assert.deepEqual(await where(p), { showing: 'yearSelect', stage: null, bar: null }, `${year}: after qualification`);
+    await p.locator('.stage-card', { hasText: year }).click();
+    // The proposal, as for any new student.
+    await p.locator('#stageProposal:not(.hidden)').waitFor();
+    assert.deepEqual(await where(p), { showing: 'stageProposal', stage: null, bar: null }, `${year}: proposal`);
+    assert.match(await p.locator('#stageProposalReason').innerText(), /** @type {RegExp} */ (proposal), `${year}`);
+    await p.click('#stageProposalAccept');
+    // The saved stage is the one accepted. Late years get the subject step; then the strengths view.
+    if (year !== 'Year 10') {
+      await p.locator('#subjectOnboard:not(.hidden)').waitFor();
+      assert.deepEqual(await where(p), { showing: 'subjectOnboard', stage, bar: null }, `${year}: subject step`);
+      await p.locator('#subjectOnboardSlot label.subject-chip', { has: p.locator('input[value="Mathematics"]') }).click();
+      await p.click('#subjectOnboardContinue');
+    }
+    await p.locator('#panel-strengths:not(.hidden)').waitFor();
+    assert.deepEqual(await where(p), { showing: 'panel-strengths', stage, bar }, `${year}: after onboarding`);
+    const saved = await plan(p);
+    // Reload with the link still in the address: the strengths view, nothing changed.
+    await p.reload();
+    await p.locator('#panel-strengths:not(.hidden)').waitFor();
+    assert.deepEqual(await where(p), { showing: 'panel-strengths', stage, bar }, `${year}: reload`);
+    assert.equal(await plan(p), saved, `${year}: plan unchanged after reload`);
+    // A plain visit afterwards: Home.
+    await p.goto(`${base}/app.html`);
+    await p.locator('#panel-home:not(.hidden)').waitFor();
+    assert.deepEqual(await where(p), { showing: 'panel-home', stage, bar }, `${year}: plain visit`);
+    assert.equal(await plan(p), saved);
+    assert.deepEqual([h.violations, h.pageErrors], [[], []]);
+    await h.ctx.close();
+  }
+  // Without the link, onboarding still ends on the stage's own tool (Year 12: Check Combination).
   const n = await harness();
-  await n.p.goto(`${base}/app.html?mode=strengths`);
-  await n.p.locator('#systemSelect:not(.hidden)').waitFor();
-  assert.equal(await shown(n.p), 'systemSelect');
+  await n.p.goto(`${base}/app.html`);
   await n.p.locator('.stage-card', { hasText: 'UK A-Levels' }).click();
   await n.p.locator('.stage-card', { hasText: 'Year 12' }).click();
-  await n.p.locator('#subjectOnboard:not(.hidden)').waitFor();
-  assert.equal(await shown(n.p), 'subjectOnboard');
+  await n.p.click('#stageProposalAccept');
   await n.p.click('#subjectOnboardSkip');
-  await n.p.locator('#panel-strengths:not(.hidden)').waitFor();
-  assert.equal(await shown(n.p), 'panel-strengths');
-  assert.deepEqual([n.violations, n.pageErrors], [[], []]);
+  await n.p.locator('#panel-check:not(.hidden)').waitFor();
+  assert.deepEqual(await where(n.p), { showing: 'panel-check', stage: 'building', bar: '3Building list' });
   await n.ctx.close();
 });
 

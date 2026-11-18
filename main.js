@@ -1634,6 +1634,7 @@ function chooseYear(label, years) {
   _isReturningUser = true;
   applyStageChrome(AltioraState.getProfile().stage);
   switchMode('home');
+  openStrengthsIfLinked();
 }
 
 // The year-informed stage proposal — replaces the blind self-select for new
@@ -1674,6 +1675,33 @@ function showStageProposal() {
  * ─────────────────────────────────────────────────────────────── */
 
 let _onboardSubjectsPending = false;   // armed by the stage proposal, consumed by enterStage
+
+/* ─── The landing page's "Start from your strengths and interests" link ───
+ * app.html?mode=strengths (strengths-param.js leaves the marker init() reads).
+ * The link only ever OPENS the strengths view — with switchMode('strengths'),
+ * exactly as Home's "Explore fields" button does. It never writes the stage:
+ *   - a returning student lands on Home as usual and the view opens on top,
+ *     saved stage and journey bar untouched;
+ *   - a new student goes through onboarding in full (qualification, year,
+ *     the stage proposal, subjects) and the view opens where their stage's
+ *     primary tool otherwise would.
+ * Nothing is saved because of the link. */
+let _strengthsLinkPending = false;
+// A returning student: the workspace is already showing — open the view.
+function openStrengthsIfLinked() {
+  if (!_strengthsLinkPending) return;
+  _strengthsLinkPending = false;
+  switchMode('strengths');
+}
+// The end of onboarding: into the stage the student accepted, on its primary
+// tool — or on the strengths view when they arrived through the link.
+function routeAfterOnboarding(stage) {
+  if (!_strengthsLinkPending) { routeToStage(stage); return; }
+  _strengthsLinkPending = false;
+  if (!STAGES[stage]) stage = DEFAULT_STAGE;
+  applyStageChrome(stage);
+  switchMode('strengths');
+}
 let _subjectOnboardStage    = null;    // where to route once the step finishes
 
 // Offer the onboarding subject question if it applies (normalised year says
@@ -1717,7 +1745,7 @@ function finishSubjectOnboard(skipped) {
   if (state.selectedSubjects.length) state.pickerCollapsed = true;
   const stage = _subjectOnboardStage || AltioraState.getProfile().stage || DEFAULT_STAGE;
   _subjectOnboardStage = null;
-  routeToStage(stage);   // applyStageChrome restores the picker into Check
+  routeAfterOnboarding(stage);   // applyStageChrome restores the picker into Check
 }
 
 // Return the picker to its home inside panel-check (no-op when it never
@@ -2116,7 +2144,7 @@ function enterStage(stage) {
     _onboardSubjectsPending = false;
     if (maybeOfferOnboardSubjects(stage)) return;
   }
-  routeToStage(stage);
+  routeAfterOnboarding(stage);   // routeToStage(stage), unless the strengths link is waiting
 }
 
 // Onboarding system pick (or the one-time prompt for old saves). Stores the
@@ -2134,7 +2162,7 @@ function chooseSystem(sys) {
   if (AltioraState.getProfile().yearsUntilApplication == null) { showYearSelect(); return; }
   const stage = _pendingStage || AltioraState.getProfile().stage || DEFAULT_STAGE;
   if (_pendingStage) { _pendingStage = null; routeToStage(stage); }
-  else { _isReturningUser = true; applyStageChrome(stage); switchMode('home'); } // returning user who lacked a system
+  else { _isReturningUser = true; applyStageChrome(stage); switchMode('home'); openStrengthsIfLinked(); } // returning user who lacked a system
 }
 
 // The single global control: change the qualification system everywhere.
@@ -9293,10 +9321,12 @@ function init() {
   // Apply the saved system globally up front so every screen renders in it.
   if (_savedSystem && qualificationMappings[_savedSystem]) applyProfileSystem(_savedSystem);
 
+  // The landing page's strengths link: remember it, change nothing (see _strengthsLinkPending).
   if (window.sessionStorage.getItem('openStrengthsMode') === 'true') {
     window.sessionStorage.removeItem('openStrengthsMode');
-    enterStage('exploring');   // diverts to system step if none set yet
-  } else if (AltioraState.getState().meta.hasOnboarded) {
+    _strengthsLinkPending = true;
+  }
+  if (AltioraState.getState().meta.hasOnboarded) {
     if (!_savedSystem) {
       // Old save from before systems were first-class — prompt once, then continue.
       showSystemSelect();
@@ -9313,6 +9343,7 @@ function init() {
       // Already onboarded with a system and year → genuinely returning.
       _isReturningUser = true;
       showWorkspaceHome();
+      openStrengthsIfLinked();
     }
   } else {
     // Onboarding starts at the qualification system — year labels and the
