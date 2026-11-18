@@ -462,3 +462,111 @@ test('profile menu: all of it, padding included, is inside the viewport at 375px
     await h.ctx.close();
   }
 });
+
+// ── The strengths link on the paths with an extra step before the workspace ──
+
+test('the strengths link: a new student who picks a stage by hand keeps that stage and lands on the strengths view', async () => {
+  for (const [year, card, stage, bar, subjectStep] of /** @type {Array<[string, string, string, string, boolean]>} */ ([
+    ['Year 12', "I'm choosing my subjects", 'choosing', '2Choosing subjects', true], ['Year 10', 'building', 'building', '3Building list', false]])) {
+    const h = await harness();
+    const { p } = h;
+    await p.goto(`${base}/app.html?mode=strengths`);
+    await p.locator('.stage-card', { hasText: 'UK A-Levels' }).click();
+    await p.locator('.stage-card', { hasText: year }).click();
+    await p.locator('#stageProposal:not(.hidden)').waitFor();
+    assert.deepEqual(await where(p), { showing: 'stageProposal', stage: null, bar: null }, `${year}: proposal`);
+    // "No, start me somewhere else": the four stage cards. Still nothing saved as the stage.
+    await p.click('#stageProposalManual');
+    await p.locator('#stageSelect:not(.hidden)').waitFor();
+    assert.equal((await where(p)).stage, null, `${year}: stage cards`);
+    await p.locator(`#stageSelect .stage-card[data-stage="${stage}"]`).click();
+    if (subjectStep) {
+      await p.locator('#subjectOnboard:not(.hidden)').waitFor();
+      assert.deepEqual(await where(p), { showing: 'subjectOnboard', stage, bar: null }, `${year}: subject step (${card})`);
+      await p.click('#subjectOnboardSkip');
+    }
+    await p.locator('#panel-strengths:not(.hidden)').waitFor();
+    assert.deepEqual(await where(p), { showing: 'panel-strengths', stage, bar }, `${year}: after onboarding`);
+    await p.goto(`${base}/app.html`);
+    await p.locator('#panel-home:not(.hidden)').waitFor();
+    assert.deepEqual(await where(p), { showing: 'panel-home', stage, bar }, `${year}: plain visit`);
+    assert.deepEqual([h.violations, h.pageErrors], [[], []]);
+    await h.ctx.close();
+  }
+});
+
+/** The saved plan as an object, without the visit timestamp. @param {any} p */
+const planObj = async (p) => JSON.parse(await plan(p));
+/** Which question is on screen, by its heading. @param {any} p */
+const heading = (p) => p.evaluate(() => (Array.from(document.querySelectorAll('#systemSelect h1, #yearSelect h1')).find(e => e.getClientRects().length && !e.closest('.hidden'))?.textContent ?? '').trim());
+
+// Three saved plans that are asked one question before the workspace opens.
+const PROMPTED = /** @type {Array<{name: string, change: (s: any) => void, question: string, heading: string, answer: string, answered: string[]}>} */ ([
+  { name: 'year to confirm (set before this school year)', change: s => { s.profile.yearSetAt = '2020-06-01T00:00:00.000Z'; },
+    question: 'yearSelect', heading: 'Is this still your year group?', answer: 'Year 12', answered: ['yearGroup', 'yearsUntilApplication', 'yearSetAt'] },
+  { name: 'old save with no qualification', change: s => { s.profile.qualificationSystem = null; },
+    question: 'systemSelect', heading: 'Which qualification are you studying?', answer: 'UK A-Levels', answered: ['qualificationSystem'] },
+  { name: 'old save with no year', change: s => { s.profile.yearGroup = null; s.profile.yearsUntilApplication = null; s.profile.yearSetAt = null; },
+    question: 'yearSelect', heading: 'What year are you in?', answer: 'Year 12', answered: ['yearGroup', 'yearsUntilApplication', 'yearSetAt'] },
+]);
+const promptedState = (/** @type {(s: any) => void} */ change) => {
+  const s = RETURNING();
+  Object.assign(s.profile, { predictedGrades: null, achievements: [{ id: 'ach_1', type: 'project', title: 'Robotics club', organisation: '', level: '', date: '', description: '', situation: '', whatIDid: '', whatItTaught: '', whyItMattered: '', fields: [] }], statementDrafts: { q1: 'A draft.', q2: '', q3: '' } });
+  change(s);
+  return s;
+};
+
+test('the strengths link: a returning student asked a question first gets the strengths view after answering, stage and plan unchanged', async () => {
+  for (const c of PROMPTED) {
+    const h = await harness();
+    await seed(h.ctx, promptedState(c.change));
+    const { p } = h;
+    await p.goto(`${base}/app.html?mode=strengths`);
+    await p.locator(`#${c.question}:not(.hidden)`).waitFor();
+    assert.deepEqual(await where(p), { showing: c.question, stage: 'building', bar: null }, `${c.name}: the question`);
+    assert.equal(await heading(p), c.heading, c.name);
+    const before = await planObj(p);
+    // Answer it: the strengths view opens, on the stage they already had.
+    await p.locator(`#${c.question} .stage-card`, { hasText: c.answer }).click();
+    await p.locator('#panel-strengths:not(.hidden)').waitFor();
+    assert.deepEqual(await where(p), { showing: 'panel-strengths', stage: 'building', bar: '3Building list' }, `${c.name}: after answering`);
+    // The rest of the plan is identical: only the answered field(s) changed.
+    const after = await planObj(p);
+    const changed = Object.keys(after.profile).filter(k => JSON.stringify(after.profile[k]) !== JSON.stringify(before.profile[k]));
+    for (const k of changed) assert.ok(c.answered.includes(k), `${c.name}: profile.${k} changed (${JSON.stringify(before.profile[k])} → ${JSON.stringify(after.profile[k])})`);
+    assert.ok(changed.length >= 1, `${c.name}: the answer was saved`);
+    assert.deepEqual({ ...after, profile: null }, { ...before, profile: null }, `${c.name}: shortlist, progress and meta unchanged`);
+    assert.deepEqual([after.profile.subjects, after.profile.achievements.length, after.profile.statementDrafts.q1, after.shortlist], [['Mathematics', 'Physics'], 1, 'A draft.', ['uk-cs-oxford']]);
+    // A plain visit afterwards: Home.
+    await p.goto(`${base}/app.html`);
+    await p.locator('#panel-home:not(.hidden)').waitFor();
+    assert.deepEqual(await where(p), { showing: 'panel-home', stage: 'building', bar: '3Building list' }, `${c.name}: plain visit`);
+    assert.deepEqual([h.violations, h.pageErrors], [[], []]);
+    await h.ctx.close();
+  }
+});
+
+test('the strengths link: left unanswered, a plain visit in the same tab shows the question and then Home, never the strengths view', async () => {
+  for (const c of PROMPTED) {
+    const h = await harness();
+    await seed(h.ctx, promptedState(c.change));
+    const { p } = h;
+    await p.goto(`${base}/app.html?mode=strengths`);
+    await p.locator(`#${c.question}:not(.hidden)`).waitFor();
+    const before = await plan(p);
+    // No answer. A plain visit in the same tab: the same question, nothing saved in between.
+    await p.goto(`${base}/app.html`);
+    await p.locator(`#${c.question}:not(.hidden)`).waitFor();
+    assert.deepEqual(await where(p), { showing: c.question, stage: 'building', bar: null }, `${c.name}: plain visit, the question again`);
+    assert.equal(await heading(p), c.heading, c.name);
+    assert.equal(await plan(p), before, `${c.name}: nothing saved by the unanswered visit`);
+    assert.equal(await p.evaluate(() => sessionStorage.getItem('openStrengthsMode')), null);
+    // Now they answer: Home, not the strengths view.
+    await p.locator(`#${c.question} .stage-card`, { hasText: c.answer }).click();
+    await p.locator('#panel-home:not(.hidden)').waitFor();
+    await p.waitForTimeout(300);
+    assert.deepEqual(await where(p), { showing: 'panel-home', stage: 'building', bar: '3Building list' }, `${c.name}: Home after answering`);
+    assert.deepEqual([h.violations, h.pageErrors], [[], []]);
+    await h.ctx.close();
+  }
+});
