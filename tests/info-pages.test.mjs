@@ -79,3 +79,17 @@ test('the sitemap lists the info pages', () => {
   for (const p of INFO_PAGES) assert.ok(xml.includes(`<loc>${SITE}/${p.file}</loc>`), p.file);
   assert.deepEqual([...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]), sitemapUrls());
 });
+
+// Altiora is a website, not an app: the information pages never call it one.
+test('the information pages never use "app" as a word for Altiora in their visible text', () => {
+  /** Text a reader sees: the <body> without tags (so file names in links and addresses in attributes are gone). */
+  const visible = (/** @type {string} */ html) => html.slice(html.indexOf('<body')).replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<[^>]+>/g, ' ')
+    .replace(/&amp;/g, '&').replace(/\s+/g, ' ');
+  for (const p of INFO_PAGE_CONTENT) {
+    // File names and addresses are exempt (app.html, usealtiora.com/app.html).
+    const text = visible(read(p.file)).replace(/\S*app\.html\S*/g, ' ');
+    const hits = [...text.matchAll(/.{0,40}\bapps?\b.{0,30}/gi)].map(m => m[0].trim());
+    assert.deepEqual(hits, [], `${p.file} says "app": ${hits.join(' | ')}`);
+  }
+  assert.deepEqual(INFO_PAGE_CONTENT.map(p => p.file), ['privacy.html', 'terms.html', 'accessibility.html']);
+});

@@ -35,6 +35,8 @@ const p = text => `<p class="fo-prose">${text}</p>`;
 /** @type {InfoPage} */
 const privacy = {
   file: 'privacy.html',
+  // Its own date, so a change here does not move the date on terms.html (which uses LAST_UPDATED).
+  updated: { iso: '2026-11-18', text: '18 November 2026' },
   title: 'Privacy policy · Altiora',
   eyebrow: 'Privacy',
   h1: 'Privacy policy',
@@ -53,12 +55,12 @@ const privacy = {
         'What you enter (your subjects, grades, shortlist and notes) is saved only in your own browser. It is not sent to us, and we can’t see it.',
         'We count visits with Cloudflare Web Analytics, which doesn’t use cookies and doesn’t receive anything you enter.',
       ]) },
-    { head: 'What the app saves, and where',
+    { head: 'What Altiora saves, and where',
       // Audit: state.js — one localStorage key, altiora_state_v1, with the fields
       // listed; a probe key written and removed at once; no fetch/XHR/beacon in
       // the site's own code. index.html, fields/, courses/, universities/ write
       // no storage.
-      body: p('When you use the app, it saves your progress in your browser’s <strong>local storage</strong>: a small storage area on your own device that belongs to this website. It keeps one entry, called <code>altiora_state_v1</code>, which holds:') +
+      body: p('When you use the Check my subjects page, Altiora saves your progress in your browser’s <strong>local storage</strong>: a small storage area on your own device that belongs to this website. It keeps one entry, called <code>altiora_state_v1</code>, which holds:') +
         list([
           'your qualification system, year group and the stage you’re at;',
           'your subjects and predicted grades;',
@@ -68,10 +70,13 @@ const privacy = {
           'your personal statement drafts;',
           'the date and time of your first and most recent visit.',
         ]) +
+        // Audit: state.js _init() — a first load stamps meta.firstVisit / lastVisit and saves, before any input.
+        p('The entry is created the first time you open the Check my subjects page, with only those visit times, before you enter anything.') +
         p('This stays in the browser on the device you used. It is not sent to us or to anyone else. If you use a different device or browser, your information won’t be there unless you move it with a backup file (see below).') +
-        p('To check that saving works, the app writes a test value and deletes it straight away. If your browser blocks storage, the app still works but saves nothing.') +
-        // Audit: app.html sets sessionStorage openStrengthsMode for ?mode=strengths.
-        p('If you open the app from the “Start from your strengths and interests” link, it also keeps one temporary marker in <strong>session storage</strong> that tells it to open that view. Session storage lasts only for that browser tab.') +
+        p('To check that saving works, Altiora writes a test value and deletes it straight away. If your browser blocks storage, Altiora still works but saves nothing.') +
+        // Audit: strengths-param.js sets sessionStorage openStrengthsMode for ?mode=strengths; main.js init()
+        // reads it and removes it at once.
+        p('If you open the Check my subjects page from the “Start from your strengths and interests” link, one temporary marker is set in <strong>session storage</strong> when the link is opened, to tell the page to open that view, and it is removed as the page starts. Session storage lasts only for that browser tab.') +
         p('The home page, the field guides and the course and university pages save nothing.') },
     { head: 'Backups and downloads',
       // Audit: main.js exportBackupFile (Blob download), FileReader import,
@@ -80,12 +85,12 @@ const privacy = {
     { head: 'How to delete your information',
       // Audit: data is only in localStorage; the profile menu's "Erase my plan from this device"
       // removes every key the site owns (AltioraState.erasePlan).
-      body: p('Because everything is stored in your browser, you delete it there. In your browser’s settings, clear the site data for <strong>usealtiora.com</strong> (browsers call this “site data”, “website data” or “cookies and site data”). This removes everything the app saved. You can also erase your plan on the website itself: open the profile menu and choose “Erase my plan from this device”. If you made a backup file, delete that file too.') },
+      body: p('Because everything is stored in your browser, you delete it there. In your browser’s settings, clear the site data for <strong>usealtiora.com</strong> (browsers call this “site data”, “website data” or “cookies and site data”). This removes everything Altiora saved. You can also erase your plan on the website itself: open the profile menu and choose “Erase my plan from this device”. If you made a backup file, delete that file too.') },
     { head: 'Cookies and storage',
       // Audit: every page type loaded in a fresh browser; context cookies and
       // document.cookie empty; no cookie header sent to any third party.
       body: p('<strong>Altiora does not use any cookies</strong>, and neither does the service it loads (Cloudflare Web Analytics). We loaded every type of page in a fresh browser and no cookies were created. That is why there is no cookie banner.') +
-        p('The only browser storage the site uses is the local storage and session storage described above. Only the app uses it, only to make the app work, and it is never sent anywhere.') },
+        p('The only browser storage the site uses is the local storage and session storage described above. Only the Check my subjects page uses it, only to make that page work, and it is never sent anywhere.') },
     { head: 'Visit counting: Cloudflare Web Analytics',
       // Audit: beacon payload keys — location (query string removed), referrer
       // (when present), browser engine/version, load timings, memory, a random
@@ -113,7 +118,7 @@ const privacy = {
       // story bank form saves to localStorage).
       body: p('Altiora is intended for students aged 14 and over. It does not collect personal information through forms: there are no accounts, no sign-up and no contact form, and anything you write is saved only in your browser.') },
     { head: 'Links to other websites',
-      body: p('The app and the course pages link to universities’ own websites. When you follow one of those links you leave Altiora, and that website’s own privacy policy applies.') },
+      body: p('The Check my subjects page and the course pages link to universities’ own websites. When you follow one of those links you leave Altiora, and that website’s own privacy policy applies.') },
     { head: 'Changes to this policy',
       body: p('If the way the site handles information changes, we will update this page and the date at the top.') },
   ],
@@ -153,7 +158,7 @@ const accessibility = {
   h1: 'Accessibility',
   intro: 'Altiora should work for everyone, including people who use a keyboard, a screen reader, zoom or a small screen. This page says what has been done, what is still limited, and how to tell us about a problem.',
   description: 'What Altiora does for accessibility, its known limitations, and how to report a problem.',
-  updated: { iso: '2026-11-15', text: '15 November 2026' },
+  updated: { iso: '2026-11-18', text: '18 November 2026' },
   sections: [
     { head: 'What we have done',
       // Each line: scripts/verify-pass/matching/axe.mjs (its VIEWS list, widths,
@@ -161,7 +166,7 @@ const accessibility = {
       // keyboard pass recorded in the commit that added this page. Emoji icons
       // are aria-hidden; programmatic scrolling goes through scrollMotion().
       body: list([
-        '<strong>Automated checks.</strong> We test the home page, the app’s main views (from the first questions to Applying, including its pop-up panels and dialogs), the course list, a course page, a university page, every field guide and these information pages with axe-core against the WCAG 2.0 Level A and AA rules, at desktop and phone widths, with every expandable panel both open and closed. The most recent check found no violations.',
+        '<strong>Automated checks.</strong> We test the home page, the main views of the Check my subjects page (from the first questions to Applying, including its pop-up panels and dialogs), the course list, a course page, a university page, every field guide and these information pages with axe-core against the WCAG 2.0 Level A and AA rules, at desktop and phone widths, with every expandable panel both open and closed. The most recent check found no violations.',
         '<strong>Contrast.</strong> Text colours are checked for contrast against WCAG AA as part of those automated checks.',
         '<strong>Text size.</strong> No text on the checked pages is smaller than 12px.',
         '<strong>Small screens.</strong> The checked pages fit a 375px-wide screen without sideways scrolling.',
