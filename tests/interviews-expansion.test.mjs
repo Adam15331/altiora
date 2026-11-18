@@ -42,7 +42,8 @@ test('route quote mode: "Interviews some applicants. <University> says:" and the
   const routes = /** @type {any[]} */ (Object.values(D.records).filter((/** @type {any} */ r) => r.appliesTo));
   assert.deepEqual(routes.filter(r => r.routeDisplay === 'quote').map(r => r.id).sort(), QUOTE);
   for (const r of routes) assert.ok(r.routeDisplay === 'quote' || r.routeDisplay === 'label', r.id);
-  // Each quote-mode course: the whole quote, verbatim, from the record's own quote that holds the route wording.
+  // Each quote-mode course: the quote, verbatim, from the record's own quote that holds the route wording —
+  // the whole of it, or the record's one or two sub-quotes (two joined by " … ").
   for (const [courseId, recordId] of [['uk-maths-bath', 'bath-mathematics'], ['uk-cs-bath', 'bath-qualification-route-uk-cs-bath'],
     ['uk-economics-bath', 'bath-qualification-route-uk-economics-bath'], ['uk-engineering-bath', 'bath-qualification-route-uk-engineering-bath'],
     ['uk-accounting-bath', 'bath-qualification-route-uk-accounting-bath'], ['uk-cs-glasgow', 'glasgow-year2-entry'],
@@ -52,10 +53,18 @@ test('route quote mode: "Interviews some applicants. <University> says:" and the
     assert.ok(q && q.sourceSnippet.includes(r.appliesTo), recordId);
     const html = card(courseId);
     const shown = html.replace(/&amp;/g, '&');
-    assert.ok(shown.includes(`Interviews some applicants. ${r.university} says: “${q.sourceSnippet}” <span class="reqs__meta-inline"><a class="reqs__link" href="${q.source}"`), courseId);
+    const quoted = r.routeQuoteParts ? r.routeQuoteParts.join(' … ') : q.sourceSnippet;
+    for (const part of r.routeQuoteParts ?? []) assert.ok(q.sourceSnippet.includes(part), `${recordId}: sub-quote is in the quote the Source link points to`);
+    assert.ok(shown.includes(`Interviews some applicants. ${r.university} says: “${quoted}” <span class="reqs__meta-inline"><a class="reqs__link" href="${q.source}"`), courseId);
     assert.doesNotMatch(text(html), /Interviews some applicants:/, courseId);   // no label line as well
-    assert.doesNotMatch(html, /data-iv-practise|Practise|…/, courseId);
+    assert.doesNotMatch(html, /data-iv-practise|Practise/, courseId);
+    assert.equal(html.includes(' … '), (r.routeQuoteParts ?? []).length === 2, courseId);   // an ellipsis only between two sub-quotes
   }
+  // Sub-quotes: Glasgow shows its one sentence, UNC its sentence and the requirement, exactly as the university wrote them.
+  assert.deepEqual(routes.filter(r => r.routeQuoteParts).map(r => [r.id, r.routeQuoteParts.length]), [['glasgow-year2-entry', 1], ['unc-business', 2]]);
+  assert.match(text(card('uk-law-glasgow')), /^Interview Interviews some applicants\. University of Glasgow says: “You may also be interviewed if you’re applying for entry into Year 2 in any subject\.” Source$/);
+  assert.match(text(card('us-business-unc')), /^Interview Interviews some applicants\. UNC Chapel Hill says: “If you are an admitted transfer student or current UNC student who has completed your first year, you are encouraged to apply to the Undergraduate Business Program\. … Video interview” Source$/);
+  assert.doesNotMatch(text(card('uk-cs-glasgow')), /Dentistry|Community Development/);
   assert.match(text(card('uk-maths-bath')), /^Interview Interviews some applicants\. University of Bath says: “Very exceptionally we may invite you to an interview if you have circumstances we cannot assess from an application alone\.” Source$/);
   // A course with a label-mode route and a quote-mode route shows both, once each.
   const both = text(card('sg-cs-nus'));
@@ -152,6 +161,21 @@ test('validator: "no" needs the statement; term and provider must be in the quot
   assert.match(mutate(d => { d.records['hku-law'].routeDisplay = 'label'; }), /routeDisplay is only for route-limited records/);
   // cuhk-cs is backed by its key term only ("JUPAS"): no quote holds "JUPAS applicants", so it cannot be quoted.
   assert.match(mutate(d => { d.records['cuhk-cs'].routeDisplay = 'quote'; }), /routeDisplay "quote" needs a quote that contains the full route wording "JUPAS applicants"/);
+  // Sub-quotes: exact substrings of the record's own evidence, at most two, quote mode only.
+  const G = 'glasgow-year2-entry', U = 'unc-business';
+  assert.equal(mutate(() => {}), '');
+  assert.match(mutate(d => { d.records[G].routeQuoteParts[0] = d.records[G].routeQuoteParts[0].replace('you’re', "you're"); }), /sub-quote is not an exact part of the record's evidence/);
+  assert.match(mutate(d => { d.records[G].routeQuoteParts[0] = d.records[G].routeQuoteParts[0].replace('Year 2', 'Year 3'); }), /sub-quote is not an exact part of the record's evidence/);
+  assert.match(mutate(d => { d.records[U].routeQuoteParts[1] = 'Video Interview'; }), /sub-quote is not an exact part of the record's evidence: “Video Interview”/);
+  assert.match(mutate(d => { d.records[U].routeQuoteParts[0] += '.'; }), /sub-quote is not an exact part/);   // one character added
+  assert.match(mutate(d => { d.records[U].routeQuoteParts.push('Resume'); }), /routeQuoteParts holds 3 sub-quotes; at most two are allowed/);
+  assert.match(mutate(d => { d.records[U].routeQuoteParts = []; }), /routeQuoteParts must hold one or two sub-quotes/);
+  assert.match(mutate(d => { d.records[U].routeQuoteParts.reverse(); }), /the two sub-quotes must come from the same quote, the second after the first/);
+  assert.match(mutate(d => { d.records[U].routeQuoteParts = ['Video interview']; }), /a sub-quote must contain the full route wording/);
+  assert.match(mutate(d => { d.records['cuhk-all'].routeQuoteParts = ['JUPAS applicants']; }), /routeQuoteParts is only for a route record shown in quote mode/);
+  assert.match(mutate(d => { d.records['hku-law'].routeQuoteParts = ['x']; }), /routeQuoteParts is only for a route record shown in quote mode/);
+  // A sub-quote borrowed from another record's evidence is refused too.
+  assert.match(mutate(d => { d.records[G].routeQuoteParts = [d.records['bath-mathematics'].appliesToEvidence[0].sourceSnippet]; }), /sub-quote is not an exact part of the record's evidence/);
   assert.match(mutate(d => { delete d.records['cuhk-cs'].appliesToEvidence; }), /is not in the record's quotes/);
   assert.match(mutate(d => { d.records['cuhk-cs'].appliesToEvidence[0].accessed = ''; }), /accessed date/);
 });

@@ -70,9 +70,11 @@
       // One line per distinct route (a subject record and a university-wide one often name the same route).
       // The Source link on a route line is the quote that names the route (appliesToEvidence) when there is one.
       // Quote mode (routeDisplay 'quote') shows that quote in full instead of the label; its link is the quote's.
+      // routeQuoteParts (one or two exact parts of the quote) are shown instead of the whole, two joined by " … ".
       routes: kind === 'route' ? avail.map((/** @type {any} */ r) => {
         const quote = r.routeDisplay === 'quote' ? routeQuote(r) : null;
-        return { appliesTo: r.appliesTo, university: r.university, quote: quote?.sourceSnippet ?? null,
+        const parts = quote && Array.isArray(r.routeQuoteParts) && r.routeQuoteParts.length ? r.routeQuoteParts.join(' … ') : null;
+        return { appliesTo: r.appliesTo, university: r.university, quote: parts ?? quote?.sourceSnippet ?? null,
           source: quote?.source ?? r.appliesToEvidence?.[0]?.source ?? firstSource(r) };
       })
         .filter((/** @type {any} */ x, /** @type {number} */ i, /** @type {any[]} */ a) => a.findIndex(y => y.appliesTo === x.appliesTo) === i) : [],
