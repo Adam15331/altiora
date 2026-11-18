@@ -4812,3 +4812,10 @@ Format:
 
 - No web research and no requirement value changed. `uk-law-exeter` lost `noSubjectRequirements` in `data/courseRequirements.js`: its quote ("Entry requirements for 2027 entry (typical offer) … A-Level AAA n/a IB 36/666 n/a") does not explicitly say that no subjects are required or that any are accepted. The `subjectPrerequisites` row keeps its status, items, source, date and quote and gains a `reviewFlag` recording this for an owner decision.
 - The other five flags were re-read and kept: Oxford Law ("your choice of subjects is your own"), Cambridge Law ("We don't ask for any specific subjects"), LSE Law ("There is no set subject combination"), King's Law ("Required subjects: None Preferred subjects: None") and King's Nursing ("Required subjects: No subject requirements").
+
+## 2026-11-18 — 2027 entry — Five graduate-entry courses retired (5 records removed)
+
+- No web research. Removed from `data/courseRequirements.js` (course record and its `courseVerification` line) and from `data/requirements/2027.js` (all eight rows): `ca-law-utoronto`, `ca-law-ottawa`, `ca-law-york`, `ca-law-uvic`, `ca-medicine-dalhousie`. None is open to school leavers.
+- Each id is listed in the new `retiredCourses` list in `data/courseRequirements.js` with the name and university it had, the reason "graduate-entry: not open to school leavers" and the eligibility quote already on file in `research/interviews-expansion-proposed.json` (`notOpenToSchoolLeavers`, accessed 2026-11-15) as evidence. `npm run validate` now fails if a retired id is ever a course id, a requirements record or an interview mapping again.
+- The eight `notApplicable` rows (A-Level and IB for the four JDs) went with their courses. No remaining course has a `notApplicable` row; the status, its validation and its rendering are kept.
+- Matching: every remaining course's `checkStatusFor` output is byte-identical in all five fixtures; only the five removed rows are gone.

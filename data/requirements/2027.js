@@ -2814,16 +2814,6 @@
       "otherQualifications": {"status":"unverified"},
       "otherRequirements": {"status":"unverified"}
     },
-    "ca-law-utoronto": {
-      "satAct": {"status":"unverified"},
-      "englishLanguage": {"status":"unverified"},
-      "admissionsTests": {"status":"verified","items":["LSAT — required"],"codes":["LSAT"],"sources":[{"url":"https://jackmanlaw.utoronto.ca/jd-program/admissions-faq","label":"Official source"}],"lastVerified":"2026-06-23"},
-      "subjectPrerequisites": {"status":"verified","items":["Preferred: History, English"],"codes":["History","English"],"sources":[{"url":"https://jackmanlaw.utoronto.ca/jd-program/admissions-faq","label":"Official source"}],"lastVerified":"2026-06-23"},
-      "aLevel": {"status":"notApplicable","accepted":"no","sources":[{"url":"https://jackmanlaw.utoronto.ca/jd-program/admissions-faq","label":"Official source"}],"lastVerified":"2026-06-23","note":"Graduate-entry programme: admission follows prior university study, so school-leaving qualifications are not the entry route."},
-      "ib": {"status":"notApplicable","accepted":"no","sources":[{"url":"https://jackmanlaw.utoronto.ca/jd-program/admissions-faq","label":"Official source"}],"lastVerified":"2026-06-23","note":"Graduate-entry programme: admission follows prior university study, so school-leaving qualifications are not the entry route."},
-      "otherQualifications": {"status":"unverified"},
-      "otherRequirements": {"status":"unverified"}
-    },
     "ca-medicine-mcgill": {
       "satAct": {"status":"unverified"},
       "englishLanguage": {"status":"unverified"},
@@ -3114,16 +3104,6 @@
       "otherQualifications": {"status":"unverified"},
       "otherRequirements": {"status":"unverified"}
     },
-    "ca-law-ottawa": {
-      "satAct": {"status":"unverified"},
-      "englishLanguage": {"status":"unverified"},
-      "admissionsTests": {"status":"verified","items":["LSAT — required"],"codes":["LSAT"],"sources":[{"url":"https://www.uottawa.ca/faculty-law/common-law/admissions/how-to-apply","label":"Official source"}],"lastVerified":"2026-06-23"},
-      "subjectPrerequisites": {"status":"verified","items":["Preferred: History, English"],"codes":["History","English"],"sources":[{"url":"https://www.uottawa.ca/faculty-law/common-law/admissions/how-to-apply","label":"Official source"}],"lastVerified":"2026-06-23"},
-      "aLevel": {"status":"notApplicable","accepted":"no","sources":[{"url":"https://www.uottawa.ca/faculty-law/common-law/admissions/how-to-apply","label":"Official source"}],"lastVerified":"2026-06-23","note":"Graduate-entry programme: admission follows prior university study, so school-leaving qualifications are not the entry route."},
-      "ib": {"status":"notApplicable","accepted":"no","sources":[{"url":"https://www.uottawa.ca/faculty-law/common-law/admissions/how-to-apply","label":"Official source"}],"lastVerified":"2026-06-23","note":"Graduate-entry programme: admission follows prior university study, so school-leaving qualifications are not the entry route."},
-      "otherQualifications": {"status":"unverified"},
-      "otherRequirements": {"status":"unverified"}
-    },
     "ca-cs-ottawa": {
       "satAct": {"status":"unverified"},
       "englishLanguage": {"status":"unverified"},
@@ -3131,16 +3111,6 @@
       "subjectPrerequisites": {"status":"verified","items":["Required: Advanced mathematics","Preferred: Computer Science, Physics"],"codes":["Mathematics_Advanced","Computer_Science","Physics"],"sources":[{"url":"https://www.uottawa.ca/study/undergraduate-studies/international-applicants/other-recognized-country-curriculum","label":"Official source"}],"lastVerified":"2026-07-03"},
       "aLevel": {"status":"unverified"},
       "ib": {"status":"verified","accepted":"yes","overallScore":29,"subjects":{"required":[{"name":"Mathematics at Higher Level","code":"Mathematics_Advanced"}],"preferred":[{"name":"Computer Science","code":"Computer_Science"},{"name":"Physics","code":"Physics"}]},"detail":"Full IB diploma with 3 HL + 3 SL; maths prerequisite accepted at SL or HL (Analysis & Approaches or Applications & Interpretation). Min average 29 points excluding bonus; may be higher for CS.","sources":[{"url":"https://www.uottawa.ca/study/undergraduate-studies/international-applicants/other-recognized-country-curriculum","label":"Official source"}],"lastVerified":"2026-07-03"},
-      "otherQualifications": {"status":"unverified"},
-      "otherRequirements": {"status":"unverified"}
-    },
-    "ca-medicine-dalhousie": {
-      "satAct": {"status":"unverified"},
-      "englishLanguage": {"status":"unverified"},
-      "admissionsTests": {"status":"verified","items":["MCAT — required"],"codes":["MCAT"],"sources":[{"url":"https://medicine.dal.ca/departments/core-units/admissions/admissions/mcat-requirement.html","label":"Official source"}],"lastVerified":"2026-06-23"},
-      "subjectPrerequisites": {"status":"verified","items":["Required: Chemistry, Biology","Preferred: Mathematics"],"codes":["Chemistry","Biology","Mathematics_Standard"],"sources":[{"url":"https://medicine.dal.ca/departments/core-units/admissions/admissions/mcat-requirement.html","label":"Official source"}],"lastVerified":"2026-06-23"},
-      "aLevel": {"status":"unverified","note":"The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either."},
-      "ib": {"status":"partial","accepted":"yes","subjects":{"required":[{"name":"Chemistry","code":"Chemistry"},{"name":"Biology","code":"Biology"}],"preferred":[{"name":"Mathematics","code":"Mathematics_Standard"}],"higherLevel":[{"name":"Chemistry","code":"Chemistry"},{"name":"Biology","code":"Biology"}]},"detail":"655 at HL","sources":[{"url":"https://medicine.dal.ca/departments/core-units/admissions/admissions/mcat-requirement.html","label":"Official source"}],"lastVerified":"2026-06-23","note":"The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either."},
       "otherQualifications": {"status":"unverified"},
       "otherRequirements": {"status":"unverified"}
     },
@@ -3181,26 +3151,6 @@
       "subjectPrerequisites": {"status":"verified","items":["Required: Mathematics","Preferred: Economics, Advanced mathematics"],"codes":["Mathematics_Standard","Economics","Mathematics_Advanced"],"sources":[{"url":"https://schulich.yorku.ca/admissions/admissions-requirements/bba/","label":"Official source"}],"lastVerified":"2026-07-03"},
       "aLevel": {"status":"unverified"},
       "ib": {"status":"verified","accepted":"yes","subjects":{"required":[{"name":"Mathematics","code":"Mathematics_Standard"}],"preferred":[{"name":"Economics","code":"Economics"},{"name":"Mathematics at Higher Level","code":"Mathematics_Advanced"}]},"detail":"No official IB point total or HL requirement published; English and maths required (Ontario: ENG4U + MHF4U + MCV4U/MDM4U in top six, min 70% in ENG4U and MHF4U).","sources":[{"url":"https://schulich.yorku.ca/admissions/admissions-requirements/bba/","label":"Official source"}],"lastVerified":"2026-07-03"},
-      "otherQualifications": {"status":"unverified"},
-      "otherRequirements": {"status":"unverified"}
-    },
-    "ca-law-york": {
-      "satAct": {"status":"unverified"},
-      "englishLanguage": {"status":"unverified"},
-      "admissionsTests": {"status":"verified","items":["LSAT — required"],"codes":["LSAT"],"sources":[{"url":"https://www.osgoode.yorku.ca/programs/juris-doctor/juris-doctor-admissions/eligibility-requirements/","label":"Official source"}],"lastVerified":"2026-06-23"},
-      "subjectPrerequisites": {"status":"verified","items":["Preferred: History, English"],"codes":["History","English"],"sources":[{"url":"https://www.osgoode.yorku.ca/programs/juris-doctor/juris-doctor-admissions/eligibility-requirements/","label":"Official source"}],"lastVerified":"2026-06-23"},
-      "aLevel": {"status":"notApplicable","accepted":"no","sources":[{"url":"https://www.osgoode.yorku.ca/programs/juris-doctor/juris-doctor-admissions/eligibility-requirements/","label":"Official source"}],"lastVerified":"2026-06-23","note":"Graduate-entry programme: admission follows prior university study, so school-leaving qualifications are not the entry route."},
-      "ib": {"status":"notApplicable","accepted":"no","sources":[{"url":"https://www.osgoode.yorku.ca/programs/juris-doctor/juris-doctor-admissions/eligibility-requirements/","label":"Official source"}],"lastVerified":"2026-06-23","note":"Graduate-entry programme: admission follows prior university study, so school-leaving qualifications are not the entry route."},
-      "otherQualifications": {"status":"unverified"},
-      "otherRequirements": {"status":"unverified"}
-    },
-    "ca-law-uvic": {
-      "satAct": {"status":"unverified"},
-      "englishLanguage": {"status":"unverified"},
-      "admissionsTests": {"status":"verified","items":["LSAT — required"],"codes":["LSAT"],"sources":[{"url":"https://www.uvic.ca/law/admissions/first-year/how-to-apply/index.php","label":"Official source"}],"lastVerified":"2026-06-23"},
-      "subjectPrerequisites": {"status":"verified","items":["Preferred: History, English"],"codes":["History","English"],"sources":[{"url":"https://www.uvic.ca/law/admissions/first-year/how-to-apply/index.php","label":"Official source"}],"lastVerified":"2026-06-23"},
-      "aLevel": {"status":"notApplicable","accepted":"no","sources":[{"url":"https://www.uvic.ca/law/admissions/first-year/how-to-apply/index.php","label":"Official source"}],"lastVerified":"2026-06-23","note":"Graduate-entry programme: admission follows prior university study, so school-leaving qualifications are not the entry route."},
-      "ib": {"status":"notApplicable","accepted":"no","sources":[{"url":"https://www.uvic.ca/law/admissions/first-year/how-to-apply/index.php","label":"Official source"}],"lastVerified":"2026-06-23","note":"Graduate-entry programme: admission follows prior university study, so school-leaving qualifications are not the entry route."},
       "otherQualifications": {"status":"unverified"},
       "otherRequirements": {"status":"unverified"}
     },

@@ -34,6 +34,11 @@ export function loadCourses() {
   return freshRequire(path.join(ROOT, 'data', 'courseRequirements.js')).courses;
 }
 
+/** @returns {any[]} retired course ids, with the name, university and evidence they had (data/courseRequirements.js) */
+export function loadRetiredCourses() {
+  return freshRequire(path.join(ROOT, 'data', 'courseRequirements.js')).retiredCourses ?? [];
+}
+
 /** @param {string} cycleId */
 export function cyclePath(cycleId) {
   return path.join(REQ_DIR, `${cycleId}.js`);

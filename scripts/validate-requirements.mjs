@@ -11,9 +11,9 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { ROOT, loadConfig, loadCourses, loadCycle, cyclePath, today } from './lib/requirements-io.mjs';
+import { ROOT, loadConfig, loadCourses, loadCycle, loadRetiredCourses, cyclePath, today } from './lib/requirements-io.mjs';
 import { buildReport, REPORT_PATH } from './requirements-report.mjs';
-import { validateConfig, validateCycle } from './lib/validate-requirements.mjs';
+import { validateConfig, validateCycle, validateRetired } from './lib/validate-requirements.mjs';
 import { validateInterviews } from './lib/validate-interviews.mjs';
 import { createRequire } from 'node:module';
 
@@ -34,6 +34,11 @@ for (const cycleId of Object.keys(config.cycles ?? {})) {
 // Interview information (display only): same provenance rule as requirement rows.
 const { interviewData } = createRequire(import.meta.url)(path.join(ROOT, 'data/interviews.js'));
 problems.push(...validateInterviews(interviewData, { courses, today: todayIso }));
+
+// Retired course ids: never a course id, a requirements record or an interview mapping again.
+const retired = loadRetiredCourses();
+const allCycles = Object.fromEntries(Object.keys(config.cycles ?? {}).filter(c => fs.existsSync(cyclePath(c))).map(c => [c, loadCycle(c)]));
+problems.push(...validateRetired(retired, { courses, cycles: allCycles, interviews: interviewData, today: todayIso }));
 
 // The site must load the CURRENT cycle's data file.
 const appHtml = fs.readFileSync(path.join(ROOT, 'app.html'), 'utf8');
@@ -57,4 +62,4 @@ if (errors.length) {
   process.exit(1);
 }
 console.log(`✓ Requirements data valid — cycle(s) ${cycles}, ${courses.length} courses × ${config.categories.length} categories, `
-  + `${Object.keys(interviewData.records).length} interview records, ${warnings.length} warning(s).`);
+  + `${Object.keys(interviewData.records).length} interview records, ${retired.length} retired course ids, ${warnings.length} warning(s).`);

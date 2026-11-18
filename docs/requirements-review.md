@@ -8,16 +8,16 @@
 
 | Category | Verified | Partly verified | Not verified | Not applicable |
 |---|---:|---:|---:|---:|
-| SAT / ACT | 157 | 62 | 116 | 0 |
-| English language | 176 | 39 | 120 | 0 |
-| Admissions tests | 272 | 53 | 10 | 0 |
-| Subject prerequisites | 154 | 169 | 12 | 0 |
-| A-Level requirements | 156 | 92 | 83 | 4 |
-| IB requirements | 215 | 94 | 22 | 4 |
-| Other qualifications | 150 | 85 | 100 | 0 |
-| Other requirements | 178 | 43 | 114 | 0 |
+| SAT / ACT | 157 | 62 | 111 | 0 |
+| English language | 176 | 39 | 115 | 0 |
+| Admissions tests | 267 | 53 | 10 | 0 |
+| Subject prerequisites | 149 | 169 | 12 | 0 |
+| A-Level requirements | 156 | 92 | 82 | 0 |
+| IB requirements | 215 | 93 | 22 | 0 |
+| Other qualifications | 150 | 85 | 95 | 0 |
+| Other requirements | 178 | 43 | 109 | 0 |
 
-335 courses × 8 categories = 2680 requirement entries.
+330 courses × 8 categories = 2640 requirement entries.
 
 ## Partly verified
 
@@ -617,7 +617,6 @@ Shown with a "Partly verified" badge and the note below.
 | `ca-cs-waterloo` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-mathematics-waterloo` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-mathematics-waterloo` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
-| `ca-medicine-dalhousie` | IB requirements | The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
 | `ca-engineering-dalhousie` | Admissions tests | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ca-engineering-dalhousie` | Subject prerequisites | Confirmed on the university's page for one specific qualification route — check the same applies to your qualification. |
 | `ie-engineering-trinity` | SAT / ACT | The brochure (content labelled for 2026 admission) gives SAT/ACT plus GPA bands; the USA page for 2027 entry lets applicants be assessed without standardised tests. Both shown; neither is a guaranteed threshold. |
@@ -1518,7 +1517,6 @@ category — check the official source; never copy a hint in as a value.
 | `ca-engineering-utoronto` | University of Toronto | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
 | `ca-medicine-utoronto` | University of Toronto | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
 | `ca-economics-utoronto` | University of Toronto | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
-| `ca-law-utoronto` | University of Toronto | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `ca-medicine-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level requirements: The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
 | `ca-cs-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
 | `ca-engineering-mcgill` | McGill University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
@@ -1548,15 +1546,11 @@ category — check the official source; never copy a hint in as a value.
 | `ca-business-sfu` | Simon Fraser University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
 | `ca-engineering-calgary` | University of Calgary | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
 | `ca-business-calgary` | University of Calgary | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention A-Level grades |
-| `ca-law-ottawa` | University of Ottawa | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `ca-cs-ottawa` | University of Ottawa | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
-| `ca-medicine-dalhousie` | Dalhousie University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level requirements: The course record describes this as a graduate-entry programme, yet the matching engine holds school-qualification requirements for it — confirm which applies before relying on either. |
 | `ca-engineering-dalhousie` | Dalhousie University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | A-Level: no offer held in the repo — check the university's A-Level / international entry page |
 | `ca-business-concordia` | Concordia University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
 | `ca-cs-concordia` | Concordia University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
 | `ca-business-york` | York University | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention an interview / portfolio / audition; notes mention SAT/ACT; A-Level: no offer held in the repo — check the university's A-Level / international entry page |
-| `ca-law-york` | York University | SAT / ACT, English language, Other qualifications, Other requirements |  |
-| `ca-law-uvic` | University of Victoria | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `ca-cs-uvic` | University of Victoria | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
 | `ie-law-trinity` | Trinity College Dublin | Subject prerequisites | Subject prerequisites: Not verified: the brochure text read for this row names the course but says nothing about required subjects, which is not the same as saying none are required. Check the official page. |
 | `es-law-ie` | IE University | Subject prerequisites |  |

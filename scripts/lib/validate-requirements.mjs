@@ -329,3 +329,48 @@ export function validateConfig(config) {
   }
   return out;
 }
+
+export const RETIRED_REASONS = ['graduate-entry: not open to school leavers'];
+
+/**
+ * Validate the retired-courses list (data/courseRequirements.js
+ * retiredCourses). Course ids are a permanent API: a retired id may never
+ * be a course id again, nor hold a requirements record in any cycle, nor be
+ * mapped to interview records.
+ * @param {any} retired
+ * @param {object} ctx
+ * @param {any[]} ctx.courses                       the course dataset
+ * @param {Record<string, {courses: Record<string, any>}>} [ctx.cycles]  every cycle file, by id
+ * @param {{courses?: Record<string, any>}} [ctx.interviews]            data/interviews.js interviewData
+ * @param {string} ctx.today                        YYYY-MM-DD
+ * @returns {Problem[]}
+ */
+export function validateRetired(retired, { courses, cycles = {}, interviews, today }) {
+  /** @type {Problem[]} */
+  const out = [];
+  const err = (/** @type {string} */ where, /** @type {string} */ message) => out.push({ level: 'error', where: `retiredCourses › ${where}`, message });
+  if (!Array.isArray(retired)) { err('?', 'must be an array'); return out; }
+  const courseIds = new Set(courses.map(c => c.id));
+  const seen = new Set();
+  retired.forEach((r, i) => {
+    const where = typeof r?.id === 'string' ? r.id : `#${i}`;
+    if (!r || typeof r !== 'object') { err(where, 'entry must be an object'); return; }
+    if (typeof r.id !== 'string' || !/^[a-z0-9-]+$/.test(r.id)) err(where, 'id must be a course id (a-z, 0-9, hyphens)');
+    if (seen.has(r.id)) err(where, 'retired twice');
+    seen.add(r.id);
+    if (courseIds.has(r.id)) err(where, 'a retired id is a course id again — course ids are never reused');
+    for (const [cid, cycle] of Object.entries(cycles)) if (cycle?.courses && r.id in cycle.courses) err(where, `still has a requirements record in cycle ${cid}`);
+    if (interviews?.courses && r.id in interviews.courses) err(where, 'still mapped to interview records in data/interviews.js');
+    for (const k of ['name', 'university']) if (!isNonEmptyString(r[k])) err(where, `needs "${k}" (as it was shown)`);
+    if (!RETIRED_REASONS.includes(r.reason)) err(where, `reason must be one of: ${RETIRED_REASONS.map(x => JSON.stringify(x)).join(', ')}`);
+    if (!isIsoDate(r.retired) || r.retired > today) err(where, '"retired" must be a YYYY-MM-DD date, not in the future');
+    const e = r.evidence;
+    if (!e || typeof e !== 'object') { err(where, 'needs evidence { source, accessed, sourceSnippet }'); return; }
+    if (typeof e.source !== 'string' || !/^https:\/\//.test(e.source)) err(where, 'evidence.source must be an https URL');
+    if (!isIsoDate(e.accessed) || e.accessed > today) err(where, 'evidence.accessed must be a YYYY-MM-DD date, not in the future');
+    if (!isNonEmptyString(e.sourceSnippet)) err(where, 'evidence.sourceSnippet must quote the source verbatim');
+    const extra = Object.keys(r).filter(k => !['id', 'name', 'university', 'reason', 'retired', 'evidence'].includes(k));
+    if (extra.length) err(where, `unknown key(s): ${extra.join(', ')}`);
+  });
+  return out;
+}

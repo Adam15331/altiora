@@ -5,7 +5,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
-import { loadConfig, loadCourses, loadCycle } from '../scripts/lib/requirements-io.mjs';
+import { loadConfig, loadCourses, loadCycle, loadRetiredCourses } from '../scripts/lib/requirements-io.mjs';
 import { validateEntry, validateCycle, validateConfig, engineDisagreements } from '../scripts/lib/validate-requirements.mjs';
 import { carryEntry } from '../scripts/lib/cycles.mjs';
 
@@ -28,6 +28,15 @@ const SRC = [{ url: 'https://www.example.ac.uk/course', label: 'Official source'
 const MED_OX = {
   aLevel: {"status": "verified", "accepted": "yes", "typicalOffer": "A*AA", "subjects": {"required": [{"name": "Chemistry", "code": "Chemistry"}, {"name": "Biology", "code": "Biology"}], "preferred": [{"name": "Physics", "code": "Physics"}]}, "sources": [{"url": "https://www.medsci.ox.ac.uk/study/medicine/pre-clinical/requirements", "label": "Official source"}], "lastVerified": "2026-06-23"},
   ib: {"status": "verified", "accepted": "yes", "overallScore": 39, "subjects": {"required": [{"name": "Chemistry", "code": "Chemistry"}, {"name": "Biology", "code": "Biology"}], "preferred": [{"name": "Physics", "code": "Physics"}], "higherLevel": [{"name": "Chemistry", "code": "Chemistry"}, {"name": "Biology", "code": "Biology"}]}, "detail": "766 at HL", "sources": [{"url": "https://www.medsci.ox.ac.uk/study/medicine/pre-clinical/requirements", "label": "Official source"}], "lastVerified": "2026-06-23"},
+};
+// A frozen copy of the A-Level and IB rows ca-law-york had (Osgoode Hall JD,
+// graduate-entry) before it was retired on 18 Nov 2026. No course on the
+// site has a not-applicable row now, but the status, its validation and its
+// rendering stay: the tests below keep them working on this copy.
+/** @type {any} */
+const GRAD_ENTRY = {
+  aLevel: {"status":"notApplicable","accepted":"no","sources":[{"url":"https://www.osgoode.yorku.ca/programs/juris-doctor/juris-doctor-admissions/eligibility-requirements/","label":"Official source"}],"lastVerified":"2026-06-23","note":"Graduate-entry programme: admission follows prior university study, so school-leaving qualifications are not the entry route."},
+  ib: {"status":"notApplicable","accepted":"no","sources":[{"url":"https://www.osgoode.yorku.ca/programs/juris-doctor/juris-doctor-admissions/eligibility-requirements/","label":"Official source"}],"lastVerified":"2026-06-23","note":"Graduate-entry programme: admission follows prior university study, so school-leaving qualifications are not the entry route."},
 };
 
 /** Copy of an object without one key. @param {any} o @param {string} k */
@@ -95,13 +104,21 @@ test('the 7 courses verified on an IB applicants page have a verified IB row; SU
   assert.match(cycle.courses['sg-engineering-sutd'].ib.note ?? '', /not on a page for IB applicants/);
 });
 
-test('graduate-entry courses are not applicable — unless the engine holds data for them', () => {
-  for (const id of ['ca-law-utoronto', 'ca-law-ottawa', 'ca-law-york', 'ca-law-uvic']) {
-    for (const cat of ['aLevel', 'ib']) {
-      const e = cycle.courses[id][cat];
-      assert.equal(e.status, 'notApplicable', `${id} › ${cat}`);
-      assert.equal(e.accepted, 'no');
-    }
+test('graduate-entry courses: retired, not shown as not applicable; the not-applicable status still validates', () => {
+  // The four graduate-entry JDs (and Dalhousie MD) were retired on 18 Nov 2026:
+  // no course record, no requirements row, listed in retiredCourses instead.
+  const retired = new Set(loadRetiredCourses().map(r => r.id));
+  for (const id of ['ca-law-utoronto', 'ca-law-ottawa', 'ca-law-york', 'ca-law-uvic', 'ca-medicine-dalhousie']) {
+    assert.ok(retired.has(id), `${id} is retired`);
+    assert.ok(!byId.has(id), `${id} is not a course`);
+    assert.ok(!(id in cycle.courses), `${id} has no requirements row`);
+  }
+  // No remaining course has a not-applicable row; the machinery stays and still validates one.
+  assert.deepEqual(Object.entries(cycle.courses).filter(([, r]) => Object.values(r).some((/** @type {any} */ e) => e.status === 'notApplicable')).map(([id]) => id), []);
+  for (const cat of ['aLevel', 'ib']) {
+    assert.deepEqual(entryErrors(GRAD_ENTRY[cat]), [], cat);
+    assert.equal(GRAD_ENTRY[cat].status, 'notApplicable');
+    assert.equal(GRAD_ENTRY[cat].accepted, 'no');
   }
   // Undergraduate "pre-law track" degrees: their "Law is graduate-entry" note
   // is about the law school afterwards, so A-Level / IB are not "not applicable".
@@ -110,7 +127,7 @@ test('graduate-entry courses are not applicable — unless the engine holds data
   }
   // The record says graduate-entry but the engine holds IB Higher Level subjects:
   // the conflict is shown, nothing is marked not applicable.
-  for (const id of ['ca-medicine-mcgill', 'ca-medicine-dalhousie']) {
+  for (const id of ['ca-medicine-mcgill']) {
     assert.equal(cycle.courses[id].ib.status, 'partial');
     assert.equal(cycle.courses[id].aLevel.status, 'unverified');
     assert.match(cycle.courses[id].ib.note ?? '', /graduate-entry/);
@@ -239,7 +256,7 @@ test('new cycle: A-Level, IB and not-applicable rows draft as unverified, keepin
   assert.deepEqual(Object.keys(al), ['status', 'recorded']);
   assert.equal(al.status, 'unverified');
   assert.match(al.recorded ?? '', /^A\*AA; Required subjects: Chemistry, Biology; Preferred subjects: Physics \(2027 entry, verified 23 Jun 2026\)$/);
-  const na = carryEntry(cycle.courses['ca-law-york'].ib, '2027 entry');
+  const na = carryEntry(GRAD_ENTRY.ib, '2027 entry');
   assert.equal(na.status, 'unverified');
   assert.match(na.recorded ?? '', /^Not applicable — .*\(2027 entry, checked \d+ [A-Z][a-z]{2} 2026\)$/);
 });
@@ -281,7 +298,7 @@ test('a missing score reads "Not recorded"; a withheld one reads "Not shown" wit
 });
 
 test('a not-applicable row says so with its own badge, and is left out of the verified tally', () => {
-  const html = panel(cycle.courses['ca-law-york']);
+  const html = panel(GRAD_ENTRY);
   assert.match(row(html, 'aLevel'), /Not an entry route for this course/);
   assert.match(row(html, 'aLevel'), /reqs__badge--notApplicable">Not applicable/);
   assert.match(row(html, 'aLevel'), /Graduate-entry programme/);
@@ -299,7 +316,7 @@ test('an A-Level / IB row with no data is "Not verified" and points at the offic
 test('entryText gives one honest line for A-Level, IB and not-applicable rows', () => {
   assert.equal(view.entryText(MED_OX.aLevel), 'A*AA; Required subjects: Chemistry, Biology; Preferred subjects: Physics (verified 23 Jun 2026)');
   assert.match(view.entryText(MED_OX.ib), /^39 points; .*Higher Level: Chemistry, Biology; Details: 766 at HL \(verified 23 Jun 2026\)$/);
-  assert.match(view.entryText(cycle.courses['ca-law-york'].aLevel), /^Not applicable — Graduate-entry programme.* \(checked \d+ [A-Z][a-z]{2} 2026\)$/);
+  assert.match(view.entryText(GRAD_ENTRY.aLevel), /^Not applicable — Graduate-entry programme.* \(checked \d+ [A-Z][a-z]{2} 2026\)$/);
   assert.equal(view.entryText(cycle.courses['sg-law-nus'].ib), view.UNVERIFIED_TEXT);
 });
 

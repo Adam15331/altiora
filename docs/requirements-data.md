@@ -85,6 +85,15 @@ needs `accepted: "no"`, a source, a date and a `note`, and carries no values.
 A verified/partial entry that holds no grade shows "Not recorded" — absent
 data is never shown as a value.
 
+A course that is not open to school leavers at all (every applicant needs a
+degree, university credits or CEGEP) is **retired**, not kept with
+`notApplicable` rows: remove its record from `data/courseRequirements.js` and
+from the cycle file, and add it to `retiredCourses` in
+`data/courseRequirements.js` with the name and university it had, the reason
+and the official eligibility quote (`source`, `accessed`, `sourceSnippet`).
+Course ids are a permanent API: a retired id is never a course id again.
+Saved plans that still hold it show a one-time notice on the Shortlist.
+
 How the 2027 entries were made (`scripts/migrate-requirements-2027-qualifications.mjs`):
 values come only from the engine's structured fields; status, source and date
 come from the course's verification record (as Phase 1 did for subject
@@ -119,6 +128,8 @@ npm run check      # lint + typecheck + validate + test (what CI runs)
   engine still reads — update both until the engine moves onto this data. A
   withheld value must still exist in the engine; a `notApplicable` entry fails
   while the engine holds an offer for that qualification;
+- a retired id (`retiredCourses`) is a course id, has a requirements record or
+  an interview mapping, or lacks its name, university, reason or evidence;
 - `app.html` does not load the current cycle's file;
 - `docs/requirements-review.md` is out of date.
 
