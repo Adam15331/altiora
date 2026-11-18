@@ -21,6 +21,7 @@ const st = { profile: { stage: 'choosing', qualificationSystem: 'UK_A_Level', su
 const with_ = (/** @type {any} */ profile, /** @type {any} */ rest = {}) => ({ ...st, ...rest, profile: { ...st.profile, ...profile } });
 const Y13 = with_({ stage: 'applying', yearGroup: 'Year 13', yearsUntilApplication: 0 });
 const Y13_EMPTY = with_({ stage: 'applying', yearGroup: 'Year 13', yearsUntilApplication: 0 }, { shortlist: [] });
+const RETIRED_SAVED = with_({}, { shortlist: ['ca-law-york', 'uk-cs-cambridge', 'made-up-course', 'ca-law-mcgill'] });   // retired ids, one course, one unknown id
 const STALE_YEAR = with_({ yearSetAt: '2020-06-01T00:00:00.000Z' });   // set before this school year began
 
 // ── Guards: is the surface this view checks actually on screen? ──
@@ -57,6 +58,7 @@ const VIEWS = [
   ['Home', '/app.html', st, 'home', null, appView('home')],
   ['Check', '/app.html', st, 'check', null, appView('check')],
   ['Shortlist', '/app.html', st, 'shortlist', null, appView('shortlist')],
+  ['Shortlist (retired courses notice)', '/app.html', RETIRED_SAVED, 'shortlist', null, `${appView('shortlist')} && ${visible('#panel-shortlist [data-retired-notice]')}`],
   ['This month', '/app.html', st, 'month', null, appView('month')],
   ['Story', '/app.html', st, 'story', null, appView('story')],
   ['Interview practice', '/app.html', st, 'interview', null, appView('interview')],

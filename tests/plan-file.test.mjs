@@ -181,8 +181,25 @@ test('describePlan counts what the file will restore', () => {
   fillPlan(S);
   assert.deepEqual(plain(S.describePlan(S.getState())), {
     qualificationSystem: 'UK_A_Level', yearGroup: 'Year 12', stage: 'building', subjects: 3, grades: 3,
-    fields: 1, shortlist: 2, story: 1, draftWords: 6, checklistTicks: 1,
+    fields: 1, shortlist: 2, shortlistIds: ['uk-maths-durham', 'uk-maths-oxford'], story: 1, draftWords: 6, checklistTicks: 1,
   });
+});
+
+test('removeCourseIds drops the ids from the shortlist and progress in one change, and leaves the rest', () => {
+  const { S } = loadState();
+  fillPlan(S);
+  S.addToShortlist('ca-law-york');
+  S.addToShortlist('made-up-id');
+  S.setProgress('ca-law-york', { applied: true });
+  let calls = 0;
+  S.subscribe(() => { calls += 1; });
+  S.removeCourseIds(['ca-law-york', 'not-saved']);
+  assert.equal(calls, 1);
+  assert.deepEqual(plain(S.getShortlist()), ['uk-maths-durham', 'uk-maths-oxford', 'made-up-id']);
+  assert.deepEqual(plain(S.getProgress()), {});
+  S.removeCourseIds([]);
+  S.removeCourseIds(['nothing-here']);
+  assert.equal(calls, 1, 'no change, no notification');
 });
 
 /* ── Academic-year rollover (main.js) ─────────────────────────────── */

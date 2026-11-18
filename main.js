@@ -1819,6 +1819,16 @@ function exportBackupFile() {
   }
 }
 
+// The restore dialog's Shortlist line, from savedCourseState like every other
+// count: courses on Altiora plus retired ones, which are named as no longer
+// available. Ids that are neither are not counted.
+function shortlistSummary(ids) {
+  const { courses: found, retired } = savedCourseState(ids);
+  const total = found.length + retired.length;
+  if (!total) return 'Empty';
+  return `${total} course${total === 1 ? '' : 's'}${retired.length ? ` (${retired.length} no longer available)` : ''}`;
+}
+
 // What a plan holds, as the rows the restore dialog shows. Counts come from
 // AltioraState.describePlan, i.e. from the data as it will actually load.
 function planSummaryRows(d) {
@@ -1831,7 +1841,7 @@ function planSummaryRows(d) {
     ['Subjects', d.subjects ? n(d.subjects, 'subject', 'subjects') : 'None'],
     ['Predicted grades', d.grades ? `${d.grades} set` : 'None'],
     ['Fields kept', d.fields ? n(d.fields, 'field', 'fields') : 'None'],
-    ['Shortlist', d.shortlist ? n(d.shortlist, 'course', 'courses') : 'Empty'],
+    ['Shortlist', shortlistSummary(d.shortlistIds ?? [])],
     ['Story', d.story ? n(d.story, 'entry', 'entries') : 'Empty'],
     ['Statement drafts', d.draftWords ? n(d.draftWords, 'word', 'words') : 'Empty'],
     ['Checklist', d.checklistTicks ? n(d.checklistTicks, 'item ticked', 'items ticked') : 'Nothing ticked'],
@@ -2630,9 +2640,7 @@ function testLoadNoteHtml(tasks) {
 function renderApplyingChecklist() {
   const host = $('applyingChecklist');
   if (!host) return;
-  const saved = AltioraState.getShortlist()
-    .map(id => (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null)
-    .filter(Boolean);
+  const saved = savedCourses();
   const yrs = studentYears();
   const preview = yrs != null && yrs >= 1;
   // Tests sat after offers (afterOffersOnly — STEP) belong to the
@@ -2784,9 +2792,7 @@ function calendarControlHtml(savedCourses, now = new Date()) {
 // attribute) so Safari can offer its own "Add to Calendar". Others download
 // altiora-calendar-YYYY-MM-DD.ics. Built on click, from the current state.
 function openCalendarFile(now = new Date()) {
-  const saved = AltioraState.getShortlist()
-    .map(id => (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null)
-    .filter(Boolean);
+  const saved = savedCourses();
   const plan = calendarPlan(saved, now);
   if (!plan?.events.length) return;
   const ics = AltioraCalendar.buildIcs(plan.events, { now });
@@ -2821,12 +2827,9 @@ function wireApplyingChecklist() {
 function renderApplyingPanel() {
   const panel = $('panel-applying');
   if (!panel) return;
-  const ids = (typeof AltioraState !== 'undefined') ? AltioraState.getShortlist() : [];
-  const savedCourses = ids
-    .map(id => (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null)
-    .filter(Boolean);
+  const savedList = (typeof AltioraState !== 'undefined') ? savedCourses() : [];
 
-  if (!savedCourses.length) {
+  if (!savedList.length) {
     // Subjects-aware landing: a student who just told onboarding their
     // subjects shouldn't be greeted by a cold empty state. The count is the
     // LIVE subjects-fit number (checkStatusFor — the exact Check pipeline,
@@ -2862,29 +2865,29 @@ function renderApplyingPanel() {
   // ── THE DIAGNOSTIC. The most consequential fact about this application,
   // stated first: the shape of the list, in the shared balance wording, plus
   // one factual observation about test load. No course surgery is suggested.
-  const bal = shortlistBalance(savedCourses);
-  const unis = new Set(savedCourses.map(c => c.university));
-  const countryBits = [...new Set(savedCourses.map(c => c.country))].map(k => COUNTRY_LABELS[k] ?? k);
+  const bal = shortlistBalance(savedList);
+  const unis = new Set(savedList.map(c => c.university));
+  const countryBits = [...new Set(savedList.map(c => c.country))].map(k => COUNTRY_LABELS[k] ?? k);
   const diagLine = bal.classified > 0
     ? `Your list: ${bal.countsBits.join(' · ')}`
-    : `Your list: ${savedCourses.length} course${savedCourses.length === 1 ? '' : 's'}, unclassified`;
-  const usNote = savedCourses.some(c => c.holisticAdmission)
-    ? `<p class="applying-diag__aside">${esc(holisticNoSafetyNote(savedCourses))}</p>` : '';
+    : `Your list: ${savedList.length} course${savedList.length === 1 ? '' : 's'}, unclassified`;
+  const usNote = savedList.some(c => c.holisticAdmission)
+    ? `<p class="applying-diag__aside">${esc(holisticNoSafetyNote(savedList))}</p>` : '';
 
   const diagnostic = `
     <section class="applying-diag" aria-label="Your list at a glance">
       <p class="applying-diag__counts">${esc(diagLine)}</p>
       <p class="applying-diag__advice">${esc(bal.advice)}</p>
-      ${testLoadNoteHtml(applyingChecklistTasks(savedCourses, yrs))}
+      ${testLoadNoteHtml(applyingChecklistTasks(savedList, yrs))}
       ${usNote}
-      <p class="applying-diag__meta"><strong>${savedCourses.length}</strong> course${savedCourses.length === 1 ? '' : 's'} ·
+      <p class="applying-diag__meta"><strong>${savedList.length}</strong> course${savedList.length === 1 ? '' : 's'} ·
         <strong>${unis.size}</strong> universit${unis.size === 1 ? 'y' : 'ies'} ·
         ${esc(countryBits.join(', '))}
         <button class="home-card__link applying-diag__link" data-go-shortlist>View full shortlist →</button></p>
     </section>`;
 
   // "Add to my calendar" sits beside the checklist heading (tests and UK deadlines).
-  const cal = calendarParts(savedCourses);
+  const cal = calendarParts(savedList);
 
   // ── Year-honest lead. An application-year student gets the dashboard; a
   // student who applies later gets an explicit PREVIEW, not a year of
@@ -2982,9 +2985,7 @@ function renderMonthPanel(now = new Date()) {
     return;
   }
 
-  const saved = AltioraState.getShortlist()
-    .map(id => (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null)
-    .filter(Boolean);
+  const saved = savedCourses();
   const tasks = thisMonthTasks(saved, yrs, now.getMonth() + 1);
   const stage = profile.stage || DEFAULT_STAGE;
   const next = computeNextStep(stage, profile, saved.length);
@@ -3058,9 +3059,7 @@ function buildCounselorSummaryHtml() {
     ? (qualificationMappings[p.qualificationSystem]?.systemLabel ?? p.qualificationSystem) : null;
   const stage   = p.stage && STAGES[p.stage] ? STAGES[p.stage].name : null;
   const fields  = activeCandidateFields().map(f => CATEGORY_LABEL_MAP[f]);
-  const saved   = AltioraState.getShortlist()
-    .map(id => (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null)
-    .filter(Boolean);
+  const saved   = savedCourses();
   const none = txt => `<p class="cs-none">${esc(txt)}</p>`;
 
   /* ── Snapshot ── */
@@ -3548,9 +3547,8 @@ function storyCounsel(label, entries, yrs, opts = {}) {
 function shortlistFieldCounts() {
   if (typeof AltioraState === 'undefined' || typeof courses === 'undefined') return new Map();
   const counts = new Map();
-  AltioraState.getShortlist()
-    .map(id => courses.find(c => c.id === id))
-    .filter(c => c && CATEGORY_LABEL_MAP[c.category])
+  savedCourses()
+    .filter(c => CATEGORY_LABEL_MAP[c.category])
     .forEach(c => counts.set(c.category, (counts.get(c.category) ?? 0) + 1));
   return counts;
 }
@@ -3962,9 +3960,7 @@ function statementRefsFor(qid) {
 // country filter reads.
 function shortlistExcludesUK() {
   if (typeof courses === 'undefined') return false;
-  const saved = AltioraState.getShortlist()
-    .map(id => courses.find(c => c.id === id))
-    .filter(Boolean);
+  const saved = savedCourses();
   return saved.length > 0 && !saved.some(c => c.country === 'UK');
 }
 
@@ -3974,10 +3970,7 @@ function shortlistExcludesUK() {
 // drives the UCAS statement gate.
 function shortlistIncludesUS() {
   if (typeof courses === 'undefined') return false;
-  return AltioraState.getShortlist()
-    .map(id => courses.find(c => c.id === id))
-    .filter(Boolean)
-    .some(c => c.country === 'US');
+  return savedCourses().some(c => c.country === 'US');
 }
 
 function statementDraftingState() {
@@ -4419,9 +4412,7 @@ function toggleShortlist(courseId) {
   }
   logEvent(willSave ? 'shortlist_add' : 'shortlist_remove', { courseId });
   syncSaveButtons(courseId);
-  updateShortlistCount();
-  if (state.mode === 'shortlist') renderShortlist();
-  if (state.mode === 'applying')  renderApplyingPanel();
+  // The count, Home, the Shortlist and Applying follow via syncShortlistSurfaces (subscribed).
 }
 
 // Attach the click handler to a save button inside a freshly-built card.
@@ -4434,10 +4425,55 @@ function wireSaveButton(cardEl) {
   });
 }
 
+/* ─── Saved courses: the ONE reading of the shortlist ─────────────
+ * Every count and list of saved courses reads savedCourseState(): the
+ * Home button and line, the stage-bar count, the Shortlist, the CSV, the
+ * checklist and the restore dialog. Each saved id is one of:
+ *   courses — a course on Altiora (shortlist order, each id once)
+ *   retired — an id in retiredCourses (data/courseRequirements.js): once a
+ *             course, no longer on Altiora; named on the Shortlist once
+ *   unknown — neither: hidden and not counted, left in storage as it is
+ * Pass ids to read a plan that is not loaded (a backup file). */
+let _courseIndex = null;
+let _retiredIndex = null;
+function savedCourseState(ids = AltioraState.getShortlist()) {
+  if (!_courseIndex) _courseIndex = new Map((typeof courses !== 'undefined' ? courses : []).map(c => [c.id, c]));
+  if (!_retiredIndex) _retiredIndex = new Map((typeof retiredCourses !== 'undefined' ? retiredCourses : []).map(r => [r.id, r]));
+  const out = { courses: [], retired: [], unknown: [] };
+  const seen = new Set();
+  for (const id of Array.isArray(ids) ? ids : []) {
+    if (seen.has(id)) continue;
+    seen.add(id);
+    const c = _courseIndex.get(id);
+    if (c) out.courses.push(c);
+    else if (_retiredIndex.has(id)) out.retired.push(_retiredIndex.get(id));
+    else out.unknown.push(id);
+  }
+  return out;
+}
+// The saved courses that exist on Altiora, in shortlist order.
+function savedCourses() {
+  return savedCourseState().courses;
+}
+
 // Update the "My Shortlist (n)" count in the stage bar.
 function updateShortlistCount() {
   const el = $('shortlistCount');
-  if (el) el.textContent = String(AltioraState.getShortlist().length);
+  if (el) el.textContent = String(savedCourses().length);
+}
+
+// Reactive fan-out for the shortlist: the stage-bar count, Home and the
+// Shortlist re-render whenever the saved ids change (a save, a removal, the
+// retired-courses Dismiss), whatever changed them.
+let _lastShortlistSig = null;
+function syncShortlistSurfaces() {
+  const sig = AltioraState.getShortlist().join('|');
+  if (sig === _lastShortlistSig) return;
+  _lastShortlistSig = sig;
+  updateShortlistCount();
+  if (state.mode === 'home')           renderWorkspaceHome();
+  else if (state.mode === 'shortlist') renderShortlist();
+  else if (state.mode === 'applying')  renderApplyingPanel();
 }
 
 // "My Story" nav count — the third durable student-owned asset, beside
@@ -4590,9 +4626,39 @@ function syncSubjectSurfaces() {
 
 /* ─── Shortlist view ──────────────────────────────────────────── */
 
+// Saved ids that are retired courses (savedCourseState().retired): named once,
+// with the reason, until the student dismisses the notice. Dismiss removes
+// those ids from the saved plan; nothing else changes.
+function retiredLabel(r) {
+  return `${r.name}, ${r.university} (${r.reason})`;
+}
+function retiredNoticeHtml(retired) {
+  if (!retired.length) return '';
+  const one = retired.length === 1;
+  const lead = `${retired.length} course${one ? '' : 's'} on your list ${one ? 'is' : 'are'} no longer on Altiora`;
+  const body = one
+    ? `<p class="maths-warning-banner__msg">${esc(`${lead}: ${retiredLabel(retired[0])}`)}</p>`
+    : `<p class="maths-warning-banner__msg">${esc(lead)}:</p>
+       ${retired.map(r => `<p class="maths-warning-banner__msg mt-8" data-retired-course>${esc(retiredLabel(r))}</p>`).join('')}`;
+  return `
+    <div class="maths-warning-banner" role="status" data-retired-notice>
+      ${body}
+      <button type="button" class="export-csv-btn mt-8" data-retired-dismiss>Dismiss</button>
+    </div>`;
+}
+function wireRetiredNotice(panel) {
+  panel.querySelector('[data-retired-dismiss]')?.addEventListener('click', () => {
+    const ids = savedCourseState().retired.map(r => r.id);
+    AltioraState.removeCourseIds(ids);
+    logEvent('shortlist_retired_dismiss', { count: ids.length });
+    // syncShortlistSurfaces (subscribed) re-renders the Shortlist without the notice.
+    $('panel-shortlist')?.querySelector('button, a[href]')?.focus();
+  });
+}
+
 // Download the saved courses as a CSV file (client-side, no backend).
 function exportShortlistToCSV() {
-  const saved = AltioraState.getShortlist().map(id => courses.find(c => c.id === id)).filter(Boolean);
+  const saved = savedCourses();
   if (!saved.length) { showToast('No saved courses to export'); return; }
 
   const reqCats = requirementsConfig()?.categories ?? [];
@@ -4657,20 +4723,21 @@ function renderShortlist() {
   const panel = $('panel-shortlist');
   if (!panel) return;
 
-  const ids   = AltioraState.getShortlist();
-  const saved = ids.map(id => courses.find(c => c.id === id)).filter(Boolean);
+  const { courses: saved, retired } = savedCourseState();
+  const notice = retiredNoticeHtml(retired);
 
   if (!saved.length) {
-    panel.innerHTML = `
+    panel.innerHTML = notice + `
       <div class="empty-state shortlist-empty">
         <div class="empty-state__icon">🔖</div>
         <p>You haven't saved any courses yet.</p>
         <p class="mt-8">When you find courses you're interested in, save them here to build your list.</p>
       </div>`;
+    wireRetiredNotice(panel);
     return;
   }
 
-  panel.innerHTML =
+  panel.innerHTML = notice +
     `<div class="shortlist-toolbar">
        <button id="exportCsvBtn" class="export-csv-btn" type="button"><span aria-hidden="true">⬇</span> Export CSV</button>
        <button class="export-csv-btn" type="button" data-open-summary><span aria-hidden="true">🖨</span> Print summary</button>
@@ -4678,6 +4745,7 @@ function renderShortlist() {
     + buildShortlistInsightsHtml(saved)
     + `<div id="shortlistGroups"></div>`;
   panel.querySelector('#exportCsvBtn')?.addEventListener('click', exportShortlistToCSV);
+  wireRetiredNotice(panel);
 
   // Student's subject tags for the match badge: prefer the live Check
   // Combination selection, else fall back to the saved profile (pure
@@ -5336,7 +5404,7 @@ function subjectsSummary(subjects) {
 // language. Safe to call for any stage regardless of the current one.
 function stageProgress(stage) {
   const profile  = AltioraState.getProfile();
-  const saved    = AltioraState.getShortlist();
+  const saved    = savedCourses();
   const fields   = plannerFields();
   const fieldNames = fields.map(planFieldShort);
   const subjects = Array.isArray(profile.subjects) ? profile.subjects : [];
@@ -5385,8 +5453,7 @@ function stageProgress(stage) {
         ? 'Add a few more courses — aim for a balanced list of 3+.'
         : 'Find courses you qualify for and save the ones you like.'] };
     }
-    const savedCourses = saved.map(id => courses.find(c => c.id === id)).filter(Boolean);
-    const { counts, hasGrades } = shortlistVerdicts(savedCourses);
+    const { counts, hasGrades } = shortlistVerdicts(saved);
     const classified = counts.reach + counts.match + counts.safety;
     // Pathological shape: everything competitive, nothing safe. Only gate on
     // this when grades are set — optional data never blocks graduation.
@@ -5507,7 +5574,7 @@ function renderWorkspaceHome() {
   const profile = AltioraState.getProfile();
   const stage   = profile.stage || DEFAULT_STAGE;
   const cfg     = STAGES[stage] || STAGES[DEFAULT_STAGE];
-  const saved   = AltioraState.getShortlist();
+  const saved   = savedCourses();
 
   // One progress pass for every stage — feeds the strip, the next-step
   // guidance, and the graduation card.
@@ -5563,12 +5630,11 @@ function renderWorkspaceHome() {
   ).join('');
 
   // Shortlist mini-summary
-  const savedCourses = saved.map(id => courses.find(c => c.id === id)).filter(Boolean);
   let shortlistHtml;
-  if (savedCourses.length) {
-    const unis      = new Set(savedCourses.map(c => c.university));
-    const countries = new Set(savedCourses.map(c => c.country));
-    shortlistHtml = `<p><strong>${savedCourses.length}</strong> course${savedCourses.length === 1 ? '' : 's'} across
+  if (saved.length) {
+    const unis      = new Set(saved.map(c => c.university));
+    const countries = new Set(saved.map(c => c.country));
+    shortlistHtml = `<p><strong>${saved.length}</strong> course${saved.length === 1 ? '' : 's'} across
       <strong>${unis.size}</strong> universit${unis.size === 1 ? 'y' : 'ies'} in
       <strong>${countries.size}</strong> countr${countries.size === 1 ? 'y' : 'ies'}.</p>`;
   } else {
@@ -5633,7 +5699,7 @@ function renderWorkspaceHome() {
           <button class="home-quick__btn" data-go-tool="shortlist"><span aria-hidden="true">🔖</span> My Shortlist (${saved.length})</button>
           <button class="home-quick__btn" data-open-story><span aria-hidden="true">📖</span> Your story</button>
           <button class="home-quick__btn" data-open-summary><span aria-hidden="true">🖨</span> Print summary</button>
-          ${savedCourses.some(c => typeof AltioraInterviewView !== 'undefined' && AltioraInterviewView.interviews(courseInterview(c.id)))
+          ${saved.some(c => typeof AltioraInterviewView !== 'undefined' && AltioraInterviewView.interviews(courseInterview(c.id)))
             ? '<button type="button" class="home-next__btn iv-practise-link" data-iv-open>Practise interview questions</button>' : ''}
           <button class="home-quick__btn" data-change-stage>Change stage</button>
         </div>
@@ -6608,8 +6674,7 @@ const _ivTimer = { phases: [], index: 0, left: 0, handle: null, endsAt: 0 };
 // Shortlisted courses that interview, plus the course a card button opened.
 function interviewPracticeCourses() {
   const ids = [...new Set([...AltioraState.getShortlist(), ...(_ivCourseId ? [_ivCourseId] : [])])];
-  return ids.map(id => (typeof courses !== 'undefined') ? courses.find(c => c.id === id) : null)
-    .filter(c => c && AltioraInterviewView.interviews(courseInterview(c.id)));
+  return savedCourseState(ids).courses.filter(c => AltioraInterviewView.interviews(courseInterview(c.id)));
 }
 
 function openInterviewPractice(courseId) {
@@ -9192,8 +9257,8 @@ function init() {
   // Saved shortlist: persistent link + live count (kept in sync via the
   // state subscription so it reflects changes from anywhere).
   $('shortlistLink')?.addEventListener('click', () => switchMode('shortlist'));
-  AltioraState.subscribe(updateShortlistCount);
-  updateShortlistCount();
+  AltioraState.subscribe(syncShortlistSurfaces);
+  syncShortlistSurfaces();
 
   // "My fields" indicator — persistent access to the kept candidate fields.
   $('fieldsLink')?.addEventListener('click', e => { e.stopPropagation(); toggleFieldsMenu(); });

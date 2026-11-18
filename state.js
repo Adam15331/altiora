@@ -409,6 +409,7 @@ const AltioraState = (() => {
         : (grades && typeof grades === 'object' ? Object.values(grades).filter(Boolean).length : 0),
       fields: p.candidateFields.length,
       shortlist: s.shortlist.length,
+      shortlistIds: s.shortlist.slice(),   // the ids themselves, so the caller can tell courses from retired ones
       story: p.achievements.length,
       draftWords: drafts.reduce((n, d) => n + (d.trim() ? d.trim().split(/\s+/).length : 0), 0),
       checklistTicks: Object.keys(p.applicationTasks).length,
@@ -700,6 +701,21 @@ const AltioraState = (() => {
     }
   }
 
+  // Remove several course ids from the saved plan in one change: the
+  // shortlist and any progress entry keyed by the id. Used for retired
+  // courses (the Shortlist notice's Dismiss). One commit, one notification.
+  function removeCourseIds(ids) {
+    const drop = new Set((Array.isArray(ids) ? ids : []).filter(id => typeof id === 'string'));
+    if (!drop.size) return;
+    const before = _state.shortlist.length;
+    _state.shortlist = _state.shortlist.filter(id => !drop.has(id));
+    let changed = _state.shortlist.length !== before;
+    drop.forEach(id => {
+      if (Object.prototype.hasOwnProperty.call(_state.progress, id)) { delete _state.progress[id]; changed = true; }
+    });
+    if (changed) _commit();
+  }
+
   function isInShortlist(courseId) {
     return _state.shortlist.includes(courseId);
   }
@@ -767,6 +783,7 @@ const AltioraState = (() => {
     ACHIEVEMENT_TYPES,
     addToShortlist,
     removeFromShortlist,
+    removeCourseIds,
     isInShortlist,
     setProgress,
     setOnboarded,
