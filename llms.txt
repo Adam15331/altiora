@@ -8,7 +8,7 @@ Altiora is a static web application. It runs entirely in the browser, has no acc
 
 - Universities in the UK, US, Canada, Singapore, Hong Kong, Ireland and Spain.
 - Qualification systems: UK A-Levels, International Baccalaureate, US Advanced Placement, Singapore-Cambridge A-Levels and Hong Kong DSE.
-- The dataset holds 328 course records (counted from the entries in data/courseRequirements.js).
+- The dataset holds 328 course records for 327 courses: a course listed under two fields has a record under each (counted from the entries in data/courseRequirements.js).
 
 ## How requirements are sourced
 

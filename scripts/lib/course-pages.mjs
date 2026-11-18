@@ -19,6 +19,7 @@
  * Pure: data in, HTML out. scripts/build-course-pages.mjs does the I/O. */
 import { createRequire } from 'node:module';
 import { SITE, esc, pageShell } from './site-pages.mjs';
+import { courseKey, distinctCourseCount } from './coverage-copy.mjs';
 
 const require = createRequire(import.meta.url);
 /** @type {typeof import('../../requirements-view.js')} */
@@ -113,10 +114,10 @@ export function buildModel({ courses, cycle, config, fieldProfiles, universityPr
   /** @type {Map<string, any>} */
   const firstListing = new Map();
   for (const c of courses) {
-    const key = JSON.stringify([c.university, c.name, c.degreeLevel ?? '']);
+    const key = courseKey(c);
     if (!firstListing.has(key)) firstListing.set(key, c);
   }
-  const primary = (/** @type {any} */ course) => firstListing.get(JSON.stringify([course.university, course.name, course.degreeLevel ?? '']));
+  const primary = (/** @type {any} */ course) => firstListing.get(courseKey(course));
   /** The course whose page shows this course, or null when there is none. */
   const pageOf = (/** @type {any} */ course) => (hasPage(record(primary(course))) ? primary(course) : null);
   const paged = courses.filter(c => pageOf(c) === c);
@@ -249,7 +250,7 @@ export function universityPage(model, uni, env) {
       quals.map(q => `<td>${scoreCell(rec[q.id])}</td>`).join('') +
       `<td class="cp-num">${esc(tally(rec, model.config.categories))}</td></tr>`;
   }).join('\n            ');
-  const count = uni.courses.length;
+  const count = distinctCourseCount(uni.courses);   // a course listed under two fields counts once
 
   const body = `      <header class="fo__header">
         <span class="fo__eyebrow">Entry requirements · ${esc(model.cycleLabel)}</span>
@@ -307,7 +308,7 @@ export function hubPage(model, env) {
   const body = `      <header class="fo__header">
         <span class="fo__eyebrow">Entry requirements · ${esc(model.cycleLabel)}</span>
         <h1 class="fo__title">Entry requirements by course</h1>
-        <p class="fo__desc">${model.paged.length} courses at ${model.pagedUniversities.length} universities. Every requirement is labelled verified, partly verified or not verified, with the date it was checked and a link to the official source.</p>
+        <p class="fo__desc">${model.paged.length} course pages at ${model.pagedUniversities.length} universities. Every requirement is labelled verified, partly verified or not verified, with the date it was checked and a link to the official source.</p>
         <p class="cp-crumbs"><a href="../universities/">Browse by university</a></p>
       </header>
 ${sections}
@@ -319,7 +320,7 @@ ${sections}
   return pageShell({
     ...env, generator: GENERATOR, source: SOURCE, url, body,
     title: `University entry requirements by course, ${model.cycleLabel} · Altiora`,
-    description: `Entry requirements for ${model.paged.length} courses at ${model.pagedUniversities.length} universities, ${model.cycleLabel}. Every requirement is labelled verified, partly verified or not verified, with a link to the official source.`,
+    description: `Entry requirements on ${model.paged.length} course pages at ${model.pagedUniversities.length} universities, ${model.cycleLabel}. Every requirement is labelled verified, partly verified or not verified, with a link to the official source.`,
     structuredData: [breadcrumbs([{ name: 'Altiora', url: `${SITE}/` }, { name: 'Courses', url }])],
   });
 }
@@ -338,7 +339,7 @@ export function universitiesHubPage(model, env) {
     const unis = model.pagedUniversities.filter(u => u.country === code).sort((a, b) => a.name.localeCompare(b.name, 'en'));
     return `      <section class="fo-section">
         <h2 class="fo-section__head">${esc(COUNTRY_NAMES[code] ?? code)}</h2>
-        <ul class="cp-links">${unis.map(u => `<li><a href="${esc(u.slug)}.html">${esc(u.name)}</a> <span class="cp-muted">· ${u.courses.length === 1 ? '1 course' : `${u.courses.length} courses`}</span></li>`).join('')}</ul>
+        <ul class="cp-links">${unis.map(u => `<li><a href="${esc(u.slug)}.html">${esc(u.name)}</a> <span class="cp-muted">· ${distinctCourseCount(u.courses) === 1 ? '1 course' : `${distinctCourseCount(u.courses)} courses`}</span></li>`).join('')}</ul>
       </section>`;
   }).join('\n');
 

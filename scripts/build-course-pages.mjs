@@ -32,10 +32,13 @@ const config = loadConfig();
 const model = buildModel({ courses: loadCourses(), cycle: loadCycle(config.currentCycle), config, fieldProfiles, universityProfiles });
 const pages = buildAll(model, { pieces: appPieces(), pagesCssV: fileHash('course-pages.css') });
 
+// "N course pages": the build's own count of the pages it writes (courses/index.html is not one).
+const coursePageCount = pages.courses.size - 1;
+if (coursePageCount !== model.paged.length) throw new Error(`course pages: built ${coursePageCount}, model has ${model.paged.length}`);
 writePages('courses', pages.courses);
 writePages('universities', pages.universities);
 replaceMarkedBlock('index.html', 'course-links',
-  `<p class="step__desc"><a class="step__link" href="courses/">Browse entry requirements for ${model.paged.length} courses at ${model.pagedUniversities.length} universities</a>.</p>`);
+  `<p class="step__desc"><a class="step__link" href="courses/">Browse entry requirements on ${coursePageCount} course pages at ${model.pagedUniversities.length} universities</a>.</p>`);
 const urls = writeSitemap();
 
 console.log(`Built ${pages.courses.size - 1} course pages, courses/index.html, ${pages.universities.size - 1} university pages, universities/index.html, sitemap.xml (${urls} URLs), index.html course links.`);

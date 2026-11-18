@@ -5,8 +5,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { syncCoverageCopy, coverageFacts } from '../scripts/lib/coverage-copy.mjs';
-import { ROOT, loadConfig, loadCycle } from '../scripts/lib/requirements-io.mjs';
+import { syncCoverageCopy, coverageFacts, distinctCourseCount } from '../scripts/lib/coverage-copy.mjs';
+import { ROOT, loadConfig, loadCourses, loadCycle } from '../scripts/lib/requirements-io.mjs';
 
 const read = (/** @type {string} */ f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
 
@@ -24,7 +24,7 @@ test('the verification split comes from the cycle file row statuses', () => {
   assert.equal(f.withPartial, records.filter(r => has(r, 'partial')).length);
   assert.equal(f.withUnverified, records.filter(r => has(r, 'unverified')).length);
   assert.ok(read('llms.txt').includes(
-    `of the ${f.total} records, ${f.fullyVerified} are fully verified, ${f.withPartial} have at least one partly verified requirement `
+    `of the ${f.records} records, ${f.fullyVerified} are fully verified, ${f.withPartial} have at least one partly verified requirement `
     + `and ${f.withUnverified} have at least one requirement not yet checked; a record can be in both of the last two groups `
     + `(counted from the row statuses in data/requirements/${f.cycle}.js)`));
 });
@@ -58,4 +58,31 @@ test('no site file claims "verified courses" or "Every requirement checked"', ()
     assert.doesNotMatch(src, /verified courses/i, file);
     assert.doesNotMatch(src, /Every requirement checked/i, file);
   }
+});
+
+test('"N courses" counts distinct courses: one course listed under two fields counts once', () => {
+  const courses = loadCourses();
+  const f = coverageFacts();
+  assert.equal(f.records, courses.length);
+  assert.equal(f.total, distinctCourseCount(courses));
+  // Trinity's BESS is listed under Economics and under Business: two records, one course.
+  const bess = courses.filter(c => c.university === 'Trinity College Dublin' && /BESS/.test(c.name));
+  assert.equal(bess.length, 2);
+  assert.equal(distinctCourseCount(bess), 1);
+  assert.equal(f.total, f.records - 1);
+  assert.ok(read('llms.txt').includes(`The dataset holds ${f.records} course records for ${f.total} courses: a course listed under two fields has a record under each`));
+  // University pages use the same count.
+  const trinity = courses.filter(c => c.university === 'Trinity College Dublin');
+  assert.match(read('universities/trinity-college-dublin.html'), new RegExp(`Entry requirements for the ${distinctCourseCount(trinity)} courses Altiora holds at Trinity College Dublin`));
+  assert.match(read('universities/index.html'), new RegExp(`Trinity College Dublin</a> <span class="cp-muted">· ${distinctCourseCount(trinity)} courses<`));
+});
+
+test('the landing browse link and courses/index.html say "N course pages", the number of pages built', () => {
+  const pages = fs.readdirSync(path.join(ROOT, 'courses')).filter(f => f.endsWith('.html') && f !== 'index.html').length;
+  assert.ok(pages > 0);
+  assert.ok(read('index.html').includes(`Browse entry requirements on ${pages} course pages at `));
+  const idx = read('courses/index.html');
+  assert.ok(idx.includes(`<p class="fo__desc">${pages} course pages at `));
+  assert.ok(idx.includes(`content="Entry requirements on ${pages} course pages at `));
+  assert.doesNotMatch(idx + read('index.html'), /\d+ courses at \d+ universities/);
 });

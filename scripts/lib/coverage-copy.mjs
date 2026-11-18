@@ -35,6 +35,24 @@ export function verificationFacts() {
   };
 }
 
+/**
+ * Two course records are one course when the university, name and degree
+ * match: a course listed under two fields has a record under each.
+ * @param {{university: string, name: string, degreeLevel?: string | null}} c
+ */
+export const courseKey = c => JSON.stringify([c.university, c.name, c.degreeLevel ?? '']);
+
+/**
+ * THE count behind every "N courses" on the site: distinct courses, so a
+ * course listed under two fields counts once. The landing page, the
+ * Check my subjects page, llms.txt and the generated university pages all
+ * read it. (Course pages are counted by the page build: "N course pages".)
+ * @param {Array<{university: string, name: string, degreeLevel?: string | null}>} courses
+ */
+export function distinctCourseCount(courses) {
+  return new Set(courses.map(courseKey)).size;
+}
+
 /** Facts read from data/courseRequirements.js and the current cycle file. */
 export function coverageFacts() {
   const courses = loadCourses();
@@ -43,7 +61,7 @@ export function coverageFacts() {
   const unknown = [...present].filter(k => !(k in COUNTRY_NAMES));
   if (unknown.length) throw new Error(`coverage-copy: no display name for country code(s) ${unknown.join(', ')}`);
   const v = verificationFacts();
-  return { total: courses.length, countries, ...v };
+  return { total: distinctCourseCount(courses), records: courses.length, countries, ...v };
 }
 
 const LABELLED = 'Every requirement is labelled verified, partly verified or not yet checked.';
@@ -62,8 +80,8 @@ export function managedStrings(f = coverageFacts()) {
     { file: 'index.html', re: /across \d+ courses\. Every requirement shows whether it has been checked against the university&rsquo;s own page\./, text: `across ${f.total} courses. ${SHOWN}` },
     { file: 'index.html', re: /<p class="small">\d+ courses</, text: `<p class="small">${f.total} courses<` },
     { file: 'llms.txt', re: /- Universities in the [^\n]*\./, text: `- Universities in the ${list(f.countries, 'and')}.` },
-    { file: 'llms.txt', re: /The dataset holds \d+ course records/, text: `The dataset holds ${f.total} course records` },
-    { file: 'llms.txt', re: /of the \d+ records, \d+ are fully verified, [^\n]*?\(counted from the row statuses in data\/requirements\/\d+\.js\)/, text: `of the ${f.total} records, ${f.fullyVerified} are fully verified, ${f.withPartial} have at least one partly verified requirement and ${f.withUnverified} have at least one requirement not yet checked; a record can be in both of the last two groups (counted from the row statuses in data/requirements/${f.cycle}.js)` },
+    { file: 'llms.txt', re: /The dataset holds \d+ course records[^\n]*?\(counted from the entries in data\/courseRequirements\.js\)\./, text: `The dataset holds ${f.records} course records for ${f.total} courses: a course listed under two fields has a record under each (counted from the entries in data/courseRequirements.js).` },
+    { file: 'llms.txt', re: /of the \d+ records, \d+ are fully verified, [^\n]*?\(counted from the row statuses in data\/requirements\/\d+\.js\)/, text: `of the ${f.records} records, ${f.fullyVerified} are fully verified, ${f.withPartial} have at least one partly verified requirement and ${f.withUnverified} have at least one requirement not yet checked; a record can be in both of the last two groups (counted from the row statuses in data/requirements/${f.cycle}.js)` },
   ];
 }
 
