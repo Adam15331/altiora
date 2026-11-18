@@ -4801,3 +4801,9 @@ Format:
 ## 2026-11-14 — 2027 entry — Curly apostrophe in the reworded note (218 rows)
 
 - No web research and no value changed. In the 218 rows reworded above, "university's" (straight apostrophe) is now "university’s" (U+2019), the apostrophe the other notes use. Nothing else in those notes changed.
+
+## 2026-11-18 — 2027 entry — Law: Trinity subject row downgraded, Glasgow note in the source's words (2 rows)
+
+- No web research. `ie-law-trinity` `subjectPrerequisites`: was `verified` with `none: true` on a quote that only names the course ("2 Law, Law (JH)"), so the source is silent on subjects. Now `unverified` (no `none`, sources, date or snippet), with a `reviewFlag` recording why and what was read. The engine record (`courseRequirements.js`) is unchanged: it holds no subjects for this course.
+- `uk-law-glasgow` `subjectPrerequisites`: only the student-facing `note` changed. It now quotes the row's own `sourceSnippet` ("Additional Requirement: A-level Humanities at A", "Additional Requirement: GCSE English at B", "Arts, Humanity or Modern Language (All considered Humanities subjects)") instead of paraphrasing it. Status, items, sources, date, snippet and `reviewFlag` are unchanged.
+- No `noSubjectRequirements` flag was added: no further Law course has a verified row whose quote explicitly says no subjects are required or any are accepted.

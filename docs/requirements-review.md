@@ -11,7 +11,7 @@
 | SAT / ACT | 157 | 62 | 116 | 0 |
 | English language | 176 | 39 | 120 | 0 |
 | Admissions tests | 272 | 53 | 10 | 0 |
-| Subject prerequisites | 155 | 169 | 11 | 0 |
+| Subject prerequisites | 154 | 169 | 12 | 0 |
 | A-Level requirements | 156 | 92 | 83 | 4 |
 | IB requirements | 215 | 94 | 22 | 4 |
 | Other qualifications | 150 | 85 | 100 | 0 |
@@ -393,7 +393,7 @@ Shown with a "Partly verified" badge and the note below.
 | `uk-medicine-glasgow` | SAT / ACT | Source: the Undergraduate Medical School’s International Entry Requirements page (MBChB-specific; undated current page), reached from the Medicine course page’s link to the Medical School admissions pages. The table scopes this to United States school-leaver qualifications, with required subjects Chemistry, Biology and one of Maths or Physics. UCAT and interview still apply (see Admissions tests and Other requirements). Partly verified: the SAT route is stated, but the page misprints the ACT minimum, so the ACT route is not fully confirmed. |
 | `uk-medicine-glasgow` | Subject prerequisites | Matching follows the UK A-level route: Chemistry required, plus one of Biology, Physics or Mathematics (a choice the engine cannot express). International A-level and IB applicants also need Biology (shown in the items above; the IB Higher Level Biology requirement is applied in matching). |
 | `uk-medicine-glasgow` | A-Level requirements | UK A-level: AAA with Chemistry and one of Biology, Physics or Mathematics (GCSE English B/6; GCSE Biology B/6 if not at A-level). International A-level: AAA with Chemistry, Biology and one of Physics or Mathematics. Matching follows the UK A-level route (Chemistry required); the second-subject choice and the international Biology requirement are display-only. |
-| `uk-law-glasgow` | Subject prerequisites | A Humanities A level at A (Glasgow counts English, History and most arts, social-science and language subjects), GCSE English at B, and for IB HL English at 6 are required; none is expressible in the engine, so no subject is coded. |
+| `uk-law-glasgow` | Subject prerequisites | Glasgow’s page says: “Additional Requirement: A-level Humanities at A” and “Additional Requirement: GCSE English at B”. Its admissions guidance lists “Arts, Humanity or Modern Language (All considered Humanities subjects)”. Altiora does not match on these, so check them on the official page. |
 | `uk-law-glasgow` | A-Level requirements | Common Law LLB M100: AAA including an A-level Humanities subject at A, GCSE English at B and the LNAT. The Humanities requirement is a one-of choice the engine cannot express. |
 | `uk-law-glasgow` | IB requirements | IB 38 (6,6,6 HL) with HL English at 6, plus the LNAT. HL English is not an ibHL tag, so it is not matched. |
 | `uk-economics-glasgow` | Subject prerequisites | English or a Humanities subject is also required (one-of choice the engine cannot express); no preferred subjects are listed. |
@@ -1376,6 +1376,7 @@ still holds a value a verified official source contradicts. Not shown in the pan
 | `ie-economics-trinity` | A-Level requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. An older, undated A-Level quick guide (TCD_NonEU_ALevel_Quick_Guide.pdf) lists different grades (e.g. Medicine AAAA); its values are not used — the brochure bands are. |
 | `ie-economics-trinity` | IB requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
 | `ie-economics-trinity` | Other qualifications | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
+| `ie-law-trinity` | Subject prerequisites | The source is silent on required subjects. The row was marked verified with none: true on 2026-10-21 from the Trinity non-EU admissions brochure (https://www.tcd.ie/study/assets/PDF/Trinity_International_Admissions_Brochure_2027.pdf), whose quoted text was only “2 Law, Law (JH)”: a table listing with no statement about subjects. Downgraded to unverified on 2026-11-18; needs a page that states the subject requirement, or states there is none. |
 | `ie-law-trinity` | A-Level requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. An older, undated A-Level quick guide (TCD_NonEU_ALevel_Quick_Guide.pdf) lists different grades (e.g. Medicine AAAA); its values are not used — the brochure bands are. |
 | `ie-law-trinity` | IB requirements | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
 | `ie-law-trinity` | Other qualifications | The brochure file named …_2027.pdf still reads "Applicants seeking admission in 2026" (same text as the 2026 brochure); band values are taken from it — re-check when a true 2027-entry guide is published. |
@@ -1556,4 +1557,5 @@ category — check the official source; never copy a hint in as a value.
 | `ca-law-york` | York University | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `ca-law-uvic` | University of Victoria | SAT / ACT, English language, Other qualifications, Other requirements |  |
 | `ca-cs-uvic` | University of Victoria | SAT / ACT, English language, A-Level requirements, Other qualifications, Other requirements | notes mention A-Level grades |
+| `ie-law-trinity` | Trinity College Dublin | Subject prerequisites | Subject prerequisites: Not verified: the brochure text read for this row names the course but says nothing about required subjects, which is not the same as saying none are required. Check the official page. |
 | `es-law-ie` | IE University | Subject prerequisites |  |
